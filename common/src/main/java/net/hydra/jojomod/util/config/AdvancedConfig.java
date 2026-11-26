@@ -642,7 +642,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingBlockGroups = new HashSet<>(
+    public Set<String> kingNothingBlockGroupsv2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:iron_ore:minecraft:deepslate_iron_ore",
                     "minecraft:gold_ore:minecraft:deepslate_gold_ore:minecraft:nether_gold_ore",
@@ -652,17 +652,20 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:copper_ore:minecraft:deepslate_copper_ore",
                     "minecraft:redstone_ore:minecraft:deepslate_redstone_ore",
                     "minecraft:lapis_ore:minecraft:deepslate_lapis_ore",
-                    "minecraft:oak_log:minecraft:oak_wood",
-                    "minecraft:birch_log:minecraft:birch_wood",
-                    "minecraft:spruce_log:minecraft:spruce_wood",
-                    "minecraft:jungle_log:minecraft:jungle_wood",
-                    "minecraft:acacia_log:minecraft:acacia_wood",
-                    "minecraft:dark_oak_log:minecraft:dark_oak_wood",
-                    "minecraft:mangrove_log:minecraft:mangrove_wood",
-                    "minecraft:cherry_log:minecraft:cherry_wood",
-                    "minecraft:crimson_log:minecraft:crimson_wood",
-                    "minecraft:warped_log:minecraft:warped_wood",
-                    "roundabout:new_locacaca_plant:roundabout:locacaca_cactus"
+                    "roundabout:aja_ore:roundabout:deepslate_aja_ore",
+                    "minecraft:bamboo_sapling:minecraft:bamboo"
+            )
+    );
+
+    public Set<String> kingNothingEntityGroups = new HashSet<>(
+            Arrays.asList(
+                    "roundabout:snake:roundabout:ge_snake",
+                    "minecraft:bee:roundabout:ge_bee",
+                    "minecraft:fox:roundabout:ge_fox",
+                    "roundabout:piranha:roundabout:ge_piranha",
+                    "roundabout:butterfly:roundabout:ge_butterfly",
+                    "minecraft:bat:roundabout:ge_bat",
+                    "minecraft:salmon:roundabout:ge_fish"
             )
     );
 
@@ -686,9 +689,16 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingEntitySniffOverrides = new HashSet<>(
+    public Set<String> kingNothingEntitySniffOverridesv2 = new HashSet<>(
             Arrays.asList(
-                    "mod_id:add_mob_A_here:mod_id:add_mob_B_here"
+                    "roundabout:ge_fish:minecraft:salmon",
+                    "roundabout:ge_piranha:roundabout:piranha",
+                    "roundabout:ge_bee:minecraft:bee",
+                    "roundabout:ge_snake:roundabout:snake",
+                    "roundabout:ge_fox:minecraft:fox",
+                    "roundabout:ge_frog:minecraft:frog",
+                    "roundabout:ge_butterfly:roundabout:butterfly",
+                    "roundabout:ge_bat:minecraft:bat"
             )
     );
 

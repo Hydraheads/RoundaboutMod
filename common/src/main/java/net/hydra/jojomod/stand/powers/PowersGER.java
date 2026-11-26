@@ -82,6 +82,20 @@ public class PowersGER extends PowersGoldExperience {
     }
 
     @Override
+    public void onStandSwitch() {
+        if (!this.self.level().isClientSide()) {
+            if (standArrow != null && !standArrow.isEmpty()) {
+                giveStandArrowBack();
+            }
+            if (hasNormalGEDisc()) {
+                ((StandUser) self).roundabout$setStandDisc(originalDisc);
+                originalDisc = null;
+            }
+        }
+        super.onStandSwitch();
+    }
+
+    @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         if (originalDisc != null) {
             CompoundTag compoundtag = new CompoundTag();
@@ -122,23 +136,26 @@ public class PowersGER extends PowersGoldExperience {
 
     public void goBackToGE(){
         setPowerNone();
+        ItemStack arrowToReturn = standArrow;
+        standArrow = null;
 
         ((StandUser) self).roundabout$setStandDisc(originalDisc);
         ((StandUser) self).roundabout$getStandPowers().onStandSwitchInto();
-        if (((StandUser) self).roundabout$getStandPowers() instanceof PowersGoldExperience GER) {
-            GER.idlePos = idlePos;
-            GER.standSkin = standSkin;
-            GER.resolvePoints = resolvePoints;
-
-            GER.saveDiscAndSync();
+        if (((StandUser) self).roundabout$getStandPowers() instanceof PowersGoldExperience GE) {
+            GE.idlePos = idlePos;
+            GE.standSkin = standSkin;
+            GE.resolvePoints = resolvePoints;
+            if (arrowToReturn != null && !arrowToReturn.isEmpty()) {
+                GE.standArrow = arrowToReturn;
+                GE.giveStandArrowBack();
+            } else {
+                GE.saveDiscAndSync();
+            }
         }
 
         if (((StandUser) self).roundabout$getStand() != null) {
             ((StandUser) self).roundabout$getStand().discard();
             ((StandUser) self).roundabout$setStand(null);
-        }
-        if (standArrow != null && !standArrow.isEmpty()) {
-            giveStandArrowBack();
         }
     }
 
@@ -146,7 +163,7 @@ public class PowersGER extends PowersGoldExperience {
         super.tickPower();
         if (hasNormalGEDisc()) {
             resolvePoints -= 0.25f;
-            if (resolvePoints <= 0f) {
+            if (!this.self.level().isClientSide() && resolvePoints <= 0f) {
                 goBackToGE();
                 ((StandUser) self).roundabout$summonStand(self.level(), true, true);
             }
@@ -351,8 +368,8 @@ public class PowersGER extends PowersGoldExperience {
     @Override
     public void playBarrageNoise(int hitNumber, Entity entity) {
         if (!this.self.level().isClientSide()) {
-            if (hitNumber % 3 == 0)
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GER_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 1.3F, 1F);
+            if (hitNumber % 2 == 0)
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.GER_BARRAGE_HIT_EVENT, SoundSource.PLAYERS, 1.1F, 1F);
         }
     }
 
