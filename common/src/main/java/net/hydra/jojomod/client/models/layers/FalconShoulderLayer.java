@@ -48,7 +48,7 @@ public class FalconShoulderLayer<T extends LivingEntity, M extends HumanoidModel
                 $$0.pushPose();
                 $$0.translate($$8 ? 0.4F : -0.4F, PL.isCrouching() ? -1.3F : -1.5F, 0.0F);
                 FalconEntity.Variant $$11 = FalconEntity.Variant.byId($$9.getInt("Variant"));
-                VertexConsumer $$12 = $$1.getBuffer(this.model.renderType(FalconRenderer.getVariantTexture($$11)));
+                VertexConsumer $$12 = $$1.getBuffer(ModStrayModels.falconShoulderLayer.model.renderType(FalconRenderer.getVariantTexture($$11)));
                 ModStrayModels.falconShoulderLayer.model.renderOnShoulder($$0, $$12, $$2, OverlayTexture.NO_OVERLAY, $$4, $$5, $$6, $$7, PL.tickCount);
                 $$0.popPose();
             });
