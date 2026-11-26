@@ -5,22 +5,16 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
-import net.hydra.jojomod.entity.stand.KingNothingEntity;
-import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
-import net.hydra.jojomod.entity.substand.SeperatedArmEntity;
 import net.hydra.jojomod.event.powers.StandUser;
-import net.hydra.jojomod.item.AnubisItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.PowersGoldExperience;
-import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
@@ -44,7 +38,10 @@ public class StandArrowHeldItemLayer<T extends GoldExperienceEntity, M extends S
         }
 
         ItemStack itemstack = GE.getStandArrow();
-        if (itemstack != null && !itemstack.isEmpty()) {
+        if (itemstack == null || itemstack.isEmpty()) {
+            itemstack = new ItemStack(ModItems.STAND_ARROW);
+        }
+        if (!itemstack.isEmpty()) {
             stack.pushPose();
             if (this.getParentModel().young) {
                 //float f = 0.5F;
@@ -52,27 +49,64 @@ public class StandArrowHeldItemLayer<T extends GoldExperienceEntity, M extends S
                 stack.scale(0.5F, 0.5F, 0.5F);
             }
 
-           this.renderArmWithItem(entity, itemstack,
+            this.renderArmWithItem(entity, itemstack,
                     ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
                     HumanoidArm.LEFT, stack, bufferSource, p_117206_);
             stack.popPose();
         }
     }
 
-    protected void renderArmWithItem(T livingEntity, ItemStack itemStack, ItemDisplayContext displayContext, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource bufferSource, int p_117191_) {
+    protected void renderArmWithItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext displayContext, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource bufferSource, int p_117191_) {
         if (!itemStack.isEmpty()) {
             ClientUtil.pushPoseAndCooperate(poseStack,25);
             float shiftZ = 1.3F;
             float shiftY = 1;
             float shiftX = 3F;
 
+            if (livingEntity instanceof GoldExperienceEntity) {
+                // applies parent body & shoulder transforms before translateToHand applies lower_arm
+                ModelPart root = this.getParentModel().root();
+                if (root != null && root.hasChild("stand2")) {
+                    ModelPart stand2 = root.getChild("stand2");
+                    if (stand2.hasChild("body")) {
+                        ModelPart body = stand2.getChild("body");
+                        if (body.hasChild("body2")) {
+                            ModelPart body2 = body.getChild("body2");
+                            if (body2.hasChild("torso")) {
+                                ModelPart torso = body2.getChild("torso");
+                                if (torso.hasChild("upper_chest")) {
+                                    ModelPart upperChest = torso.getChild("upper_chest");
+                                    String armName = humanoidArm == HumanoidArm.LEFT ? "right_arm" : "left_arm";
+                                    if (upperChest.hasChild(armName)) {
+                                        ModelPart arm = upperChest.getChild(armName);
+                                        root.translateAndRotate(poseStack);
+                                        stand2.translateAndRotate(poseStack);
+                                        body.translateAndRotate(poseStack);
+                                        body2.translateAndRotate(poseStack);
+                                        torso.translateAndRotate(poseStack);
+                                        upperChest.translateAndRotate(poseStack);
+                                        arm.translateAndRotate(poseStack);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                shiftZ = 1.3F;
+                shiftY = 6.0F;
+                shiftX = 0.0F;
+            }
+
             this.getParentModel().translateToHand(humanoidArm, poseStack, shiftZ, shiftY, shiftX);
 
             poseStack.mulPose(Axis.XP.rotationDegrees(-65.0F));
-
             poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
             boolean flag = humanoidArm == HumanoidArm.LEFT;
             poseStack.translate((float)(flag ? -1 : 1) / 16.0F, 0.125F, -0.625F);
+
+            if (livingEntity instanceof GoldExperienceEntity) {
+                poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1, 0, 0, 30.0F), 0.0F, 0.25F, 0.0F);
+            }
 
             this.itemInHandRenderer.renderItem(livingEntity, itemStack, displayContext, flag, poseStack, bufferSource, p_117191_);
 
