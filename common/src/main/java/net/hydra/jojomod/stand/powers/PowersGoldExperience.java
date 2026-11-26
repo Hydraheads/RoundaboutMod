@@ -2320,22 +2320,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return false;
     }
 
-    @Override
-    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim) {
-        if (canUseRequiem() && victim instanceof Mob) {
-            boolean isStandUserMob = !((StandUser) victim).roundabout$getStandDisc().isEmpty()
-                    && (victim instanceof Monster || victim instanceof NeutralMob);
-            grantResolve(ResolveSource.MOB_KILL, ResolveSource.MOB_KILL.amount);
-        }
-        return super.onKilledEntity($$0, victim);
-    }
-
-    public void onPlayerHurt(Player PL, DamageSource src, float damage) {
-        if (damage > 0.0F) {
-            grantResolve(ResolveSource.DEAL_PLAYER_DAMAGE, damage * ResolveSource.DEAL_PLAYER_DAMAGE.amount);
-        }
-    }
-
     protected void grantResolve(ResolveSource source, float amount) {
         if (this.self.level().isClientSide() || !canUseRequiem() || resolvePoints >= getNeededResolvePoints()) {
             return;
@@ -2368,8 +2352,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     public enum ResolveSource {
-        MOB_KILL(5.0F),
-        DEAL_PLAYER_DAMAGE(1.0F);
+        MOB_KILL(3.0F),
+        STAND_USER_KILL(7.0F),
+        DEAL_PLAYER_DAMAGE(5.0F),
+        RAID_WIN(50);
         // rest of stuff go here
 
         public final float amount;
@@ -2387,6 +2373,28 @@ public class PowersGoldExperience extends BlockGrabPreset {
             this.timer = timer;
             this.gained = gained;
         }
+    }
+
+    @Override
+    public boolean onKilledEntity(ServerLevel $$0, LivingEntity victim) {
+        if (!((StandUser) victim).roundabout$getStandDisc().isEmpty()) {
+            grantResolve(ResolveSource.STAND_USER_KILL, ResolveSource.STAND_USER_KILL.amount);
+        }
+        else if ((victim instanceof Monster || victim instanceof NeutralMob)) {
+            grantResolve(ResolveSource.MOB_KILL, ResolveSource.MOB_KILL.amount);
+        }
+        return super.onKilledEntity($$0, victim);
+    }
+
+    public void onPlayerHurt(Player PL, DamageSource src, float damage) {
+        if (damage > 0.0F) {
+            grantResolve(ResolveSource.DEAL_PLAYER_DAMAGE, damage * ResolveSource.DEAL_PLAYER_DAMAGE.amount);
+        }
+    }
+
+    // look at ExecutionerAxeRaid
+    public void onRaidWon() {
+        grantResolve(ResolveSource.RAID_WIN, ResolveSource.RAID_WIN.amount);
     }
 
     // requiem system end
