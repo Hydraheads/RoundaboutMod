@@ -213,6 +213,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (activePower == REQUIEM) {
             return !source.is(DamageTypes.GENERIC_KILL);
         }
+        if (this.getSelf().getHealth() < 6.0F) {
+            grantResolve(ResolveSource.LOW_HEALTH, ResolveSource.LOW_HEALTH.amount);
+        }
 
         return super.interceptIncomingHarm(source, amount);
     }
@@ -2361,7 +2364,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
         ZOMBIE_VILLAGER_CURE(10),
         HEAL_OTHERS(2),
         PET_INJURED(2.5F),
-        FISH_CAUGHT(3);
+        FISH_CAUGHT(3),
+        TAME_ANIMAL(15.0F),
+        LOW_HEALTH(5),
+        ITEM_IMBUE(2.5F);
         // rest of stuff go here
 
         public final float amount;
@@ -2463,6 +2469,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // look at FishingLootMixin
     public void onFishCaught() {
         grantResolve(ResolveSource.FISH_CAUGHT, ResolveSource.FISH_CAUGHT.amount);
+    }
+
+    // look at ZTameAnimalTriggerMixin
+    public void onAnimalTamed() {
+        grantResolve(ResolveSource.TAME_ANIMAL, ResolveSource.TAME_ANIMAL.amount);
     }
 
     // requiem system end
