@@ -145,9 +145,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingBlockFormPredictionsv2 != null) {
+        if (getAdvancedConfig().kingNothingBlockFormPredictionsv3 != null) {
             MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictionsv2) {
+            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictionsv3) {
                 try {
                     String[] split = entry.split(":");
 
@@ -176,9 +176,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingEntityFormPredictionsv3 != null) {
+        if (getAdvancedConfig().kingNothingEntityFormPredictionsv4 != null) {
             MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsv3) {
+            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsv4) {
                 try {
                     String[] split = entry.split(":");
 
