@@ -2359,7 +2359,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
         HARVEST_CROP(1.0F),
         ANIMAL_CREATION(1.5F),
         ZOMBIE_VILLAGER_CURE(10),
-        HEAL_OTHERS(2);
+        HEAL_OTHERS(2),
+        PET_INJURED(2.5F),
+        FISH_CAUGHT(3);
         // rest of stuff go here
 
         public final float amount;
@@ -2451,6 +2453,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // look at NPCZombieVillager
     public void onZombieVillagerCured() {
         grantResolve(ResolveSource.ZOMBIE_VILLAGER_CURE, ResolveSource.ZOMBIE_VILLAGER_CURE.amount);
+    }
+
+    // look at StandUserEntity
+    public void onPetInjured(float damage) {
+        grantResolve(ResolveSource.PET_INJURED, damage * ResolveSource.PET_INJURED.amount);
+    }
+
+    // look at FishingLootMixin
+    public void onFishCaught() {
+        grantResolve(ResolveSource.FISH_CAUGHT, ResolveSource.FISH_CAUGHT.amount);
     }
 
     // requiem system end

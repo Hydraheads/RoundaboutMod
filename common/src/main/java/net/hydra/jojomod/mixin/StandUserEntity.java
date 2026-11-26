@@ -6010,6 +6010,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                         PGE.onPlayerHurt(PL, damageSource, $$1);
                     }
                 }
+
+                if ($$1 > 0.0F
+                        && (Object) this instanceof OwnableEntity ownable
+                        && ownable.getOwner() instanceof ServerPlayer owner
+                        && damageSource.getEntity() != owner
+                        && ((StandUser) owner).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+                    ge.onPetInjured($$1);
+                }
             }
 
             /*
