@@ -2366,7 +2366,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         PET_INJURED(2.5F),
         FISH_CAUGHT(3),
         TAME_ANIMAL(15.0F),
-        LOW_HEALTH(5),
+        LOW_HEALTH(7.5F),
         ITEM_IMBUE(2.5F);
         // rest of stuff go here
 
