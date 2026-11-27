@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -14,34 +14,34 @@ import org.jetbrains.annotations.Nullable;
 
 public class StarPlatinumBaseRenderer<T extends StandEntity> extends StandRenderer<StarPlatinumEntity>  {
 
-    public static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/anime.png");
-    public static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/manga.png");
-    public static final ResourceLocation PART_3_MANGA_PURPLE_SKIN= new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/purple.png");
+    public static final ResourceLocation PART_3_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/anime.png");
+    public static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/manga.png");
+    public static final ResourceLocation PART_3_MANGA_PURPLE_SKIN= new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/purple.png");
 
-    public static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/ova.png");
-    public static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/green.png");
-    public static final ResourceLocation GREEN_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/green_2.png");
-    public static final ResourceLocation BASEBALL_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/baseball.png");
-    public static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/part_4.png");
-    public static final ResourceLocation PART_6_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/part_6.png");
-    public static final ResourceLocation ATOMIC_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/atomic.png");
-    public static final ResourceLocation MANGA_FIRST_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/first_summon.png");
-    public static final ResourceLocation JOJONIUM_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/jojonium.png");
-    public static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/beta.png");
-    public static final ResourceLocation ARCADE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/arcade.png");
-    public static final ResourceLocation ARCADE_SKIN_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/arcade_2.png");
-    public static final ResourceLocation FOUR_DEE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/4d.png");
-    public static final ResourceLocation JOJOVELLER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/jojoveller.png");
-    public static final ResourceLocation CROP = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/crop.png");
-    public static final ResourceLocation VOLUME_39 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/volume_39.png");
-    public static final ResourceLocation JUMP_13 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/jump_13.png");
-    public static final ResourceLocation TREE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/tree.png");
-    public static final ResourceLocation NETHER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/nether.png");
-    public static final ResourceLocation PHANTOM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/phantom.png");
-    public static final ResourceLocation LIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/light.png");
-    public static final ResourceLocation FINISHER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/finisher.png");
-    public static final ResourceLocation PART_4_LIVE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/part_4_live.png");
-    public static final ResourceLocation KING = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/star_platinum/king.png");
+    public static final ResourceLocation OVA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/ova.png");
+    public static final ResourceLocation GREEN_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/green.png");
+    public static final ResourceLocation GREEN_2 = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/green_2.png");
+    public static final ResourceLocation BASEBALL_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/baseball.png");
+    public static final ResourceLocation PART_4_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/part_4.png");
+    public static final ResourceLocation PART_6_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/part_6.png");
+    public static final ResourceLocation ATOMIC_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/atomic.png");
+    public static final ResourceLocation MANGA_FIRST_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/first_summon.png");
+    public static final ResourceLocation JOJONIUM_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/jojonium.png");
+    public static final ResourceLocation BETA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/beta.png");
+    public static final ResourceLocation ARCADE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/arcade.png");
+    public static final ResourceLocation ARCADE_SKIN_2 = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/arcade_2.png");
+    public static final ResourceLocation FOUR_DEE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/4d.png");
+    public static final ResourceLocation JOJOVELLER = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/jojoveller.png");
+    public static final ResourceLocation CROP = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/crop.png");
+    public static final ResourceLocation VOLUME_39 = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/volume_39.png");
+    public static final ResourceLocation JUMP_13 = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/jump_13.png");
+    public static final ResourceLocation TREE = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/tree.png");
+    public static final ResourceLocation NETHER = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/nether.png");
+    public static final ResourceLocation PHANTOM = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/phantom.png");
+    public static final ResourceLocation LIGHT = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/light.png");
+    public static final ResourceLocation FINISHER = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/finisher.png");
+    public static final ResourceLocation PART_4_LIVE = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/part_4_live.png");
+    public static final ResourceLocation KING = new ResourceLocation(SBA.MOD_ID,"textures/stand/star_platinum/king.png");
     public StarPlatinumBaseRenderer(EntityRendererProvider.Context context, StandModel<StarPlatinumEntity> entityModel, float f) {
         super(context, entityModel,f);
         this.addLayer(new StarPlatinumEyeLayer<>(this));

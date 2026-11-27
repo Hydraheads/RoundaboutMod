@@ -15,7 +15,7 @@ public abstract class AccessAbstractFurnaceMenu extends RecipeBookMenu<Container
     /**There is no reason for these to be private or protected, we should be able to tap into them.*/
     @Unique
     @Override
-    public Container roundabout$getContainer(){
+    public Container sba$getContainer(){
         return this.container;
     }
 

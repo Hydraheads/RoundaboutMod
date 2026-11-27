@@ -1,11 +1,11 @@
 {
   "replace": false,
   "values": [
-    "roundabout:stand_fire",
-    "roundabout:stand_virus",
-    "roundabout:hamon",
-    "roundabout:vampire",
-    "roundabout:stand_brawl",
-    "roundabout:martial_arts"
+    "sba:stand_fire",
+    "sba:stand_virus",
+    "sba:hamon",
+    "sba:vampire",
+    "sba:stand_brawl",
+    "sba:martial_arts"
   ]
 }

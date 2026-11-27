@@ -19,7 +19,7 @@ public abstract class FrozenAbstractZombieModel<T extends Monster> extends Human
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/model/AnimationUtils;animateZombieArms(Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/client/model/geom/ModelPart;ZFF)V",
                     shift = At.Shift.BEFORE), cancellable = true)
-    public void roundabout$setupAnimFreeze3(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+    public void sba$setupAnimFreeze3(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         if ($$0 != null && HeatUtil.isBodyFrozen($$0)) {
             ClientUtil.animateZombieArmsNoBob(this.leftArm, this.rightArm, this.isAggressive($$0), 0, $$3);
             ci.cancel();

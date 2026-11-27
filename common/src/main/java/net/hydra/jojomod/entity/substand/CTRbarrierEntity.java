@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
@@ -61,7 +61,7 @@ public class CTRbarrierEntity extends StandEntity {
     public void tick() {
         if (!this.level().isClientSide()) {
             if (User == null
-                    || !(((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR)
+                    || !(((StandUser) User).sba$getStandPowers() instanceof PowersCatchTheRainbow PCR)
                     || !User.isAlive()) {
                 this.discard();
             }
@@ -94,9 +94,9 @@ public class CTRbarrierEntity extends StandEntity {
                     }
                 }
             }
-            double randX = Roundabout.RANDOM.nextDouble(-2, 2);
-            double randZ = Roundabout.RANDOM.nextDouble(-2, 2);
-            double randY = Roundabout.RANDOM.nextDouble(0, 10);
+            double randX = SBA.RANDOM.nextDouble(-2, 2);
+            double randZ = SBA.RANDOM.nextDouble(-2, 2);
+            double randY = SBA.RANDOM.nextDouble(0, 10);
             if (Math.random() > 0.3) {
                 sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
                         this.getX() + randX,
@@ -106,7 +106,7 @@ public class CTRbarrierEntity extends StandEntity {
             }
 
             if (Math.random() > 0.6) {
-                int randParticle = Roundabout.RANDOM.nextInt(0, 3);
+                int randParticle = SBA.RANDOM.nextInt(0, 3);
                 if (randParticle == 0) {
                     sendParticlesIfPossible(this, level(), ModParticles.RAIN_SHARD_1,
                             this.getX() + randX,
@@ -134,20 +134,20 @@ public class CTRbarrierEntity extends StandEntity {
     private void dealWithProjectile(Projectile pj, CTRbarrierEntity this2){
         if (pj.level() instanceof ServerLevel sl) {
             if (!(pj.getOwner() instanceof LivingEntity LE &&
-                    ((StandUser) LE).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)) {
+                    ((StandUser) LE).sba$getStandPowers() instanceof PowersCatchTheRainbow)) {
                 {
                     if (pj instanceof AbstractArrow || pj instanceof IronBallEntity || pj instanceof ThrownObjectEntity ||
                             pj instanceof RipperEyesProjectile ||
                             pj instanceof MatchEntity) {
-                        if (!(pj instanceof AbstractArrow aa && ((IAbstractArrowAccess) aa).roundabout$GetIsManhattan())
-                                && !(pj instanceof RoundaboutBulletEntity abe && abe.isHattan)) {
+                        if (!(pj instanceof AbstractArrow aa && ((IAbstractArrowAccess) aa).sba$GetIsManhattan())
+                                && !(pj instanceof SBABulletEntity abe && abe.isHattan)) {
                             IProjectileAccess ipa = (IProjectileAccess) pj;
-                            if (!ipa.roundabout$getIsDeflected()) {
+                            if (!ipa.sba$getIsDeflected()) {
                                 if (pj instanceof ThrownObjectEntity ttt){
                                     ttt.disableThrow();
                                 }
-                                if (pj instanceof AbstractArrow ttt && ((ISuperThrownAbstractArrow)ttt).roundabout$getSuperThrow()){
-                                    ((ISuperThrownAbstractArrow)ttt).roundabout$cancelSuperThrow();
+                                if (pj instanceof AbstractArrow ttt && ((ISuperThrownAbstractArrow)ttt).sba$getSuperThrow()){
+                                    ((ISuperThrownAbstractArrow)ttt).sba$cancelSuperThrow();
                                 }
                                 ((ServerLevel) this2.level()).sendParticles(ParticleTypes.SPLASH,
                                         pj.getX(),
@@ -157,11 +157,11 @@ public class CTRbarrierEntity extends StandEntity {
                                     //change the sound
                                 pj.level().playSound(null, pj.blockPosition(), ModSounds.ICE_BREAKER_EVENT,
                                         SoundSource.PLAYERS, 1.0F, 2.0F);
-                                if (pj instanceof RoundaboutBulletEntity) {
+                                if (pj instanceof SBABulletEntity) {
                                     pj.setOwner(this2);
-                                    ((RoundaboutBulletEntity) pj).setSuperThrown(false);
+                                    ((SBABulletEntity) pj).setSuperThrown(false);
                                 }
-                                ipa.roundabout$setIsDeflected(true);
+                                ipa.sba$setIsDeflected(true);
                                 ((IEntityAndData) pj).rdbt$forceDeltaMovement(pj.getDeltaMovement().scale(-0.4));
                                 pj.setYRot(pj.getYRot() + 180.0F);
                                 pj.yRotO += 180.0F;

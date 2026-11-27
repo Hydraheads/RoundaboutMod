@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -60,7 +60,7 @@ public class RightHeelPart extends PsuedoHierarchicalModel {
     /**Idle 1 (byte 0) = head straight, idle 2 (byte 1) = head follow*/
 
     public ResourceLocation getTextureLocation(String path){
-        return new ResourceLocation(Roundabout.MOD_ID, path);
+        return new ResourceLocation(SBA.MOD_ID, path);
     }
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light, String path) {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(path)));
@@ -76,7 +76,7 @@ public class RightHeelPart extends PsuedoHierarchicalModel {
                 partialTicks = partialTicks % 1;
             }
 
-            if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
+            if (((StandUser)LE).sba$getStandPowers() instanceof PowersWalkingHeart PW){
                 int ext = PW.getHeelExtension();
                 boolean $$9 = LE.getMainArm() == HumanoidArm.RIGHT;
                 if ($$9) {

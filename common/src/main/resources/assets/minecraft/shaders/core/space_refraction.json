@@ -1,6 +1,6 @@
 {
-  "vertex": "roundabout:space_refraction",
-  "fragment": "roundabout:space_refraction",
+  "vertex": "sba:space_refraction",
+  "fragment": "sba:space_refraction",
   "samplers": [
     {
       "name": "SceneColor"

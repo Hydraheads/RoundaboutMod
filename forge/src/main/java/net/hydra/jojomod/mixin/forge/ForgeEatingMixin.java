@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.forge;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.util.MainUtil;
@@ -25,7 +25,7 @@ public abstract class ForgeEatingMixin {
     @Shadow public abstract void eat(int i, float f);
 
     @Inject(method = "eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"),remap = false,require = 0, cancellable = true)
-    protected void roundabout$eatForge(Item item, ItemStack stack, LivingEntity entity, CallbackInfo ci) {
+    protected void sba$eatForge(Item item, ItemStack stack, LivingEntity entity, CallbackInfo ci) {
         if (entity != null) {
             if (stack.hasTag()) {
                 if (stack.getOrCreateTag().contains("pearljamfood")) {

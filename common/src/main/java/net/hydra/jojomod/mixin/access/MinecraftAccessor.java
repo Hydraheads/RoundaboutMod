@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface MinecraftAccessor {
 
     @Invoker("handleKeybinds")
-    void roundabout$invokeHandleKeybinds();
+    void sba$invokeHandleKeybinds();
 }

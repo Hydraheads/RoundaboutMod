@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.anubis;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.mobs.AnubisGuardian;
@@ -66,7 +66,7 @@ public abstract class AnubisRaidMixin {
     protected abstract void updateRaiders();
 
     @Inject(method = "spawnGroup", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$replaceFinalWave(BlockPos $$0, CallbackInfo ci) {
+    private void sba$replaceFinalWave(BlockPos $$0, CallbackInfo ci) {
         if (this.getGroupsSpawned() == 2) {
             if (!this.level.getBiome(this.center).value().hasPrecipitation()) {
                 if (ClientNetworking.getAppropriateConfig().anubisSettings.enableSpecialRaids) {

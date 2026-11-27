@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "sba:aja_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "sba:aja"
+  }
+}

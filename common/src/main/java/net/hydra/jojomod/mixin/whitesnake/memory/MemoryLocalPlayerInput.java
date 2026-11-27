@@ -17,20 +17,20 @@ public abstract class MemoryLocalPlayerInput {
     @Shadow public Input input;
 
     @Inject(method = "aiStep", at = @At("HEAD"))
-    private void roundabout$blockPreviousControlledInput(CallbackInfo ci) {
+    private void sba$blockPreviousControlledInput(CallbackInfo ci) {
         LocalPlayer player = (LocalPlayer) (Object) this;
         if (!DiscItemData.hasPlayerControl(player)) clearControlledInput(player, true);
     }
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/player/Input;tick(ZF)V", shift = At.Shift.AFTER))
-    private void roundabout$blockRefreshedControlledInput(CallbackInfo ci) {
+    private void sba$blockRefreshedControlledInput(CallbackInfo ci) {
         LocalPlayer player = (LocalPlayer) (Object) this;
         if (!DiscItemData.hasPlayerControl(player)) clearControlledInput(player, false);
     }
 
     @Inject(method = "aiStep", at = @At("TAIL"))
-    private void roundabout$finishBlockingControlledInput(CallbackInfo ci) {
+    private void sba$finishBlockingControlledInput(CallbackInfo ci) {
         LocalPlayer player = (LocalPlayer) (Object) this;
         if (!DiscItemData.hasPlayerControl(player)) clearControlledInput(player, false);
     }

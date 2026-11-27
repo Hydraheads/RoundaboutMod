@@ -8,6 +8,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(IllagerModel.class)
 public interface AccessIllagerModel {
     @Accessor("rightArm")
-    ModelPart roundabout$getRightArm();
+    ModelPart sba$getRightArm();
 
 }

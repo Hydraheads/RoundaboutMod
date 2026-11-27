@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.WhitesnakeModel;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -49,7 +49,7 @@ public class WhitesnakeRenderer extends StandRenderer<WhitesnakeEntity> {
     }
 
     private static ResourceLocation texture(String name) {
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/whitesnake/" + name + ".png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/stand/whitesnake/" + name + ".png");
     }
 
     @Override

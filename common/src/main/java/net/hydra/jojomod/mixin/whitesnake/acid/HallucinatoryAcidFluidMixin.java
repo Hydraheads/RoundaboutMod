@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(FlowingFluid.class)
 public abstract class HallucinatoryAcidFluidMixin {
     @Inject(method = "canHoldFluid", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$treatAcidAsReplaceable(BlockGetter level, BlockPos pos,
+    private void sbaWhitesnake$treatAcidAsReplaceable(BlockGetter level, BlockPos pos,
                                                               BlockState state, Fluid fluid,
                                                               CallbackInfoReturnable<Boolean> cir) {
         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.waterWashesAwayAcid
@@ -30,7 +30,7 @@ public abstract class HallucinatoryAcidFluidMixin {
     }
 
     @Inject(method = "canSpreadTo", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$washThroughAcid(BlockGetter level, BlockPos sourcePos,
+    private void sbaWhitesnake$washThroughAcid(BlockGetter level, BlockPos sourcePos,
                                                        BlockState sourceState, Direction direction,
                                                        BlockPos targetPos, BlockState targetState,
                                                        FluidState targetFluid, Fluid fluid,

@@ -2,7 +2,7 @@ package net.hydra.jojomod.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.HallucinatoryAcidColors;
 import net.hydra.jojomod.entity.stand.WhitesnakeEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public final class HallucinatoryAcidBlockEntityRenderer
         implements BlockEntityRenderer<HallucinatoryAcidBlockEntity> {
-    private static final ResourceLocation ACID_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation ACID_TEXTURE = new ResourceLocation(SBA.MOD_ID,
             "textures/block/hallucinatory_acid_inner.png");
     private static final ResourceLocation SAND_TEXTURE = new ResourceLocation("minecraft",
             "textures/block/sand.png");

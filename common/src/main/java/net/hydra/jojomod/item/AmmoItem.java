@@ -1,6 +1,6 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.projectile.SBABulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -28,6 +28,6 @@ public class AmmoItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED));
+        tooltip.add(Component.translatable("leveling.sba.disc_wip").withStyle(ChatFormatting.RED));
     }
 }

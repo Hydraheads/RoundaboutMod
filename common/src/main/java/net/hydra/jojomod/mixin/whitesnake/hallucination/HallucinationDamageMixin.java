@@ -15,16 +15,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HallucinationDamageMixin {
 
     @Inject(method = "actuallyHurt", at = @At("HEAD"))
-    private void roundaboutWhitesnake$reduceEffectDurations(DamageSource source, float amount,
+    private void sbaWhitesnake$reduceEffectDurations(DamageSource source, float amount,
                                                             CallbackInfo cir) {
         LivingEntity living = (LivingEntity) (Object) this;
         if (amount < 2.0F || living.level().isClientSide()) return;
-        roundabout$reduceEffectDuration(living, living.getEffect(ModEffects.HALLUCINATION));
-        roundabout$reduceEffectDuration(living, living.getEffect(ModEffects.SLEEPING));
+        sba$reduceEffectDuration(living, living.getEffect(ModEffects.HALLUCINATION));
+        sba$reduceEffectDuration(living, living.getEffect(ModEffects.SLEEPING));
     }
 
     @Unique
-    private static void roundabout$reduceEffectDuration(LivingEntity living, MobEffectInstance effect) {
+    private static void sba$reduceEffectDuration(LivingEntity living, MobEffectInstance effect) {
         if (effect == null || effect.isInfiniteDuration()) return;
         living.removeEffect(effect.getEffect());
         if (effect.getDuration() > 20) {

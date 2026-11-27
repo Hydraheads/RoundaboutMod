@@ -100,7 +100,7 @@ public final class HallucinatoryAcidWallBlock extends BaseEntityBlock implements
 
     @Override
     public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
-        if (((StandUser) player).roundabout$getStandPowers().getActivePower() == PowerIndex.MINING) {
+        if (((StandUser) player).sba$getStandPowers().getActivePower() == PowerIndex.MINING) {
             return super.getDestroyProgress(state, player, level, pos);
         }
         return 1.0F / 30.0F;

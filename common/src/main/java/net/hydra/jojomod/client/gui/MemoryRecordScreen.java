@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -30,7 +30,7 @@ import java.util.List;
 
 public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation MEMORY_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation MEMORY_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/anubis_memory.png");
 
     public byte currentlyHovered;
@@ -73,10 +73,10 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         StandUser SU = (StandUser) pl;
 
         this.currentlyHovered = (byte)-1;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
             List<AnubisMemory> memories = PA.memories;
-            boolean bypass = pl.isCreative() || (!SU.roundabout$getStandDisc().isEmpty() && SU.roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
-            final int count = bypass ? 8 : ((IPlayerEntity)pl).roundabout$getStandLevel()+1;
+            boolean bypass = pl.isCreative() || (!SU.sba$getStandDisc().isEmpty() && SU.sba$getStandDisc().getItem() instanceof MaxStandDiscItem);
+            final int count = bypass ? 8 : ((IPlayerEntity)pl).sba$getStandLevel()+1;
             for (int i = 0; i < count; ++i) {
                 AnubisMemory memory = memories.get(i);
                 if (memory != null) {
@@ -115,8 +115,8 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         super.render(guiGraphics, i, j, f);
 
 
-        Component str = Component.translatable("roundabout.anubis.playback_title");
-        if (this.recording) {str = Component.translatable("roundabout.anubis.memory_title");}
+        Component str = Component.translatable("sba.anubis.playback_title");
+        if (this.recording) {str = Component.translatable("sba.anubis.memory_title");}
         guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32, -1);
 
         if (!this.setFirstMousePos) {
@@ -140,8 +140,8 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
 
             Player player = Minecraft.getInstance().player;
             StandUser SU = (StandUser) player;
-            if (SU.roundabout$getStandPowers() != null) {
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            if (SU.sba$getStandPowers() != null) {
+                if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
                     PA.convertToVisual(currentlyHovered == 8 ? -1 : currentlyHovered,    PA.memories.get( (currentlyHovered == 8 || currentlyHovered == -1) ? 0 : currentlyHovered).moments);
                 }
             }
@@ -163,7 +163,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         }
         Player pl = Minecraft.getInstance().player;
         StandUser SU = (StandUser) pl;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
             if (this.recording) {
                 PA.recordMemory(pIcon.id);
             } else {
@@ -179,9 +179,9 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     private boolean checkToClose() {
@@ -212,7 +212,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
             return false; // Let these go through to the player
         }
 
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && this.recording) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis PA && this.recording) {
             List<AnubisMemory> memories = PA.memories;
             if (this.currentlyHovered == -1 || this.currentlyHovered == 8) {return false;}
             for (int i=0;i<mc.options.keyHotbarSlots.length;i++) {
@@ -252,7 +252,7 @@ public class MemoryRecordScreen extends Screen implements NoCancelInputScreen {
         public int getMode() {
             Player p = Minecraft.getInstance().player;
             StandUser SU = (StandUser) p;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
                 if(!PA.memories.isEmpty()) {
                     AnubisMemory memory = PA.memories.get(this.id);
                     if (memory != null) {

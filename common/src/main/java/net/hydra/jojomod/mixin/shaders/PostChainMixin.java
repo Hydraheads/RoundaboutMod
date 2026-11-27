@@ -3,7 +3,7 @@ package net.hydra.jojomod.mixin.shaders;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IShaderGameRenderer;
 import net.minecraft.client.Camera;
 import net.zetalasis.client.shader.IPostChainAccessor;
@@ -37,22 +37,22 @@ public abstract class PostChainMixin implements IPostChainAccessor {
     @Unique private float processCount;
 
     @Override
-    public List<PostPass> roundabout$getPasses() {
+    public List<PostPass> sba$getPasses() {
         return this.passes;
     }
 
     @Override
-    public void roundabout$resize() {
+    public void sba$resize() {
         Minecraft client = Minecraft.getInstance();
         ((PostChain)((Object)this)).resize(client.getWindow().getWidth(), client.getWindow().getHeight());
     }
 
     @Override
-    public void roundabout$process(float tickDelta) {
+    public void sba$process(float tickDelta) {
         Minecraft client = Minecraft.getInstance();
         processCount += 1;
 
-        this.roundabout$resize();
+        this.sba$resize();
 
         /*
         if (TimestopShaderManager.TIMESTOP_DEPTH_BUFFER == null)
@@ -75,7 +75,7 @@ public abstract class PostChainMixin implements IPostChainAccessor {
     }
 
     @Override
-    public boolean roundabout$setUniform(String name, Object value) {
+    public boolean sba$setUniform(String name, Object value) {
         try
         {
             for (PostPass p : this.passes)

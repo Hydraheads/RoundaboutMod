@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class DazeIronGolem {
         /**Minor code, mobs in a barrage should not be attacking*/
         @Inject(method = "doHurtTarget", at = @At(value = "HEAD"), cancellable = true)
-        private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
-            if (((StandUser) this).roundabout$isDazed() ||
-                    (((StandUser) this).roundabout$hasAStand() &&
-                            ((StandUser) this).roundabout$getStandPowers().disableMobAiAttack()) || ((StandUser) this).roundabout$isRestrained()) {
+        private void sba$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
+            if (((StandUser) this).sba$isDazed() ||
+                    (((StandUser) this).sba$hasAStand() &&
+                            ((StandUser) this).sba$getStandPowers().disableMobAiAttack()) || ((StandUser) this).sba$isRestrained()) {
                 ci.setReturnValue(false);
             }
         }

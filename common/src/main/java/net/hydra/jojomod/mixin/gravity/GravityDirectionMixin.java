@@ -18,7 +18,7 @@ public abstract class GravityDirectionMixin {
 
     @ModifyVariable(method = "orderedByNearest", at = @At(value = "STORE"), ordinal = 1
             )
-    private static float roundabout$orderByNearest1(float f1, Entity entity) {
+    private static float sba$orderByNearest1(float f1, Entity entity) {
         Direction gravityDirection = GravityAPI.getGravityDirection(entity);
         if (gravityDirection != Direction.DOWN){
             return RotationUtil.rotPlayerToWorld(f1,entity.getViewXRot(1F),gravityDirection).x;
@@ -28,7 +28,7 @@ public abstract class GravityDirectionMixin {
 
     @ModifyVariable(method = "orderedByNearest", at = @At(value = "STORE"), ordinal = 0
     )
-    private static float roundabout$orderByNearest2(float f1, Entity entity) {
+    private static float sba$orderByNearest2(float f1, Entity entity) {
         Direction gravityDirection = GravityAPI.getGravityDirection(entity);
         if (gravityDirection != Direction.DOWN){
             return RotationUtil.rotPlayerToWorld(f1,entity.getViewYRot(1F),gravityDirection).y;
@@ -39,7 +39,7 @@ public abstract class GravityDirectionMixin {
 
     @Inject(method = "getFacingAxis", at = @At(value = "HEAD"), cancellable = true
     )
-    private static void roundabout$getFacingAxis(Entity entity, Direction.Axis $$1, CallbackInfoReturnable<Direction> cir) {
+    private static void sba$getFacingAxis(Entity entity, Direction.Axis $$1, CallbackInfoReturnable<Direction> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection(entity);
         if (gravityDirection != Direction.DOWN){
             switch ($$1) {

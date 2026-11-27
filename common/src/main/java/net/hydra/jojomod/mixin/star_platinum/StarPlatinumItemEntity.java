@@ -18,9 +18,9 @@ public abstract class StarPlatinumItemEntity extends Entity {
     /**This mixin makes items being sucked in by inhale lose gravity*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$tick(CallbackInfo ci) {
-        if (((IEntityAndData)this).roundabout$getNoGravTicks() > 0){
-            ((IEntityAndData)this).roundabout$setNoGravTicks(((IEntityAndData)this).roundabout$getNoGravTicks()-1);
+    protected void sba$tick(CallbackInfo ci) {
+        if (((IEntityAndData)this).sba$getNoGravTicks() > 0){
+            ((IEntityAndData)this).sba$setNoGravTicks(((IEntityAndData)this).sba$getNoGravTicks()-1);
             if (!this.isNoGravity()) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.04, 0.0));
             }
@@ -28,7 +28,7 @@ public abstract class StarPlatinumItemEntity extends Entity {
     }
 
     @Inject(method = "playerTouch", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playerTouch(Player $$0,CallbackInfo ci) {
+    protected void sba$playerTouch(Player $$0,CallbackInfo ci) {
         if (PowerTypes.isInADifferentExistence($$0,this)){
             ci.cancel();
         }

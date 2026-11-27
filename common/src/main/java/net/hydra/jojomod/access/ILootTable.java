@@ -8,8 +8,8 @@ import java.util.List;
 public interface ILootTable {
 
     @Unique
-    int roundabout$getSize();
+    int sba$getSize();
     @Unique
-    List<LootPool> roundabout$getPools();
+    List<LootPool> sba$getPools();
 
 }

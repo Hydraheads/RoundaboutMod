@@ -28,7 +28,7 @@ public class HologramCloneRenderer<T extends KingCrimsonProjectionEntity> extend
         entity.player = ClientUtil.getPlayer();
         if (entity.player != null) {
             IPlayerEntity pl = ((IPlayerEntity) entity.getPlayer());
-            ItemStack visage = pl.roundabout$getMaskSlot();
+            ItemStack visage = pl.sba$getMaskSlot();
             entity.setVisage(visage);
             entity.setItemSlot(EquipmentSlot.HEAD, entity.player.getItemBySlot(EquipmentSlot.HEAD).copy());
             entity.setItemSlot(EquipmentSlot.CHEST, entity.player.getItemBySlot(EquipmentSlot.CHEST).copy());

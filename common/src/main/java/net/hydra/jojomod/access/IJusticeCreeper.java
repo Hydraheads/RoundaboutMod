@@ -2,6 +2,6 @@ package net.hydra.jojomod.access;
 
 public interface IJusticeCreeper {
 
-    boolean roundabout$isTransformed();
-    void roundabout$setTransformed(boolean transformed);
+    boolean sba$isTransformed();
+    void sba$setTransformed(boolean transformed);
 }

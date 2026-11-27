@@ -131,7 +131,7 @@ public class VirusSpitEntity extends ThrowableProjectile {
             if (ownedBy($$0.getEntity()))
                 return;
             if ($$0.getEntity() instanceof EnderMan em) {
-                ((IEnderMan) em).roundabout$teleport();
+                ((IEnderMan) em).sba$teleport();
                 return;
             }
             ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ModBlocks.VIRUS_SPIT_SPLATTER.defaultBlockState()), this.getX(),
@@ -144,7 +144,7 @@ public class VirusSpitEntity extends ThrowableProjectile {
             if ($$0.getEntity() instanceof LivingEntity LE ) {
                 LE.addEffect(new MobEffectInstance(ModEffects.DISTORTION_VIRUS, 60,2), getOwner());
             }
-            if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+            if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers()
                     instanceof PowersPurpleHaze pph){
 
                 pph.addEXP(6);

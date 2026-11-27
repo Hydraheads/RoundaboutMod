@@ -30,34 +30,34 @@ public abstract class UserAIPanicGoal extends Goal {
     /**Weaponize the panic goal into an attack goal when a mob is a stand user or survivor zapped*/
 
     @Final
-    private static TargetingConditions roundabout$HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
+    private static TargetingConditions sba$HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
 
     @Unique
-    private int roundabout$timestamp;
+    private int sba$timestamp;
 
     @Unique
     @Final
-    protected boolean roundabout$mustSee;
+    protected boolean sba$mustSee;
     @Final
-    private boolean roundabout$mustReach;
+    private boolean sba$mustReach;
     @Unique
-    private int roundabout$reachCache;
+    private int sba$reachCache;
     @Unique
-    private int roundabout$reachCacheTime;
+    private int sba$reachCacheTime;
     @Unique
-    private int roundabout$unseenTicks;
-    @Unique
-    @Nullable
-    protected LivingEntity roundabout$targetMob;
-    @Unique
-    protected int roundabout$unseenMemoryTicks = 60;
+    private int sba$unseenTicks;
     @Unique
     @Nullable
-    private Class<?>[] roundabout$toIgnoreAlert;
+    protected LivingEntity sba$targetMob;
+    @Unique
+    protected int sba$unseenMemoryTicks = 60;
+    @Unique
+    @Nullable
+    private Class<?>[] sba$toIgnoreAlert;
 
 
     @Unique
-    public boolean roundabout$getPanicGoal(){
+    public boolean sba$getPanicGoal(){
         if (MainUtil.forceAggression(this.mob) && (!(this.mob instanceof Wolf) &&
                 !(this.mob instanceof PolarBear))) {
             return true;
@@ -68,12 +68,12 @@ public abstract class UserAIPanicGoal extends Goal {
 
 
     @Inject(method = "canContinueToUse", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$canContinueToUse(CallbackInfoReturnable<Boolean> cir) {
-        if (roundabout$getPanicGoal()) {
+    public void sba$canContinueToUse(CallbackInfoReturnable<Boolean> cir) {
+        if (sba$getPanicGoal()) {
             cir.setReturnValue(false);
             LivingEntity $$0 = this.mob.getTarget();
             if ($$0 == null) {
-                $$0 = this.roundabout$targetMob;
+                $$0 = this.sba$targetMob;
             }
 
             if ($$0 == null) {
@@ -85,14 +85,14 @@ public abstract class UserAIPanicGoal extends Goal {
                 Team $$2 = $$0.getTeam();
                 if ($$1 != null && $$2 == $$1) {
                 } else {
-                    double $$3 = this.roundabout$getFollowDistance();
+                    double $$3 = this.sba$getFollowDistance();
                     if (this.mob.distanceToSqr($$0) > $$3 * $$3) {
                         cir.setReturnValue(false);
                     } else {
-                        if (this.roundabout$mustSee) {
+                        if (this.sba$mustSee) {
                             if (this.mob.getSensing().hasLineOfSight($$0)) {
-                                this.roundabout$unseenTicks = 0;
-                            } else if (++this.roundabout$unseenTicks > reducedTickDelay(this.roundabout$unseenMemoryTicks)) {
+                                this.sba$unseenTicks = 0;
+                            } else if (++this.sba$unseenTicks > reducedTickDelay(this.sba$unseenMemoryTicks)) {
                                 cir.setReturnValue(false);
                             }
                         }
@@ -105,15 +105,15 @@ public abstract class UserAIPanicGoal extends Goal {
         }
     }
     @Inject(method = "canUse", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$canUse(CallbackInfoReturnable<Boolean> cir) {
-        if (roundabout$getPanicGoal()){
+    public void sba$canUse(CallbackInfoReturnable<Boolean> cir) {
+        if (sba$getPanicGoal()){
             int $$0 = this.mob.getLastHurtByMobTimestamp();
             LivingEntity $$1 = this.mob.getLastHurtByMob();
-            if ($$0 != this.roundabout$timestamp && $$1 != null) {
+            if ($$0 != this.sba$timestamp && $$1 != null) {
                 if ($$1.getType() == EntityType.PLAYER && this.mob.level().getGameRules().getBoolean(GameRules.RULE_UNIVERSAL_ANGER)) {
                     cir.setReturnValue(false);
                 } else {
-                    cir.setReturnValue(this.roundabout$canAttack($$1, roundabout$HURT_BY_TARGETING));
+                    cir.setReturnValue(this.sba$canAttack($$1, sba$HURT_BY_TARGETING));
                 }
             } else {
                 cir.setReturnValue(false);
@@ -122,32 +122,32 @@ public abstract class UserAIPanicGoal extends Goal {
     }
 
     @Inject(method = "start", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$start(CallbackInfo ci) {
-        if (roundabout$getPanicGoal()){
+    public void sba$start(CallbackInfo ci) {
+        if (sba$getPanicGoal()){
             this.mob.setTarget(this.mob.getLastHurtByMob());
-            this.roundabout$targetMob = this.mob.getTarget();
-            this.roundabout$timestamp = this.mob.getLastHurtByMobTimestamp();
-            this.roundabout$unseenMemoryTicks = 300;
-            ((IMob)this.mob).roundabout$resetAtkCD();
+            this.sba$targetMob = this.mob.getTarget();
+            this.sba$timestamp = this.mob.getLastHurtByMobTimestamp();
+            this.sba$unseenMemoryTicks = 300;
+            ((IMob)this.mob).sba$resetAtkCD();
             ci.cancel();
         }
-        this.roundabout$reachCache = 0;
-        this.roundabout$reachCacheTime = 0;
-        this.roundabout$unseenTicks = 0;
+        this.sba$reachCache = 0;
+        this.sba$reachCacheTime = 0;
+        this.sba$unseenTicks = 0;
     }
 
     @Inject(method = "stop", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$stop(CallbackInfo ci) {
-        if (roundabout$getPanicGoal()){
+    public void sba$stop(CallbackInfo ci) {
+        if (sba$getPanicGoal()){
             this.mob.setTarget(null);
-            this.roundabout$targetMob = null;
+            this.sba$targetMob = null;
             ci.cancel();
         }
     }
 
     @Unique
-    private boolean roundabout$canReach(LivingEntity $$0) {
-        this.roundabout$reachCacheTime = reducedTickDelay(10 + this.mob.getRandom().nextInt(5));
+    private boolean sba$canReach(LivingEntity $$0) {
+        this.sba$reachCacheTime = reducedTickDelay(10 + this.mob.getRandom().nextInt(5));
         Path $$1 = this.mob.getNavigation().createPath($$0, 0);
         if ($$1 == null) {
             return false;
@@ -164,7 +164,7 @@ public abstract class UserAIPanicGoal extends Goal {
     }
 
     @Unique
-    protected boolean roundabout$canAttack(@Nullable LivingEntity $$0, TargetingConditions $$1) {
+    protected boolean sba$canAttack(@Nullable LivingEntity $$0, TargetingConditions $$1) {
         if ($$0 == null) {
             return false;
         } else if (!$$1.test(this.mob, $$0)) {
@@ -172,16 +172,16 @@ public abstract class UserAIPanicGoal extends Goal {
         } else if (!this.mob.isWithinRestriction($$0.blockPosition())) {
             return false;
         } else {
-            if (this.roundabout$mustReach) {
-                if (--this.roundabout$reachCacheTime <= 0) {
-                    this.roundabout$reachCache = 0;
+            if (this.sba$mustReach) {
+                if (--this.sba$reachCacheTime <= 0) {
+                    this.sba$reachCache = 0;
                 }
 
-                if (this.roundabout$reachCache == 0) {
-                    this.roundabout$reachCache = this.roundabout$canReach($$0) ? 1 : 2;
+                if (this.sba$reachCache == 0) {
+                    this.sba$reachCache = this.sba$canReach($$0) ? 1 : 2;
                 }
 
-                if (this.roundabout$reachCache == 2) {
+                if (this.sba$reachCache == 2) {
                     return false;
                 }
             }
@@ -191,7 +191,7 @@ public abstract class UserAIPanicGoal extends Goal {
     }
 
     @Unique
-    protected double roundabout$getFollowDistance() {
+    protected double sba$getFollowDistance() {
         return this.mob.getAttributeValue(Attributes.FOLLOW_RANGE);
     }
 

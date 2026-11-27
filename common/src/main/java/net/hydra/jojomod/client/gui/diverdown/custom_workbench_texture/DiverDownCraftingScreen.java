@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.CraftingScreen;
@@ -11,7 +11,7 @@ import net.minecraft.world.inventory.CraftingMenu;
 
 public class DiverDownCraftingScreen extends CraftingScreen {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/gui/diver_down/workbench_ui/crafting_table.png");
+            new ResourceLocation(SBA.MOD_ID, "textures/gui/diver_down/workbench_ui/crafting_table.png");
 
     public DiverDownCraftingScreen(CraftingMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

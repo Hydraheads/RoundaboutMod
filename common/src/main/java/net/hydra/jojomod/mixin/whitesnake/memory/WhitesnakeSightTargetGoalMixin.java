@@ -17,9 +17,9 @@ public abstract class WhitesnakeSightTargetGoalMixin {
     @Shadow @Final protected Mob mob;
 
     @Inject(method = "getFollowDistance", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$missingSightRange(CallbackInfoReturnable<Double> cir) {
+    private void sbaWhitesnake$missingSightRange(CallbackInfoReturnable<Double> cir) {
         if (WhitesnakeDiscUtil.canCarrySightDisc(mob)
-                && !((DiscBearer) mob).roundabout$hasSightDisc()
+                && !((DiscBearer) mob).sba$hasSightDisc()
                 && mob.getLastHurtByMob() == null) {
             cir.setReturnValue(mob.getAttributeValue(Attributes.FOLLOW_RANGE) * 0.07D);
         }

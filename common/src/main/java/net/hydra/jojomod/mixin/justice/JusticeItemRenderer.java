@@ -24,7 +24,7 @@ public class JusticeItemRenderer {
 
     /**Justice rendering the little star next to fog block items*/
     @Inject(method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V", at = @At(value = "TAIL"))
-    public void roundabout$renderTail(ItemStack $$0, ItemDisplayContext $$1, boolean $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, int $$6, BakedModel $$7, CallbackInfo ci) {
+    public void sba$renderTail(ItemStack $$0, ItemDisplayContext $$1, boolean $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, int $$6, BakedModel $$7, CallbackInfo ci) {
         if (!$$0.isEmpty() && $$0.getItem() instanceof BlockItem BE && BE.getBlock() instanceof FogBlock) {
             ClientUtil.applyJusticeFogBlockTextureOverlayInInventory($$0,$$1,$$2,$$3,$$4,$$5,$$6,this.itemModelShaper,this.blockEntityRenderer,
                     ((ItemRenderer)(Object)this));

@@ -62,20 +62,20 @@ public final class CommandDiscController {
     }
 
     public static void save(LivingEntity commanded, CompoundTag tag) {
-        tag.remove("roundabout.CommandDiscs");
+        tag.remove("sba.CommandDiscs");
         if (!COMMAND_DISCS.containsKey(commanded)) return;
         CompoundTag discs = new CompoundTag();
         COMMAND_DISCS.get(commanded).forEach((command, stack) ->
                 discs.put(command.name(), stack.save(new CompoundTag())));
-        tag.put("roundabout.CommandDiscs", discs);
+        tag.put("sba.CommandDiscs", discs);
     }
 
     public static void load(LivingEntity commanded, CompoundTag tag) {
         ATTACK_COMMANDS.remove(commanded);
         EXPLOSIVE_COMMANDS.remove(commanded);
         COMMAND_DISCS.remove(commanded);
-        if (!tag.contains("roundabout.CommandDiscs", 10)) return;
-        CompoundTag discs = tag.getCompound("roundabout.CommandDiscs");
+        if (!tag.contains("sba.CommandDiscs", 10)) return;
+        CompoundTag discs = tag.getCompound("sba.CommandDiscs");
         for (CommandDiscItem.Command command : CommandDiscItem.Command.values()) {
             if (!discs.contains(command.name(), 10)) continue;
             ItemStack stack = ItemStack.of(discs.getCompound(command.name()));
@@ -95,7 +95,7 @@ public final class CommandDiscController {
 
     public static boolean commandAttack(ServerPlayer commanded, LivingEntity target) {
         StandUser standUser = (StandUser) commanded;
-        if (standUser.roundabout$isPossessed()) return false;
+        if (standUser.sba$isPossessed()) return false;
 
         CommandDiscPossession possession = new CommandDiscPossession(commanded.level(), commanded, target);
         possession.setPos(commanded.position());
@@ -105,8 +105,8 @@ public final class CommandDiscController {
             return false;
         }
         commanded.stopUsingItem();
-        standUser.roundabout$setPossessor(possession);
-        standUser.roundabout$setActive(false);
+        standUser.sba$setPossessor(possession);
+        standUser.sba$setActive(false);
         return true;
     }
 
@@ -152,7 +152,7 @@ public final class CommandDiscController {
             return;
         }
         if (!(commanded instanceof Mob mob)) {
-            if (!(((StandUser) commanded).roundabout$getPossessor() instanceof CommandDiscPossession possession)
+            if (!(((StandUser) commanded).sba$getPossessor() instanceof CommandDiscPossession possession)
                     || possession.isRemoved()) {
                 ejectCommandDisc(commanded, CommandDiscItem.Command.ATTACK);
             }
@@ -165,7 +165,7 @@ public final class CommandDiscController {
         }
         if (!(mob.level() instanceof ServerLevel level)) return;
         if (mob.isNoAi() || level.getGameTime() >= command.expiresAt()
-                || !((DiscBearer) mob).roundabout$hasMemoryDisc()) {
+                || !((DiscBearer) mob).sba$hasMemoryDisc()) {
             clearAttackCommand(mob);
             mob.setTarget(null);
             mob.getNavigation().stop();

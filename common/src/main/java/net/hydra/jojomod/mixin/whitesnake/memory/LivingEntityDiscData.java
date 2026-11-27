@@ -43,149 +43,149 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityDiscData extends Entity implements DiscBearer {
-    @Unique private static final EntityDataAccessor<Boolean> ROUNDABOUT$HAS_MEMORY =
+    @Unique private static final EntityDataAccessor<Boolean> SBA$HAS_MEMORY =
             SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
-    @Unique private static final EntityDataAccessor<Byte> ROUNDABOUT$MEMORY_PERSONALITY =
+    @Unique private static final EntityDataAccessor<Byte> SBA$MEMORY_PERSONALITY =
             SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BYTE);
-    @Unique private boolean roundabout$hasSightDisc = true;
-    @Unique private boolean roundabout$hasHearingDisc = true;
-    @Unique private String roundabout$sightDiscOwnerId = "";
-    @Unique private String roundabout$sightDiscOwnerName = "";
-    @Unique private String roundabout$memoryDiscOwnerId = "";
-    @Unique private String roundabout$memoryDiscOwnerName = "";
-    @Unique private String roundabout$memoryTameOwnerId = "";
-    @Unique private String roundabout$memoryTameOwnerName = "";
-    @Unique private String roundabout$hearingDiscOwnerId = "";
-    @Unique private String roundabout$hearingDiscOwnerName = "";
-    @Unique private int roundabout$sightSealTicks;
-    @Unique private int roundabout$sightSealMaxTicks;
-    @Unique private int roundabout$memorySealTicks;
-    @Unique private int roundabout$memorySealMaxTicks;
-    @Unique private int roundabout$hearingSealTicks;
-    @Unique private int roundabout$hearingSealMaxTicks;
-    @Unique private ItemStack roundabout$musicDisc = ItemStack.EMPTY;
-    @Unique private boolean roundabout$bodyDiscStateDirty = true;
-    @Unique private boolean roundabout$foreignDiscsDropped;
-    @Unique private boolean roundabout$memoryDevelopmentLimited;
-    @Unique private int roundabout$previousLevelDecreaseTicks;
-    @Unique private int roundabout$memoryDevelopmentLimitedTicks;
-    @Unique private CompoundTag roundabout$memoryReading = new CompoundTag();
-    @Unique private ItemStack roundabout$temporaryMemoryDisc = ItemStack.EMPTY;
-    @Unique private CompoundTag roundabout$memoryBeforeDreaming = new CompoundTag();
+    @Unique private boolean sba$hasSightDisc = true;
+    @Unique private boolean sba$hasHearingDisc = true;
+    @Unique private String sba$sightDiscOwnerId = "";
+    @Unique private String sba$sightDiscOwnerName = "";
+    @Unique private String sba$memoryDiscOwnerId = "";
+    @Unique private String sba$memoryDiscOwnerName = "";
+    @Unique private String sba$memoryTameOwnerId = "";
+    @Unique private String sba$memoryTameOwnerName = "";
+    @Unique private String sba$hearingDiscOwnerId = "";
+    @Unique private String sba$hearingDiscOwnerName = "";
+    @Unique private int sba$sightSealTicks;
+    @Unique private int sba$sightSealMaxTicks;
+    @Unique private int sba$memorySealTicks;
+    @Unique private int sba$memorySealMaxTicks;
+    @Unique private int sba$hearingSealTicks;
+    @Unique private int sba$hearingSealMaxTicks;
+    @Unique private ItemStack sba$musicDisc = ItemStack.EMPTY;
+    @Unique private boolean sba$bodyDiscStateDirty = true;
+    @Unique private boolean sba$foreignDiscsDropped;
+    @Unique private boolean sba$memoryDevelopmentLimited;
+    @Unique private int sba$previousLevelDecreaseTicks;
+    @Unique private int sba$memoryDevelopmentLimitedTicks;
+    @Unique private CompoundTag sba$memoryReading = new CompoundTag();
+    @Unique private ItemStack sba$temporaryMemoryDisc = ItemStack.EMPTY;
+    @Unique private CompoundTag sba$memoryBeforeDreaming = new CompoundTag();
 
     protected LivingEntityDiscData(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
-    private void roundabout$defineDiscData(CallbackInfo ci) {
-        if (!this.entityData.hasItem(ROUNDABOUT$HAS_MEMORY)) {
-            this.entityData.define(ROUNDABOUT$HAS_MEMORY, true);
-            this.entityData.define(ROUNDABOUT$MEMORY_PERSONALITY,
+    private void sba$defineDiscData(CallbackInfo ci) {
+        if (!this.entityData.hasItem(SBA$HAS_MEMORY)) {
+            this.entityData.define(SBA$HAS_MEMORY, true);
+            this.entityData.define(SBA$MEMORY_PERSONALITY,
                     MemoryPersonality.classify((LivingEntity) (Object) this));
         }
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void roundabout$saveDiscData(CompoundTag tag, CallbackInfo ci) {
+    private void sba$saveDiscData(CompoundTag tag, CallbackInfo ci) {
         CommandDiscController.save((LivingEntity) (Object) this, tag);
         if (WhitesnakeDiscUtil.isDiscBlacklisted((LivingEntity) (Object) this)) return;
         CompoundTag discs = new CompoundTag();
-        discs.putBoolean("HasMemory", roundabout$ownsMemoryDisc());
-        discs.putInt("MemorySealTicks", roundabout$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY));
-        discs.putInt("MemorySealMaxTicks", roundabout$getDiscSealMaxTicks(WhitesnakeDiscUtil.MEMORY));
-        discs.putString("MemoryOwnerId", roundabout$getMemoryDiscOwnerId());
-        discs.putString("MemoryOwnerName", roundabout$getMemoryDiscOwnerName());
-        discs.putString("MemoryTameOwnerId", roundabout$getMemoryTameOwnerId());
-        discs.putString("MemoryTameOwnerName", roundabout$getMemoryTameOwnerName());
+        discs.putBoolean("HasMemory", sba$ownsMemoryDisc());
+        discs.putInt("MemorySealTicks", sba$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY));
+        discs.putInt("MemorySealMaxTicks", sba$getDiscSealMaxTicks(WhitesnakeDiscUtil.MEMORY));
+        discs.putString("MemoryOwnerId", sba$getMemoryDiscOwnerId());
+        discs.putString("MemoryOwnerName", sba$getMemoryDiscOwnerName());
+        discs.putString("MemoryTameOwnerId", sba$getMemoryTameOwnerId());
+        discs.putString("MemoryTameOwnerName", sba$getMemoryTameOwnerName());
         if (WhitesnakeDiscUtil.isSightDiscEnabled()) {
-            discs.putBoolean("HasSight", roundabout$hasSightDisc);
-            discs.putInt("SightSealTicks", roundabout$sightSealTicks);
-            discs.putInt("SightSealMaxTicks", roundabout$sightSealMaxTicks);
-            discs.putString("SightOwnerId", roundabout$sightDiscOwnerId);
-            discs.putString("SightOwnerName", roundabout$sightDiscOwnerName);
+            discs.putBoolean("HasSight", sba$hasSightDisc);
+            discs.putInt("SightSealTicks", sba$sightSealTicks);
+            discs.putInt("SightSealMaxTicks", sba$sightSealMaxTicks);
+            discs.putString("SightOwnerId", sba$sightDiscOwnerId);
+            discs.putString("SightOwnerName", sba$sightDiscOwnerName);
         }
         if (WhitesnakeDiscUtil.isHearingDiscEnabled()) {
-            discs.putBoolean("HasHearing", roundabout$hasHearingDisc);
-            discs.putInt("HearingSealTicks", roundabout$hearingSealTicks);
-            discs.putInt("HearingSealMaxTicks", roundabout$hearingSealMaxTicks);
-            discs.putString("HearingOwnerId", roundabout$hearingDiscOwnerId);
-            discs.putString("HearingOwnerName", roundabout$hearingDiscOwnerName);
+            discs.putBoolean("HasHearing", sba$hasHearingDisc);
+            discs.putInt("HearingSealTicks", sba$hearingSealTicks);
+            discs.putInt("HearingSealMaxTicks", sba$hearingSealMaxTicks);
+            discs.putString("HearingOwnerId", sba$hearingDiscOwnerId);
+            discs.putString("HearingOwnerName", sba$hearingDiscOwnerName);
         }
-        discs.putByte("MemoryPersonality", roundabout$getMemoryPersonality());
-        discs.putBoolean("MemoryDevelopmentLimited", roundabout$memoryDevelopmentLimited);
-        discs.putInt("PreviousLevelDecreaseTicks", roundabout$previousLevelDecreaseTicks);
-        discs.putInt("MemoryDevelopmentLimitedTicks", roundabout$memoryDevelopmentLimitedTicks);
-        if (!roundabout$memoryReading.isEmpty()) {
-            discs.put("MemoryReading", roundabout$memoryReading.copy());
+        discs.putByte("MemoryPersonality", sba$getMemoryPersonality());
+        discs.putBoolean("MemoryDevelopmentLimited", sba$memoryDevelopmentLimited);
+        discs.putInt("PreviousLevelDecreaseTicks", sba$previousLevelDecreaseTicks);
+        discs.putInt("MemoryDevelopmentLimitedTicks", sba$memoryDevelopmentLimitedTicks);
+        if (!sba$memoryReading.isEmpty()) {
+            discs.put("MemoryReading", sba$memoryReading.copy());
         }
-        if (!roundabout$getMusicDisc().isEmpty()) {
-            discs.put("MusicDisc", roundabout$getMusicDisc().save(new CompoundTag()));
+        if (!sba$getMusicDisc().isEmpty()) {
+            discs.put("MusicDisc", sba$getMusicDisc().save(new CompoundTag()));
         }
-        if (roundabout$hasTemporaryMemoryDisc()) {
-            discs.put("DreamingMemoryDisc", roundabout$temporaryMemoryDisc.save(new CompoundTag()));
-            discs.put("MemoryBeforeDreaming", roundabout$memoryBeforeDreaming.copy());
+        if (sba$hasTemporaryMemoryDisc()) {
+            discs.put("DreamingMemoryDisc", sba$temporaryMemoryDisc.save(new CompoundTag()));
+            discs.put("MemoryBeforeDreaming", sba$memoryBeforeDreaming.copy());
         }
-        tag.put("roundabout.WhitesnakeDiscs", discs);
+        tag.put("sba.WhitesnakeDiscs", discs);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void roundabout$loadDiscData(CompoundTag tag, CallbackInfo ci) {
+    private void sba$loadDiscData(CompoundTag tag, CallbackInfo ci) {
         CommandDiscController.load((LivingEntity) (Object) this, tag);
         if (WhitesnakeDiscUtil.isDiscBlacklisted((LivingEntity) (Object) this)) return;
-        if (!tag.contains("roundabout.WhitesnakeDiscs", 10)) {
+        if (!tag.contains("sba.WhitesnakeDiscs", 10)) {
             return;
         }
-        CompoundTag discs = tag.getCompound("roundabout.WhitesnakeDiscs");
-        roundabout$setMemoryDiscOwnerId(discs.getString("MemoryOwnerId"));
-        roundabout$setMemoryDiscOwnerName(discs.getString("MemoryOwnerName"));
-        roundabout$setMemoryTameOwnerId(discs.getString("MemoryTameOwnerId"));
-        roundabout$setMemoryTameOwnerName(discs.getString("MemoryTameOwnerName"));
+        CompoundTag discs = tag.getCompound("sba.WhitesnakeDiscs");
+        sba$setMemoryDiscOwnerId(discs.getString("MemoryOwnerId"));
+        sba$setMemoryDiscOwnerName(discs.getString("MemoryOwnerName"));
+        sba$setMemoryTameOwnerId(discs.getString("MemoryTameOwnerId"));
+        sba$setMemoryTameOwnerName(discs.getString("MemoryTameOwnerName"));
         if (WhitesnakeDiscUtil.isSightDiscEnabled()) {
-            roundabout$hasSightDisc = WhitesnakeDiscUtil.canCarrySightDisc((LivingEntity) (Object) this)
+            sba$hasSightDisc = WhitesnakeDiscUtil.canCarrySightDisc((LivingEntity) (Object) this)
                     && (!discs.contains("HasSight") || discs.getBoolean("HasSight"));
-            roundabout$sightDiscOwnerId = discs.getString("SightOwnerId");
-            roundabout$sightDiscOwnerName = discs.getString("SightOwnerName");
-            roundabout$sightSealTicks = discs.getInt("SightSealTicks");
-            roundabout$sightSealMaxTicks = discs.getInt("SightSealMaxTicks");
+            sba$sightDiscOwnerId = discs.getString("SightOwnerId");
+            sba$sightDiscOwnerName = discs.getString("SightOwnerName");
+            sba$sightSealTicks = discs.getInt("SightSealTicks");
+            sba$sightSealMaxTicks = discs.getInt("SightSealMaxTicks");
         } else {
-            roundabout$resetSightDiscState();
+            sba$resetSightDiscState();
         }
         if (WhitesnakeDiscUtil.isHearingDiscEnabled()) {
-            roundabout$hasHearingDisc = !discs.contains("HasHearing") || discs.getBoolean("HasHearing");
-            roundabout$hearingDiscOwnerId = discs.getString("HearingOwnerId");
-            roundabout$hearingDiscOwnerName = discs.getString("HearingOwnerName");
-            roundabout$hearingSealTicks = discs.getInt("HearingSealTicks");
-            roundabout$hearingSealMaxTicks = discs.getInt("HearingSealMaxTicks");
+            sba$hasHearingDisc = !discs.contains("HasHearing") || discs.getBoolean("HasHearing");
+            sba$hearingDiscOwnerId = discs.getString("HearingOwnerId");
+            sba$hearingDiscOwnerName = discs.getString("HearingOwnerName");
+            sba$hearingSealTicks = discs.getInt("HearingSealTicks");
+            sba$hearingSealMaxTicks = discs.getInt("HearingSealMaxTicks");
         } else {
-            roundabout$resetHearingDiscState();
+            sba$resetHearingDiscState();
         }
-        roundabout$bodyDiscStateDirty = true;
+        sba$bodyDiscStateDirty = true;
         if (discs.contains("MemoryPersonality")) {
-            roundabout$setMemoryPersonality(discs.getByte("MemoryPersonality"));
+            sba$setMemoryPersonality(discs.getByte("MemoryPersonality"));
         }
-        roundabout$memoryDevelopmentLimited = discs.getBoolean("MemoryDevelopmentLimited");
-        roundabout$previousLevelDecreaseTicks = discs.getInt("PreviousLevelDecreaseTicks");
-        roundabout$memoryDevelopmentLimitedTicks = discs.getInt("MemoryDevelopmentLimitedTicks");
-        roundabout$memoryReading = discs.contains("MemoryReading", 10)
+        sba$memoryDevelopmentLimited = discs.getBoolean("MemoryDevelopmentLimited");
+        sba$previousLevelDecreaseTicks = discs.getInt("PreviousLevelDecreaseTicks");
+        sba$memoryDevelopmentLimitedTicks = discs.getInt("MemoryDevelopmentLimitedTicks");
+        sba$memoryReading = discs.contains("MemoryReading", 10)
                 ? discs.getCompound("MemoryReading").copy() : new CompoundTag();
-        roundabout$setMusicDisc(discs.contains("MusicDisc", 10)
+        sba$setMusicDisc(discs.contains("MusicDisc", 10)
                 ? ItemStack.of(discs.getCompound("MusicDisc")) : ItemStack.EMPTY);
-        roundabout$setTemporaryMemoryDisc(discs.contains("DreamingMemoryDisc", 10)
+        sba$setTemporaryMemoryDisc(discs.contains("DreamingMemoryDisc", 10)
                 ? ItemStack.of(discs.getCompound("DreamingMemoryDisc")) : ItemStack.EMPTY);
-        roundabout$setMemoryBeforeDreaming(discs.contains("MemoryBeforeDreaming", 10)
+        sba$setMemoryBeforeDreaming(discs.contains("MemoryBeforeDreaming", 10)
                 ? discs.getCompound("MemoryBeforeDreaming") : new CompoundTag());
-        entityData.set(ROUNDABOUT$HAS_MEMORY,
+        entityData.set(SBA$HAS_MEMORY,
                 !discs.contains("HasMemory") || discs.getBoolean("HasMemory"));
-        roundabout$bodyDiscStateDirty = true;
+        sba$bodyDiscStateDirty = true;
         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.discSealing) {
-            roundabout$setDiscSeal(WhitesnakeDiscUtil.MEMORY, discs.getInt("MemorySealTicks"),
+            sba$setDiscSeal(WhitesnakeDiscUtil.MEMORY, discs.getInt("MemorySealTicks"),
                     discs.getInt("MemorySealMaxTicks"));
         }
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void roundabout$tickDiscEffects(CallbackInfo ci) {
+    private void sba$tickDiscEffects(CallbackInfo ci) {
         LivingEntity living = (LivingEntity) (Object) this;
         if (WhitesnakeDiscUtil.isDiscBlacklisted(living)) {
             CommandDiscController.ejectCommandDisc(living);
@@ -195,7 +195,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
             WhitesnakeDiscUtil.ejectMobMemoryFromPlayer(player);
         }
         DreamingMemoryController.tick(living);
-        if (WhitesnakeDiscUtil.canCarrySightDisc(living) && !roundabout$hasSightDisc() && !level().isClientSide()
+        if (WhitesnakeDiscUtil.canCarrySightDisc(living) && !sba$hasSightDisc() && !level().isClientSide()
                 && (!living.hasEffect(MobEffects.BLINDNESS)
                 || living.getEffect(MobEffects.BLINDNESS).getDuration() < 80)) {
             living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 0, false, false, false));
@@ -210,7 +210,7 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
                 if (mob.isNoAi()) mob.setNoAi(false);
                 mob.setTarget(null);
                 mob.getNavigation().stop();
-                roundabout$groundLobotomizedFlyer(mob);
+                sba$groundLobotomizedFlyer(mob);
             }
         } else if (DiscItemData.isBlankMemoryMob(living)) {
             Mob mob = (Mob) living;
@@ -223,16 +223,16 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
         CommandDiscController.tick(living);
         MusicDiscController.tick(living);
         if (living instanceof ServerPlayer player) {
-            roundabout$updateMemoryDevelopment(player);
+            sba$updateMemoryDevelopment(player);
         }
         if (!level().isClientSide()) {
-            roundabout$tickDiscSeals(living);
-            if (living instanceof ServerPlayer player) roundabout$syncBodyDiscState(player);
+            sba$tickDiscSeals(living);
+            if (living instanceof ServerPlayer player) sba$syncBodyDiscState(player);
         }
     }
 
     @Unique
-    private static void roundabout$groundLobotomizedFlyer(Mob mob) {
+    private static void sba$groundLobotomizedFlyer(Mob mob) {
         if (!(mob instanceof FlyingMob) && !(mob instanceof Allay)) return;
         mob.setNoGravity(false);
         if (mob.onGround() || mob.isInWater() || mob.isInLava()) return;
@@ -242,345 +242,345 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
     }
 
     @Inject(method = "hurt", at = @At("RETURN"))
-    private void roundabout$ejectMusicDiscWhenDamaged(DamageSource source, float amount,
+    private void sba$ejectMusicDiscWhenDamaged(DamageSource source, float amount,
                                                        CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) MusicDiscController.ejectOnDamage((LivingEntity) (Object) this);
     }
 
     @Inject(method = "die", at = @At("TAIL"))
-    private void roundabout$dropForeignDiscs(DamageSource source, CallbackInfo ci) {
+    private void sba$dropForeignDiscs(DamageSource source, CallbackInfo ci) {
         LivingEntity living = (LivingEntity) (Object) this;
         CommandDiscController.ejectCommandDisc(living);
-        if (roundabout$foreignDiscsDropped || living.level().isClientSide()
+        if (sba$foreignDiscsDropped || living.level().isClientSide()
                 || WhitesnakeDiscUtil.isDiscBlacklisted(living)) return;
-        roundabout$foreignDiscsDropped = true;
+        sba$foreignDiscsDropped = true;
         String entityId = living.getUUID().toString();
 
-        if (WhitesnakeDiscUtil.isSightDiscEnabled() && roundabout$ownsSightDisc()
-                && roundabout$isForeign(roundabout$getSightDiscOwnerId(), entityId)) {
+        if (WhitesnakeDiscUtil.isSightDiscEnabled() && sba$ownsSightDisc()
+                && sba$isForeign(sba$getSightDiscOwnerId(), entityId)) {
             ItemStack stack = new ItemStack(ModItems.SIGHT_DISC);
-            DiscItemData.setOwner(stack, roundabout$getSightDiscOwnerId(), roundabout$getSightDiscOwnerName());
-            roundabout$setHasSightDisc(false);
+            DiscItemData.setOwner(stack, sba$getSightDiscOwnerId(), sba$getSightDiscOwnerName());
+            sba$setHasSightDisc(false);
             living.spawnAtLocation(stack, 0.35F);
         }
-        if (roundabout$ownsMemoryDisc() && roundabout$isForeign(roundabout$getMemoryDiscOwnerId(), entityId)) {
+        if (sba$ownsMemoryDisc() && sba$isForeign(sba$getMemoryDiscOwnerId(), entityId)) {
             ItemStack stack = new ItemStack(ModItems.MEMORY_DISC);
-            DiscItemData.setOwner(stack, roundabout$getMemoryDiscOwnerId(), roundabout$getMemoryDiscOwnerName());
-            DiscItemData.setPersonality(stack, roundabout$getMemoryPersonality());
-            DiscItemData.setTameOwner(stack, roundabout$getMemoryTameOwnerId(),
-                    roundabout$getMemoryTameOwnerName());
-            DiscItemData.setMemoryReading(stack, roundabout$getMemoryReading());
-            roundabout$setHasMemoryDisc(false);
-            roundabout$setMemoryReading(new CompoundTag());
+            DiscItemData.setOwner(stack, sba$getMemoryDiscOwnerId(), sba$getMemoryDiscOwnerName());
+            DiscItemData.setPersonality(stack, sba$getMemoryPersonality());
+            DiscItemData.setTameOwner(stack, sba$getMemoryTameOwnerId(),
+                    sba$getMemoryTameOwnerName());
+            DiscItemData.setMemoryReading(stack, sba$getMemoryReading());
+            sba$setHasMemoryDisc(false);
+            sba$setMemoryReading(new CompoundTag());
             living.spawnAtLocation(stack, 0.35F);
         }
-        if (WhitesnakeDiscUtil.isHearingDiscEnabled() && roundabout$ownsHearingDisc()
-                && roundabout$isForeign(roundabout$getHearingDiscOwnerId(), entityId)) {
+        if (WhitesnakeDiscUtil.isHearingDiscEnabled() && sba$ownsHearingDisc()
+                && sba$isForeign(sba$getHearingDiscOwnerId(), entityId)) {
             ItemStack stack = new ItemStack(ModItems.HEARING_DISC);
-            DiscItemData.setOwner(stack, roundabout$getHearingDiscOwnerId(), roundabout$getHearingDiscOwnerName());
-            roundabout$setHasHearingDisc(false);
+            DiscItemData.setOwner(stack, sba$getHearingDiscOwnerId(), sba$getHearingDiscOwnerName());
+            sba$setHasHearingDisc(false);
             living.spawnAtLocation(stack, 0.35F);
         }
 
         StandUser standUser = (StandUser) living;
-        ItemStack standDisc = standUser.roundabout$getStandDisc();
+        ItemStack standDisc = standUser.sba$getStandDisc();
         if (!(living instanceof KingCrimsonCloneEntity) && !standDisc.isEmpty()
-                && roundabout$isForeign(DiscItemData.getOwnerId(standDisc), entityId)) {
+                && sba$isForeign(DiscItemData.getOwnerId(standDisc), entityId)) {
             ItemStack stack = MainUtil.saveToDiscData(living, standDisc.copy());
-            standUser.roundabout$getStandPowers().onStandSwitch();
-            standUser.roundabout$setStand(null);
-            standUser.roundabout$setActive(false);
-            standUser.roundabout$setStandDisc(ItemStack.EMPTY);
-            standUser.roundabout$setStandPowers(null);
+            standUser.sba$getStandPowers().onStandSwitch();
+            standUser.sba$setStand(null);
+            standUser.sba$setActive(false);
+            standUser.sba$setStandDisc(ItemStack.EMPTY);
+            standUser.sba$setStandPowers(null);
             living.spawnAtLocation(stack, 0.35F);
         }
     }
 
     @Unique
-    private static boolean roundabout$isForeign(String ownerId, String entityId) {
+    private static boolean sba$isForeign(String ownerId, String entityId) {
         return ownerId != null && !ownerId.isEmpty() && !ownerId.equals(entityId);
     }
 
     @Override
-    public boolean roundabout$hasSightDisc() {
+    public boolean sba$hasSightDisc() {
         if (!WhitesnakeDiscUtil.isSightDiscEnabled()) return true;
-        return roundabout$ownsSightDisc() && roundabout$getDiscSealTicks(WhitesnakeDiscUtil.SIGHT) <= 0;
+        return sba$ownsSightDisc() && sba$getDiscSealTicks(WhitesnakeDiscUtil.SIGHT) <= 0;
     }
 
     @Override
-    public boolean roundabout$ownsSightDisc() {
+    public boolean sba$ownsSightDisc() {
         return !WhitesnakeDiscUtil.isSightDiscEnabled()
-                || WhitesnakeDiscUtil.canCarrySightDisc((LivingEntity) (Object) this) && roundabout$hasSightDisc;
+                || WhitesnakeDiscUtil.canCarrySightDisc((LivingEntity) (Object) this) && sba$hasSightDisc;
     }
 
     @Override
-    public void roundabout$setHasSightDisc(boolean value) {
-        roundabout$hasSightDisc = !WhitesnakeDiscUtil.isSightDiscEnabled()
+    public void sba$setHasSightDisc(boolean value) {
+        sba$hasSightDisc = !WhitesnakeDiscUtil.isSightDiscEnabled()
                 || value && WhitesnakeDiscUtil.canCarrySightDisc((LivingEntity) (Object) this);
-        roundabout$setDiscSeal(WhitesnakeDiscUtil.SIGHT, 0, 0);
-        roundabout$bodyDiscStateDirty = true;
+        sba$setDiscSeal(WhitesnakeDiscUtil.SIGHT, 0, 0);
+        sba$bodyDiscStateDirty = true;
     }
     @Override
-    public boolean roundabout$hasMemoryDisc() {
-        return roundabout$ownsMemoryDisc() && roundabout$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY) <= 0;
-    }
-
-    @Override
-    public boolean roundabout$ownsMemoryDisc() {
-        return entityData.get(ROUNDABOUT$HAS_MEMORY);
+    public boolean sba$hasMemoryDisc() {
+        return sba$ownsMemoryDisc() && sba$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY) <= 0;
     }
 
     @Override
-    public void roundabout$setHasMemoryDisc(boolean value) {
-        entityData.set(ROUNDABOUT$HAS_MEMORY, value);
-        roundabout$setDiscSeal(WhitesnakeDiscUtil.MEMORY, 0, 0);
-        roundabout$bodyDiscStateDirty = true;
+    public boolean sba$ownsMemoryDisc() {
+        return entityData.get(SBA$HAS_MEMORY);
+    }
+
+    @Override
+    public void sba$setHasMemoryDisc(boolean value) {
+        entityData.set(SBA$HAS_MEMORY, value);
+        sba$setDiscSeal(WhitesnakeDiscUtil.MEMORY, 0, 0);
+        sba$bodyDiscStateDirty = true;
     }
     @Override
-    public boolean roundabout$hasHearingDisc() {
+    public boolean sba$hasHearingDisc() {
         if (!WhitesnakeDiscUtil.isHearingDiscEnabled()) return true;
-        return roundabout$ownsHearingDisc() && roundabout$getDiscSealTicks(WhitesnakeDiscUtil.HEARING) <= 0;
+        return sba$ownsHearingDisc() && sba$getDiscSealTicks(WhitesnakeDiscUtil.HEARING) <= 0;
     }
 
     @Override
-    public boolean roundabout$ownsHearingDisc() {
-        return !WhitesnakeDiscUtil.isHearingDiscEnabled() || roundabout$hasHearingDisc;
+    public boolean sba$ownsHearingDisc() {
+        return !WhitesnakeDiscUtil.isHearingDiscEnabled() || sba$hasHearingDisc;
     }
 
     @Override
-    public void roundabout$setHasHearingDisc(boolean value) {
-        roundabout$hasHearingDisc = !WhitesnakeDiscUtil.isHearingDiscEnabled() || value;
-        roundabout$setDiscSeal(WhitesnakeDiscUtil.HEARING, 0, 0);
-        roundabout$bodyDiscStateDirty = true;
+    public void sba$setHasHearingDisc(boolean value) {
+        sba$hasHearingDisc = !WhitesnakeDiscUtil.isHearingDiscEnabled() || value;
+        sba$setDiscSeal(WhitesnakeDiscUtil.HEARING, 0, 0);
+        sba$bodyDiscStateDirty = true;
     }
     @Override
-    public int roundabout$getDiscSealTicks(byte type) {
+    public int sba$getDiscSealTicks(byte type) {
         return switch (type) {
             case WhitesnakeDiscUtil.SIGHT -> WhitesnakeDiscUtil.isSightDiscEnabled()
-                    ? roundabout$sightSealTicks : 0;
-            case WhitesnakeDiscUtil.MEMORY -> roundabout$memorySealTicks;
+                    ? sba$sightSealTicks : 0;
+            case WhitesnakeDiscUtil.MEMORY -> sba$memorySealTicks;
             case WhitesnakeDiscUtil.HEARING -> WhitesnakeDiscUtil.isHearingDiscEnabled()
-                    ? roundabout$hearingSealTicks : 0;
+                    ? sba$hearingSealTicks : 0;
             default -> 0;
         };
     }
     @Override
-    public int roundabout$getDiscSealMaxTicks(byte type) {
+    public int sba$getDiscSealMaxTicks(byte type) {
         return switch (type) {
             case WhitesnakeDiscUtil.SIGHT -> WhitesnakeDiscUtil.isSightDiscEnabled()
-                    ? roundabout$sightSealMaxTicks : 0;
-            case WhitesnakeDiscUtil.MEMORY -> roundabout$memorySealMaxTicks;
+                    ? sba$sightSealMaxTicks : 0;
+            case WhitesnakeDiscUtil.MEMORY -> sba$memorySealMaxTicks;
             case WhitesnakeDiscUtil.HEARING -> WhitesnakeDiscUtil.isHearingDiscEnabled()
-                    ? roundabout$hearingSealMaxTicks : 0;
+                    ? sba$hearingSealMaxTicks : 0;
             default -> 0;
         };
     }
     @Override
-    public void roundabout$setDiscSeal(byte type, int ticks, int maxTicks) {
+    public void sba$setDiscSeal(byte type, int ticks, int maxTicks) {
         int remaining = Math.max(0, ticks);
         int maximum = Math.max(remaining, maxTicks);
         switch (type) {
             case WhitesnakeDiscUtil.SIGHT -> {
                 if (!WhitesnakeDiscUtil.isSightDiscEnabled()) {
-                    roundabout$resetSightDiscState();
+                    sba$resetSightDiscState();
                     return;
                 }
-                roundabout$sightSealTicks = remaining;
-                roundabout$sightSealMaxTicks = maximum;
-                roundabout$bodyDiscStateDirty = true;
+                sba$sightSealTicks = remaining;
+                sba$sightSealMaxTicks = maximum;
+                sba$bodyDiscStateDirty = true;
             }
             case WhitesnakeDiscUtil.MEMORY -> {
-                roundabout$memorySealTicks = remaining;
-                roundabout$memorySealMaxTicks = maximum;
-                roundabout$bodyDiscStateDirty = true;
+                sba$memorySealTicks = remaining;
+                sba$memorySealMaxTicks = maximum;
+                sba$bodyDiscStateDirty = true;
             }
             case WhitesnakeDiscUtil.HEARING -> {
                 if (!WhitesnakeDiscUtil.isHearingDiscEnabled()) {
-                    roundabout$resetHearingDiscState();
+                    sba$resetHearingDiscState();
                     return;
                 }
-                roundabout$hearingSealTicks = remaining;
-                roundabout$hearingSealMaxTicks = maximum;
-                roundabout$bodyDiscStateDirty = true;
+                sba$hearingSealTicks = remaining;
+                sba$hearingSealMaxTicks = maximum;
+                sba$bodyDiscStateDirty = true;
             }
         }
     }
     @Override
-    public String roundabout$getSightDiscOwnerId() {
-        return WhitesnakeDiscUtil.isSightDiscEnabled() ? roundabout$sightDiscOwnerId : "";
+    public String sba$getSightDiscOwnerId() {
+        return WhitesnakeDiscUtil.isSightDiscEnabled() ? sba$sightDiscOwnerId : "";
     }
 
     @Override
-    public void roundabout$setSightDiscOwnerId(String value) {
-        roundabout$sightDiscOwnerId = WhitesnakeDiscUtil.isSightDiscEnabled() && value != null ? value : "";
+    public void sba$setSightDiscOwnerId(String value) {
+        sba$sightDiscOwnerId = WhitesnakeDiscUtil.isSightDiscEnabled() && value != null ? value : "";
     }
 
     @Override
-    public String roundabout$getSightDiscOwnerName() {
-        return WhitesnakeDiscUtil.isSightDiscEnabled() ? roundabout$sightDiscOwnerName : "";
+    public String sba$getSightDiscOwnerName() {
+        return WhitesnakeDiscUtil.isSightDiscEnabled() ? sba$sightDiscOwnerName : "";
     }
 
     @Override
-    public void roundabout$setSightDiscOwnerName(String value) {
-        roundabout$sightDiscOwnerName = WhitesnakeDiscUtil.isSightDiscEnabled() && value != null ? value : "";
+    public void sba$setSightDiscOwnerName(String value) {
+        sba$sightDiscOwnerName = WhitesnakeDiscUtil.isSightDiscEnabled() && value != null ? value : "";
     }
 
     @Override
-    public String roundabout$getMemoryDiscOwnerId() {
-        return roundabout$memoryDiscOwnerId;
+    public String sba$getMemoryDiscOwnerId() {
+        return sba$memoryDiscOwnerId;
     }
 
     @Override
-    public void roundabout$setMemoryDiscOwnerId(String value) {
-        roundabout$memoryDiscOwnerId = value == null ? "" : value;
+    public void sba$setMemoryDiscOwnerId(String value) {
+        sba$memoryDiscOwnerId = value == null ? "" : value;
     }
 
     @Override
-    public String roundabout$getMemoryDiscOwnerName() {
-        return roundabout$memoryDiscOwnerName;
+    public String sba$getMemoryDiscOwnerName() {
+        return sba$memoryDiscOwnerName;
     }
 
     @Override
-    public void roundabout$setMemoryDiscOwnerName(String value) {
-        roundabout$memoryDiscOwnerName = value == null ? "" : value;
+    public void sba$setMemoryDiscOwnerName(String value) {
+        sba$memoryDiscOwnerName = value == null ? "" : value;
     }
 
     @Override
-    public String roundabout$getMemoryTameOwnerId() {
-        return roundabout$memoryTameOwnerId;
+    public String sba$getMemoryTameOwnerId() {
+        return sba$memoryTameOwnerId;
     }
 
     @Override
-    public void roundabout$setMemoryTameOwnerId(String value) {
-        roundabout$memoryTameOwnerId = value == null ? "" : value;
+    public void sba$setMemoryTameOwnerId(String value) {
+        sba$memoryTameOwnerId = value == null ? "" : value;
     }
 
     @Override
-    public String roundabout$getMemoryTameOwnerName() {
-        return roundabout$memoryTameOwnerName;
+    public String sba$getMemoryTameOwnerName() {
+        return sba$memoryTameOwnerName;
     }
 
     @Override
-    public void roundabout$setMemoryTameOwnerName(String value) {
-        roundabout$memoryTameOwnerName = value == null ? "" : value;
+    public void sba$setMemoryTameOwnerName(String value) {
+        sba$memoryTameOwnerName = value == null ? "" : value;
     }
 
     @Override
-    public String roundabout$getHearingDiscOwnerId() {
-        return WhitesnakeDiscUtil.isHearingDiscEnabled() ? roundabout$hearingDiscOwnerId : "";
+    public String sba$getHearingDiscOwnerId() {
+        return WhitesnakeDiscUtil.isHearingDiscEnabled() ? sba$hearingDiscOwnerId : "";
     }
 
     @Override
-    public void roundabout$setHearingDiscOwnerId(String value) {
-        roundabout$hearingDiscOwnerId = WhitesnakeDiscUtil.isHearingDiscEnabled() && value != null ? value : "";
+    public void sba$setHearingDiscOwnerId(String value) {
+        sba$hearingDiscOwnerId = WhitesnakeDiscUtil.isHearingDiscEnabled() && value != null ? value : "";
     }
 
     @Override
-    public String roundabout$getHearingDiscOwnerName() {
-        return WhitesnakeDiscUtil.isHearingDiscEnabled() ? roundabout$hearingDiscOwnerName : "";
+    public String sba$getHearingDiscOwnerName() {
+        return WhitesnakeDiscUtil.isHearingDiscEnabled() ? sba$hearingDiscOwnerName : "";
     }
 
     @Override
-    public void roundabout$setHearingDiscOwnerName(String value) {
-        roundabout$hearingDiscOwnerName = WhitesnakeDiscUtil.isHearingDiscEnabled() && value != null ? value : "";
+    public void sba$setHearingDiscOwnerName(String value) {
+        sba$hearingDiscOwnerName = WhitesnakeDiscUtil.isHearingDiscEnabled() && value != null ? value : "";
     }
 
     @Override
-    public byte roundabout$getMemoryPersonality() {
-        return entityData.get(ROUNDABOUT$MEMORY_PERSONALITY);
+    public byte sba$getMemoryPersonality() {
+        return entityData.get(SBA$MEMORY_PERSONALITY);
     }
 
     @Override
-    public void roundabout$setMemoryPersonality(byte value) {
-        entityData.set(ROUNDABOUT$MEMORY_PERSONALITY, value);
+    public void sba$setMemoryPersonality(byte value) {
+        entityData.set(SBA$MEMORY_PERSONALITY, value);
     }
     @Override
-    public CompoundTag roundabout$getMemoryReading() {
-        return roundabout$memoryReading.copy();
-    }
-
-    @Override
-    public void roundabout$setMemoryReading(CompoundTag value) {
-        roundabout$memoryReading = value == null ? new CompoundTag() : value.copy();
+    public CompoundTag sba$getMemoryReading() {
+        return sba$memoryReading.copy();
     }
 
     @Override
-    public boolean roundabout$hasTemporaryMemoryDisc() {
-        return !roundabout$temporaryMemoryDisc.isEmpty();
+    public void sba$setMemoryReading(CompoundTag value) {
+        sba$memoryReading = value == null ? new CompoundTag() : value.copy();
     }
 
     @Override
-    public ItemStack roundabout$getTemporaryMemoryDisc() {
-        return roundabout$temporaryMemoryDisc.copy();
+    public boolean sba$hasTemporaryMemoryDisc() {
+        return !sba$temporaryMemoryDisc.isEmpty();
     }
 
     @Override
-    public void roundabout$setTemporaryMemoryDisc(ItemStack value) {
-        roundabout$temporaryMemoryDisc = value == null ? ItemStack.EMPTY : value.copy();
+    public ItemStack sba$getTemporaryMemoryDisc() {
+        return sba$temporaryMemoryDisc.copy();
     }
 
     @Override
-    public CompoundTag roundabout$getMemoryBeforeDreaming() {
-        return roundabout$memoryBeforeDreaming.copy();
+    public void sba$setTemporaryMemoryDisc(ItemStack value) {
+        sba$temporaryMemoryDisc = value == null ? ItemStack.EMPTY : value.copy();
     }
 
     @Override
-    public void roundabout$setMemoryBeforeDreaming(CompoundTag value) {
-        roundabout$memoryBeforeDreaming = value == null ? new CompoundTag() : value.copy();
+    public CompoundTag sba$getMemoryBeforeDreaming() {
+        return sba$memoryBeforeDreaming.copy();
     }
 
     @Override
-    public ItemStack roundabout$getMusicDisc() {
-        return roundabout$musicDisc;
+    public void sba$setMemoryBeforeDreaming(CompoundTag value) {
+        sba$memoryBeforeDreaming = value == null ? new CompoundTag() : value.copy();
     }
 
     @Override
-    public void roundabout$setMusicDisc(ItemStack value) {
-        roundabout$musicDisc = value == null ? ItemStack.EMPTY : value.copy();
+    public ItemStack sba$getMusicDisc() {
+        return sba$musicDisc;
+    }
+
+    @Override
+    public void sba$setMusicDisc(ItemStack value) {
+        sba$musicDisc = value == null ? ItemStack.EMPTY : value.copy();
     }
 
     @Unique
-    private void roundabout$resetSightDiscState() {
-        roundabout$hasSightDisc = true;
-        roundabout$sightDiscOwnerId = "";
-        roundabout$sightDiscOwnerName = "";
-        roundabout$sightSealTicks = 0;
-        roundabout$sightSealMaxTicks = 0;
+    private void sba$resetSightDiscState() {
+        sba$hasSightDisc = true;
+        sba$sightDiscOwnerId = "";
+        sba$sightDiscOwnerName = "";
+        sba$sightSealTicks = 0;
+        sba$sightSealMaxTicks = 0;
     }
 
     @Unique
-    private void roundabout$resetHearingDiscState() {
-        roundabout$hasHearingDisc = true;
-        roundabout$hearingDiscOwnerId = "";
-        roundabout$hearingDiscOwnerName = "";
-        roundabout$hearingSealTicks = 0;
-        roundabout$hearingSealMaxTicks = 0;
+    private void sba$resetHearingDiscState() {
+        sba$hasHearingDisc = true;
+        sba$hearingDiscOwnerId = "";
+        sba$hearingDiscOwnerName = "";
+        sba$hearingSealTicks = 0;
+        sba$hearingSealMaxTicks = 0;
     }
 
     @Unique
-    private void roundabout$syncBodyDiscState(ServerPlayer player) {
-        if (!roundabout$bodyDiscStateDirty || player.connection == null) return;
+    private void sba$syncBodyDiscState(ServerPlayer player) {
+        if (!sba$bodyDiscStateDirty || player.connection == null) return;
         S2CPacketUtil.syncWhitesnakeDiscState(player, WhitesnakeDiscUtil.MEMORY,
-                entityData.get(ROUNDABOUT$HAS_MEMORY), roundabout$memorySealTicks, roundabout$memorySealMaxTicks);
+                entityData.get(SBA$HAS_MEMORY), sba$memorySealTicks, sba$memorySealMaxTicks);
         if (WhitesnakeDiscUtil.isSightDiscEnabled()) {
             S2CPacketUtil.syncWhitesnakeDiscState(player, WhitesnakeDiscUtil.SIGHT,
-                    roundabout$hasSightDisc, roundabout$sightSealTicks, roundabout$sightSealMaxTicks);
+                    sba$hasSightDisc, sba$sightSealTicks, sba$sightSealMaxTicks);
         }
         if (WhitesnakeDiscUtil.isHearingDiscEnabled()) {
             S2CPacketUtil.syncWhitesnakeDiscState(player, WhitesnakeDiscUtil.HEARING,
-                    roundabout$hasHearingDisc, roundabout$hearingSealTicks, roundabout$hearingSealMaxTicks);
+                    sba$hasHearingDisc, sba$hearingSealTicks, sba$hearingSealMaxTicks);
         }
-        roundabout$bodyDiscStateDirty = false;
+        sba$bodyDiscStateDirty = false;
     }
 
     @Unique
-    private void roundabout$tickDiscSeals(LivingEntity living) {
+    private void sba$tickDiscSeals(LivingEntity living) {
         for (byte type = WhitesnakeDiscUtil.SIGHT; type <= WhitesnakeDiscUtil.HEARING; type++) {
             if (!WhitesnakeDiscUtil.isBodyDiscEnabled(type)) continue;
-            int remaining = roundabout$getDiscSealTicks(type);
+            int remaining = sba$getDiscSealTicks(type);
             if (remaining <= 0) continue;
             int next = ClientNetworking.getAppropriateConfig().whitesnakeSettings.discSealing ? remaining - 1 : 0;
-            roundabout$setDiscSeal(type, next, roundabout$getDiscSealMaxTicks(type));
+            sba$setDiscSeal(type, next, sba$getDiscSealMaxTicks(type));
             if (next > 0) continue;
             if (type == WhitesnakeDiscUtil.MEMORY) {
                 if (living instanceof Mob mob && mob.isNoAi()) mob.setNoAi(false);
@@ -589,28 +589,28 @@ public abstract class LivingEntityDiscData extends Entity implements DiscBearer 
     }
 
     @Unique
-    private void roundabout$updateMemoryDevelopment(ServerPlayer player) {
+    private void sba$updateMemoryDevelopment(ServerPlayer player) {
         IPlayerEntity playerData = (IPlayerEntity) player;
         boolean limited = DiscItemData.isMemoryDevelopmentLimited(player);
         if (limited) {
-            if (!roundabout$memoryDevelopmentLimited) {
-                roundabout$memoryDevelopmentLimited = true;
-                roundabout$previousLevelDecreaseTicks = playerData.rdbt$getLevelDecreaseTicks();
-                roundabout$memoryDevelopmentLimitedTicks = 0;
+            if (!sba$memoryDevelopmentLimited) {
+                sba$memoryDevelopmentLimited = true;
+                sba$previousLevelDecreaseTicks = playerData.rdbt$getLevelDecreaseTicks();
+                sba$memoryDevelopmentLimitedTicks = 0;
             }
-            roundabout$memoryDevelopmentLimitedTicks++;
+            sba$memoryDevelopmentLimitedTicks++;
             int currentLevelDecreaseTicks = playerData.rdbt$getLevelDecreaseTicks();
             if (currentLevelDecreaseTicks < 1_000_000) {
-                roundabout$previousLevelDecreaseTicks = Math.max(roundabout$previousLevelDecreaseTicks,
-                        currentLevelDecreaseTicks + roundabout$memoryDevelopmentLimitedTicks);
+                sba$previousLevelDecreaseTicks = Math.max(sba$previousLevelDecreaseTicks,
+                        currentLevelDecreaseTicks + sba$memoryDevelopmentLimitedTicks);
                 playerData.rdbt$setLevelDecreaseTicks(Integer.MAX_VALUE / 2);
             }
-        } else if (roundabout$memoryDevelopmentLimited) {
+        } else if (sba$memoryDevelopmentLimited) {
             int remaining = Math.max(0,
-                    roundabout$previousLevelDecreaseTicks - roundabout$memoryDevelopmentLimitedTicks);
-            roundabout$memoryDevelopmentLimited = false;
-            roundabout$previousLevelDecreaseTicks = 0;
-            roundabout$memoryDevelopmentLimitedTicks = 0;
+                    sba$previousLevelDecreaseTicks - sba$memoryDevelopmentLimitedTicks);
+            sba$memoryDevelopmentLimited = false;
+            sba$previousLevelDecreaseTicks = 0;
+            sba$memoryDevelopmentLimitedTicks = 0;
             playerData.rdbt$setLevelDecreaseTicks(remaining);
         }
     }

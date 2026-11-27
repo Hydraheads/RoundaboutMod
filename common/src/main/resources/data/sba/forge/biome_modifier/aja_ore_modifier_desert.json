@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:desert",
+  "features": "sba:ore_aja_desert",
+  "step": "underground_ores"
+}

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -78,7 +78,7 @@ public class PowersMetallica extends NewDashPreset {
     public int attackRevealTicks = 0;
     public int suppressRevealTicks = 0;
     private int lastHurtMobTimestampCheck = 0;
-    private byte roundabout$metalMode = NAILS;
+    private byte sba$metalMode = NAILS;
 
     public List<MetallicaKnifeEntity> summonedKnives = new ArrayList<>();
     public List<ItemEntity> magnetItems = new ArrayList<>();
@@ -86,7 +86,7 @@ public class PowersMetallica extends NewDashPreset {
     public PowersMetallica(LivingEntity self) {
         super(self);
         if (self != null && !self.level().isClientSide) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+            getStandUserSelf().sba$setUniqueStandModeToggle(false);
         }
     }
 
@@ -102,9 +102,9 @@ public class PowersMetallica extends NewDashPreset {
         super.onStandSummon(active);
 
         if (self != null) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+            getStandUserSelf().sba$setUniqueStandModeToggle(false);
 
-            //((StandUser)self).roundabout$setMetallicaInvisibility(-1);
+            //((StandUser)self).sba$setMetallicaInvisibility(-1);
             self.removeEffect(MobEffects.INVISIBILITY);
             this.camoAlpha = 0.0f;
             this.prevCamoAlpha = 0.0f;
@@ -123,10 +123,10 @@ public class PowersMetallica extends NewDashPreset {
     public static boolean hasAnyFadeActive(LivingEntity entity) {
         if (entity == null || !MainUtil.isUsingMetallica(entity)) return false;
         StandUser su = (StandUser) entity;
-        if (su.roundabout$getMetallicaInvisibility() > -1) return true;
+        if (su.sba$getMetallicaInvisibility() > -1) return true;
 
         if (entity.level().isClientSide()) {
-            if (su.roundabout$getStandPowers() instanceof PowersMetallica pm) {
+            if (su.sba$getStandPowers() instanceof PowersMetallica pm) {
                 return pm.camoAlpha > 0.0f;
             }
         }
@@ -144,7 +144,7 @@ public class PowersMetallica extends NewDashPreset {
             float activationAlpha = 0.0f;
             float revealFactor = 0.0f;
 
-            if (entity instanceof StandUser user && user.roundabout$getStandPowers() instanceof PowersMetallica metallica) {
+            if (entity instanceof StandUser user && user.sba$getStandPowers() instanceof PowersMetallica metallica) {
                 activationAlpha = Mth.lerp(partialTicks, metallica.prevCamoAlpha, metallica.camoAlpha);
 
                 if (metallica.attackRevealTicks > 0) {
@@ -152,7 +152,7 @@ public class PowersMetallica extends NewDashPreset {
                     revealFactor = Mth.clamp(progress, 0.0f, 0.6f);
                 }
             } else {
-                if (((StandUser)entity).roundabout$getMetallicaInvisibility() > -1) {
+                if (((StandUser)entity).sba$getMetallicaInvisibility() > -1) {
                     activationAlpha = 1.0f;
                 }
             }
@@ -201,7 +201,7 @@ public class PowersMetallica extends NewDashPreset {
         }
 
         float damagePerHit = 3.0f;
-        if (player instanceof StandUser su && su.roundabout$getStandPowers() instanceof PowersMetallica pm) {
+        if (player instanceof StandUser su && su.sba$getStandPowers() instanceof PowersMetallica pm) {
             byte mode = pm.getMetalMode();
             if (mode == RAZORS) damagePerHit = 6.0f;
             else if (mode == SCISSORS) damagePerHit = 12.0f;
@@ -228,7 +228,7 @@ public class PowersMetallica extends NewDashPreset {
     }
 
     @Override public boolean isWip(){ return true; }
-    @Override public Component ifWipListDevStatus(){ return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.AQUA); }
+    @Override public Component ifWipListDevStatus(){ return Component.translatable("sba.dev_status.active").withStyle(ChatFormatting.AQUA); }
     @Override public Component ifWipListDev(){ return Component.literal("Lucio").withStyle(ChatFormatting.YELLOW); }
     @Override public StandPowers generateStandPowers(LivingEntity entity) { return new PowersMetallica(entity); }
     @Override public boolean isStandEnabled() { return true; }
@@ -465,27 +465,27 @@ public class PowersMetallica extends NewDashPreset {
         return false;
     }
     public boolean isMagneticFieldActive(){
-        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+        return getStandUserSelf().sba$getUniqueStandModeToggle();
     }
 
     public byte getMetalMode() {
-        return roundabout$metalMode;
+        return sba$metalMode;
     }
     public boolean toggleMagneticField() {
         suppressRevealTicks = 10;
         self.swing(InteractionHand.MAIN_HAND, true);
         boolean newState = !isMagneticFieldActive();
-        getStandUserSelf().roundabout$setUniqueStandModeToggle(newState);
+        getStandUserSelf().sba$setUniqueStandModeToggle(newState);
         return true;
     }
     public boolean cycleMetalMode() {
         byte newMode = (byte) (getMetalMode() + 1);
         if (newMode > SCISSORS) newMode = NAILS;
-        this.roundabout$metalMode = newMode;
+        this.sba$metalMode = newMode;
         if (!self.level().isClientSide) {
             List<Entity> nearby = self.level().getEntitiesOfClass(Entity.class, self.getBoundingBox().inflate(20));
             for (Entity e : nearby) {
-                if (e instanceof LivingEntity && e != self) ((StandUser)e).roundabout$setMetalMeter(0);
+                if (e instanceof LivingEntity && e != self) ((StandUser)e).sba$setMetalMeter(0);
             }
             if (self instanceof Player p) {
                 String modeName = switch(newMode) {
@@ -503,7 +503,7 @@ public class PowersMetallica extends NewDashPreset {
         super.tickPower();
 
         this.prevCamoAlpha = this.camoAlpha;
-        boolean wantsInvis = ((StandUser)self).roundabout$getMetallicaInvisibility() > -1;
+        boolean wantsInvis = ((StandUser)self).sba$getMetallicaInvisibility() > -1;
 
         if (wantsInvis) {
             if (camoAlpha < 1.0f) {
@@ -610,13 +610,13 @@ public class PowersMetallica extends NewDashPreset {
             boolean canSeeStand = false;
             if (clientPlayer != null) {
                 if (clientPlayer == self) canSeeStand = true;
-                else if (clientPlayer instanceof StandUser su && su.roundabout$hasAStand()) canSeeStand = true;
+                else if (clientPlayer instanceof StandUser su && su.sba$hasAStand()) canSeeStand = true;
             }
 
             if (canSeeStand) {
                 long time = self.tickCount;
 
-                if (((StandUser)self).roundabout$getActive() && !hasAnyFadeActive(self) && time % 2 == 0) {
+                if (((StandUser)self).sba$getActive() && !hasAnyFadeActive(self) && time % 2 == 0) {
                     net.minecraft.core.particles.SimpleParticleType[] bodyVariants = {
                             ModParticles.METALLICA_A, ModParticles.METALLICA_B,
                             ModParticles.METALLICA_C, ModParticles.METALLICA_D
@@ -696,20 +696,20 @@ public class PowersMetallica extends NewDashPreset {
 
                             float buildup = speedMult * distMult;
                             if (buildup < 0.2f) buildup = 0.2f;
-                            float current = data.roundabout$getMetalMeter() + buildup;
+                            float current = data.sba$getMetalMeter() + buildup;
 
                             if (current >= 100f) {
                                 triggerMetalEffect(victim, data);
                                 current = 0;
                             }
-                            data.roundabout$setMetalMeter(current);
+                            data.sba$setMetalMeter(current);
                         }
                     }
                     if (shouldDecrease) {
-                        float current = data.roundabout$getMetalMeter();
+                        float current = data.sba$getMetalMeter();
                         if (current > 0) {
                             current = Math.max(0, current - 1.5f);
-                            data.roundabout$setMetalMeter(current);
+                            data.sba$setMetalMeter(current);
                         }
                     }
                 }
@@ -721,7 +721,7 @@ public class PowersMetallica extends NewDashPreset {
     private void triggerMetalEffect(LivingEntity victim, StandUser data) {
         float dmg = (getMetalMode() == SCISSORS) ? 12.0f : (getMetalMode() == RAZORS) ? 6.0f : 3.0f;
 
-        ResourceKey<DamageType> ironKey = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "iron_deprivation"));
+        ResourceKey<DamageType> ironKey = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(SBA.MOD_ID, "iron_deprivation"));
         DamageSource source = null;
 
         if (self.level() instanceof ServerLevel sl) {
@@ -741,7 +741,7 @@ public class PowersMetallica extends NewDashPreset {
 
         victim.hurt(source, dmg);
 
-        ResourceLocation bleedLoc = new ResourceLocation(Roundabout.MOD_ID, "bleed");
+        ResourceLocation bleedLoc = new ResourceLocation(SBA.MOD_ID, "bleed");
         if (BuiltInRegistries.MOB_EFFECT.containsKey(bleedLoc)) {
             net.minecraft.world.effect.MobEffect bleedEffect = BuiltInRegistries.MOB_EFFECT.get(bleedLoc);
 
@@ -782,12 +782,12 @@ public class PowersMetallica extends NewDashPreset {
     public boolean executeHeal() {
         setCooldown(net.hydra.jojomod.event.index.PowerIndex.SKILL_EXTRA, 600);
         attackRevealTicks = 10;
-        float dmg = ((IEntityAndData)self).roundabout$getLastDamageTaken();
+        float dmg = ((IEntityAndData)self).sba$getLastDamageTaken();
         if (dmg <= 0) dmg = 6.0f; if (dmg > 40.0f) dmg = 40.0f;
         self.heal(dmg);
-        ((IEntityAndData)self).roundabout$setLastDamageTaken(0);
-        if (net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.containsKey(new net.minecraft.resources.ResourceLocation(net.hydra.jojomod.Roundabout.MOD_ID, "bleed"))) {
-            self.removeEffect(net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.get(new net.minecraft.resources.ResourceLocation(net.hydra.jojomod.Roundabout.MOD_ID, "bleed")));
+        ((IEntityAndData)self).sba$setLastDamageTaken(0);
+        if (net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.containsKey(new net.minecraft.resources.ResourceLocation(net.hydra.jojomod.SBA.MOD_ID, "bleed"))) {
+            self.removeEffect(net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.get(new net.minecraft.resources.ResourceLocation(net.hydra.jojomod.SBA.MOD_ID, "bleed")));
         }
         playSoundIfPossible(self.level(),null, self.getX(), self.getY(), self.getZ(), net.minecraft.sounds.SoundEvents.IRON_GOLEM_REPAIR, net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.5f);
         return true;
@@ -795,14 +795,14 @@ public class PowersMetallica extends NewDashPreset {
 
     public boolean toggleInvis() {
         StandUser data = (StandUser) self;
-        if (data.roundabout$getMetallicaInvisibility() > -1) {
-            //data.roundabout$setMetallicaInvisibility(-1);
+        if (data.sba$getMetallicaInvisibility() > -1) {
+            //data.sba$setMetallicaInvisibility(-1);
             self.removeEffect(MobEffects.INVISIBILITY);
         } else {
-            //data.roundabout$setMetallicaInvisibility(10000);
+            //data.sba$setMetallicaInvisibility(10000);
         }
         return true;
     }
 
-    public boolean isInvisible() { return ((StandUser)self).roundabout$getMetallicaInvisibility() > -1; }
+    public boolean isInvisible() { return ((StandUser)self).sba$getMetallicaInvisibility() > -1; }
 }

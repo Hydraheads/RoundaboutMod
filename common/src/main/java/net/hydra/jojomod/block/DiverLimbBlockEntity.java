@@ -97,7 +97,7 @@ public class DiverLimbBlockEntity extends BlockEntity {
                     if (owner == null
                             || !owner.isAlive()
                             || owner.isRemoved()
-                            || !(((StandUser) owner).roundabout$getStandPowers() instanceof PowersDiverDown)) {
+                            || !(((StandUser) owner).sba$getStandPowers() instanceof PowersDiverDown)) {
                         level.removeBlock(pos, false);
                     }
                 }

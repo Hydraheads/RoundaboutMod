@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -91,11 +91,11 @@ public class VampireHairFleshBudLayer extends PsuedoHierarchicalModel {
 
 
     public ResourceLocation getTextureLocation(Entity context, int poggers){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/hair/vampire_3/vampire_hair_white_"+(poggers)+".png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/entity/hair/vampire_3/vampire_hair_white_"+(poggers)+".png");
     }
 
     public boolean getAlternateStyle(Player pl){
-        if (pl != null && ((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.HAIR_EXTENSION_2)
+        if (pl != null && ((IPlayerEntity)pl).sba$GetPos2() == PlayerPosIndex.HAIR_EXTENSION_2)
             return true;
         return false;
     }

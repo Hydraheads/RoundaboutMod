@@ -48,7 +48,7 @@ import java.util.List;
         }
 
         @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
-        private void roundabout$onHit(EntityHitResult $$0, CallbackInfo ci) {
+        private void sba$onHit(EntityHitResult $$0, CallbackInfo ci) {
                 Entity $$2x = $$0.getEntity();
                 ThrownTrident thrownTr = (ThrownTrident) (Object) (this);
                 if($$2x instanceof ManhattanTransferEntity ME){
@@ -59,7 +59,7 @@ import java.util.List;
                         if (!ii.isEmpty()) {
                             ci.cancel();
                             if(ci.isCancelled()) {
-                                if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                if(ME.getUser() instanceof Player PL && ((StandUser) PL).sba$getStandPowers() instanceof  PowersManhattanTransfer PM){
                                     if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
                                         $$2x.playSound(SoundEvents.TRIDENT_HIT, 1.0F, 1.0F);
                                         PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -109,7 +109,7 @@ import java.util.List;
                     }
                 } else if ($$2x instanceof BlackSabbathEntity be){
                         if (thrownTr.getOwner() != null && be.getUser() != null && thrownTr.getOwner().is(be.getUser())) {
-                            if(!this.level().isClientSide() && this.roundabout$getReturnToBlackSabbath()) {
+                            if(!this.level().isClientSide() && this.sba$getReturnToBlackSabbath()) {
                                 ci.cancel();
                             }
                         }
@@ -121,13 +121,13 @@ import java.util.List;
             return this.entityData.get(ID_LOYALTY_SABBATH);
         }
             @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-            private void roundabout$tick(CallbackInfo ci) {
+            private void sba$tick(CallbackInfo ci) {
             if(this.inGroundTime > 4){
                 dealtDamage = true;
             }
 
                 ThrownTrident thrownTr = (ThrownTrident) (Object) (this);
-                if(!this.level().isClientSide() && roundabout$getReturnToBlackSabbath()){
+                if(!this.level().isClientSide() && sba$getReturnToBlackSabbath()){
                     int loyalty = EnchantmentHelper.getLoyalty(this.getPickupItem());
                     if(getLoyalSabbath() == 0 && loyalty > 0) {
                         if(!this.level().isClientSide) {
@@ -142,7 +142,7 @@ import java.util.List;
                         }
                         this.discard();
                     } else {
-                        StandEntity stand = ((StandUser)thrownTr.getOwner()).roundabout$getStand();
+                        StandEntity stand = ((StandUser)thrownTr.getOwner()).sba$getStand();
                         if(stand != null && stand instanceof BlackSabbathEntity be) {
                             ci.cancel();
                             AABB beHitbox = be.getBoundingBox().inflate(1.5, 1.5, 1.5);
@@ -154,7 +154,7 @@ import java.util.List;
                                     ItemStack tridentCopy = this.getPickupItem().copy();
                                     IPlayerEntity play = ((IPlayerEntity)pl);
                                     if(!this.level().isClientSide()) {
-                                        play.roundabout$getBlckSabbathPlayerInventory().setItem(0, tridentCopy);
+                                        play.sba$getBlckSabbathPlayerInventory().setItem(0, tridentCopy);
                                         this.level()
                                                 .playSound(
                                                         null,
@@ -187,8 +187,8 @@ import java.util.List;
                             thrownTr.clientSideReturnTridentTickCount++;
                             super.tick();
                         } else {
-                            if(roundabout$getReturnToBlackSabbath()){
-                                roundabout$setReturnToBlackSabbath(false);
+                            if(sba$getReturnToBlackSabbath()){
+                                sba$setReturnToBlackSabbath(false);
                             }
                         }
                         return;
@@ -197,8 +197,8 @@ import java.util.List;
             }
 
     @Inject(method = "tryPickup", at = @At(value = "HEAD"), cancellable = true, require = 0)
-    public void roundabout$canBePickedUp(CallbackInfoReturnable<Boolean> cir) {
-        if (!this.level().isClientSide() && roundabout$getReturnToBlackSabbath()) {
+    public void sba$canBePickedUp(CallbackInfoReturnable<Boolean> cir) {
+        if (!this.level().isClientSide() && sba$getReturnToBlackSabbath()) {
             cir.setReturnValue(false);
         }
     }
@@ -206,7 +206,7 @@ import java.util.List;
             this.entityData.set(ID_LOYALTY_SABBATH, bt);
         }
         @Inject(method = "defineSynchedData", at = @At(value = "TAIL"), cancellable = true)
-        protected void roundabout$defineSynchedData(CallbackInfo ci) {
+        protected void sba$defineSynchedData(CallbackInfo ci) {
             if (!((ThrownTrident)(Object)this).getEntityData().hasItem(ID_LOYALTY_SABBATH)) {
                 this.entityData.define(ID_LOYALTY_SABBATH, (byte)0);
             }
@@ -214,10 +214,10 @@ import java.util.List;
         protected ItemStack getPickupItem;
         private boolean dealtDamage;
         private boolean returnToSabbarh = false;
-        public void roundabout$setReturnToBlackSabbath(boolean bool){
+        public void sba$setReturnToBlackSabbath(boolean bool){
             returnToSabbarh = bool;
         }
-       public  boolean roundabout$getReturnToBlackSabbath(){
+       public  boolean sba$getReturnToBlackSabbath(){
             return returnToSabbarh;
         }
 

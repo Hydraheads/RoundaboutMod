@@ -8,15 +8,15 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(CreeperModel.class)
 public interface AccessCreeperModel {
     @Accessor("head")
-    ModelPart roundabout$getHead();
+    ModelPart sba$getHead();
     @Accessor("root")
-    ModelPart roundabout$getRoot();
+    ModelPart sba$getRoot();
     @Accessor("rightHindLeg")
-    ModelPart roundabout$getRightHindLeg();
+    ModelPart sba$getRightHindLeg();
     @Accessor("leftHindLeg")
-    ModelPart roundabout$getLeftHindLeg();
+    ModelPart sba$getLeftHindLeg();
     @Accessor("rightFrontLeg")
-    ModelPart roundabout$getRightFrontLeg();
+    ModelPart sba$getRightFrontLeg();
     @Accessor("leftFrontLeg")
-    ModelPart roundabout$getLeftFrontLeg();
+    ModelPart sba$getLeftFrontLeg();
 }

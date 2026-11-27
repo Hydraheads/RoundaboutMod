@@ -30,7 +30,7 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class StandArrowItem extends RoundaboutArrowItem {
+public class StandArrowItem extends SBAArrowItem {
 
     public StandArrowItem(Properties $$0) {
         super($$0);
@@ -90,7 +90,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                     }
                     return InteractionResultHolder.consume($$3);
                 }
-            } else if(((StandUser) $$1).roundabout$getStandPowers().canUseStandArrow()) {
+            } else if(((StandUser) $$1).sba$getStandPowers().canUseStandArrow()) {
                 $$1.startUsingItem($$2);
                 if ($$0.isClientSide()) {
                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_STAND_ARROW_START_SOUND);
@@ -125,13 +125,13 @@ public class StandArrowItem extends RoundaboutArrowItem {
 
             if (stack == null)
             {
-                player.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.noStandsInPool").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.AQUA), true);
+                player.displayClientMessage(Component.translatable("item.sba.stand_arrow.noStandsInPool").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.AQUA), true);
                 return;
             }
 
             if (!ClientNetworking.getAppropriateConfig().itemSettings.standArrowsHideResults) {
                 if (stack.getItem() instanceof StandDiscItem SD) {
-                    player.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
+                    player.displayClientMessage(Component.translatable("item.sba.stand_arrow.rerollOutcome").withStyle(ChatFormatting.WHITE).append(SD.getDisplayName2()).withStyle(ChatFormatting.AQUA), true);
                 }
             }
         }
@@ -195,7 +195,7 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 itemstack = ItemStack.of(tag2);
             }
             if (itemstack != null && !itemstack.isEmpty() && itemstack.getItem() instanceof StandDiscItem de) {
-                ((StandUser)live).roundabout$setRejectionStandDisc(itemstack.copy());
+                ((StandUser)live).sba$setRejectionStandDisc(itemstack.copy());
                 de.generateStandPowerRejection(live);
                 $$0.removeTagKey("StandDisc");
             }
@@ -220,13 +220,13 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 if ($$5 >= itemTime) {
                     if ($$2 instanceof Player PE) {
 
-                        if (!((StandUser) $$2).roundabout$getStandDisc().isEmpty()) {
-                            if (((StandUser) $$2).roundabout$getStandPowers().canUseStandArrow()) {
-                                 if (((StandUser) $$2).roundabout$getStandPowers().onStandArrowUse()) {
+                        if (!((StandUser) $$2).sba$getStandDisc().isEmpty()) {
+                            if (((StandUser) $$2).sba$getStandPowers().canUseStandArrow()) {
+                                 if (((StandUser) $$2).sba$getStandPowers().onStandArrowUse()) {
                                      $$0.hurt(1,PE.level().getRandom(),(ServerPlayer) PE);
                                  }
                             }else {
-                                PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
+                                PE.displayClientMessage(Component.translatable("item.sba.stand_arrow.haveStand").withStyle(ChatFormatting.RED), true);
                             }
                         } else {
                             int get = ClientNetworking.getAppropriateConfig().itemSettings.levelsToGetStand;
@@ -241,8 +241,8 @@ public class StandArrowItem extends RoundaboutArrowItem {
                                     if (de.standPowers.isSecondaryStand() || PE.experienceLevel >= get || PE.isCreative()) {
                                         if (grantStand(itemstack, $$2)) {
                                             $$1.playSound(null, $$2.blockPosition(), ModSounds.STAND_ARROW_USE_EVENT, SoundSource.PLAYERS, 1.5F, 1F);
-                                            PE.displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
-                                            ((IPlayerEntity)PE).roundabout$qmessage(1);
+                                            PE.displayClientMessage(Component.translatable("item.sba.stand_arrow.acquireStand").withStyle(ChatFormatting.WHITE), true);
+                                            ((IPlayerEntity)PE).sba$qmessage(1);
                                             ((ServerLevel) $$1).sendParticles(ParticleTypes.FIREWORK, $$2.getX(),
                                                     $$2.getY() + $$2.getEyeHeight(), $$2.getZ(),
                                                     20, 0, 0, 0, 0.4);
@@ -265,9 +265,9 @@ public class StandArrowItem extends RoundaboutArrowItem {
             }
         } else {
             C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_ITEM_STOP_SOUND);
-            if (!((StandUser) $$2).roundabout$getStandDisc().isEmpty()) {
-                if (((StandUser) $$2).roundabout$getStandPowers().canUseStandArrow()) {
-                    ((StandUser) $$2).roundabout$getStandPowers().onStandArrowUseClient();
+            if (!((StandUser) $$2).sba$getStandDisc().isEmpty()) {
+                if (((StandUser) $$2).sba$getStandPowers().canUseStandArrow()) {
+                    ((StandUser) $$2).sba$getStandPowers().onStandArrowUseClient();
                 }
             }
         }
@@ -321,16 +321,16 @@ public class StandArrowItem extends RoundaboutArrowItem {
     public static boolean grantStand(ItemStack discStack, LivingEntity target){
         if (MainUtil.isDiscEntityBlacklisted(target)) return false;
         if (discStack.getItem() instanceof StandDiscItem de){
-            if (!target.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_LEVELING)){
+            if (!target.level().getGameRules().getBoolean(ModGamerules.SBA_STAND_LEVELING)){
                 discStack.getOrCreateTagElement("Memory").putByte("Level",de.standPowers.getMaxLevel());
             }
 
-            ((StandUser) target).roundabout$setStand(null);
-            ((StandUser) target).roundabout$setActive(false);
-            ((StandUser) target).roundabout$setStandDisc(discStack.copy());
-            ((StandUser) target).roundabout$getStandPowers().rollSkin();
-            if(((StandUser)target).roundabout$getGrabberSabbath() == 0) {
-                ((StandUser) target).roundabout$summonStand(target.level(), true, false);
+            ((StandUser) target).sba$setStand(null);
+            ((StandUser) target).sba$setActive(false);
+            ((StandUser) target).sba$setStandDisc(discStack.copy());
+            ((StandUser) target).sba$getStandPowers().rollSkin();
+            if(((StandUser)target).sba$getGrabberSabbath() == 0) {
+                ((StandUser) target).sba$summonStand(target.level(), true, false);
             }
             return true;
         }
@@ -347,43 +347,43 @@ public class StandArrowItem extends RoundaboutArrowItem {
                 ItemStack itemstack = ItemStack.of(tag2);
                 if (itemstack.isEmpty()) {
                     $$2.add(
-                            Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
+                            Component.translatable("item.sba.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
                     );
                 } else if (itemstack.getItem() instanceof StandDiscItem de) {
                     if (ClientNetworking.getAppropriateConfig().itemSettings.standArrowsHideResults){
                         $$2.add(
-                                Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
+                                Component.translatable("item.sba.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
                         );
                     } else {
                         $$2.add(
                                 de.getDisplayName2().withStyle(ChatFormatting.AQUA)
                         );
                     }
-                    //Component.translatable("item.roundabout.stand_arrow.reroll", Minecraft.getInstance().options.keyShift.getDefaultKey().getName())
+                    //Component.translatable("item.sba.stand_arrow.reroll", Minecraft.getInstance().options.keyShift.getDefaultKey().getName())
                     $$2.add(
                             Component.empty()
                     );
                     $$2.add(
-                            Component.translatable("item.roundabout.stand_arrow.reroll",ClientNetworking.getAppropriateConfig().itemSettings.levelsToRerollStandWithArrow).withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
+                            Component.translatable("item.sba.stand_arrow.reroll",ClientNetworking.getAppropriateConfig().itemSettings.levelsToRerollStandWithArrow).withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
                     );
                     $$2.add(
-                            Component.translatable("item.roundabout.stand_arrow.reroll2").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
+                            Component.translatable("item.sba.stand_arrow.reroll2").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
                     );
                     $$2.add(
-                            Component.translatable("item.roundabout.stand_arrow.magnet").withStyle(ChatFormatting.BLUE).withStyle(ChatFormatting.ITALIC)
+                            Component.translatable("item.sba.stand_arrow.magnet").withStyle(ChatFormatting.BLUE).withStyle(ChatFormatting.ITALIC)
                     );
                 }
             } else {
                 $$2.add(
-                        Component.translatable("item.roundabout.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
+                        Component.translatable("item.sba.stand_arrow.roll").withStyle(ChatFormatting.GRAY)
                 );
                 $$2.add(
-                        Component.translatable("item.roundabout.stand_arrow.magnet").withStyle(ChatFormatting.BLUE).withStyle(ChatFormatting.ITALIC)
+                        Component.translatable("item.sba.stand_arrow.magnet").withStyle(ChatFormatting.BLUE).withStyle(ChatFormatting.ITALIC)
                 );
             }
         } else {
             $$2.add(
-                    Component.translatable("item.roundabout.stand_arrow.usedUp").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
+                    Component.translatable("item.sba.stand_arrow.usedUp").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC)
             );
         }
     }

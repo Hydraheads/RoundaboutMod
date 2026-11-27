@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models;// Made with Blockbench 4.12.6
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -80,7 +80,7 @@ public class RoadRollerStrayModel<T extends Entity> extends PsuedoHierarchicalMo
     public void setupAnim(Entity var1, float pAgeInTicks) {
     }
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/entity/road_roller.png");
     }
 

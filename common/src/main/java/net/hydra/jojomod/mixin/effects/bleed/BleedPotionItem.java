@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BleedPotionItem {
 
     @Inject(method = "finishUsingItem(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/item/ItemStack;", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$finishUsingItem(ItemStack $$0, Level $$1, LivingEntity $$2, CallbackInfoReturnable<ItemStack> cir) {
+    private void sba$finishUsingItem(ItemStack $$0, Level $$1, LivingEntity $$2, CallbackInfoReturnable<ItemStack> cir) {
         if (!$$1.isClientSide() && $$2 != null && $$1 instanceof ServerLevel sl){
             if (ClientNetworking.getAppropriateConfig().miscellaneousSettings.hexTwoSealsPotions) {
                 MobEffectInstance mi = $$2.getEffect(ModEffects.BANISH);

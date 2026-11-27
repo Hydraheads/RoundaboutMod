@@ -3,7 +3,7 @@ package net.hydra.jojomod.event.index;
 public class SyncedDataIndex {
     /**
      * a way to store multiples booleans in a single synced data
-     * using byte flags, similar to SharedFlag of entities, but reserved for roundabout.
+     * using byte flags, similar to SharedFlag of entities, but reserved for sba.
      * Make sure that your number inst being used by other index and if it really needs this,
      * in some cases doing a simple send package to nearby players should work well.
 

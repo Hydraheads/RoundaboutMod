@@ -1,6 +1,6 @@
 package net.hydra.jojomod.event.powers;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -168,7 +168,7 @@ public class DamageHandler {
 
          AABB shiftBox = RotationUtil.boxPlayerToWorld(
                  new AABB(-horizontalRange,-verticalRange,-horizontalRange,horizontalRange,0,horizontalRange),
-                 ((IGravityEntity)player).roundabout$getGravityDirection());
+                 ((IGravityEntity)player).sba$getGravityDirection());
         // Define search area
         AABB box = new AABB(
                 playerPos.x + shiftBox.minX,

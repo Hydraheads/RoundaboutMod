@@ -56,14 +56,14 @@ public class AnubisGuardian extends AbstractIllager implements RangedAttackMob {
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
-        $$0.putBoolean("roundabout.popped_totem",!this.hasTotem());
+        $$0.putBoolean("sba.popped_totem",!this.hasTotem());
         super.addAdditionalSaveData($$0);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
-        if ($$0.contains("roundabout.popped_totem")) {
-            boolean hasPopped = $$0.getBoolean("roundabout.popped_totem");
+        if ($$0.contains("sba.popped_totem")) {
+            boolean hasPopped = $$0.getBoolean("sba.popped_totem");
             this.setPopped(hasPopped);
         }
         super.readAdditionalSaveData($$0);

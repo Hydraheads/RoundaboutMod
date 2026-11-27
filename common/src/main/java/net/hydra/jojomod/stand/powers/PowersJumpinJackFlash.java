@@ -172,7 +172,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     private void jjf$updateArmsStand() {
         if (getSelf() instanceof StandUser user
-                && user.roundabout$getStand() instanceof net.hydra.jojomod.entity.stand.JumpinJackFlashEntity stand) {
+                && user.sba$getStand() instanceof net.hydra.jojomod.entity.stand.JumpinJackFlashEntity stand) {
             stand.jjf$setArmsMode(jjf$armsMode);
         }
     }
@@ -212,9 +212,9 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     @Override
     public net.minecraft.network.chat.Component getSkinName(byte skinId) {
         String key = switch (skinId) {
-            case 1 -> "skins.roundabout.jjf.black_flash";
-            case 2 -> "skins.roundabout.jjf.astronaut";
-            default -> "skins.roundabout.jjf.original";
+            case 1 -> "skins.sba.jjf.black_flash";
+            case 2 -> "skins.sba.jjf.astronaut";
+            default -> "skins.sba.jjf.original";
         };
         return net.minecraft.network.chat.Component.translatable(key);
     }
@@ -668,7 +668,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     private JumpinJackFlashEntity activeStand() {
         return getSelf() instanceof StandUser user
-                && user.roundabout$getStand() instanceof JumpinJackFlashEntity stand
+                && user.sba$getStand() instanceof JumpinJackFlashEntity stand
                 && stand.isAlive() && net.hydra.jojomod.event.index.PowerTypes.hasStandActive(getSelf())
                 ? stand : null;
     }
@@ -685,7 +685,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private boolean canLoadSpit(Player player, JJFLauncherState launcher) {
         ItemStack loaded = launcher.getLoadedItem();
         return player.isAlive() && !player.isSpectator() && !player.isUsingItem()
-                && !jjf$spinAttackHeld && !((StandUser) player).roundabout$isSealed()
+                && !jjf$spinAttackHeld && !((StandUser) player).sba$isSealed()
                 && (loaded.isEmpty() || isSpitAmmo(loaded)) && loaded.getCount() < SPIT_CAPACITY;
     }
 
@@ -708,7 +708,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
         if (loaded.isEmpty()) {
             loaded = new ItemStack(Items.SLIME_BALL);
             loaded.getOrCreateTag().putBoolean("JJFSpitAmmo", true);
-            loaded.setHoverName(Component.translatable("item.roundabout.jjf_spit_ammo"));
+            loaded.setHoverName(Component.translatable("item.sba.jjf_spit_ammo"));
         } else {
             loaded.grow(1);
         }
@@ -1026,7 +1026,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
 
     private void spawnSpit(LivingEntity shooter, JJFSpitEntity spit) {
         if (shooter.level().addFreshEntity(spit) && shooter instanceof StandUser user
-                && user.roundabout$getStand() instanceof JumpinJackFlashEntity stand) {
+                && user.sba$getStand() instanceof JumpinJackFlashEntity stand) {
             stand.playSpitAnimation();
         }
     }
@@ -1258,11 +1258,11 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
     private boolean jjf$canLoadAmmo(Player player, int requiredLevel) {
         if (player.isCreative()) return true;
         if (player instanceof StandUser user) {
-            ItemStack disc = user.roundabout$getStandDisc();
+            ItemStack disc = user.sba$getStandDisc();
             if (!disc.isEmpty() && disc.getItem() instanceof MaxStandDiscItem) return true;
         }
         return player instanceof IPlayerEntity access
-                && access.roundabout$getStandLevel() >= requiredLevel;
+                && access.sba$getStandLevel() >= requiredLevel;
     }
 
     private void loadHeldItem(Player player) {
@@ -2834,7 +2834,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 leftPos + 39,
                 topPos + 118,
                 0,
-                "ability.roundabout.dodge",
+                "ability.sba.dodge",
                 "instruction.jjf.dash",
                 StandIcons.DODGE,
                 3,
@@ -2891,7 +2891,7 @@ public class PowersJumpinJackFlash extends NewPunchingStand {
                 topPos + 80,
                 0,
                 "ability.jjf.arms_mode",
-                "instruction.roundabout.press_skill_crouch",
+                "instruction.sba.press_skill_crouch",
                 StandIcons.JJF_ARMS_MODE_ICON,
                 4,
                 level,

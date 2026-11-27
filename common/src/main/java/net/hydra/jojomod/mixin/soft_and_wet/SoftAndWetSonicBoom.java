@@ -17,16 +17,16 @@ public class SoftAndWetSonicBoom {
      * The warden's Sonic Boom ability pops all sound bubble.
      * Much wow, very powerful.*/
     @Inject(method = "start(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/monster/warden/Warden;J)V", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$start(ServerLevel $$0, Warden $$1, long $$2, CallbackInfo ci) {
+    public void sba$start(ServerLevel $$0, Warden $$1, long $$2, CallbackInfo ci) {
         if ($$1 != null) {
             ILevelAccess access = ((ILevelAccess) $$1.level());
-            if (access.roundabout$isSoundPlunderedEntity($$1)){
-                SoftAndWetPlunderBubbleEntity bubs = access.roundabout$getSoundPlunderedBubbleEntity($$1);
+            if (access.sba$isSoundPlunderedEntity($$1)){
+                SoftAndWetPlunderBubbleEntity bubs = access.sba$getSoundPlunderedBubbleEntity($$1);
                 if (bubs != null) {
                     bubs.popBubble();
                 }
             }
-            access.roundabout$raptureBubbles($$1.blockPosition());
+            access.sba$raptureBubbles($$1.blockPosition());
         }
     }
 }

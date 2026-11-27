@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L":
+    {
+      "tag": "minecraft:logs"
+    },
+    "P":
+    {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "   ",
+    "LLL",
+    "P P"
+  ],
+  "result": {
+    "count": 4,
+    "item": "sba:wooden_manor_table"
+  },
+  "show_notification": true
+}

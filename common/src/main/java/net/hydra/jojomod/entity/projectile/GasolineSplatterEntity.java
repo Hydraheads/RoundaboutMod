@@ -86,7 +86,7 @@ public class GasolineSplatterEntity extends ThrowableItemProjectile {
                 if (!entities.isEmpty()) {
                     for (Entity value : entities) {
                         if (value instanceof LivingEntity){
-                            ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                            ((StandUser) value).sba$setGasolineTime(((StandUser) value).sba$getMaxGasolineTime());
                         }
                     }
                 }
@@ -132,14 +132,14 @@ public class GasolineSplatterEntity extends ThrowableItemProjectile {
             SoundEvent $$6 = SoundEvents.GENERIC_SPLASH;
             this.playSound($$6, 1F, 1.5F);
             if ($$0.getEntity() instanceof LivingEntity) {
-                ((StandUser) $$0.getEntity()).roundabout$setGasolineTime(((StandUser) $$0.getEntity()).roundabout$getMaxBucketGasolineTime());
+                ((StandUser) $$0.getEntity()).sba$setGasolineTime(((StandUser) $$0.getEntity()).sba$getMaxBucketGasolineTime());
             }
             List<Entity> entities = MainUtil.hitbox(MainUtil.genHitbox(this.level(), $$0.getEntity().getX(),  $$0.getEntity().getY(),
                     $$0.getEntity().getZ(), 2, 2, 2));
             if (!entities.isEmpty()) {
                 for (Entity value : entities) {
                     if (value instanceof LivingEntity){
-                        ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxBucketGasolineTime());
+                        ((StandUser) value).sba$setGasolineTime(((StandUser) value).sba$getMaxBucketGasolineTime());
                     }
                 }
             }

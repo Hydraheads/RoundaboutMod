@@ -19,7 +19,7 @@ public class AnubisMountMessageMixin {
     private ClientLevel level;
 
     @Inject(method = "handleSetEntityPassengersPacket",at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;"),cancellable = true)
-    private void roundabout$cancelMountMessage(ClientboundSetPassengersPacket $$0, CallbackInfo ci) {
+    private void sba$cancelMountMessage(ClientboundSetPassengersPacket $$0, CallbackInfo ci) {
         Entity entity = this.level.getEntity($$0.getVehicle());
         if (entity instanceof AnubisPossessorEntity || entity instanceof CommandDiscPossession) {
             ci.cancel();

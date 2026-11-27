@@ -116,7 +116,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private static final byte RETREAT_MODE = 108;
     private static final byte AUTO_MODE_FOLLOW = 109;
     private static final byte AUTO_MODE_ATTACK_TOGGLE = 110;
-    private static final byte ROUNDABOUT_DODGE_NOISE = 59;
+    private static final byte SBA_DODGE_NOISE = 59;
     private static final byte TIME_SPARK_COOLDOWN = PowerIndex.SKILL_EXTRA;
     private static final byte PHASE_GRAB_COOLDOWN = PowerIndex.SKILL_EXTRA_2;
     private static final byte DISC_STEAL_CHARGE_NOISE = 124;
@@ -162,7 +162,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     @Override
     public Component ifWipListDevStatus() {
-        return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable("sba.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
 
     @Override
@@ -221,8 +221,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
         skins.add(WhitesnakeEntity.ANIME_SKIN);
         skins.add(WhitesnakeEntity.MANGA_SKIN);
         if (self instanceof Player player) {
-            byte level = ((IPlayerEntity) player).roundabout$getStandLevel();
-            ItemStack disc = ((StandUser) player).roundabout$getStandDisc();
+            byte level = ((IPlayerEntity) player).sba$getStandLevel();
+            ItemStack disc = ((StandUser) player).sba$getStandDisc();
             boolean bypass = player.isCreative()
                     || !disc.isEmpty() && disc.getItem() instanceof MaxStandDiscItem;
             if (level > 1 || bypass) {
@@ -262,26 +262,26 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public Component getSkinName(byte skinId) {
         String key = switch (skinId) {
-            case WhitesnakeEntity.MANGA_SKIN -> "skins.roundabout.whitesnake.manga";
-            case WhitesnakeEntity.ANIME_PURPLE_SKIN -> "skins.roundabout.whitesnake.anime_purple";
-            case WhitesnakeEntity.ANIME_GREEN_SKIN -> "skins.roundabout.whitesnake.anime_green";
-            case WhitesnakeEntity.ANIME_YELLOW_SKIN -> "skins.roundabout.whitesnake.anime_yellow";
-            case WhitesnakeEntity.ANIME_AQUA_SKIN -> "skins.roundabout.whitesnake.anime_aqua";
-            case WhitesnakeEntity.MANGA_PURPLE_SKIN -> "skins.roundabout.whitesnake.manga_purple";
-            case WhitesnakeEntity.MANGA_RED_SKIN -> "skins.roundabout.whitesnake.manga_red";
-            case WhitesnakeEntity.GOLD_SKIN -> "skins.roundabout.whitesnake.gold";
-            case WhitesnakeEntity.SILVER_SKIN -> "skins.roundabout.whitesnake.silver";
-            case WhitesnakeEntity.COTTON_CANDY_SKIN -> "skins.roundabout.whitesnake.cotton_candy";
-            case WhitesnakeEntity.ASBR_SKIN -> "skins.roundabout.whitesnake.asbr";
-            case WhitesnakeEntity.AGOGO_SKIN -> "skins.roundabout.whitesnake.agogo";
-            case WhitesnakeEntity.DARK_SKIN -> "skins.roundabout.whitesnake.dark";
-            case WhitesnakeEntity.SOUR_CANDY_SKIN -> "skins.roundabout.whitesnake.sour_candy";
-            case WhitesnakeEntity.EDGY_GOLD_SKIN -> "skins.roundabout.whitesnake.edgy_gold";
-            case WhitesnakeEntity.GOLD_TRIMMED_SKIN -> "skins.roundabout.whitesnake.gold_trimmed";
-            case WhitesnakeEntity.SANDSNAKE_SKIN -> "skins.roundabout.whitesnake.sandsnake";
-            case WhitesnakeEntity.EOH_SKIN -> "skins.roundabout.whitesnake.eoh";
-            case WhitesnakeEntity.FLESHSNAKE_SKIN -> "skins.roundabout.whitesnake.fleshsnake";
-            default -> "skins.roundabout.whitesnake.anime";
+            case WhitesnakeEntity.MANGA_SKIN -> "skins.sba.whitesnake.manga";
+            case WhitesnakeEntity.ANIME_PURPLE_SKIN -> "skins.sba.whitesnake.anime_purple";
+            case WhitesnakeEntity.ANIME_GREEN_SKIN -> "skins.sba.whitesnake.anime_green";
+            case WhitesnakeEntity.ANIME_YELLOW_SKIN -> "skins.sba.whitesnake.anime_yellow";
+            case WhitesnakeEntity.ANIME_AQUA_SKIN -> "skins.sba.whitesnake.anime_aqua";
+            case WhitesnakeEntity.MANGA_PURPLE_SKIN -> "skins.sba.whitesnake.manga_purple";
+            case WhitesnakeEntity.MANGA_RED_SKIN -> "skins.sba.whitesnake.manga_red";
+            case WhitesnakeEntity.GOLD_SKIN -> "skins.sba.whitesnake.gold";
+            case WhitesnakeEntity.SILVER_SKIN -> "skins.sba.whitesnake.silver";
+            case WhitesnakeEntity.COTTON_CANDY_SKIN -> "skins.sba.whitesnake.cotton_candy";
+            case WhitesnakeEntity.ASBR_SKIN -> "skins.sba.whitesnake.asbr";
+            case WhitesnakeEntity.AGOGO_SKIN -> "skins.sba.whitesnake.agogo";
+            case WhitesnakeEntity.DARK_SKIN -> "skins.sba.whitesnake.dark";
+            case WhitesnakeEntity.SOUR_CANDY_SKIN -> "skins.sba.whitesnake.sour_candy";
+            case WhitesnakeEntity.EDGY_GOLD_SKIN -> "skins.sba.whitesnake.edgy_gold";
+            case WhitesnakeEntity.GOLD_TRIMMED_SKIN -> "skins.sba.whitesnake.gold_trimmed";
+            case WhitesnakeEntity.SANDSNAKE_SKIN -> "skins.sba.whitesnake.sandsnake";
+            case WhitesnakeEntity.EOH_SKIN -> "skins.sba.whitesnake.eoh";
+            case WhitesnakeEntity.FLESHSNAKE_SKIN -> "skins.sba.whitesnake.fleshsnake";
+            default -> "skins.sba.whitesnake.anime";
         };
         return Component.translatable(key);
     }
@@ -295,7 +295,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     public void playSummonSound() {
         if (self.isCrouching()) return;
         if (self instanceof Player player
-                && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof PucciVoice voice) {
+                && ((IPlayerEntity) player).sba$getVoiceData() instanceof PucciVoice voice) {
             voice.playSummon();
         }
         playStandUserOnlySoundsIfNearby(getSummonSound(), 10, false, false);
@@ -310,8 +310,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public boolean isPiloting() {
         if (self instanceof Player player) {
-            StandEntity stand = ((StandUser) player).roundabout$getStand();
-            return stand != null && ((IPlayerEntity) player).roundabout$getControlling() == stand.getId();
+            StandEntity stand = ((StandUser) player).sba$getStand();
+            return stand != null && ((IPlayerEntity) player).sba$getControlling() == stand.getId();
         }
         return false;
     }
@@ -389,7 +389,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     public boolean tryRetreatBeforeUnsummon() {
-        if (!(self instanceof Player) || !getStandUserSelf().roundabout$getActive()
+        if (!(self instanceof Player) || !getStandUserSelf().sba$getActive()
                 || !(getStandEntity(self) instanceof WhitesnakeEntity stand)
                 || !isUsableStand(stand) || !hasDetachedStand()
                 || stand.distanceTo(self) <= 2.5D) return false;
@@ -416,7 +416,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     public void detectNeedToRetreat() {
         if (!(getStandEntity(self) instanceof WhitesnakeEntity stand)
                 || !stand.isAlive() || stand.isRemoved()
-                || !((StandUser) self).roundabout$getActive()) {
+                || !((StandUser) self).sba$getActive()) {
             return;
         }
         double distance = stand.distanceTo(self);
@@ -529,7 +529,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             stopPowerAtCurrentPosition(stand);
         }
         if (entering) prepareStandForRemoteControl(stand);
-        ((IPlayerEntity) player).roundabout$setIsControlling(entering ? id : 0);
+        ((IPlayerEntity) player).sba$setIsControlling(entering ? id : 0);
         if (stand instanceof WhitesnakeEntity whitesnake) whitesnake.setControlMode(entering);
         if (leavingAutoMode) {
             setAutoMode(false);
@@ -579,8 +579,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (whitesnake == null) return;
         whitesnake.setMeltingHovering(false);
-        Direction oldGravity = ((IGravityEntity) whitesnake).roundabout$getGravityDirection();
-        ((IGravityEntity) whitesnake).roundabout$setGravityDirection(Direction.DOWN);
+        Direction oldGravity = ((IGravityEntity) whitesnake).sba$getGravityDirection();
+        ((IGravityEntity) whitesnake).sba$setGravityDirection(Direction.DOWN);
         if (rotateCamera && isClient()) {
             WhitesnakeControlClient.rotateLookForGravityChange(whitesnake, oldGravity, Direction.DOWN);
         }
@@ -633,12 +633,12 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private static void normalizeRemoteGravity(StandEntity stand) {
         IGravityEntity gravity = (IGravityEntity) stand;
-        gravity.roundabout$setBaseGravityDirection(Direction.DOWN);
-        gravity.roundabout$setGravityStrength(1.0D);
-        gravity.roundabout$setGravityDirection(Direction.DOWN);
-        gravity.roundabout$applyGravityChange();
+        gravity.sba$setBaseGravityDirection(Direction.DOWN);
+        gravity.sba$setGravityStrength(1.0D);
+        gravity.sba$setGravityDirection(Direction.DOWN);
+        gravity.sba$applyGravityChange();
         if (stand.level().isClientSide()) {
-            ((IClientEntity) stand).roundabout$setGravityAnimation(new RotationAnimation());
+            ((IClientEntity) stand).sba$setGravityAnimation(new RotationAnimation());
         }
     }
 
@@ -768,7 +768,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         entity.setYHeadRot(entity.getYRot());
         if (whitesnake.getMeltingHoverCharge() <= 0) meltingHoverExhausted = true;
         if (!input.jumping) meltingHoverExhausted = false;
-        Direction gravity = ((IGravityEntity) whitesnake).roundabout$getGravityDirection();
+        Direction gravity = ((IGravityEntity) whitesnake).sba$getGravityDirection();
         boolean hovering = meltingMode && input.jumping && !meltingHoverExhausted
                 && whitesnake.getMeltingHoverCharge() > 0
                 && (whitesnake.isMeltingHovering() || gravity != Direction.DOWN
@@ -799,7 +799,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     // Melting Mode
     private void updateMeltingCrawl(WhitesnakeEntity whitesnake, KeyboardPilotInput input) {
         IGravityEntity gravityEntity = (IGravityEntity) whitesnake;
-        Direction current = gravityEntity.roundabout$getGravityDirection();
+        Direction current = gravityEntity.sba$getGravityDirection();
         if (meltingCrawlTransitionTicks > 0) {
             meltingCrawlTransitionTicks--;
             return;
@@ -880,9 +880,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private void setMeltingGravityClient(WhitesnakeEntity whitesnake, Direction direction) {
         IGravityEntity gravityEntity = (IGravityEntity) whitesnake;
-        Direction oldGravity = gravityEntity.roundabout$getGravityDirection();
+        Direction oldGravity = gravityEntity.sba$getGravityDirection();
         if (oldGravity == direction) return;
-        gravityEntity.roundabout$setGravityDirection(direction);
+        gravityEntity.sba$setGravityDirection(direction);
         WhitesnakeControlClient.rotateLookForGravityChange(whitesnake, oldGravity, direction);
         int encoded = MainUtil.getIntFromDirection(direction);
         tryIntPower(MELTING_GRAVITY, true, encoded);
@@ -982,7 +982,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (!onCooldown(PowerIndex.SKILL_1_SNEAK) && canExecuteMoveWithLevel(getImpaleLevel())) {
             byte move = activePower == PowerIndex.POWER_1_SNEAK ? PowerIndex.NONE : PowerIndex.POWER_1_SNEAK;
-            ((StandUser) self).roundabout$tryPower(move, true);
+            ((StandUser) self).sba$tryPower(move, true);
             tryPowerPacket(move);
         }
     }
@@ -1005,7 +1005,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return;
         }
         if (!onCooldown(PHASE_GRAB_COOLDOWN)) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.POWER_2_BLOCK, true);
             tryPowerPacket(PowerIndex.POWER_2_BLOCK);
         }
     }
@@ -1150,7 +1150,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (!self.level().isClientSide() && !isPiloting()
                 && self instanceof Player player
                 && isThrowableDisc(player.getInventory().getItem(grabInventorySlot))
-                && ((IPlayerEntity) player).roundabout$getVoiceData() instanceof PucciVoice voice) {
+                && ((IPlayerEntity) player).sba$getVoiceData() instanceof PucciVoice voice) {
             voice.playDiscToss();
         }
     }
@@ -1670,7 +1670,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             if (direction != Direction.DOWN && (!meltingMode || !isPiloting() || whitesnake.isMeltingHovering())) {
                 return false;
             }
-            ((IGravityEntity) whitesnake).roundabout$setGravityDirection(direction);
+            ((IGravityEntity) whitesnake).sba$setGravityDirection(direction);
             return true;
         }
         if (move == CONTROL_DASH) return controlDash(value);
@@ -1716,8 +1716,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (activePower == RETREAT_MODE) {
             isRetreating = data != 0;
-            if (isRetreating && !getStandUserSelf().roundabout$getActive()) {
-                getStandUserSelf().roundabout$setActive(true);
+            if (isRetreating && !getStandUserSelf().sba$getActive()) {
+                getStandUserSelf().sba$setActive(true);
             }
             return;
         }
@@ -1772,7 +1772,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     @Override
     public void tickPower() {
         if (self instanceof Player player && self.level().isClientSide() && isPacketPlayer()) {
-            int controlledId = ((IPlayerEntity) player).roundabout$getControlling();
+            int controlledId = ((IPlayerEntity) player).sba$getControlling();
             Entity controlled = self.level().getEntity(controlledId);
             if (controlled instanceof LivingEntity living && living.isAlive() && !living.isRemoved()) {
                 if (!isWithinRemoteRange(living)) {
@@ -1816,14 +1816,14 @@ public class PowersWhitesnake extends BlockGrabPreset {
         stand.setPos(stand.getPosition(1).add(stand.getForward().scale(speed)));
         if (stand.isTechnicallyInWall()
                 || stand.position().distanceTo(self.position()) > FORWARD_BARRAGE_RANGE) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.NONE, true);
         }
     }
 
     private void tickPhaseGrab() {
         if (self.level().isClientSide()) return;
         if (attackTimeDuring == 108) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.NONE, true);
             return;
         }
         if (attackTimeDuring < 0) return;
@@ -1840,7 +1840,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             stand.setYRot(self.getYHeadRot() % 360.0F);
             stand.setXRot(self.getXRot());
         } else {
-            Direction gravity = ((IGravityEntity) self).roundabout$getGravityDirection();
+            Direction gravity = ((IGravityEntity) self).sba$getGravityDirection();
             Vec2 rotation = RotationUtil.rotWorldToPlayer(new Vec2(
                     getLookAtPlaceYaw(stand, destination), getLookAtPlacePitch(stand, destination)), gravity);
             stand.setYRot(rotation.x);
@@ -1853,7 +1853,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 S2CPacketUtil.sendCooldownSyncPacket(player, PHASE_GRAB_COOLDOWN, 7);
             }
             setCooldown(PHASE_GRAB_COOLDOWN, 5);
-            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.NONE, true);
             return;
         }
 
@@ -1862,7 +1862,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     }
 
     private void usePhaseGrabRedstone(StandEntity stand) {
-        if (!self.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE)) return;
+        if (!self.level().getGameRules().getBoolean(ModGamerules.SBA_STAND_REDSTONE_INTERFERENCE)) return;
         Vec3 eye = stand.getEyePosition(0);
         BlockHitResult hit = stand.level().clip(new ClipContext(eye, eye.add(stand.getViewVector(0).scale(3.0D)),
                 ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, stand));
@@ -1873,7 +1873,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 || state.getBlock() instanceof DoorBlock || state.getBlock() instanceof TrapDoorBlock
                 || state.getBlock() instanceof FenceGateBlock) {
             state.getBlock().use(state, self.level(), pos, player, player.getUsedItemHand(), hit);
-            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.NONE, true);
         }
     }
 
@@ -1917,7 +1917,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         poseStand(OffsetIndex.LOOSE);
 
         Vec2 playerRotation = new Vec2(self.getYHeadRot() % 360.0F, self.getXRot());
-        Direction gravity = ((IGravityEntity) self).roundabout$getGravityDirection();
+        Direction gravity = ((IGravityEntity) self).sba$getGravityDirection();
         Vec2 worldRotation = RotationUtil.rotPlayerToWorld(playerRotation, gravity);
         Vec3 heightOffset = RotationUtil.vecPlayerToWorld(new Vec3(0.0D, 0.25D, 0.0D), gravity);
         stand.setYRot(playerRotation.x);
@@ -1930,13 +1930,13 @@ public class PowersWhitesnake extends BlockGrabPreset {
 
     private void tickControlModeServer() {
         if (!(self instanceof ServerPlayer player)) return;
-        int controlledId = ((IPlayerEntity) player).roundabout$getControlling();
+        int controlledId = ((IPlayerEntity) player).sba$getControlling();
         if (controlledId == 0) return;
         StandEntity stand = getStandEntity(self);
         Entity controlled = self.level().getEntity(controlledId);
         boolean valid = stand != null && controlled != null && controlled.is(stand)
                 && stand.isAlive() && !stand.isRemoved()
-                && ((StandUser) self).roundabout$getActive()
+                && ((StandUser) self).sba$getActive()
                 && isWithinRemoteRange(stand);
         if (valid) return;
         setPiloting(0);
@@ -1946,7 +1946,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private void tickRetreatMode() {
         if (!(getStandEntity(self) instanceof WhitesnakeEntity stand)
                 || !stand.isAlive() || stand.isRemoved()
-                || !((StandUser) self).roundabout$getActive()) {
+                || !((StandUser) self).sba$getActive()) {
             return;
         }
 
@@ -1977,7 +1977,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     private void tickAutoMode() {
         if (!(getStandEntity(self) instanceof WhitesnakeEntity stand)
                 || !stand.isAlive() || stand.isRemoved()
-                || !((StandUser) self).roundabout$getActive()) {
+                || !((StandUser) self).sba$getActive()) {
             stopAutoModeServer();
             return;
         }
@@ -2117,7 +2117,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     public void tickMobAI(LivingEntity attackTarget) {
         if (mobAbilityDecisionCooldown > 0) mobAbilityDecisionCooldown--;
         if (getActivePower() == PowerIndex.GUARD) {
-            if (--mobGuardTicks <= 0) ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+            if (--mobGuardTicks <= 0) ((StandUser) self).sba$tryPower(PowerIndex.NONE, true);
             return;
         }
         if (autoMode) {
@@ -2141,7 +2141,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         double roll = self.getRandom().nextDouble();
 
         if (distance <= 5.0D && roll < 0.06D) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.GUARD, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.GUARD, true);
             if (getActivePower() == PowerIndex.GUARD) {
                 mobGuardTicks = 12 + self.getRandom().nextInt(13);
                 mobAbilityDecisionCooldown = mobGuardTicks;
@@ -2165,7 +2165,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (distance <= 12.0D && self.hasLineOfSight(attackTarget)
                 && !onCooldown(PowerIndex.SKILL_2) && roll < 0.34D) {
             int skillTwoMove = ACID_TOSS;
-            ((StandUser) self).roundabout$tryPower(skillTwoMove, true);
+            ((StandUser) self).sba$tryPower(skillTwoMove, true);
             if (getActivePower() == skillTwoMove) {
                 mobAbilityDecisionCooldown = 50;
                 return;
@@ -2173,35 +2173,35 @@ public class PowersWhitesnake extends BlockGrabPreset {
         }
         if (closeAndAimed && !onCooldown(PowerIndex.SKILL_1) && roll < 0.46D) {
             setSelectedDisc(WhitesnakeDiscUtil.randomEnabledDisc(self.getRandom()));
-            ((StandUser) self).roundabout$tryPower(DISC_STEAL, true);
+            ((StandUser) self).sba$tryPower(DISC_STEAL, true);
             if (getActivePower() == DISC_STEAL) {
                 mobAbilityDecisionCooldown = 45;
                 return;
             }
         }
         if (closeAndAimed && !onCooldown(PowerIndex.SKILL_1_SNEAK) && canImpale() && roll < 0.58D) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.POWER_1_SNEAK, true);
             if (getActivePower() == PowerIndex.POWER_1_SNEAK) {
                 mobAbilityDecisionCooldown = 40;
                 return;
             }
         }
         if (closeAndAimed && roll < 0.70D) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
             if (getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
                 mobAbilityDecisionCooldown = getMaxSuperHitTime() + 25;
                 return;
             }
         }
         if (closeAndAimed && roll < 0.84D) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.BARRAGE_CHARGE, true);
             if (getActivePower() == PowerIndex.BARRAGE_CHARGE) {
                 mobAbilityDecisionCooldown = 35;
                 return;
             }
         }
         if (closeAndAimed) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.ATTACK, true);
+            ((StandUser) self).sba$tryPower(PowerIndex.ATTACK, true);
             mobAbilityDecisionCooldown = 4;
         }
     }
@@ -2273,7 +2273,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
     public void onStandSwitch() {
         StandEntity stand = getStandEntity(self);
         boolean hasControlId = self instanceof Player player
-                && ((IPlayerEntity) player).roundabout$getControlling() != 0;
+                && ((IPlayerEntity) player).sba$getControlling() != 0;
         if (hasControlId || stand instanceof WhitesnakeEntity whitesnake && whitesnake.isControlModeActive()) {
             setPiloting(0);
             if (self.level().isClientSide() && isPacketPlayer()) WhitesnakeControlClient.exit();
@@ -2437,8 +2437,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
                 if (entity instanceof LivingEntity living) addEXP(lastHit ? 2 : 1, living);
                 takeDeterminedKnockback(origin, entity, knockback);
             } else if (lastHit) {
-                if (entity instanceof LivingEntity living && ((StandUser) living).roundabout$getStandPowers().interceptGuard()
-                        && living.isBlocking() && !((StandUser) living).roundabout$isGuarding()) {
+                if (entity instanceof LivingEntity living && ((StandUser) living).sba$getStandPowers().interceptGuard()
+                        && living.isBlocking() && !((StandUser) living).sba$isGuarding()) {
                     knockShield2(entity, 60);
                 } else {
                     knockShield2(entity, 40);
@@ -2701,11 +2701,11 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (attackTimeDuring < 0) return;
         if (attackTimeDuring >= 60) {
             if (self instanceof Player && self.level().isClientSide() && isPacketPlayer()) {
-                ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+                ((StandUser) self).sba$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
             }
         } else if (attackTimeDuring >= getMaxSuperHitTime() && !(self instanceof Player)) {
-            ((StandUser) self).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true, getMaxSuperHitTime());
+            ((StandUser) self).sba$tryIntPower(PowerIndex.SNEAK_ATTACK, true, getMaxSuperHitTime());
         }
     }
 
@@ -2994,7 +2994,7 @@ public class PowersWhitesnake extends BlockGrabPreset {
             return ModSounds.WSVOICE_IMPALE_EVENT;
         } else if (soundChoice == TIME_STOP_TICKING) {
             return ModSounds.TIME_STOP_TICKING_EVENT;
-        } else if (soundChoice == ROUNDABOUT_DODGE_NOISE) {
+        } else if (soundChoice == SBA_DODGE_NOISE) {
             return ModSounds.DODGE_EVENT;
         }
         return super.getSoundFromByte(soundChoice);
@@ -3024,68 +3024,68 @@ public class PowersWhitesnake extends BlockGrabPreset {
                                                    int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> icons = Lists.newArrayList();
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0,
-                "ability.roundabout.punch", "instruction.roundabout.press_attack",
+                "ability.sba.punch", "instruction.sba.press_attack",
                 StandIcons.WHITESNAKE_PUNCH, 0, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0,
-                "ability.roundabout.guard", "instruction.roundabout.hold_block",
+                "ability.sba.guard", "instruction.sba.hold_block",
                 StandIcons.WHITESNAKE_GUARD, 0, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0,
-                "ability.roundabout.whitesnake_chop", "instruction.roundabout.hold_attack_crouch",
+                "ability.sba.whitesnake_chop", "instruction.sba.hold_attack_crouch",
                 StandIcons.WHITESNAKE_CHOP, 0, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0,
-                "ability.roundabout.barrage", "instruction.roundabout.barrage",
+                "ability.sba.barrage", "instruction.sba.barrage",
                 StandIcons.WHITESNAKE_BARRAGE, 0, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0,
-                "ability.roundabout.forward_barrage", "instruction.roundabout.forward_barrage",
+                "ability.sba.forward_barrage", "instruction.sba.forward_barrage",
                 StandIcons.WHITESNAKE_FORWARD_BARRAGE, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, getMeltingModeLevel(),
-                "ability.roundabout.whitesnake_melting_mode", "instruction.roundabout.press_skill_block",
+                "ability.sba.whitesnake_melting_mode", "instruction.sba.press_skill_block",
                 StandIcons.WHITESNAKE_MELTING_MODE, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, getImpaleLevel(),
-                "ability.roundabout.impale", "instruction.roundabout.press_skill_crouch",
+                "ability.sba.impale", "instruction.sba.press_skill_crouch",
                 StandIcons.WHITESNAKE_IMPALE, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 99, 0,
-                "ability.roundabout.dodge", "instruction.roundabout.press_skill",
+                "ability.sba.dodge", "instruction.sba.press_skill",
                 StandIcons.WHITESNAKE_DASH, 3, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, getDiscStealLevel(),
-                "ability.roundabout.whitesnake_disc_steal", "instruction.roundabout.press_skill",
+                "ability.sba.whitesnake_disc_steal", "instruction.sba.press_skill",
                 StandIcons.WHITESNAKE_DISC_STEAL, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0,
-                "ability.roundabout.whitesnake_inventory", "instruction.roundabout.whitesnake_press_skill_guard",
+                "ability.sba.whitesnake_inventory", "instruction.sba.whitesnake_press_skill_guard",
                 StandIcons.WHITESNAKE_INVENTORY, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0,
-                "ability.roundabout.whitesnake_disc_throw", "instruction.roundabout.press_skill",
+                "ability.sba.whitesnake_disc_throw", "instruction.sba.press_skill",
                 StandIcons.WHITESNAKE_DISC_THROW, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, getAcidTossLevel(),
-                "ability.roundabout.whitesnake_acid_toss", "instruction.roundabout.press_skill",
+                "ability.sba.whitesnake_acid_toss", "instruction.sba.press_skill",
                 StandIcons.WHITESNAKE_ACID_TOSS, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 80, 0,
-                "ability.roundabout.whitesnake_control_mode", "instruction.roundabout.press_skill",
+                "ability.sba.whitesnake_control_mode", "instruction.sba.press_skill",
                 StandIcons.WHITESNAKE_CONTROL_MODE, 4, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 118, getHallucinatoryDisguiseLevel(),
-                "ability.roundabout.whitesnake_disguise", "instruction.roundabout.whitesnake_press_skill_guard",
+                "ability.sba.whitesnake_disguise", "instruction.sba.whitesnake_press_skill_guard",
                 StandIcons.WHITESNAKE_HALLUCINATORY_DISGUISE, 4, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0,
-                "ability.roundabout.phase_grab", "instruction.roundabout.press_skill_block",
+                "ability.sba.phase_grab", "instruction.sba.press_skill_block",
                 StandIcons.WHITESNAKE_PHASE_GRAB, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, 0,
-                "ability.roundabout.whitesnake_auto_mode", "instruction.roundabout.press_skill_crouch",
+                "ability.sba.whitesnake_auto_mode", "instruction.sba.press_skill_crouch",
                 StandIcons.WHITESNAKE_AUTO_MODE, 4, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, getTimeSparkLevel(),
-                "ability.roundabout.whitesnake_time_spark", "instruction.roundabout.press_skill_crouch",
+                "ability.sba.whitesnake_time_spark", "instruction.sba.press_skill_crouch",
                 StandIcons.WHITESNAKE_TIME_SPARK, 3, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 80, 0,
-                "ability.roundabout.whitesnake_auto_mode_move", "instruction.roundabout.whitesnake_auto_mode_move",
+                "ability.sba.whitesnake_auto_mode_move", "instruction.sba.whitesnake_auto_mode_move",
                 StandIcons.WHITESNAKE_AUTO_MODE_MOVE, 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 99, 0,
-                "ability.roundabout.whitesnake_auto_mode_attack", "instruction.roundabout.whitesnake_auto_mode_attack",
+                "ability.sba.whitesnake_auto_mode_attack", "instruction.sba.whitesnake_auto_mode_attack",
                 StandIcons.WHITESNAKE_AUTO_MODE_ATTACK, 2, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 118, 0,
-                "ability.roundabout.whitesnake_auto_mode_follow", "instruction.roundabout.press_skill_crouch",
+                "ability.sba.whitesnake_auto_mode_follow", "instruction.sba.press_skill_crouch",
                 autoFollow ? StandIcons.WHITESNAKE_AUTOFOLLOW_ON : StandIcons.WHITESNAKE_AUTOFOLLOW_OFF,
                 1, level, bypass));
         icons.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, 0,
-                "ability.roundabout.whitesnake_auto_mode_attack_toggle", "instruction.roundabout.press_skill_crouch",
+                "ability.sba.whitesnake_auto_mode_attack_toggle", "instruction.sba.press_skill_crouch",
                 autoAttack ? StandIcons.WHITESNAKE_AUTOATTACK_ON : StandIcons.WHITESNAKE_AUTOATTACK_OFF,
                 2, level, bypass));
         return icons;
@@ -3185,9 +3185,9 @@ public class PowersWhitesnake extends BlockGrabPreset {
         if (displayStand == null){
             displayStand = getNewStandEntity();
         }
-        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).sba$getStandSkin() != displayStand.getSkin()) {
             displayStand = getNewStandEntity();
-            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+            displayStand.setSkin(((IPlayerEntity) PL).sba$getStandSkin());
         }
 
         // All of this is code to have the idle animation appear.
@@ -3196,8 +3196,8 @@ public class PowersWhitesnake extends BlockGrabPreset {
             displayStand.setUser(this.self);
             displayStand.tickCount = this.self.tickCount;
 
-            displayStand.setAnimation(su.roundabout$getStandAnimation());
-            displayStand.setIdleAnimation(su.roundabout$getIdlePos());
+            displayStand.setAnimation(su.sba$getStandAnimation());
+            displayStand.setIdleAnimation(su.sba$getIdlePos());
 
             StandEntity realStand = this.getStandEntity(this.self);
             if (realStand != null) {

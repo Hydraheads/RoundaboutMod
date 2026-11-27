@@ -24,14 +24,14 @@ public final class MemoryAiController {
     public static void tick(LivingEntity entity) {
         if (!(entity instanceof Mob mob) || entity.level().isClientSide() || !entity.isAlive()) return;
         DiscBearer bearer = (DiscBearer) entity;
-        if (!bearer.roundabout$hasMemoryDisc()) return;
-        byte personality = bearer.roundabout$getMemoryPersonality();
+        if (!bearer.sba$hasMemoryDisc()) return;
+        byte personality = bearer.sba$getMemoryPersonality();
         if (WhitesnakeDiscUtil.hasForeignMemory(entity)) tickMob(mob, personality);
     }
 
     public static void tickBlankMob(Mob mob) {
         mob.setTarget(null);
-        ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
+        ((StandUser) mob).sba$deeplyRemoveAttackTarget();
         if (mob.getNavigation().isDone() && mob.getRandom().nextInt(20) == 0) {
             double angle = mob.getRandom().nextDouble() * Math.PI * 2.0D;
             double distance = 3.0D + mob.getRandom().nextDouble() * 7.0D;
@@ -88,7 +88,7 @@ public final class MemoryAiController {
     }
 
     private static LivingEntity getTameOwner(LivingEntity entity) {
-        String ownerId = ((DiscBearer) entity).roundabout$getMemoryTameOwnerId();
+        String ownerId = ((DiscBearer) entity).sba$getMemoryTameOwnerId();
         if (ownerId == null || ownerId.isEmpty() || !(entity.level() instanceof ServerLevel server)) return null;
         try {
             UUID id = UUID.fromString(ownerId);
@@ -121,7 +121,7 @@ public final class MemoryAiController {
                 && personality != MemoryPersonality.CREEPER) return null;
         double range = 24.0D;
         if (WhitesnakeDiscUtil.canCarrySightDisc(entity)
-                && !((DiscBearer) entity).roundabout$hasSightDisc()) {
+                && !((DiscBearer) entity).sba$hasSightDisc()) {
             LivingEntity attacker = entity.getLastHurtByMob();
             if (attacker != null && attacker.isAlive()) return attacker;
             AttributeInstance followRange = entity.getAttribute(Attributes.FOLLOW_RANGE);

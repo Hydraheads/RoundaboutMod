@@ -179,7 +179,7 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 	public ResourceLocation getTextureLocation(Entity context) {
 		byte bt = 0;
 		if (context instanceof LivingEntity LE) {
-			bt = ((StandUser) LE).roundabout$getStandSkin();
+			bt = ((StandUser) LE).sba$getStandSkin();
 		}
 		return SilverChariotBaseRenderer.getSkin(bt);
 	}
@@ -199,21 +199,21 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 			return;
 		if (context instanceof LivingEntity LE) {
 			StandUser user = (StandUser) LE;
-			if (user.roundabout$getStandPowers() instanceof PowersSilverChariot psc) {
+			if (user.sba$getStandPowers() instanceof PowersSilverChariot psc) {
 				this.root().getAllParts().forEach(ModelPart::resetPose);
 				if (((TimeStop) context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()) {
 					partialTicks = 0;
 				}
-				int heyTicks = user.roundabout$getArmVanishTicks();
+				int heyTicks = user.sba$getArmVanishTicks();
 				boolean hasHeyYaOut = (PowerTypes.hasStandActive(LE) && PowerTypes.hasHandsActive(LE) &&
 						(PowerTypes.hasHandsActiveRendering(LE) || ClientUtil.inPowerInventory));
-				ClientUtil.skinTicker(ClientUtil.lastSkin,((StandUser)LE).roundabout$getStandSkin());
+				ClientUtil.skinTicker(ClientUtil.lastSkin,((StandUser)LE).sba$getStandSkin());
 
 
 				float heyFull = 0;
 				float fixedPartial = partialTicks % 1;
 				if (ClientUtil.inPowerInventory && PowerTypes.hasStandActivelyEquipped(LE)
-						&& ((StandUser)LE).roundabout$getStandPowers().hasHandsOut()){
+						&& ((StandUser)LE).sba$getStandPowers().hasHandsOut()){
 					heyFull = ClientUtil.skinTicker + fixedPartial;
 					heyFull = Math.min(heyFull / 10, 1f);
 				} else {
@@ -229,71 +229,71 @@ public class SilverChariotArmsPart extends PsuedoHierarchicalModel {
 				if (heyFull <= 0) {
 					return;
 				}
-				byte animation = user.roundabout$getStandAnimation();
+				byte animation = user.sba$getStandAnimation();
 
-				boolean isRightHanded = user.roundabout$getStandSkin() != SilverChariotEntity.PART_5;
+				boolean isRightHanded = user.sba$getStandSkin() != SilverChariotEntity.PART_5;
 
 				VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(LE)));
 				//The number at the end is inversely proportional so 2 is half speed
-				this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
-				// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
-				// user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+				this.animate(user.sba$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
+				// this.animate(user.sba$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
+				// user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 				this.right_arm.visible = false;
 				this.left_arm.visible = false;
 				/*
 				if (isRightHanded) {
 					this.right_arm.visible = true;
 					this.left_arm.visible = false;
-					// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.HideLeftArm(), partialTicks, 1f);
+					// this.animate(user.sba$getWornStandIdleAnimation(), SilverChariotAnimations.HideLeftArm(), partialTicks, 1f);
 				} else {
 					this.right_arm.visible = false;
 					this.left_arm.visible = true;
-					// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.HideRightArm(), partialTicks, 1f);
+					// this.animate(user.sba$getWornStandIdleAnimation(), SilverChariotAnimations.HideRightArm(), partialTicks, 1f);
 				}
 				*/
-				user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
-				this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
+				user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+				this.animate(user.sba$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
 				/*
 				if (animation == StandPowers.GUARD) {
-					// user.roundabout$getWornStandIdleAnimation().stop();
+					// user.sba$getWornStandIdleAnimation().stop();
 					if (isRightHanded) {
-						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightGuardStart(), context.tickCount+fixedPartial, 1f);
+						this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.RightGuardStart(), context.tickCount+fixedPartial, 1f);
 					} else {
-						this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftGuardStart(), context.tickCount+fixedPartial, 1f);
+						this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.LeftGuardStart(), context.tickCount+fixedPartial, 1f);
 					}
 				} else {
-					user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
-					// this.animate(user.roundabout$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
-					// user.roundabout$getWornStandIdleAnimation().stop();
+					user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+					// this.animate(user.sba$getWornStandIdleAnimation(), SilverChariotAnimations.Idle(), partialTicks, 1f);
+					// user.sba$getWornStandIdleAnimation().stop();
 					if (animation == StandPowers.PUNCH_RIGHT) {
 						if (isRightHanded) {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit1(), partialTicks, speed*1.5f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit1(), partialTicks, speed*1.5f);
 						} else {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit1(), partialTicks, speed*1.5f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit1(), partialTicks, speed*1.5f);
 						}
 					} else if (animation == StandPowers.PUNCH_LEFT) {
 						if (isRightHanded) {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit2(), partialTicks, speed*1.75f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.RightHit2(), partialTicks, speed*1.75f);
 						} else {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit2(), partialTicks, speed*1.75f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.LeftHit2(), partialTicks, speed*1.75f);
 						}
 					} else if (animation == StandPowers.VAULT) {
 						if (isRightHanded) {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightVault(), partialTicks, 1f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.RightVault(), partialTicks, 1f);
 						} else {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftVault(), partialTicks, 1f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.LeftVault(), partialTicks, 1f);
 						}
 					} else if (animation == StandPowers.MINING) {
 						if (isRightHanded) {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightBarrage(), partialTicks, 1f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.RightBarrage(), partialTicks, 1f);
 						} else {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftBarrage(), partialTicks, 1f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.LeftBarrage(), partialTicks, 1f);
 						}
 					} else if (animation == SilverChariotEntity.SC_GUARD_HIT) {
 						if (isRightHanded) {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.RightGuardHit(), partialTicks, 1f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.RightGuardHit(), partialTicks, 1f);
 						} else {
-							this.animate(user.roundabout$getWornStandActiveAnimation(), SilverChariotAnimations.LeftGuardHit(), partialTicks, 1f);
+							this.animate(user.sba$getWornStandActiveAnimation(), SilverChariotAnimations.LeftGuardHit(), partialTicks, 1f);
 						}
 					}
 

@@ -1,6 +1,0 @@
-{
-  "parent": "roundabout:item/glaive_item",
-  "textures": {
-    "layer0": "roundabout:item/netherite_glaive"
-  }
-}

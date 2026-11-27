@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.PWBigMeteorModel;
@@ -72,18 +72,18 @@ public class PWBigMeteorRenderer extends EntityRenderer<PWBigMeteorEntity> {
 
 
     public static final ResourceLocation PW_BIG_METEOR_TEXTURE =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor.png");
+            new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_big_meteor.png");
     public static final ResourceLocation PW_BIG_METEOR_COSMIC_TEXTURE =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor_cosmic.png");
+            new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_big_meteor_cosmic.png");
     public static final ResourceLocation PW_BIG_METEOR_GRAPE_TEXTURE =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_big_meteor_grape.png");
+            new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_big_meteor_grape.png");
 
 
 
     @Override
     public ResourceLocation getTextureLocation(PWBigMeteorEntity entity) {
         LivingEntity user = entity.getUser();
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+        if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersPlanetWaves PPW) {
             byte sft = PPW.getFireballColor();
             if (sft == 3) {
                 //return PW_METEOR_BLUE_TEXTURE;

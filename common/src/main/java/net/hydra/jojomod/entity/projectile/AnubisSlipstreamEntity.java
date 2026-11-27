@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;

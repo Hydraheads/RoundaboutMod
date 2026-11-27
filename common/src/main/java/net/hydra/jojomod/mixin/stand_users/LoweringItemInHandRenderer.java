@@ -31,12 +31,12 @@ public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
      *
      * Also makes them lowered when in combat modes like soft and wet shooting mode or vampire punching mode.*/
     @Inject(method = "tick", at = @At(value = "TAIL"))
-    public void roundabout$HeldItems(CallbackInfo ci) {
+    public void sba$HeldItems(CallbackInfo ci) {
         if (this.minecraft.player != null) {
             LocalPlayer clientPlayerEntity2 = this.minecraft.player;
             if (!clientPlayerEntity2.isHandsBusy()) {
-                if (PowerTypes.hasStandActive(clientPlayerEntity2) && ((StandUser) clientPlayerEntity2).roundabout$getStandPowers().isMiningStand() &&
-                        !((StandUser)clientPlayerEntity2).roundabout$getEffectiveCombatMode()) {
+                if (PowerTypes.hasStandActive(clientPlayerEntity2) && ((StandUser) clientPlayerEntity2).sba$getStandPowers().isMiningStand() &&
+                        !((StandUser)clientPlayerEntity2).sba$getEffectiveCombatMode()) {
                     ItemStack itemStack3 = clientPlayerEntity2.getMainHandItem();
                     ItemStack itemStack4 = clientPlayerEntity2.getOffhandItem();
                     //if (itemStack3.getItem() instanceof TieredItem && !clientPlayerEntity2.getUseItem().equals(itemStack3)) {
@@ -44,7 +44,7 @@ public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
                             && !(itemStack3.getItem() instanceof GasolineCanItem)
                             && !(itemStack3.getItem() instanceof FishingRodItem)
                             && !clientPlayerEntity2.getUseItem().equals(itemStack3) &&
-                            !(((StandUser)clientPlayerEntity2).roundabout$getStandPowers().getActivePower() != PowerIndex.MINING &&
+                            !(((StandUser)clientPlayerEntity2).sba$getStandPowers().getActivePower() != PowerIndex.MINING &&
                     this.minecraft.gameMode != null && this.minecraft.gameMode.isDestroying())) {
                         if (this.mainHandHeight > 0.6) {
                             this.mainHandHeight = Mth.clamp(this.mainHandHeight - 0.4f, 0.6f, 1.0f);
@@ -59,7 +59,7 @@ public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
 
                 }
             }
-            if (((StandUser) clientPlayerEntity2).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0){
+            if (((StandUser) clientPlayerEntity2).sba$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0){
                 if (this.mainHandHeight > 0.0) {
                     this.mainHandHeight = Mth.clamp(this.mainHandHeight - 0.4f, 0.0f, 1.0f);
                 }
@@ -74,16 +74,16 @@ public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
     @Override
     public void rdbt$assertSelf(){
         if (this.minecraft.player != null &&
-                ( ((StandUser)this.minecraft.player).roundabout$getEffectiveCombatMode()
+                ( ((StandUser)this.minecraft.player).sba$getEffectiveCombatMode()
                         ||
-                        (PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)this.minecraft.player).roundabout$GetPos2()))
+                        (PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)this.minecraft.player).sba$GetPos2()))
                         ||
-                        ((IPlayerEntity) this.minecraft.player).roundabout$GetPoseEmote() == 35
+                        ((IPlayerEntity) this.minecraft.player).sba$GetPoseEmote() == 35
                 )
 
                 &&
                 !this.minecraft.player.isUsingItem()) {
-            if (roundabout$ticker == 0) {
+            if (sba$ticker == 0) {
                 this.mainHandHeight = 0;
                 this.offHandHeight = 0;
                 this.oMainHandHeight = 0;
@@ -93,26 +93,26 @@ public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
     }
 
     @Unique
-    public float roundabout$ticker = 0;
+    public float sba$ticker = 0;
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$HeldItems2(CallbackInfo ci) {
+    public void sba$HeldItems2(CallbackInfo ci) {
         if (this.minecraft.player != null &&
-                ( ((StandUser)this.minecraft.player).roundabout$getEffectiveCombatMode()
+                ( ((StandUser)this.minecraft.player).sba$getEffectiveCombatMode()
                         ||
-                        (PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)this.minecraft.player).roundabout$GetPos2()))
+                        (PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)this.minecraft.player).sba$GetPos2()))
                         ||
-                        ((IPlayerEntity) this.minecraft.player).roundabout$GetPoseEmote() == 35
+                        ((IPlayerEntity) this.minecraft.player).sba$GetPoseEmote() == 35
                 )
 
                 &&
         !this.minecraft.player.isUsingItem()) {
-            if (roundabout$ticker == 0){
+            if (sba$ticker == 0){
                 this.mainHandHeight = 0;
                 this.offHandHeight = 0;
                 this.oMainHandHeight = 0;
                 this.oOffHandHeight = 0;
             }
-            roundabout$ticker++;
+            sba$ticker++;
             this.mainHandItem = ItemStack.EMPTY;
             this.offHandItem = ItemStack.EMPTY;
 
@@ -126,7 +126,7 @@ public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
                 this.mainHandHeight = Mth.clamp(this.mainHandHeight - 0.4F, 0.0F, 1.0F);
                 this.offHandHeight = Mth.clamp(this.offHandHeight - 0.4F, 0.0F, 1.0F);
             } else {
-                float $$3 = Mth.clamp(((float)roundabout$ticker + 1) / 2, 0.0F, 1.0F);
+                float $$3 = Mth.clamp(((float)sba$ticker + 1) / 2, 0.0F, 1.0F);
                 this.mainHandHeight = this.mainHandHeight + Mth.clamp((this.mainHandItem == $$1 ? $$3 * $$3 * $$3 : 0.0F) - this.mainHandHeight, -0.4F, 0.4F);
                 this.offHandHeight = this.offHandHeight + Mth.clamp((float)(this.offHandItem == $$2 ? 1 : 0) - this.offHandHeight, -0.4F, 0.4F);
             }
@@ -140,7 +140,7 @@ public class LoweringItemInHandRenderer implements AccessLoweringRenderer {
             }
             ci.cancel();
         } else {
-            roundabout$ticker = 0;
+            sba$ticker = 0;
         }
     }
 

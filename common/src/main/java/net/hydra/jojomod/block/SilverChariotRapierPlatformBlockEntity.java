@@ -81,7 +81,7 @@ public class SilverChariotRapierPlatformBlockEntity extends BlockEntity {
                     if (owner == null
                             || !owner.isAlive()
                             || owner.isRemoved()
-                            || !(((StandUser) owner).roundabout$getStandPowers() instanceof PowersSilverChariot)
+                            || !(((StandUser) owner).sba$getStandPowers() instanceof PowersSilverChariot)
                     ) {
                         level.removeBlock(blockPos, false);
                     }

@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.authlib.GameProfile;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
 import net.hydra.jojomod.access.IPlayerModel;
@@ -42,116 +42,116 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
     @Shadow
     protected abstract @Nullable PlayerInfo getPlayerInfo();
 
-    public boolean roundabout$switched = false;
+    public boolean sba$switched = false;
 
     @Override
     @Unique
-    public boolean roundabout$getSwitched(){
-        return this.roundabout$switched;
+    public boolean sba$getSwitched(){
+        return this.sba$switched;
     }
     @Override
     @Unique
-    public void roundabout$setSwitched(boolean switched){
-        this.roundabout$switched = switched;
-    }
-
-    @Unique
-    public PlayerModel roundabout$playerModel = null;
-
-    @Override
-    @Unique
-    public PlayerModel roundabout$getOGModel(){
-        return this.roundabout$playerModel;
-    }
-    @Override
-    @Unique
-    public void roundabout$setOGModel(PlayerModel switched){
-            this.roundabout$playerModel = switched;
-    }
-    @Unique
-    Mob roundabout$shapeShift = null;
-    @Unique
-    Mob roundabout$swappedModel = null;
-    @Unique
-    VisageData roundabout$visageData = null;
-    @Unique
-    ItemStack roundabout$lastVisage = null;
-
-    @Unique
-    @Override
-    public void roundabout$setShapeShiftTemp(Mob shift){
-        roundabout$shapeShift = shift;
+    public void sba$setSwitched(boolean switched){
+        this.sba$switched = switched;
     }
 
     @Unique
+    public PlayerModel sba$playerModel = null;
+
     @Override
-    public Mob roundabout$getShapeShiftTemp(){
-        return roundabout$shapeShift;
+    @Unique
+    public PlayerModel sba$getOGModel(){
+        return this.sba$playerModel;
+    }
+    @Override
+    @Unique
+    public void sba$setOGModel(PlayerModel switched){
+            this.sba$playerModel = switched;
+    }
+    @Unique
+    Mob sba$shapeShift = null;
+    @Unique
+    Mob sba$swappedModel = null;
+    @Unique
+    VisageData sba$visageData = null;
+    @Unique
+    ItemStack sba$lastVisage = null;
+
+    @Unique
+    @Override
+    public void sba$setShapeShiftTemp(Mob shift){
+        sba$shapeShift = shift;
+    }
+
+    @Unique
+    @Override
+    public Mob sba$getShapeShiftTemp(){
+        return sba$shapeShift;
     }
     @Unique
     @Override
-    public void roundabout$setSwappedModel(Mob swap){
-        roundabout$swappedModel = swap;
+    public void sba$setSwappedModel(Mob swap){
+        sba$swappedModel = swap;
     }
     @Unique
     @Override
-    public Mob roundabout$getSwappedModel(){
-        return roundabout$swappedModel;
+    public Mob sba$getSwappedModel(){
+        return sba$swappedModel;
     }
     @Unique
     @Override
-    public void roundabout$setVisageData(VisageData data){
-        roundabout$visageData = data;
+    public void sba$setVisageData(VisageData data){
+        sba$visageData = data;
     }
     @Unique
     @Override
-    public VisageData roundabout$getVisageData(){
-        return roundabout$visageData;
+    public VisageData sba$getVisageData(){
+        return sba$visageData;
     }
     @Unique
     @Override
-    public void roundabout$setLastVisage(ItemStack stack){
-        roundabout$lastVisage = stack;
+    public void sba$setLastVisage(ItemStack stack){
+        sba$lastVisage = stack;
     }
     @Unique
     @Override
-    public ItemStack roundabout$getLastVisage(){
-        return roundabout$lastVisage;
+    public ItemStack sba$getLastVisage(){
+        return sba$lastVisage;
     }
     @Inject(method = "getSkinTextureLocation",
             at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$getTextureLocation(CallbackInfoReturnable<ResourceLocation> cir) {
-        if (this instanceof StandUser su && su.roundabout$isDisguised()) {
-            GameProfile profile = su.roundabout$getDisguiseProfile();
+    public void sba$getTextureLocation(CallbackInfoReturnable<ResourceLocation> cir) {
+        if (this instanceof StandUser su && su.sba$isDisguised()) {
+            GameProfile profile = su.sba$getDisguiseProfile();
             if (profile != null) {
                 cir.setReturnValue(SkinUtil.getSkin(profile).texture());
                 return;
             }
         }
         IPlayerEntity ple = ((IPlayerEntity) this);
-        byte shape = ple.roundabout$getShapeShift();
+        byte shape = ple.sba$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift == ShapeShifts.OVA) {
             cir.setReturnValue(StandIcons.OVA_ENYA_SKIN);
         } else if (shift == ShapeShifts.EERIE){
             cir.setReturnValue(StandIcons.EERIE_SKIN);
         } else {
-            ItemStack visage = ple.roundabout$getMaskSlot();
+            ItemStack visage = ple.sba$getMaskSlot();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     VisageData vd = MI.visageData.generateVisageData(this);
                     if (vd.isCharacterVisage()) {
                         if (FateTypes.isUndisguisedZombie(this)) {
                             // 37 67 -34
-                            cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
+                            cir.setReturnValue(new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
 
                         } else {
-                            cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
+                            cir.setReturnValue(new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
 
                         }
                         return;
                     } else if (visage.is(ModItems.RAT_MASK) && !isSpectator()){
-                        cir.setReturnValue(new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/rat/rat_skin.png"));
+                        cir.setReturnValue(new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/rat/rat_skin.png"));
                         return;
                     }
                 }
@@ -159,7 +159,7 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
 
             if (FateTypes.isUndisguisedZombie(this)) {
                 PlayerModel pm = ClientUtil.getPlayerModel(this);
-                if (pm != null && (((IPlayerModel)pm).roundabout$getSlim())){
+                if (pm != null && (((IPlayerModel)pm).sba$getSlim())){
                     cir.setReturnValue(StandIcons.ZOMBIE_SKIN_SLIM);
                     return;
                 } else {
@@ -172,25 +172,25 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
 
     @Unique
     @Override
-    public ResourceLocation roundabout$getTextureLocation2() {
+    public ResourceLocation sba$getTextureLocation2() {
         IPlayerEntity ple = ((IPlayerEntity) this);
-        byte shape = ple.roundabout$getShapeShift();
+        byte shape = ple.sba$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift == ShapeShifts.OVA) {
             return StandIcons.OVA_ENYA_SKIN;
         } else if (shift == ShapeShifts.EERIE){
             return StandIcons.EERIE_SKIN;
         } else {
-            ItemStack visage = ple.roundabout$getMaskSlot();
+            ItemStack visage = ple.sba$getMaskSlot();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     VisageData vd = MI.visageData.generateVisageData(this);
                     if (vd.isCharacterVisage()) {
                         if (FateTypes.isUndisguisedZombie(this)) {
                             // 37 67 -34
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
+                            return (new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
                         } else {
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
+                            return (new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
 
                         }
                     }
@@ -199,7 +199,7 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
 
             if (FateTypes.isUndisguisedZombie(this)) {
                 PlayerModel pm = ClientUtil.getPlayerModel(this);
-                if (pm != null && (((IPlayerModel)pm).roundabout$getSlim())){
+                if (pm != null && (((IPlayerModel)pm).sba$getSlim())){
                     return (StandIcons.ZOMBIE_SKIN_SLIM);
                 } else {
                     return (StandIcons.ZOMBIE_SKIN);
@@ -212,8 +212,8 @@ public abstract class PlayerEntityAbstractClient extends Player implements IPlay
 
 
     public ResourceLocation rdbt$getSkinTextureLocation3() {
-        if (this instanceof StandUser su && su.roundabout$isDisguised()) {
-            GameProfile profile = su.roundabout$getDisguiseProfile();
+        if (this instanceof StandUser su && su.sba$isDisguised()) {
+            GameProfile profile = su.sba$getDisguiseProfile();
             if (profile != null) {
                 return SkinUtil.getSkin(profile).texture();
             }

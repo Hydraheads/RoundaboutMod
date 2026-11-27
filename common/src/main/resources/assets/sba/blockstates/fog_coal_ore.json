@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "in_fog=false": {
+      "model": "sba:block/fog_block_invisible"
+    },
+    "in_fog=true": {
+      "model": "minecraft:block/coal_ore"
+    }
+  }
+}

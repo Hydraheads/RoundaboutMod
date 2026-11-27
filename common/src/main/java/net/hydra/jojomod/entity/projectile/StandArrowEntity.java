@@ -130,27 +130,27 @@ public class StandArrowEntity extends AbstractArrow {
             }
         }
         if (this.getArrow().getItem() instanceof WorthyArrowItem WI && ($$1 instanceof Mob || $$1 instanceof Player)) {
-            if (this.getOwner() instanceof Player PE && PE.isCreative() && !((StandUser)$$1).roundabout$getStandDisc().isEmpty()){
+            if (this.getOwner() instanceof Player PE && PE.isCreative() && !((StandUser)$$1).sba$getStandDisc().isEmpty()){
                 if (PowerTypes.hasStandActive($$1)){
-                    ((StandUser)$$1).roundabout$setActive(false);
+                    ((StandUser)$$1).sba$setActive(false);
                 }
-                ((StandUser)$$1).roundabout$setStandDisc(ItemStack.EMPTY);
+                ((StandUser)$$1).sba$setStandDisc(ItemStack.EMPTY);
                 if ($$1 instanceof Mob mb) {
-                    ((IMob) $$1).roundabout$setWorthy(false);
+                    ((IMob) $$1).sba$setWorthy(false);
                 }
                 particleStorm(this.level(),$$1);
                 this.discard();
                 return;
             } else if ($$1 instanceof Mob mb){
-                if (((IMob)mb).roundabout$isWorthy()){
+                if (((IMob)mb).sba$isWorthy()){
                     if (this.getOwner() instanceof Player PE && PE.isCreative()){
-                        ((IMob)mb).roundabout$setWorthy(false);
+                        ((IMob)mb).sba$setWorthy(false);
                         particleStorm(this.level(),$$1);
                         this.discard();
                         return;
                     }
                 } else {
-                    ((IMob)mb).roundabout$setWorthy(true);
+                    ((IMob)mb).sba$setWorthy(true);
                     particleStorm(this.level(),$$1);
 
                     this.discard();

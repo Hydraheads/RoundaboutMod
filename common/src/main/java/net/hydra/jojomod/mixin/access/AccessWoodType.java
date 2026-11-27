@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface AccessWoodType {
 
     @Invoker("register")
-    static WoodType roundabout$register(WoodType woodType) {
+    static WoodType sba$register(WoodType woodType) {
         throw new AssertionError();
     }
 }

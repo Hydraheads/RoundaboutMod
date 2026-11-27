@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
@@ -32,7 +32,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class EncasementBubbleRenderer extends EntityRenderer<EncasementBubbleEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
 
     private final float scale;
     private final ItemRenderer itemRenderer;

@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.visages.parts;// Made with Blockbench 5.
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPlayerRenderer;
@@ -132,35 +132,35 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
             }
             if (player.getUseItem().getItem() instanceof SnubnoseRevolverItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             } else if (player.getUseItem().getItem() instanceof TommyGunItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.TOMMY_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.TOMMY_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.TOMMY_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.TOMMY_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.TOMMY_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.TOMMY_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             } else if (player.getUseItem().getItem() instanceof ColtRevolverItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             } else if (player.getUseItem().getItem() instanceof BerettaPistolItem) {
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.SNUBNOSE_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL.ad, partialTicks, 1f);
                 } else {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.SNUBNOSE_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.SNUBNOSE_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
@@ -174,18 +174,18 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                 PlayerModel plm = PR.getModel();
 
 
-                byte shift = ((IPlayerEntity)player).roundabout$getShapeShift();
+                byte shift = ((IPlayerEntity)player).sba$getShapeShift();
                 ModelPart rightArm = plm.rightArm;
                 ModelPart rightSleeve = plm.rightSleeve;
                 ModelPart leftArm = plm.leftArm;
                 ModelPart leftSleeve = plm.leftSleeve;
-                byte bt = ((StandUser)LE).roundabout$getLocacacaCurse();
-                int muscle = ((StandUser)LE).roundabout$getZappedToID();
+                byte bt = ((StandUser)LE).sba$getLocacacaCurse();
+                int muscle = ((StandUser)LE).sba$getZappedToID();
 
                 boolean renderLeft = true;
                 boolean renderRight = true;
 
-                if (standUser.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player) && !player.isUsingItem()) {
+                if (standUser.sba$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player) && !player.isUsingItem()) {
                     if (!PT.renderBothArms()) {
                         renderLeft = player.getMainArm() == HumanoidArm.LEFT;
                         renderRight = player.getMainArm() == HumanoidArm.RIGHT;
@@ -193,20 +193,20 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
 
 
                     AnimationDefinition anim = PT.getFirstPersonAnimation();
-                    if (standUser.roundabout$getStandAnimation() == PowerIndex.NONE) {
-                        standUser.roundabout$getWornStandIdleAnimation().startIfStopped(player.tickCount);
+                    if (standUser.sba$getStandAnimation() == PowerIndex.NONE) {
+                        standUser.sba$getWornStandIdleAnimation().startIfStopped(player.tickCount);
                     }
-                    this.animate(standUser.roundabout$getWornStandIdleAnimation(),anim,partialTicks,1F);
+                    this.animate(standUser.sba$getWornStandIdleAnimation(),anim,partialTicks,1F);
                 }
-                if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.isUsingStand(player)){
+                if (standUser.sba$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.isUsingStand(player)){
                     AnimationDefinition anim = PCB.getAnimation(standUser, true);
                     if (anim != null) {
-                        this.animate(standUser.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
-                        standUser.roundabout$getWornStandAnimation().startIfStopped(player.tickCount - 15);
+                        this.animate(standUser.sba$getWornStandAnimation(), anim, partialTicks, 1F);
+                        standUser.sba$getWornStandAnimation().startIfStopped(player.tickCount - 15);
                     }
                 }
 
-                Mob shapeShift = ((IPlayerRenderer)PR).roundabout$getShapeShift(player);
+                Mob shapeShift = ((IPlayerRenderer)PR).sba$getShapeShift(player);
                 if (shapeShift != null && (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(shift)) ||
                         ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(shift))) && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
                     consumer = bufferSource.getBuffer(RenderType.entityTranslucent(hr.getTextureLocation(shapeShift)));
@@ -295,7 +295,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
 
                 StandUser user = ((StandUser) player);
 
-                if (user.roundabout$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player) && !player.isUsingItem()) {
+                if (user.sba$getStandPowers() instanceof PowersTusk PT && PowerTypes.isUsingStand(player) && !player.isUsingItem()) {
                   if  (PT.renderDrill()) {
                         if (renderRight) {
                             poseStack.pushPose();
@@ -385,12 +385,12 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                         this.rform.translateAndRotate(poseStack);
                         this.right_arm.translateAndRotate(poseStack);
 
-                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        byte skin = ((StandUser) player).sba$getStandSkin();
                         String path = PowersWhiteAlbum.getSkinString(skin);
                         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                             path = "ice";
                         }
-                        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                        if (((StandUser) player).sba$getStandPowers() instanceof PowersWhiteAlbum PW
                                 && PW.cracked) {
                             path = "cracked/" + path;
                         }
@@ -407,7 +407,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                         this.rform.translateAndRotate(poseStack);
                         this.right_arm.translateAndRotate(poseStack);
 
-                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        byte skin = ((StandUser) player).sba$getStandSkin();
                         String path = PowersOasis.getSkinString(skin);
 
                         ModStrayModels.OasisSlimRightArm.render(
@@ -451,7 +451,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                                 rightSleeve.xScale += 0.04f;
                                 rightSleeve.zScale += 0.04f;
                                 VertexConsumer consumerX;
-                                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                                if (((IPlayerModel) plm).sba$getSlim()) {
                                     consumerX = bufferSource.getBuffer
                                             (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
                                 } else {
@@ -471,10 +471,10 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                             }
                         }
 
-                        boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
+                        boolean hasMandom = (user.sba$getStandPowers() instanceof PowersMandom);
                         boolean hasMandomOut = (PowerTypes.hasStandActive(player)  && hasMandom);
                         if (hasMandom) {
-                            byte style = ipe.roundabout$getWatchStyle();
+                            byte style = ipe.sba$getWatchStyle();
                             if (style != PowersMandom.WATCHLESS) {
 
                                 poseStack.pushPose();
@@ -482,7 +482,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                                 this.rform.translateAndRotate(poseStack);
                                 this.right_arm.translateAndRotate(poseStack);
                                 VertexConsumer consumerX;
-                                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                                if (((IPlayerModel) plm).sba$getSlim()) {
                                     ModStrayModels.MANDOM_WATCH_SMALL.render(
                                             player,partialTicks,
                                             poseStack,
@@ -517,12 +517,12 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                         this.lform.translateAndRotate(poseStack);
                         this.left_arm.translateAndRotate(poseStack);
 
-                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        byte skin = ((StandUser) player).sba$getStandSkin();
                         String path = PowersWhiteAlbum.getSkinString(skin);
                         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                             path = "ice";
                         }
-                        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                        if (((StandUser) player).sba$getStandPowers() instanceof PowersWhiteAlbum PW
                                 && PW.cracked) {
                             path = "cracked/" + path;
                         }
@@ -539,7 +539,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                         this.lform.translateAndRotate(poseStack);
                         this.left_arm.translateAndRotate(poseStack);
 
-                        byte skin = ((StandUser) player).roundabout$getStandSkin();
+                        byte skin = ((StandUser) player).sba$getStandSkin();
                         String path = PowersOasis.getSkinString(skin);
 
                         ModStrayModels.OasisSlimLeftArm.render(
@@ -583,7 +583,7 @@ public class FirstPersonArmsSlimModel<T extends Entity> extends PsuedoHierarchic
                                 rightSleeve.xScale += 0.04f;
                                 rightSleeve.zScale += 0.04f;
                                 VertexConsumer consumerX;
-                                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                                if (((IPlayerModel) plm).sba$getSlim()) {
                                     consumerX = bufferSource.getBuffer
                                             (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
                                 } else {

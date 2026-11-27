@@ -58,7 +58,7 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
             Entity ent = getChasing();
             if (ticksUntilDamage <= 0) {
                 if (ent != null && $$0.getEntity().is(ent)) {
-                    if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                    if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.GO_BEYOND, this.getOwner()),
                                 PW.getGoBeyondStrength(ent))) {
                             //You don't need to hurt them to launch them
@@ -133,7 +133,7 @@ public class GoBeyondEntity extends SoftAndWetBubbleEntity implements NoHitboxRe
 
             }
             lifeSpan--;
-            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet))) {
+            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).sba$getStandPowers() instanceof PowersSoftAndWet))) {
                 popBubble();
                 return;
             }

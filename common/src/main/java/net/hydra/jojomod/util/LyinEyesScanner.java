@@ -128,7 +128,7 @@ public class LyinEyesScanner {
             else if (entity instanceof NeutralMob || entity instanceof Player
                     || (entity instanceof LivingEntity living
                     && living instanceof StandUser standUser
-                    && standUser.roundabout$hasAStand())) {
+                    && standUser.sba$hasAStand())) {
                 type = TargetType.NEUTRAL;
             }
             // passive mobs

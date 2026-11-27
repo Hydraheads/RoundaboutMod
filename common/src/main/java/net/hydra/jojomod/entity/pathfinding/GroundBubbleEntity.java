@@ -74,7 +74,7 @@ public class GroundBubbleEntity extends GroundPathfindingStandAttackEntity {
         LivingEntity $$0 = this.getUser();
         super.tick();
         if (!client) {
-            if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersSoftAndWet PWW) {
+            if ($$0 != null && ((StandUser) $$0).sba$getStandPowers() instanceof PowersSoftAndWet PWW) {
                 if (PWW.bubbleNumber != bubbleNo){
                     this.discard();
                     return;
@@ -82,7 +82,7 @@ public class GroundBubbleEntity extends GroundPathfindingStandAttackEntity {
             }
             Entity targ = this.getTarget();
             if (targ != null && this.getTarget().distanceTo(this) < 5 && $$0 != null && targ.getUUID() != $$0.getUUID()) {
-                if (((StandUser) $$0).roundabout$getStandPowers() instanceof PowersSoftAndWet PWW) {
+                if (((StandUser) $$0).sba$getStandPowers() instanceof PowersSoftAndWet PWW) {
                     SoftAndWetExplosiveBubbleEntity bubble = PWW.getExplosiveBubble();
                     if (bubble != null){
                         bubble.setReady(true);

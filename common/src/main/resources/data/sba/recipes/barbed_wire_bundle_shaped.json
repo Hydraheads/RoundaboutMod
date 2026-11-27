@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "sba:barbed_wire"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "III"
+  ],
+  "result": {
+    "count": 4,
+    "item": "sba:barbed_wire_bundle"
+  },
+  "show_notification": true
+}

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class DamageTrackingMixin implements IEntityAndData {
 
     @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V"))
-    private void roundabout$trackSignificantDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$trackSignificantDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
 
         boolean isDoT = source.is(DamageTypes.ON_FIRE) ||
                 source.is(DamageTypes.IN_FIRE) ||
@@ -31,7 +31,7 @@ public abstract class DamageTrackingMixin implements IEntityAndData {
         boolean isTinyDamage = amount < 1.0f && isDoT;
 
         if (!isDoT && !isTinyDamage) {
-            this.roundabout$setLastDamageTaken(amount);
+            this.sba$setLastDamageTaken(amount);
         }
     }
 }

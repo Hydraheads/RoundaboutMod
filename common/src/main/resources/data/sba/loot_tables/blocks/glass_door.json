@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "enchantments": [
+              {
+                "enchantment": "minecraft:silk_touch",
+                "levels": {
+                  "min": 1
+                }
+              }
+            ]
+          },
+          "block": "sba:glass_door",
+          "properties": { "half": "lower" }
+        }
+      ],
+      "entries": [
+        { "type": "minecraft:item", "name": "sba:glass_door" }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "sba:blocks/glass_door"
+}

@@ -24,7 +24,7 @@ public abstract class TimeStopItemEntity extends Entity implements IItemEntityTi
 
     /**This mixin makes items tick in age so they can be picked up after being thrown even while time is stopped*/
     @Override
-    public void roundabout$TickPickupDelay(){
+    public void sba$TickPickupDelay(){
         if (this.getItem().isEmpty()) {
             this.discard();
         } else {

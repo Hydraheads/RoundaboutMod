@@ -1,0 +1,7 @@
+{
+  "parent": "sba:block/hallucinatory_acid_3",
+  "textures": {
+    "particle": "minecraft:block/sand",
+    "acid": "sba:block/hallucinatory_acid_sandsnake"
+  }
+}

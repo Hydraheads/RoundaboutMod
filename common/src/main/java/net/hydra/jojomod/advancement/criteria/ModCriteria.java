@@ -1,6 +1,6 @@
 package net.hydra.jojomod.advancement.criteria;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
 
@@ -19,7 +19,7 @@ public class ModCriteria {
         }
         catch (Exception e)
         {
-            Roundabout.LOGGER.error("Exception caught while registering advancement criteria!");
+            SBA.LOGGER.error("Exception caught while registering advancement criteria!");
             return null;
         }
     }

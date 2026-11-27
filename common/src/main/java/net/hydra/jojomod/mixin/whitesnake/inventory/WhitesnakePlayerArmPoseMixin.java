@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class WhitesnakePlayerArmPoseMixin {
     @Inject(method = "getArmPose(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;",
             at = @At("HEAD"), cancellable = true)
-    private static void roundaboutWhitesnake$emptyControlHand(AbstractClientPlayer player, InteractionHand hand,
+    private static void sbaWhitesnake$emptyControlHand(AbstractClientPlayer player, InteractionHand hand,
                                                               CallbackInfoReturnable<HumanoidModel.ArmPose> cir) {
         if (hand == InteractionHand.MAIN_HAND && WhitesnakeControlInventory.isActive(player)) {
             cir.setReturnValue(HumanoidModel.ArmPose.EMPTY);

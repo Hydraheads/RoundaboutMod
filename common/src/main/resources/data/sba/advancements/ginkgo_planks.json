@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_logs": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "sba:ginkgo_log",
+              "sba:ginkgo_wood",
+              "sba:stripped_ginkgo_log",
+              "sba:stripped_ginkgo_wood"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "recipes": ["sba:ginkgo_planks"]
+  }
+}

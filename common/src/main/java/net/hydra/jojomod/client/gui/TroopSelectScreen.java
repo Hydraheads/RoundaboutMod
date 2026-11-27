@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -44,7 +44,7 @@ import java.util.List;
 
 public class TroopSelectScreen extends Screen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation TROOP_CHOOSER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation TROOP_CHOOSER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/troop_chooser.png");
 
     private static final int
@@ -85,15 +85,15 @@ public class TroopSelectScreen extends Screen {
         int Yoffset = -6;
 
         this.slots.add(new SwitchSelect(TROOP, centerX-offsetCenter, centerY-offsetCenter + Yoffset,
-                Component.translatable("roundabout.troop_select.troop")));
+                Component.translatable("sba.troop_select.troop")));
         this.slots.add(new SwitchSelect(BUNDLE, centerX+offsetCenter, centerY-offsetCenter + Yoffset,
-                Component.translatable("roundabout.troop_select.bundle")));
+                Component.translatable("sba.troop_select.bundle")));
         this.slots.add(new SwitchSelect(HELICOPTER, centerX-offsetCenter-12, centerY+offsetCenter + Yoffset-6,
-                Component.translatable("roundabout.troop_select.helicopter")));
+                Component.translatable("sba.troop_select.helicopter")));
         this.slots.add(new SwitchSelect(TANK, centerX+offsetCenter+12, centerY+offsetCenter + Yoffset-6,
-                Component.translatable("roundabout.troop_select.tank")));
+                Component.translatable("sba.troop_select.tank")));
         this.slots.add(new SwitchSelect(MINE, centerX, centerY+offsetCenter + Yoffset+12,
-                Component.translatable("roundabout.troop_select.mine")));
+                Component.translatable("sba.troop_select.mine")));
 
     }
 
@@ -125,7 +125,7 @@ public class TroopSelectScreen extends Screen {
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
-        Component str = Component.translatable("roundabout.bad_company.troop_select");
+        Component str = Component.translatable("sba.bad_company.troop_select");
 
         guiGraphics.drawCenteredString(this.font, str , this.width / 2, l, -1);
 
@@ -160,7 +160,7 @@ public class TroopSelectScreen extends Screen {
             if (safeSelect && lastChangedConfig == currentlyHovered) {
                 return;
             }
-            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersBadCompany PBC) {
+            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).sba$getStandPowers() instanceof PowersBadCompany PBC) {
                 PBC.selectedTroop(currentlyHovered);
                 lastChangedConfig = currentlyHovered;
             }
@@ -210,14 +210,14 @@ public class TroopSelectScreen extends Screen {
     }
 
     /*public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }*/
 
 
-    public boolean roundabout$sameKeyOne(KeyMapping key1){
+    public boolean sba$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
                 || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
         );
@@ -225,7 +225,7 @@ public class TroopSelectScreen extends Screen {
 
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
-        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+        if (this.minecraft != null && !sba$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
             this.exitTroopSelect();
 
             this.minecraft.options.keyUse.setDown(false);

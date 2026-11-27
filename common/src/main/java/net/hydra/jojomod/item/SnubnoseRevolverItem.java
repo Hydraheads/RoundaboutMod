@@ -1,6 +1,6 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.projectile.SBABulletEntity;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.sounds.SoundEvent;
@@ -32,7 +32,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
     public int getFireCooldown() { return 5; }
 
     @Override
-    public byte getBulletType() { return RoundaboutBulletEntity.SNUBNOSE; }
+    public byte getBulletType() { return SBABulletEntity.SNUBNOSE; }
 
     @Override
     public SoundEvent getFireSound() { return ModSounds.SNUBNOSE_FIRE_EVENT; }
@@ -54,7 +54,7 @@ public class SnubnoseRevolverItem extends FirearmItem implements Vanishable {
     }
 
     @Override
-    public void configureBulletTrajectory(RoundaboutBulletEntity bullet, LivingEntity shooter) {
+    public void configureBulletTrajectory(SBABulletEntity bullet, LivingEntity shooter) {
         bullet.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 3.5F, 1.3F);
     }
 

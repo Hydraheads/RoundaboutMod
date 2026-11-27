@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.networking;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersCream;
@@ -35,19 +35,19 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
     @Shadow public ServerPlayer player;
 
     @Inject(method = "handlePlayerAction", at = @At("HEAD"), cancellable = true)
-    private void roundabout$handlePlayerAction(ServerboundPlayerActionPacket $$0, CallbackInfo ci) {
+    private void sba$handlePlayerAction(ServerboundPlayerActionPacket $$0, CallbackInfo ci) {
         ServerboundPlayerActionPacket.Action serverboundplayeractionpacket$action = $$0.getAction();
         switch (serverboundplayeractionpacket$action) {
             case SWAP_ITEM_WITH_OFFHAND:
-                if (((StandUser)this.player).roundabout$getEffectiveCombatMode() || ((StandUser) this.player).roundabout$isPossessed()){
+                if (((StandUser)this.player).sba$getEffectiveCombatMode() || ((StandUser) this.player).sba$isPossessed()){
                     ci.cancel();
                 }
-                if(((StandUser)this.player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+                if(((StandUser)this.player).sba$getStandPowers() instanceof PowersGreenDay PGD){
                     if(!(PGD.HasMainArm && PGD.HasOffHand)){
                         ci.cancel();
                     }
                 }
-                if(((StandUser)this.player).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCTR){
+                if(((StandUser)this.player).sba$getStandPowers() instanceof PowersCatchTheRainbow PCTR){
                     if(!(PCTR.HasOffHand)){
                         ci.cancel();
                     }
@@ -62,9 +62,9 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
         return ((ServerGamePacketListenerImpl)(Object)this);
     }
     @Inject(method = "handleCustomPayload", at = @At("HEAD"))
-    private void roundabout$handlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci)
+    private void sba$handlePayload(ServerboundCustomPayloadPacket packet, CallbackInfo ci)
     {
-        boolean rdbt = packet.getIdentifier().getNamespace().equals("roundabout");
+        boolean rdbt = packet.getIdentifier().getNamespace().equals("sba");
 
         if (!rdbt)
             return;
@@ -72,7 +72,7 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
         Object[] threadTest = ModNetworking.decodeBufferToVArgs(new FriendlyByteBuf(packet.getData().duplicate()));
 
         if (threadTest.length == 0 || !(threadTest[0] instanceof String messageName)) {
-            Roundabout.LOGGER.warn("Invalid message data received: {}", Arrays.toString(threadTest));
+            SBA.LOGGER.warn("Invalid message data received: {}", Arrays.toString(threadTest));
             return;
         }
         if (!messageName.contains("thread_hop")){
@@ -94,7 +94,7 @@ public class ZServerGamePacketListenerImpl implements IClientNetworking {
     }
 
     @Override
-    public @Nullable Connection roundabout$getServer() {
+    public @Nullable Connection sba$getServer() {
         return this.connection;
     }
 }

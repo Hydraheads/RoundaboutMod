@@ -22,11 +22,11 @@ public class GERootsLayer<T extends LivingEntity, A extends EntityModel<T>> exte
                        float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
                        float netHeadYaw, float headPitch) {
         if (entity == null || entity.isInvisible()) return;
-        if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
+        if (((IEntityAndData) entity).sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
 
         StandUser user = (StandUser) entity;
-        boolean rooted = user.roundabout$hasGERooted();
-        boolean shrinking = !rooted && user.roundabout$getGERootsShrinkTicks() > 0;
+        boolean rooted = user.sba$hasGERooted();
+        boolean shrinking = !rooted && user.sba$getGERootsShrinkTicks() > 0;
 
         if (rooted || shrinking) {
             ClientUtil.pushPoseAndCooperate(poseStack, 28);

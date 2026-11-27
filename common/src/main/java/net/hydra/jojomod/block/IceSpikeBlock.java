@@ -33,7 +33,7 @@ public class IceSpikeBlock
 
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
         if ($$3 instanceof LivingEntity LE && !LE.isInvulnerable() && !MainUtil.isBossMob($$3)) {
-            if (!(((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
+            if (!(((StandUser)LE).sba$getStandPowers() instanceof PowersWhiteAlbum PW &&
                     PowerTypes.hasStandActive(LE))) {
                 if (LE.onGround()) {
                     if ((!(LE instanceof Player pl && pl.isCreative()))){

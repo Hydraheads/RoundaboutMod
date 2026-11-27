@@ -18,9 +18,9 @@ public abstract class TimeStopPrimedTnt extends Entity {
      * to get the entity mixin tick calls that the mod adds*/
 
     @Inject(method = "tick", at = @At(value = "TAIL"), cancellable = true)
-    protected void roundabout$tick(CallbackInfo ci) {
-        ((IEntityAndData)this).roundabout$universalTick();
-        ((IEntityAndData)this).roundabout$tickQVec();
+    protected void sba$tick(CallbackInfo ci) {
+        ((IEntityAndData)this).sba$universalTick();
+        ((IEntityAndData)this).sba$tickQVec();
 
     }
 

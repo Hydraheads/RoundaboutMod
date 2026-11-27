@@ -81,7 +81,7 @@ public abstract class GravityWalkNodeEvaluatorMixin extends NodeEvaluator {
 //    )
 //    public void rdbt$getStart(CallbackInfoReturnable<Node> cir) {
 //        if (this.mob != null) {
-//            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //
@@ -251,7 +251,7 @@ public abstract class GravityWalkNodeEvaluatorMixin extends NodeEvaluator {
 //    )
 //    public void rdbt$getNeighbors(Node[] $$0, Node $$1,CallbackInfoReturnable<Integer> cir) {
 //        if (this.mob != null) {
-//            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //
@@ -327,7 +327,7 @@ public abstract class GravityWalkNodeEvaluatorMixin extends NodeEvaluator {
 //    )
 //    public void rdbt$isDiagonalValid(Node $$0, Node $$1, Node $$2, Node $$3, CallbackInfoReturnable<Boolean> cir){
 //        if (this.mob != null) {
-//            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //
@@ -381,7 +381,7 @@ public abstract class GravityWalkNodeEvaluatorMixin extends NodeEvaluator {
 //    )
 //    public void rdbt$getFloorLevel(BlockPos $$0, CallbackInfoReturnable<Double> cir){
 //        if (this.mob != null) {
-//            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //
@@ -433,7 +433,7 @@ public abstract class GravityWalkNodeEvaluatorMixin extends NodeEvaluator {
 //            cancellable = true
 //    )
 //    public void rdbt$findAcceptedNode(int $$0, int $$1, int $$2, int $$3, double $$4, Direction $$5, BlockPathTypes $$6, CallbackInfoReturnable<Node> cir){
-//        Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//        Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //        if (dir == Direction.DOWN)
 //            return;
 //
@@ -572,7 +572,7 @@ public abstract class GravityWalkNodeEvaluatorMixin extends NodeEvaluator {
 //            cancellable = true
 //    )
 //    public void rdbt$getBlockPathType(BlockGetter $$0, int $$1, int $$2, int $$3, CallbackInfoReturnable<BlockPathTypes> cir) {
-//        Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//        Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //        if (dir == Direction.DOWN)
 //            return;
 //

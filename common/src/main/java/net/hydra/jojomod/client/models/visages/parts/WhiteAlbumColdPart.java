@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
@@ -67,7 +67,7 @@ public class WhiteAlbumColdPart extends PsuedoHierarchicalModel {
 
 
     public ResourceLocation getTextureLocation(String path, Entity context){
-            return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/white_album/projectiles/shooting_mode.png");
+            return new ResourceLocation(SBA.MOD_ID, "textures/stand/white_album/projectiles/shooting_mode.png");
 
     }
 
@@ -87,8 +87,8 @@ public class WhiteAlbumColdPart extends PsuedoHierarchicalModel {
             //The number at the end is inversely proportional so 2 is half speed
 
             StandUser user = ((StandUser) LE);
-            this.animate(user.roundabout$getWornStandIdleAnimation(), WhiteAlbumAnimations.SpinningBubble, partialTicks, 0.5f);
-            user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+            this.animate(user.sba$getWornStandIdleAnimation(), WhiteAlbumAnimations.SpinningBubble, partialTicks, 0.5f);
+            user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }
     }

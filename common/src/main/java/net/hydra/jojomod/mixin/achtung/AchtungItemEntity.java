@@ -24,12 +24,12 @@ public abstract class AchtungItemEntity extends Entity {
      * Support for thrown item gaining invisibility
      */
     @Inject(method = "setThrower", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$setThrower(@Nullable UUID $$0, CallbackInfo ci) {
+    protected void sba$setThrower(@Nullable UUID $$0, CallbackInfo ci) {
         if ($$0 != null) {
             Player pl =  this.level().getPlayerByUUID($$0);
             if (pl != null){
                 if (MainUtil.getEntityIsTrulyInvisible(pl) && ClientNetworking.getAppropriateConfig().achtungSettings.hidesShotProjectiles){
-                    ((IEntityAndData)this).roundabout$setTrueInvisibility(MainUtil.getEntityTrulyInvisibleTicks(pl));
+                    ((IEntityAndData)this).sba$setTrueInvisibility(MainUtil.getEntityTrulyInvisibleTicks(pl));
                 }
                 PowerTypes.copyPlaneOfExisting(pl,this);
             }
@@ -37,7 +37,7 @@ public abstract class AchtungItemEntity extends Entity {
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/entity/item/ItemEntity;)V", at = @At(value = "RETURN"))
-    protected void roundabout$setPlaneOfItem(ItemEntity $$0, CallbackInfo ci) {
+    protected void sba$setPlaneOfItem(ItemEntity $$0, CallbackInfo ci) {
         if ($$0 != null) {
             PowerTypes.copyPlaneOfExisting($$0,this);
         }

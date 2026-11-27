@@ -5,7 +5,7 @@ import net.hydra.jojomod.client.models.stand.StandModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.models.mobs.animations.StrayCatEntityAnimations;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 
 import net.hydra.jojomod.client.models.substand.renderers.animations.SheerHeartAttackAnimations;
 import net.hydra.jojomod.entity.mobs.FalconEntity;

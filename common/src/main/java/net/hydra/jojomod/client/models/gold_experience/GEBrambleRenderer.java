@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class GEBrambleRenderer extends EntityRenderer<GEBrambleEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation("roundabout", "textures/entity/ge_bramble.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation("sba", "textures/entity/ge_bramble.png");
     private final GEBrambleModel model;
 
     public GEBrambleRenderer(EntityRendererProvider.Context context) {

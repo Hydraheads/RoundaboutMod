@@ -23,7 +23,7 @@ public abstract class CenturyBoyPotionDuration{
 
     @Inject(method = "tick", at=@At("HEAD"), cancellable = true)
     private void pauseDuration(LivingEntity entity, Runnable run, CallbackInfoReturnable<Boolean> cir){
-        if (entity instanceof StandUser user && user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy pCB){
+        if (entity instanceof StandUser user && user.sba$getStandPowers() instanceof Powers20thCenturyBoy pCB){
             if (pCB.invincibleState){
                 if (this.getEffect() != null && (this.getEffect() != MobEffects.WITHER  || this.getEffect() != ModEffects.STAND_VIRUS)){
                     cir.setReturnValue(true);

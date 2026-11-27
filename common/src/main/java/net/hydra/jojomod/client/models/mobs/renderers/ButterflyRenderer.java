@@ -11,30 +11,30 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 
 public class ButterflyRenderer extends MobRenderer<Butterfly, ButterflyModel<Butterfly>> {
-    private static final ResourceLocation BLANK_TEXTURE = new ResourceLocation("roundabout:textures/entity/butterfly/blank.png");
+    private static final ResourceLocation BLANK_TEXTURE = new ResourceLocation("sba:textures/entity/butterfly/blank.png");
 
     // Body textures
     private static final ResourceLocation[] BODY_TEXTURES = {
-            new ResourceLocation("roundabout:textures/entity/butterfly/morpho_body.png"),
-            new ResourceLocation("roundabout:textures/entity/butterfly/monarch_body.png"),
-            new ResourceLocation("roundabout:textures/entity/butterfly/swallowtail_body.png"),
-            new ResourceLocation("roundabout:textures/entity/butterfly/vanessa_body.png")
+            new ResourceLocation("sba:textures/entity/butterfly/morpho_body.png"),
+            new ResourceLocation("sba:textures/entity/butterfly/monarch_body.png"),
+            new ResourceLocation("sba:textures/entity/butterfly/swallowtail_body.png"),
+            new ResourceLocation("sba:textures/entity/butterfly/vanessa_body.png")
     };
 
     // Inner wing textures
     private static final ResourceLocation[] INNER_WING_PATTERNS = {
-            new ResourceLocation("roundabout:textures/entity/butterfly/morpho_inner.png"),
-            new ResourceLocation("roundabout:textures/entity/butterfly/monarch_inner.png"),
-            new ResourceLocation("roundabout:textures/entity/butterfly/swallowtail_inner.png"),
-            new ResourceLocation("roundabout:textures/entity/butterfly/vanessa_inner.png")
+            new ResourceLocation("sba:textures/entity/butterfly/morpho_inner.png"),
+            new ResourceLocation("sba:textures/entity/butterfly/monarch_inner.png"),
+            new ResourceLocation("sba:textures/entity/butterfly/swallowtail_inner.png"),
+            new ResourceLocation("sba:textures/entity/butterfly/vanessa_inner.png")
     };
 
     // Outer wing textures
     private static final ResourceLocation[] OUTER_WING_PATTERNS = {
-            new ResourceLocation("roundabout:textures/entity/butterfly/morpho_outer.png"),
-            new ResourceLocation("roundabout:textures/entity/butterfly/monarch_outer.png"),
-            new ResourceLocation("roundabout:textures/entity/butterfly/swallowtail_outer.png"),
-            new ResourceLocation("roundabout:textures/entity/butterfly/vanessa_outer.png")
+            new ResourceLocation("sba:textures/entity/butterfly/morpho_outer.png"),
+            new ResourceLocation("sba:textures/entity/butterfly/monarch_outer.png"),
+            new ResourceLocation("sba:textures/entity/butterfly/swallowtail_outer.png"),
+            new ResourceLocation("sba:textures/entity/butterfly/vanessa_outer.png")
     };
 
     public ButterflyRenderer(EntityRendererProvider.Context context) {

@@ -23,17 +23,17 @@ public abstract class AnubisCrossbowCancelMixin<T extends Monster & RangedAttack
     private T mob;
 
     @Inject(method = "canUse",at = @At(value="HEAD"), cancellable = true)
-    private void roundabout$cancelCrossbowGoal(CallbackInfoReturnable<Boolean> cir) {
+    private void sba$cancelCrossbowGoal(CallbackInfoReturnable<Boolean> cir) {
         StandUser SU = (StandUser) this.mob;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis && !PowersAnubis.shouldDash(this.mob)) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis && !PowersAnubis.shouldDash(this.mob)) {
             cir.setReturnValue(false);
         }
     }
 
     @Inject(method = "canContinueToUse",at = @At(value="HEAD"), cancellable = true)
-    private void roundabout$cancelContinueCrossbowGoal(CallbackInfoReturnable<Boolean> cir) {
+    private void sba$cancelContinueCrossbowGoal(CallbackInfoReturnable<Boolean> cir) {
         StandUser SU = (StandUser) this.mob;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis && !PowersAnubis.shouldDash(this.mob)) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis && !PowersAnubis.shouldDash(this.mob)) {
             cir.setReturnValue(false);
         }
     }

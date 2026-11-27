@@ -28,8 +28,8 @@ public final class JJFPlayerArmsOverlay {
 
     public static boolean shouldRender(LivingEntity entity) {
         return entity instanceof StandUser user
-                && user.roundabout$getStandPowers() instanceof PowersJumpinJackFlash powers
-                && (user.roundabout$getStand() instanceof JumpinJackFlashEntity stand
+                && user.sba$getStandPowers() instanceof PowersJumpinJackFlash powers
+                && (user.sba$getStand() instanceof JumpinJackFlashEntity stand
                         ? stand.jjf$isArmsMode() : powers.jjf$isArmsMode())
                 && entity.isAlive()
                 && PowerTypes.hasStandActive(entity)
@@ -59,7 +59,7 @@ public final class JJFPlayerArmsOverlay {
         poseStack.pushPose();
         playerArm.translateAndRotate(poseStack);
         poseStack.translate((right ? 1.5D : -1.5D) / 16.0D, 0.0D, 0.0D);
-        byte skin = ((StandUser) entity).roundabout$getStandSkin();
+        byte skin = ((StandUser) entity).sba$getStandSkin();
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(
                 JumpinJackFlashRenderer.textureForSkin(skin)));
         arm.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY);

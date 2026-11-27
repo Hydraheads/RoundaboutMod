@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.projectile.CrossfireHurricaneEntity;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class CrossfireFirestormModel<T extends CrossfireHurricaneEntity> extends HierarchicalModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "crossfire_hurricane"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(SBA.MOD_ID, "crossfire_hurricane"), "main");
     private final ModelPart Fire_Ankh;
     private final ModelPart Square;
     private final ModelPart Root;

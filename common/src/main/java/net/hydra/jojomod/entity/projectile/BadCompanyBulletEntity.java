@@ -88,17 +88,17 @@ public class BadCompanyBulletEntity extends AbstractArrow {
 
         if (!level().isClientSide && entity instanceof EnderMan em) {
 
-            if (((IEnderMan) em).roundabout$teleport()) return;
+            if (((IEnderMan) em).sba$teleport()) return;
 
             for (int i = 0; i < 64; i++) {
-                if (((IEnderMan) em).roundabout$teleport()) {
+                if (((IEnderMan) em).sba$teleport()) {
                     return;
                 }
             }
         }
 
         if (entity instanceof LivingEntity $$3) {
-            StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
+            StandPowers entityPowers = ((StandUser) $$3).sba$getStandPowers();
             if (entityPowers != null ) {
                 if (entityPowers.dealWithProjectile(this, result)) {
                     discard();
@@ -163,7 +163,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
     }
 
     protected void onHitBlock2(BlockHitResult $$0) {
-        ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
+        ((IAbstractArrowAccess)this).sba$setLastState(this.level().getBlockState($$0.getBlockPos()));
         BlockState BSS = this.level().getBlockState($$0.getBlockPos());
         BSS.onProjectileHit(this.level(), BSS, $$0, this);
         Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
@@ -177,7 +177,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
         this.setPierceLevel((byte)0);
         this.setSoundEvent(SoundEvents.ARROW_HIT);
         this.setShotFromCrossbow(false);
-        ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
+        ((IAbstractArrowAccess)this).sba$resetPiercedEntities();
         discard();
     }
 
@@ -194,7 +194,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
 
         if (getOwner() == null) {
             discard();
-        }else if (!(((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersBadCompany) || MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), getOwner().getX(), getOwner().getZ()) > BCTroop.getMaximumRangeBullets()) {
+        }else if (!(((StandUser)getOwner()).sba$getStandPowers() instanceof PowersBadCompany) || MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), getOwner().getX(), getOwner().getZ()) > BCTroop.getMaximumRangeBullets()) {
             discard();
         }
 
@@ -272,7 +272,7 @@ public class BadCompanyBulletEntity extends AbstractArrow {
     @Override
     public boolean shouldRender(double $$0, double $$1, double $$2) {
         if (ClientUtil.getPlayer() != null) {
-            return ((StandUser) ClientUtil.getPlayer()).roundabout$hasAStand();
+            return ((StandUser) ClientUtil.getPlayer()).sba$hasAStand();
         }
 
         return true;

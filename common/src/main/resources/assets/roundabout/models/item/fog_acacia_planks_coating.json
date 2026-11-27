@@ -1,6 +1,0 @@
-{
-  "parent": "roundabout:item/fog_coating",
-  "textures": {
-    "layer0": "minecraft:block/acacia_planks"
-  }
-}

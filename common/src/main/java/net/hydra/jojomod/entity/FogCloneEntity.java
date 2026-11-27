@@ -57,7 +57,7 @@ public class FogCloneEntity extends CloneEntity {
             simulatePoof(new Vec3(this.getPlayer().getX(),
                     this.getPlayer().getY(),
                     this.getPlayer().getZ()));
-            ((IPlayerEntityServer)this.getPlayer()).roundabout$setInvincibleTicks(5);
+            ((IPlayerEntityServer)this.getPlayer()).sba$setInvincibleTicks(5);
             ((ServerPlayer)this.getPlayer()).teleportTo(
                     (ServerLevel)this.level(),
                     x,

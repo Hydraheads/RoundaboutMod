@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class GEBowItemMixin {
 
     @Redirect(method = "releaseUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
-    private boolean roundabout$transferTreeImbueToArrow(Level level, Entity entity, ItemStack bow, Level levelArg, LivingEntity shooter, int timeLeft) {
+    private boolean sba$transferTreeImbueToArrow(Level level, Entity entity, ItemStack bow, Level levelArg, LivingEntity shooter, int timeLeft) {
         if (entity instanceof AbstractArrow arrowEntity && shooter instanceof Player player) {
             ItemStack ammoStack = player.getProjectile(bow);
             if (PowersGoldExperience.isTreeImbuedProjectileItem(ammoStack)) {

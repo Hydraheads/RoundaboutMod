@@ -1,6 +1,6 @@
 package net.hydra.jojomod.event.powers.visagedata;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.minecraft.core.Vec3i;

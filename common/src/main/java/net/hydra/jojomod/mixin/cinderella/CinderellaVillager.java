@@ -26,7 +26,7 @@ public abstract class CinderellaVillager extends AbstractVillager implements Rep
     /**Makes lucky lipstick and faceless influence trading*/
 
     @Inject(method = "updateSpecialPrices(Lnet/minecraft/world/entity/player/Player;)V", at = @At(value = "TAIL"),cancellable = true)
-    private void roundabout$updateSpecialPrices(Player $$0, CallbackInfo ci) {
+    private void sba$updateSpecialPrices(Player $$0, CallbackInfo ci) {
         if (!$$0.hasEffect(MobEffects.HERO_OF_THE_VILLAGE)) {
             if ($$0.hasEffect(ModEffects.FACELESS)) {
                 MobEffectInstance mi = $$0.getEffect(ModEffects.FACELESS);

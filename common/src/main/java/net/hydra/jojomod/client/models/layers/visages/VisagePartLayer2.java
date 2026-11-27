@@ -78,21 +78,21 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
                     StandUser user = ((StandUser) entity);
 
 
-                    boolean hasWhiteAlbumOut = user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
-                    //int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+                    boolean hasWhiteAlbumOut = user.sba$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
+                    //int whiteAlbumTicks = user.sba$getWhiteAlbumVanishTicks();
                     int whiteAlbumTicks = MainUtil.getWornStandVanishticksSafe(user, PowersWhiteAlbum.class);
                     boolean hideExtraPartsWithSuit = false;
                     float heyFull = 0;
-                    byte skin = user.roundabout$getStandSkin();
+                    byte skin = user.sba$getStandSkin();
                     if (hasWhiteAlbumOut || whiteAlbumTicks > 0) {
-                        if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum) {
-                            if (user.roundabout$getLastStandSkin() != skin) {
-                                user.roundabout$setLastStandSkin(skin);
+                        if (user.sba$getStandPowers() instanceof PowersWhiteAlbum) {
+                            if (user.sba$getLastStandSkin() != skin) {
+                                user.sba$setLastStandSkin(skin);
                                 whiteAlbumTicks = 0;
-                                user.roundabout$setCurrentStandVanishTicks(0);
+                                user.sba$setCurrentStandVanishTicks(0);
                             }
                         }else {
-                            skin = user.roundabout$getPreviousSkin();
+                            skin = user.sba$getPreviousSkin();
                         }
 
                         float partialTicks2 = partialTicks % 1;
@@ -109,15 +109,15 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
                         }
                     }
 
-                    boolean hasOasisOut = user.roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit();
-                    int oasisTicks = user.roundabout$getOasisVanishTicks();
+                    boolean hasOasisOut = user.sba$getStandPowers() instanceof PowersOasis po && po.renderSuit();
+                    int oasisTicks = user.sba$getOasisVanishTicks();
                     float fadeAmt = 0;
-                    byte oasisSkin = user.roundabout$getStandSkin();
+                    byte oasisSkin = user.sba$getStandSkin();
                     if (hasOasisOut || oasisTicks > 0){
-                        if (user.roundabout$getLastStandSkin() != oasisSkin){
-                            user.roundabout$setLastStandSkin(oasisSkin);
+                        if (user.sba$getLastStandSkin() != oasisSkin){
+                            user.sba$setLastStandSkin(oasisSkin);
                             oasisTicks = 0;
-                            user.roundabout$setOasisVanishTicks(0);
+                            user.sba$setOasisVanishTicks(0);
                         }
 
                         float partialTicks2 = partialTicks % 1;
@@ -136,7 +136,7 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
 
                     if (hasWhiteAlbumOut || whiteAlbumTicks > 0) {
 
-                        if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw) {
+                        if (user.sba$getStandPowers() instanceof PowersWhiteAlbum pw) {
 
                             String path = PowersWhiteAlbum.getSkinString(skin);
                             String path2 = path;
@@ -163,7 +163,7 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
                             renderWhiteAlbumLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                     partialTicks, path, r, g, b, heyFull);
 
-                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).sba$getSlim()) {
                                 renderWhiteAlbumSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                         partialTicks, path, r, g, b, heyFull);
                                 renderWhiteAlbumSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
@@ -186,7 +186,7 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
 
                     if (hasOasisOut || oasisTicks > 0) {
 
-                        if (user.roundabout$getStandPowers() instanceof PowersOasis po) {
+                        if (user.sba$getStandPowers() instanceof PowersOasis po) {
 
                             String path = PowersOasis.getSkinString(skin);
                             String path2 = path;
@@ -201,7 +201,7 @@ public class VisagePartLayer2<T extends LivingEntity, A extends HumanoidModel<T>
                             renderOasisLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                     partialTicks, path, r, g, b, fadeAmt);
 
-                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).sba$getSlim()) {
                                 renderOasisSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                         partialTicks, path, r, g, b, fadeAmt);
                                 renderOasisSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,

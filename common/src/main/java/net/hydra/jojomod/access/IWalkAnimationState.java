@@ -1,8 +1,8 @@
 package net.hydra.jojomod.access;
 
 public interface IWalkAnimationState {
-    float roundabout$getPosition();
-    float roundabout$getSpeedOld();
-    void roundabout$setPosition(float position);
-    void roundabout$setSpeedOld(float speedOld);
+    float sba$getPosition();
+    float sba$getSpeedOld();
+    void sba$setPosition(float position);
+    void sba$setSpeedOld(float speedOld);
 }

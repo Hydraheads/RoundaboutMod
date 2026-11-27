@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.LayerAnimations;
@@ -22,7 +22,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
 // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "soft_and_wet_shooting_arm"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(SBA.MOD_ID, "soft_and_wet_shooting_arm"), "main");
     private final ModelPart armAddon;
     private final ModelPart Root;
 
@@ -55,7 +55,7 @@ public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
     public void setupAnim(Entity var1,  float pAgeInTicks) {
 
     }
-    public static ResourceLocation rl = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation rl = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/soft_and_wet/projectiles/shooting_mode.png");
 
     public ResourceLocation getTextureLocation(Entity context){
@@ -74,8 +74,8 @@ public class SoftAndWetShootingArmModel extends PsuedoHierarchicalModel {
             }
             StandUser user = ((StandUser) LE);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
-            user.roundabout$getHandLayerAnimation().startIfStopped(context.tickCount);
-            this.animate(user.roundabout$getHandLayerAnimation(), LayerAnimations.SpinningBubble, partialTicks, 0.7f);
+            user.sba$getHandLayerAnimation().startIfStopped(context.tickCount);
+            this.animate(user.sba$getHandLayerAnimation(), LayerAnimations.SpinningBubble, partialTicks, 0.7f);
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }

@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.worn_stand;// Made with Blockbench 5.0.4
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -51,7 +51,7 @@ public class MoldLeftArm<T extends Entity> extends EntityModel<T> {
 
 	}
 	public ResourceLocation getTextureLocation(){
-		return new ResourceLocation(Roundabout.MOD_ID,
+		return new ResourceLocation(SBA.MOD_ID,
 				"textures/stand/green_day/mold_main_arm_texture.png");
 	}
 

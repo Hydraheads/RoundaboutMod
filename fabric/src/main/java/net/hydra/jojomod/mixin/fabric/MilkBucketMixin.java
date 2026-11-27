@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.fabric;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +23,7 @@ public abstract class MilkBucketMixin {
     List<MobEffectInstance> effects = new ArrayList<>();
 
     @Inject(method = "finishUsingItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;removeAllEffects()Z"))
-    public void roundabout$beforeMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
+    public void sba$beforeMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
         for (MobEffectInstance effect : livingEntity.getActiveEffects()) {
             if (MainUtil.isSpecialEffect(effect)) {
                 effects.add(effect);
@@ -32,7 +32,7 @@ public abstract class MilkBucketMixin {
     }
 
     @Inject(method = "finishUsingItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;removeAllEffects()Z",shift = At.Shift.AFTER))
-    public void roundabout$afterMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
+    public void sba$afterMilkClear(ItemStack itemStack, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir) {
         for (MobEffectInstance effect : effects) {
             livingEntity.addEffect(effect);
         }

@@ -23,7 +23,7 @@ public abstract class ScissorsMushroomCow extends Animal implements Shearable {
     /**You can sheer a mooshroom with scissors as well*/
 
     @Inject(method = "mobInteract", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$interact(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+    public void sba$interact(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
 
         ItemStack $$2 = $$0.getItemInHand($$1);
         if ($$2.is(ModItems.SCISSORS) && this.readyForShearing()) {

@@ -107,10 +107,10 @@ public class PowersCinderella extends NewDashPreset {
     public void doDefaceClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2) && !self.isUsingItem()) {
             if (this.activePower == PowerIndex.POWER_2) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
             } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2, true);
                 tryPowerPacket(PowerIndex.POWER_2);
             }
         }
@@ -161,17 +161,17 @@ public class PowersCinderella extends NewDashPreset {
 
     public static Component getSkinNameT(byte skinId){
         if (skinId == CinderellaEntity.MANGA_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.manga");
+            return Component.translatable("skins.sba.cinderella.manga");
         } if (skinId == CinderellaEntity.ZOMBIE_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.zombie");
+            return Component.translatable("skins.sba.cinderella.zombie");
         } if (skinId == CinderellaEntity.JACK_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.jack_in_the_box");
+            return Component.translatable("skins.sba.cinderella.jack_in_the_box");
         } if (skinId == CinderellaEntity.BUSINESS_SKIN) {
-            return Component.translatable("skins.roundabout.cinderella.business");
+            return Component.translatable("skins.sba.cinderella.business");
         } if (skinId == CinderellaEntity.FACE_OFF) {
-            return Component.translatable("skins.roundabout.cinderella.face_off");
+            return Component.translatable("skins.sba.cinderella.face_off");
         }
-        return Component.translatable("skins.roundabout.cinderella.base");
+        return Component.translatable("skins.sba.cinderella.base");
     }
 
     public void addFloatingVisage(CinderellaVisageDisplayEntity che){
@@ -229,7 +229,7 @@ public class PowersCinderella extends NewDashPreset {
                     -(distanceOut * (Math.cos(offset / 180)))
             );
 
-            Direction dir = ((IGravityEntity)self).roundabout$getGravityDirection();
+            Direction dir = ((IGravityEntity)self).sba$getGravityDirection();
             if (dir != Direction.DOWN){
                 finalOffset = RotationUtil.vecPlayerToWorld(finalOffset,dir);
             }
@@ -285,7 +285,7 @@ public class PowersCinderella extends NewDashPreset {
         return SoundIndex.SUMMON_SOUND;
     }
     public SoundEvent getSoundFromByte(byte soundChoice){
-        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte bt = ((StandUser)this.getSelf()).sba$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.CINDERELLA_SUMMON_EVENT;
         } else if (soundChoice == IMPALE_NOISE) {
@@ -330,7 +330,7 @@ public class PowersCinderella extends NewDashPreset {
         if (this.self.level().isClientSide()) {
             if (hasUIOpen && !ClientUtil.hasCinderellaUI()){
                 hasUIOpen = false;
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                 tryPowerPacket(PowerIndex.NONE);
             }
         } else {
@@ -343,17 +343,17 @@ public class PowersCinderella extends NewDashPreset {
                 if (this.self instanceof Aesthetician aes){
                     if (this.getStandEntity(this.self) == null || this.getStandEntity(this.self).isRemoved()){
                         if (this.canSummonStand()){
-                            ((StandUser)this.self).roundabout$summonStand(this.self.level(),true,false);
+                            ((StandUser)this.self).sba$summonStand(this.self.level(),true,false);
                         }
                     }
                     if (aes.interactingWith != null && aes.interactingWith.isEmpty()){
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                     }
                 }
             } else {
                 if (this.self instanceof Aesthetician aes){
                     if (aes.interactingWith != null && !aes.interactingWith.isEmpty()){
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1, true);
                     }
                 }
             }
@@ -470,7 +470,7 @@ public class PowersCinderella extends NewDashPreset {
                             this.self instanceof IronGolem)) {
                         if (!self.isUsingItem()) {
                             delayTick = 40;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2, true);
                         }
                     }
                 }
@@ -479,16 +479,16 @@ public class PowersCinderella extends NewDashPreset {
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.visage_creation",
-                "instruction.roundabout.press_skill", StandIcons.CINDERELLA_MASK, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.face_removal",
-                "instruction.roundabout.press_skill", StandIcons.CINDERELLA_SCALP,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.visages",
-                "instruction.roundabout.shop_item", StandIcons.CINDERELLA_VISAGES,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lucky_lipstick",
-                "instruction.roundabout.shop_item", StandIcons.CINDERELLA_LIPSTICK,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.visage_creation",
+                "instruction.sba.press_skill", StandIcons.CINDERELLA_MASK, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.face_removal",
+                "instruction.sba.press_skill", StandIcons.CINDERELLA_SCALP,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.visages",
+                "instruction.sba.shop_item", StandIcons.CINDERELLA_VISAGES,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.sba.lucky_lipstick",
+                "instruction.sba.shop_item", StandIcons.CINDERELLA_LIPSTICK,0,level,bypass));
         return $$1;
     }
     @Override

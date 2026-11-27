@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "building",
+  "cookingtime": 200,
+  "experience": 7.0,
+  "group": "sba:meteorite",
+  "ingredient": {
+    "item": "sba:meteorite"
+  },
+  "result": "sba:meteorite_ingot"
+}

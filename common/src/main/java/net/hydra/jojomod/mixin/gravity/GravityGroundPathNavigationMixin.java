@@ -33,7 +33,7 @@ public abstract class GravityGroundPathNavigationMixin extends PathNavigation {
 //    )
 //    public void rdbt$createPath(BlockPos $$0, int $$1, CallbackInfoReturnable<Path> cir) {
 //        if (this.mob != null) {
-//            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //
@@ -79,7 +79,7 @@ public abstract class GravityGroundPathNavigationMixin extends PathNavigation {
 //    )
 //    public void rdbt$getTempMobPos(CallbackInfoReturnable<Vec3> cir) {
 //        if (this.mob != null) {
-//            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //

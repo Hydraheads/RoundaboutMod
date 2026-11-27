@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.stand;// Made with Blockbench 4.12.5
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
@@ -121,7 +121,7 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 	}
 
 
-	public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/ratt/anime.png");
 	public ResourceLocation getTextureLocation(Entity context, byte skin){
 		return base;
@@ -147,7 +147,7 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
 
 		StandUser SU = (StandUser) pEntity.getUser();
 		if (SU != null) {
-			if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
+			if (SU.sba$getStandPowers() instanceof PowersRatt PR) {
 				if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser()))) {
                     Entity target = PR.getShootTarget();
 					Vec3 v = PR.getRotations(target);
@@ -159,7 +159,7 @@ public class RattModel<T extends RattEntity> extends StandModel<T> {
                     }
                     if (pEntity.getUser() != null) {
                         if (pEntity.getUser() instanceof Player P) {
-                            if (((IPlayerEntity)P).roundabout$GetPoseEmote() != Poses.NONE.id) {
+                            if (((IPlayerEntity)P).sba$GetPoseEmote() != Poses.NONE.id) {
                                 v = new Vec3(Mth.lerp(0.2,pEntity.getHeadRotationX(),0),v.y,0);
                             }
                         }

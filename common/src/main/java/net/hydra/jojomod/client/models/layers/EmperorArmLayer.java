@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -37,8 +37,8 @@ import java.util.Map;
                 if (!entity.isInvisible()) {
                     if (entity!= null) {
                         StandUser user = ((StandUser)livent);
-                        if (user.roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
-                            if (user.roundabout$getStandPowers() instanceof PowersEmperor PW) {
+                        if (user.sba$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
+                            if (user.sba$getStandPowers() instanceof PowersEmperor PW) {
                                 ClientUtil.pushPoseAndCooperate(poseStack,47);
 
                                 // Translate to the right/left hand
@@ -74,8 +74,8 @@ import java.util.Map;
             if (!entity.isInvisible()) {
                 if (entity!= null) {
                     StandUser user = ((StandUser)entity);
-                    if (user.roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
-                        if (user.roundabout$getStandPowers() instanceof PowersEmperor PW) {
+                    if (user.sba$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
+                        if (user.sba$getStandPowers() instanceof PowersEmperor PW) {
                             ClientUtil.pushPoseAndCooperate(poseStack,48);
 
                             // Translate to the right/left hand

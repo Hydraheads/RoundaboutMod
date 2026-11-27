@@ -17,12 +17,12 @@ public class AccessAreaOfEffectCloud implements IAreaOfEffectCloud {
     /**There is no reason for these to be private or protected, we should be able to tap into them.*/
     @Unique
     @Override
-    public List<MobEffectInstance> roundabout$getEffects(){
+    public List<MobEffectInstance> sba$getEffects(){
         return this.effects;
     }
     @Unique
     @Override
-    public Potion roundabout$getPotions(){
+    public Potion sba$getPotions(){
         return this.potion;
     }
 

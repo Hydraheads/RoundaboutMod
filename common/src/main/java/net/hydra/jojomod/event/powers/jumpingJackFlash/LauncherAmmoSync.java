@@ -11,7 +11,7 @@ import java.util.function.BiConsumer;
 public final class LauncherAmmoSync {
 
     public static final ResourceLocation CHANNEL =
-            new ResourceLocation("roundabout", "jjf_launcher_ammo");
+            new ResourceLocation("sba", "jjf_launcher_ammo");
 
     private static BiConsumer<ServerPlayer, Snapshot> sender;
 

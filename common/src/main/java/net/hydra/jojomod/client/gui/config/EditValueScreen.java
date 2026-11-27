@@ -19,7 +19,7 @@ public class EditValueScreen extends Screen {
     private final double savedScrollAmount;
 
     public EditValueScreen(Screen parent, Field field, Object instance, ConfigType configType, double savedScrollAmount) {
-        super(Component.translatable("config.roundabout.major.edit_value"));
+        super(Component.translatable("config.sba.major.edit_value"));
         this.parent = parent;
         this.field = field;
         this.instance = instance;
@@ -29,7 +29,7 @@ public class EditValueScreen extends Screen {
 
     @Override
     protected void init() {
-        this.inputBox = new EditBox(this.font, this.width / 2 - 100, this.height / 2 - 10, 200, 20, Component.translatable("config.roundabout.major.value"));
+        this.inputBox = new EditBox(this.font, this.width / 2 - 100, this.height / 2 - 10, 200, 20, Component.translatable("config.sba.major.value"));
         this.inputBox.setMaxLength(256);
         try {
             this.inputBox.setValue(String.valueOf(field.get(instance)));
@@ -38,7 +38,7 @@ public class EditValueScreen extends Screen {
         }
         this.addRenderableWidget(inputBox);
 
-        this.doneButton = Button.builder(Component.translatable("config.roundabout.major.done"), btn -> {
+        this.doneButton = Button.builder(Component.translatable("config.sba.major.done"), btn -> {
             try {
                 String text = inputBox.getValue();
                 Class<?> type = field.getType();
@@ -74,7 +74,7 @@ public class EditValueScreen extends Screen {
     @Override
     public void render(GuiGraphics drawContext, int mouseX, int mouseY, float delta) {
         this.renderBackground(drawContext);
-        drawContext.drawCenteredString(this.font, Component.translatable("config.roundabout.major.edit").getString()+" " + field.getName(), this.width / 2, 20, 0xFFFFFF);
+        drawContext.drawCenteredString(this.font, Component.translatable("config.sba.major.edit").getString()+" " + field.getName(), this.width / 2, 20, 0xFFFFFF);
         super.render(drawContext, mouseX, mouseY, delta);
     }
 }

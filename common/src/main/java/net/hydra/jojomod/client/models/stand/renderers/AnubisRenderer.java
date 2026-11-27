@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.AnubisHumanoidModel;
 import net.hydra.jojomod.entity.stand.AnubisEntity;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class AnubisRenderer extends StandRenderer<AnubisEntity> {
 
-    private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/anubis/anime_human.png");
+    private static final ResourceLocation ANIME = new ResourceLocation(SBA.MOD_ID,"textures/stand/anubis/anime_human.png");
     public AnubisRenderer(EntityRendererProvider.Context context) {
         super(context, new AnubisHumanoidModel<>(context.bakeLayer(ModEntityRendererClient.ANUBIS)), 0f);
     }

@@ -37,7 +37,7 @@ public class JojoNPCItemInHandLayer<T extends JojoNPC, M extends PlayerLikeModel
 
     @Override
     public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
-        if (entity.host != null && ((StandUser)entity.host).roundabout$getEffectiveCombatMode() && !entity.host.isUsingItem()){
+        if (entity.host != null && ((StandUser)entity.host).sba$getEffectiveCombatMode() && !entity.host.isUsingItem()){
             return;
         }
         if (entity.standPos == Poses.NONE || entity.standPos == null) {

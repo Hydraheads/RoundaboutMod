@@ -23,35 +23,35 @@ public abstract class DiscSealHudMixin {
     @Shadow private int screenHeight;
 
     @Inject(method = "renderExperienceBar", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$renderDiscSeal(GuiGraphics context, int x, CallbackInfo ci) {
-        if (roundaboutWhitesnake$renderDiscSealBar(context, x)) ci.cancel();
+    private void sbaWhitesnake$renderDiscSeal(GuiGraphics context, int x, CallbackInfo ci) {
+        if (sbaWhitesnake$renderDiscSealBar(context, x)) ci.cancel();
     }
 
     @Inject(method = "renderJumpMeter", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$renderMountedDiscSeal(PlayerRideableJumping mount, GuiGraphics context,
+    private void sbaWhitesnake$renderMountedDiscSeal(PlayerRideableJumping mount, GuiGraphics context,
                                                              int x, CallbackInfo ci) {
-        if (roundaboutWhitesnake$renderDiscSealBar(context, x)) ci.cancel();
+        if (sbaWhitesnake$renderDiscSealBar(context, x)) ci.cancel();
     }
 
     @Unique
-    private boolean roundaboutWhitesnake$renderDiscSealBar(GuiGraphics context, int x) {
+    private boolean sbaWhitesnake$renderDiscSealBar(GuiGraphics context, int x) {
         if (minecraft.player == null) return false;
         DiscBearer bearer = (DiscBearer) minecraft.player;
         int remaining = 0;
         int maximum = 0;
         for (byte type = WhitesnakeDiscUtil.SIGHT; type <= WhitesnakeDiscUtil.HEARING; type++) {
-            int candidate = bearer.roundabout$getDiscSealTicks(type);
+            int candidate = bearer.sba$getDiscSealTicks(type);
             if (candidate > remaining) {
                 remaining = candidate;
-                maximum = bearer.roundabout$getDiscSealMaxTicks(type);
+                maximum = bearer.sba$getDiscSealMaxTicks(type);
             }
         }
         if (remaining <= 0) return false;
 
         StandUser standUser = (StandUser) minecraft.player;
-        if (standUser.roundabout$getSealedTicks() > remaining) {
-            remaining = standUser.roundabout$getSealedTicks();
-            maximum = standUser.roundabout$getMaxSealedTicks();
+        if (standUser.sba$getSealedTicks() > remaining) {
+            remaining = standUser.sba$getSealedTicks();
+            maximum = standUser.sba$getMaxSealedTicks();
         }
         maximum = Math.max(1, maximum);
         int filled = (int) Math.floor((182.0D / maximum) * (maximum - remaining));

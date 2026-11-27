@@ -37,11 +37,11 @@ public class BucketItemMixin extends Item implements IBucketItem {
 
     /**This mixin makes buckets able to pick up gasoline and become gasoline buckets*/
     @Override
-    public Fluid roundabout$getContents(){
+    public Fluid sba$getContents(){
         return content;
     }
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$use(Level level, Player player, InteractionHand hand,
+    public void sba$use(Level level, Player player, InteractionHand hand,
                     CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (itemStack.is(Items.BUCKET)){

@@ -167,13 +167,13 @@ public final class WhitesnakeControlClient {
 
     private static PowersWhitesnake getControlPowers(Minecraft minecraft) {
         if (minecraft.player == null || minecraft.level == null || minecraft.gameMode == null) return null;
-        if (((StandUser) minecraft.player).roundabout$getStandPowers() instanceof PowersWhitesnake powers
+        if (((StandUser) minecraft.player).sba$getStandPowers() instanceof PowersWhitesnake powers
                 && powers.isPiloting()) return powers;
         return null;
     }
 
     private static boolean hasMiningTarget(Minecraft minecraft, BlockHitResult hit) {
-        if (((StandUser) minecraft.player).roundabout$isGuardInput()) return false;
+        if (((StandUser) minecraft.player).sba$isGuardInput()) return false;
         return hit != null && !minecraft.level.getBlockState(hit.getBlockPos()).isAir();
     }
 
@@ -215,7 +215,7 @@ public final class WhitesnakeControlClient {
                         && powers.getActivePower() != PowerIndex.MINING
                         && powers.getAttackTimeDuring() != -1)) return;
                 if (powers.getActivePower() != PowerIndex.MINING) {
-                    ((StandUser) minecraft.player).roundabout$tryPower(PowerIndex.MINING, true);
+                    ((StandUser) minecraft.player).sba$tryPower(PowerIndex.MINING, true);
                     powers.tryPowerPacket(PowerIndex.MINING);
                 }
                 miningActive = minecraft.gameMode.startDestroyBlock(pos, hit.getDirection());

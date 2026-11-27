@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.PearlJamModel;
 import net.hydra.jojomod.entity.stand.PearlJamEntity;
@@ -30,8 +30,8 @@ import org.joml.Matrix4f;
 public class PearlJamRenderer extends StandRenderer<PearlJamEntity> {
 
 
-    private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/pearl_jam/anime.png");
-    private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/pearl_jam/manga.png");
+    private static final ResourceLocation ANIME = new ResourceLocation(SBA.MOD_ID, "textures/stand/pearl_jam/anime.png");
+    private static final ResourceLocation MANGA = new ResourceLocation(SBA.MOD_ID, "textures/stand/pearl_jam/manga.png");
 
     public PearlJamRenderer(EntityRendererProvider.Context context) {
         super(context, new PearlJamModel<>(context.bakeLayer(ModEntityRendererClient.PEARL_JAM_LAYER)), 0f);

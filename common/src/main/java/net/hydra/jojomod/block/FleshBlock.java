@@ -156,7 +156,7 @@ public class FleshBlock
         if (y <= bounds.getYsize()) {
             boolean cond = false;
             if (entity instanceof LivingEntity L) {
-                StandPowers S = ((StandUser) L).roundabout$getStandPowers();
+                StandPowers S = ((StandUser) L).sba$getStandPowers();
                 if (S != null && S instanceof PowersRatt) {
                     cond = true;
                 }
@@ -187,7 +187,7 @@ public class FleshBlock
 
     @Override
     public InteractionResult use(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5) {
-        StandPowers powers = ((StandUser)  $$3 ).roundabout$getStandPowers();
+        StandPowers powers = ((StandUser)  $$3 ).sba$getStandPowers();
         if (powers instanceof PowersRatt) {
             if ($$3.getMainHandItem().is(Items.AIR)) {
                 if (!powers.isClient()) {

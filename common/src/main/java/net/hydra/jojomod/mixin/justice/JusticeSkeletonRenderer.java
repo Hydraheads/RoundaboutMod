@@ -21,14 +21,14 @@ public class JusticeSkeletonRenderer {
      * select green team- your skeleton morph will look like a green team skeleton.*/
 
     @Inject(method = "getTextureLocation(Lnet/minecraft/world/entity/monster/AbstractSkeleton;)Lnet/minecraft/resources/ResourceLocation;", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$getTexture(AbstractSkeleton $$0, CallbackInfoReturnable<ResourceLocation> cir) {
+    private void sba$getTexture(AbstractSkeleton $$0, CallbackInfoReturnable<ResourceLocation> cir) {
         if ($$0 != null){
             StandUser user = (StandUser) $$0;
-            if (user.roundabout$getEmulator() instanceof Player PE){
+            if (user.sba$getEmulator() instanceof Player PE){
                 StandUser user2 = ((StandUser) PE);
-                if (user2.roundabout$getStandPowers() instanceof PowersJustice PJ){
+                if (user2.sba$getStandPowers() instanceof PowersJustice PJ){
                     IPlayerEntity ipe = ((IPlayerEntity) PE);
-                    byte bt = ipe.roundabout$getTeamColor();
+                    byte bt = ipe.sba$getTeamColor();
                     if (bt == 1){
                         cir.setReturnValue(FallenSkeletonRenderer.FALLEN_SKELETON_LOCATION_B);
                     } else if (bt == 2){

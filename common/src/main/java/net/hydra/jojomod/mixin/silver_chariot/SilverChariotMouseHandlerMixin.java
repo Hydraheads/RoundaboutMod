@@ -22,11 +22,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SilverChariotMouseHandlerMixin {
 
     @Inject(method = "turnPlayer()V", at = @At("HEAD"), cancellable = true)
-    private void roundabout$controlView(CallbackInfo ci) {
-        Entity stand = roundabout$getControlledStand();
+    private void sba$controlView(CallbackInfo ci) {
+        Entity stand = sba$getControlledStand();
         if (stand != null) {
             ci.cancel();
-            roundabout$turnControlledStand(stand);
+            sba$turnControlledStand(stand);
             return;
         }
         if (minecraft.player != null && !DiscItemData.hasPlayerControl(minecraft.player)) {
@@ -35,7 +35,7 @@ public abstract class SilverChariotMouseHandlerMixin {
     }
 
     @Unique
-    private void roundabout$turnControlledStand(Entity stand) {
+    private void sba$turnControlledStand(Entity stand) {
         double time = Blaze3D.getTime();
         double elapsed = time - lastMouseEventTime;
         lastMouseEventTime = time;
@@ -73,10 +73,10 @@ public abstract class SilverChariotMouseHandlerMixin {
     }
 
     @Unique
-    private Entity roundabout$getControlledStand() {
+    private Entity sba$getControlledStand() {
         LocalPlayer localPlayer = minecraft.player;
         if (localPlayer == null
-                || !(((StandUser) localPlayer).roundabout$getStandPowers() instanceof PowersSilverChariot powers)
+                || !(((StandUser) localPlayer).sba$getStandPowers() instanceof PowersSilverChariot powers)
                 || !powers.isPiloting()
         ) {
             return null;

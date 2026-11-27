@@ -26,8 +26,8 @@ public abstract class TimeStopFishingHook extends Entity implements IFishingRodA
     /**Fishing Hooks move and slow in stopped time, much like projectiles thrown, and stop before they hit something*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$SetPosForTS(CallbackInfo ci) {
-        if (((TimeStop)this.level()).inTimeStopRange(((FishingHook)(Object)this)) && ((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated()) {
+    private void sba$SetPosForTS(CallbackInfo ci) {
+        if (((TimeStop)this.level()).inTimeStopRange(((FishingHook)(Object)this)) && ((IProjectileAccess) this).sba$getSBAIsTimeStopCreated()) {
             this.syncronizedRandom.setSeed(this.getUUID().getLeastSignificantBits() ^ this.level().getGameTime());
             Player $$0 = this.getPlayerOwner();
             if ($$0 == null) {
@@ -43,7 +43,7 @@ public abstract class TimeStopFishingHook extends Entity implements IFishingRodA
     }
 
     @Override
-    public void roundabout$UpdateRodInTS(){
+    public void sba$UpdateRodInTS(){
         Player $$0 = this.getPlayerOwner();
         if ($$0 == null) {
             this.discard();

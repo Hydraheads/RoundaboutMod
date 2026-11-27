@@ -1,78 +1,78 @@
 package net.hydra.jojomod.client;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.projectile.*;
 import net.hydra.jojomod.client.models.projectile.TommyGunModel;
 import net.hydra.jojomod.client.models.stand.AnubisModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
 public class ModItemModels {
-    public static ModelResourceLocation HARPOON_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "harpoon_in_hand", "inventory");
-    public static ModelResourceLocation SNUBNOSE_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "snubnose_revolver_in_hand", "inventory");
-    public static ModelResourceLocation MISTA_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "mista_revolver_in_hand", "inventory");
-    public static ModelResourceLocation TOMMY_GUN_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "tommy_gun_in_hand", "inventory");
-    public static ModelResourceLocation COLT_REVOLVER_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "colt_revolver_in_hand", "inventory");
-    public static ModelResourceLocation JACKAL_RIFLE_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "jackal_rifle_in_hand", "inventory");
-    public static ModelResourceLocation BERETTA_PISTOL_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "beretta_pistol_in_hand", "inventory");
-    public static ModelResourceLocation ANUBIS_IN_HAND = new ModelResourceLocation(Roundabout.MOD_ID, "anubis_in_hand", "inventory");
-    public static ModelResourceLocation STAND_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_bow_arrow", "inventory");
-    public static ModelResourceLocation STAND_BEETLE_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "stand_beetle_bow_arrow", "inventory");
-    public static ModelResourceLocation WORTHY_BOW = new ModelResourceLocation(Roundabout.MOD_ID, "worthy_bow_arrow", "inventory");
-    public static ModelResourceLocation FOG_BLOCK_ICON = new ModelResourceLocation(Roundabout.MOD_ID, "fog_block_icon", "inventory");
-    public static ModelResourceLocation STREET_SIGN_DIO_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_dio_item_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_DIO_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_dio_item_damaged_2", "inventory");
-    public static ModelResourceLocation STREET_SIGN_DIO_HELD = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_dio_item_held", "inventory");
-    public static ModelResourceLocation STREET_SIGN_DIO_HELD_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_dio_item_held_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_DIO_HELD_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_dio_item_held_damaged_2", "inventory");
+    public static ModelResourceLocation HARPOON_IN_HAND = new ModelResourceLocation(SBA.MOD_ID, "harpoon_in_hand", "inventory");
+    public static ModelResourceLocation SNUBNOSE_REVOLVER_IN_HAND = new ModelResourceLocation(SBA.MOD_ID, "snubnose_revolver_in_hand", "inventory");
+    public static ModelResourceLocation MISTA_REVOLVER_IN_HAND = new ModelResourceLocation(SBA.MOD_ID, "mista_revolver_in_hand", "inventory");
+    public static ModelResourceLocation TOMMY_GUN_IN_HAND = new ModelResourceLocation(SBA.MOD_ID, "tommy_gun_in_hand", "inventory");
+    public static ModelResourceLocation COLT_REVOLVER_IN_HAND = new ModelResourceLocation(SBA.MOD_ID, "colt_revolver_in_hand", "inventory");
+    public static ModelResourceLocation JACKAL_RIFLE_IN_HAND = new ModelResourceLocation(SBA.MOD_ID, "jackal_rifle_in_hand", "inventory");
+    public static ModelResourceLocation BERETTA_PISTOL_IN_HAND = new ModelResourceLocation(SBA.MOD_ID, "beretta_pistol_in_hand", "inventory");
+    public static ModelResourceLocation ANUBIS_IN_HAND = new ModelResourceLocation(SBA.MOD_ID, "anubis_in_hand", "inventory");
+    public static ModelResourceLocation STAND_BOW = new ModelResourceLocation(SBA.MOD_ID, "stand_bow_arrow", "inventory");
+    public static ModelResourceLocation STAND_BEETLE_BOW = new ModelResourceLocation(SBA.MOD_ID, "stand_beetle_bow_arrow", "inventory");
+    public static ModelResourceLocation WORTHY_BOW = new ModelResourceLocation(SBA.MOD_ID, "worthy_bow_arrow", "inventory");
+    public static ModelResourceLocation FOG_BLOCK_ICON = new ModelResourceLocation(SBA.MOD_ID, "fog_block_icon", "inventory");
+    public static ModelResourceLocation STREET_SIGN_DIO_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_dio_item_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_DIO_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_dio_item_damaged_2", "inventory");
+    public static ModelResourceLocation STREET_SIGN_DIO_HELD = new ModelResourceLocation(SBA.MOD_ID, "street_sign_dio_item_held", "inventory");
+    public static ModelResourceLocation STREET_SIGN_DIO_HELD_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_dio_item_held_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_DIO_HELD_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_dio_item_held_damaged_2", "inventory");
 
-    public static ModelResourceLocation STREET_SIGN_RIGHT_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_right_item_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_RIGHT_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_right_item_damaged_2", "inventory");
-    public static ModelResourceLocation STREET_SIGN_RIGHT_HELD = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_right_item_held", "inventory");
-    public static ModelResourceLocation STREET_SIGN_RIGHT_HELD_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_right_item_held_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_RIGHT_HELD_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_right_item_held_damaged_2", "inventory");
-
-
-
-    public static ModelResourceLocation STREET_SIGN_STOP_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_stop_item_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_STOP_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_stop_item_damaged_2", "inventory");
-    public static ModelResourceLocation STREET_SIGN_STOP_HELD = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_stop_item_held", "inventory");
-    public static ModelResourceLocation STREET_SIGN_STOP_HELD_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_stop_item_held_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_STOP_HELD_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_stop_item_held_damaged_2", "inventory");
+    public static ModelResourceLocation STREET_SIGN_RIGHT_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_right_item_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_RIGHT_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_right_item_damaged_2", "inventory");
+    public static ModelResourceLocation STREET_SIGN_RIGHT_HELD = new ModelResourceLocation(SBA.MOD_ID, "street_sign_right_item_held", "inventory");
+    public static ModelResourceLocation STREET_SIGN_RIGHT_HELD_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_right_item_held_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_RIGHT_HELD_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_right_item_held_damaged_2", "inventory");
 
 
-    public static ModelResourceLocation STREET_SIGN_YIELD_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_yield_item_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_YIELD_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_yield_item_damaged_2", "inventory");
-    public static ModelResourceLocation STREET_SIGN_YIELD_HELD = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_yield_item_held", "inventory");
-    public static ModelResourceLocation STREET_SIGN_YIELD_HELD_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_yield_item_held_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_YIELD_HELD_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_yield_item_held_damaged_2", "inventory");
+
+    public static ModelResourceLocation STREET_SIGN_STOP_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_stop_item_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_STOP_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_stop_item_damaged_2", "inventory");
+    public static ModelResourceLocation STREET_SIGN_STOP_HELD = new ModelResourceLocation(SBA.MOD_ID, "street_sign_stop_item_held", "inventory");
+    public static ModelResourceLocation STREET_SIGN_STOP_HELD_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_stop_item_held_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_STOP_HELD_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_stop_item_held_damaged_2", "inventory");
 
 
-    public static ModelResourceLocation STREET_SIGN_DANGER_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_danger_item_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_DANGER_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_danger_item_damaged_2", "inventory");
-    public static ModelResourceLocation STREET_SIGN_DANGER_HELD = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_danger_item_held", "inventory");
-    public static ModelResourceLocation STREET_SIGN_DANGER_HELD_D = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_danger_item_held_damaged", "inventory");
-    public static ModelResourceLocation STREET_SIGN_DANGER_HELD_D2 = new ModelResourceLocation(Roundabout.MOD_ID, "street_sign_danger_item_held_damaged_2", "inventory");
+    public static ModelResourceLocation STREET_SIGN_YIELD_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_yield_item_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_YIELD_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_yield_item_damaged_2", "inventory");
+    public static ModelResourceLocation STREET_SIGN_YIELD_HELD = new ModelResourceLocation(SBA.MOD_ID, "street_sign_yield_item_held", "inventory");
+    public static ModelResourceLocation STREET_SIGN_YIELD_HELD_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_yield_item_held_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_YIELD_HELD_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_yield_item_held_damaged_2", "inventory");
+
+
+    public static ModelResourceLocation STREET_SIGN_DANGER_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_danger_item_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_DANGER_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_danger_item_damaged_2", "inventory");
+    public static ModelResourceLocation STREET_SIGN_DANGER_HELD = new ModelResourceLocation(SBA.MOD_ID, "street_sign_danger_item_held", "inventory");
+    public static ModelResourceLocation STREET_SIGN_DANGER_HELD_D = new ModelResourceLocation(SBA.MOD_ID, "street_sign_danger_item_held_damaged", "inventory");
+    public static ModelResourceLocation STREET_SIGN_DANGER_HELD_D2 = new ModelResourceLocation(SBA.MOD_ID, "street_sign_danger_item_held_damaged_2", "inventory");
 
     public static ModelResourceLocation STAND_ARROW_CROSSBOW =
-            new ModelResourceLocation(Roundabout.MOD_ID, "crossbow_stand_arrow", "inventory");
+            new ModelResourceLocation(SBA.MOD_ID, "crossbow_stand_arrow", "inventory");
     public static ModelResourceLocation STAND_BEETLE_CROSSBOW =
-            new ModelResourceLocation(Roundabout.MOD_ID, "crossbow_beetle_arrow", "inventory");
+            new ModelResourceLocation(SBA.MOD_ID, "crossbow_beetle_arrow", "inventory");
     public static ModelResourceLocation STAND_WORTHY_CROSSBOW =
-            new ModelResourceLocation(Roundabout.MOD_ID, "crossbow_worthy_arrow", "inventory");
+            new ModelResourceLocation(SBA.MOD_ID, "crossbow_worthy_arrow", "inventory");
 
     public static ModelResourceLocation DREAD_BOOK =
-            new ModelResourceLocation(Roundabout.MOD_ID, "dread_book", "inventory");
+            new ModelResourceLocation(SBA.MOD_ID, "dread_book", "inventory");
     public static ModelResourceLocation IRON_BALL_CROSSBOW_LOADED =
-            new ModelResourceLocation(Roundabout.MOD_ID, "iron_ball_crossbow_loaded", "inventory");
+            new ModelResourceLocation(SBA.MOD_ID, "iron_ball_crossbow_loaded", "inventory");
     public static ModelResourceLocation IRON_BALL_CROSSBOW_PULLING_0 =
-            new ModelResourceLocation(Roundabout.MOD_ID, "iron_ball_crossbow_pulling_0", "inventory");
+            new ModelResourceLocation(SBA.MOD_ID, "iron_ball_crossbow_pulling_0", "inventory");
     public static ModelResourceLocation IRON_BALL_CROSSBOW_PULLING_1 =
-            new ModelResourceLocation(Roundabout.MOD_ID, "iron_ball_crossbow_pulling_1", "inventory");
+            new ModelResourceLocation(SBA.MOD_ID, "iron_ball_crossbow_pulling_1", "inventory");
     public static ModelResourceLocation IRON_BALL_CROSSBOW_PULLING_2 =
-            new ModelResourceLocation(Roundabout.MOD_ID, "iron_ball_crossbow_pulling_2", "inventory");
+            new ModelResourceLocation(SBA.MOD_ID, "iron_ball_crossbow_pulling_2", "inventory");
 
-    public static ModelResourceLocation ZOMBIE_HORSE_THREAD_BROKEN = new ModelResourceLocation(Roundabout.MOD_ID, "zombie_horse_thread_broken", "inventory");
-    public static ModelResourceLocation ZOMBIE_HORSE_THREAD = new ModelResourceLocation(Roundabout.MOD_ID, "zombie_horse_thread", "inventory");
+    public static ModelResourceLocation ZOMBIE_HORSE_THREAD_BROKEN = new ModelResourceLocation(SBA.MOD_ID, "zombie_horse_thread_broken", "inventory");
+    public static ModelResourceLocation ZOMBIE_HORSE_THREAD = new ModelResourceLocation(SBA.MOD_ID, "zombie_horse_thread", "inventory");
 
     public static HarpoonModel HARPOON_MODEL;
     public static SnubnoseRevolverModel SNUBNOSE_MODEL;

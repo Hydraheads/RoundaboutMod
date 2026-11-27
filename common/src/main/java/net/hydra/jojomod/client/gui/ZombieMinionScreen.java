@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -41,7 +41,7 @@ import java.util.List;
 
 public class ZombieMinionScreen extends Screen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/tactics_chooser.png");
     private static final int SPRITE_SHEET_WIDTH = 256;
     private static final int SPRITE_SHEET_HEIGHT = 256;
@@ -69,7 +69,7 @@ public class ZombieMinionScreen extends Screen {
     private ShapeShifts getDefaultSelected() {
         Player pl = Minecraft.getInstance().player;
         if (pl != null){
-            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).roundabout$getShapeShift());
+            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).sba$getShapeShift());
         }
         return ShapeShifts.PLAYER;
     }
@@ -179,9 +179,9 @@ public class ZombieMinionScreen extends Screen {
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     private boolean checkToClose() {
@@ -208,29 +208,29 @@ public class ZombieMinionScreen extends Screen {
 
     public enum tacticIcon {
 
-        NONE(Component.translatable("roundabout.minion.none"), new ResourceLocation(Roundabout.MOD_ID,
+        NONE(Component.translatable("sba.minion.none"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),Tactics.NONE.id,0,31),
-        EQUIP(Component.translatable("roundabout.minion.tactics.equip"), new ResourceLocation(Roundabout.MOD_ID,
+        EQUIP(Component.translatable("sba.minion.tactics.equip"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/equip.png"), Tactics.EQUIP.id,-30,4),
-        SETHOME(Component.translatable("roundabout.minion.tactics.sethome"), new ResourceLocation(Roundabout.MOD_ID,
+        SETHOME(Component.translatable("sba.minion.tactics.sethome"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/sethome.png"),Tactics.SETHOME.id,0,4),
-        SENDHOME(Component.translatable("roundabout.minion.tactics.sendhome"), new ResourceLocation(Roundabout.MOD_ID,
+        SENDHOME(Component.translatable("sba.minion.tactics.sendhome"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/sendhome.png"),Tactics.SENDHOME.id,30,4),
-        STAY_PUT(Component.translatable("roundabout.corpse.tactics.still"), new ResourceLocation(Roundabout.MOD_ID,
+        STAY_PUT(Component.translatable("sba.corpse.tactics.still"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/stay_put.png"),Tactics.STAY_PUT.id,-31,40),
-        ROAM(Component.translatable("roundabout.corpse.tactics.wander"), new ResourceLocation(Roundabout.MOD_ID,
+        ROAM(Component.translatable("sba.corpse.tactics.wander"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/roam.png"),Tactics.ROAM.id,-31,70),
-        HOLD(Component.translatable("roundabout.corpse.tactics.hold"), new ResourceLocation(Roundabout.MOD_ID,
+        HOLD(Component.translatable("sba.corpse.tactics.hold"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/hold.png"),Tactics.HOLD.id,-61,70),
-        FOLLOW(Component.translatable("roundabout.corpse.tactics.follow"), new ResourceLocation(Roundabout.MOD_ID,
+        FOLLOW(Component.translatable("sba.corpse.tactics.follow"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/follow.png"),Tactics.FOLLOW.id,-61,40),
-        DEFEND(Component.translatable("roundabout.corpse.tactics.guard"), new ResourceLocation(Roundabout.MOD_ID,
+        DEFEND(Component.translatable("sba.corpse.tactics.guard"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/defend.png"),Tactics.DEFEND.id,31,40),
-        HUNT_MONSTERS(Component.translatable("roundabout.corpse.tactics.hunt_monster"), new ResourceLocation(Roundabout.MOD_ID,
+        HUNT_MONSTERS(Component.translatable("sba.corpse.tactics.hunt_monster"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/hunt_monsters.png"),Tactics.HUNT_MONSTERS.id,61,40),
-        HUNT_PLAYERS(Component.translatable("roundabout.corpse.tactics.hunt_player"), new ResourceLocation(Roundabout.MOD_ID,
+        HUNT_PLAYERS(Component.translatable("sba.corpse.tactics.hunt_player"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/hunt_players.png"),Tactics.HUNT_PLAYERS.id,61,70),
-        PEACEFUL(Component.translatable("roundabout.corpse.tactics.peaceful"), new ResourceLocation(Roundabout.MOD_ID,
+        PEACEFUL(Component.translatable("sba.corpse.tactics.peaceful"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/tactics_icons/peaceful.png"),Tactics.PEACEFUL.id,31,70);
 
         static tacticIcon getByte(Tactics tactics) {

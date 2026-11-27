@@ -14,10 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class SoftAndWetSoundManager {
     /**This mixin prevents sound plundered areas from getting noise.*/
     @Inject(method = "play", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$play(SoundInstance $$0, CallbackInfo ci) {
+    public void sba$play(SoundInstance $$0, CallbackInfo ci) {
         if (Minecraft.getInstance().player != null){
             ILevelAccess access = ((ILevelAccess)Minecraft.getInstance().player.level());
-            if(access.roundabout$isSoundPlundered(new BlockPos((int) $$0.getX(), (int) $$0.getY(), (int) $$0.getZ()))){
+            if(access.sba$isSoundPlundered(new BlockPos((int) $$0.getX(), (int) $$0.getY(), (int) $$0.getZ()))){
                 ci.cancel();
             }
         }

@@ -83,23 +83,23 @@ public enum FateTypes {
     }
     public static boolean isHuman(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() <= HUMAN.ordinal();
+            return ((IPlayerEntity)PE).sba$getFate() <= HUMAN.ordinal();
         }
         return false;
     }
     public static boolean isVampire(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal();
+            return ((IPlayerEntity)PE).sba$getFate() == VAMPIRE.ordinal();
         }
-        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+        if (entity instanceof Mob mb && ((IMob)mb).sba$isVampire())
             return true;
         return false;
     }
     public static boolean isZombie(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+            return ((IPlayerEntity)PE).sba$getFate() == ZOMBIE.ordinal();
         } else if (entity instanceof Mob mb){
-            return ((IMob)mb).roundabout$getFate() == ZOMBIE.ordinal();
+            return ((IMob)mb).sba$getFate() == ZOMBIE.ordinal();
         }
         return false;
     }
@@ -107,7 +107,7 @@ public enum FateTypes {
         if (entity instanceof Player PE){
             return ((IFatePlayer)PE).rdbt$getFatePowers().getDamageReduction(source,amt);
         }
-        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire()) {
+        if (entity instanceof Mob mb && ((IMob)mb).sba$isVampire()) {
             if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)){
                 return 0.15F;
             }
@@ -121,9 +121,9 @@ public enum FateTypes {
         if (source.getEntity() != null) {
             if (source.getEntity() instanceof Player PE) {
                 return ((IFatePlayer) PE).rdbt$getFatePowers().getDamageAdd(source, amt,entity)
-                        + ((StandUser) PE).roundabout$getStandPowers().getDamageAdd(source, amt,entity);
+                        + ((StandUser) PE).sba$getStandPowers().getDamageAdd(source, amt,entity);
             }
-            if (source.getEntity() instanceof Mob mb && ((IMob) mb).roundabout$isVampire()) {
+            if (source.getEntity() instanceof Mob mb && ((IMob) mb).sba$isVampire()) {
                 if (source.is(DamageTypes.MOB_ATTACK) || source.is(DamageTypes.PLAYER_ATTACK)) {
                     return 0.4F;
                 }
@@ -133,7 +133,7 @@ public enum FateTypes {
     }
     public static boolean isEvil(LivingEntity entity){
         if (entity instanceof Player PE){
-            Byte fate = ((IPlayerEntity)PE).roundabout$getFate();
+            Byte fate = ((IPlayerEntity)PE).sba$getFate();
             if (fate == ZOMBIE.ordinal()){
                 return isUndisguisedZombie(entity);
             }
@@ -143,7 +143,7 @@ public enum FateTypes {
     }
     public static boolean isDaggerUpgraded(LivingEntity entity){
         if (entity instanceof Player PE){
-            Byte fate = ((IPlayerEntity)PE).roundabout$getFate();
+            Byte fate = ((IPlayerEntity)PE).sba$getFate();
             if (fate == VAMPIRE.ordinal()){
                 if (((IPlayerEntity) PE).rdbt$getVampireData().daggerSplatterLevel > 0) {
                     return true;
@@ -160,27 +160,27 @@ public enum FateTypes {
     }
     public static boolean isVampireStrong(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal()
+            return ((IPlayerEntity)PE).sba$getFate() == VAMPIRE.ordinal()
                     ||
-                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+                    ((IPlayerEntity)PE).sba$getFate() == ZOMBIE.ordinal();
         }
         return false;
     }
     public static boolean needsToEat(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
-                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+            return ((IPlayerEntity)PE).sba$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).sba$getFate() == ZOMBIE.ordinal();
         }
-        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+        if (entity instanceof Mob mb && ((IMob)mb).sba$isVampire())
             return true;
         return false;
     }
     public static boolean hasBloodHunger(LivingEntity entity){
         if (entity instanceof Player PE){
-            return ((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
-                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal();
+            return ((IPlayerEntity)PE).sba$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).sba$getFate() == ZOMBIE.ordinal();
         }
-        if (entity instanceof Mob mb && ((IMob)mb).roundabout$isVampire())
+        if (entity instanceof Mob mb && ((IMob)mb).sba$isVampire())
             return true;
         return false;
     }
@@ -194,8 +194,8 @@ public enum FateTypes {
     }
     public static boolean canCurrentlyAvoidSunlight(LivingEntity entity){
 
-        if (entity != null && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
-                PWA.hasStandActive(entity) && !((StandUser)entity).roundabout$getGuardBroken()) {
+        if (entity != null && ((StandUser)entity).sba$getStandPowers() instanceof PowersWhiteAlbum PWA &&
+                PWA.hasStandActive(entity) && !((StandUser)entity).sba$getGuardBroken()) {
             return true;
         }
         return false;
@@ -209,12 +209,12 @@ public enum FateTypes {
             if (PE.isCreative()){
                 return false;
             }
-            return (((IPlayerEntity)PE).roundabout$getFate() == VAMPIRE.ordinal() ||
-                    ((IPlayerEntity)PE).roundabout$getFate() == ZOMBIE.ordinal()) &&
+            return (((IPlayerEntity)PE).sba$getFate() == VAMPIRE.ordinal() ||
+                    ((IPlayerEntity)PE).sba$getFate() == ZOMBIE.ordinal()) &&
                     ClientNetworking.getAppropriateConfig().vampireSettings.sunDamagePercentPerDamageTick > 0;
         }
-        if (entity instanceof Mob mb && (((IMob)mb).roundabout$isVampire() ||
-                ((IMob)mb).roundabout$getFate() == ZOMBIE.ordinal()))
+        if (entity instanceof Mob mb && (((IMob)mb).sba$isVampire() ||
+                ((IMob)mb).sba$getFate() == ZOMBIE.ordinal()))
             return true;
         if (entity instanceof Zombiefish)
             return true;
@@ -251,7 +251,7 @@ public enum FateTypes {
     }
     public static boolean isUndisguisedZombie(Entity entity){
         if (entity instanceof Player player){
-            if (((IPlayerEntity)player).roundabout$getFate() == ZOMBIE.ordinal()){
+            if (((IPlayerEntity)player).sba$getFate() == ZOMBIE.ordinal()){
                 if (((IFatePlayer)player).rdbt$getFatePowers() instanceof ZombieFate zf && !zf.isDisguised()){
                     return true;
                 }
@@ -267,17 +267,17 @@ public enum FateTypes {
     }
     public static void setVampire(LivingEntity entity){
         if (entity instanceof Player PE){
-            ((IPlayerEntity)PE).roundabout$setFate((byte) VAMPIRE.ordinal());
+            ((IPlayerEntity)PE).sba$setFate((byte) VAMPIRE.ordinal());
         }
     }
     public static void setZombie(LivingEntity entity){
         if (entity instanceof Player PE){
-            ((IPlayerEntity)PE).roundabout$setFate((byte) ZOMBIE.ordinal());
+            ((IPlayerEntity)PE).sba$setFate((byte) ZOMBIE.ordinal());
         }
     }
     public static void setHuman(LivingEntity entity){
         if (entity instanceof Player PE){
-            ((IPlayerEntity)PE).roundabout$setFate((byte) HUMAN.ordinal());
+            ((IPlayerEntity)PE).sba$setFate((byte) HUMAN.ordinal());
         }
     }
     public static float getJumpHeightAddon(LivingEntity entity){

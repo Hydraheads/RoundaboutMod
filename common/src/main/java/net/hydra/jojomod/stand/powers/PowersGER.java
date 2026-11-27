@@ -60,7 +60,7 @@ public class PowersGER extends PowersGoldExperience {
 
     @Override
     public StandEntity getNewStandEntity() {
-        byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
+        byte skin = ((StandUser) this.getSelf()).sba$getStandSkin();
         if (skin == GoldExperienceEntity.DEIMOS) {
             return ModEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS.create(this.getSelf().level());
         }
@@ -93,7 +93,7 @@ public class PowersGER extends PowersGoldExperience {
                 giveStandArrowBack();
             }
             if (hasNormalGEDisc()) {
-                ((StandUser) self).roundabout$setStandDisc(originalDisc);
+                ((StandUser) self).sba$setStandDisc(originalDisc);
                 originalDisc = null;
             }
         }
@@ -109,13 +109,13 @@ public class PowersGER extends PowersGoldExperience {
                 IPlayerEntity IPE = ((IPlayerEntity) PE);
                 if (originalDisc.getItem() instanceof StandDiscItem SD && !SD.standPowers.isSecondaryStand()) {
                     originalDisc.getOrCreateTagElement("Memory").putByte("Level",
-                            (byte) Math.max(IPE.roundabout$getStandLevel() - 1, 0));
-                    originalDisc.getOrCreateTagElement("Memory").putInt("Experience", IPE.roundabout$getStandExp());
-                    originalDisc.getOrCreateTagElement("Memory").putBoolean("BonusSkin", IPE.roundabout$getUnlockedBonusSkin());
+                            (byte) Math.max(IPE.sba$getStandLevel() - 1, 0));
+                    originalDisc.getOrCreateTagElement("Memory").putInt("Experience", IPE.sba$getStandExp());
+                    originalDisc.getOrCreateTagElement("Memory").putBoolean("BonusSkin", IPE.sba$getUnlockedBonusSkin());
                 }
             }
 
-            tag.put("roundabout.originalDisc", originalDisc.save(compoundtag));
+            tag.put("sba.originalDisc", originalDisc.save(compoundtag));
         }
         super.addAdditionalSaveData(tag);
     }
@@ -126,8 +126,8 @@ public class PowersGER extends PowersGoldExperience {
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
-        if (tag.contains("roundabout.originalDisc", 10)) {
-            CompoundTag compoundtag = tag.getCompound("roundabout.originalDisc");
+        if (tag.contains("sba.originalDisc", 10)) {
+            CompoundTag compoundtag = tag.getCompound("sba.originalDisc");
             originalDisc = ItemStack.of(compoundtag);
         }
 
@@ -144,9 +144,9 @@ public class PowersGER extends PowersGoldExperience {
         ItemStack arrowToReturn = standArrow;
         standArrow = null;
 
-        ((StandUser) self).roundabout$setStandDisc(originalDisc);
-        ((StandUser) self).roundabout$getStandPowers().onStandSwitchInto();
-        if (((StandUser) self).roundabout$getStandPowers() instanceof PowersGoldExperience GE) {
+        ((StandUser) self).sba$setStandDisc(originalDisc);
+        ((StandUser) self).sba$getStandPowers().onStandSwitchInto();
+        if (((StandUser) self).sba$getStandPowers() instanceof PowersGoldExperience GE) {
             GE.idlePos = idlePos;
             GE.standSkin = standSkin;
             GE.resolvePoints = resolvePoints;
@@ -158,9 +158,9 @@ public class PowersGER extends PowersGoldExperience {
             }
         }
 
-        if (((StandUser) self).roundabout$getStand() != null) {
-            ((StandUser) self).roundabout$getStand().discard();
-            ((StandUser) self).roundabout$setStand(null);
+        if (((StandUser) self).sba$getStand() != null) {
+            ((StandUser) self).sba$getStand().discard();
+            ((StandUser) self).sba$setStand(null);
         }
     }
 
@@ -170,7 +170,7 @@ public class PowersGER extends PowersGoldExperience {
             resolvePoints -= 0.25f;
             if (!this.self.level().isClientSide() && resolvePoints <= 0f) {
                 goBackToGE();
-                ((StandUser) self).roundabout$summonStand(self.level(), true, true);
+                ((StandUser) self).sba$summonStand(self.level(), true, true);
             }
         }
     }
@@ -183,7 +183,7 @@ public class PowersGER extends PowersGoldExperience {
 
         if (culprit != null && !source.is(ModDamageTypes.GO_BEYOND) && culprit != this.getSelf()) {
             if (direct != null && direct != shooter && direct instanceof IEntityAndData directData) {
-                SavedSecond projectileSecond = directData.roundabout$getLastSavedSecond();
+                SavedSecond projectileSecond = directData.sba$getLastSavedSecond();
                 if (projectileSecond != null) {
                     projectileSecond.loadTime(direct);
                 }
@@ -191,11 +191,11 @@ public class PowersGER extends PowersGoldExperience {
 
             if (culprit instanceof LivingEntity livingCulprit) {
                 if (((TimeStop) livingCulprit.level()).isTimeStoppingEntity(livingCulprit)
-                        && ((StandUser) livingCulprit).roundabout$getStandPowers() instanceof TWAndSPSharedPowers tsPowers) {
+                        && ((StandUser) livingCulprit).sba$getStandPowers() instanceof TWAndSPSharedPowers tsPowers) {
                     tsPowers.resumeTime();
                 }
                 IEntityAndData iData = (IEntityAndData) livingCulprit;
-                SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
+                SavedSecond lastSecond = iData.sba$getLastSavedSecond();
                 if (lastSecond != null) {
                     Vec3 startPos = livingCulprit.position();
                     float startYaw = livingCulprit.getYRot();
@@ -204,7 +204,7 @@ public class PowersGER extends PowersGoldExperience {
                     lastSecond.resetHealth = false;
                     lastSecond.loadTime(livingCulprit);
                     setDazed(livingCulprit, (byte) 60);
-                    ((StandUser)livingCulprit).roundabout$sealStand(60);
+                    ((StandUser)livingCulprit).sba$sealStand(60);
 
                     if (livingCulprit instanceof ServerPlayer victim) {
                         Vec3 endPos = victim.position();
@@ -227,7 +227,7 @@ public class PowersGER extends PowersGoldExperience {
                 if (livingCulprit instanceof Mob mb && !MainUtil.isBossMob(mb)) {
                     mb.getNavigation().stop();
                     if (!MainUtil.blockConfusionTicks(mb)) {
-                        ((IMob) mb).roundabout$setConfusionTicks(60);
+                        ((IMob) mb).sba$setConfusionTicks(60);
                     }
                 }
             }
@@ -248,7 +248,7 @@ public class PowersGER extends PowersGoldExperience {
                 IPlayerEntity ipe = (IPlayerEntity) serverPlayer;
                 if (ipe.rdbt$getGerDeathLoops() <= 0) {
                     ipe.rdbt$setGerDeathLoops(10);
-                    ((IPlayerEntityServer) serverPlayer).roundabout$setTemporaryGerSpawn(serverPlayer.blockPosition());
+                    ((IPlayerEntityServer) serverPlayer).sba$setTemporaryGerSpawn(serverPlayer.blockPosition());
                 }
             }
         }
@@ -329,7 +329,7 @@ public class PowersGER extends PowersGoldExperience {
     @Override
     public boolean setPowerAttack() {
         //dogael forgot to add the item throw check
-        StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+        StandEntity standEntity = ((StandUser) this.getSelf()).sba$getStand();
         if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()
                 && (!standEntity.getHeldItem().isEmpty() || standEntity.getFirstPassenger() != null)) {
             return super.setPowerAttack();
@@ -401,7 +401,7 @@ public class PowersGER extends PowersGoldExperience {
     @Override
     /*The stand is named on the disc so we just use that*/
     public Component getStandName(){
-        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        ItemStack disc = ((StandUser)this.getSelf()).sba$getStandDisc();
         if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
             return Component.translatable(SDI.getDescriptionId() + ".desc.short");
         }

@@ -2,7 +2,7 @@ package net.hydra.jojomod.block;
 
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;

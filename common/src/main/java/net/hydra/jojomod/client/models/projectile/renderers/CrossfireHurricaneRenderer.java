@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.projectile.CrossfireFirestormModel;
 import net.hydra.jojomod.client.models.projectile.CrossfireHurricaneModel;
@@ -71,50 +71,50 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
 
 
 
-    public static final ResourceLocation CROSSFIRE_HURRICANE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_BLUE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_blue.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_BLUE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_blue.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_BLUE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_blue.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_PURPLE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_purple.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_purple.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_purple.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_GREEN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_green.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_GREEN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_green.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_GREEN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_green.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_dread.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_dread.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_DREAD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_dread.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_CREAM_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_cream.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_CREAM_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_cream.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_CREAM_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_BLUE_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_BLUE_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_BLUE_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_PURPLE_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_GREEN_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_GREEN_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_GREEN_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_DREAD_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_DREAD_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_DREAD_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_CREAM_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_CREAM_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_2_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_CREAM_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/crossfire_hurricane_3_cream.png");
 
-    public static final ResourceLocation CROSSFIRE_HURRICANE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_BLUE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_blue.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_BLUE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_blue.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_BLUE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_blue.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_PURPLE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_purple.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_purple.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_purple.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_GREEN_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_green.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_GREEN_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_green.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_GREEN_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_green.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_DREAD_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_dread.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_DREAD_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_dread.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_DREAD_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_dread.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_CREAM_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_1_cream.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_2_CREAM_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_2_cream.png");
-    public static final ResourceLocation CROSSFIRE_HURRICANE_3_CREAM_TEXTURE_B = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/firestorm_3_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_1.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_2.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_3.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_BLUE_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_1_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_BLUE_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_2_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_BLUE_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_3_blue.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_PURPLE_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_1_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_PURPLE_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_2_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_PURPLE_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_3_purple.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_GREEN_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_1_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_GREEN_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_2_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_GREEN_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_3_green.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_DREAD_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_1_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_DREAD_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_2_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_DREAD_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_3_dread.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_CREAM_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_1_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_2_CREAM_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_2_cream.png");
+    public static final ResourceLocation CROSSFIRE_HURRICANE_3_CREAM_TEXTURE_B = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/firestorm_3_cream.png");
 
 
 
     public ResourceLocation getThird(CrossfireHurricaneEntity var1){
         LivingEntity user = var1.getUser();
         int crossno = var1.getCrossNumber();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+        if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
                 if (crossno == 6){
@@ -156,7 +156,7 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
     public ResourceLocation getFirst(CrossfireHurricaneEntity var1){
         LivingEntity user = var1.getUser();
         int crossno = var1.getCrossNumber();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+        if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
                 if (crossno == 6){
@@ -198,7 +198,7 @@ public class CrossfireHurricaneRenderer extends EntityRenderer<CrossfireHurrican
     public ResourceLocation getSecond(CrossfireHurricaneEntity var1){
         LivingEntity user = var1.getUser();
         int crossno = var1.getCrossNumber();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+        if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
                 if (crossno == 6){

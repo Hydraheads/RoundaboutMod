@@ -24,9 +24,9 @@ public final class DiscSealController {
         if (duration <= 0) return false;
         if (type == WhitesnakeDiscUtil.STAND) {
             StandUser standUser = (StandUser) target;
-            if (standUser.roundabout$getStandDisc().isEmpty()) return false;
-            standUser.roundabout$setSealedTicks(duration);
-            if (!((DiscBearer) target).roundabout$hasMemoryDisc()) {
+            if (standUser.sba$getStandDisc().isEmpty()) return false;
+            standUser.sba$setSealedTicks(duration);
+            if (!((DiscBearer) target).sba$hasMemoryDisc()) {
                 if (target instanceof Mob mob) {
                     mob.setTarget(null);
                     mob.getNavigation().stop();
@@ -39,17 +39,17 @@ public final class DiscSealController {
         DiscBearer bearer = (DiscBearer) target;
         boolean ownsDisc = switch (type) {
             case WhitesnakeDiscUtil.SIGHT -> WhitesnakeDiscUtil.canCarrySightDisc(target)
-                    && bearer.roundabout$ownsSightDisc();
-            case WhitesnakeDiscUtil.MEMORY -> bearer.roundabout$ownsMemoryDisc();
-            case WhitesnakeDiscUtil.HEARING -> bearer.roundabout$ownsHearingDisc();
+                    && bearer.sba$ownsSightDisc();
+            case WhitesnakeDiscUtil.MEMORY -> bearer.sba$ownsMemoryDisc();
+            case WhitesnakeDiscUtil.HEARING -> bearer.sba$ownsHearingDisc();
             default -> false;
         };
         if (!ownsDisc) return false;
-        bearer.roundabout$setDiscSeal(type, duration, duration);
+        bearer.sba$setDiscSeal(type, duration, duration);
         if (type == WhitesnakeDiscUtil.SIGHT) {
-            ((StandUser) target).roundabout$deeplyRemoveAttackTarget();
+            ((StandUser) target).sba$deeplyRemoveAttackTarget();
         } else if (type == WhitesnakeDiscUtil.MEMORY) {
-            ((StandUser) target).roundabout$deeplyRemoveAttackTarget();
+            ((StandUser) target).sba$deeplyRemoveAttackTarget();
             if (target instanceof Mob mob) {
                 mob.setTarget(null);
                 mob.getNavigation().stop();

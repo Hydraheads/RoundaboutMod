@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -37,20 +37,20 @@ public class MoldRightArmLayer<T extends LivingEntity, A extends HumanoidModel<T
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
 
         if (entity != null && entity instanceof Player) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            if (((IEntityAndData)entity).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             StandUser user = ((StandUser) entity);
             boolean MoldedRightArm = false;
-            boolean HasGreenDay = (user.roundabout$getStandPowers() instanceof PowersGreenDay);
+            boolean HasGreenDay = (user.sba$getStandPowers() instanceof PowersGreenDay);
             if (HasGreenDay){
-                MoldedRightArm = !((PowersGreenDay)user.roundabout$getStandPowers()).HasMainArm  & (entity.getMainArm() == HumanoidArm.RIGHT);
+                MoldedRightArm = !((PowersGreenDay)user.sba$getStandPowers()).HasMainArm  & (entity.getMainArm() == HumanoidArm.RIGHT);
                 if(!MoldedRightArm) {
-                    MoldedRightArm = !((PowersGreenDay) user.roundabout$getStandPowers()).HasOffHand & (entity.getMainArm() == HumanoidArm.LEFT);
+                    MoldedRightArm = !((PowersGreenDay) user.sba$getStandPowers()).HasOffHand & (entity.getMainArm() == HumanoidArm.LEFT);
                 }
             }
             if (!entity.isInvisible()) {
                 if (MoldedRightArm) {
-                    int color = ((PowersGreenDay) user.roundabout$getStandPowers()).getMoldParticleColor();
+                    int color = ((PowersGreenDay) user.sba$getStandPowers()).getMoldParticleColor();
                     float r = ((color >> 16) & 0xFF) / 255.0F;
                     float g = ((color >> 8) & 0xFF) / 255.0F;
                     float b = (color & 0xFF) / 255.0F;

@@ -19,14 +19,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ZAbstractFish extends WaterAnimal {
 
     @Inject(method = "saveToBucketTag(Lnet/minecraft/world/item/ItemStack;)V", at = @At(value = "TAIL"))
-    protected void roundabout$saveToBucketTag(ItemStack $$0, CallbackInfo ci) {
+    protected void sba$saveToBucketTag(ItemStack $$0, CallbackInfo ci) {
         CompoundTag $$1 = $$0.getOrCreateTag();
         MainUtil.saveEntityData($$1,((IEntityAndData) this));
         MainUtil.saveLivingData($$1,((StandUser) this),this);
         MainUtil.saveMobData($$1,((IMob) this));
     }
     @Inject(method = "loadFromBucketTag(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"))
-    protected void roundabout$loadFromBucketTag(CompoundTag $$0, CallbackInfo ci) {
+    protected void sba$loadFromBucketTag(CompoundTag $$0, CallbackInfo ci) {
         MainUtil.loadEntityData($$0,((IEntityAndData) this));
         MainUtil.loadLivingData($$0,((StandUser) this),this);
         MainUtil.loadMobData($$0,((IMob) this));

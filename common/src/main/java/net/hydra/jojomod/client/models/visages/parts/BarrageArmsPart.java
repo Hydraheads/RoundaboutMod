@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPlayerRenderer;
@@ -138,7 +138,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
 
 
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/star_platinum/anime.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/stand/star_platinum/anime.png");
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
@@ -165,7 +165,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
             if (context instanceof Player player) {
 
 
-                this.animate(((IPlayerEntity)player).roundabout$getBarrageArms(), BarrageArmAnimation.BARRAGE, (context.tickCount + (partialTicks % 1)), 1f);
+                this.animate(((IPlayerEntity)player).sba$getBarrageArms(), BarrageArmAnimation.BARRAGE, (context.tickCount + (partialTicks % 1)), 1f);
                 float correction = (float) Math.toRadians(95);
                 RightArmBAM.xRot -= correction;
                 RightArmBAM2.xRot -= correction;
@@ -197,15 +197,15 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                     float yScale2 = plm.rightArm.yScale;
                     float zScale2 = plm.rightArm.zScale;
 
-                    byte shift = ((IPlayerEntity) player).roundabout$getShapeShift();
+                    byte shift = ((IPlayerEntity) player).sba$getShapeShift();
                     ModelPart rightArm = plm.rightArm;
                     ModelPart rightSleeve = plm.rightSleeve;
                     ModelPart leftArm = plm.leftArm;
                     ModelPart leftSleeve = plm.leftSleeve;
-                    byte bt = ((StandUser) LE).roundabout$getLocacacaCurse();
-                    int muscle = ((StandUser) LE).roundabout$getZappedToID();
+                    byte bt = ((StandUser) LE).sba$getLocacacaCurse();
+                    int muscle = ((StandUser) LE).sba$getZappedToID();
 
-                    Mob shapeShift = ((IPlayerRenderer) PR).roundabout$getShapeShift(player);
+                    Mob shapeShift = ((IPlayerRenderer) PR).sba$getShapeShift(player);
                     if (shapeShift != null && (ShapeShifts.isSkeleton(ShapeShifts.getShiftFromByte(shift)) ||
                             ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(shift))) && $$7.getRenderer(shapeShift) instanceof HumanoidMobRenderer hr){
                         storedRenderType = RenderType.entityTranslucent(hr.getTextureLocation(shapeShift));
@@ -478,7 +478,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
             float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
             float oasisAmt = PowersOasis.getOasisAmt(player, delta);
             if (whiteAmt > 0) {
-                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                byte skin = ((StandUser) player).sba$getStandSkin();
                 String path = PowersWhiteAlbum.getSkinString(skin);
                 if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                     path = "ice";
@@ -486,7 +486,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 ClientUtil.pushPoseAndCooperate(poseStack, 8);
 
                 rsleeve.translateAndRotate(poseStack);
-                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                if (((IPlayerModel) plm).sba$getSlim()) {
                     ModStrayModels.WhiteAlbumSlimRightArm.render(
                             player, delta, poseStack, bSource, light,
                             r, g, b, Math.min(whiteAmt, barrageAlpha), path);
@@ -498,12 +498,12 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 ClientUtil.popPoseAndCooperate(poseStack, 8);
 
             } else if (oasisAmt > 0) {
-                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                byte skin = ((StandUser) player).sba$getStandSkin();
                 String path = PowersOasis.getSkinString(skin);
                 ClientUtil.pushPoseAndCooperate(poseStack, 8);
 
                 rsleeve.translateAndRotate(poseStack);
-                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                if (((IPlayerModel) plm).sba$getSlim()) {
                     ModStrayModels.OasisSlimRightArm.render(
                             player, delta, poseStack, bSource, light,
                             r, g, b, Math.min(oasisAmt, barrageAlpha), path);
@@ -544,7 +544,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                         rsleeve.xScale += 0.04f;
                         rsleeve.zScale += 0.04f;
                         VertexConsumer consumerX;
-                        if (((IPlayerModel) plm).roundabout$getSlim()) {
+                        if (((IPlayerModel) plm).sba$getSlim()) {
                             consumerX = bSource.getBuffer
                                     (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
                         } else {
@@ -582,7 +582,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
             float whiteAmt = PowersWhiteAlbum.getWhiteAlbumAmt(player, delta);
             float oasisAmt = PowersOasis.getOasisAmt(player, delta);
             if (whiteAmt > 0) {
-                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                byte skin = ((StandUser) player).sba$getStandSkin();
                 String path = PowersWhiteAlbum.getSkinString(skin);
                 if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                     path = "ice";
@@ -590,7 +590,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 ClientUtil.pushPoseAndCooperate(poseStack, 8);
 
                 rsleeve.translateAndRotate(poseStack);
-                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                if (((IPlayerModel) plm).sba$getSlim()) {
                     ModStrayModels.WhiteAlbumSlimLeftArm.render(
                             player, delta, poseStack, bSource, light,
                             r, g, b, Math.min(whiteAmt,barrageAlpha), path);
@@ -602,12 +602,12 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                 ClientUtil.popPoseAndCooperate(poseStack, 8);
 
             } else if (oasisAmt > 0) {
-                byte skin = ((StandUser) player).roundabout$getStandSkin();
+                byte skin = ((StandUser) player).sba$getStandSkin();
                 String path = PowersOasis.getSkinString(skin);
                 ClientUtil.pushPoseAndCooperate(poseStack, 8);
 
                 rsleeve.translateAndRotate(poseStack);
-                if (((IPlayerModel) plm).roundabout$getSlim()) {
+                if (((IPlayerModel) plm).sba$getSlim()) {
                     ModStrayModels.OasisSlimLeftArm.render(
                             player, delta, poseStack, bSource, light,
                             r, g, b, Math.min(oasisAmt, barrageAlpha), path);
@@ -648,7 +648,7 @@ public class BarrageArmsPart extends PsuedoHierarchicalModel {
                         rsleeve.xScale += 0.04f;
                         rsleeve.zScale += 0.04f;
                         VertexConsumer consumerX;
-                        if (((IPlayerModel) plm).roundabout$getSlim()) {
+                        if (((IPlayerModel) plm).sba$getSlim()) {
                             consumerX = bSource.getBuffer
                                     (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
                         } else {

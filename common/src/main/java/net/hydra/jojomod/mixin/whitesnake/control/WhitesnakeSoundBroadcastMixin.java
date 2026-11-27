@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerLevel.class)
 public abstract class WhitesnakeSoundBroadcastMixin {
     @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At("TAIL"))
-    private void roundaboutWhitesnake$sendPositionSound(Player excluded, double x, double y, double z,
+    private void sbaWhitesnake$sendPositionSound(Player excluded, double x, double y, double z,
                                                         Holder<SoundEvent> sound, SoundSource source,
                                                         float volume, float pitch, long seed, CallbackInfo ci) {
         sendToControllers(excluded, new Vec3(x, y, z), sound.value().getRange(volume),
@@ -30,7 +30,7 @@ public abstract class WhitesnakeSoundBroadcastMixin {
     }
 
     @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At("TAIL"))
-    private void roundaboutWhitesnake$sendEntitySound(Player excluded, Entity sourceEntity,
+    private void sbaWhitesnake$sendEntitySound(Player excluded, Entity sourceEntity,
                                                       Holder<SoundEvent> sound, SoundSource source,
                                                       float volume, float pitch, long seed, CallbackInfo ci) {
         sendToControllers(excluded, sourceEntity.position(), sound.value().getRange(volume),
@@ -42,7 +42,7 @@ public abstract class WhitesnakeSoundBroadcastMixin {
         double rangeSqr = (double) range * range;
         for (ServerPlayer player : level.players()) {
             if (player == excluded || player.distanceToSqr(source) <= rangeSqr) continue;
-            if (!(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
+            if (!(((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers)
                     || !powers.isPiloting()) continue;
             LivingEntity stand = powers.getPilotingStand();
             if (stand != null && stand.isAlive() && !stand.isRemoved()

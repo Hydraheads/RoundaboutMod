@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.TrailRenderer;
@@ -37,8 +37,8 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
         this.model = new Tusk1NailModel($$0.bakeLayer(ModEntityRendererClient.TUSK1_NAIL_MODEL));
     }
 
-    private static final ResourceLocation ACT_1 = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/tusk_one.png");
-    private static final ResourceLocation ACT_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/tusk_two.png");
+    private static final ResourceLocation ACT_1 = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/tusk_one.png");
+    private static final ResourceLocation ACT_2 = new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/tusk_two.png");
 
     @Override
     public ResourceLocation getTextureLocation(TuskNailEntity tne) {
@@ -49,7 +49,7 @@ public class TuskNailRenderer extends EntityRenderer<TuskNailEntity> {
     }
 
     public void render(TuskNailEntity $$0, float $$1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int $$5) {
-        if ($$0.getOwner() != null && $$0.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
+        if ($$0.getOwner() != null && $$0.getOwner() instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers() instanceof PowersTusk PT) {
             VertexConsumer $$6 = ItemRenderer.getFoilBufferDirect(bufferSource, this.model.renderType(this.getTextureLocation($$0)), false, false);// $$0.isFoil());
             poseStack.pushPose();
             poseStack.scale(1.6F, 1.6F, 1.6F);

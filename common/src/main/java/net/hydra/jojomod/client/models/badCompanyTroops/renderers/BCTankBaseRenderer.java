@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.badCompanyTroops.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
@@ -17,11 +17,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class BCTankBaseRenderer extends StandRenderer<BCTank> {
 
-    private static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/tank/beta.png");
-    private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/tank/anime.png");
-    private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/tank/manga.png");
-    private static final ResourceLocation MARINE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/tank/marine.png");
-    private static final ResourceLocation SAND = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/tank/sand.png");
+    private static final ResourceLocation BETA = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/tank/beta.png");
+    private static final ResourceLocation ANIME = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/tank/anime.png");
+    private static final ResourceLocation MANGA = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/tank/manga.png");
+    private static final ResourceLocation MARINE = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/tank/marine.png");
+    private static final ResourceLocation SAND = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/tank/sand.png");
 
     public BCTankBaseRenderer(EntityRendererProvider.Context context, StandModel<BCTank> entityModel, float f) {
         super(context, entityModel,f);
@@ -31,8 +31,8 @@ public class BCTankBaseRenderer extends StandRenderer<BCTank> {
     @Override
     public ResourceLocation getTextureLocation(BCTank entity) {
         LivingEntity user = entity.getUser();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersBadCompany) {
-            byte skn = ((StandUser)user).roundabout$getStandSkin();
+        if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersBadCompany) {
+            byte skn = ((StandUser)user).sba$getStandSkin();
 
             if (skn == PowersBadCompany.ANIME_SKIN) {
                 return ANIME;

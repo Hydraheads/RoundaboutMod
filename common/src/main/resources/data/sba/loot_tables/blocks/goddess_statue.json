@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "sba:goddess_statue",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "part": "bottom"
+              }
+            }
+          ],
+          "name": "sba:goddess_statue"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "sba:blocks/goddess_statue"
+}

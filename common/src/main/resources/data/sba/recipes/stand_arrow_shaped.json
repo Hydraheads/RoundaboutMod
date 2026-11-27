@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " MM",
+    " SM",
+    "F  "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "M": {
+      "item": "sba:meteorite_ingot"
+    }
+  },
+  "result": {
+    "item": "sba:stand_arrow"
+  }
+}

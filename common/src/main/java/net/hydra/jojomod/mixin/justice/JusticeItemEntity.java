@@ -21,7 +21,7 @@ public abstract class JusticeItemEntity extends Entity {
 
     /**This mixin makes fog blocks as items disappear fast and be foggy*/
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$tick(CallbackInfo ci) {
+    protected void sba$tick(CallbackInfo ci) {
         if (getItem().getItem() instanceof FogBlockItem){
             if (this.age < 5840){
                 this.age = 5840;

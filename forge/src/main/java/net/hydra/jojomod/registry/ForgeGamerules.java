@@ -5,27 +5,27 @@ import net.minecraft.world.level.GameRules;
 
 public class ForgeGamerules {
     public static void registerGamerules(){
-        ModGamerules.ROUNDABOUT_STAND_GRIEFING = GameRules.register("roundaboutStandGriefing",
+        ModGamerules.SBA_STAND_GRIEFING = GameRules.register("sbaStandGriefing",
                 GameRules.Category.MISC, GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT = GameRules.register("roundaboutStandGriefingObtainment",
+        ModGamerules.SBA_STAND_GRIEFING_OBTAINMENT = GameRules.register("sbaStandGriefingObtainment",
                 GameRules.Category.MISC, GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_STAND_LEVELING = GameRules.register("roundaboutStandLeveling",
+        ModGamerules.SBA_STAND_LEVELING = GameRules.register("sbaStandLeveling",
                 GameRules.Category.MISC, GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_MOB_STAND_FIRE_SPREADS = GameRules.register("roundaboutMonsterStandFireSpreads",
+        ModGamerules.SBA_MOB_STAND_FIRE_SPREADS = GameRules.register("sbaMonsterStandFireSpreads",
                 GameRules.Category.MOBS, GameRules.BooleanValue.create(false));
-        ModGamerules.ROUNDABOUT_KEEP_STANDS_ON_DEATH = GameRules.register("roundaboutKeepStandsOnDeath",
+        ModGamerules.SBA_KEEP_STANDS_ON_DEATH = GameRules.register("sbaKeepStandsOnDeath",
                 GameRules.Category.PLAYER, GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE = GameRules.register("roundaboutStandRedstoneInterference",
+        ModGamerules.SBA_STAND_REDSTONE_INTERFERENCE = GameRules.register("sbaStandRedstoneInterference",
                 GameRules.Category.MISC, GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_ALLOW_ENTITY_GRAB = GameRules.register("roundaboutMobGrabbing",
+        ModGamerules.SBA_ALLOW_ENTITY_GRAB = GameRules.register("sbaMobGrabbing",
                 GameRules.Category.PLAYER, GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_WORTHY_MOB_SPAWNS = GameRules.register("roundaboutSpawnWorthyMobs",
+        ModGamerules.SBA_WORTHY_MOB_SPAWNS = GameRules.register("sbaSpawnWorthyMobs",
                 GameRules.Category.MOBS, GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS = GameRules.register("roundaboutSpawnStandUserMobs",
+        ModGamerules.SBA_STAND_USER_MOB_SPAWNS = GameRules.register("sbaSpawnStandUserMobs",
                 GameRules.Category.MOBS,GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_ROAD_ROLLER_BREAK_ICE = GameRules.register("roundaboutRoadRollerBreakIce",
+        ModGamerules.SBA_ROAD_ROLLER_BREAK_ICE = GameRules.register("sbaRoadRollerBreakIce",
                 GameRules.Category.MOBS,GameRules.BooleanValue.create(true));
-        ModGamerules.ROUNDABOUT_LOSE_FATE_ON_DEATH = GameRules.register("roundaboutLoseFateOnDeath",
+        ModGamerules.SBA_LOSE_FATE_ON_DEATH = GameRules.register("sbaLoseFateOnDeath",
                 GameRules.Category.PLAYER,GameRules.BooleanValue.create(false));
     }
 }

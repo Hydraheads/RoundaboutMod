@@ -299,7 +299,7 @@ public class DiverDownEntity extends FollowingStandEntity {
     public boolean isControlledByLocalInstance() {
         LivingEntity user = this.getUser();
         if (user != null) {
-            Entity ent = this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
+            Entity ent = this.getUserData(user).sba$getStandPowers().getPilotingStand();
             if (ent != null && ent.is(this)) {
                 return (user instanceof Player $$0 ? $$0.isLocalPlayer() : this.isEffectiveAi());
             }

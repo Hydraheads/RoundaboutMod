@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -34,7 +34,7 @@ import java.util.StringTokenizer;
 
 public class PlunderScreen extends Screen implements NoCancelInputScreen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation MOB_SWITCHER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation MOB_SWITCHER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/pose_switcher.png");
     private static final int SPRITE_SHEET_WIDTH = 256;
     private static final int SPRITE_SHEET_HEIGHT = 256;
@@ -66,7 +66,7 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
     private ShapeShifts getDefaultSelected() {
         Player pl = Minecraft.getInstance().player;
         if (pl != null){
-            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).roundabout$getShapeShift());
+            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).sba$getShapeShift());
         }
         return ShapeShifts.PLAYER;
     }
@@ -86,12 +86,12 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
     }
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
-        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+        if (this.minecraft != null && !sba$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
             this.switchToHoveredGameMode();
             this.minecraft.setScreen(null);
             if (this.minecraft.player != null){
                 StandUser SU = ((StandUser) this.minecraft.player);
-                if (SU.roundabout$getStandPowers().isBarraging()){
+                if (SU.sba$getStandPowers().isBarraging()){
                     //This prevents barrage canceling
                 } else {
                     this.minecraft.options.keyUse.setDown(false);
@@ -207,7 +207,7 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
             //ModPacketHandler.PACKET_ACCESS.byteToServerPacket(pIcon3.id, PacketDataIndex.BYTE_CHANGE_MORPH);
     }
 
-    public boolean roundabout$sameKeyOne(KeyMapping key1){
+    public boolean sba$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
                 || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
         );
@@ -218,9 +218,9 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     private boolean checkToClose() {
@@ -266,25 +266,25 @@ public class PlunderScreen extends Screen implements NoCancelInputScreen {
     }
 
     public enum standRerollIcon {
-        ITEM_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.items"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/item.png"),PlunderTypes.ITEM.id,-43,31, Component.translatable("roundabout.soft_and_wet_plunder.items.desc")),
-        SOUND_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.sound"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/sound.png"),PlunderTypes.SOUND.id,-28,1, Component.translatable("roundabout.soft_and_wet_plunder.sound.desc")),
-        FRICTION_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.friction"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/friction.png"),PlunderTypes.FRICTION.id,42,31, Component.translatable("roundabout.soft_and_wet_plunder.friction.desc")),
-        SIGHT_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.sight"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/sight.png"),PlunderTypes.SIGHT.id,0,-16, Component.translatable("roundabout.soft_and_wet_plunder.sight.desc")),
-        OXYGEN_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.oxygen"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/oxygen.png"),PlunderTypes.OXYGEN.id,28,1, Component.translatable("roundabout.soft_and_wet_plunder.oxygen.desc")),
-        MOB_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.mobs"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/mobs.png"),PlunderTypes.MOBS.id,28,61, Component.translatable("roundabout.soft_and_wet_plunder.mobs.desc")),
-        POTION_EFFECT_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.potion_effects"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/effects.png"),PlunderTypes.POTION_EFFECTS.id,-28,61, Component.translatable("roundabout.soft_and_wet_plunder.potion_effects.desc")),
-        MOISTURE_PLUNDER(Component.translatable("roundabout.soft_and_wet_plunder.moisture"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/moisture.png"),PlunderTypes.MOISTURE.id,0,78, Component.translatable("roundabout.soft_and_wet_plunder.moisture.desc")),
+        ITEM_PLUNDER(Component.translatable("sba.soft_and_wet_plunder.items"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/item.png"),PlunderTypes.ITEM.id,-43,31, Component.translatable("sba.soft_and_wet_plunder.items.desc")),
+        SOUND_PLUNDER(Component.translatable("sba.soft_and_wet_plunder.sound"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/sound.png"),PlunderTypes.SOUND.id,-28,1, Component.translatable("sba.soft_and_wet_plunder.sound.desc")),
+        FRICTION_PLUNDER(Component.translatable("sba.soft_and_wet_plunder.friction"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/friction.png"),PlunderTypes.FRICTION.id,42,31, Component.translatable("sba.soft_and_wet_plunder.friction.desc")),
+        SIGHT_PLUNDER(Component.translatable("sba.soft_and_wet_plunder.sight"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/sight.png"),PlunderTypes.SIGHT.id,0,-16, Component.translatable("sba.soft_and_wet_plunder.sight.desc")),
+        OXYGEN_PLUNDER(Component.translatable("sba.soft_and_wet_plunder.oxygen"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/oxygen.png"),PlunderTypes.OXYGEN.id,28,1, Component.translatable("sba.soft_and_wet_plunder.oxygen.desc")),
+        MOB_PLUNDER(Component.translatable("sba.soft_and_wet_plunder.mobs"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/mobs.png"),PlunderTypes.MOBS.id,28,61, Component.translatable("sba.soft_and_wet_plunder.mobs.desc")),
+        POTION_EFFECT_PLUNDER(Component.translatable("sba.soft_and_wet_plunder.potion_effects"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/effects.png"),PlunderTypes.POTION_EFFECTS.id,-28,61, Component.translatable("sba.soft_and_wet_plunder.potion_effects.desc")),
+        MOISTURE_PLUNDER(Component.translatable("sba.soft_and_wet_plunder.moisture"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/moisture.png"),PlunderTypes.MOISTURE.id,0,78, Component.translatable("sba.soft_and_wet_plunder.moisture.desc")),
 
-        NONE(Component.translatable("roundabout.soft_and_wet_plunder.none"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,31, Component.translatable("roundabout.stand_switch.main.desc"));
+        NONE(Component.translatable("sba.soft_and_wet_plunder.none"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,31, Component.translatable("sba.stand_switch.main.desc"));
 
         static standRerollIcon getByte(PlunderTypes pose) {
             return switch (pose) {

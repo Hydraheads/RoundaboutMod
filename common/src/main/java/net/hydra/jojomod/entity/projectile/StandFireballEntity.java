@@ -88,7 +88,7 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
     @Override
     public boolean isControlledByLocalInstance() {
         /**
-         if (this.getStandUser() != null && ((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+         if (this.getStandUser() != null && ((StandUser)this.getStandUser()).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
          if (this.getCrossNumber() > 0) {
          return true;
          }
@@ -196,7 +196,7 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
 
             if (!this.level().isClientSide()) {
                 LivingEntity user = this.getStandUser();
-                if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                     BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
                     PMR.createStandFire2(pos);
                 }
@@ -243,7 +243,7 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
     public void radialExplosion(Entity mainTarget){
         if (!this.level().isClientSide()){
             LivingEntity user = this.getStandUser();
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 this.level().playSound(null, this.blockPosition(), ModSounds.FIREBALL_HIT_EVENT, SoundSource.PLAYERS, 2.5F, (float)(0.99F + Math.random()*0.02));
                 ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
                         this.getY(), this.getZ(),
@@ -289,13 +289,13 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
                     PMR.addEXP(3,LE);
                     StandUser userLE = ((StandUser) LE);
                     int ticks = 20;
-                    if (userLE.roundabout$getRemainingFireTicks() > -1){
-                        ticks+=userLE.roundabout$getRemainingFireTicks();
+                    if (userLE.sba$getRemainingFireTicks() > -1){
+                        ticks+=userLE.sba$getRemainingFireTicks();
                     } else {
                         ticks += 80;
                     }
-                    userLE.roundabout$setOnStandFire(PMR.getFireColor(), standUser);
-                    userLE.roundabout$setRemainingStandFireTicks(ticks);
+                    userLE.sba$setOnStandFire(PMR.getFireColor(), standUser);
+                    userLE.sba$setRemainingStandFireTicks(ticks);
                 }
             }
         }
@@ -308,7 +308,7 @@ public class StandFireballEntity extends AbstractHurtingProjectile implements Un
     @Override
     protected ParticleOptions getTrailParticle() {
         LivingEntity user = this.getStandUser();
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+        if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
             return PMR.getFlameParticle();
         }
         return new BlockParticleOption(ParticleTypes.BLOCK, Blocks.AIR.defaultBlockState());

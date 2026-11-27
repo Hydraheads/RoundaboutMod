@@ -38,13 +38,13 @@ public class MaskItem extends Item {
         $$2.add(this.getDisplayName2().withStyle(ChatFormatting.GRAY));
         if (visageData.hasVoices() || $$0.is(ModItems.BLANK_MASK)){
             $$2.add(
-                    Component.translatable("roundabout.cinderella.mod_visage.voice_available").withStyle(ChatFormatting.AQUA)
+                    Component.translatable("sba.cinderella.mod_visage.voice_available").withStyle(ChatFormatting.AQUA)
             );
         }
         if (visageData.isJojovein() && !ClientNetworking.getAppropriateConfig().cinderellaSettings.enableJojoveinVisagesInShop){
 
             $$2.add(
-                    Component.translatable("item.roundabout.creative_only.info").withStyle(ChatFormatting.GOLD)
+                    Component.translatable("item.sba.creative_only.info").withStyle(ChatFormatting.GOLD)
             );
         }
     }

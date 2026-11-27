@@ -38,7 +38,7 @@ public class GravityBehaviorUtilsMixin {
         ItemEntity itemEntity = new ItemEntity(
                 entity.level(), itemPos.x(), itemPos.y(), itemPos.z(), $$1
         );
-        ((IGravityEntity)itemEntity).roundabout$setBaseGravityDirection(
+        ((IGravityEntity)itemEntity).sba$setBaseGravityDirection(
                 GravityAPI.getGravityDirection(entity)
         );
 

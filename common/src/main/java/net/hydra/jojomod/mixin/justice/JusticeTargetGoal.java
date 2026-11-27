@@ -22,11 +22,11 @@ public class JusticeTargetGoal {
     /**Justice aggro from shape shifts*/
 
     @Inject(method = "canContinueToUse", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$tick(CallbackInfoReturnable<Boolean> cir) {
+    protected void sba$tick(CallbackInfoReturnable<Boolean> cir) {
 
         if (mob instanceof Zombie ZE && targetMob instanceof Player $$0){
             IPlayerEntity ple = ((IPlayerEntity) $$0);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 if (ShapeShifts.isZombie(shift)) {
@@ -40,7 +40,7 @@ public class JusticeTargetGoal {
             }
         } else if (mob instanceof IronGolem ZE && targetMob instanceof Player $$0){
             IPlayerEntity ple = ((IPlayerEntity) $$0);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 if (ShapeShifts.isVillager(shift)) {
@@ -52,7 +52,7 @@ public class JusticeTargetGoal {
             }
         } else if (mob instanceof AbstractSkeleton ZE && targetMob instanceof Player $$0){
             IPlayerEntity ple = ((IPlayerEntity) $$0);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 if (ShapeShifts.isSkeleton(shift)) {

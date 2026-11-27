@@ -36,23 +36,23 @@ public abstract class JusticeIronGolem extends AbstractGolem implements NeutralM
      * as select humanoid vanilla mobs, based on the JoJo OVA in which Enya disguises as younger.*/
     @Inject(method = "aiStep()V", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/entity/animal/IronGolem;updatePersistentAnger(Lnet/minecraft/server/level/ServerLevel;Z)V",shift = At.Shift.BEFORE))
-    protected void roundabout$aiStep(CallbackInfo ci) {
+    protected void sba$aiStep(CallbackInfo ci) {
         if (this.getTarget() instanceof Player PE && !PE.isCreative() && !PE.isSpectator()){
             IPlayerEntity ple = ((IPlayerEntity) PE);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
-            if (roundabout$lastSeenAsMorph != shift){
-                if (ShapeShifts.isZombie(roundabout$lastSeenAsMorph) || ShapeShifts.isSkeleton(roundabout$lastSeenAsMorph)) {
+            if (sba$lastSeenAsMorph != shift){
+                if (ShapeShifts.isZombie(sba$lastSeenAsMorph) || ShapeShifts.isSkeleton(sba$lastSeenAsMorph)) {
                     if (!ShapeShifts.isZombie(shift) && !ShapeShifts.isSkeleton(shift)){
                         setLastHurtByPlayer(null);
                         setLastHurtByMob(null);
                         setPersistentAngerTarget(null);
                         setTarget(null);
                         setRemainingPersistentAngerTime(0);
-                        roundabout$setNegation(true);
+                        sba$setNegation(true);
                     }
                 }
-                roundabout$lastSeenAsMorph = shift;
+                sba$lastSeenAsMorph = shift;
             }
 
             if (ShapeShifts.isVillager(shift)){
@@ -61,7 +61,7 @@ public abstract class JusticeIronGolem extends AbstractGolem implements NeutralM
                 setPersistentAngerTarget(null);
                 setTarget(null);
                 setRemainingPersistentAngerTime(0);
-                roundabout$setNegation(true);
+                sba$setNegation(true);
             }
         }
     }
@@ -69,64 +69,64 @@ public abstract class JusticeIronGolem extends AbstractGolem implements NeutralM
     /**Have to save some extra variables to get this working*/
 
     @Unique
-    public boolean roundabout$Negation = false;
+    public boolean sba$Negation = false;
 
     @Override
     @Unique
-    public boolean roundabout$getNegation(){
-        return roundabout$Negation;
+    public boolean sba$getNegation(){
+        return sba$Negation;
     }
     @Override
     @Unique
-    public void roundabout$setNegation(boolean negate){
-        roundabout$Negation = negate;
+    public void sba$setNegation(boolean negate){
+        sba$Negation = negate;
     }
     @Unique
-    public ShapeShifts roundabout$lastSeenAsMorph = ShapeShifts.PLAYER;
+    public ShapeShifts sba$lastSeenAsMorph = ShapeShifts.PLAYER;
 
 
     @Unique
-    private static final EntityDataAccessor<Byte> roundabout$ALT_LOOK = SynchedEntityData.defineId(IronGolem.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> sba$ALT_LOOK = SynchedEntityData.defineId(IronGolem.class, EntityDataSerializers.BYTE);
 
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"))
-    protected void roundabout$pigDefineSyncedData(CallbackInfo ci) {
-        if (!(this.getEntityData().hasItem(roundabout$ALT_LOOK))) {
-            this.entityData.define(roundabout$ALT_LOOK, (byte)0);
+    protected void sba$pigDefineSyncedData(CallbackInfo ci) {
+        if (!(this.getEntityData().hasItem(sba$ALT_LOOK))) {
+            this.entityData.define(sba$ALT_LOOK, (byte)0);
         }
     }
     @Inject(method = "canAttackType(Lnet/minecraft/world/entity/EntityType;)Z", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$canAttackTypeG(EntityType<?> $$0, CallbackInfoReturnable<Boolean> cir) {
+    protected void sba$canAttackTypeG(EntityType<?> $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0 == ModEntities.ANUBIS_GUARDIAN){
             cir.setReturnValue(false);
         }
     }
     @Inject(method = "doPush(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$doPush(Entity $$0, CallbackInfo ci) {
+    protected void sba$doPush(Entity $$0, CallbackInfo ci) {
         if ($$0 instanceof AnubisGuardian){
             super.push($$0);
             ci.cancel();
         }
     }
     @Inject(method = "addAdditionalSaveData", at = @At(value = "HEAD"))
-    protected void roundabout$pigaddAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
-        byte altLook = roundabout$isAlt();
+    protected void sba$pigaddAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
+        byte altLook = sba$isAlt();
         if (altLook > 0){
             $$0.putByte("rdbtAlt", altLook);
         }
     }
     @Inject(method = "readAdditionalSaveData", at = @At(value = "HEAD"))
-    protected void roundabout$readAdditionalSaveData(CompoundTag $$0,CallbackInfo ci) {
+    protected void sba$readAdditionalSaveData(CompoundTag $$0,CallbackInfo ci) {
         if ($$0.contains("rdbtAlt")){
-            roundabout$setAlt($$0.getByte("rdbtAlt"));
+            sba$setAlt($$0.getByte("rdbtAlt"));
         }
     }
     @Unique
-    public byte roundabout$isAlt(){
-        return this.getEntityData().get(roundabout$ALT_LOOK);
+    public byte sba$isAlt(){
+        return this.getEntityData().get(sba$ALT_LOOK);
     }
     @Unique
-    public void roundabout$setAlt(byte look){
-        this.getEntityData().set(roundabout$ALT_LOOK, look);
+    public void sba$setAlt(byte look){
+        this.getEntityData().set(sba$ALT_LOOK, look);
     }
 
 

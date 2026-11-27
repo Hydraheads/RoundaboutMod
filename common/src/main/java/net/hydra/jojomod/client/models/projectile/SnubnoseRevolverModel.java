@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 5.0.3
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.event.powers.visagedata.MistaVisage;
@@ -75,15 +75,15 @@ public class SnubnoseRevolverModel<T extends Entity> extends HierarchicalModel<T
 
     public ResourceLocation getTextureLocation(Entity ct){
         if (ct instanceof Player plent){
-            if (((IPlayerEntity) plent).roundabout$getMaskSlot() != null &&
-                    !((IPlayerEntity) plent).roundabout$getMaskSlot().isEmpty() &&
-                    ((IPlayerEntity) plent).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
+            if (((IPlayerEntity) plent).sba$getMaskSlot() != null &&
+                    !((IPlayerEntity) plent).sba$getMaskSlot().isEmpty() &&
+                    ((IPlayerEntity) plent).sba$getMaskSlot().getItem() instanceof MaskItem ME &&
                     ME.visageData instanceof MistaVisage){
-                return new ResourceLocation(Roundabout.MOD_ID,
+                return new ResourceLocation(SBA.MOD_ID,
                         "textures/item/mista_gun.png");
             }
         }
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/item/snubnose_revolver.png");
     }
 

@@ -81,7 +81,7 @@ public final class CommandDiscPossession extends GroundPathfindingStandAttackEnt
         LivingEntity target = getCommandTarget();
         if (!level().isClientSide()
                 && (!(user instanceof ServerPlayer player) || !player.isAlive() || player.isRemoved()
-                || ((StandUser) player).roundabout$getPossessor() != this
+                || ((StandUser) player).sba$getPossessor() != this
                 || target == null || !target.isAlive() || target.isRemoved() || target == player
                 || target.level() != level() || distanceToSqr(target) > MAX_TARGET_DISTANCE_SQR)) {
             discard();
@@ -137,8 +137,8 @@ public final class CommandDiscPossession extends GroundPathfindingStandAttackEnt
     @Override
     public void remove(RemovalReason reason) {
         if (!level().isClientSide() && standUser instanceof StandUser user
-                && user.roundabout$getPossessor() == this) {
-            user.roundabout$setPossessor(null);
+                && user.sba$getPossessor() == this) {
+            user.sba$setPossessor(null);
         }
         super.remove(reason);
     }

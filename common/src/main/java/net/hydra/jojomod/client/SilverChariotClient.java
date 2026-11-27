@@ -163,14 +163,14 @@ public final class SilverChariotClient {
         if (minecraft.player == null || minecraft.level == null || minecraft.gameMode == null) {
             return null;
         }
-        if (((StandUser) minecraft.player).roundabout$getStandPowers() instanceof PowersSilverChariot powers && powers.isPiloting()) {
+        if (((StandUser) minecraft.player).sba$getStandPowers() instanceof PowersSilverChariot powers && powers.isPiloting()) {
             return powers;
         }
         return null;
     }
 
     private static boolean hasMiningTarget(Minecraft minecraft, PowersSilverChariot powers) {
-        if (((StandUser) minecraft.player).roundabout$isGuardInput()) return false;
+        if (((StandUser) minecraft.player).sba$isGuardInput()) return false;
         BlockHitResult hit = getMiningHit(minecraft, powers);
         return hit != null && !minecraft.level.getBlockState(hit.getBlockPos()).isAir();
     }
@@ -202,7 +202,7 @@ public final class SilverChariotClient {
             return false;
         }
         BlockHitResult hit = getMiningHit(minecraft, powers);
-        if (hit == null || ((StandUser) minecraft.player).roundabout$isGuardInput()) {
+        if (hit == null || ((StandUser) minecraft.player).sba$isGuardInput()) {
             if (miningActive || powers.getActivePower() == PowerIndex.MINING) {
                 stopMining();
                 powers.tryPower(PowerIndex.NONE, true);
@@ -219,7 +219,7 @@ public final class SilverChariotClient {
                     && powers.getActivePower() != PowerIndex.MINING
                     && powers.getAttackTimeDuring() != -1)) return false;
             if (powers.getActivePower() != PowerIndex.MINING) {
-                ((StandUser) minecraft.player).roundabout$tryPower(PowerIndex.MINING, true);
+                ((StandUser) minecraft.player).sba$tryPower(PowerIndex.MINING, true);
                 powers.tryPowerPacket(PowerIndex.MINING);
             }
             miningActive = minecraft.gameMode.startDestroyBlock(pos, hit.getDirection());

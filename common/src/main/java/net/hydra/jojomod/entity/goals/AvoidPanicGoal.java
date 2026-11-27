@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.goals;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.world.entity.EntitySelector;

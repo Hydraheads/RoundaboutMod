@@ -55,7 +55,7 @@ public class StandFireBlockEntity extends BlockEntity{
     public void rollNextTarget(Level $$1, BlockPos $$2){
         int mult = 20;
         int base = 20;
-        if ((((IPermaCasting)$$1).roundabout$inPermaCastRange($$2, PermanentZoneCastInstance.FIRESTORM))){
+        if ((((IPermaCasting)$$1).sba$inPermaCastRange($$2, PermanentZoneCastInstance.FIRESTORM))){
             mult = 10;
             base = 10;
         }
@@ -78,7 +78,7 @@ public class StandFireBlockEntity extends BlockEntity{
                     $$1.removeBlock($$2, false);
                     return;
                 } else if (standUser != null && standUser.isAlive() && !standUser.isRemoved()) {
-                    if (((StandUser) standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
+                    if (((StandUser) standUser).sba$getStandPowers() instanceof PowersMagiciansRed PM) {
                         int maxFlames = ClientNetworking.getAppropriateConfig().magiciansRedSettings.maxMagiciansRedFlames;
                         int maxDist = ClientNetworking.getAppropriateConfig().magiciansRedSettings.maxMagiciansRedFlameDistance;
                         if (PM.snapNumber != snapNumber) {
@@ -115,8 +115,8 @@ public class StandFireBlockEntity extends BlockEntity{
                 if (this.ticksStored >= nextTarget) {
                     ticksStored = 0;
                     rollNextTarget($$1,$$2);
-                    if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK) && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
-                    && (standUser instanceof Player || ($$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_MOB_STAND_FIRE_SPREADS)
+                    if ($$1.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK) && $$1.getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)
+                    && (standUser instanceof Player || ($$1.getGameRules().getBoolean(ModGamerules.SBA_MOB_STAND_FIRE_SPREADS)
                     && (standUser instanceof Monster))) && !(standUser instanceof Player && ((ServerPlayer) standUser).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)    ) {
                         if (!$$0.canSurvive($$1, $$2)) {
                             $$1.removeBlock($$2, false);
@@ -181,7 +181,7 @@ public class StandFireBlockEntity extends BlockEntity{
                                                         $$17 /= 2;
                                                     }
 
-                                                    if (standUser != null && ((StandUser) standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
+                                                    if (standUser != null && ((StandUser) standUser).sba$getStandPowers() instanceof PowersMagiciansRed PM) {
                                                         if ($$17 > 0 && $$3.nextInt($$15) <= $$17 && (!$$1.isRaining() || !fb.isNearRain($$1, $$11))) {
                                                             int $$18 = Math.min(15, $$6 + $$3.nextInt(5) / 4);
                                                             BlockState bs = fb.getStateWithAge($$1, $$11, $$18);

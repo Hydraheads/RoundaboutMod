@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin.pearl_jam;
 
 import com.mojang.datafixers.util.Pair;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -48,23 +48,23 @@ public class EnergizedWaterMixin {
                     if (MainUtil.foodCuresThat.containsKey($$0.getItem())) {
                         List<MobEffect> effects = MainUtil.foodCuresThat.get($$0.getItem());
                         for (MobEffect effect : effects) {
-                            $$2.add(Component.translatable("text.roundabout.pearl_jam.cure_lore", Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
+                            $$2.add(Component.translatable("text.sba.pearl_jam.cure_lore", Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
                         }
                     }
                     if (MainUtil.foodAddsThat.containsKey($$0.getItem())) {
                         List<MobEffect> effects = MainUtil.foodAddsThat.get($$0.getItem());
                         for (MobEffect effect : effects) {
-                            $$2.add(Component.translatable("text.roundabout.pearl_jam.add_lore", Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
+                            $$2.add(Component.translatable("text.sba.pearl_jam.add_lore", Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
                         }
                     }
                     if (MainUtil.specialFoodRemoves.containsKey($$0.getItem())) {
                         List<String> conditions = MainUtil.specialFoodRemoves.get($$0.getItem());
                         for (String condition : conditions) {
-                            $$2.add(Component.translatable("text.roundabout.pearl_jam.remove_lore", Component.translatable("text.roundabout.condition.".concat(condition)).withStyle(ChatFormatting.GOLD)));
+                            $$2.add(Component.translatable("text.sba.pearl_jam.remove_lore", Component.translatable("text.sba.condition.".concat(condition)).withStyle(ChatFormatting.GOLD)));
                         }
                     }
                 } else {
-                    $$2.add(Component.translatable("text.roundabout.pearl_jam.cure_lore", Component.translatable(MainUtil.pearlJamFallback.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
+                    $$2.add(Component.translatable("text.sba.pearl_jam.cure_lore", Component.translatable(MainUtil.pearlJamFallback.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
                 }
                 if ($$0.getItem().getName($$0).getString().equals("Water Bottle")){ci.cancel();}
             }
@@ -110,7 +110,7 @@ public class EnergizedWaterMixin {
 
             /*
                 Vec3 funnyVec = new Vec3(0,($$2.getBbHeight()*0.65),0);
-                Direction gd = ((IGravityEntity)$$2).roundabout$getGravityDirection();
+                Direction gd = ((IGravityEntity)$$2).sba$getGravityDirection();
                 if (gd != Direction.DOWN){
                     funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
                 }
@@ -158,7 +158,7 @@ public class EnergizedWaterMixin {
                             }
                             if (condition.equals("gasoline")) {
                                 StandUser standUser = (StandUser) $$2;
-                                standUser.roundabout$setGasolineTime(0);
+                                standUser.sba$setGasolineTime(0);
                             }
                         }
                     }

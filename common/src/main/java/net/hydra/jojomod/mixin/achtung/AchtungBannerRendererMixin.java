@@ -52,7 +52,7 @@ public class AchtungBannerRendererMixin {
 
     /**Banners arent see thru without extra work*/
     @Inject(method = "render(Lnet/minecraft/world/level/block/entity/BannerBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V", at = @At("HEAD"), cancellable = true)
-    public void roundabout$renderInvis(BannerBlockEntity $$0, float $$1, PoseStack $$2,
+    public void sba$renderInvis(BannerBlockEntity $$0, float $$1, PoseStack $$2,
                                        MultiBufferSource $$3, int $$4, int $$5, CallbackInfo ci) {
         if (ClientUtil.getThrowFadeToTheEther() != 1){
             ci.cancel();
@@ -98,7 +98,7 @@ public class AchtungBannerRendererMixin {
     }
 
     @Inject(method = "renderPatterns(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/client/resources/model/Material;ZLjava/util/List;Z)V", at = @At("HEAD"), cancellable = true)
-    private static void roundabout$renderPatterns(PoseStack $$0,
+    private static void sba$renderPatterns(PoseStack $$0,
                                                   MultiBufferSource $$1,
                                                   int $$2,
                                                   int $$3,

@@ -20,7 +20,7 @@ public abstract class TimeStopAbstractArrow extends Entity{
     /**Makes the arrows, knives, and tridents thrown in timestop special*/
 
     @Inject(method = "playerTouch", at = @At(value = "HEAD"),cancellable = true)
-    private void roundaboutS$hakeTime(Player $$0, CallbackInfo ci) {
+    private void sbaS$hakeTime(Player $$0, CallbackInfo ci) {
         if (((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this))) {
             if (!this.level().isClientSide && (this.inGround || this.isNoPhysics())) {
                 if (this.tryPickup($$0)) {
@@ -33,8 +33,8 @@ public abstract class TimeStopAbstractArrow extends Entity{
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$SetPosForTS(CallbackInfo ci) {
-        if (((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this)) && ((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated()) {
+    private void sba$SetPosForTS(CallbackInfo ci) {
+        if (((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this)) && ((IProjectileAccess) this).sba$getSBAIsTimeStopCreated()) {
             super.tick();
             TimeMovingProjectile.tick((AbstractArrow) (Object) this);
             this.checkInsideBlocks();

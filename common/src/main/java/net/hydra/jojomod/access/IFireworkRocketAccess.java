@@ -1,10 +1,10 @@
 package net.hydra.jojomod.access;
 
 public interface IFireworkRocketAccess {
-    int roundabout$GetFireworkRemainingLifeTicks();
-    void roundabout$SetFireworkRemainingLifeTicks(int life);
+    int sba$GetFireworkRemainingLifeTicks();
+    void sba$SetFireworkRemainingLifeTicks(int life);
 
-    void roundabout$Explode();
+    void sba$Explode();
 
     void setIsHattanProj(boolean hattanProj);
 

@@ -44,14 +44,14 @@ public class DIOVoice extends VoiceData{
         if (this.self.tickCount % 11 == 0) {
             AABB aab = this.self.getBoundingBox().inflate(10.0, 8.0, 10.0);
             List<? extends LivingEntity> le = this.self.level().getNearbyEntities(LivingEntity.class,
-                    roundabout$attackTargeting, self, aab);
+                    sba$attackTargeting, self, aab);
             Iterator var4 = le.iterator();
             while (var4.hasNext()) {
                 LivingEntity nle = (LivingEntity) var4.next();
                 VoiceData vd = null;
                 if (nle instanceof Player pl) {
                     IPlayerEntity ipe = ((IPlayerEntity) pl);
-                    vd = ipe.roundabout$getVoiceData();
+                    vd = ipe.sba$getVoiceData();
                 }
                 if (vd instanceof JotaroVoice jv) {
                     if (!jv.inTheMiddleOfTalking() && !nle.isCrouching() && jv.challengeCooldown <= -1) {

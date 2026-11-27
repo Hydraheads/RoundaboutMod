@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.anubis;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.ModItems;
@@ -22,24 +22,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AnubisDropsMixin {
 
     @Inject(method = "dropCustomDeathLoot",at = @At(value = "TAIL"))
-    private void roundabout$dropAnubis(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
+    private void sba$dropAnubis(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
         LivingEntity This = ((LivingEntity) (Object) this);
 
         if (!This.level().isClientSide()) {
             StandUser SU = (StandUser)  This;
 
 
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-                if (MainUtil.isTraitorDisc(SU.roundabout$getStandDisc())) {
+            if (SU.sba$getStandPowers() instanceof PowersAnubis) {
+                if (MainUtil.isTraitorDisc(SU.sba$getStandDisc())) {
                     ItemStack stack = new ItemStack(ModItems.ANUBIS_ITEM);
 
                     if ($$0.getEntity() != null && $$0.getEntity() instanceof Player P
-                            && ((StandUser) P).roundabout$getStandPowers() instanceof PowersAnubis PA
-                            && !((IPlayerEntity) P).roundabout$getUnlockedBonusSkin()) {
-                        PA.unlockSkin(SU.roundabout$getStandSkin());
+                            && ((StandUser) P).sba$getStandPowers() instanceof PowersAnubis PA
+                            && !((IPlayerEntity) P).sba$getUnlockedBonusSkin()) {
+                        PA.unlockSkin(SU.sba$getStandSkin());
                     } else {
                         CompoundTag tag = stack.getOrCreateTagElement("SkinType");
-                        tag.putByte("SkinType", SU.roundabout$getStandSkin());
+                        tag.putByte("SkinType", SU.sba$getStandSkin());
 
                         float skin = 0;
                         if (This instanceof Evoker || This instanceof Illusioner) {

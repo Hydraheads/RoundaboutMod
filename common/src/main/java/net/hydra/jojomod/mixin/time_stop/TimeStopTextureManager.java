@@ -15,7 +15,7 @@ public class TimeStopTextureManager {
      * on a frame. Bear in mind that textures which are animated are global so every fire will be stuck on the same
      * frame. This is a really cool effect that definitely helps sell the ability.*/
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    public void roundabout$CancelTextures(CallbackInfo ci) {
+    public void sba$CancelTextures(CallbackInfo ci) {
         Entity player = Minecraft.getInstance().player;
         if (player != null && ((TimeStop) player.level()).inTimeStopRange(player)) {
             ci.cancel();

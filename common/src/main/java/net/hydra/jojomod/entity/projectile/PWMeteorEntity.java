@@ -60,7 +60,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
 
     public boolean isWip(){return true;}
 
-    public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);}
+    public Component ifWipListDevStatus(){ return Component.translatable(  "sba.dev_status.active").withStyle(ChatFormatting.AQUA);}
 
     public Component ifWipListDev(){ return Component.literal("Lloyd10").withStyle(ChatFormatting.YELLOW);}
 
@@ -432,7 +432,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         }
 
         if (!missedPlayer) {
-            if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+            if (this.level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)) {
                 BlockPos pos = hit.getBlockPos();
                 BlockState state = this.level().getBlockState(pos);
                 if (state.getBlock() instanceof net.minecraft.world.level.block.AbstractGlassBlock) {
@@ -536,7 +536,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
 
         if (user != null
                 && target instanceof LivingEntity living
-                && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+                && ((StandUser) user).sba$getStandPowers() instanceof PowersPlanetWaves PPW) {
 
             getEntity(living, PPW, user);
 
@@ -554,7 +554,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
 
             LivingEntity user = this.getStandUser();
 
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+            if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersPlanetWaves PPW) {
 
 
                 this.level().playSound(
@@ -684,7 +684,7 @@ public class PWMeteorEntity extends AbstractHurtingProjectile implements Unburna
         }
 
         LivingEntity user = this.getStandUser();
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+        if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersPlanetWaves PPW) {
             ParticleOptions particle = PPW.getFlameParticle();
             return particle != null ? particle : ParticleTypes.SMOKE;
         }

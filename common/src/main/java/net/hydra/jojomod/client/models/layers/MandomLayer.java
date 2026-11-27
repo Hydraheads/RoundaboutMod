@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
@@ -45,30 +45,30 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
 
         if (entity != null) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            if (((IEntityAndData)entity).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             StandUser user = ((StandUser) entity);
-            boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
+            boolean hasMandom = (user.sba$getStandPowers() instanceof PowersMandom);
             boolean hasMandomOut = (PowerTypes.hasStandActive(entity) && hasMandom);
             if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 if (!entity.isInvisible()) {
                     int mandomTicks = MainUtil.getWornStandVanishticksSafe(user, PowersMandom.class);/*0;
-                    if (user.roundabout$getStandPowers() instanceof PowersMandom) {
-                        mandomTicks = user.roundabout$getCurrentStandVanishTicks();
-                    }else if (user.roundabout$getPreviousStandPowers() instanceof PowersMandom) {
-                        mandomTicks = user.roundabout$getPreviousStandVanishTicks();
+                    if (user.sba$getStandPowers() instanceof PowersMandom) {
+                        mandomTicks = user.sba$getCurrentStandVanishTicks();
+                    }else if (user.sba$getPreviousStandPowers() instanceof PowersMandom) {
+                        mandomTicks = user.sba$getPreviousStandVanishTicks();
                     }*/
 
                     if (mandomTicks > 0 || hasMandomOut) {
-                        byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getStandPowers() instanceof PowersMandom) {
-                            if (user.roundabout$getLastStandSkin() != skin) {
-                                user.roundabout$setLastStandSkin(skin);
+                        byte skin = user.sba$getStandSkin();
+                        if (user.sba$getStandPowers() instanceof PowersMandom) {
+                            if (user.sba$getLastStandSkin() != skin) {
+                                user.sba$setLastStandSkin(skin);
                                 mandomTicks = 0;
-                                user.roundabout$setCurrentStandVanishTicks(0);
+                                user.sba$setCurrentStandVanishTicks(0);
                             }
                         }else {
-                            skin = user.roundabout$getPreviousSkin();
+                            skin = user.sba$getPreviousSkin();
                         }
 
                         float heyFull = 0;
@@ -108,7 +108,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             }
 
             if (hasMandom && entity instanceof Player PL) {
-                byte style = ((IPlayerEntity) PL).roundabout$getWatchStyle();
+                byte style = ((IPlayerEntity) PL).sba$getWatchStyle();
                 if (style != PowersMandom.WATCHLESS) {
                     poseStack.pushPose();
 
@@ -123,7 +123,7 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                     float r = isHurt ? 1.0F : 1.0F;
                     float g = isHurt ? 0.4F : 1.0F;
                     float b = isHurt ? 0.4F : 1.0F;
-                    if ((getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim())) {
+                    if ((getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).sba$getSlim())) {
                         ModStrayModels.MANDOM_WATCH_SMALL.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                                 r, g, b, 1, style);
                     } else {
@@ -143,9 +143,9 @@ public class MandomLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
         if (entity != null && handarm.visible) {
             StandUser user = ((StandUser) entity);
-            boolean hasMandom = (user.roundabout$getStandPowers() instanceof PowersMandom);
+            boolean hasMandom = (user.sba$getStandPowers() instanceof PowersMandom);
             if (hasMandom && entity instanceof Player PL) {
-                byte style = ((IPlayerEntity) PL).roundabout$getWatchStyle();
+                byte style = ((IPlayerEntity) PL).sba$getWatchStyle();
                 if (style != PowersMandom.WATCHLESS) {
                     ClientUtil.pushPoseAndCooperate(poseStack,54);
 

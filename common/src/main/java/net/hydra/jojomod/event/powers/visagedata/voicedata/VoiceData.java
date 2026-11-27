@@ -237,5 +237,5 @@ public class VoiceData {
     public void challenge(){
 
     }
-    public static final TargetingConditions roundabout$attackTargeting = TargetingConditions.forNonCombat().range(64.0);
+    public static final TargetingConditions sba$attackTargeting = TargetingConditions.forNonCombat().range(64.0);
 }

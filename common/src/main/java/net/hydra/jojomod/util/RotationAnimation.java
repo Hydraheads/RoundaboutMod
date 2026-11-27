@@ -1,6 +1,6 @@
 package net.hydra.jojomod.util;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.util.gravity.QuaternionUtil;
 import net.hydra.jojomod.util.gravity.RotationUtil;

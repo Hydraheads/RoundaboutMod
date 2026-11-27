@@ -19,7 +19,7 @@ public abstract class AnubisFoxRendererMixin extends MobRenderer<Fox, FoxModel<F
     }
 
     @Inject(method = "<init>",at = @At(value = "RETURN"))
-    private void roundabout$anubisFoxLayer(EntityRendererProvider.Context $$0, CallbackInfo ci) {
+    private void sba$anubisFoxLayer(EntityRendererProvider.Context $$0, CallbackInfo ci) {
         this.addLayer(new AnubisMobLayer<>(this));
     }
 }

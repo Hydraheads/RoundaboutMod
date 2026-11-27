@@ -8,8 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 
 public class RCoreShader {
-    @Nullable public static ShaderInstance roundabout$meltDodgeProgram;
-    @Nullable public static ShaderInstance roundabout$loveTrainProgram;
+    @Nullable public static ShaderInstance sba$meltDodgeProgram;
+    @Nullable public static ShaderInstance sba$loveTrainProgram;
     private final ShaderInstance program;
 
     public RCoreShader(ResourceProvider provider, String name) throws IOException {

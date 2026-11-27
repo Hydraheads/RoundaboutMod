@@ -26,7 +26,7 @@ public class StereoRecordItem {
      * normally*/
 
     @Inject(method = "useOn", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$ShootFromRotation(UseOnContext $$0, CallbackInfoReturnable<InteractionResult> cir) {
+    public void sba$ShootFromRotation(UseOnContext $$0, CallbackInfoReturnable<InteractionResult> cir) {
 
         Level level = $$0.getLevel();
         BlockPos blockpos = $$0.getClickedPos();

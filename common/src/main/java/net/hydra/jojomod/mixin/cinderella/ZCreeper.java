@@ -35,7 +35,7 @@ public abstract class ZCreeper extends Monster {
     /**Modded effects such as faceless marked as special in mainutil (dont emit standard particles)
      * will not spawn from creeper explosions if the creeper has the effects*/
     @ModifyVariable(method = "spawnLingeringCloud()V", at = @At("STORE"), ordinal = 0)
-    protected Collection<MobEffectInstance> roundabout$SpawnLingeringCloud(Collection<MobEffectInstance> col) {
+    protected Collection<MobEffectInstance> sba$SpawnLingeringCloud(Collection<MobEffectInstance> col) {
         if (!col.isEmpty()) {
             Collection<MobEffectInstance> col2 = Lists.newArrayList();
             for (MobEffectInstance $$2 : col) {
@@ -50,11 +50,11 @@ public abstract class ZCreeper extends Monster {
 
     /// Ratt creepers melt everything nearby :>
     @Inject(method = "explodeCreeper", at = @At(value = "HEAD"))
-    protected void roundabout$rattCreeper(CallbackInfo ci) {
+    protected void sba$rattCreeper(CallbackInfo ci) {
         Creeper This = (Creeper) (Object) this;
         StandUser SU = (StandUser)  This;
-        if (SU.roundabout$getStandPowers() != null) {
-            if (SU.roundabout$getStandPowers() instanceof PowersRatt) {
+        if (SU.sba$getStandPowers() != null) {
+            if (SU.sba$getStandPowers() instanceof PowersRatt) {
                 List<Entity> list = MainUtil.genHitbox(This.level(),This.getX(),This.getY(),This.getZ(),3,3,3);
                 for (Entity entity : list) {
                     if (entity instanceof LivingEntity LE) {
@@ -68,7 +68,7 @@ public abstract class ZCreeper extends Monster {
     /**Creepers start becoming shy when faceless*/
     /**They also run from ocelot minions*/
     @Inject(method = "registerGoals()V", at = @At(value = "HEAD"))
-    protected void roundabout$registerGoals(CallbackInfo ci) {
+    protected void sba$registerGoals(CallbackInfo ci) {
         this.goalSelector.addGoal(3, new AvoidEntityGoal(this, OcelotMinion.class, 6.0F, (double)1.0F, 1.2));
         this.goalSelector.addGoal(3, new AvoidCatHeadGoal<>(this, LivingEntity.class, 6.0F, (double)1.0F, 1.2));
         this.goalSelector.addGoal(3, new AvoidEntityWhenFacelessGoal<>(this, Player.class, 6.0F, 1.0, 1.2));

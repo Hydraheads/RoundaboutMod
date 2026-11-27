@@ -1,6 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -96,9 +96,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     public void playSummonEffects(boolean forced) {
         if (!this.getSelf().level().isClientSide()) {
             for(int i = 0; i < 23; i = i + 1) {
-                double randX = Roundabout.RANDOM.nextDouble(-1.5, 1.5);
-                double randY = Roundabout.RANDOM.nextDouble(-1, 2);
-                double randZ = Roundabout.RANDOM.nextDouble(-1.5, 1.5);
+                double randX = SBA.RANDOM.nextDouble(-1.5, 1.5);
+                double randY = SBA.RANDOM.nextDouble(-1, 2);
+                double randZ = SBA.RANDOM.nextDouble(-1.5, 1.5);
                 sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH,
                         this.getSelf().getX() + randX,
                         this.getSelf().getY() + randY,
@@ -126,10 +126,10 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     @Override
     public Component getPosName(byte posID) {
         switch (posID){
-            case 1 -> {return Component.translatable("idle.roundabout.catch_the_rainbow2"); }
-            case 2 -> {return Component.translatable("idle.roundabout.catch_the_rainbow3"); }
+            case 1 -> {return Component.translatable("idle.sba.catch_the_rainbow2"); }
+            case 2 -> {return Component.translatable("idle.sba.catch_the_rainbow3"); }
         }
-        return Component.translatable("idle.roundabout.catch_the_rainbow1");
+        return Component.translatable("idle.sba.catch_the_rainbow1");
     }
 
     @Override
@@ -176,48 +176,48 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if (this.self != null) {
             if (!isInRain()) {
                 return switch (skinId) {
-                    case GHAST -> Component.translatable("skins.roundabout.catch_the_rainbow.ghast_dry");
-                    case LALI_HO -> Component.translatable("skins.roundabout.catch_the_rainbow.lali_ho");
-                    case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_white");
-                    case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
-                    case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
-                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
-                    case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
-                    case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
-                    case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_off");
-                    case KNIGHT -> Component.translatable("skins.roundabout.catch_the_rainbow.knight");
-                    default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
+                    case GHAST -> Component.translatable("skins.sba.catch_the_rainbow.ghast_dry");
+                    case LALI_HO -> Component.translatable("skins.sba.catch_the_rainbow.lali_ho");
+                    case EYE -> Component.translatable("skins.sba.catch_the_rainbow.eye_white");
+                    case NEON -> Component.translatable("skins.sba.catch_the_rainbow.neon_off");
+                    case SKELETONCTR -> Component.translatable("skins.sba.catch_the_rainbow.skeleton");
+                    case STRIDER -> Component.translatable("skins.sba.catch_the_rainbow.strider_healthy");
+                    case MAGMA -> Component.translatable("skins.sba.catch_the_rainbow.magma");
+                    case CMY -> Component.translatable("skins.sba.catch_the_rainbow.cmy");
+                    case UMVUTHI -> Component.translatable("skins.sba.catch_the_rainbow.umvuthi_off");
+                    case KNIGHT -> Component.translatable("skins.sba.catch_the_rainbow.knight");
+                    default -> Component.translatable("skins.sba.catch_the_rainbow.base");
                 };
             } else {
                 return switch (skinId) {
-                    case GHAST -> Component.translatable("skins.roundabout.catch_the_rainbow.ghast_happy");
-                    case LALI_HO -> Component.translatable("skins.roundabout.catch_the_rainbow.lali_ho");
-                    case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_red");
-                    case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_on");
-                    case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
-                    case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_sick");
-                    case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
-                    case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
-                    case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_on");
-                    case KNIGHT -> Component.translatable("skins.roundabout.catch_the_rainbow.knight");
-                    default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
+                    case GHAST -> Component.translatable("skins.sba.catch_the_rainbow.ghast_happy");
+                    case LALI_HO -> Component.translatable("skins.sba.catch_the_rainbow.lali_ho");
+                    case EYE -> Component.translatable("skins.sba.catch_the_rainbow.eye_red");
+                    case NEON -> Component.translatable("skins.sba.catch_the_rainbow.neon_on");
+                    case SKELETONCTR -> Component.translatable("skins.sba.catch_the_rainbow.skeleton");
+                    case STRIDER -> Component.translatable("skins.sba.catch_the_rainbow.strider_sick");
+                    case MAGMA -> Component.translatable("skins.sba.catch_the_rainbow.magma");
+                    case CMY -> Component.translatable("skins.sba.catch_the_rainbow.cmy");
+                    case UMVUTHI -> Component.translatable("skins.sba.catch_the_rainbow.umvuthi_on");
+                    case KNIGHT -> Component.translatable("skins.sba.catch_the_rainbow.knight");
+                    default -> Component.translatable("skins.sba.catch_the_rainbow.base");
                 };
             }
         }
         //avoids a game crash when hovering over the stand disc item :/
         else{
             return switch (skinId) {
-                case GHAST -> Component.translatable("skins.roundabout.catch_the_rainbow.ghast_dry");
-                case LALI_HO -> Component.translatable("skins.roundabout.catch_the_rainbow.lali_ho");
-                case EYE -> Component.translatable("skins.roundabout.catch_the_rainbow.eye_white");
-                case NEON -> Component.translatable("skins.roundabout.catch_the_rainbow.neon_off");
-                case SKELETONCTR -> Component.translatable("skins.roundabout.catch_the_rainbow.skeleton");
-                case STRIDER -> Component.translatable("skins.roundabout.catch_the_rainbow.strider_healthy");
-                case MAGMA -> Component.translatable("skins.roundabout.catch_the_rainbow.magma");
-                case CMY -> Component.translatable("skins.roundabout.catch_the_rainbow.cmy");
-                case UMVUTHI -> Component.translatable("skins.roundabout.catch_the_rainbow.umvuthi_off");
-                case KNIGHT -> Component.translatable("skins.roundabout.catch_the_rainbow.knight");
-                default -> Component.translatable("skins.roundabout.catch_the_rainbow.base");
+                case GHAST -> Component.translatable("skins.sba.catch_the_rainbow.ghast_dry");
+                case LALI_HO -> Component.translatable("skins.sba.catch_the_rainbow.lali_ho");
+                case EYE -> Component.translatable("skins.sba.catch_the_rainbow.eye_white");
+                case NEON -> Component.translatable("skins.sba.catch_the_rainbow.neon_off");
+                case SKELETONCTR -> Component.translatable("skins.sba.catch_the_rainbow.skeleton");
+                case STRIDER -> Component.translatable("skins.sba.catch_the_rainbow.strider_healthy");
+                case MAGMA -> Component.translatable("skins.sba.catch_the_rainbow.magma");
+                case CMY -> Component.translatable("skins.sba.catch_the_rainbow.cmy");
+                case UMVUTHI -> Component.translatable("skins.sba.catch_the_rainbow.umvuthi_off");
+                case KNIGHT -> Component.translatable("skins.sba.catch_the_rainbow.knight");
+                default -> Component.translatable("skins.sba.catch_the_rainbow.base");
             };
         }
     }
@@ -252,32 +252,32 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         List<AbilityIconInstance> $$1 = com.google.common.collect.Lists.newArrayList();
 
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.ctr_passives",
-                "instruction.roundabout.passive", StandIcons.CATCH_THE_RAINBOW_PASSIVES,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.sba.ctr_passives",
+                "instruction.sba.passive", StandIcons.CATCH_THE_RAINBOW_PASSIVES,1,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,0, "ability.roundabout.ctr_rain_platform",
-                "instruction.roundabout.crouch_air", StandIcons.CATCH_THE_RAINBOW_RAIN_PLATFORM,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,0, "ability.sba.ctr_rain_platform",
+                "instruction.sba.crouch_air", StandIcons.CATCH_THE_RAINBOW_RAIN_PLATFORM,0,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.roundabout.ctr_life_clutch",
-                "instruction.roundabout.passive", StandIcons.CATCH_THE_RAINBOW_LIFE_CLUTCH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.sba.ctr_life_clutch",
+                "instruction.sba.passive", StandIcons.CATCH_THE_RAINBOW_LIFE_CLUTCH,0,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.ctr_barrier",
-                "instruction.roundabout.press_skill", StandIcons.CATCH_THE_RAINBOW_BARRIER,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.sba.ctr_barrier",
+                "instruction.sba.press_skill", StandIcons.CATCH_THE_RAINBOW_BARRIER,1,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.ctr_rain_mend",
-                "instruction.roundabout.press_skill_crouch", StandIcons.CATCH_THE_RAINBOW_RAIN_MEND,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.sba.ctr_rain_mend",
+                "instruction.sba.press_skill_crouch", StandIcons.CATCH_THE_RAINBOW_RAIN_MEND,1,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.ctr_choke",
-                "instruction.roundabout.press_skill", StandIcons.CATCH_THE_RAINBOW_CHOKE,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.sba.ctr_choke",
+                "instruction.sba.press_skill", StandIcons.CATCH_THE_RAINBOW_CHOKE,2,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.ctr_rain_dash",
-                "instruction.roundabout.press_skill", StandIcons.CATCH_THE_RAINBOW_RAIN_DASH,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.sba.ctr_rain_dash",
+                "instruction.sba.press_skill", StandIcons.CATCH_THE_RAINBOW_RAIN_DASH,3,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.ctr_drop_down",
-                "instruction.roundabout.press_skill_air_crouch", StandIcons.CATCH_THE_RAINBOW_DROP_DOWN,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.sba.ctr_drop_down",
+                "instruction.sba.press_skill_air_crouch", StandIcons.CATCH_THE_RAINBOW_DROP_DOWN,3,level,bypas));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.ctr_full_dodge",
-                "instruction.roundabout.press_skill", StandIcons.CATCH_THE_RAINBOW_FULL_DODGE,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.sba.ctr_full_dodge",
+                "instruction.sba.press_skill", StandIcons.CATCH_THE_RAINBOW_FULL_DODGE,4,level,bypas));
 
         return $$1;
     }
@@ -500,7 +500,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             dropTimer = 0;
             canCreatePlatform = false;
             if (this.self instanceof StandUser su){
-                su.roundabout$setIsRainWalking(false);
+                su.sba$setIsRainWalking(false);
             }
         }
 
@@ -509,7 +509,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 if (dropTimer == 0){
                     canCreatePlatform = true;
                     if (this.self instanceof StandUser su){
-                        su.roundabout$setIsRainWalking(true);
+                        su.sba$setIsRainWalking(true);
                     }
                 }else{
                     canCreatePlatform = false;
@@ -624,7 +624,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     self.setHealth(1);
                     self.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1), this.self);
                     self.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 10), this.self);
-                    getStandUserSelf().roundabout$setDazed((byte) 0);
+                    getStandUserSelf().sba$setDazed((byte) 0);
                     OffHandReturnServer();
                     playSoundIfPossible(self.level(), null, self.blockPosition(), ModSounds.VAMPIRE_AWAKEN_EVENT,
                             SoundSource.PLAYERS, 1F, 1F);
@@ -685,9 +685,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 double Pitch = Math.toRadians(this.self.getLookAngle().y);
                 double Zangle = Math.toRadians(this.self.getLookAngle().z);
                 double diameter = 0.6d;
-                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.6F, (float)Roundabout.RANDOM.nextDouble(0.9, 1.1));
+                playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.6F, (float)SBA.RANDOM.nextDouble(0.9, 1.1));
                 for (int i = 0; i < 11; i = i + 1) {
-                    double randY = Roundabout.RANDOM.nextDouble(-0.5, 0.25);
+                    double randY = SBA.RANDOM.nextDouble(-0.5, 0.25);
                     sendParticlesIfPossible(self.level(), ModParticles.RAIN_BUBBLE,
                             this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
                             this.getSelf().getY() + (this.getSelf().getEyeHeight() * 0.7) + randY,
@@ -706,7 +706,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         if (!this.self.level().isClientSide()) {
             canCreatePlatform = false;
             if (this.self instanceof StandUser su){
-                su.roundabout$setIsRainWalking(true);
+                su.sba$setIsRainWalking(true);
             }
 
             soundVariations.removeAll(soundVariations);
@@ -714,7 +714,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             soundVariations.add(ModSounds.CTR_RAIN_STEP_1_EVENT);
             soundVariations.add(ModSounds.CTR_RAIN_STEP_2_EVENT);
             soundVariations.add(ModSounds.CTR_RAIN_STEP_3_EVENT);
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 0.8F, (float)Roundabout.RANDOM.nextDouble(0.9, 1.1));
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), getRandomSound(soundVariations), SoundSource.PLAYERS, 0.8F, (float)SBA.RANDOM.nextDouble(0.9, 1.1));
         }
     }
 
@@ -827,9 +827,9 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                 }
 
                 for(int i = 0; i < 23; i = i + 1) {
-                    double randX = Roundabout.RANDOM.nextDouble(-1.5, 1.5);
-                    double randY = Roundabout.RANDOM.nextDouble(0, 1.5);
-                    double randZ = Roundabout.RANDOM.nextDouble(-1.5, 1.5);
+                    double randX = SBA.RANDOM.nextDouble(-1.5, 1.5);
+                    double randY = SBA.RANDOM.nextDouble(0, 1.5);
+                    double randZ = SBA.RANDOM.nextDouble(-1.5, 1.5);
                     sendParticlesIfPossible(self.level(),ParticleTypes.SPLASH,
                             this.getSelf().getX() + randX,
                             this.getSelf().getY() + randY,
@@ -909,7 +909,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             double Zangle = Math.toRadians(this.self.getLookAngle().z);
             double diameter = 0.6d;
 
-            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.35F, (float)Roundabout.RANDOM.nextDouble(0.65, 0.85));
+            playSoundIfPossible(self.level(), null, this.self.blockPosition(), ModSounds.CTR_HEAL_EVENT, SoundSource.PLAYERS, 0.35F, (float)SBA.RANDOM.nextDouble(0.65, 0.85));
             for (int i = 0; i < 11; i = i + 1) {
                 sendParticlesIfPossible(self.level(), ModParticles.RAIN_BUBBLE,
                         this.getSelf().getX() + (diameter * Math.sin(i * 4)) * Math.cos(Xangle),
@@ -960,12 +960,12 @@ public class PowersCatchTheRainbow extends NewDashPreset {
 
     public void setFullDodgeAnimation(){
         if (self instanceof Player pl ){
-            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 43);
+            ((IPlayerEntity)pl).sba$SetPoseEmote((byte) 43);
         }
     }
     public void setNoAnimation(){
         if (self instanceof Player pl ){
-            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 0);
+            ((IPlayerEntity)pl).sba$SetPoseEmote((byte) 0);
         }
     }
 
@@ -1049,11 +1049,11 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                     int buffer = 0;
                     int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown / 6;
                     if (this.getSelf() instanceof Player) {
-                        ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
+                        ((IPlayerEntity) this.getSelf()).sba$setClientDodgeTime(0);
                     }
                     if (this.self instanceof StandUser su){
                         if (!ConfigManager.getClientConfig().catchTheRainbowSettings.catchTheRainbowAlternateRainWalk) {
-                            su.roundabout$setIsRainWalking(false);
+                            su.sba$setIsRainWalking(false);
                         }
                     }
                     this.setCooldown(PowerIndex.GLOBAL_DASH, cdTime);
@@ -1062,7 +1062,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                             Mth.sin(-20 * ((float) Math.PI / 180)),
                             -Mth.cos(degrees * ((float) Math.PI / 180)));
 
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.MOVEMENT, true);
                     tryIntPowerPacket(PowerIndex.MOVEMENT, backwards+buffer);
                 }
             }
@@ -1090,14 +1090,14 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             if (!this.onCooldown(PowerIndex.SKILL_1) && isInRain()) {
                 if (MainUtil.cheapDistanceTo
                         (this.self.getX(), this.self.getY(), this.self.getZ(), attackTarget.getX(), attackTarget.getY(), attackTarget.getZ()) < 5) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1, true);
                 }
             }
         }
 
         if (!this.onCooldown(SKILL_1_SNEAK) && isInRain()) {
             if (self.getHealth() < self.getMaxHealth()/3 || (self.hasEffect(ModEffects.BLEED) && self.getHealth() < self.getMaxHealth()/ 1.5)) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(RAINMEND, true);
+                ((StandUser) this.getSelf()).sba$tryPower(RAINMEND, true);
             }
         }
     }
@@ -1109,7 +1109,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "sba.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
     @Override
     public Component ifWipListDev(){

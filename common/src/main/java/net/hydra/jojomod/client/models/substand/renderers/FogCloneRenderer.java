@@ -67,30 +67,30 @@ public class FogCloneRenderer<T extends FogCloneEntity> extends CloneRenderer<T>
         entity.setSwimming(pl.isSwimming());
         ILivingEntityAccess ila = ((ILivingEntityAccess) pl);
         ILivingEntityAccess ila2 = ((ILivingEntityAccess) entity);
-        ila2.roundabout$setSwimAmount(ila.roundabout$getSwimAmount());
-        ila2.roundabout$setSwimAmountO(ila.roundabout$getSwimAmountO());
-        ila2.roundabout$setWasTouchingWater(ila.roundabout$getWasTouchingWater());
-        ila2.roundabout$setFallFlyingTicks(pl.getFallFlyingTicks());
-        ila2.roundabout$setSharedFlag(1, ila.roundabout$getSharedFlag(1));
-        ila2.roundabout$setSharedFlag(2, ila.roundabout$getSharedFlag(2));
-        ila2.roundabout$setSharedFlag(3, ila.roundabout$getSharedFlag(3));
-        ila2.roundabout$setSharedFlag(4, ila.roundabout$getSharedFlag(4));
-        ila2.roundabout$setSharedFlag(5, ila.roundabout$getSharedFlag(5));
-        ila2.roundabout$setSharedFlag(6, ila.roundabout$getSharedFlag(6));
+        ila2.sba$setSwimAmount(ila.sba$getSwimAmount());
+        ila2.sba$setSwimAmountO(ila.sba$getSwimAmountO());
+        ila2.sba$setWasTouchingWater(ila.sba$getWasTouchingWater());
+        ila2.sba$setFallFlyingTicks(pl.getFallFlyingTicks());
+        ila2.sba$setSharedFlag(1, ila.sba$getSharedFlag(1));
+        ila2.sba$setSharedFlag(2, ila.sba$getSharedFlag(2));
+        ila2.sba$setSharedFlag(3, ila.sba$getSharedFlag(3));
+        ila2.sba$setSharedFlag(4, ila.sba$getSharedFlag(4));
+        ila2.sba$setSharedFlag(5, ila.sba$getSharedFlag(5));
+        ila2.sba$setSharedFlag(6, ila.sba$getSharedFlag(6));
         entity.deathTime = pl.deathTime;
         entity.setHealth(pl.getHealth());
         this.model.crouching = entity.isCrouching();
-        ila2.roundabout$setUseItem(pl.getUseItem());
-        ila2.roundabout$setUseItemTicks(pl.getUseItemRemainingTicks());
+        ila2.sba$setUseItem(pl.getUseItem());
+        ila2.sba$setUseItemTicks(pl.getUseItemRemainingTicks());
 
 
         if (pl.isFallFlying()) {
-            if (!ila2.roundabout$getSharedFlag(7)) {
-                ila2.roundabout$setSharedFlag(7, true);
+            if (!ila2.sba$getSharedFlag(7)) {
+                ila2.sba$setSharedFlag(7, true);
             }
         } else {
-            if (ila2.roundabout$getSharedFlag(7)) {
-                ila2.roundabout$setSharedFlag(7, false);
+            if (ila2.sba$getSharedFlag(7)) {
+                ila2.sba$setSharedFlag(7, false);
             }
         }
 

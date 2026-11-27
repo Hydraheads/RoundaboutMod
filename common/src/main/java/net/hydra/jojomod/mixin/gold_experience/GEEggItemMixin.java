@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(EggItem.class)
 public class GEEggItemMixin {
     @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void roundabout$transferTreeImbueToEgg(Level level, Player player, InteractionHand hand,
+    private void sba$transferTreeImbueToEgg(Level level, Player player, InteractionHand hand,
             CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir, ItemStack itemStack, ThrownEgg thrownEgg) {
         PowersGoldExperience.transferTreeImbueToProjectile(level, itemStack, thrownEgg);
     }

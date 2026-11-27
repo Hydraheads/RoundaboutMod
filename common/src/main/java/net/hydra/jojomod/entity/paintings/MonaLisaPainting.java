@@ -13,7 +13,7 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.Optional;
 
-public class MonaLisaPainting extends RoundaboutPainting {
+public class MonaLisaPainting extends SBAPainting {
 
 
     public MonaLisaPainting(EntityType<? extends MonaLisaPainting> $$0, Level $$1) {
@@ -27,12 +27,12 @@ public class MonaLisaPainting extends RoundaboutPainting {
 
 
 
-    public static EntityType<? extends RoundaboutPainting> getPaintingType(){
+    public static EntityType<? extends SBAPainting> getPaintingType(){
         return ModEntities.MONA_LISA_PAINTING;
     }
 
-    public static Optional<RoundaboutPainting> create(Level $$0, BlockPos $$1, Direction $$2) {
-        RoundaboutPainting $$3 = new MonaLisaPainting($$0, $$1,$$2);
+    public static Optional<SBAPainting> create(Level $$0, BlockPos $$1, Direction $$2) {
+        SBAPainting $$3 = new MonaLisaPainting($$0, $$1,$$2);
         if (!$$3.survives())
             return Optional.empty();
         return Optional.of($$3);

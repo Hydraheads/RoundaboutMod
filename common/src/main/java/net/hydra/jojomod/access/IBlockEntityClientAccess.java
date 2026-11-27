@@ -3,10 +3,10 @@ package net.hydra.jojomod.access;
 /**This code lets me access the ZBlockEntityClient Mixin externally, so I can call BlockEntity functions*/
 public interface IBlockEntityClientAccess {
 
-    float roundabout$getPreTSTick();
+    float sba$getPreTSTick();
 
-    void roundabout$setPreTSTick();
+    void sba$setPreTSTick();
 
-    void roundabout$resetPreTSTick();
+    void sba$resetPreTSTick();
 
 }

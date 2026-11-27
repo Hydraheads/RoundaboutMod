@@ -28,13 +28,13 @@ public abstract class PowersMultiPlayerGameMode implements IMultiplayerGameMode 
 
     /**Prevents stand mining from making your vanilla attack cooldown reset*/
     @Inject(method = "releaseUsingItem", at = @At("HEAD"), cancellable = true)
-    public void roundabout$releaseUsingItem(Player pl, CallbackInfo ci) {
-        if (((IInputEvents)Minecraft.getInstance()).roundabout$sameKeyTwo(KeyInputRegistry.guardKey)) {
+    public void sba$releaseUsingItem(Player pl, CallbackInfo ci) {
+        if (((IInputEvents)Minecraft.getInstance()).sba$sameKeyTwo(KeyInputRegistry.guardKey)) {
             ci.cancel();
         }
     }
     @Inject(method = "continueDestroyBlock", at = @At("HEAD"), cancellable = true)
-    public void roundabout$continueDestroyBlock(BlockPos $$0, Direction $$1, CallbackInfoReturnable<Boolean> cir) {
+    public void sba$continueDestroyBlock(BlockPos $$0, Direction $$1, CallbackInfoReturnable<Boolean> cir) {
         if (PowerTypes.isExistentiallyElsewhere(this.minecraft.player) && !PowerTypes.canInteractInExistence(this.minecraft.player)){
             this.isDestroying = false;
             destroyDelay = 10;
@@ -43,7 +43,7 @@ public abstract class PowersMultiPlayerGameMode implements IMultiplayerGameMode 
 
     }
     @Inject(method = "startDestroyBlock", at = @At("HEAD"), cancellable = true)
-    public void roundabout$startDestroyBlock(BlockPos $$0, Direction $$1, CallbackInfoReturnable<Boolean> cir) {
+    public void sba$startDestroyBlock(BlockPos $$0, Direction $$1, CallbackInfoReturnable<Boolean> cir) {
         if (PowerTypes.isExistentiallyElsewhere(this.minecraft.player) && !PowerTypes.canInteractInExistence(this.minecraft.player)){
             this.isDestroying = false;
             destroyDelay = 10;
@@ -53,8 +53,8 @@ public abstract class PowersMultiPlayerGameMode implements IMultiplayerGameMode 
     }
     /**Prevents stand mining from making your vanilla attack cooldown reset*/
     @Inject(method = "stopDestroyBlock()V", at = @At("HEAD"), cancellable = true)
-    public void roundabout$stopDestroyBlock(CallbackInfo ci) {
-        if (PowerTypes.hasStandActive(this.minecraft.player) && ((StandUser) this.minecraft.player).roundabout$getStandPowers().canUseMiningStand()) {
+    public void sba$stopDestroyBlock(CallbackInfo ci) {
+        if (PowerTypes.hasStandActive(this.minecraft.player) && ((StandUser) this.minecraft.player).sba$getStandPowers().canUseMiningStand()) {
             if (this.isDestroying) {
                 BlockState $$0 = this.minecraft.level.getBlockState(this.destroyBlockPos);
                 this.minecraft.getTutorial().onDestroyBlock(this.minecraft.level, this.destroyBlockPos, $$0, -1.0F);

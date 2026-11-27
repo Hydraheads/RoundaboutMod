@@ -1,6 +1,6 @@
 package net.hydra.jojomod.Utils;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.registry.ForgeItems;
 import net.minecraft.data.PackOutput;
@@ -19,7 +19,7 @@ import net.minecraftforge.common.loot.LootTableIdCondition;
 
 public class GlobalLootModProvider extends GlobalLootModifierProvider {
     public GlobalLootModProvider(PackOutput output) {
-        super(output, Roundabout.MOD_ID);
+        super(output, SBA.MOD_ID);
     }
 
     @Override

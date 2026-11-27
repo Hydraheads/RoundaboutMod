@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin.shaders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IShaderGameRenderer;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -49,106 +49,106 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
      * such as time stop desaturation*/
 
     @Unique
-    public int roundabout$tsShaderStatus = 0;
+    public int sba$tsShaderStatus = 0;
     @Override
-    public void roundabout$loadEffect(ResourceLocation $$0){
+    public void sba$loadEffect(ResourceLocation $$0){
         this.loadEffect($$0);
     }
 
     @Override
-    public boolean roundabout$tsShaderStatus() {
-        return roundabout$tsShaderStatus == 1;
+    public boolean sba$tsShaderStatus() {
+        return sba$tsShaderStatus == 1;
     }
 
     @Unique
-    private int roundabout$frameCount = 0;
+    private int sba$frameCount = 0;
     @Override
-    public float roundabout$getFrameCount() {
-        return (float)roundabout$frameCount;
+    public float sba$getFrameCount() {
+        return (float)sba$frameCount;
     }
 
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;doEntityOutline()V", shift = At.Shift.BEFORE))
-    private void roundabout$renderShaders(float tickDelta, long $$1, boolean renderLevel, CallbackInfo ci)
+    private void sba$renderShaders(float tickDelta, long $$1, boolean renderLevel, CallbackInfo ci)
     {
         TimestopShaderManager.renderAll(tickDelta);
 
-        RenderCallbackRegistry.roundabout$GAME_RENDERER_FINISH(tickDelta);
+        RenderCallbackRegistry.sba$GAME_RENDERER_FINISH(tickDelta);
 
 
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null){
             if (!ConfigManager.getClientConfig().timeStopSettings.advancedTimeStopShader && ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
                 if (RPostShaderRegistry.DESATURATE != null) {
-                    if (((IShaderGameRenderer) Minecraft.getInstance().gameRenderer).roundabout$tsShaderStatus()) {
-                        RPostShaderRegistry.DESATURATE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
-                        RPostShaderRegistry.DESATURATE.roundabout$process(tickDelta);
+                    if (((IShaderGameRenderer) Minecraft.getInstance().gameRenderer).sba$tsShaderStatus()) {
+                        RPostShaderRegistry.DESATURATE.sba$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+                        RPostShaderRegistry.DESATURATE.sba$process(tickDelta);
                     }
                 }
             }
         }
 
         if(ClientUtil.checkIfClientCanSeeMobsForWindVision()){
-            RPostShaderRegistry.WIND_VISION.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
-            RPostShaderRegistry.WIND_VISION.roundabout$process(tickDelta);
+            RPostShaderRegistry.WIND_VISION.sba$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+            RPostShaderRegistry.WIND_VISION.sba$process(tickDelta);
         }
         if(ClientUtil.canEpitaphRenderShader()){
-            RPostShaderRegistry.EPITAPH.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+            RPostShaderRegistry.EPITAPH.sba$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
 
-            RPostShaderRegistry.EPITAPH.roundabout$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
-            RPostShaderRegistry.EPITAPH.roundabout$setUniform("GameTimeStart",(float) ClientUtil.GameTimeStart);
-            RPostShaderRegistry.EPITAPH.roundabout$setUniform("PartialTick",tickDelta%1);
+            RPostShaderRegistry.EPITAPH.sba$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
+            RPostShaderRegistry.EPITAPH.sba$setUniform("GameTimeStart",(float) ClientUtil.GameTimeStart);
+            RPostShaderRegistry.EPITAPH.sba$setUniform("PartialTick",tickDelta%1);
             Vec3 vec = new Vec3(1.0,0,1.0);
 
-            if (((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+            if (((StandUser)ClientUtil.getPlayer()).sba$getStandPowers() instanceof PowersKingCrimson pkc){
                 vec = pkc.getEpitaphColors();
 
             }
-            RPostShaderRegistry.EPITAPH.roundabout$setUniform("RedValue",(float)vec.x);
-            RPostShaderRegistry.EPITAPH.roundabout$setUniform("GreenValue",(float)vec.y);
-            RPostShaderRegistry.EPITAPH.roundabout$setUniform("BlueValue",(float)vec.z);
+            RPostShaderRegistry.EPITAPH.sba$setUniform("RedValue",(float)vec.x);
+            RPostShaderRegistry.EPITAPH.sba$setUniform("GreenValue",(float)vec.y);
+            RPostShaderRegistry.EPITAPH.sba$setUniform("BlueValue",(float)vec.z);
 
-            RPostShaderRegistry.EPITAPH.roundabout$process(tickDelta);
+            RPostShaderRegistry.EPITAPH.sba$process(tickDelta);
         }
         if(ClientUtil.canRenderWorldMerge()){
             if (PowerTypes.isInD4CWorldWithRender(ClientUtil.getPlayer()) ||
-                    ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersD4C) {
-                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+                    ((StandUser)ClientUtil.getPlayer()).sba$getStandPowers() instanceof PowersD4C) {
+                RPostShaderRegistry.D4C_DIM_MERGE.sba$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
 
-                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("GameTime", (float) ClientUtil.getPlayer().tickCount);
-                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("GameTimeStart", (float) ClientUtil.D4CTickStart);
-                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$setUniform("PartialTick", tickDelta % 1);
+                RPostShaderRegistry.D4C_DIM_MERGE.sba$setUniform("GameTime", (float) ClientUtil.getPlayer().tickCount);
+                RPostShaderRegistry.D4C_DIM_MERGE.sba$setUniform("GameTimeStart", (float) ClientUtil.D4CTickStart);
+                RPostShaderRegistry.D4C_DIM_MERGE.sba$setUniform("PartialTick", tickDelta % 1);
 
-                RPostShaderRegistry.D4C_DIM_MERGE.roundabout$process(tickDelta);
+                RPostShaderRegistry.D4C_DIM_MERGE.sba$process(tickDelta);
             }
         } else if(ClientUtil.leftADimension){
 
-            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.sba$setUniform("InvProjMat", RPostShaderRegistry.InverseProjectionMatrix);
 
-            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
-            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("GameTimeStart",(float) ClientUtil.D4CTickStart2);
-            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$setUniform("PartialTick",tickDelta%1);
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.sba$setUniform("GameTime",(float) ClientUtil.getPlayer().tickCount);
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.sba$setUniform("GameTimeStart",(float) ClientUtil.D4CTickStart2);
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.sba$setUniform("PartialTick",tickDelta%1);
 
-            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.roundabout$process(tickDelta);
+            RPostShaderRegistry.D4C_DIM_MERGE_LEAVE.sba$process(tickDelta);
         }
     }
 
     @Inject(method = "reloadShaders", at=@At("HEAD"))
-    private void roundabout$reloadShaders(ResourceProvider provider, CallbackInfo ci)
+    private void sba$reloadShaders(ResourceProvider provider, CallbackInfo ci)
     {
         RPostShaderRegistry.bootstrap();
 
         try {
-            RCoreShader.roundabout$meltDodgeProgram = Objects.requireNonNull(roundabout$registerShader(provider, "meltdodge")).getProgram();
-            RCoreShader.roundabout$loveTrainProgram = Objects.requireNonNull(roundabout$registerShader(provider, "lovetrainlines")).getProgram();
+            RCoreShader.sba$meltDodgeProgram = Objects.requireNonNull(sba$registerShader(provider, "meltdodge")).getProgram();
+            RCoreShader.sba$loveTrainProgram = Objects.requireNonNull(sba$registerShader(provider, "lovetrainlines")).getProgram();
         } catch(Exception e) {
             //put shader debug stuff here
-            Roundabout.LOGGER.info("Oops, something went wrong loading shaders");
+            SBA.LOGGER.info("Oops, something went wrong loading shaders");
         }
-        Roundabout.LOGGER.info("Reloaded shaders!");
+        SBA.LOGGER.info("Reloaded shaders!");
     }
 
-    @Unique private RCoreShader roundabout$registerShader(ResourceProvider provider, String name)
+    @Unique private RCoreShader sba$registerShader(ResourceProvider provider, String name)
     {
         try
         {
@@ -166,19 +166,19 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
         }
         catch (IOException e)
         {
-            Roundabout.LOGGER.warn("roundabout${} failed to load!", name);
+            SBA.LOGGER.warn("sba${} failed to load!", name);
             return null;
         }
     }
 
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$renderLevel(float $$0, long $$1, PoseStack $$2, CallbackInfo ci) {
+    private void sba$renderLevel(float $$0, long $$1, PoseStack $$2, CallbackInfo ci) {
         // TODO: copy the old depth buffer to a texture
-        roundabout$frameCount++;
+        sba$frameCount++;
     }
 
     @Inject(method = "checkEntityPostEffect(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "TAIL"), cancellable = true)
-    private void roundabout$checkEntityPostEffect(Entity $$0, CallbackInfo ci){
+    private void sba$checkEntityPostEffect(Entity $$0, CallbackInfo ci){
         //$$0 is matrcices, $$1 is tickdelta
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null) {
@@ -197,7 +197,7 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    private void roundabout$tick(CallbackInfo ci) {
+    private void sba$tick(CallbackInfo ci) {
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null){
             if (ConfigManager.getClientConfig().timeStopSettings.advancedTimeStopShader) {
@@ -205,17 +205,17 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
             } else if (ConfigManager.getClientConfig().timeStopSettings.simpleTimeStopShader) {
                 boolean changed = false;
                 if (minecraft.player != null && ((TimeStop) minecraft.player.level()).inTimeStopRange(minecraft.player)) {
-                    if (roundabout$tsShaderStatus == 0) {
+                    if (sba$tsShaderStatus == 0) {
                         if (!(ClientUtil.getScreenFreeze() && !((TimeStop) minecraft.player.level()).isTimeStoppingEntity(minecraft.player))) {
                             changed = true;
-                            roundabout$tsShaderStatus = 1;
+                            sba$tsShaderStatus = 1;
                             //this.loadEffect(new ResourceLocation("shaders/post/desaturate.json"));
                         }
                     }
                 } else {
-                    if (roundabout$tsShaderStatus == 1) {
+                    if (sba$tsShaderStatus == 1) {
                         changed = true;
-                        roundabout$tsShaderStatus = 0;
+                        sba$tsShaderStatus = 0;
                         this.postEffect = null;
                     }
                 }
@@ -235,7 +235,7 @@ public abstract class ShaderGameRenderer implements IShaderGameRenderer {
     }
 
     @Override
-    public float roundabout$getFov(Camera activeRenderInfo, float partialTicks, boolean useFOVSetting) {
+    public float sba$getFov(Camera activeRenderInfo, float partialTicks, boolean useFOVSetting) {
         return (float) getFov(activeRenderInfo, partialTicks, useFOVSetting);
     }
 

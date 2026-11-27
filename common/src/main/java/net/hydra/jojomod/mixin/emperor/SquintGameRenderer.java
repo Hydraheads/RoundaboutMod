@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class SquintGameRenderer {
 
     @Inject(method = "getFov", at = @At("RETURN"), cancellable = true)
-    private void roundabout$emperorZoom(
+    private void sba$emperorZoom(
             net.minecraft.client.Camera camera,
             float tickDelta,
             boolean changingFov,
@@ -34,7 +34,7 @@ public class SquintGameRenderer {
             return;
         }
 
-        if (!(su.roundabout$getStandPowers() instanceof PowersEmperor emperor)) {
+        if (!(su.sba$getStandPowers() instanceof PowersEmperor emperor)) {
             return;
         }
 

@@ -76,34 +76,34 @@ public class TuskNailEntity extends AbstractArrow {
         WALL_BREAKER = (byte) 4;
 
 
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$ACT = SynchedEntityData.defineId(TuskNailEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$BONUS = SynchedEntityData.defineId(TuskNailEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> SBA$ACT = SynchedEntityData.defineId(TuskNailEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Byte> SBA$BONUS = SynchedEntityData.defineId(TuskNailEntity.class, EntityDataSerializers.BYTE);
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        if (!this.entityData.hasItem(ROUNDABOUT$ACT)) {
-            this.entityData.define(ROUNDABOUT$ACT, 1);
-            this.entityData.define(ROUNDABOUT$BONUS, NONE);
+        if (!this.entityData.hasItem(SBA$ACT)) {
+            this.entityData.define(SBA$ACT, 1);
+            this.entityData.define(SBA$BONUS, NONE);
         }
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0) {
-        if ($$0.contains("act")) {this.entityData.set(ROUNDABOUT$ACT,$$0.getInt("act"));}
-        if ($$0.contains("rb_extra")) {this.entityData.set(ROUNDABOUT$BONUS,$$0.getByte("rb_extra"));}
+        if ($$0.contains("act")) {this.entityData.set(SBA$ACT,$$0.getInt("act"));}
+        if ($$0.contains("rb_extra")) {this.entityData.set(SBA$BONUS,$$0.getByte("rb_extra"));}
         super.readAdditionalSaveData($$0);
     }
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
-        if (this.getEntityData().hasItem(ROUNDABOUT$ACT)) {$$0.putInt("act",this.getEntityData().get(ROUNDABOUT$ACT));}
-        if (this.getEntityData().hasItem(ROUNDABOUT$BONUS)) {$$0.putByte("rb_extra",this.getEntityData().get(ROUNDABOUT$BONUS));}
+        if (this.getEntityData().hasItem(SBA$ACT)) {$$0.putInt("act",this.getEntityData().get(SBA$ACT));}
+        if (this.getEntityData().hasItem(SBA$BONUS)) {$$0.putByte("rb_extra",this.getEntityData().get(SBA$BONUS));}
         super.addAdditionalSaveData($$0);
     }
 
-    public int getAct() {return this.entityData.get(ROUNDABOUT$ACT);}
-    public void setAct(int act) {this.entityData.set(ROUNDABOUT$ACT,Mth.clamp(act,1,4));}
-    public byte getExtra() {return this.entityData.get(ROUNDABOUT$BONUS);}
-    public void setExtra(byte i) {this.entityData.set(ROUNDABOUT$BONUS,i);}
+    public int getAct() {return this.entityData.get(SBA$ACT);}
+    public void setAct(int act) {this.entityData.set(SBA$ACT,Mth.clamp(act,1,4));}
+    public byte getExtra() {return this.entityData.get(SBA$BONUS);}
+    public void setExtra(byte i) {this.entityData.set(SBA$BONUS,i);}
 
     @Override
     public boolean isNoGravity() {
@@ -158,7 +158,7 @@ public class TuskNailEntity extends AbstractArrow {
             onDiscard();
         }
 
-        if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
+        if (!this.level().isClientSide() && this.getOwner() != null && this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers() instanceof PowersTusk PT) {
             if (!isRemoved()) {
 
                 Vec3 currentPos = this.position();
@@ -189,7 +189,7 @@ public class TuskNailEntity extends AbstractArrow {
 
     public void onDiscard() {
         if (this.getExtra() == WALL_BREAKER) {
-            if (this.getOwner() instanceof Player P && ((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (this.getOwner() instanceof Player P && ((StandUser)this.getOwner()).sba$getStandPowers() instanceof PowersTusk PT) {
                 PT.setPowerNone();
                 if (!this.level().isClientSide()) {
                     S2CPacketUtil.sendActivePowerPacket(P, PowerIndex.NONE);
@@ -217,7 +217,7 @@ public class TuskNailEntity extends AbstractArrow {
             }
 
             if (this.getExtra() == WALL_BREAKER) {
-                if (this.getOwner() != null  && ((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                if (this.getOwner() != null  && ((StandUser)this.getOwner()).sba$getStandPowers() instanceof PowersTusk PT) {
                     PT.startWallBreaker($$0);
                 }
             }
@@ -240,7 +240,7 @@ public class TuskNailEntity extends AbstractArrow {
             }
             tuskHoleEntity.setPos(pos);
             this.level().addFreshEntity(tuskHoleEntity);
-            if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (((StandUser)LE).sba$getStandPowers() instanceof PowersTusk PT) {
                 PT.setLastHole(tuskHoleEntity);
             }
             return tuskHoleEntity;
@@ -259,12 +259,12 @@ public class TuskNailEntity extends AbstractArrow {
         if (!this.level().isClientSide()) {
 
             if ($$0.getEntity() instanceof EnderMan em) {
-                ((IEnderMan) em).roundabout$teleport();
+                ((IEnderMan) em).sba$teleport();
                 return;
             }
             Entity ent = $$0.getEntity();
             if (!(ent instanceof TuskNailEntity)) {
-                if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).sba$getStandPowers() instanceof PowersTusk PT) {
                     if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
 
                         if (this.getExtra() == GOLDEN) {
@@ -284,7 +284,7 @@ public class TuskNailEntity extends AbstractArrow {
                             } else if (this.getAct() == 4 && getExtra() != WALL_BREAKER) {
                                 MainUtil.takeUnresistableKnockbackWithY(ent,0.05F,0,-1,0);
                                 if (ent instanceof Mob && !MainUtil.isBossMob(ent) && !MainUtil.getReducedDamage(ent)) {
-                                    ((StandUser)ent).roundabout$setDazed((byte) 2);
+                                    ((StandUser)ent).sba$setDazed((byte) 2);
                                 }
                             }
 
@@ -334,7 +334,7 @@ public class TuskNailEntity extends AbstractArrow {
                     this.getX(), this.getY() + this.getBbHeight(), this.getZ(),
                     0, 0, 0, 0, 0.7);
 
-            if (((StandUser) user).roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (((StandUser) user).sba$getStandPowers() instanceof PowersTusk PT) {
                 float radius = 1.5F;
                 List<Entity> entityList = DamageHandler.genHitbox(user, this.getX(), this.getY(),
                         this.getZ(), 1.5F, 1.5F, 1.5F);

@@ -2,7 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IBucketItem;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.block.FancyLighterBlock;
@@ -429,28 +429,28 @@ public class PowersKingNothing extends NewDashPreset {
             int topOffset = 80 + (19 * (i % 3));
             switch (i) {
                 case 0 -> $$1.add(drawSingleGUIIcon(context, 18, leftPos + leftOffset, topPos + topOffset, 0,
-                        "ability.roundabout.kn_smell_track", "instruction.roundabout.press_skill",
+                        "ability.sba.kn_smell_track", "instruction.sba.press_skill",
                         StandIcons.KING_NOTHING_TRACKING, 1, level, bypass));
                 case 1 -> $$1.add(drawSingleGUIIcon(context, 18, leftPos + leftOffset, topPos + topOffset, 0,
-                        "ability.roundabout.kn_track_item", "instruction.roundabout.press_skill_crouch",
+                        "ability.sba.kn_track_item", "instruction.sba.press_skill_crouch",
                         StandIcons.KING_NOTHING_SNIFF_ITEM, 1, level, bypass));
                 case 2 -> $$1.add(drawSingleGUIIcon(context, 18, leftPos + leftOffset, topPos + topOffset, 0,
-                        "ability.roundabout.phase_grab", "instruction.roundabout.press_skill",
+                        "ability.sba.phase_grab", "instruction.sba.press_skill",
                         StandIcons.KING_NOTHING_PHASE_GRAB, 2, level, bypass));
                 case 3 -> $$1.add(drawSingleGUIIcon(context, 18, leftPos + leftOffset, topPos + topOffset, 0,
-                        "ability.roundabout.kn_phase_item", "instruction.roundabout.press_skill_crouch",
+                        "ability.sba.kn_phase_item", "instruction.sba.press_skill_crouch",
                         StandIcons.KING_NOTHING_PHASE_ITEM, 2, level, bypass));
                 case 4 -> $$1.add(drawSingleGUIIcon(context, 18, leftPos + leftOffset, topPos + topOffset, 0,
-                        "ability.roundabout.kn_drop_item", "instruction.roundabout.press_skill_phase_item",
+                        "ability.sba.kn_drop_item", "instruction.sba.press_skill_phase_item",
                         StandIcons.KING_NOTHING_DROP_ITEM, 1, level, bypass));
                 case 5 -> $$1.add(drawSingleGUIIcon(context, 18, leftPos + leftOffset, topPos + topOffset, 0,
-                        "ability.roundabout.dodge", "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level,
+                        "ability.sba.dodge", "instruction.sba.press_skill", StandIcons.DODGE, 3, level,
                         bypass));
                 case 6 -> $$1.add(drawSingleGUIIcon(context, 18, leftPos + leftOffset, topPos + topOffset, 0,
-                        "ability.roundabout.kn_form_predict", "instruction.roundabout.press_skill_crouch",
+                        "ability.sba.kn_form_predict", "instruction.sba.press_skill_crouch",
                         StandIcons.KING_NOTHING_FORM_PREDICT, 3, level, bypass));
                 case 7 -> $$1.add(drawSingleGUIIcon(context, 18, leftPos + leftOffset, topPos + topOffset, 0,
-                        "ability.roundabout.kn_sniff", "instruction.roundabout.press_skill", StandIcons.STEAL_MEMORIES,
+                        "ability.sba.kn_sniff", "instruction.sba.press_skill", StandIcons.STEAL_MEMORIES,
                         4, level, bypass));
                 default -> canContinue = false;
             }
@@ -564,7 +564,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public int getParticleColor(VisualData pdata) {
-        return Roundabout.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
+        return SBA.RANDOM.nextFloat() > pdata.percentOther() ? pdata.color1() : pdata.color2();
     }
 
     public void setTrackedEntity(Entity ent) {
@@ -628,7 +628,7 @@ public class PowersKingNothing extends NewDashPreset {
                 }
                 if (disintegrateAnimTicks > 14) {
                     isOut = false;
-                    getStandUserSelf().roundabout$removeStandOut();
+                    getStandUserSelf().sba$removeStandOut();
                 }
             }
             else {
@@ -666,11 +666,11 @@ public class PowersKingNothing extends NewDashPreset {
                 switch (getMemorizedScentType()) {
                     case TrackingCloudEntity.PLAYER -> {
                         Entity player = this.getSelf().level().getPlayerByUUID(getMemorizedPlayer());
-                        if (player != null && ((StandUser) player).roundabout$getLifePunchClone() != null) {
-                            ((StandUser) player).roundabout$getLifePunchClone();
+                        if (player != null && ((StandUser) player).sba$getLifePunchClone() != null) {
+                            ((StandUser) player).sba$getLifePunchClone();
                         }
                         else if (player != null
-                                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC
+                                && ((StandUser) player).sba$getStandPowers() instanceof PowersKingCrimson PKC
                                 && PKC.timeEraseActive && PKC.activeClone != null) {
                             player = PKC.activeClone;
                         }
@@ -949,7 +949,7 @@ public class PowersKingNothing extends NewDashPreset {
                     startPhaseMovement(getStandEntity(getSelf()));
                 }
                 else if (this.attackTimeDuring == 108) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                     playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
                     animateStand(KingNothingEntity.RETURN);
                 }
@@ -984,7 +984,7 @@ public class PowersKingNothing extends NewDashPreset {
                             stand.setXRot(this.getSelf().getXRot());
                         }
                         else {
-                            Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+                            Direction gdir = ((IGravityEntity) this.self).sba$getGravityDirection();
                             Vec2 grot = new Vec2(getLookAtPlaceYaw(stand, vec3d3), getLookAtPlacePitch(stand, vec3d3));
                             grot = RotationUtil.rotWorldToPlayer(grot, gdir);
                             stand.setYRot(grot.x);
@@ -1012,13 +1012,13 @@ public class PowersKingNothing extends NewDashPreset {
                         boolean didThings = false;
                         if (!state.isAir()) {
                             if (this.getSelf().level().getGameRules().getBoolean(
-                                    ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE) && !isHoldingItem) {
+                                    ModGamerules.SBA_STAND_REDSTONE_INTERFERENCE) && !isHoldingItem) {
                                 Block blk = state.getBlock();
                                 if (((blk instanceof LeverBlock) || (blk instanceof ButtonBlock)
                                         || (blk instanceof DoorBlock) || (blk instanceof TrapDoorBlock)
                                         || (blk instanceof FenceGateBlock)) && this.getSelf() instanceof Player PE) {
                                     blk.use(state, PE.level(), bpos, PE, PE.getUsedItemHand(), blockHit);
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                                     playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
                                     animateStand(KingNothingEntity.RETURN);
                                     didThings = true;
@@ -1066,7 +1066,7 @@ public class PowersKingNothing extends NewDashPreset {
                             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()),
                                     PowerIndex.SKILL_2_SNEAK, 7);
                             this.setCooldown(PowerIndex.SKILL_2_SNEAK, 5);
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                             setPowerNone();
                             animateStand(KingNothingEntity.RETURN);
                             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
@@ -1084,14 +1084,14 @@ public class PowersKingNothing extends NewDashPreset {
         BlockPos placePos = bpos.relative(blockHit.getDirection());
         boolean placesNotfr = getSelf().level().isFluidAtPosition(placePos,
                 fluidState -> (!fluidState.isSource() || bucket instanceof MobBucketItem) && (
-                        fluidState.getType().isSame(((IBucketItem) bucket).roundabout$getContents())
+                        fluidState.getType().isSame(((IBucketItem) bucket).sba$getContents())
                                 || fluidState.isEmpty())) && canModifyPos(placePos);
         if (placesNotfr && bucket.emptyContents(null, stand.level(), placePos, null)) {
             bucket.checkExtraContent(null, stand.level(), stand.getHeldItem(), placePos);
             if (!getCreative()) {
                 stand.setHeldItem(Items.BUCKET.getDefaultInstance());
             }
-            getStandUserSelf().roundabout$tryPower(PowerIndex.NONE, true);
+            getStandUserSelf().sba$tryPower(PowerIndex.NONE, true);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,
                     ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
             this.setCooldown(PowerIndex.SKILL_2,
@@ -1130,7 +1130,7 @@ public class PowersKingNothing extends NewDashPreset {
             if (!stacko.isEmpty()) {
                 stand.setHeldItem(stacko);
             }
-            getStandUserSelf().roundabout$tryPower(PowerIndex.NONE, true);
+            getStandUserSelf().sba$tryPower(PowerIndex.NONE, true);
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,
                     ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
             this.setCooldown(PowerIndex.SKILL_2,
@@ -1147,7 +1147,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     public boolean canModifyPos(BlockPos pos) {
         return getSelf() instanceof ServerPlayer SP && SP.level().getGameRules().getBoolean(
-                ModGamerules.ROUNDABOUT_STAND_GRIEFING) && !SP.blockActionRestricted(SP.level(), pos,
+                ModGamerules.SBA_STAND_GRIEFING) && !SP.blockActionRestricted(SP.level(), pos,
                 SP.gameMode.getGameModeForPlayer()) && SP.level().mayInteract(SP, pos) && MainUtil.canInteractWithBlock(
                 SP, pos);
     }
@@ -1219,7 +1219,7 @@ public class PowersKingNothing extends NewDashPreset {
                 Block.dropResources(state, getSelf().level(), bpos, $$6, null, held);
             }
             damageHeld(held, stand, this.getSelf());
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
             int cooldown = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingPhaseMineCd;
             S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,
                     ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
@@ -1235,7 +1235,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     @Override
     public Component getSkinName(byte skinId) {
-        return Component.translatable("skins.roundabout.king_nothing." + getSkinString(skinId));
+        return Component.translatable("skins.sba.king_nothing." + getSkinString(skinId));
     }
 
     private boolean isPhasing() {
@@ -1393,28 +1393,28 @@ public class PowersKingNothing extends NewDashPreset {
 
     private void tryItemTrack() {
         if (!isPhasing() && !isTrackingItem() && !onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+            this.getStandUserSelf().sba$tryPower(PowerIndex.POWER_1_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_1_SNEAK);
         }
     }
 
     public void tryEndItemTrack() {
         if (!onCooldown(PowerIndex.SKILL_1_SNEAK)) {
-            this.getStandUserSelf().roundabout$tryPower(PowerIndex.EXTRA_2, true);
+            this.getStandUserSelf().sba$tryPower(PowerIndex.EXTRA_2, true);
             tryPowerPacket(PowerIndex.EXTRA_2);
         }
     }
 
     public void tryTrackMemorizedScent() {
         if (!isPhasing() && !onCooldown(PowerIndex.SKILL_1)) {
-            this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_1, true);
+            this.getStandUserSelf().sba$tryPower(PowerIndex.POWER_1, true);
             tryPowerPacket(PowerIndex.POWER_1);
         }
     }
 
     private void tryEndMemorizedScentTrack() {
         if (!onCooldown(PowerIndex.SKILL_1)) {
-            this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
+            this.getStandUserSelf().sba$tryPower(PowerIndex.POWER_1_BONUS, true);
             tryPowerPacket(PowerIndex.POWER_1_BONUS);
         }
     }
@@ -1458,18 +1458,18 @@ public class PowersKingNothing extends NewDashPreset {
 
     public void tryFormPredict() {
         if (isStandHere()) {
-            getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_3_SNEAK, true);
+            getStandUserSelf().sba$tryPower(PowerIndex.POWER_3_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_3_SNEAK);
         }
     }
 
     public void tryPhaseDropItem() {
         if (isHoldingSneak()) {
-            getStandUserSelf().roundabout$tryPower(PowerIndex.EXTRA_2_FINISH, true);
+            getStandUserSelf().sba$tryPower(PowerIndex.EXTRA_2_FINISH, true);
             tryPowerPacket(PowerIndex.EXTRA_2_FINISH);
         }
         else {
-            getStandUserSelf().roundabout$tryPower(PowerIndex.EXTRA, true);
+            getStandUserSelf().sba$tryPower(PowerIndex.EXTRA, true);
             tryPowerPacket(PowerIndex.EXTRA);
         }
     }
@@ -1478,7 +1478,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (!isTrackingItem()) {
             if (!isPhasing()) {
                 if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                    this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_2, true);
+                    this.getStandUserSelf().sba$tryPower(PowerIndex.POWER_2, true);
                     tryPowerPacket(PowerIndex.POWER_2);
                 }
             }
@@ -1503,7 +1503,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (!isTrackingItem()) {
             if (!isPhasing()) {
                 if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK)) {
-                    getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                    getStandUserSelf().sba$tryPower(PowerIndex.POWER_2_SNEAK, true);
                     tryPowerPacket(PowerIndex.POWER_2_SNEAK);
                 }
             }
@@ -1534,7 +1534,7 @@ public class PowersKingNothing extends NewDashPreset {
             playSoundsIfNearby(PHASE, 27, false);
 
             Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360), (this.getSelf().getXRot()));
-            Direction gdir = ((IGravityEntity) this.self).roundabout$getGravityDirection();
+            Direction gdir = ((IGravityEntity) this.self).sba$getGravityDirection();
             Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec, gdir);
             Vec3 threeVec = new Vec3(0, 0.25, 0);
             threeVec = RotationUtil.vecPlayerToWorld(threeVec, gdir);
@@ -1549,7 +1549,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     public boolean inventoryGrab() {
         if (!this.isClient()) {
-            StandEntity standEntity = ((StandUser) this.getSelf()).roundabout$getStand();
+            StandEntity standEntity = ((StandUser) this.getSelf()).sba$getStand();
             if (standEntity != null && standEntity.isAlive() && !standEntity.isRemoved()
                     && this.getSelf() instanceof Player PE) {
                 ItemStack stack = PE.getMainHandItem();
@@ -1605,7 +1605,7 @@ public class PowersKingNothing extends NewDashPreset {
                         }
                     }
                     if (gotItem) {
-                        this.getStandUserSelf().roundabout$tryPower(PowerIndex.NONE, true);
+                        this.getStandUserSelf().sba$tryPower(PowerIndex.NONE, true);
                         S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,
                                 ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
                         this.setCooldown(PowerIndex.SKILL_2,
@@ -1671,7 +1671,7 @@ public class PowersKingNothing extends NewDashPreset {
                         didThing = true;
                     }
                     if (didThing) {
-                        this.getStandUserSelf().roundabout$tryPower(PowerIndex.NONE, true);
+                        this.getStandUserSelf().sba$tryPower(PowerIndex.NONE, true);
                         S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2,
                                 ClientNetworking.getAppropriateConfig().generalStandSettings.objectPocketCooldown);
                         this.setCooldown(PowerIndex.SKILL_2_SNEAK,
@@ -1833,7 +1833,7 @@ public class PowersKingNothing extends NewDashPreset {
         if (isStandHere()) {
             Entity targEnt = MainUtil.getTargetEntity(this.getSelf(), SMELL_RANGE, 0);
             if (targEnt instanceof LivingEntity) {
-                this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
+                this.getStandUserSelf().sba$tryPower(PowerIndex.POWER_4_BONUS, true);
                 tryPowerPacket(PowerIndex.POWER_4_BONUS);
                 return;
             }
@@ -1844,7 +1844,7 @@ public class PowersKingNothing extends NewDashPreset {
                     new ClipContext(vec3d, vec3d3, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, this.getSelf()));
             if (blockHit.getType() == HitResult.Type.BLOCK) {
                 BlockPos pos = blockHit.getBlockPos();
-                getStandUserSelf().roundabout$tryBlockPosPower(PowerIndex.POWER_4, true, pos);
+                getStandUserSelf().sba$tryBlockPosPower(PowerIndex.POWER_4, true, pos);
                 tryBlockPosPowerPacket(PowerIndex.POWER_4, pos);
             }
         }
@@ -2242,7 +2242,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     @Override
     public Component ifWipListDevStatus() {
-        return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.DARK_PURPLE);
+        return Component.translatable("sba.dev_status.active").withStyle(ChatFormatting.DARK_PURPLE);
     }
 
     // color 1 = ~~primary~~ main particle color

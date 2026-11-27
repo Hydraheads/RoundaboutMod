@@ -29,21 +29,21 @@ public abstract class JusticeMobRenderer<T extends Mob, M extends EntityModel<T>
 
     /**Disguises hide the base mobs and render new ones instead*/
     @Unique
-    Mob roundabout$shapeShift = null;
+    Mob sba$shapeShift = null;
     @Inject(method = "render(Lnet/minecraft/world/entity/Mob;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+    private void sba$render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
 
         if ($$0 instanceof Creeper) {
-            if (((IJusticeCreeper) $$0).roundabout$isTransformed()){
-                roundabout$shapeShift = EntityType.PIG.create(Minecraft.getInstance().level);
-                roundabout$doTheThing($$0,$$1,$$2,$$3,$$4,$$5);
+            if (((IJusticeCreeper) $$0).sba$isTransformed()){
+                sba$shapeShift = EntityType.PIG.create(Minecraft.getInstance().level);
+                sba$doTheThing($$0,$$1,$$2,$$3,$$4,$$5);
                 ci.cancel();
             }
         } else if ($$0 instanceof Raider) {
-            if (((IRaider) $$0).roundabout$isTransformed()){
-                roundabout$shapeShift = EntityType.VILLAGER.create(Minecraft.getInstance().level);
-                roundabout$doTheThing($$0,$$1,$$2,$$3,$$4,$$5);
+            if (((IRaider) $$0).sba$isTransformed()){
+                sba$shapeShift = EntityType.VILLAGER.create(Minecraft.getInstance().level);
+                sba$doTheThing($$0,$$1,$$2,$$3,$$4,$$5);
                 ci.cancel();
             }
 
@@ -51,15 +51,15 @@ public abstract class JusticeMobRenderer<T extends Mob, M extends EntityModel<T>
     }
 
     @Unique
-    public void roundabout$doTheThing(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5){
-        if (roundabout$shapeShift != null) {
+    public void sba$doTheThing(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5){
+        if (sba$shapeShift != null) {
             ItemStack tem = $$0.getMainHandItem();
-            roundabout$shapeShift.setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
-            roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$shapeShift, $$0, $$5);
+            sba$shapeShift.setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+            sba$renderEntityForce1($$1, $$2, $$3, $$4, sba$shapeShift, $$0, $$5);
         }
     }
     @Unique
-    public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Mob user, int light) {
+    public void sba$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Mob user, int light) {
 
         $$6.xOld = user.xOld;
         $$6.yOld = user.yOld;
@@ -83,24 +83,24 @@ public abstract class JusticeMobRenderer<T extends Mob, M extends EntityModel<T>
         $$6.hurtTime = user.hurtTime;
         IEntityAndData entd = ((IEntityAndData) user);
         IEntityAndData entd2 = ((IEntityAndData) $$6);
-        entd2.roundabout$setVehicle(entd.roundabout$getVehicle());
+        entd2.sba$setVehicle(entd.sba$getVehicle());
 
         $$6.walkAnimation.setSpeed(user.walkAnimation.speed());
         IWalkAnimationState iwalk = ((IWalkAnimationState) $$6.walkAnimation);
         IWalkAnimationState uwalk = ((IWalkAnimationState) user.walkAnimation);
-        iwalk.roundabout$setPosition(uwalk.roundabout$getPosition());
-        iwalk.roundabout$setSpeedOld(uwalk.roundabout$getSpeedOld());
+        iwalk.sba$setPosition(uwalk.sba$getPosition());
+        iwalk.sba$setSpeedOld(uwalk.sba$getSpeedOld());
 
         ILivingEntityAccess ilive = ((ILivingEntityAccess)$$6);
         ILivingEntityAccess ulive = ((ILivingEntityAccess)user);
-        ilive.roundabout$setAnimStep(ulive.roundabout$getAnimStep());
-        ilive.roundabout$setAnimStepO(ulive.roundabout$getAnimStepO());
+        ilive.sba$setAnimStep(ulive.sba$getAnimStep());
+        ilive.sba$setAnimStepO(ulive.sba$getAnimStepO());
         $$6.setSpeed(user.getSpeed());
-        ((IEntityAndData)$$6).roundabout$setNoAAB();
+        ((IEntityAndData)$$6).sba$setNoAAB();
 
-        roundabout$renderEntityForce2(f1,f2,$$3,$$4,$$6, light, user);
+        sba$renderEntityForce2(f1,f2,$$3,$$4,$$6, light, user);
     }
-    public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6, int light, LivingEntity user) {
+    public void sba$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6, int light, LivingEntity user) {
         EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
         Vec3 renderoffset = $$7.getRenderer(user).getRenderOffset(user,0);
         ClientUtil.pushPoseAndCooperate($$3,1);
@@ -109,8 +109,8 @@ public abstract class JusticeMobRenderer<T extends Mob, M extends EntityModel<T>
         }
 
         if (light == 15728880) {
-            ((IEntityAndData) $$6).roundabout$setShadow(false);
-            ((IEntityAndData) user).roundabout$setShadow(false);
+            ((IEntityAndData) $$6).sba$setShadow(false);
+            ((IEntityAndData) user).sba$setShadow(false);
         }
         $$7.setRenderShadow(false);
         boolean hb = $$7.shouldRenderHitBoxes();

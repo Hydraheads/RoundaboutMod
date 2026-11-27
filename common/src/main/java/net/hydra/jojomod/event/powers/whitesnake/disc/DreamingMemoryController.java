@@ -26,67 +26,67 @@ public final class DreamingMemoryController {
     public static boolean canTemporarilyImplant(LivingEntity target) {
         if (!(target instanceof Mob)) return false;
         DiscBearer bearer = (DiscBearer) target;
-        return bearer.roundabout$ownsMemoryDisc()
-                && bearer.roundabout$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY) > 0
-                && !bearer.roundabout$hasTemporaryMemoryDisc();
+        return bearer.sba$ownsMemoryDisc()
+                && bearer.sba$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY) > 0
+                && !bearer.sba$hasTemporaryMemoryDisc();
     }
 
     public static boolean isDreamingWithoutMemory(Mob mob) {
         return mob.hasEffect(ModEffects.SLEEPING)
-                && !((DiscBearer) mob).roundabout$hasTemporaryMemoryDisc();
+                && !((DiscBearer) mob).sba$hasTemporaryMemoryDisc();
     }
 
     public static void implant(ItemStack stack, LivingEntity target) {
         DiscBearer bearer = (DiscBearer) target;
-        bearer.roundabout$setMemoryBeforeDreaming(snapshot(bearer));
-        bearer.roundabout$setTemporaryMemoryDisc(stack.copyWithCount(1));
+        bearer.sba$setMemoryBeforeDreaming(snapshot(bearer));
+        bearer.sba$setTemporaryMemoryDisc(stack.copyWithCount(1));
         MemoryDiscItem.applyMemory(stack, target);
     }
 
     public static void tick(LivingEntity entity) {
         if (!(entity instanceof Mob) || entity.level().isClientSide()) return;
         DiscBearer bearer = (DiscBearer) entity;
-        if (!bearer.roundabout$hasTemporaryMemoryDisc()) return;
+        if (!bearer.sba$hasTemporaryMemoryDisc()) return;
 
-        CompoundTag previousMemory = bearer.roundabout$getMemoryBeforeDreaming();
+        CompoundTag previousMemory = bearer.sba$getMemoryBeforeDreaming();
         int remaining = previousMemory.getInt(SEAL_TICKS);
         int next = ClientNetworking.getAppropriateConfig().whitesnakeSettings.discSealing
                 ? Math.max(0, remaining - 1) : 0;
         previousMemory.putInt(SEAL_TICKS, next);
-        bearer.roundabout$setMemoryBeforeDreaming(previousMemory);
+        bearer.sba$setMemoryBeforeDreaming(previousMemory);
         if (next > 0) return;
 
-        ItemStack temporaryDisc = bearer.roundabout$getTemporaryMemoryDisc();
+        ItemStack temporaryDisc = bearer.sba$getTemporaryMemoryDisc();
         restore(bearer, previousMemory);
-        bearer.roundabout$setTemporaryMemoryDisc(ItemStack.EMPTY);
-        bearer.roundabout$setMemoryBeforeDreaming(new CompoundTag());
+        bearer.sba$setTemporaryMemoryDisc(ItemStack.EMPTY);
+        bearer.sba$setMemoryBeforeDreaming(new CompoundTag());
         if (!temporaryDisc.isEmpty()) entity.spawnAtLocation(temporaryDisc, 0.35F);
     }
 
     private static CompoundTag snapshot(DiscBearer bearer) {
         CompoundTag tag = new CompoundTag();
-        tag.putBoolean(HAS_MEMORY, bearer.roundabout$ownsMemoryDisc());
-        tag.putString(OWNER_ID, bearer.roundabout$getMemoryDiscOwnerId());
-        tag.putString(OWNER_NAME, bearer.roundabout$getMemoryDiscOwnerName());
-        tag.putString(TAME_OWNER_ID, bearer.roundabout$getMemoryTameOwnerId());
-        tag.putString(TAME_OWNER_NAME, bearer.roundabout$getMemoryTameOwnerName());
-        tag.putByte(PERSONALITY, bearer.roundabout$getMemoryPersonality());
-        tag.put(MEMORY_READING, bearer.roundabout$getMemoryReading());
-        tag.putInt(SEAL_TICKS, bearer.roundabout$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY));
-        tag.putInt(SEAL_MAX_TICKS, bearer.roundabout$getDiscSealMaxTicks(WhitesnakeDiscUtil.MEMORY));
+        tag.putBoolean(HAS_MEMORY, bearer.sba$ownsMemoryDisc());
+        tag.putString(OWNER_ID, bearer.sba$getMemoryDiscOwnerId());
+        tag.putString(OWNER_NAME, bearer.sba$getMemoryDiscOwnerName());
+        tag.putString(TAME_OWNER_ID, bearer.sba$getMemoryTameOwnerId());
+        tag.putString(TAME_OWNER_NAME, bearer.sba$getMemoryTameOwnerName());
+        tag.putByte(PERSONALITY, bearer.sba$getMemoryPersonality());
+        tag.put(MEMORY_READING, bearer.sba$getMemoryReading());
+        tag.putInt(SEAL_TICKS, bearer.sba$getDiscSealTicks(WhitesnakeDiscUtil.MEMORY));
+        tag.putInt(SEAL_MAX_TICKS, bearer.sba$getDiscSealMaxTicks(WhitesnakeDiscUtil.MEMORY));
         return tag;
     }
 
     private static void restore(DiscBearer bearer, CompoundTag tag) {
-        bearer.roundabout$setMemoryDiscOwnerId(tag.getString(OWNER_ID));
-        bearer.roundabout$setMemoryDiscOwnerName(tag.getString(OWNER_NAME));
-        bearer.roundabout$setMemoryTameOwnerId(tag.getString(TAME_OWNER_ID));
-        bearer.roundabout$setMemoryTameOwnerName(tag.getString(TAME_OWNER_NAME));
-        bearer.roundabout$setMemoryPersonality(tag.getByte(PERSONALITY));
-        bearer.roundabout$setMemoryReading(tag.contains(MEMORY_READING, CompoundTag.TAG_COMPOUND)
+        bearer.sba$setMemoryDiscOwnerId(tag.getString(OWNER_ID));
+        bearer.sba$setMemoryDiscOwnerName(tag.getString(OWNER_NAME));
+        bearer.sba$setMemoryTameOwnerId(tag.getString(TAME_OWNER_ID));
+        bearer.sba$setMemoryTameOwnerName(tag.getString(TAME_OWNER_NAME));
+        bearer.sba$setMemoryPersonality(tag.getByte(PERSONALITY));
+        bearer.sba$setMemoryReading(tag.contains(MEMORY_READING, CompoundTag.TAG_COMPOUND)
                 ? tag.getCompound(MEMORY_READING) : new CompoundTag());
-        bearer.roundabout$setHasMemoryDisc(tag.getBoolean(HAS_MEMORY));
-        bearer.roundabout$setDiscSeal(WhitesnakeDiscUtil.MEMORY, tag.getInt(SEAL_TICKS),
+        bearer.sba$setHasMemoryDisc(tag.getBoolean(HAS_MEMORY));
+        bearer.sba$setDiscSeal(WhitesnakeDiscUtil.MEMORY, tag.getInt(SEAL_TICKS),
                 tag.getInt(SEAL_MAX_TICKS));
     }
 }

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.registry;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
 import net.hydra.jojomod.menu.ModMenus;
 import net.hydra.jojomod.menu.GamblingTableMenu;
@@ -16,37 +16,37 @@ public final class FabricMenus {
     //If somebody has a better way to do this, please message me on discord- 88superguy
     public static final MenuType<CraftingMenu> DIVER_DOWN_CRAFTING = Registry.register(
             BuiltInRegistries.MENU,
-            new ResourceLocation(Roundabout.MOD_ID, "diver_down_crafting"),
+            new ResourceLocation(SBA.MOD_ID, "diver_down_crafting"),
             new MenuType<>(DiverDownCraftingMenu::new, FeatureFlags.DEFAULT_FLAGS)
     );
     public static final MenuType<AnvilMenu> DIVER_DOWN_ANVIL = Registry.register(
             BuiltInRegistries.MENU,
-            new ResourceLocation(Roundabout.MOD_ID, "diver_down_anvil"),
+            new ResourceLocation(SBA.MOD_ID, "diver_down_anvil"),
             new MenuType<>(DiverDownAnvilMenu::new, FeatureFlags.DEFAULT_FLAGS)
     );
     public static final MenuType<SmithingMenu> DIVER_DOWN_SMITHING = Registry.register(
             BuiltInRegistries.MENU,
-            new ResourceLocation(Roundabout.MOD_ID, "diver_down_smithing"),
+            new ResourceLocation(SBA.MOD_ID, "diver_down_smithing"),
             new MenuType<>(DiverDownSmithingMenu::new, FeatureFlags.DEFAULT_FLAGS)
     );
     public static final MenuType<StonecutterMenu> DIVER_DOWN_STONECUTTER = Registry.register(
             BuiltInRegistries.MENU,
-            new ResourceLocation(Roundabout.MOD_ID, "diver_down_stonecutter"),
+            new ResourceLocation(SBA.MOD_ID, "diver_down_stonecutter"),
             new MenuType<>(DiverDownStonecutterMenu::new, FeatureFlags.DEFAULT_FLAGS)
     );
     public static final MenuType<LoomMenu> DIVER_DOWN_LOOM = Registry.register(
             BuiltInRegistries.MENU,
-            new ResourceLocation(Roundabout.MOD_ID, "diver_down_loom"),
+            new ResourceLocation(SBA.MOD_ID, "diver_down_loom"),
             new MenuType<>(DiverDownLoomMenu::new, FeatureFlags.DEFAULT_FLAGS)
     );
     public static final MenuType<GamblingTableMenu> GAMBLING_TABLE = Registry.register(
             BuiltInRegistries.MENU,
-            new ResourceLocation(Roundabout.MOD_ID, "gambling_table"),
+            new ResourceLocation(SBA.MOD_ID, "gambling_table"),
             new MenuType<>(GamblingTableMenu::new, FeatureFlags.DEFAULT_FLAGS)
     );
     public static final MenuType<LyinEyesInventoryMenu> LYIN_EYES_INVENTORY = Registry.register(
             BuiltInRegistries.MENU,
-            new ResourceLocation(Roundabout.MOD_ID, "lyin_eyes_inventory"),
+            new ResourceLocation(SBA.MOD_ID, "lyin_eyes_inventory"),
             new MenuType<>(LyinEyesInventoryMenu::new, FeatureFlags.DEFAULT_FLAGS)
     );
 

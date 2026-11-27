@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinEntityVisibility {
 
     @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
-    private void roundabout$checkInvis(CallbackInfoReturnable<Boolean> cir) {
+    private void sba$checkInvis(CallbackInfoReturnable<Boolean> cir) {
         if ((Object)this instanceof Player player) {
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersMetallica pm && pm.isInvisible()) {
+            if (((StandUser)player).sba$getStandPowers() instanceof PowersMetallica pm && pm.isInvisible()) {
                 cir.setReturnValue(true);
             }
         }

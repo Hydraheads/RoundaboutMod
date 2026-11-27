@@ -20,10 +20,10 @@ public abstract class TuskFlattenMixin {
     protected abstract void setPosition(Vec3 vec3);
 
     @Inject(method = "setup",at = @At("TAIL"))
-    private void roundabout$flattenCamera(BlockGetter $$0, Entity $$1, boolean $$2, boolean $$3, float partialTicks, CallbackInfo ci) {
+    private void sba$flattenCamera(BlockGetter $$0, Entity $$1, boolean $$2, boolean $$3, float partialTicks, CallbackInfo ci) {
         if ($$1 instanceof Player P) {
             StandUser SU = (StandUser) P;
-            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getFlattenCameraTicks() > 0) {
+            if (SU.sba$getStandPowers() instanceof PowersTusk PT && PT.getFlattenCameraTicks() > 0) {
                 if (PT.getActivePower() != PowersTusk.FLATTEN) {partialTicks *= -1;}
 
                 if (ClientUtil.checkIfFirstPerson()) {

@@ -17,22 +17,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public abstract class HallucinationClientTickMixin {
-    @Unique private boolean roundaboutWhitesnake$acidHidden;
+    @Unique private boolean sbaWhitesnake$acidHidden;
 
     @Inject(method = "updateLevelInEngines", at = @At("HEAD"))
-    private void roundaboutWhitesnake$clearIndicators(CallbackInfo ci) {
+    private void sbaWhitesnake$clearIndicators(CallbackInfo ci) {
         HallucinationIndicatorRenderer.clear();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void roundaboutWhitesnake$refreshAcidVisibility(CallbackInfo ci) {
+    private void sbaWhitesnake$refreshAcidVisibility(CallbackInfo ci) {
         Minecraft minecraft = (Minecraft) (Object) this;
         HallucinationIndicatorRenderer.tick(minecraft);
         MobEffectInstance effect = minecraft.player == null ? null
                 : minecraft.player.getEffect(ModEffects.HALLUCINATION);
         boolean hidden = HallucinationEffect.hasDistortion(effect);
-        if (hidden == roundaboutWhitesnake$acidHidden) return;
-        roundaboutWhitesnake$acidHidden = hidden;
+        if (hidden == sbaWhitesnake$acidHidden) return;
+        sbaWhitesnake$acidHidden = hidden;
         if (minecraft.level == null || minecraft.player == null) return;
 
         int renderDistance = minecraft.options.getEffectiveRenderDistance();

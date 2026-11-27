@@ -1,7 +1,7 @@
 package net.hydra.jojomod.networking.packet.c2s;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.util.MainUtil;

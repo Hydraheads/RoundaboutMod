@@ -38,8 +38,8 @@ public class SavedSecondCreeper extends SavedSecondLiving {
             return;
         super.loadTime(ent);
         if (ent instanceof Creeper CE) {
-            ((ICreeper)CE).roundabout$setSwell(swell);
-            ((StandUser)CE).roundabout$setHeat(heatLevel);
+            ((ICreeper)CE).sba$setSwell(swell);
+            ((StandUser)CE).sba$setHeat(heatLevel);
         }
     }
 }

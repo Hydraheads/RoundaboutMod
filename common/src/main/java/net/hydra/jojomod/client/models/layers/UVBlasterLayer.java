@@ -41,7 +41,7 @@ public class UVBlasterLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
             }
 
         }
-        if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision())
+        if (((IEntityAndData)entity).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)entity).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision())
             return;
         LivingEntity livent = entity;
         float heyFull = 1;

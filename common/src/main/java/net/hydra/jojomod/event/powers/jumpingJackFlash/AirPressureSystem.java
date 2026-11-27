@@ -120,6 +120,6 @@ public final class AirPressureSystem {
             return false;
         }
 
-        return  (standUser.roundabout$getStandPowers() instanceof PowersJumpinJackFlash);
+        return  (standUser.sba$getStandPowers() instanceof PowersJumpinJackFlash);
     }
 }

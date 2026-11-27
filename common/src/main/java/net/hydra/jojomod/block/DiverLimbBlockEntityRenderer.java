@@ -3,7 +3,7 @@ package net.hydra.jojomod.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.renderers.DiverDownBaseRenderer;
@@ -78,7 +78,7 @@ public class DiverLimbBlockEntityRenderer implements BlockEntityRenderer<DiverLi
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
             //omg push and pop queues hiiii!!!!
             //needed to revert all poses back to normal later since the limbs are gonna be rendred in a bunch of different directions
-            //roundabout has its own push and pop queue for posing and debugging, so i'm using that instead of poseStack.pushPose();
+            //sba has its own push and pop queue for posing and debugging, so i'm using that instead of poseStack.pushPose();
             ClientUtil.pushPoseAndCooperate(poseStack,7);
 
             // Duration in ticks (lower = faster)

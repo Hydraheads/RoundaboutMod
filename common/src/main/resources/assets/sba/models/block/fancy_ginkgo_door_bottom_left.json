@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left",
+  "textures": {
+    "bottom": "sba:block/fancy_ginkgo_door_bottom",
+    "top": "sba:block/fancy_ginkgo_door_top"
+  }
+}

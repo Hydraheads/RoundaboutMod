@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -13,28 +13,28 @@ import org.jetbrains.annotations.Nullable;
 
 public class TheWorldBaseRenderer<M extends StandEntity> extends StandRenderer<TheWorldEntity> {
 
-    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/anime.png");
-    private static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/manga.png");
-    private static final ResourceLocation OVA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/ova.png");
-    private static final ResourceLocation HERITAGE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/heritage.png");
-    private static final ResourceLocation BLACK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/black.png");
-    private static final ResourceLocation PART_7_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/part_7.png");
-    private static final ResourceLocation PART_7_BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/part_7_blue.png");
-    private static final ResourceLocation OVER_HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/over_heaven.png");
-    private static final ResourceLocation DARK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/dark.png");
-    private static final ResourceLocation AQUA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/aqua.png");
-    private static final ResourceLocation ARCADE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/arcade.png");
-    private static final ResourceLocation AGOGO_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/agogo.png");
-    private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/beta.png");
-    private static final ResourceLocation ARCADE_SKIN_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/arcade_2.png");
-    private static final ResourceLocation FOUR_DEE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/4d.png");
-    private static final ResourceLocation ULTIMATE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/ultimate.png");
-    private static final ResourceLocation ULTIMATE_KARS_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/ultimate_kars.png");
-    private static final ResourceLocation SCARLET = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/scarlet.png");
-    private static final ResourceLocation THE_NETHER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/the_nether.png");
-    private static final ResourceLocation BRONZE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/bronze.png");
-    private static final ResourceLocation KING = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/king.png");
-    private static final ResourceLocation SHADE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/the_world/shade.png");
+    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/anime.png");
+    private static final ResourceLocation PART_3_MANGA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/manga.png");
+    private static final ResourceLocation OVA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/ova.png");
+    private static final ResourceLocation HERITAGE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/heritage.png");
+    private static final ResourceLocation BLACK_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/black.png");
+    private static final ResourceLocation PART_7_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/part_7.png");
+    private static final ResourceLocation PART_7_BLUE = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/part_7_blue.png");
+    private static final ResourceLocation OVER_HEAVEN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/over_heaven.png");
+    private static final ResourceLocation DARK_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/dark.png");
+    private static final ResourceLocation AQUA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/aqua.png");
+    private static final ResourceLocation ARCADE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/arcade.png");
+    private static final ResourceLocation AGOGO_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/agogo.png");
+    private static final ResourceLocation BETA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/beta.png");
+    private static final ResourceLocation ARCADE_SKIN_2 = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/arcade_2.png");
+    private static final ResourceLocation FOUR_DEE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/4d.png");
+    private static final ResourceLocation ULTIMATE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/ultimate.png");
+    private static final ResourceLocation ULTIMATE_KARS_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/ultimate_kars.png");
+    private static final ResourceLocation SCARLET = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/scarlet.png");
+    private static final ResourceLocation THE_NETHER = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/the_nether.png");
+    private static final ResourceLocation BRONZE = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/bronze.png");
+    private static final ResourceLocation KING = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/king.png");
+    private static final ResourceLocation SHADE = new ResourceLocation(SBA.MOD_ID,"textures/stand/the_world/shade.png");
     public TheWorldBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);
         this.addLayer(new TheWorldOverHeavenEyeLayer<>(this));

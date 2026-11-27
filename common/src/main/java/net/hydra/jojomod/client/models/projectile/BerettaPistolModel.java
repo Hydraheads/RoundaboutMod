@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 5.0.3
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -58,7 +58,7 @@ public class BerettaPistolModel<T extends Entity> extends HierarchicalModel<T> {
     }
 
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/item/beretta_pistol.png");
     }
 

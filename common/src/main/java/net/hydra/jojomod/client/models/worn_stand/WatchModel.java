@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.MandomAnimations;
@@ -62,9 +62,9 @@ public class WatchModel extends PsuedoHierarchicalModel {
     public void setupAnim(Entity var1, float pAgeInTicks) {
 
     }
-    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/watches/base.png");
-    public static ResourceLocation rolex = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation rolex = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/watches/rolex.png");
     public ResourceLocation getTextureLocation(byte skin){
         switch (skin)
@@ -87,9 +87,9 @@ public class WatchModel extends PsuedoHierarchicalModel {
             }
             StandUser user = ((StandUser) PL);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(skin)));
-            user.roundabout$getWornStandAnimation().startIfStopped(context.tickCount);
-            this.animate(user.roundabout$getWornStandAnimation(), MandomAnimations.tick, partialTicks, 1f);
-            //this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
+            user.sba$getWornStandAnimation().startIfStopped(context.tickCount);
+            this.animate(user.sba$getWornStandAnimation(), MandomAnimations.tick, partialTicks, 1f);
+            //this.animate(user.sba$getHeyYaAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }

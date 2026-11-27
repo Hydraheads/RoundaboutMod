@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.minions.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.minions.ChickenMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class ChickenMinionRenderer extends MobRenderer<ChickenMinion, ChickenMinionModel<ChickenMinion>> {
-    private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/chicken.png");
+    private static final ResourceLocation VINDICATOR = new ResourceLocation(SBA.MOD_ID,"textures/entity/minions/chicken.png");
 
     public ChickenMinionRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new ChickenMinionModel<>($$0.bakeLayer(ModEntityRendererClient.CHICKEN_MINION_LAYER)), 0.3F);

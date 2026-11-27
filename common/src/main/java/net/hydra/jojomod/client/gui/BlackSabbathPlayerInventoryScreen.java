@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -24,7 +24,7 @@ import static net.minecraft.client.gui.screens.inventory.InventoryScreen.renderE
 
 public class BlackSabbathPlayerInventoryScreen
         extends EffectRenderingInventoryScreen<BlackSabbathPlayerInventoryMenu> {
-    private static final ResourceLocation HORSE_INVENTORY_LOCATION = new ResourceLocation(Roundabout.MOD_ID, "textures/gui/polpo_stand_screen.png");
+    private static final ResourceLocation HORSE_INVENTORY_LOCATION = new ResourceLocation(SBA.MOD_ID, "textures/gui/polpo_stand_screen.png");
     private final Player player;
     private float xMouse;
     private float yMouse;
@@ -42,8 +42,8 @@ public class BlackSabbathPlayerInventoryScreen
         int $$5 = (this.height - this.imageHeight) / 2;
         $$0.blit(HORSE_INVENTORY_LOCATION, $$4, $$5, 0, 0, this.imageWidth, this.imageHeight);
 
-        if(((StandUser)player).roundabout$getStandPowers() instanceof PowersBlackSabbath) {
-        if(((StandUser)player).roundabout$getStand() instanceof BlackSabbathEntity bs) {
+        if(((StandUser)player).sba$getStandPowers() instanceof PowersBlackSabbath) {
+        if(((StandUser)player).sba$getStand() instanceof BlackSabbathEntity bs) {
             int scaleInt = bs.getSkin() == BlackSabbathEntity.SANTA ? 20 : 24;
             renderEntityInInventoryFollowsMouse(
                     $$0, $$4 + 34, $$5 + 67, scaleInt, (float)($$4 + 51) - this.xMouse, (float)($$5 + 75 - 50) - this.yMouse, bs
@@ -71,7 +71,7 @@ public class BlackSabbathPlayerInventoryScreen
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
             StandUser user = ((StandUser) pl);
-            StandPowers powers = user.roundabout$getStandPowers();
+            StandPowers powers = user.sba$getStandPowers();
             if(powers instanceof PowersBlackSabbath pb){
                 pb.active = false;
                 pb.sharedChestSelectCooldown();

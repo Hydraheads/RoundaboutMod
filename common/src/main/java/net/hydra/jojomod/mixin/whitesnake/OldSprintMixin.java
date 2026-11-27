@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Entity.class)
 public abstract class OldSprintMixin {
     @Inject(method = "setSprinting", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$blockOldSprint(boolean sprinting, CallbackInfo ci) {
+    private void sbaWhitesnake$blockOldSprint(boolean sprinting, CallbackInfo ci) {
         if (sprinting && ModEffects.OLD != null
                 && (Object) this instanceof LivingEntity living
                 && living.hasEffect(ModEffects.OLD)) {

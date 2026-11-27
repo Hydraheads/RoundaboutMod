@@ -19,10 +19,10 @@ public class DazeLeapAtTargetGoal {
 
     /**Minor code, mobs in a barrage should not be attacking*/
     @Inject(method = "start()V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$startLAT(CallbackInfo ci) {
-        if (((StandUser) this.mob).roundabout$isDazed() ||
-                (((StandUser) this.mob).roundabout$hasAStand() &&
-                        ((StandUser) this.mob).roundabout$getStandPowers().disableMobAiAttack()) || ((StandUser) this.mob).roundabout$isRestrained()) {
+    private void sba$startLAT(CallbackInfo ci) {
+        if (((StandUser) this.mob).sba$isDazed() ||
+                (((StandUser) this.mob).sba$hasAStand() &&
+                        ((StandUser) this.mob).sba$getStandPowers().disableMobAiAttack()) || ((StandUser) this.mob).sba$isRestrained()) {
             ci.cancel();
         }
     }

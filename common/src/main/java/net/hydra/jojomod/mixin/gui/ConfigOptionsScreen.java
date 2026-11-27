@@ -27,13 +27,13 @@ public abstract class ConfigOptionsScreen extends Screen {
             target = "Lnet/minecraft/client/gui/layouts/GridLayout;arrangeElements()V",
             shift = At.Shift.BEFORE),
             locals = LocalCapture.CAPTURE_FAILHARD)
-    private void roundabout$init(CallbackInfo ci, GridLayout $$0, GridLayout.RowHelper $$1)
+    private void sba$init(CallbackInfo ci, GridLayout $$0, GridLayout.RowHelper $$1)
     {
         if (!ClientConfig.getLocalInstance().configSettings.shouldShowConfigButton || !(this.lastScreen instanceof TitleScreen))
             return;
         Minecraft client = Minecraft.getInstance();
         $$1.addChild(
-                Button.builder(Component.translatable("config.roundabout.roundaboutconfig.name").withStyle(ChatFormatting.LIGHT_PURPLE),
+                Button.builder(Component.translatable("config.sba.sbaconfig.name").withStyle(ChatFormatting.LIGHT_PURPLE),
                         $$0x -> this.minecraft.setScreen(new ConfigScreen(ConfigType.COMMON, client.screen))).
                         width(50).build(), 2,
                 $$1.newCellSettings().paddingTop(-24+(ClientConfig.getLocalInstance().configSettings.configButtonOffsetY)).alignHorizontallyRight().

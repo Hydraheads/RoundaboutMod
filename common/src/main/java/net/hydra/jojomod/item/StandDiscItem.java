@@ -42,15 +42,15 @@ public class StandDiscItem extends Item {
     }
 
     public void generateStandPowers(LivingEntity entity){
-        ((StandUser)entity).roundabout$setStandPowers(standPowers.generateStandPowersPre(entity));
+        ((StandUser)entity).sba$setStandPowers(standPowers.generateStandPowersPre(entity));
     }
 
     public void generateStandPowerRejection(LivingEntity entity){
-        ((StandUser)entity).roundabout$setRejectionStandPowers(standPowers.generateStandPowers(entity));
+        ((StandUser)entity).sba$setRejectionStandPowers(standPowers.generateStandPowers(entity));
     }
 
     public boolean canImplantInto(LivingEntity target) {
-        if (!((StandUser) target).roundabout$getStandDisc().isEmpty()) return false;
+        if (!((StandUser) target).sba$getStandDisc().isEmpty()) return false;
         return !(target instanceof Mob)
                 || MainUtil.canGrantStand(target) && standPowers.isWorthinessType(target);
     }
@@ -58,10 +58,10 @@ public class StandDiscItem extends Item {
 
     public void convertStuff(ItemStack stack, Player player){
         if (stack.getItem() instanceof StandDiscItem SI) {
-            ((StandUser) player).roundabout$setStand(null);
-            ((StandUser) player).roundabout$setActive(false);
-            ((StandUser) player).roundabout$setStandDisc(stack.copy());
-            ((StandUser) player).roundabout$getStandPowers().onStandSwitchInto();
+            ((StandUser) player).sba$setStand(null);
+            ((StandUser) player).sba$setActive(false);
+            ((StandUser) player).sba$setStandDisc(stack.copy());
+            ((StandUser) player).sba$getStandPowers().onStandSwitchInto();
         }
     }
 
@@ -95,7 +95,7 @@ public class StandDiscItem extends Item {
         } else {
             $$3 = $$1.getItemBySlot(EquipmentSlot.OFFHAND);
         }
-        if ($$1 != null && ((StandUser)$$1).roundabout$getStandPowers() instanceof PowersGER GER) {
+        if ($$1 != null && ((StandUser)$$1).sba$getStandPowers() instanceof PowersGER GER) {
             if (GER.hasNormalGEDisc()) {
                 GER.goBackToGE();
                 //return InteractionResultHolder.fail($$3);
@@ -106,10 +106,10 @@ public class StandDiscItem extends Item {
             if (!$$3.isEmpty() && $$3.getItem() instanceof StandDiscItem) {
                 discNearby($$1,50,sp.getId());
 
-                ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc().copy();
+                ItemStack currentDisc = ((StandUser) $$1).sba$getStandDisc().copy();
                 if (!currentDisc.isEmpty()) {
                     ItemStack convDisc = MainUtil.saveToDiscData($$1, currentDisc.copy());
-                    ((StandUser) $$1).roundabout$getStandPowers().onStandSwitch();
+                    ((StandUser) $$1).sba$getStandPowers().onStandSwitch();
                     convertStuff($$3, $$1);
                     $$1.getCooldowns().addCooldown(this, 22);
                     $$1.getCooldowns().addCooldown(convDisc.getItem(), 22);
@@ -126,7 +126,7 @@ public class StandDiscItem extends Item {
                     }
 
                     if (!$$1.isCreative()) {
-                        ((StandUser)$$1).roundabout$sealStand(
+                        ((StandUser)$$1).sba$sealStand(
                                 ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength);
                     }
                 } else {
@@ -136,7 +136,7 @@ public class StandDiscItem extends Item {
             }
         } else {
             if ($$1 !=  null){
-                ((StandUser)$$1).roundabout$setInteractedWithDisc(true);
+                ((StandUser)$$1).sba$setInteractedWithDisc(true);
             }
         }
         return InteractionResultHolder.consume($$3);
@@ -160,28 +160,28 @@ public class StandDiscItem extends Item {
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
 
         if(standPowers != null && this.standPowers.isWip()){
-            $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
-            $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
-            $$2.add(Component.translatable("leveling.roundabout.disc_wip_3").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
-            $$2.add(Component.translatable("roundabout.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
+            $$2.add(Component.translatable("leveling.sba.disc_wip").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
+            $$2.add(Component.translatable("leveling.sba.disc_wip_2").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
+            $$2.add(Component.translatable("leveling.sba.disc_wip_3").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
+            $$2.add(Component.translatable("sba.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
                     .append(" ")
                     .append(this.standPowers.ifWipListDevStatus()));
-            $$2.add(Component.translatable("roundabout.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
+            $$2.add(Component.translatable("sba.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
                     .append(" ")
                     .append(this.standPowers.ifWipListDev()));
         }
         $$2.add(this.getDisplayName2().withStyle(ChatFormatting.AQUA));
         CompoundTag $$4 = $$0.getTagElement("Memory");
-        // && $$1.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_LEVELING)
+        // && $$1.getGameRules().getBoolean(ModGamerules.SBA_STAND_LEVELING)
         if ($$4 != null && $$1 != null) {
             if (standPowers != null && !standPowers.isSecondaryStand() && $$4.contains("Level")) {
                 if (ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
                     byte lvl = (byte) ($$4.getByte("Level") + 1);
                     if(!(this.standPowers.isWip())) {
                         if (lvl < standPowers.getMaxLevel()) {
-                            $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level", lvl).withStyle(ChatFormatting.GRAY));
+                            $$2.add(Component.translatable("leveling.sba.disc_development_potential_level", lvl).withStyle(ChatFormatting.GRAY));
                         } else {
-                            $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.GRAY));
+                            $$2.add(Component.translatable("leveling.sba.disc_maxed").withStyle(ChatFormatting.GRAY));
                         }
                     }
                 }
@@ -191,7 +191,7 @@ public class StandDiscItem extends Item {
             }
         } else {
             if (standPowers != null && !standPowers.isSecondaryStand()) {
-                $$2.add(Component.translatable("leveling.roundabout.disc_development_potential_level", 1).withStyle(ChatFormatting.GRAY));
+                $$2.add(Component.translatable("leveling.sba.disc_development_potential_level", 1).withStyle(ChatFormatting.GRAY));
             }
         }
 

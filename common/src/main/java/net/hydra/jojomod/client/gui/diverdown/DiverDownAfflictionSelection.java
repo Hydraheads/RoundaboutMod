@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui.diverdown;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
@@ -52,7 +52,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     private byte selectedAffliction = 0;
 
     //Check out GamemodeSwitcherScreen
-    static final private ResourceLocation AFFLICTION_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
+    static final private ResourceLocation AFFLICTION_SELECT_GUI = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/diver_down/diver_gui.png");
     private AfflictionType currentlyHovered;
     private int firstMouseX;
@@ -90,14 +90,14 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
     }
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
-        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
+        if (this.minecraft != null && !sba$sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
             this.selectHoveredAffliction();
             if (this.minecraft.screen == this) {
                 this.minecraft.setScreen(null);
             }
             if (this.minecraft.player != null){
                 StandUser SU = ((StandUser) this.minecraft.player);
-                if (SU.roundabout$getStandPowers().isBarraging()){
+                if (SU.sba$getStandPowers().isBarraging()){
                     //This prevents barrage canceling
                 } else {
                     this.minecraft.options.keyUse.setDown(false);
@@ -229,7 +229,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
             return;
         }
 
-        if (((StandUser) minecraft.player).roundabout$getStandPowers()instanceof PowersDiverDown powers) {
+        if (((StandUser) minecraft.player).sba$getStandPowers()instanceof PowersDiverDown powers) {
             powers.tryIntPower(PowersDiverDown.ACCESS_AFFLICTIONS, true, affliction.id);
             powers.tryIntPowerPacket(PowersDiverDown.ACCESS_AFFLICTIONS, affliction.id);
         }
@@ -240,7 +240,7 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         //minecraft.player.displayClientMessage(Component.literal("Selection menu works :thumbsup:"),false);
     }
 
-    public boolean roundabout$sameKeyOne(KeyMapping key1){
+    public boolean sba$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
                 || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
         );
@@ -251,9 +251,9 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     private boolean checkToClose() {
@@ -297,29 +297,29 @@ public class DiverDownAfflictionSelection extends Screen implements NoCancelInpu
      */
     public enum AfflictionType {
         // LEFT (Positive)
-        DIVER_LEGS_ID(Component.translatable("roundabout.diver_affliction.diver_legs"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/diver_legs.png"), DIVER_LEGS, -43, 31, Component.translatable("roundabout.diver_affliction.diver_legs.desc"), CircleColor.GREEN),
-        EFFECT_CURE_ID(Component.translatable("roundabout.diver_affliction.effect_cure"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/effect_cure.png"), EFFECT_CURE, -28, 1, Component.translatable("roundabout.diver_affliction.effect_cure.desc"), CircleColor.GREEN),
-        TRANSFER_ID(Component.translatable("roundabout.diver_affliction.diver_arms"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/diver_arms.png"), TRANSFER, -28, 61, Component.translatable("roundabout.diver_affliction.diver_arms.desc"), CircleColor.GREEN),
+        DIVER_LEGS_ID(Component.translatable("sba.diver_affliction.diver_legs"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/diver_legs.png"), DIVER_LEGS, -43, 31, Component.translatable("sba.diver_affliction.diver_legs.desc"), CircleColor.GREEN),
+        EFFECT_CURE_ID(Component.translatable("sba.diver_affliction.effect_cure"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/effect_cure.png"), EFFECT_CURE, -28, 1, Component.translatable("sba.diver_affliction.effect_cure.desc"), CircleColor.GREEN),
+        TRANSFER_ID(Component.translatable("sba.diver_affliction.diver_arms"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/diver_arms.png"), TRANSFER, -28, 61, Component.translatable("sba.diver_affliction.diver_arms.desc"), CircleColor.GREEN),
 
         // TOP & BOTTOM (Neutral)
-        DISGUISE_ID(Component.translatable("roundabout.diver_affliction.disguise"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/disguise.png"), DISGUISE, 0, -16, Component.translatable("roundabout.diver_affliction.disguise.desc"), CircleColor.NEUTRAL),
-        EMBED_POTION_ID(Component.translatable("roundabout.diver_affliction.embed_potion"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/effects.png"), EMBED_POTION, 0, 78, Component.translatable("roundabout.diver_affliction.embed_potion.desc"), CircleColor.NEUTRAL),
+        DISGUISE_ID(Component.translatable("sba.diver_affliction.disguise"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/disguise.png"), DISGUISE, 0, -16, Component.translatable("sba.diver_affliction.disguise.desc"), CircleColor.NEUTRAL),
+        EMBED_POTION_ID(Component.translatable("sba.diver_affliction.embed_potion"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/effects.png"), EMBED_POTION, 0, 78, Component.translatable("sba.diver_affliction.embed_potion.desc"), CircleColor.NEUTRAL),
 
         // RIGHT (Negative)
-        RIBCAGE_TRAP_ID(Component.translatable("roundabout.diver_affliction.ribcage_trap"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/ribcage_trap.png"), RIBCAGE_TRAP, 28, 1, Component.translatable("roundabout.diver_affliction.ribcage_trap.desc"), CircleColor.RED),
-        BONE_BOMB_ID(Component.translatable("roundabout.diver_affliction.bone_bomb"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/bone_bomb.png"), BONE_BOMB, 28, 61, Component.translatable("roundabout.diver_affliction.bone_bomb.desc"), CircleColor.RED),
-        SPRING_LEGS_ID(Component.translatable("roundabout.diver_affliction.spring_legs"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/affliction_icons/spring_legs.png"), SPRING_LEGS, 43, 31, Component.translatable("roundabout.diver_affliction.spring_legs.desc"), CircleColor.RED),
+        RIBCAGE_TRAP_ID(Component.translatable("sba.diver_affliction.ribcage_trap"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/ribcage_trap.png"), RIBCAGE_TRAP, 28, 1, Component.translatable("sba.diver_affliction.ribcage_trap.desc"), CircleColor.RED),
+        BONE_BOMB_ID(Component.translatable("sba.diver_affliction.bone_bomb"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/bone_bomb.png"), BONE_BOMB, 28, 61, Component.translatable("sba.diver_affliction.bone_bomb.desc"), CircleColor.RED),
+        SPRING_LEGS_ID(Component.translatable("sba.diver_affliction.spring_legs"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/diver_down/affliction_icons/spring_legs.png"), SPRING_LEGS, 43, 31, Component.translatable("sba.diver_affliction.spring_legs.desc"), CircleColor.RED),
 
-        NONE(Component.translatable("roundabout.diver_affliction.none"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/main_stand.png"), (byte) 0, 0, 75, Component.translatable("roundabout.stand_switch.main.desc"), CircleColor.NEUTRAL);
+        NONE(Component.translatable("sba.diver_affliction.none"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/main_stand.png"), (byte) 0, 0, 75, Component.translatable("sba.stand_switch.main.desc"), CircleColor.NEUTRAL);
 
         protected static final AfflictionType[] VALUES;
         final Component name;

@@ -152,7 +152,7 @@ public class PHCapsuleEntity extends ThrowableProjectile implements UnburnablePr
     }
     public void popBubble(){
         if (!this.level().isClientSide() && this.standUser != null) {
-            if (((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersPurpleHaze ph) {
+            if (((StandUser) this.standUser).sba$getStandPowers() instanceof PowersPurpleHaze ph) {
                 ph.onPodLanded(this.position());
             }
         }

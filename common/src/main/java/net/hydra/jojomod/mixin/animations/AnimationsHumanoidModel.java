@@ -34,18 +34,18 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
 
 
     @Inject(method = "poseRightArm", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$poseRightArm(T $$0, CallbackInfo ci){
-        if ($$0 instanceof Player pl && ((StandUser)$$0).roundabout$getEffectiveCombatMode() && !pl.isUsingItem()) {
-            if (!(PowerTypes.hasStandActive($$0) && ((StandUser)$$0).roundabout$getStandPowers().negateHandPoseForcing())) {
+    public void sba$poseRightArm(T $$0, CallbackInfo ci){
+        if ($$0 instanceof Player pl && ((StandUser)$$0).sba$getEffectiveCombatMode() && !pl.isUsingItem()) {
+            if (!(PowerTypes.hasStandActive($$0) && ((StandUser)$$0).sba$getStandPowers().negateHandPoseForcing())) {
                 this.rightArm.yRot = 0.0F;
                 ci.cancel();
             }
         }
     }
     @Inject(method = "poseLeftArm", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$poseLeftArm(T $$0, CallbackInfo ci){
-        if ($$0 instanceof Player pl && ((StandUser)pl).roundabout$getEffectiveCombatMode() && !pl.isUsingItem()) {
-            if (!(PowerTypes.hasStandActive($$0) && ((StandUser)$$0).roundabout$getStandPowers().negateHandPoseForcing())) {
+    public void sba$poseLeftArm(T $$0, CallbackInfo ci){
+        if ($$0 instanceof Player pl && ((StandUser)pl).sba$getEffectiveCombatMode() && !pl.isUsingItem()) {
+            if (!(PowerTypes.hasStandActive($$0) && ((StandUser)$$0).sba$getStandPowers().negateHandPoseForcing())) {
                 this.leftArm.yRot = 0.0F;
                 ci.cancel();
             }
@@ -53,8 +53,8 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
     }
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isUsingItem()Z", shift = At.Shift.BEFORE, ordinal = 0))
-    public void roundabout$SetupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
-        if ($$0 instanceof Player && ((IPlayerEntity)$$0).roundabout$GetPos() == PlayerPosIndex.TS_FLOAT) {
+    public void sba$SetupAnim(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci){
+        if ($$0 instanceof Player && ((IPlayerEntity)$$0).sba$GetPos() == PlayerPosIndex.TS_FLOAT) {
             this.rightArm.xRot = 0F + Mth.cos(Math.abs(($$1)/5) * 0.6662F + (float) Math.PI) * 2.0F * Math.abs(($$2)/5) * 0.5F;
             this.leftArm.xRot = -0.22F + Mth.cos(Math.abs(($$1)/5) * 0.6662F) * 2.0F * Math.abs(($$2)/5) * 0.5F;
             this.rightLeg.xRot = 0.4F;
@@ -68,15 +68,15 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
 
     /**Animation for dodge skill*/
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0),cancellable = true)
-    public void roundabout$SetupAnim2(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci){
+    public void sba$SetupAnim2(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci){
        if (entity instanceof Player player) {
 
            IPlayerEntity ipe = ((IPlayerEntity) player);
-           if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
-               byte pos = ipe.roundabout$GetPos();
+           if (ipe.sba$GetPoseEmote() != Poses.NONE.id) {
+               byte pos = ipe.sba$GetPos();
                if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
                    //this.body.xRot = -20.0F;
-                   int dodgeTime = ipe.roundabout$getDodgeTime();
+                   int dodgeTime = ipe.sba$getDodgeTime();
                    float fl;
                    if (dodgeTime > -1) {
                        if (dodgeTime > 5) {
@@ -128,10 +128,10 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
 
 
 
-           if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated() &&
+           if (((StandUser)player).sba$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated() &&
                    (player.isSprinting() || PW.getPlayerPos() == PlayerPosIndex.SKATE_GENERAL) && !player.isFallFlying() && !player.isCrouching() && !player.isPassenger()){
 
-               Byte pos = ((IPlayerEntity)player).roundabout$GetPos();
+               Byte pos = ((IPlayerEntity)player).sba$GetPos();
                if (pos != PlayerPosIndex.SKATE_TWIRL && pos != PlayerPosIndex.SKATE_JUMP) {
 
                    //float accelerationMod = ((float)PW.acceleration) /
@@ -189,7 +189,7 @@ public class AnimationsHumanoidModel<T extends LivingEntity> extends AgeableList
 
     @Unique
     @Override
-    public Iterable<ModelPart> roundabout$getBodyParts(){return bodyParts();}
+    public Iterable<ModelPart> sba$getBodyParts(){return bodyParts();}
 
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------

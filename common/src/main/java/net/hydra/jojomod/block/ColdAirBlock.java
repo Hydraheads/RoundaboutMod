@@ -18,7 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class ColdAirBlock extends RoundaboutAttackBlock {
+public class ColdAirBlock extends SBAAttackBlock {
     public ColdAirBlock(Properties $$0) {
         super($$0);
     }
@@ -26,7 +26,7 @@ public class ColdAirBlock extends RoundaboutAttackBlock {
 
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
         if ($$3 instanceof LivingEntity LE && !LE.isInvulnerable()) {
-            if (!(((StandUser) LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
+            if (!(((StandUser) LE).sba$getStandPowers() instanceof PowersWhiteAlbum PW &&
                     PowerTypes.hasStandActive(LE))) {
                 if (LE.onGround()) {
                     if (
@@ -35,8 +35,8 @@ public class ColdAirBlock extends RoundaboutAttackBlock {
                     ) {
                         if ($$3 instanceof Player pl ){
                             if ((pl.hurtTime <= 0) ||
-                                    (((StandUser)pl).roundabout$getLogSource() == null) ||
-                            !(((StandUser)pl).roundabout$getLogSource() != null && ((StandUser)pl).roundabout$getLogSource().is(ModDamageTypes.STAND))
+                                    (((StandUser)pl).sba$getLogSource() == null) ||
+                            !(((StandUser)pl).sba$getLogSource() != null && ((StandUser)pl).sba$getLogSource().is(ModDamageTypes.STAND))
                             ){
                                 if (MainUtil.canFreeze(pl)) {
                                     $$3.makeStuckInBlock($$0, new Vec3((double) 0.73F, (double) 0.73F, (double) 0.73F));

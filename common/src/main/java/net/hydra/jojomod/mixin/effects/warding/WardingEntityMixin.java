@@ -22,7 +22,7 @@ public abstract class WardingEntityMixin {
     @Inject(method = "setSecondsOnFire(I)V", at = @At(value = "HEAD"),cancellable = true)
     public void rdbt$setSecondsOnFire(int $$0, CallbackInfo ci) {
         if (((net.minecraft.world.entity.Entity)(Object)this) instanceof LivingEntity LE){
-            if (((StandUser)LE).roundabout$getStandPowers().surpassesFire()){
+            if (((StandUser)LE).sba$getStandPowers().surpassesFire()){
                 ci.cancel();
                 return;
             }
@@ -37,7 +37,7 @@ public abstract class WardingEntityMixin {
 
     // there are so many entity mixins, i might as well just put this one here
     @Inject(method = "playStepSound", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$silenceSnakeSkinBootsMob(BlockPos pos, BlockState state, CallbackInfo ci) {
+    private void sba$silenceSnakeSkinBootsMob(BlockPos pos, BlockState state, CallbackInfo ci) {
         // mob footstep cancellation
         if ((Object) this instanceof LivingEntity entity) {
             if (entity.getItemBySlot(EquipmentSlot.FEET).is(ModItems.SNAKE_SKIN_BOOTS)) {
@@ -47,7 +47,7 @@ public abstract class WardingEntityMixin {
     }
 
     @Inject(method = "spawnSprintParticle", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$silenceSnakeSkinParticles(CallbackInfo ci) {
+    private void sba$silenceSnakeSkinParticles(CallbackInfo ci) {
         if ((Object) this instanceof LivingEntity entity) {
             if (entity.getItemBySlot(EquipmentSlot.FEET).is(ModItems.SNAKE_SKIN_BOOTS)) {
                 ci.cancel();

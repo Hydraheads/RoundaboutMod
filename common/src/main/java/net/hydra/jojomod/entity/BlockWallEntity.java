@@ -1,7 +1,7 @@
 package net.hydra.jojomod.entity;
 
 import com.mojang.logging.LogUtils;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -162,7 +162,7 @@ public class BlockWallEntity extends Entity {
     public boolean hurt(DamageSource $$0, float damage) {
         if ($$0.getEntity() != null){
             if (!level().isClientSide() && isWhiteAlbumWall && $$0.getEntity() instanceof LivingEntity LE &&
-                    ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa
+                    ((StandUser)LE).sba$getStandPowers() instanceof PowersWhiteAlbum pwa
             && $$0.is(ModDamageTypes.STAND_BRAWL)){
                 Vec3 current = position();
                 Vec3 target = new Vec3(getFinalPos().x, getFinalPos().y, getFinalPos().z);

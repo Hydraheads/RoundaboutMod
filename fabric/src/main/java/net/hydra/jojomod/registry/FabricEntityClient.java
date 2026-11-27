@@ -1,7 +1,7 @@
 package net.hydra.jojomod.registry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.BombPlantedItemEntityRenderer;
 import net.hydra.jojomod.client.DNACreationRenderer;
@@ -51,7 +51,7 @@ public class FabricEntityClient {
     public static <T extends Entity> EntityType<T> register(BuiltInRegistries entityType, String name, EntityType<T> builder) {
         return Registry.register(
                 BuiltInRegistries.ENTITY_TYPE,
-                new ResourceLocation(Roundabout.MOD_ID, "terrier"),
+                new ResourceLocation(SBA.MOD_ID, "terrier"),
                 builder);
     }
 
@@ -157,7 +157,7 @@ public class FabricEntityClient {
         EntityRendererRegistry.register(FabricEntities.STEP_RULE, StepRuleRenderer::new);
 
         EntityRendererRegistry.register(FabricEntities.BLADED_BOWLER_HAT, BladedBowlerHatRenderer::new);
-        EntityRendererRegistry.register(FabricEntities.ROUNDABOUT_BULLET_ENTITY, RoundaboutBulletEntityRenderer::new);
+        EntityRendererRegistry.register(FabricEntities.SBA_BULLET_ENTITY, SBABulletEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.BAD_COMPANY_BULLET_ENTITY, BadCompanyBulletEntityRenderer::new);
         EntityRendererRegistry.register(FabricEntities.RATT_DART, RattDartRenderer::new);
         EntityRendererRegistry.register(FabricEntities.POISON_LLAMA_SPIT, PoisonLlamaSpitRenderer::new);
@@ -370,7 +370,7 @@ public class FabricEntityClient {
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.PARALLEL_CHEST, ParallelChestRenderer::createSingleBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.TUSK_HOLE_LAYER, TuskHoleModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.ROUNDABOUT_BULLET_LAYER, RoundaboutBulletModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.SBA_BULLET_LAYER, SBABulletModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.KNIFE_LAYER, KnifeModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.JUMPIN_JACK_FLASH_LAYER, JumpinJackFlashModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModEntityRendererClient.RATT_DART_LAYER, RattDartModel::getTexturedModelData);

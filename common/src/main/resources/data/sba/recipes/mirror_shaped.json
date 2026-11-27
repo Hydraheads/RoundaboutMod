@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "minecraft:glass_pane"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    " N ",
+    "NBN",
+    " N "
+  ],
+  "result": {
+    "count": 1,
+    "item": "sba:mirror"
+  },
+  "show_notification": true
+}

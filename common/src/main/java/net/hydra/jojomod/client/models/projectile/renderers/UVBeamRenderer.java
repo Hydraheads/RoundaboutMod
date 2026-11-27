@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.RipperEyesModel;
 import net.hydra.jojomod.client.models.projectile.UVModel;
@@ -69,7 +69,7 @@ public class UVBeamRenderer extends EntityRenderer<UltravioletProjectile> {
 
     @Override
     public ResourceLocation getTextureLocation(UltravioletProjectile var1) {
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/uv.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/uv.png");
     }
 
 }

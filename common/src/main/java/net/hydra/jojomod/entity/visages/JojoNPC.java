@@ -180,38 +180,38 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     public ItemStack getBasis(){
         return ModItems.BLANK_MASK.getDefaultInstance();
     }
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(JojoNPC.class,
+    private static final EntityDataAccessor<Byte> SBA$DATA_KNIFE_COUNT_ID = SynchedEntityData.defineId(JojoNPC.class,
             EntityDataSerializers.BYTE);
 
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$DODGE_TIME = SynchedEntityData.defineId(JojoNPC.class,
+    private static final EntityDataAccessor<Integer> SBA$DODGE_TIME = SynchedEntityData.defineId(JojoNPC.class,
             EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$SKIN_NUMBER = SynchedEntityData.defineId(JojoNPC.class,
+    private static final EntityDataAccessor<Integer> SBA$SKIN_NUMBER = SynchedEntityData.defineId(JojoNPC.class,
             EntityDataSerializers.INT);
 
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$POS = SynchedEntityData.defineId(JojoNPC.class,
+    private static final EntityDataAccessor<Byte> SBA$POS = SynchedEntityData.defineId(JojoNPC.class,
             EntityDataSerializers.BYTE);
-    public void roundabout$SetPos(byte Pos){
-        this.getEntityData().set(ROUNDABOUT$POS, Pos);
+    public void sba$SetPos(byte Pos){
+        this.getEntityData().set(SBA$POS, Pos);
     }
-    public byte roundabout$GetPos(){
-        return this.getEntityData().get(ROUNDABOUT$POS);
+    public byte sba$GetPos(){
+        return this.getEntityData().get(SBA$POS);
     }
     public void setSkinNumber(int Pos){
-        this.getEntityData().set(ROUNDABOUT$SKIN_NUMBER, Pos);
+        this.getEntityData().set(SBA$SKIN_NUMBER, Pos);
     }
     public int getSkinNumber(){
-        return this.getEntityData().get(ROUNDABOUT$SKIN_NUMBER);
+        return this.getEntityData().get(SBA$SKIN_NUMBER);
     }
-    public final int roundabout$getKnifeCount() {
-        return this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
+    public final int sba$getKnifeCount() {
+        return this.entityData.get(SBA$DATA_KNIFE_COUNT_ID);
     }
 
-    public void roundabout$addKnife() {
-        byte knifeCount = this.entityData.get(ROUNDABOUT$DATA_KNIFE_COUNT_ID);
+    public void sba$addKnife() {
+        byte knifeCount = this.entityData.get(SBA$DATA_KNIFE_COUNT_ID);
 
         knifeCount++;
         if (knifeCount <= 12){
-            ((LivingEntity) (Object) this).getEntityData().set(ROUNDABOUT$DATA_KNIFE_COUNT_ID, knifeCount);
+            ((LivingEntity) (Object) this).getEntityData().set(SBA$DATA_KNIFE_COUNT_ID, knifeCount);
         }
     }
 
@@ -220,21 +220,21 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     public boolean canSummonStandThroughFightOrFlightActive(){
         return false;
     }
-    private int roundabout$clientDodgeTime = 0;
-    public int roundabout$getDodgeTime(){
-        return this.getEntityData().get(ROUNDABOUT$DODGE_TIME);
+    private int sba$clientDodgeTime = 0;
+    public int sba$getDodgeTime(){
+        return this.getEntityData().get(SBA$DODGE_TIME);
     }
-    public int roundabout$getClientDodgeTime(){
-        return roundabout$clientDodgeTime;
+    public int sba$getClientDodgeTime(){
+        return sba$clientDodgeTime;
     }
-    public void roundabout$setClientDodgeTime(int dodgeTime){
-        roundabout$clientDodgeTime = dodgeTime;
+    public void sba$setClientDodgeTime(int dodgeTime){
+        sba$clientDodgeTime = dodgeTime;
     }
-    public void roundabout$setDodgeTime(int dodgeTime){
-        this.getEntityData().set(ROUNDABOUT$DODGE_TIME, dodgeTime);
+    public void sba$setDodgeTime(int dodgeTime){
+        this.getEntityData().set(SBA$DODGE_TIME, dodgeTime);
     }
-    public void roundabout$setKnife(byte knives) {
-        this.getEntityData().set(ROUNDABOUT$DATA_KNIFE_COUNT_ID, knives);
+    public void sba$setKnife(byte knives) {
+        this.getEntityData().set(SBA$DATA_KNIFE_COUNT_ID, knives);
     }
 
     public CompoundTag getShoulderEntityLeft() {
@@ -315,22 +315,22 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
         return false;
     }
 
-    public boolean roundabout$initializedStandUser = false;
+    public boolean sba$initializedStandUser = false;
     protected void customServerAiStep() {
         if (runsIfLow()){
-            if (!roundabout$initializedStandUser){
-                ((IMob)this).roundabout$toggleFightOrFlight(true);
-                roundabout$initializedStandUser = true;
+            if (!sba$initializedStandUser){
+                ((IMob)this).sba$toggleFightOrFlight(true);
+                sba$initializedStandUser = true;
             }
-            if (((IMob)this).roundabout$getFightOrFlight() && this.getHealth() > this.getMaxHealth()*0.6){
+            if (((IMob)this).sba$getFightOrFlight() && this.getHealth() > this.getMaxHealth()*0.6){
                 this.refreshBrain(((ServerLevel)this.level()));
-                ((IMob)this).roundabout$toggleFightOrFlight(false);
-            } else if (!((IMob)this).roundabout$getFightOrFlight() && (this.getHealth() < this.getMaxHealth()*0.35)){
+                ((IMob)this).sba$toggleFightOrFlight(false);
+            } else if (!((IMob)this).sba$getFightOrFlight() && (this.getHealth() < this.getMaxHealth()*0.35)){
                 this.refreshBrain(((ServerLevel)this.level()));
-                ((IMob)this).roundabout$toggleFightOrFlight(true);
+                ((IMob)this).sba$toggleFightOrFlight(true);
             }
 
-            if (!((IMob)this).roundabout$getFightOrFlight()){
+            if (!((IMob)this).sba$getFightOrFlight()){
             }
         }
 
@@ -445,16 +445,16 @@ public class JojoNPC extends AgeableMob implements InventoryCarrier, Npc, Reputa
     protected static final EntityDataAccessor<CompoundTag> DATA_SHOULDER_LEFT = SynchedEntityData.defineId(JojoNPC.class, EntityDataSerializers.COMPOUND_TAG);
     protected static final EntityDataAccessor<CompoundTag> DATA_SHOULDER_RIGHT = SynchedEntityData.defineId(JojoNPC.class, EntityDataSerializers.COMPOUND_TAG);
     protected void defineSynchedData() {
-        if (!this.entityData.hasItem(ROUNDABOUT$SKIN_NUMBER)) {
+        if (!this.entityData.hasItem(SBA$SKIN_NUMBER)) {
             super.defineSynchedData();
             this.entityData.define(DATA_UNHAPPY_COUNTER, 0);
-            this.entityData.define(ROUNDABOUT$POS, (byte) 0);
+            this.entityData.define(SBA$POS, (byte) 0);
             this.entityData.define(DATA_PLAYER_ABSORPTION_ID, 0.0F);
             this.entityData.define(DATA_SCORE_ID, 0);
             this.entityData.define(DATA_PLAYER_MODE_CUSTOMISATION, (byte) 0);
-            this.entityData.define(ROUNDABOUT$DODGE_TIME, -1);
-            this.entityData.define(ROUNDABOUT$SKIN_NUMBER, 1);
-            this.entityData.define(ROUNDABOUT$DATA_KNIFE_COUNT_ID, (byte) 0);
+            this.entityData.define(SBA$DODGE_TIME, -1);
+            this.entityData.define(SBA$SKIN_NUMBER, 1);
+            this.entityData.define(SBA$DATA_KNIFE_COUNT_ID, (byte) 0);
             this.entityData.define(DATA_PLAYER_MAIN_HAND, (byte) 1);
             this.entityData.define(DATA_SHOULDER_LEFT, new CompoundTag());
             this.entityData.define(DATA_SHOULDER_RIGHT, new CompoundTag());

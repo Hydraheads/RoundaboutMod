@@ -37,7 +37,7 @@ public class TimeStopBannerRenderer {
      */
 
     @Inject(method = "render(Lnet/minecraft/world/level/block/entity/BannerBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V", at = @At("HEAD"), cancellable = true)
-    public void roundabout$render(BannerBlockEntity $$0, float $$1, PoseStack $$2,
+    public void sba$render(BannerBlockEntity $$0, float $$1, PoseStack $$2,
                                   MultiBufferSource $$3, int $$4, int $$5, CallbackInfo ci) {
         if ($$0.getLevel() != null && ((TimeStop)$$0.getLevel()).inTimeStopRange($$0.getBlockPos())) {
             ci.cancel();

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class GEArrowItemMixin {
 
     @Inject(method = "createArrow", at = @At("RETURN"))
-    private void roundabout$transferGETreeImbueToArrow(Level level, ItemStack stack, LivingEntity shooter, CallbackInfoReturnable<AbstractArrow> cir) {
+    private void sba$transferGETreeImbueToArrow(Level level, ItemStack stack, LivingEntity shooter, CallbackInfoReturnable<AbstractArrow> cir) {
         AbstractArrow arrow = cir.getReturnValue();
         if (arrow != null && PowersGoldExperience.isTreeImbuedProjectileItem(stack)) {
             PowersGoldExperience.transferTreeImbueToProjectile(level, stack, arrow);

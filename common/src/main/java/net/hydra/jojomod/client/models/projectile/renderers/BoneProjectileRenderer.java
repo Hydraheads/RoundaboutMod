@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.BoneProjectileEntity;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -20,7 +20,7 @@ import org.joml.Matrix4f;
 public class BoneProjectileRenderer extends EntityRenderer<BoneProjectileEntity> {
 
     public static final ResourceLocation BONE_TEXTURE = new ResourceLocation(
-            Roundabout.MOD_ID, "textures/entity/projectile/bone_projectile.png"
+            SBA.MOD_ID, "textures/entity/projectile/bone_projectile.png"
     );
 
     private final float scale;

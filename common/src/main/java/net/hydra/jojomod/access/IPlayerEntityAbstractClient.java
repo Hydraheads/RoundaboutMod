@@ -8,20 +8,20 @@ import net.minecraft.world.item.ItemStack;
 
 public interface IPlayerEntityAbstractClient {
 
-    boolean roundabout$getSwitched();
-    void roundabout$setSwitched(boolean switched);
-    PlayerModel roundabout$getOGModel();
-    void roundabout$setOGModel(PlayerModel switched);
+    boolean sba$getSwitched();
+    void sba$setSwitched(boolean switched);
+    PlayerModel sba$getOGModel();
+    void sba$setOGModel(PlayerModel switched);
 
-    void roundabout$setShapeShiftTemp(Mob shift);
-    Mob roundabout$getShapeShiftTemp();
-    void roundabout$setSwappedModel(Mob swap);
-    Mob roundabout$getSwappedModel();
-    void roundabout$setVisageData(VisageData data);
-    VisageData roundabout$getVisageData();
-    void roundabout$setLastVisage(ItemStack stack);
-    ItemStack roundabout$getLastVisage();
+    void sba$setShapeShiftTemp(Mob shift);
+    Mob sba$getShapeShiftTemp();
+    void sba$setSwappedModel(Mob swap);
+    Mob sba$getSwappedModel();
+    void sba$setVisageData(VisageData data);
+    VisageData sba$getVisageData();
+    void sba$setLastVisage(ItemStack stack);
+    ItemStack sba$getLastVisage();
 
-    ResourceLocation roundabout$getTextureLocation2();
+    ResourceLocation sba$getTextureLocation2();
     ResourceLocation rdbt$getSkinTextureLocation3();
 }

@@ -1,7 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.RoundaboutLoadServer;
+import net.hydra.jojomod.SBA;
+import net.hydra.jojomod.SBALoadServer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -63,7 +63,7 @@ public class MoldSporesEntity extends StandEntity {
         LivingEntity user = this.getUser();
         StandUser StandUU = (StandUser) user;
         if (StandUU != null) {
-            if (!(StandUU.roundabout$getStandPowers() instanceof PowersGreenDay)) {
+            if (!(StandUU.sba$getStandPowers() instanceof PowersGreenDay)) {
                 this.discard();
                 return;
             }
@@ -78,7 +78,7 @@ public class MoldSporesEntity extends StandEntity {
         }
 
 
-        if((StandUU.roundabout$getStandPowers() instanceof PowersGreenDay PGD)){
+        if((StandUU.sba$getStandPowers() instanceof PowersGreenDay PGD)){
             if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties() != null) {
                 if (user.isUsingItem() && user.getMainHandItem().getItem().getFoodProperties().getNutrition() > 0) {
                     if (ClientNetworking.getAppropriateConfig().greenDaySettings.eatingCancelsMold) {
@@ -117,7 +117,7 @@ public class MoldSporesEntity extends StandEntity {
                 Entity entity = damages.get(j);
                 if (entity instanceof LivingEntity) {
                 byte skin = PowersGreenDay.PART_FIVE_GREEN_DAY;
-                if (StandUU.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                if (StandUU.sba$getStandPowers() instanceof PowersGreenDay PGD) {
                     skin = PGD.standSkin;
                 }
                 ((StandUser) entity).setMoldSkin(skin);
@@ -130,7 +130,7 @@ public class MoldSporesEntity extends StandEntity {
             tickeffect();
             int color = PowersGreenDay.defaultMoldDustColor();
             Vector3f dustColor = PowersGreenDay.defaultFloatDustColor();
-            if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+            if (User != null && ((StandUser) User).sba$getStandPowers() instanceof PowersGreenDay PGD) {
                 color = PGD.getMoldParticleColor();
                 dustColor = PGD.getFloatDustParticleColor();
             }
@@ -150,9 +150,9 @@ public class MoldSporesEntity extends StandEntity {
         }
         /*
         if(client){
-            Roundabout.LOGGER.info("ClientRange= " + range);
+            SBA.LOGGER.info("ClientRange= " + range);
         }else{
-            Roundabout.LOGGER.info("ServerRange= " + range);
+            SBA.LOGGER.info("ServerRange= " + range);
         }
         */
         super.tick();
@@ -171,8 +171,8 @@ public class MoldSporesEntity extends StandEntity {
 
                 if (entity instanceof LivingEntity && User != null) {
 
-                    if (!((StandUser) entity).roundabout$getStandPowers().isStoppingTime()
-                            && !((StandUser) entity).roundabout$isBubbleEncased()
+                    if (!((StandUser) entity).sba$getStandPowers().isStoppingTime()
+                            && !((StandUser) entity).sba$isBubbleEncased()
                             && !isStand
                             && !(PowerTypes.isInADifferentExistence(entity,this))
                             && !isBoss
@@ -181,11 +181,11 @@ public class MoldSporesEntity extends StandEntity {
                             && ((StandUser) entity).getJumpImmunityTicks() < 1
                             && !((LivingEntity) entity).hasEffect(MobEffects.SLOW_FALLING)
                             && !entity.equals(User)) {
-                        if ((!((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).allies.contains(entity.getStringUUID())) || !(User instanceof Player)) {
+                        if ((!((PowersGreenDay) ((StandUser) User).sba$getStandPowers()).allies.contains(entity.getStringUUID())) || !(User instanceof Player)) {
 
                             float fallDistance = (((StandUser) entity).getStaringYPos() - (float) entity.getPosition(1).y());
 
-                            int color = ((PowersGreenDay) ((StandUser) User).roundabout$getStandPowers()).getMoldParticleColor();
+                            int color = ((PowersGreenDay) ((StandUser) User).sba$getStandPowers()).getMoldParticleColor();
                             double width = entity.getBbWidth() / 2;
                             double height = entity.getBbHeight() / 2;
                             ((ServerLevel) level()).sendParticles(
@@ -209,7 +209,7 @@ public class MoldSporesEntity extends StandEntity {
                                     damage=0.1;
                                 }
                                 entity.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.DISINTEGRATION), (float) (damage * (ClientNetworking.getAppropriateConfig().greenDaySettings.moldDMGPlayersMultiplier / 100F)));
-                                ((StandUser)entity).roundabout$setJumpImunityTicks(10);
+                                ((StandUser)entity).sba$setJumpImunityTicks(10);
                                 if (!entity.isAlive()) {
                                     range += 2;
                                     if (lifetime_add > 0) {
@@ -219,7 +219,7 @@ public class MoldSporesEntity extends StandEntity {
                                     entity.discard();
                                 }
                                 if (Math.random() < 0.2) {
-                                    ((StandUser) User).roundabout$getStandPowers().addEXP(1);
+                                    ((StandUser) User).sba$getStandPowers().addEXP(1);
                                 }
 
                         }

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.models.paintings;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
@@ -20,6 +20,6 @@ public class VanGoghPaintingRenderer extends CustomPaintingRenderer {
 
     @Override
     public ResourceLocation getTexture() {
-        return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/painting/van_gogh.png");
+        return new ResourceLocation(SBA.MOD_ID,"textures/entity/painting/van_gogh.png");
     }
 }

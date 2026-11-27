@@ -36,6 +36,6 @@ public class AnubisAttackGoal extends MeleeAttackGoal {
         if (this.mob instanceof Pillager P) {
             bl = !P.isChargingCrossbow();
         }
-        return super.canUse() && bl && ((StandUser)this.mob).roundabout$getStandPowers() instanceof PowersAnubis;
+        return super.canUse() && bl && ((StandUser)this.mob).sba$getStandPowers() instanceof PowersAnubis;
     }
 }

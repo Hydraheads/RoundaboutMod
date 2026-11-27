@@ -24,12 +24,12 @@ public abstract class PowersPlayer extends LivingEntity implements IPowersPlayer
     @Unique
     @Override
     public GeneralPowers rdbt$getPowers(){
-        if (rdbt$lastPower != ((IPlayerEntity)this).roundabout$getPower()){
-            rdbt$lastPower = ((IPlayerEntity)this).roundabout$getPower();
+        if (rdbt$lastPower != ((IPlayerEntity)this).sba$getPower()){
+            rdbt$lastPower = ((IPlayerEntity)this).sba$getPower();
             rdbt$powers = null;
         }
         if (rdbt$powers == null){
-            rdbt$powers = PowerTypes.getPowerFromByte(((IPlayerEntity)this).roundabout$getPower()).generalPowers.generatePowers(this);
+            rdbt$powers = PowerTypes.getPowerFromByte(((IPlayerEntity)this).sba$getPower()).generalPowers.generatePowers(this);
         }
         return rdbt$powers;
     }

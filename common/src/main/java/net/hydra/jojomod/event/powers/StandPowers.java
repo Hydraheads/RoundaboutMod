@@ -2,10 +2,10 @@ package net.hydra.jojomod.event.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
-import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.projectile.SBABulletEntity;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModGamerules;
@@ -177,7 +177,7 @@ public class StandPowers extends AbilityScapeBasis {
     }
     /**Runs this code while switching out of your stand with a disc*/
     public void onStandSwitch(){
-        getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+        getStandUserSelf().sba$setUniqueStandModeToggle(false);
     }
     public void onPowerSwitch(){
 
@@ -192,9 +192,9 @@ public class StandPowers extends AbilityScapeBasis {
 
     public void onReleaseGuard(){
         StandUser standComp = ((StandUser) self);
-        standComp.roundabout$tryPower(PowerIndex.NONE,true);
-        if (standComp.roundabout$getActivePowerPhase() > 0 ) {
-            standComp.roundabout$setInterruptCD(3);
+        standComp.sba$tryPower(PowerIndex.NONE,true);
+        if (standComp.sba$getActivePowerPhase() > 0 ) {
+            standComp.sba$setInterruptCD(3);
         }
         C2SPacketUtil.guardCancelPacket();
     }
@@ -230,12 +230,12 @@ public class StandPowers extends AbilityScapeBasis {
      * any stand ability slow you down*/
     public float inputSpeedModifiers(float basis){
         StandUser standUser = ((StandUser) this.getSelf());
-        if (standUser.roundabout$isDazed()) {
+        if (standUser.sba$isDazed()) {
             basis = 0;
         } else if (!(this.getSelf().getVehicle() != null && this.getSelf().getControlledVehicle() == null) &&
                 (isGuarding() && this.getSelf().getVehicle() == null)) {
             basis*=0.3f;
-        } else if (this.isBarrageAttacking() || standUser.roundabout$isClashing()) {
+        } else if (this.isBarrageAttacking() || standUser.sba$isClashing()) {
             basis*=0.2f;
         } else if (this.isBarrageCharging()) {
             basis*=0.5f;
@@ -478,13 +478,13 @@ public class StandPowers extends AbilityScapeBasis {
     public void deflectArrowsAndBullets(Entity ent){
         if (ent instanceof Projectile PE){
             IProjectileAccess ipa = (IProjectileAccess) PE;
-            if (!ipa.roundabout$getIsDeflected()){
-                if (PE instanceof RoundaboutBulletEntity) {
-                    ((RoundaboutBulletEntity) PE).setSuperThrown(false);
+            if (!ipa.sba$getIsDeflected()){
+                if (PE instanceof SBABulletEntity) {
+                    ((SBABulletEntity) PE).setSuperThrown(false);
                     PE.setOwner(self);
                     playSoundIfPossible(PE.level(), null, PE.blockPosition(), ModSounds.BULLET_RICOCHET_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
-                ipa.roundabout$setIsDeflected(true);
+                ipa.sba$setIsDeflected(true);
                 ((IEntityAndData)ent).rdbt$forceDeltaMovement(ent.getDeltaMovement().scale(-0.4));
                 ent.setYRot(ent.getYRot() + 180.0F);
                 ent.yRotO += 180.0F;
@@ -621,8 +621,8 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean tryPower(int move, boolean forced){
         if (move != PowerIndex.NONE && this.self instanceof Mob && !hasStandEntity(this.self)){
             if (canSummonStand()) {
-                ((StandUser) this.self).roundabout$setActive(true);
-                ((StandUser) this.self).roundabout$summonStand(this.self.level(), true, false);
+                ((StandUser) this.self).sba$setActive(true);
+                ((StandUser) this.self).sba$summonStand(this.self.level(), true, false);
             }
         }
 
@@ -692,7 +692,7 @@ public class StandPowers extends AbilityScapeBasis {
 
 
     public void xTryPower(byte index, boolean forced){
-        ((StandUser) this.self).roundabout$tryPower(index,true);
+        ((StandUser) this.self).sba$tryPower(index,true);
     }
 
 
@@ -701,24 +701,24 @@ public class StandPowers extends AbilityScapeBasis {
     @Override
     public void swingStandHands(){
         if (lastRight){
-            getStandUserSelf().roundabout$setStandAnimation(PUNCH_LEFT);
+            getStandUserSelf().sba$setStandAnimation(PUNCH_LEFT);
         } else {
-            getStandUserSelf().roundabout$setStandAnimation(PUNCH_RIGHT);
+            getStandUserSelf().sba$setStandAnimation(PUNCH_RIGHT);
         }
         lastRight = !lastRight;
     }
     public boolean setPowerGuard() {
         if (PowerTypes.hasHandsActive(self)){
             if (!self.level().isClientSide()) {
-                if (!((StandUser) this.self).roundabout$getGuardBroken()) {
-                    getStandUserSelf().roundabout$setStandAnimation(GUARD);
+                if (!((StandUser) this.self).sba$getGuardBroken()) {
+                    getStandUserSelf().sba$setStandAnimation(GUARD);
                 } else {
-                    getStandUserSelf().roundabout$setStandAnimation(NONE);
+                    getStandUserSelf().sba$setStandAnimation(NONE);
                 }
                 refreshArms();
             }
         } else {
-            if (((StandUser)this.self).roundabout$getGuardBroken()) {
+            if (((StandUser)this.self).sba$getGuardBroken()) {
                 animateStand(StandEntity.BROKEN_GUARD);
             } else {
                 animateStand(StandEntity.BLOCK);
@@ -820,7 +820,7 @@ public class StandPowers extends AbilityScapeBasis {
                     this.getSelf().getEyePosition().x, this.getSelf().getEyePosition().y, this.getSelf().getEyePosition().z,
                     20, 0.4, 0.4, 0.4, 0.4);
             playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 0.95F, (float) (0.8 + (Math.random() * 0.4)));
-            this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
+            this.getStandUserSelf().sba$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).sba$getStandDisc().copy()));
         }
     }
 
@@ -1251,75 +1251,75 @@ public class StandPowers extends AbilityScapeBasis {
     /**The name for your stand's poses to display in the power inventory HUD*/
     public Component getPosName(byte posID){
         if (posID == 1){
-            return Component.translatable(  "idle.roundabout.battle");
+            return Component.translatable(  "idle.sba.battle");
         } else if (posID == 2){
-            return Component.translatable(  "idle.roundabout.floaty");
+            return Component.translatable(  "idle.sba.floaty");
         } else if (posID == 3){
-            return Component.translatable(  "idle.roundabout.star_platinum");
+            return Component.translatable(  "idle.sba.star_platinum");
         } else if (posID == 4){
-            return Component.translatable(  "idle.roundabout.star_platinum1");
+            return Component.translatable(  "idle.sba.star_platinum1");
         } else if (posID == 5){
-            return Component.translatable(  "idle.roundabout.star_platinum2");
+            return Component.translatable(  "idle.sba.star_platinum2");
         } else if (posID == 6){
-            return Component.translatable(  "idle.roundabout.magicians_red1");
+            return Component.translatable(  "idle.sba.magicians_red1");
         } else if (posID == 7){
-            return Component.translatable(  "idle.roundabout.magicians_red2");
+            return Component.translatable(  "idle.sba.magicians_red2");
         } else if (posID == 8){
-            return Component.translatable(  "idle.roundabout.the_world1");
+            return Component.translatable(  "idle.sba.the_world1");
         } else if (posID == 9){
-            return Component.translatable(  "idle.roundabout.the_world2");
+            return Component.translatable(  "idle.sba.the_world2");
         } else if (posID == 10){
-            return Component.translatable(  "idle.roundabout.killer_queen1");
+            return Component.translatable(  "idle.sba.killer_queen1");
         } else if (posID == 11){
-            return Component.translatable(  "idle.roundabout.killer_queen2");
+            return Component.translatable(  "idle.sba.killer_queen2");
         } else if (posID == 12){
-            return Component.translatable(  "idle.roundabout.purple_haze1");
+            return Component.translatable(  "idle.sba.purple_haze1");
         } else if (posID == 13){
-            return Component.translatable(  "idle.roundabout.purple_haze2");
+            return Component.translatable(  "idle.sba.purple_haze2");
         } else if (posID == 14){
-            return Component.translatable(  "idle.roundabout.king_crimson1");
+            return Component.translatable(  "idle.sba.king_crimson1");
         } else if (posID == 15){
-            return Component.translatable(  "idle.roundabout.king_crimson2");
+            return Component.translatable(  "idle.sba.king_crimson2");
         } else if (posID == 16){
-            return Component.translatable(  "idle.roundabout.white_snake1");
+            return Component.translatable(  "idle.sba.white_snake1");
         } else if (posID == 17){
-            return Component.translatable(  "idle.roundabout.white_snake2");
+            return Component.translatable(  "idle.sba.white_snake2");
         } else if (posID == 18){
-            return Component.translatable(  "idle.roundabout.diver_down1");
+            return Component.translatable(  "idle.sba.diver_down1");
         } else if (posID == 19){
-            return Component.translatable(  "idle.roundabout.diver_down2");
+            return Component.translatable(  "idle.sba.diver_down2");
         } else if (posID == 20){
-            return Component.translatable(  "idle.roundabout.d4c1");
+            return Component.translatable(  "idle.sba.d4c1");
         } else if (posID == 21){
-            return Component.translatable(  "idle.roundabout.d4c2");
+            return Component.translatable(  "idle.sba.d4c2");
         } else if (posID == 22){
-            return Component.translatable(  "idle.roundabout.soft_and_wet1");
+            return Component.translatable(  "idle.sba.soft_and_wet1");
         } else if (posID == 23){
-            return Component.translatable(  "idle.roundabout.soft_and_wet2");
+            return Component.translatable(  "idle.sba.soft_and_wet2");
         } else if (posID == 24){
-            return Component.translatable(  "idle.roundabout.kneel");
+            return Component.translatable(  "idle.sba.kneel");
         } else if (posID == 25){
-            return Component.translatable(  "idle.roundabout.brave");
+            return Component.translatable(  "idle.sba.brave");
         } else if (posID == 26){
-            return Component.translatable(  "idle.roundabout.reborn");
+            return Component.translatable(  "idle.sba.reborn");
         } else if (posID == 27){
-            return Component.translatable(  "idle.roundabout.patriot");
+            return Component.translatable(  "idle.sba.patriot");
         } else if (posID == 28){
-            return Component.translatable(  "idle.roundabout.relaxed");
+            return Component.translatable(  "idle.sba.relaxed");
         } else if (posID == 29){
-            return Component.translatable(  "idle.roundabout.crazy_diamond1");
+            return Component.translatable(  "idle.sba.crazy_diamond1");
         } else if (posID == 30){
-            return Component.translatable(  "idle.roundabout.crazy_diamond2");
+            return Component.translatable(  "idle.sba.crazy_diamond2");
         } else if (posID == 31){
-            return Component.translatable(  "idle.roundabout.golden_experience1");
+            return Component.translatable(  "idle.sba.golden_experience1");
         } else if (posID == 32){
-            return Component.translatable(  "idle.roundabout.golden_experience2");
+            return Component.translatable(  "idle.sba.golden_experience2");
         } else if (posID == 33){
-            return Component.translatable(  "idle.roundabout.sticky_fingers1");
+            return Component.translatable(  "idle.sba.sticky_fingers1");
         } else if (posID == 34){
-            return Component.translatable(  "idle.roundabout.sticky_fingers2");
+            return Component.translatable(  "idle.sba.sticky_fingers2");
         } else {
-            return Component.translatable(  "idle.roundabout.passive");
+            return Component.translatable(  "idle.sba.passive");
         }
     }
 
@@ -1335,7 +1335,7 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean cancelAllRandomMiningThatBreaksMoves(){
         return isBarraging() || isBarrageCharging();
     }
-    //Called Later as to not bother with roundabout intercepts (like m1s)
+    //Called Later as to not bother with sba intercepts (like m1s)
     public boolean cancelAllRandomMiningThatBreaksMoves2(){
         return false;
     }
@@ -1350,14 +1350,14 @@ public class StandPowers extends AbilityScapeBasis {
             displayStand = getNewStandEntity();
         }
         if (displayStand != null) {
-            if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+            if (this.self instanceof Player PL && ((IPlayerEntity) PL).sba$getStandSkin() != displayStand.getSkin()) {
                 displayStand = getNewStandEntity();
             }
         }
         if (displayStand != null) {
-            displayStand.setSkin(((StandUser) self).roundabout$getStandSkin());
-            displayStand.setAnimation(((StandUser) self).roundabout$getStandAnimation());
-            displayStand.setIdleAnimation(((StandUser) self).roundabout$getIdlePos());
+            displayStand.setSkin(((StandUser) self).sba$getStandSkin());
+            displayStand.setAnimation(((StandUser) self).sba$getStandAnimation());
+            displayStand.setIdleAnimation(((StandUser) self).sba$getIdlePos());
             displayStand.tickCount = self.tickCount;
             displayStand.setUser(self);
             displayStand.setupAnimationStates();
@@ -1375,7 +1375,7 @@ public class StandPowers extends AbilityScapeBasis {
     public StandEntity getStandForHUD(){
         if (returnFakeStandForHud())
             return getStandForHUDIfFake();
-        return getStandUserSelf().roundabout$getStand();
+        return getStandUserSelf().sba$getStand();
     }
 
     /**how big your stand is in the power inventory*/
@@ -1470,11 +1470,11 @@ public class StandPowers extends AbilityScapeBasis {
             if (this.getSelf().fallDistance > 4 && !(this.self instanceof Blaze) && !(this.self instanceof FlyingMob) && !this.getSelf().isNoGravity()
                     && !(this.getSelf().noPhysics) && !(this.self instanceof EnderDragon) && !(this.self instanceof WitherBoss)) {
                 /**Fall Brace AI*/
-                ((StandUser) this.getSelf()).roundabout$summonStand(this.getSelf().level(),true,false);
+                ((StandUser) this.getSelf()).sba$summonStand(this.getSelf().level(),true,false);
                 if (this.getSelf() instanceof Mob MB){
-                    ((IMob)MB).roundabout$setRetractTicks(140);
+                    ((IMob)MB).sba$setRetractTicks(140);
                 }
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.EXTRA, true);
                 return true;
             }
         }
@@ -1510,7 +1510,7 @@ public class StandPowers extends AbilityScapeBasis {
             int level;
             boolean skipsCheck = hasGoldenDisc() || pl.isCreative();
             if (!skipsCheck){
-                level = ((IPlayerEntity)pl).roundabout$getStandLevel();
+                level = ((IPlayerEntity)pl).sba$getStandLevel();
             } else {
                 level = getMaxLevel();
             }
@@ -1542,7 +1542,7 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**Functions to use to make your abilities grant stand exp*/
     public void addEXP(int amt, LivingEntity ent){
-        if (!((StandUser)ent).roundabout$getStandDisc().isEmpty() && (ent instanceof Monster ||
+        if (!((StandUser)ent).sba$getStandDisc().isEmpty() && (ent instanceof Monster ||
                 ent instanceof NeutralMob)){
             if (ent.getMaxHealth() >= 100){
                 amt = (int)( amt*0.5);
@@ -1557,10 +1557,10 @@ public class StandPowers extends AbilityScapeBasis {
     }
     public void addEXP(int amt){
         if (this.getSelf() instanceof Player PE && !PE.level().isClientSide()){
-            ItemStack stack = ((StandUser) PE).roundabout$getStandDisc();
+            ItemStack stack = ((StandUser) PE).sba$getStandDisc();
             if (!stack.isEmpty() && !(hasGoldenDisc())){
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
-                ipe.roundabout$addStandExp(amt);
+                ipe.sba$addStandExp(amt);
             }
         }
     }
@@ -1571,7 +1571,7 @@ public class StandPowers extends AbilityScapeBasis {
         if (!this.self.level().isClientSide()) {
             BlockState state = this.getSelf().level().getBlockState(pos);
             if (state.isAir() || (state.canBeReplaced() && getIsGamemodeApproriateForGrief() && !state.liquid() &&
-                    this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+                    this.getSelf().level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING) &&
                     !((this.getSelf() instanceof Player &&
                             (((Player) this.getSelf()).blockActionRestricted(this.getSelf().level(), pos, ((ServerPlayer)
                                     this.getSelf()).gameMode.getGameModeForPlayer()))) ||
@@ -1593,7 +1593,7 @@ public class StandPowers extends AbilityScapeBasis {
     public boolean getIsGamemodeApproriateForGrief(){
         if ((!(this.getSelf() instanceof Player) || (((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() != GameType.SPECTATOR
                 && ((ServerPlayer) this.getSelf()).gameMode.getGameModeForPlayer() != GameType.ADVENTURE))
-                && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+                && this.getSelf().level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)) {
             return true;
         }
         return false;
@@ -1607,8 +1607,8 @@ public class StandPowers extends AbilityScapeBasis {
         if (percent > 0  && this.self instanceof Player PE && this.getMaxLevel() >= 1){
             int maxlevel = getMaxLevel();
             if (maxlevel > 1) {
-                int level = ((IPlayerEntity) PE).roundabout$getStandLevel();
-                ItemStack sdisc = ((StandUser)PE).roundabout$getStandDisc();
+                int level = ((IPlayerEntity) PE).sba$getStandLevel();
+                ItemStack sdisc = ((StandUser)PE).sba$getStandDisc();
                 if (hasGoldenDisc()){
                     level =maxlevel;
                 }
@@ -1750,7 +1750,7 @@ public class StandPowers extends AbilityScapeBasis {
         animateStand(StandEntity.BARRAGE);
 
         if (this.self instanceof Player && !this.self.level().isClientSide) {
-            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.barrage_clash"), true);
+            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.barrage_clash"), true);
         }
         return true;
         //playBarrageGuardSound();
@@ -1761,20 +1761,20 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**Initiates a stand barrage clash. This code should probably not be overridden, it is a very mutual event*/
     public void initiateClash(Entity entity){
-        ((StandUser) entity).roundabout$getStandPowers().setClashOp(this.self);
-        ((StandUser) this.self).roundabout$getStandPowers().setClashOp((LivingEntity) entity);
+        ((StandUser) entity).sba$getStandPowers().setClashOp(this.self);
+        ((StandUser) this.self).sba$getStandPowers().setClashOp((LivingEntity) entity);
         this.clashStarter = 0;
-        ((StandUser) entity).roundabout$getStandPowers().clashStarter = 1;
+        ((StandUser) entity).sba$getStandPowers().clashStarter = 1;
 
-        ((StandUser) entity).roundabout$tryPower(PowerIndex.BARRAGE_CLASH, true);
-        ((StandUser) self).roundabout$tryPower(PowerIndex.BARRAGE_CLASH, true);
+        ((StandUser) entity).sba$tryPower(PowerIndex.BARRAGE_CLASH, true);
+        ((StandUser) self).sba$tryPower(PowerIndex.BARRAGE_CLASH, true);
 
-        LivingEntity standEntity = ((StandUser) entity).roundabout$getStand();
-        LivingEntity standSelf = ((StandUser) self).roundabout$getStand();
+        LivingEntity standEntity = ((StandUser) entity).sba$getStand();
+        LivingEntity standSelf = ((StandUser) self).sba$getStand();
 
         if (standEntity != null && standSelf != null){
-            ((StandUser) entity).roundabout$getStandPowers().playBarrageClashSound();
-            ((StandUser) this.self).roundabout$getStandPowers().playBarrageClashSound();
+            ((StandUser) entity).sba$getStandPowers().playBarrageClashSound();
+            ((StandUser) this.self).sba$getStandPowers().playBarrageClashSound();
             Vec3 CenterPoint = entity.position().add(self.position()).scale(0.5);
 
             Vec3 entityPoint = offsetBarrageVector(
@@ -1788,7 +1788,7 @@ public class StandPowers extends AbilityScapeBasis {
 
             standEntity.setPosRaw(entityPoint.x(),entityPoint.y()+getYOffSet(standEntity),entityPoint.z());
 
-            Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Direction gdir = ((IGravityEntity)this.self).sba$getGravityDirection();
             Vec2 grot = new Vec2(getLookAtEntityYaw(standEntity,standSelf),
                     getLookAtEntityPitch(standEntity,standSelf)
             );
@@ -1818,19 +1818,19 @@ public class StandPowers extends AbilityScapeBasis {
     /**Stand barrage results*/
     public void breakClash(LivingEntity winner, LivingEntity loser){
         if (StandDamageEntityAttack(loser, this.getClashBreakStrength(loser), 0.0001F, winner)) {
-            ((StandUser)winner).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
-            ((StandUser)loser).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
-            ((StandUser)winner).roundabout$getStandPowers().playBarrageEndNoise(0, loser);
+            ((StandUser)winner).sba$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+            ((StandUser)loser).sba$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+            ((StandUser)winner).sba$getStandPowers().playBarrageEndNoise(0, loser);
             takeDeterminedKnockbackWithY(winner, loser, this.getBarrageFinisherKnockback());
-            ((StandUser)winner).roundabout$getStandPowers().animateStand(StandEntity.BARRAGE_FINISHER);
-            ((StandUser)loser).roundabout$tryPower(PowerIndex.NONE,true);
+            ((StandUser)winner).sba$getStandPowers().animateStand(StandEntity.BARRAGE_FINISHER);
+            ((StandUser)loser).sba$tryPower(PowerIndex.NONE,true);
         }
     }
     public void TieClash(LivingEntity user1, LivingEntity user2){
-        ((StandUser)user1).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
-        ((StandUser)user2).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
-        ((StandUser)user1).roundabout$getStandPowers().playBarrageEndNoise(0F,user2);
-        ((StandUser)user2).roundabout$getStandPowers().playBarrageEndNoise(-0.05F,user1);
+        ((StandUser)user1).sba$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        ((StandUser)user2).sba$getStandPowers().stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
+        ((StandUser)user1).sba$getStandPowers().playBarrageEndNoise(0F,user2);
+        ((StandUser)user2).sba$getStandPowers().playBarrageEndNoise(-0.05F,user1);
 
         user1.hurtMarked = true;
         user2.hurtMarked = true;
@@ -1846,8 +1846,8 @@ public class StandPowers extends AbilityScapeBasis {
 
                 /*Rotation has to be set actively by both client and server,
                  * because serverPitch and serverYaw are inconsistent, client overwrites stand stuff sometimes*/
-                LivingEntity standEntity = ((StandUser) entity).roundabout$getStand();
-                LivingEntity standSelf = ((StandUser) self).roundabout$getStand();
+                LivingEntity standEntity = ((StandUser) entity).sba$getStand();
+                LivingEntity standSelf = ((StandUser) self).sba$getStand();
                 if (standSelf != null && standEntity != null) {
                     if (!this.self.level().isClientSide) {
                         standSelf.setXRot(getLookAtEntityPitch(standSelf, standEntity));
@@ -1859,11 +1859,11 @@ public class StandPowers extends AbilityScapeBasis {
 
 
                 if (!(this.self instanceof Player)) {
-                    this.RoundaboutEnemyClash();
+                    this.SBAEnemyClash();
                 }
                 if (!this.self.level().isClientSide) {
 
-                    if ((this.getClashDone() && ((StandUser) entity).roundabout$getStandPowers().getClashDone())
+                    if ((this.getClashDone() && ((StandUser) entity).sba$getStandPowers().getClashDone())
                             || !PowerTypes.hasStandActive(self) || !PowerTypes.hasStandActive(entity)) {
                         this.updateClashing2();
                     } else {
@@ -1882,10 +1882,10 @@ public class StandPowers extends AbilityScapeBasis {
 
     public void endClash(){
         if (!this.self.level().isClientSide) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.CLASH_CANCEL, true);
+            ((StandUser) this.self).sba$tryPower(PowerIndex.CLASH_CANCEL, true);
             LivingEntity entity = this.getClashOp();
             if (entity != null){
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.CLASH_CANCEL, true);
+                ((StandUser) this.self).sba$tryPower(PowerIndex.CLASH_CANCEL, true);
             }
         }
     }
@@ -1900,18 +1900,18 @@ public class StandPowers extends AbilityScapeBasis {
             } else if (!thisActive && opActive){
                 breakClash(this.getClashOp(), this.self);
             } else if (thisActive && opActive){
-                if ((this.getClashProgress() == ((StandUser) this.getClashOp()).roundabout$getStandPowers().getClashProgress())) {
+                if ((this.getClashProgress() == ((StandUser) this.getClashOp()).sba$getStandPowers().getClashProgress())) {
                     TieClash(this.self, this.getClashOp());
-                } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).roundabout$getStandPowers().getClashProgress()) {
+                } else if (this.getClashProgress() > ((StandUser) this.getClashOp()).sba$getStandPowers().getClashProgress()) {
                     breakClash(this.self, this.getClashOp());
                 } else {
                     breakClash(this.getClashOp(), this.self);
                 }
             }
-            ((StandUser) this.self).roundabout$setAttackTimeDuring(-10);
-            ((StandUser) this.getClashOp()).roundabout$setAttackTimeDuring(-10);
-            ((StandUser) this.self).roundabout$getStandPowers().syncActivePower();
-            ((StandUser) this.getClashOp()).roundabout$getStandPowers().syncActivePower();
+            ((StandUser) this.self).sba$setAttackTimeDuring(-10);
+            ((StandUser) this.getClashOp()).sba$setAttackTimeDuring(-10);
+            ((StandUser) this.self).sba$getStandPowers().syncActivePower();
+            ((StandUser) this.getClashOp()).sba$getStandPowers().syncActivePower();
         }
     }
 
@@ -1955,12 +1955,12 @@ public class StandPowers extends AbilityScapeBasis {
 
     public void updateBarrageCharge(){
         if (this.attackTimeDuring >= this.getBarrageWindup()) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE, true);
+            ((StandUser) this.self).sba$tryPower(PowerIndex.BARRAGE, true);
         }
     }
 
     /**Enemies randomize their clash power, up to on occasion the maximum for some forced at best ties*/
-    private void RoundaboutEnemyClash(){
+    private void SBAEnemyClash(){
         if (this.isClashing()) {
             if (this.clashIncrement < 0) {
                 ++this.clashIncrement;
@@ -1989,8 +1989,8 @@ public class StandPowers extends AbilityScapeBasis {
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().sba$isPossessed()   ) {
+                ((StandUser) this.getSelf()).sba$setIdleTime(0);
                 buttonInput4(keyIsDown, options);
             }
         }
@@ -1999,8 +1999,8 @@ public class StandPowers extends AbilityScapeBasis {
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().sba$isPossessed()   ) {
+                ((StandUser) this.getSelf()).sba$setIdleTime(0);
                 buttonInput3(keyIsDown, options);
             }
         }
@@ -2010,8 +2010,8 @@ public class StandPowers extends AbilityScapeBasis {
     public void preButtonInput2(boolean keyIsDown, Options options){
         if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().sba$isPossessed()   ) {
+                ((StandUser) this.getSelf()).sba$setIdleTime(0);
                 buttonInput2(keyIsDown, options);
             }
         }
@@ -2021,8 +2021,8 @@ public class StandPowers extends AbilityScapeBasis {
     public void preButtonInput1(boolean keyIsDown, Options options){
         if (!DiscItemData.canUseAbilities(getSelf())) return;
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf())  && !this.getStandUserSelf().sba$isPossessed()   ) {
+                ((StandUser) this.getSelf()).sba$setIdleTime(0);
                 buttonInput1(keyIsDown, options);
             }
         }
@@ -2146,7 +2146,7 @@ public class StandPowers extends AbilityScapeBasis {
         } else {
 
             StandUser userSelf = getStandUserSelf();
-            byte animationType = userSelf.roundabout$getStandAnimation();
+            byte animationType = userSelf.sba$getStandAnimation();
 
             if (handTicks > 0) {
                 if (isGuarding() || getActivePower() == PowerIndex.MINING) {
@@ -2159,41 +2159,41 @@ public class StandPowers extends AbilityScapeBasis {
                 }
             }
             if (PowerTypes.hasHandsActive(self) && isGuarding() && animationType != GUARD &&
-                    !userSelf.roundabout$getGuardBroken()) {
-                userSelf.roundabout$setStandAnimation(GUARD);
+                    !userSelf.sba$getGuardBroken()) {
+                userSelf.sba$setStandAnimation(GUARD);
             } else if (PowerTypes.hasHandsActive(self) && getActivePower() == PowerIndex.MINING
                     && animationType != MINING) {
-                userSelf.roundabout$setStandAnimation(MINING);
+                userSelf.sba$setStandAnimation(MINING);
                 refreshArms();
             } else if (animationType > 0) {
                 if (animationType == GUARD) {
-                    if (!isGuarding() || userSelf.roundabout$getGuardBroken()
+                    if (!isGuarding() || userSelf.sba$getGuardBroken()
                             || !PowerTypes.hasHandsActive(self)) {
-                        userSelf.roundabout$setStandAnimation(NONE);
+                        userSelf.sba$setStandAnimation(NONE);
                     }
                 } else if (animationType == MINING) {
                     if (getActivePower() != PowerIndex.MINING) {
-                        userSelf.roundabout$setStandAnimation(NONE);
+                        userSelf.sba$setStandAnimation(NONE);
                     }
                 } else if (animationType == HEEL_RAISE) {
                     if (getActivePower() != PowerIndex.POWER_3_SNEAK) {
-                        userSelf.roundabout$setStandAnimation(NONE);
+                        userSelf.sba$setStandAnimation(NONE);
                     }
                 } else if (animationType == PUNCH_LEFT || animationType == PUNCH_RIGHT) {
                     if ((activePower != PowerIndex.NONE || attackTimeDuring > attackTimeMax) || !PowerTypes.hasHandsActive(self)) {
-                        userSelf.roundabout$setStandAnimation(NONE);
+                        userSelf.sba$setStandAnimation(NONE);
                     }
                 } else if (animationType == VAULT) {
                     if (activePower != PowerIndex.VAULT){
-                        userSelf.roundabout$setStandAnimation(NONE);
+                        userSelf.sba$setStandAnimation(NONE);
                     }
                 } else if (animationType == MELT_DODGE_ANIM) {
                     if (activePower != PowerIndex.POWER_3_BLOCK){
-                        userSelf.roundabout$setStandAnimation(NONE);
+                        userSelf.sba$setStandAnimation(NONE);
                     }
                 } else if (animationType == SWITCH_INTO_BODY) {
                     if (activePower != PowerIndex.POWER_2_SNEAK){
-                        userSelf.roundabout$setStandAnimation(NONE);
+                        userSelf.sba$setStandAnimation(NONE);
                     }
                 }
             }
@@ -2205,27 +2205,27 @@ public class StandPowers extends AbilityScapeBasis {
             if (surpassesFire()) {
                 if (self.isOnFire()) {
                     self.setSecondsOnFire(0);
-                } if (getStandUserSelf().roundabout$isOnStandFire()) {
-                    getStandUserSelf().roundabout$setSecondsOnStandFire((byte) 0);
-                    getStandUserSelf().roundabout$setOnStandFire((byte) 0);
+                } if (getStandUserSelf().sba$isOnStandFire()) {
+                    getStandUserSelf().sba$setSecondsOnStandFire((byte) 0);
+                    getStandUserSelf().sba$setOnStandFire((byte) 0);
                 }
             }
 
 
             if (self instanceof Player player){
                 IPlayerEntity ipe = ((IPlayerEntity) player);
-                byte pos = ipe.roundabout$GetPos();
+                byte pos = ipe.sba$GetPos();
                 if (pos == PlayerPosIndex.SKATE_JUMP ||
                         pos == PlayerPosIndex.SKATE_TWIRL){
                     if (self.onGround()) {
-                        ipe.roundabout$SetPos(PlayerPosIndex.NONE);
+                        ipe.sba$SetPos(PlayerPosIndex.NONE);
                         onLandingAnimatedJump();
                     } else {
                         if (twirlTicks > 0){
                             twirlTicks--;
                         } else {
                             if (pos == PlayerPosIndex.SKATE_TWIRL){
-                                ipe.roundabout$SetPos(PlayerPosIndex.SKATE_JUMP);
+                                ipe.sba$SetPos(PlayerPosIndex.SKATE_JUMP);
                             }
                         }
                     }
@@ -2234,7 +2234,7 @@ public class StandPowers extends AbilityScapeBasis {
         }
 
         if (this.self instanceof Player PE && PE.isSpectator()) {
-            ((StandUser) this.getSelf()).roundabout$setActive(false);
+            ((StandUser) this.getSelf()).sba$setActive(false);
         }
         if (this.self.isAlive() && !this.self.isRemoved()) {
             if (this.self.level().isClientSide){
@@ -2252,7 +2252,7 @@ public class StandPowers extends AbilityScapeBasis {
                 if (this.attackTimeDuring != -1) {
                     this.attackTimeDuring++;
                     if (this.attackTimeDuring == -1) {
-                        ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE,true);
+                        ((StandUser) this.self).sba$tryPower(PowerIndex.NONE,true);
                     } else {
                         if (!this.isAttackInept(this.activePower)) {
                             if (this.activePower == PowerIndex.ATTACK) {
@@ -2266,7 +2266,7 @@ public class StandPowers extends AbilityScapeBasis {
                                         this.updateBarrage();
                                     }
                                 } else {
-                                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+                                    ((StandUser) this.self).sba$tryPower(PowerIndex.NONE, true);
                                 }
                             } else {
                                 this.updateUniqueMoves();
@@ -2304,9 +2304,9 @@ public class StandPowers extends AbilityScapeBasis {
             this.tickDash();
         } else {
             StandUser user = ((StandUser)this.getSelf());
-            StandEntity stnd = user.roundabout$getStand();
+            StandEntity stnd = user.sba$getStand();
             if (stnd != null){
-                user.roundabout$setStand(null);
+                user.sba$setStand(null);
             }
         }
         if (this.self.level().isClientSide) {
@@ -2316,11 +2316,11 @@ public class StandPowers extends AbilityScapeBasis {
             setScopeLevel(0);
             this.scopeTime = -1;
         }
-        if (((StandUser)this.self).roundabout$getStandDisc().isEmpty()){
-            ((StandUser)this.self).roundabout$setStandPowers(new StandPowers(this.self));
+        if (((StandUser)this.self).sba$getStandDisc().isEmpty()){
+            ((StandUser)this.self).sba$setStandPowers(new StandPowers(this.self));
         }
         if (!hasStandActive(this.self)) {
-            getStandUserSelf().roundabout$setStandAnimation(NONE);
+            getStandUserSelf().sba$setStandAnimation(NONE);
         }
     }
     public int handTicks = 0;
@@ -2339,7 +2339,7 @@ public class StandPowers extends AbilityScapeBasis {
     /**Iteration through skins in the power inventory*/
     public void getSkinInDirection(boolean right, boolean sealed){
         StandUser SE = ((StandUser)this.getSelf());
-        byte currentSkin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte currentSkin = ((StandUser)this.getSelf()).sba$getStandSkin();
         List<Byte> skins = getSkinList();
         if (!skins.isEmpty() && skins.size() > 1) {
             int skinind = 0;
@@ -2353,18 +2353,18 @@ public class StandPowers extends AbilityScapeBasis {
                 if (skinind >= skins.size()){
                     skinind =0;
                 }
-                SE.roundabout$setStandSkin((skins.get(skinind)));
+                SE.sba$setStandSkin((skins.get(skinind)));
             } else {
                 skinind-=1;
                 if (skinind < 0){
                     skinind =skins.size()-1;
                 }
-                SE.roundabout$setStandSkin((skins.get(skinind)));
+                SE.sba$setStandSkin((skins.get(skinind)));
             }
             if (!sealed) {
                 if (hasStandActive(self)) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
-                    SE.roundabout$summonStand(this.getSelf().level(), true, false);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
+                    SE.sba$summonStand(this.getSelf().level(), true, false);
                 }
             }
         }
@@ -2372,7 +2372,7 @@ public class StandPowers extends AbilityScapeBasis {
     /**Iteration through poses in the power inventory*/
     public void getPoseInDirection(boolean right){
         StandUser SE = ((StandUser)this.getSelf());
-        byte currentSkin = ((StandUser)this.getSelf()).roundabout$getIdlePos();
+        byte currentSkin = ((StandUser)this.getSelf()).sba$getIdlePos();
         List<Byte> poses = getPosList();
         if (!poses.isEmpty() && poses.size() > 1) {
             int skinind = 0;
@@ -2386,13 +2386,13 @@ public class StandPowers extends AbilityScapeBasis {
                 if (skinind >= poses.size()){
                     skinind =0;
                 }
-                SE.roundabout$setIdlePosX(poses.get(skinind));
+                SE.sba$setIdlePosX(poses.get(skinind));
             } else {
                 skinind-=1;
                 if (skinind < 0){
                     skinind = poses.size()-1;
                 }
-                SE.roundabout$setIdlePosX(poses.get(skinind));
+                SE.sba$setIdlePosX(poses.get(skinind));
             }
         }
     }
@@ -2457,7 +2457,7 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**If they have a max disc, very niche*/
     public boolean hasGoldenDisc(){
-        ItemStack stack = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        ItemStack stack = ((StandUser)this.getSelf()).sba$getStandDisc();
         return !stack.isEmpty() && stack.getItem() instanceof MaxStandDiscItem;
     }
 
@@ -2499,7 +2499,7 @@ public class StandPowers extends AbilityScapeBasis {
 
     /**The stand is named on the disc so we just use that*/
     public Component getStandName(){
-        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        ItemStack disc = ((StandUser)this.getSelf()).sba$getStandDisc();
         if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
             return SDI.getDisplayName2();
         }
@@ -2549,9 +2549,9 @@ public class StandPowers extends AbilityScapeBasis {
     public void saveDiscAndSync(){
         if (self.level().isClientSide())
             return;
-        if (getStandUserSelf().roundabout$getStandDisc().isEmpty())
+        if (getStandUserSelf().sba$getStandDisc().isEmpty())
             return;
-        this.getStandUserSelf().roundabout$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).roundabout$getStandDisc().copy()));
+        this.getStandUserSelf().sba$updateStandDisc(MainUtil.saveToDiscData(self,((StandUser)self).sba$getStandDisc().copy()));
     }
 
     public boolean negateHandPoseForcing(){

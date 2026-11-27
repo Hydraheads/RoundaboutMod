@@ -67,16 +67,16 @@ public class KiraPartFourVoice extends VoiceData{
         if (this.self.tickCount % 11 == 0) {
             AABB aab = this.self.getBoundingBox().inflate(10.0, 8.0, 10.0);
             List<? extends LivingEntity> le = this.self.level().getNearbyEntities(LivingEntity.class,
-                    roundabout$attackTargeting, self, aab);
+                    sba$attackTargeting, self, aab);
             for (LivingEntity nle : le) {
                 VisageData vd = null;
                 VoiceData vc = null;
                 if (nle instanceof Player pl) {
                     IPlayerEntity ipe = ((IPlayerEntity) pl);
-                    if (ipe.roundabout$getMaskSlot().getItem() instanceof MaskItem MI) {
+                    if (ipe.sba$getMaskSlot().getItem() instanceof MaskItem MI) {
                         vd = MI.visageData.generateVisageData(pl);
                     }
-                    vc = ipe.roundabout$getVoiceData();
+                    vc = ipe.sba$getVoiceData();
                 }
                 if (vc instanceof JotaroVoice jv && !jv.inTheMiddleOfTalking() && !nle.isCrouching() && jv.challengeCooldown <= -1) {
                     double db = Math.random();

@@ -20,9 +20,9 @@ import java.util.Optional;
 @Mixin(PiglinAi.class)
 public class SoftAndWetPiglinAiMixin {
     @Inject(method = "findNearestValidAttackTarget(Lnet/minecraft/world/entity/monster/piglin/Piglin;)Ljava/util/Optional;", at = @At(value = "HEAD"),cancellable = true)
-    private static void roundabout$findNearestValidAttackTarget(Piglin $$0x, CallbackInfoReturnable<Optional<? extends LivingEntity>> cir) {
-        if ((((StandUser)$$0x).roundabout$getEyeSightTaken() != null && $$0x.getLastHurtByMob() == null)
-        || ((IMob)$$0x).roundabout$getConfusionTicks() > 0){
+    private static void sba$findNearestValidAttackTarget(Piglin $$0x, CallbackInfoReturnable<Optional<? extends LivingEntity>> cir) {
+        if ((((StandUser)$$0x).sba$getEyeSightTaken() != null && $$0x.getLastHurtByMob() == null)
+        || ((IMob)$$0x).sba$getConfusionTicks() > 0){
             cir.setReturnValue(Optional.empty());
         }
     }

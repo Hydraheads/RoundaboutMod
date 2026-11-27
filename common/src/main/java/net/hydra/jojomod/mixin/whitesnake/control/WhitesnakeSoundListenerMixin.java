@@ -26,11 +26,11 @@ public abstract class WhitesnakeSoundListenerMixin {
     @Shadow @Final private SoundEngineExecutor executor;
 
     @Inject(method = "updateSource", at = @At("TAIL"))
-    private void roundaboutWhitesnake$listenerPosition(Camera camera, CallbackInfo ci) {
+    private void sbaWhitesnake$listenerPosition(Camera camera, CallbackInfo ci) {
         if (!loaded) return;
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player != null
-                && ((StandUser) minecraft.player).roundabout$getStandPowers() instanceof PowersWhitesnake powers
+                && ((StandUser) minecraft.player).sba$getStandPowers() instanceof PowersWhitesnake powers
                 && powers.isPiloting()) {
             LivingEntity stand = powers.getPilotingStand();
             if (stand != null && stand.isAlive() && !stand.isRemoved()) {
@@ -41,10 +41,10 @@ public abstract class WhitesnakeSoundListenerMixin {
     }
 
     @Inject(method = "play", at = @At("HEAD"), cancellable = true)
-    public void roundabout$play(SoundInstance $$0, CallbackInfo ci) {
+    public void sba$play(SoundInstance $$0, CallbackInfo ci) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player != null && WhitesnakeDiscUtil.isHearingDiscEnabled()
-                && !((DiscBearer) minecraft.player).roundabout$hasHearingDisc()) {
+                && !((DiscBearer) minecraft.player).sba$hasHearingDisc()) {
             ci.cancel();
         }
     }

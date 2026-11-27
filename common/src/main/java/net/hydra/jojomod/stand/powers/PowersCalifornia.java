@@ -324,9 +324,9 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public Component getPosName(byte posID){
         if (posID == 1){
-            return Component.translatable(  "idle.roundabout.ckb_2");
+            return Component.translatable(  "idle.sba.ckb_2");
         } else {
-            return Component.translatable(  "idle.roundabout.ckb_1");
+            return Component.translatable(  "idle.sba.ckb_1");
         }
     }
 
@@ -485,29 +485,29 @@ public class PowersCalifornia extends NewDashPreset {
 
     public static Component getSkinNameT(byte skinId){
         if (skinId == CaliforniaKingBedEntity.PART_8_SKIN) {
-            return Component.translatable("skins.roundabout.california_king_bed.base");
+            return Component.translatable("skins.sba.california_king_bed.base");
         } else if (skinId == CaliforniaKingBedEntity.SUNSHINE) {
-            return Component.translatable("skins.roundabout.california_king_bed.sunshine");
+            return Component.translatable("skins.sba.california_king_bed.sunshine");
         } else if (skinId == CaliforniaKingBedEntity.EGYPT) {
-            return Component.translatable("skins.roundabout.california_king_bed.egypt");
+            return Component.translatable("skins.sba.california_king_bed.egypt");
         } else if (skinId == CaliforniaKingBedEntity.SPOOKY) {
-            return Component.translatable("skins.roundabout.california_king_bed.spooky");
+            return Component.translatable("skins.sba.california_king_bed.spooky");
         } else if (skinId == CaliforniaKingBedEntity.EXPERIENCE) {
-            return Component.translatable("skins.roundabout.california_king_bed.experience");
+            return Component.translatable("skins.sba.california_king_bed.experience");
         } else if (skinId == CaliforniaKingBedEntity.CARD_SUIT) {
-            return Component.translatable("skins.roundabout.california_king_bed.card_suit");
+            return Component.translatable("skins.sba.california_king_bed.card_suit");
         } else if (skinId == CaliforniaKingBedEntity.COVER) {
-            return Component.translatable("skins.roundabout.california_king_bed.cover");
+            return Component.translatable("skins.sba.california_king_bed.cover");
         } else if (skinId == CaliforniaKingBedEntity.SPINE_ART) {
-            return Component.translatable("skins.roundabout.california_king_bed.spine_art");
+            return Component.translatable("skins.sba.california_king_bed.spine_art");
         } else if (skinId == CaliforniaKingBedEntity.HEAVEN) {
-            return Component.translatable("skins.roundabout.california_king_bed.heaven");
+            return Component.translatable("skins.sba.california_king_bed.heaven");
         } else if (skinId == CaliforniaKingBedEntity.BLUE) {
-            return Component.translatable("skins.roundabout.california_king_bed.blue");
+            return Component.translatable("skins.sba.california_king_bed.blue");
         } else if (skinId == CaliforniaKingBedEntity.SLEEPY) {
-            return Component.translatable("skins.roundabout.california_king_bed.sleepy");
+            return Component.translatable("skins.sba.california_king_bed.sleepy");
         }
-        return Component.translatable("skins.roundabout.california_king_bed.base");
+        return Component.translatable("skins.sba.california_king_bed.base");
     }
 
 
@@ -627,7 +627,7 @@ public class PowersCalifornia extends NewDashPreset {
                     Entity zent = self.level().getEntity(storedInt);
                     if (zent instanceof LivingEntity LV){
                         clearLeaded();
-                        ((StandUser)LV).roundabout$setBoundTo(self);
+                        ((StandUser)LV).sba$setBoundTo(self);
                         setLeadTarget(LV);
                         playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.HEART_SPARKLE_EVENT,
                                 SoundSource.PLAYERS, 1F, (float) (0.99f + Math.random() * 0.03f));
@@ -700,7 +700,7 @@ public class PowersCalifornia extends NewDashPreset {
         return SoundIndex.SUMMON_SOUND;
     }
     public SoundEvent getSoundFromByte(byte soundChoice){
-        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte bt = ((StandUser)this.getSelf()).sba$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.SUMMON_CALIFORNIA_EVENT;
         }
@@ -709,7 +709,7 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     /**The stand is named on the disc so we just use that*/
     public Component getStandName(){
-        ItemStack disc = ((StandUser)this.getSelf()).roundabout$getStandDisc();
+        ItemStack disc = ((StandUser)this.getSelf()).sba$getStandDisc();
         if (!disc.isEmpty() && disc.getItem() instanceof StandDiscItem SDI){
             return Component.translatable(SDI.getDescriptionId() + ".desc.short");
         }
@@ -832,10 +832,10 @@ public class PowersCalifornia extends NewDashPreset {
             }
 
             if (leaded != null) {
-                if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                if (((StandUser) leaded).sba$getStandPowers() instanceof PowersKingCrimson pkc) {
                     if (pkc.timeEraseActive){
                         clearLeaded();
-                        ((StandUser)pkc.activeClone).roundabout$setBoundTo(self);
+                        ((StandUser)pkc.activeClone).sba$setBoundTo(self);
                         setLeadTarget(pkc.activeClone);
                     }
                 }
@@ -846,7 +846,7 @@ public class PowersCalifornia extends NewDashPreset {
                         if (leaded instanceof AbstractVillager || leaded instanceof Animal ||
                                 leaded instanceof Aesthetician ||
                                 leaded instanceof WaterAnimal) {
-                            ((IMob) mb).roundabout$setHypnotizedBy(self);
+                            ((IMob) mb).sba$setHypnotizedBy(self);
                         }
                     }
 
@@ -941,7 +941,7 @@ public class PowersCalifornia extends NewDashPreset {
     public LivingEntity leaded = null;
     public void clearLeaded(){
         if (leaded != null){
-            ((StandUser)leaded).roundabout$dropString();
+            ((StandUser)leaded).sba$dropString();
             setLeadTarget(null);
         }
     }
@@ -1026,7 +1026,7 @@ public class PowersCalifornia extends NewDashPreset {
                 Map.Entry<Entity, Integer> entry = it.next();
 
                 Entity entity = entry.getKey();
-                if (entity instanceof Player PE && ((StandUser)PE).roundabout$getStandPowers() instanceof
+                if (entity instanceof Player PE && ((StandUser)PE).sba$getStandPowers() instanceof
                 PowersKingCrimson pkc && pkc.isErasingTime()){
                     if (pkc.activeClone != null) {
                         entity = pkc.activeClone;
@@ -1131,17 +1131,17 @@ public class PowersCalifornia extends NewDashPreset {
             if (victim instanceof Mob mb){
                 lastTarget = mb.getTarget();
             }
-            ((StandUser)LE).roundabout$deeplyRemoveAttackTarget();
+            ((StandUser)LE).sba$deeplyRemoveAttackTarget();
             if (victim instanceof Mob mb){
                 isMemortaken = ((IMob)victim).rdbt$getStolen();
                 ((IMob)victim).rdbt$setStolen(true);
-                ((IMob)mb).roundabout$setConfusionTicks(30);
+                ((IMob)mb).sba$setConfusionTicks(30);
             }
         }
         if (!isMemortaken && (victim instanceof Skeleton || victim instanceof Stray)) {
             return 7;
         } else if (victim instanceof Player pl && PowerTypes.hasStandActive(pl)
-        && !((StandUser)pl).roundabout$getStandPowers().isSecondaryStand()
+        && !((StandUser)pl).sba$getStandPowers().isSecondaryStand()
                 && ((IPlayerEntity)pl).rdbt$getLevelDecreaseTicks() <= 0
         ) {
             ((IPlayerEntity)pl).rdbt$setLevelDecreaseTicks(400);
@@ -1249,20 +1249,20 @@ public class PowersCalifornia extends NewDashPreset {
     }
 
     public boolean inCowerStance(){
-        return self instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPoseEmote() == 35;
+        return self instanceof Player pl && ((IPlayerEntity)pl).sba$GetPoseEmote() == 35;
     }
     public boolean inCowerLeaveStance(){
-        return self instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPoseEmote() == 36;
+        return self instanceof Player pl && ((IPlayerEntity)pl).sba$GetPoseEmote() == 36;
     }
 
     public void setCowerLeaveStance(){
         if (self instanceof Player pl ){
-            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 36);
+            ((IPlayerEntity)pl).sba$SetPoseEmote((byte) 36);
         }
     }
     public void setNoStance(){
         if (self instanceof Player pl ){
-            ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 0);
+            ((IPlayerEntity)pl).sba$SetPoseEmote((byte) 0);
         }
     }
 
@@ -1280,9 +1280,9 @@ public class PowersCalifornia extends NewDashPreset {
     public void tickStandRejection(MobEffectInstance effect){
         if (!this.getSelf().level().isClientSide()) {
             if (effect.getDuration() == 80) {
-                ((StandUser)self).roundabout$deeplyRemoveAttackTarget();
+                ((StandUser)self).sba$deeplyRemoveAttackTarget();
                 if (self instanceof Mob mb){
-                    ((IMob)mb).roundabout$setConfusionTicks(50);
+                    ((IMob)mb).sba$setConfusionTicks(50);
                     sendParticlesIfPossible(self.level(),ModParticles.QUESTION,
                             self.getEyePosition().x, self.getEyePosition().y+0.5F, self.getEyePosition().z,
                             0, 0, 0.5,0, 0.15);
@@ -1462,7 +1462,7 @@ public class PowersCalifornia extends NewDashPreset {
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.HEEL_RAISE_EVENT, SoundSource.PLAYERS, 1F, (float) (1.00f + Math.random() * 0.03f));
                 setActivePower(PowerIndex.POWER_2);
                 this.setAttackTimeDuring(0);
-                ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 35);
+                ((IPlayerEntity)pl).sba$SetPoseEmote((byte) 35);
             }
         }
     }
@@ -1487,7 +1487,7 @@ public class PowersCalifornia extends NewDashPreset {
         clearLeaded();
         nextRule();
         if (self instanceof ServerPlayer pl){
-            pl.displayClientMessage(Component.translatable("text.roundabout.ckb_rule_"+currentRule).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            pl.displayClientMessage(Component.translatable("text.sba.ckb_rule_"+currentRule).withStyle(ChatFormatting.LIGHT_PURPLE), true);
         }
     }
 
@@ -1528,32 +1528,32 @@ public class PowersCalifornia extends NewDashPreset {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.steal_memories",
-                "instruction.roundabout.press_skill", StandIcons.STEAL_MEMORIES,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.steal_memories_2",
-                "instruction.roundabout.press_skill_crouch", StandIcons.STEAL_MEMORIES_2,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.piece_attack",
-                "instruction.roundabout.press_attack", StandIcons.PIECE_ATTACK,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.forbid_rule",
-                "instruction.roundabout.press_skill", StandIcons.FORBID,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.hurt_rule",
-                "instruction.roundabout.press_skill", StandIcons.HURT,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.leave_rule",
-                "instruction.roundabout.press_skill", StandIcons.LEAVE,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.roundabout.save_location",
-                "instruction.roundabout.press_skill_crouch", StandIcons.SAVE_LOCATION,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118, 0, "ability.roundabout.fall_brace",
-                "instruction.roundabout.press_skill_falling", StandIcons.CALIFORNIA_FALL_CATCH,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.exp_bishop",
-                "instruction.roundabout.press_skill_crouch", StandIcons.EXPERIENCE_BISHOP,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.rule_change",
-                "instruction.roundabout.press_skill", StandIcons.LEAVE_RULE,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.roundabout.sleep",
-                "instruction.roundabout.press_skill_crouch", StandIcons.SLEEP,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.step_shadow",
-                "instruction.roundabout.passive", StandIcons.STEP_SHADOW,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.sba.steal_memories",
+                "instruction.sba.press_skill", StandIcons.STEAL_MEMORIES,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.sba.steal_memories_2",
+                "instruction.sba.press_skill_crouch", StandIcons.STEAL_MEMORIES_2,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.sba.piece_attack",
+                "instruction.sba.press_attack", StandIcons.PIECE_ATTACK,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.sba.forbid_rule",
+                "instruction.sba.press_skill", StandIcons.FORBID,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.sba.hurt_rule",
+                "instruction.sba.press_skill", StandIcons.HURT,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.sba.leave_rule",
+                "instruction.sba.press_skill", StandIcons.LEAVE,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.sba.save_location",
+                "instruction.sba.press_skill_crouch", StandIcons.SAVE_LOCATION,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118, 0, "ability.sba.fall_brace",
+                "instruction.sba.press_skill_falling", StandIcons.CALIFORNIA_FALL_CATCH,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.sba.exp_bishop",
+                "instruction.sba.press_skill_crouch", StandIcons.EXPERIENCE_BISHOP,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.sba.rule_change",
+                "instruction.sba.press_skill", StandIcons.LEAVE_RULE,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,0, "ability.sba.sleep",
+                "instruction.sba.press_skill_crouch", StandIcons.SLEEP,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.sba.step_shadow",
+                "instruction.sba.passive", StandIcons.STEP_SHADOW,0,level,bypas));
         return $$1;
     }
 

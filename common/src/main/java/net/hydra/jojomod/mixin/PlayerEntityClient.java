@@ -63,20 +63,20 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
 
     @Shadow @Final private List<AmbientSoundHandler> ambientSoundHandlers;
     @Unique
-    private int roundabout$clashIncrement;
+    private int sba$clashIncrement;
     @Unique
-    private boolean roundabout$bl = false;
+    private boolean sba$bl = false;
 
     /**When time is stopped, it would be OP if you could place some blocks down*/
     @Unique
-    private int roundabout$NoPlaceTSTicks = -1;
+    private int sba$NoPlaceTSTicks = -1;
     @Unique
-    private int roundabout$menuTicks = -1;
+    private int sba$menuTicks = -1;
 
     @Unique
-    private long roundabout$clashDisplayExtraTimestamp = -100;
+    private long sba$clashDisplayExtraTimestamp = -100;
     @Unique
-    private float roundabout$lastClashPower = -1;
+    private float sba$lastClashPower = -1;
 
 
     public PlayerEntityClient(ClientLevel $$0, GameProfile $$1) {
@@ -85,41 +85,41 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
 
     @Unique
     @Override
-    public int roundabout$getRoundaboutNoPlaceTSTicks(){
-        return this.roundabout$NoPlaceTSTicks;
+    public int sba$getSBANoPlaceTSTicks(){
+        return this.sba$NoPlaceTSTicks;
     }
 
     @Unique
     @Override
-    public long roundabout$getClashDisplayExtraTimestamp(){
-        return this.roundabout$clashDisplayExtraTimestamp;
+    public long sba$getClashDisplayExtraTimestamp(){
+        return this.sba$clashDisplayExtraTimestamp;
     }
 
     @Unique
     @Override
-    public void roundabout$setMenuTicks(int menuTicks){
-        this.roundabout$menuTicks = menuTicks;
+    public void sba$setMenuTicks(int menuTicks){
+        this.sba$menuTicks = menuTicks;
     }
 
     @Unique
     @Override
-    public int roundabout$getMenuTicks(){
-        return this.roundabout$menuTicks;
+    public int sba$getMenuTicks(){
+        return this.sba$menuTicks;
     }
     @Unique
     @Override
-    public float roundabout$getLastClashPower(){
-        return this.roundabout$lastClashPower;
+    public float sba$getLastClashPower(){
+        return this.sba$lastClashPower;
     }
     @Unique
     @Override
-    public void roundabout$setClashDisplayExtraTimestamp(long set){
-        this.roundabout$clashDisplayExtraTimestamp = set;
+    public void sba$setClashDisplayExtraTimestamp(long set){
+        this.sba$clashDisplayExtraTimestamp = set;
     }
     @Unique
     @Override
-    public void roundabout$setLastClashPower(float set){
-        this.roundabout$lastClashPower = set;
+    public void sba$setLastClashPower(float set){
+        this.sba$lastClashPower = set;
     }
 
 
@@ -127,17 +127,17 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
     /**This code mirrors item usage code, and it's why you are slower while eating.
      * The purpose of this mixin is to make stand blocking slow you down.*/
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/tutorial/Tutorial;onInput(Lnet/minecraft/client/player/Input;)V", shift = At.Shift.AFTER))
-    private void roundabout$TickMovement(CallbackInfo ci) {
+    private void sba$TickMovement(CallbackInfo ci) {
         /*Time Stop Levitation*/
         //this.sprintTriggerTime = ((StandUser)this).getStandPowers().inputSpeedModifiers(this.sprintTriggerTime);
-        roundabout$ClashJump();
+        sba$ClashJump();
         /*Soft and Wet friction cancels input*/
         if (MainUtil.canHaveFrictionTaken(((LivingEntity) (Object)this))) {
-            if (((ILevelAccess) this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
-                    ((ILevelAccess) this.level()).roundabout$isFrictionPlunderedEntity(this)
+            if (((ILevelAccess) this.level()).sba$isFrictionPlundered(this.blockPosition()) ||
+                    ((ILevelAccess) this.level()).sba$isFrictionPlunderedEntity(this)
             ) {
 
-                if (!((StandUser)this).roundabout$frictionSave().equals(Vec3.ZERO)) {
+                if (!((StandUser)this).sba$frictionSave().equals(Vec3.ZERO)) {
                     this.input.forwardImpulse *= 0.1F;
                     this.input.leftImpulse *= 0.1F;
                 }
@@ -146,46 +146,46 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
     }
 
     @Unique
-    private void roundabout$ClashJump(){
-        if (((StandUser) this).roundabout$isClashing()) {
-            if (!((StandUser)this).roundabout$getStandPowers().getClashDone()) {
-                if (this.roundabout$clashIncrement < 0) {
-                    ++this.roundabout$clashIncrement;
-                    if (this.roundabout$clashIncrement == 0) {
-                        ((StandUser) this).roundabout$getStandPowers().setClashProgress(0.0f);
+    private void sba$ClashJump(){
+        if (((StandUser) this).sba$isClashing()) {
+            if (!((StandUser)this).sba$getStandPowers().getClashDone()) {
+                if (this.sba$clashIncrement < 0) {
+                    ++this.sba$clashIncrement;
+                    if (this.sba$clashIncrement == 0) {
+                        ((StandUser) this).sba$getStandPowers().setClashProgress(0.0f);
                     }
                 }
-                if (roundabout$bl && !this.input.jumping) {
-                    ((StandUser)this).roundabout$getStandPowers().setClashDone(true);
+                if (sba$bl && !this.input.jumping) {
+                    ((StandUser)this).sba$getStandPowers().setClashDone(true);
                     //this.startRidingJump();
-                } else if (!roundabout$bl && this.input.jumping) {
-                    this.roundabout$clashIncrement = 0;
-                    ((StandUser) this).roundabout$getStandPowers().setClashProgress(0.0f);
-                } else if (roundabout$bl) {
-                    ++this.roundabout$clashIncrement;
-                    ((StandUser) this).roundabout$getStandPowers().setClashProgress(this.roundabout$clashIncrement < 10 ?
-                            (float) this.roundabout$clashIncrement * 0.1f : 0.8f + 2.0f / (float) (this.roundabout$clashIncrement - 9) * 0.1f);
+                } else if (!sba$bl && this.input.jumping) {
+                    this.sba$clashIncrement = 0;
+                    ((StandUser) this).sba$getStandPowers().setClashProgress(0.0f);
+                } else if (sba$bl) {
+                    ++this.sba$clashIncrement;
+                    ((StandUser) this).sba$getStandPowers().setClashProgress(this.sba$clashIncrement < 10 ?
+                            (float) this.sba$clashIncrement * 0.1f : 0.8f + 2.0f / (float) (this.sba$clashIncrement - 9) * 0.1f);
                 }
-                roundabout$updateClash();
+                sba$updateClash();
             }
         } else {
-            ((StandUser)this).roundabout$getStandPowers().setClashProgress(0.0f);
-            ((StandUser)this).roundabout$getStandPowers().setClashDone(false);
+            ((StandUser)this).sba$getStandPowers().setClashProgress(0.0f);
+            ((StandUser)this).sba$getStandPowers().setClashDone(false);
         }
-        roundabout$bl = this.input.jumping;
+        sba$bl = this.input.jumping;
     }
 
     @Inject(method = "sendRidingJump", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$startRidingJump(CallbackInfo ci) {
-        if (((StandUser) this).roundabout$isClashing()) {
+    protected void sba$startRidingJump(CallbackInfo ci) {
+        if (((StandUser) this).sba$isClashing()) {
             ci.cancel();
         }
     }
     @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playSound(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
+    protected void sba$playSound(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
         Entity thrs = ((Entity) (Object)this);
-        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(thrs)){
-            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
+        if(((ILevelAccess)this.level()).sba$isSoundPlunderedEntity(thrs)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).sba$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds(soundEvent, this.getSoundSource(), f, g);
             }
@@ -206,12 +206,12 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
 
     /**Soft and Wet blindness disables sprinting like actual blindness*/
     @Inject(method = "canStartSprinting", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$canStartSprinting(CallbackInfoReturnable<Boolean> cir) {
+    private void sba$canStartSprinting(CallbackInfoReturnable<Boolean> cir) {
 
     }
 
     @Inject(method = "onSyncedDataUpdated", at = @At(value = "TAIL"), require = 0)
-    public void roundabout$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci) {
+    public void sba$onSyncedDataUpdated(EntityDataAccessor<?> $$0, CallbackInfo ci) {
         ((IPlayerEntity)this).rdbt$onSyncedDataUpdated($$0);
         ((StandUser)this).rdbt$onSyncedDataUpdated2($$0);
     }
@@ -219,31 +219,31 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
     /**If you are stopping time, make it so that you gain a block placement cooldown for blocks with
      * a certain level of hardness or danger*/
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$tick(CallbackInfo ci) {
+    protected void sba$tick(CallbackInfo ci) {
         if (!((TimeStop) ((Player)(Object) this).level()).getTimeStoppingEntities().isEmpty() &&
                 ((TimeStop) ((Player) (Object) this).level()).isTimeStoppingEntity(((Player) (Object) this))) {
-            this.roundabout$NoPlaceTSTicks = 6;
+            this.sba$NoPlaceTSTicks = 6;
         } else {
-            if (this.roundabout$NoPlaceTSTicks > -1){
-                this.roundabout$NoPlaceTSTicks--;
+            if (this.sba$NoPlaceTSTicks > -1){
+                this.sba$NoPlaceTSTicks--;
             }
         }
-        if (this.roundabout$menuTicks > -1){
-            this.roundabout$menuTicks--;
+        if (this.sba$menuTicks > -1){
+            this.sba$menuTicks--;
         }
 
         StandUser user = ((StandUser) this);
-        if (user.roundabout$getStandPowers().isPiloting()){
-            Entity ent = user.roundabout$getStandPowers().getPilotingStand();
+        if (user.sba$getStandPowers().isPiloting()){
+            Entity ent = user.sba$getStandPowers().getPilotingStand();
             if (ent != null){
-                roundabout$standControlTick(ent);
+                sba$standControlTick(ent);
                 ci.cancel();
             }
         }
     }
 
     @Unique
-    private void roundabout$standControlTick(Entity ent){
+    private void sba$standControlTick(Entity ent){
         if (this.level().hasChunkAt(this.getBlockX(), this.getBlockZ())) {
             super.tick();
                 this.connection.send(new ServerboundMovePlayerPacket.Rot(this.getYRot(), this.getXRot(), this.onGround()));
@@ -269,13 +269,13 @@ public abstract class PlayerEntityClient extends AbstractClientPlayer implements
     }
 
     @Unique
-    private void roundabout$updateClash(){
-        C2SPacketUtil.barrageClashUpdatePacket(((StandUser) this).roundabout$getStandPowers().getClashProgress(),
-                ((StandUser) this).roundabout$getStandPowers().getClashDone());
+    private void sba$updateClash(){
+        C2SPacketUtil.barrageClashUpdatePacket(((StandUser) this).sba$getStandPowers().getClashProgress(),
+                ((StandUser) this).sba$getStandPowers().getClashDone());
     }
 
     @Inject(method = "sendPosition", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$sendPosition(CallbackInfo ci) {
+    private void sba$sendPosition(CallbackInfo ci) {
         if (ClientUtil.isUnderRTZ()) {
             ci.cancel();
         }

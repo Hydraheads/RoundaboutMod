@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGravityLivingEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.HallucinationRenderOffset;
@@ -60,12 +60,12 @@ import java.util.Map;
 public abstract class GravityLivingEntityMixin extends Entity implements IGravityLivingEntity {
 
 
-    /**Unique Roundabout Code*/
+    /**Unique SBA Code*/
     @Unique
     @Override
-    public void roundabout$augmentKB(Entity knockback){
-        roundabout$knockbackGravityAugmentation = true;
-        roundabout$augmentSource = knockback;
+    public void sba$augmentKB(Entity knockback){
+        sba$knockbackGravityAugmentation = true;
+        sba$augmentSource = knockback;
     }
 
 
@@ -149,7 +149,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                     value = "HEAD"
             ),
             cancellable = true, require = 0)
-    private void roundabout$calculateEntityAnimation(boolean $$0, CallbackInfo ci) {
+    private void sba$calculateEntityAnimation(boolean $$0, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
         if (gravityDirection == Direction.DOWN)
             return;
@@ -174,7 +174,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
 
     @Unique
     public double rdbt$assertDazed(double initial){
-        if (((StandUser)this).roundabout$isDazed()) {
+        if (((StandUser)this).sba$isDazed()) {
             return 0;
         } else {
             return initial;
@@ -182,10 +182,10 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
     }
     @Unique
     private double rdbt$TravelGravity(double $$1) {
-        if (((StandUser)this).roundabout$isDazed()) {
+        if (((StandUser)this).sba$isDazed()) {
             return 0;
         } else {
-            return ((StandUser)this).roundabout$getGravity($$1);
+            return ((StandUser)this).sba$getGravity($$1);
         }
     }
 
@@ -198,13 +198,13 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                     value = "HEAD"
             ),
             cancellable = true, require = 0)
-    private void roundabout$travelWithGravity(Vec3 $$0, CallbackInfo ci) {
+    private void sba$travelWithGravity(Vec3 $$0, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
         int changeContext = 0;
-        if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()
-                || ((StandUser)this).roundabout$getStandPowers() instanceof PowersDiverDown DD && DD.inZipMode()){
+        if (((StandUser)this).sba$getStandPowers() instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()
+                || ((StandUser)this).sba$getStandPowers() instanceof PowersDiverDown DD && DD.inZipMode()){
             changeContext = 1;
-        } else if (((StandUser)this).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated()){
+        } else if (((StandUser)this).sba$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated()){
             changeContext = 2;
         }
         if (gravityDirection == Direction.DOWN && changeContext == 0)
@@ -364,7 +364,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             ),
             cancellable = true, require = 0
     )
-    private void roundabout$modify_playBlockFallSound_getBlockState_0(CallbackInfo ci) {
+    private void sba$modify_playBlockFallSound_getBlockState_0(CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
             return;
@@ -387,7 +387,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                     ordinal = 0
             ),
             cancellable = true, require = 0)
-    private void roundabout$redirect_canSee_new_0(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$redirect_canSee_new_0(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
 
         Direction gravityDirectioEent = GravityAPI.getGravityDirection(entity);
@@ -410,7 +410,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             at = @At("RETURN"),
             cancellable = true, require = 0
     )
-    private void roundabout$inject_getBoundingBox(Pose pose, CallbackInfoReturnable<AABB> cir) {
+    private void sba$inject_getBoundingBox(Pose pose, CallbackInfoReturnable<AABB> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return;
 
@@ -422,14 +422,14 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
     }
     /**Modifies the gravity influence*/
     @ModifyVariable(method = "tick", at = @At(value = "STORE"),ordinal = 0)
-    private double roundabout$tickGravity(double $$1) {
+    private double sba$tickGravity(double $$1) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return $$1;
 
         return RotationUtil.vecWorldToPlayer(this.getX() - xo, this.getY() - this.yo, this.getZ() - this.zo, gravityDirection).x;
     }
     @ModifyVariable(method = "tick", at = @At(value = "STORE"),ordinal = 1)
-    private double roundabout$tickGravity2(double $$1) {
+    private double sba$tickGravity2(double $$1) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return $$1;
 
@@ -438,9 +438,9 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
 
 
     @Unique
-    public boolean roundabout$knockbackGravityAugmentation = false;
+    public boolean sba$knockbackGravityAugmentation = false;
     @Unique
-    public Entity roundabout$augmentSource = null;
+    public Entity sba$augmentSource = null;
 
 
     @Inject(
@@ -450,9 +450,9 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                     target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"
             )
     )
-    private void roundabout$augmentHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> cir){
-        roundabout$knockbackGravityAugmentation = true;
-        roundabout$augmentSource = $$0.getEntity();
+    private void sba$augmentHurt(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> cir){
+        sba$knockbackGravityAugmentation = true;
+        sba$augmentSource = $$0.getEntity();
     }
     @Inject(
             method = "knockback(DDD)V",
@@ -461,23 +461,23 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             ),
             cancellable = true, require = 0
     )
-    private void roundabout$augmentHurtKnockaback(double $$0, double $$1, double $$2, CallbackInfo ci){
+    private void sba$augmentHurtKnockaback(double $$0, double $$1, double $$2, CallbackInfo ci){
         if (MainUtil.isKnockbackImmune(rdbt$this())){
             ci.cancel();
             return;
         }
-        if (roundabout$knockbackGravityAugmentation){
-            roundabout$knockbackGravityAugmentation = false;
-            if (roundabout$augmentSource != null) {
+        if (sba$knockbackGravityAugmentation){
+            sba$knockbackGravityAugmentation = false;
+            if (sba$augmentSource != null) {
                 Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
                 if (gravityDirection == Direction.DOWN)
                     return;
-                double $$13 = roundabout$redirect_damage_getX_0(roundabout$augmentSource) -
-                        roundabout$redirect_damage_getX_1(rdbt$this());
+                double $$13 = sba$redirect_damage_getX_0(sba$augmentSource) -
+                        sba$redirect_damage_getX_1(rdbt$this());
 
                 double $$14;
-                for ($$14 = roundabout$redirect_damage_getZ_0(roundabout$augmentSource) -
-                        roundabout$redirect_damage_getZ_1(rdbt$this()); $$13 * $$13 + $$14 * $$14 < 1.0E-4; $$14 = (Math.random() - Math.random()) * 0.01) {
+                for ($$14 = sba$redirect_damage_getZ_0(sba$augmentSource) -
+                        sba$redirect_damage_getZ_1(rdbt$this()); $$13 * $$13 + $$14 * $$14 < 1.0E-4; $$14 = (Math.random() - Math.random()) * 0.01) {
                     $$13 = (Math.random() - Math.random()) * 0.01;
                 }
                 knockback(0.4F,$$13,$$14);
@@ -487,7 +487,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
     }
 
     @Unique
-    private double roundabout$redirect_damage_getX_0(Entity attacker) {
+    private double sba$redirect_damage_getX_0(Entity attacker) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) {
             if (GravityAPI.getGravityDirection(attacker) == Direction.DOWN) {
@@ -502,7 +502,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
     }
 
     @Unique
-    private double roundabout$redirect_damage_getZ_0(Entity attacker) {
+    private double sba$redirect_damage_getZ_0(Entity attacker) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) {
             if (GravityAPI.getGravityDirection(attacker) == Direction.DOWN) {
@@ -518,7 +518,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
 
 
     @Unique
-    private double roundabout$redirect_damage_getX_1(LivingEntity target) {
+    private double sba$redirect_damage_getX_1(LivingEntity target) {
         Direction gravityDirection = GravityAPI.getGravityDirection(target);
         if (gravityDirection == Direction.DOWN) {
             return target.getX();
@@ -528,7 +528,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
     }
 
     @Unique
-    private double roundabout$redirect_damage_getZ_1(LivingEntity target) {
+    private double sba$redirect_damage_getZ_1(LivingEntity target) {
         Direction gravityDirection = GravityAPI.getGravityDirection(target);
         if (gravityDirection == Direction.DOWN) {
             return target.getZ();
@@ -543,7 +543,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                     value = "HEAD"
             ),
             cancellable = true, require = 0)
-    private void roundabout$blocked(LivingEntity target, CallbackInfo ci) {
+    private void sba$blocked(LivingEntity target, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(target);
         Direction gravityDirection2 = GravityAPI.getGravityDirection(rdbt$this());
         if (gravityDirection == Direction.DOWN && gravityDirection2 == Direction.DOWN)
@@ -551,14 +551,14 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
         ci.cancel();
 
         target.knockback(0.5, RotationUtil.vecWorldToPlayer(target.position(), gravityDirection).x
-                - roundabout$redirect_knockback_getX_1(rdbt$this(),target),
+                - sba$redirect_knockback_getX_1(rdbt$this(),target),
                 RotationUtil.vecWorldToPlayer(target.position(), gravityDirection).z
-                        - roundabout$redirect_knockback_getZ_1(rdbt$this(),target));
+                        - sba$redirect_knockback_getZ_1(rdbt$this(),target));
         return ;
     }
 
     @Unique
-    private double roundabout$redirect_knockback_getX_1(LivingEntity attacker, LivingEntity target) {
+    private double sba$redirect_knockback_getX_1(LivingEntity attacker, LivingEntity target) {
         Direction gravityDirection = GravityAPI.getGravityDirection(target);
         if (gravityDirection == Direction.DOWN) {
             if (GravityAPI.getGravityDirection(attacker) == Direction.DOWN) {
@@ -573,7 +573,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
     }
 
     @Unique
-    private double roundabout$redirect_knockback_getZ_1(LivingEntity attacker, LivingEntity target) {
+    private double sba$redirect_knockback_getZ_1(LivingEntity attacker, LivingEntity target) {
         Direction gravityDirection = GravityAPI.getGravityDirection(target);
         if (gravityDirection == Direction.DOWN) {
             if (GravityAPI.getGravityDirection(attacker) == Direction.DOWN) {
@@ -593,7 +593,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
                     value = "HEAD"
             ),
             cancellable = true, require = 0)
-    private void roundabout$spawnItemParticles(ItemStack $$0, int $$1, CallbackInfo ci){
+    private void sba$spawnItemParticles(ItemStack $$0, int $$1, CallbackInfo ci){
         Direction gravityDirection = GravityAPI.getGravityDirection(this);
         if (gravityDirection == Direction.DOWN)
             return;
@@ -621,7 +621,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             ),
             cancellable = true, require = 0
     )
-    private void roundabout$tickEffects(CallbackInfo ci) {
+    private void sba$tickEffects(CallbackInfo ci) {
         LivingEntity ent = ((LivingEntity) (Object) this);
         MobEffectInstance effect = ent.getEffect(ModEffects.HALLUCINATION);
         Direction gravityDirection = GravityAPI.getGravityDirection(ent);
@@ -737,7 +737,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
             ),
             cancellable = true, require = 0
     )
-    private void roundabout$modify_addDeathParticless_addParticle_0(CallbackInfo ci) {
+    private void sba$modify_addDeathParticless_addParticle_0(CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
             return;
@@ -797,7 +797,7 @@ public abstract class GravityLivingEntityMixin extends Entity implements IGravit
 
 
     @ModifyVariable(method = "calculateFallDamage(FF)I", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-    private float roundabout$diminishFallDamage(float value) {
+    private float sba$diminishFallDamage(float value) {
         return value * (float) Math.sqrt(GravityAPI.getGravityStrength(this));
     }
 

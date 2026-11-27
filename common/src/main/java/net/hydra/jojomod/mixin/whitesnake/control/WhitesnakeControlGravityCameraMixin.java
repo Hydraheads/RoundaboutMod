@@ -29,10 +29,10 @@ public abstract class WhitesnakeControlGravityCameraMixin {
             at = @At(value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
                     ordinal = 3, shift = At.Shift.AFTER), require = 0)
-    private void roundaboutWhitesnake$orientFabricControlCamera(float tickDelta, long limitTime,
+    private void sbaWhitesnake$orientFabricControlCamera(float tickDelta, long limitTime,
                                                                 PoseStack poseStack, CallbackInfo ci) {
         if (!"Forge".equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName())) {
-            roundaboutWhitesnake$applyControlGravity(tickDelta, poseStack);
+            sbaWhitesnake$applyControlGravity(tickDelta, poseStack);
         }
     }
 
@@ -40,16 +40,16 @@ public abstract class WhitesnakeControlGravityCameraMixin {
             at = @At(value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
                     ordinal = 4, shift = At.Shift.AFTER), require = 0)
-    private void roundaboutWhitesnake$orientForgeControlCamera(float tickDelta, long limitTime,
+    private void sbaWhitesnake$orientForgeControlCamera(float tickDelta, long limitTime,
                                                                PoseStack poseStack, CallbackInfo ci) {
         if ("Forge".equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName())) {
-            roundaboutWhitesnake$applyControlGravity(tickDelta, poseStack);
+            sbaWhitesnake$applyControlGravity(tickDelta, poseStack);
         }
     }
 
-    private void roundaboutWhitesnake$applyControlGravity(float tickDelta, PoseStack poseStack) {
+    private void sbaWhitesnake$applyControlGravity(float tickDelta, PoseStack poseStack) {
         Entity focused = mainCamera.getEntity();
-        Entity controlled = ((ICamera) mainCamera).roundabout$getPovSwitch();
+        Entity controlled = ((ICamera) mainCamera).sba$getPovSwitch();
         if (focused == null || focused.is(controlled)
                 || !(controlled instanceof WhitesnakeEntity whitesnake)
                 || !whitesnake.isControlModeActive()) return;

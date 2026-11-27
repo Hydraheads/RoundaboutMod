@@ -20,11 +20,11 @@ public abstract class DazeCreeper extends Monster {
      * This mixin also makes it so when the creeper is using barrages or attacks
      * that it shouldn't explode during, it stops.*/
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$Tick(CallbackInfo ci) {
+    protected void sba$Tick(CallbackInfo ci) {
         StandUser user = ((StandUser) this);
-        if (user.roundabout$isDazed() ||
-                (!user.roundabout$getStandDisc().isEmpty() &&
-                        user.roundabout$getStandPowers().disableMobAiAttack())) {
+        if (user.sba$isDazed() ||
+                (!user.sba$getStandDisc().isEmpty() &&
+                        user.sba$getStandPowers().disableMobAiAttack())) {
             if (this.isAlive()) {
                 oldSwell = swell;
             }

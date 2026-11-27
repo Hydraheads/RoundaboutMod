@@ -5,7 +5,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
@@ -36,13 +36,13 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 
 public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
-	private static final ResourceLocation PART_4_KILLER_QUEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/pink.png");
-	private static final ResourceLocation MINESWEEPER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/minesweeper.png");
-	private static final ResourceLocation BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/blue.png");
-	private static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/green.png");
-	private static final ResourceLocation GOLD = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/gold.png");
-	private static final ResourceLocation NUMBRA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/numbra.png");
-	//private static final ResourceLocation ONIBIS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/blockbombs/samurai.png");
+	private static final ResourceLocation PART_4_KILLER_QUEEN = new ResourceLocation(SBA.MOD_ID,"textures/stand/killer_queen/blockbombs/pink.png");
+	private static final ResourceLocation MINESWEEPER = new ResourceLocation(SBA.MOD_ID,"textures/stand/killer_queen/blockbombs/minesweeper.png");
+	private static final ResourceLocation BLUE = new ResourceLocation(SBA.MOD_ID,"textures/stand/killer_queen/blockbombs/blue.png");
+	private static final ResourceLocation GREEN = new ResourceLocation(SBA.MOD_ID,"textures/stand/killer_queen/blockbombs/green.png");
+	private static final ResourceLocation GOLD = new ResourceLocation(SBA.MOD_ID,"textures/stand/killer_queen/blockbombs/gold.png");
+	private static final ResourceLocation NUMBRA = new ResourceLocation(SBA.MOD_ID,"textures/stand/killer_queen/blockbombs/numbra.png");
+	//private static final ResourceLocation ONIBIS = new ResourceLocation(SBA.MOD_ID,"textures/stand/killer_queen/blockbombs/samurai.png");
 
 	
     public BlockBombRenderer(EntityRendererProvider.Context context) {
@@ -52,8 +52,8 @@ public class BlockBombRenderer extends StandRenderer<BlockBombEntity> {
     @Override
     public ResourceLocation getTextureLocation(BlockBombEntity blockBombEntity) {
         LivingEntity user = blockBombEntity.getUser();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen) {
-            byte BT = ((StandUser) user).roundabout$getStandSkin();
+        if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersKillerQueen) {
+            byte BT = ((StandUser) user).sba$getStandSkin();
 
             switch (BT) {
                 case KillerQueenEntity.GOGO, KillerQueenEntity.NOTW, KillerQueenEntity.CREEPER -> {return GREEN;}

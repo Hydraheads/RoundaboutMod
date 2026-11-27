@@ -1,7 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -95,47 +95,47 @@ public class PowersAnubis extends NewDashPreset {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.anubis_attack",
-                "instruction.roundabout.press_attack", StandIcons.ANUBIS_SLASH,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.anubis_sneak_attack",
-                "instruction.roundabout.hold_attack_crouch", StandIcons.ANUBIS_UPPERCUT,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.anubis_pogo",
-                "instruction.roundabout.press_attack_crouch_air", StandIcons.ANUBIS_DIVE_ATTACK,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.sba.anubis_attack",
+                "instruction.sba.press_attack", StandIcons.ANUBIS_SLASH,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.sba.anubis_sneak_attack",
+                "instruction.sba.hold_attack_crouch", StandIcons.ANUBIS_UPPERCUT,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.sba.anubis_pogo",
+                "instruction.sba.press_attack_crouch_air", StandIcons.ANUBIS_DIVE_ATTACK,0,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.anubis_empower",
-                "instruction.roundabout.press_skill", StandIcons.ANUBIS_EMPOWER,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.anubis_alluring_light",
-                "instruction.roundabout.press_skill_crouch", StandIcons.ANUBIS_ALLURING_LIGHT,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.anubis_raging_light",
-                "instruction.roundabout.press_skill_crouch", StandIcons.ANUBIS_RAGING_LIGHT,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.sba.anubis_empower",
+                "instruction.sba.press_skill", StandIcons.ANUBIS_EMPOWER,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.sba.anubis_alluring_light",
+                "instruction.sba.press_skill_crouch", StandIcons.ANUBIS_ALLURING_LIGHT,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.sba.anubis_raging_light",
+                "instruction.sba.press_skill_crouch", StandIcons.ANUBIS_RAGING_LIGHT,2,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.roundabout.guard",
-                "instruction.roundabout.hold_block", StandIcons.ANUBIS_GUARD,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.anubis_quickdraw",
-                "instruction.roundabout.barrage", StandIcons.ANUBIS_BARRAGE,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118, 0, "ability.roundabout.anubis_shieldbreak",
-                "instruction.roundabout.kick_barrage", StandIcons.ANUBIS_SHIELDBREAK,1,level,bypass));
-
-
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos+77, topPos+80, 0, "ability.roundabout.anubis_dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,4, "ability.roundabout.anubis_backflip",
-                "instruction.roundabout.press_skill_crouch", StandIcons.ANUBIS_BACKFLIP,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,7, "ability.roundabout.anubis_sword_throw",
-                "instruction.roundabout.press_skill_crouch", StandIcons.ANUBIS_SWORD_THROW,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.sba.guard",
+                "instruction.sba.hold_block", StandIcons.ANUBIS_GUARD,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.sba.anubis_quickdraw",
+                "instruction.sba.barrage", StandIcons.ANUBIS_BARRAGE,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118, 0, "ability.sba.anubis_shieldbreak",
+                "instruction.sba.kick_barrage", StandIcons.ANUBIS_SHIELDBREAK,1,level,bypass));
 
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.anubis_record",
-                "instruction.roundabout.press_skill", StandIcons.ANUBIS_RECORD,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.anubis_replay",
-                "instruction.roundabout.press_skill", StandIcons.ANUBIS_REPLAY,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.anubis_mouse",
-                "instruction.roundabout.press_skill_memory", StandIcons.ANUBIS_DMOUSE,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos+77, topPos+80, 0, "ability.sba.anubis_dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,4, "ability.sba.anubis_backflip",
+                "instruction.sba.press_skill_crouch", StandIcons.ANUBIS_BACKFLIP,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,7, "ability.sba.anubis_sword_throw",
+                "instruction.sba.press_skill_crouch", StandIcons.ANUBIS_SWORD_THROW,4,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.anubis_exp",
-                "instruction.roundabout.passive", StandIcons.ANUBIS_EXP,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.roundabout.anubis_speed",
-                "instruction.roundabout.passive", StandIcons.ANUBIS_SPEED,3,level,bypass));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.sba.anubis_record",
+                "instruction.sba.press_skill", StandIcons.ANUBIS_RECORD,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.sba.anubis_replay",
+                "instruction.sba.press_skill", StandIcons.ANUBIS_REPLAY,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.sba.anubis_mouse",
+                "instruction.sba.press_skill_memory", StandIcons.ANUBIS_DMOUSE,2,level,bypass));
+
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.sba.anubis_exp",
+                "instruction.sba.passive", StandIcons.ANUBIS_EXP,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,0, "ability.sba.anubis_speed",
+                "instruction.sba.passive", StandIcons.ANUBIS_SPEED,3,level,bypass));
 
         return $$1;
     }
@@ -152,15 +152,15 @@ public class PowersAnubis extends NewDashPreset {
         }
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
-            byte level = ipe.roundabout$getStandLevel();
+            byte level = ipe.sba$getStandLevel();
             if (level == 4) {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.memory_and_ability").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.memory_and_ability").
                         withStyle(ChatFormatting.AQUA), true);
             } else if (level == 7) {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.memory").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.max.memory").
                         withStyle(ChatFormatting.AQUA), true);
             } else {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.memory").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.memory").
                         withStyle(ChatFormatting.AQUA), true);
             }
         }
@@ -170,10 +170,10 @@ public class PowersAnubis extends NewDashPreset {
     public static final int MaxPossessionTime = 200;
     public int  getMaxPlayTime() {
         if (this.getSelf() instanceof Player P) {
-            boolean bypass = (P.isCreative()) || (this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem);
+            boolean bypass = (P.isCreative()) || (this.getStandUserSelf().sba$getStandDisc().getItem() instanceof MaxStandDiscItem);
             IPlayerEntity IPE = (IPlayerEntity) P;
 
-            return (int) (ClientNetworking.getAppropriateConfig().anubisSettings.anubisMaxMemory * (bypass ? 1 : 0.5 + (0.5 * ((float) IPE.roundabout$getStandLevel() / this.getMaxLevel()  )) ) );
+            return (int) (ClientNetworking.getAppropriateConfig().anubisSettings.anubisMaxMemory * (bypass ? 1 : 0.5 + (0.5 * ((float) IPE.sba$getStandLevel() / this.getMaxLevel()  )) ) );
         }
         return -1;
     }
@@ -245,7 +245,7 @@ public class PowersAnubis extends NewDashPreset {
 
         } else {
             if (this.playTime > 0) {
-                if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+                if (this.getStandUserSelf().sba$getUniqueStandModeToggle()) {
                     icon4 = StandIcons.ANUBIS_CANCEL;
                 } else {
                     icon4 = StandIcons.ANUBIS_SAVE;
@@ -341,7 +341,7 @@ public class PowersAnubis extends NewDashPreset {
 
             case SKILL_4_NORMAL -> {
                 if (this.playTime > 0) {
-                    if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+                    if (this.getStandUserSelf().sba$getUniqueStandModeToggle()) {
                         MemoryCancelClient();
                     } else {
                         MemorySaveClient(true);
@@ -371,16 +371,16 @@ public class PowersAnubis extends NewDashPreset {
         int radius = 8;
         AABB box = this.getSelf().getBoundingBox().inflate(radius,2,radius);
 
-        boolean bypass = this.getStandUserSelf().roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem || (this.getSelf() instanceof Player P && P.isCreative());
+        boolean bypass = this.getStandUserSelf().sba$getStandDisc().getItem() instanceof MaxStandDiscItem || (this.getSelf() instanceof Player P && P.isCreative());
         int time = 160;
         if (!bypass && this.getSelf() instanceof Player P) {
             IPlayerEntity IPE = (IPlayerEntity) P;
-            time =(int) ( time * Math.min(1,(double) IPE.roundabout$getStandLevel() / this.getMaxLevel()+0.2F) );
+            time =(int) ( time * Math.min(1,(double) IPE.sba$getStandLevel() / this.getMaxLevel()+0.2F) );
         }
 
         for (Mob M : this.getSelf().level().getNearbyEntities(Mob.class, TargetingConditions.DEFAULT,this.getSelf(),box)) {
             if (!(M instanceof FallenMob)) {
-                ((IMob) M).roundabout$setHypnotizedBy(this.getSelf(), time);
+                ((IMob) M).sba$setHypnotizedBy(this.getSelf(), time);
             }
         }
 
@@ -413,13 +413,13 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void MemoryRecordClient() {
-        if(!this.getStandUserSelf().roundabout$getUniqueStandModeToggle() && Minecraft.getInstance().mouseHandler.isMouseGrabbed()) {
+        if(!this.getStandUserSelf().sba$getUniqueStandModeToggle() && Minecraft.getInstance().mouseHandler.isMouseGrabbed()) {
             ClientUtil.openMemoryRecordScreen(true);
         }
     }
 
     public void MemoryPlayClient() {
-        if(!this.getStandUserSelf().roundabout$getUniqueStandModeToggle() && Minecraft.getInstance().mouseHandler.isMouseGrabbed()) {
+        if(!this.getStandUserSelf().sba$getUniqueStandModeToggle() && Minecraft.getInstance().mouseHandler.isMouseGrabbed()) {
             ClientUtil.openMemoryRecordScreen(false);
         }
     }
@@ -437,7 +437,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void MemorySaveClient(boolean rotSave) {
-        this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+        this.getStandUserSelf().sba$setUniqueStandModeToggle(false);
 
         AnubisMemory memory = this.getUsedMemory();
         List<AnubisMoment> moments = memory.moments;
@@ -488,13 +488,13 @@ public class PowersAnubis extends NewDashPreset {
 
 
     public void MemoryCancelClient() {
-        if (!this.getStandUserSelf().roundabout$getUniqueStandModeToggle() && !this.memories.isEmpty() && this.playSlot != -1) {
+        if (!this.getStandUserSelf().sba$getUniqueStandModeToggle() && !this.memories.isEmpty() && this.playSlot != -1) {
             this.memories.set(this.playSlot,lastMemory);
             lastMemory = null;
         }
         this.visualValues = new ArrayList<>();
         setPlayTime(-1);
-        this.getStandUserSelf().roundabout$setUniqueStandModeToggle(false);
+        this.getStandUserSelf().sba$setUniqueStandModeToggle(false);
     }
 
     public void SwordThrowClient() {
@@ -562,8 +562,8 @@ public class PowersAnubis extends NewDashPreset {
                 }
 
                 Vec3 look = getSelf().getLookAngle().multiply(1, 0, 1).normalize();
-                SU.roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                SU.roundabout$setLeapIntentionally(true);
+                SU.sba$setLeapTicks(((StandUser) this.getSelf()).sba$getMaxLeapTicks());
+                SU.sba$setLeapIntentionally(true);
 
                 if (isPacketPlayer()) {
                     float strength = 1F;
@@ -707,10 +707,10 @@ public class PowersAnubis extends NewDashPreset {
     int pogoCounter = 0;
     @Override
     public void tickPower() {
-        //Roundabout.LOGGER.info("CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax() + " PHASE: " + this.getActivePowerPhase());
+        //SBA.LOGGER.info("CA: " + this.getActivePower() + " | " + this.getAttackTime() + " | "+ this.getAttackTimeDuring() + "/" + this.getAttackTimeMax() + " PHASE: " + this.getActivePowerPhase());
         StandUser SU = this.getStandUserSelf();
 
-        if (SU.roundabout$isSealed()) {MemoryCancelClient();}
+        if (SU.sba$isSealed()) {MemoryCancelClient();}
 
         if (isPacketPlayer()) {
             if (this.getActivePower() == PowerIndex.BARRAGE_CHARGE && this.getAttackTimeDuring() > this.getBarrageWindup()) {
@@ -743,9 +743,9 @@ public class PowersAnubis extends NewDashPreset {
         this.getSelf().setNoGravity(this.isPogoing());
 
         if (!self.level().isClientSide()){
-            if (SU.roundabout$getStandSkin() == ITEM){
+            if (SU.sba$getStandSkin() == ITEM){
                 if (self.getMainArm() == HumanoidArm.LEFT){
-                    SU.roundabout$setStandSkin(ANIME);
+                    SU.sba$setStandSkin(ANIME);
                 }
             }
         }
@@ -792,7 +792,7 @@ public class PowersAnubis extends NewDashPreset {
 
 
 
-            if (!this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+            if (!this.getStandUserSelf().sba$getUniqueStandModeToggle()) {
 
                 List<Byte> value = new ArrayList<>();
                 for (int i=0;i<this.playKeys.size();i++) {
@@ -843,12 +843,12 @@ public class PowersAnubis extends NewDashPreset {
 
             /// playback section
             boolean bl = false;
-            if (this.getStandUserSelf().roundabout$getUniqueStandModeToggle()) {
+            if (this.getStandUserSelf().sba$getUniqueStandModeToggle()) {
                 if (memory != null) {
                     int time = this.getMaxPlayTime()-this.playTime;
                     for (int i=0;i<playBytes.size();i++) {
                         if (isPressed(playBytes.get(i),time) && !isPressed(playBytes.get(i),time-1)) {
-                            ((IKeyMapping)this.playKeys.get(i)).roundabout$addClick();
+                            ((IKeyMapping)this.playKeys.get(i)).sba$addClick();
                         }
                     }
 
@@ -864,7 +864,7 @@ public class PowersAnubis extends NewDashPreset {
             this.playTime--;
 
             if (this.playTime <= 0 || bl) {
-                this.MemorySaveClient(!this.getStandUserSelf().roundabout$getUniqueStandModeToggle());
+                this.MemorySaveClient(!this.getStandUserSelf().sba$getUniqueStandModeToggle());
             }
         }
     }
@@ -888,31 +888,31 @@ public class PowersAnubis extends NewDashPreset {
             // guard
             if (isGuarding()) {
                 setAnimation(PowerIndex.GUARD);
-            } else if (getStandUserSelf().roundabout$getStandAnimation() == PowerIndex.GUARD) {
+            } else if (getStandUserSelf().sba$getStandAnimation() == PowerIndex.GUARD) {
                 setAnimation(NONE);
             }
 
             // backflip go away
-            if (SU.roundabout$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
+            if (SU.sba$getStandAnimation() == PowerIndex.SNEAK_MOVEMENT) {
                 if (this.getAttackTimeDuring() > 16 || this.getActivePower() != PowerIndex.SNEAK_MOVEMENT) {
                     setAnimation(PowerIndex.NONE);
                 }
             }
             // pogo
-            else if(SU.roundabout$getStandAnimation() == PowersAnubis.POGO || SU.roundabout$getStandAnimation() == PowersAnubis.STAB ) {
+            else if(SU.sba$getStandAnimation() == PowersAnubis.POGO || SU.sba$getStandAnimation() == PowersAnubis.STAB ) {
                 if (this.getSelf().onGround()) {
                     setAnimation(PowerIndex.NONE);
-                    this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
+                    this.getStandUserSelf().sba$getWornStandAnimation().stop();
                 }
             }
         }
         if (isClient()) {
-            if (SU.roundabout$getStandAnimation() != PowerIndex.NONE
-                    && SU.roundabout$getStandAnimation() != PowerIndex.BARRAGE_CHARGE_2
-                    && SU.roundabout$getStandAnimation() != PowerIndex.BARRAGE_CHARGE
-                    && SU.roundabout$getStandAnimation() != PowerIndex.GUARD
+            if (SU.sba$getStandAnimation() != PowerIndex.NONE
+                    && SU.sba$getStandAnimation() != PowerIndex.BARRAGE_CHARGE_2
+                    && SU.sba$getStandAnimation() != PowerIndex.BARRAGE_CHARGE
+                    && SU.sba$getStandAnimation() != PowerIndex.GUARD
                     && PowersAnubis.getAnimation(SU) != null) {
-                float current = SU.roundabout$getWornStandAnimation().getAccumulatedTime() / 1000F;
+                float current = SU.sba$getWornStandAnimation().getAccumulatedTime() / 1000F;
                 float max = PowersAnubis.getAnimation(SU).lengthInSeconds();
                 if (current > max) {
                     this.setAnimation(PowerIndex.NONE);
@@ -948,9 +948,9 @@ public class PowersAnubis extends NewDashPreset {
 
     public static AnimationDefinition getAnimation(StandUser SU) {
         AnimationDefinition anim = null;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
             boolean leftArm = ((LivingEntity)SU).getMainArm() == HumanoidArm.LEFT;
-            switch (SU.roundabout$getStandAnimation()) {
+            switch (SU.sba$getStandAnimation()) {
                 case PowerIndex.SNEAK_MOVEMENT -> {
                     if (PA.getAttackTime() < 16) {
                         anim = AnubisAnimations.Backflip;
@@ -986,8 +986,8 @@ public class PowersAnubis extends NewDashPreset {
 
     public static AnimationDefinition getFirstPersonAnimation(StandUser SU) {
         AnimationDefinition anim = null;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            anim = switch (SU.roundabout$getStandAnimation()) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
+            anim = switch (SU.sba$getStandAnimation()) {
                 case PowerIndex.GUARD -> AnubisFirstPersonAnimations.Block;
                 case PowerIndex.BARRAGE -> AnubisFirstPersonAnimations.BarrageDash;
                 case PowerIndex.BARRAGE_CHARGE -> AnubisFirstPersonAnimations.BarrageCharge;
@@ -1006,7 +1006,7 @@ public class PowersAnubis extends NewDashPreset {
                 default -> null;
             };
             if (anim == null) {
-                switch (SU.roundabout$getStandAnimation()) {
+                switch (SU.sba$getStandAnimation()) {
                     case PowerIndex.ATTACK -> {
                         if (PA.activePowerPhase == 1) {
                             anim = AnubisFirstPersonAnimations.Attack;
@@ -1024,11 +1024,11 @@ public class PowersAnubis extends NewDashPreset {
 
     public void setAnimation(byte b) {
         if (this.getSelf() instanceof Player P && this.isClient()) {
-            ((IPlayerEntity)P).roundabout$SetPoseEmote(Poses.NONE.id);
+            ((IPlayerEntity)P).sba$SetPoseEmote(Poses.NONE.id);
         }
-        this.getStandUserSelf().roundabout$setStandAnimation(b);
-        this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
-        this.getStandUserSelf().roundabout$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
+        this.getStandUserSelf().sba$setStandAnimation(b);
+        this.getStandUserSelf().sba$getWornStandAnimation().stop();
+        this.getStandUserSelf().sba$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
     }
 
     private int iframeTicks = 0;
@@ -1081,7 +1081,7 @@ public class PowersAnubis extends NewDashPreset {
     private int chargedFinal = 0;
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (this.getStandUserSelf().roundabout$isDazed()) {return;}
+        if (this.getStandUserSelf().sba$isDazed()) {return;}
         if ( (!keyIsDown || this.attackTimeDuring > maxSuperHitTime) && this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
             this.chargedFinal = this.attackTimeDuring;
             tryPowerPackets(PowerIndex.SNEAK_ATTACK);
@@ -1523,12 +1523,12 @@ public class PowersAnubis extends NewDashPreset {
             }
             removeBubble();
         } else {
-            this.getStandUserSelf().roundabout$setCurrentStandVanishTicks(0);
+            this.getStandUserSelf().sba$setCurrentStandVanishTicks(0);
             super.setPowerNone();
             if (!this.self.level().isClientSide()){
-                this.getStandUserSelf().roundabout$sealStand(400);
+                this.getStandUserSelf().sba$sealStand(400);
             }
-       //     this.getStandUserSelf().roundabout$setActive(false);
+       //     this.getStandUserSelf().sba$setActive(false);
         }
     }
 
@@ -1708,15 +1708,15 @@ public class PowersAnubis extends NewDashPreset {
                 if (entity instanceof LivingEntity LE) {
                     if (lastHit) {
                         if (entity instanceof Player PE) {
-                            ((IPlayerEntity) PE).roundabout$setCameraHits(-1);
+                            ((IPlayerEntity) PE).sba$setCameraHits(-1);
                         }
                         if (!sideHit) {
-                            ((StandUser) LE).roundabout$setDestructionTrailTicks(80);
+                            ((StandUser) LE).sba$setDestructionTrailTicks(80);
                             playBarrageEndNoise(0, entity);
                         }
                     } else {
                         if (entity instanceof Player PE) {
-                            ((IPlayerEntity) PE).roundabout$setCameraHits(2);
+                            ((IPlayerEntity) PE).sba$setCameraHits(2);
                         }
                         if (!sideHit) {
                             playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.ANUBIS_BARRAGE_1_HIT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float)Math.random()*0.2F));
@@ -1831,7 +1831,7 @@ public class PowersAnubis extends NewDashPreset {
                     launched = true;
 
                     if (!isClient()) {
-                        if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+                        if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)) {
                             this.getSelf().level().destroyBlock(blockHit.getBlockPos(), false, this.getSelf());
                         } else {
                             playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),state.getSoundType().getBreakSound(),SoundSource.PLAYERS,1F,1F);
@@ -1904,7 +1904,7 @@ public class PowersAnubis extends NewDashPreset {
             if (this.attackTimeDuring > this.attackTimeMax && this.isPacketPlayer()) {
                 this.attackTime = -1;
                 this.attackTimeMax = 0;
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
             } else {
                 final int windup = getPogoDelay();
                 /*  Pogo is broken up into 4 stages: Hover, Launch, Attack, and Aftershock */
@@ -2119,7 +2119,7 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public boolean isRecording() {
-        return this.playTime > 0 && !this.getStandUserSelf().roundabout$getUniqueStandModeToggle();
+        return this.playTime > 0 && !this.getStandUserSelf().sba$getUniqueStandModeToggle();
     }
 
 
@@ -2208,10 +2208,10 @@ public class PowersAnubis extends NewDashPreset {
 
     public Component getPosName(byte posID){
         return switch (posID) {
-            case (byte) 1 -> Component.translatable("idle.roundabout.anubis_2");
-            case (byte) 2 -> Component.translatable("idle.roundabout.anubis_3");
-            case (byte) 3 -> Component.translatable("idle.roundabout.anubis_4");
-            default -> Component.translatable("idle.roundabout.anubis_1");
+            case (byte) 1 -> Component.translatable("idle.sba.anubis_2");
+            case (byte) 2 -> Component.translatable("idle.sba.anubis_3");
+            case (byte) 3 -> Component.translatable("idle.sba.anubis_4");
+            default -> Component.translatable("idle.sba.anubis_1");
         };
     }
     public List<Byte> getPosList(){
@@ -2261,8 +2261,8 @@ public class PowersAnubis extends NewDashPreset {
         }
         $$1.add(EVIL);
         if (this.getSelf() instanceof Player PE){
-            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
-            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            byte Level = ((IPlayerEntity)PE).sba$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).sba$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
                 $$1.add(WOODEN);
@@ -2289,7 +2289,7 @@ public class PowersAnubis extends NewDashPreset {
                 $$1.add(BRILLIANCE);
             } if (Level > 6 || bypass){
                 $$1.add(ANCIENT);
-            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+            } if (((IPlayerEntity)PE).sba$getUnlockedBonusSkin() || bypass){
                 $$1.add(CLEAVER);
                 $$1.add(ILLUSORY);
             }
@@ -2301,31 +2301,31 @@ public class PowersAnubis extends NewDashPreset {
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
-            case PowersAnubis.EVIL -> Component.translatable("skins.roundabout.anubis.evil");
-            case PowersAnubis.ALLURING -> Component.translatable("skins.roundabout.anubis.alluring");
-            case PowersAnubis.RAGING -> Component.translatable("skins.roundabout.anubis.raging");
-            case PowersAnubis.WOODEN -> Component.translatable("skins.roundabout.anubis.wooden");
-            case PowersAnubis.STONE -> Component.translatable("skins.roundabout.anubis.stone");
-            case PowersAnubis.GRASS -> Component.translatable("skins.roundabout.anubis.grass");
-            case PowersAnubis.KHOPESPH -> Component.translatable("skins.roundabout.anubis.khopesh");
-            case PowersAnubis.AQUAMARINE -> Component.translatable("skins.roundabout.anubis.aquamarine");
-            case PowersAnubis.GRAY_WAGON -> Component.translatable("skins.roundabout.anubis.gray_wagon");
-            case PowersAnubis.TIMEKEEPER -> Component.translatable("skins.roundabout.anubis.timekeeper");
-            case PowersAnubis.DIAMOND -> Component.translatable("skins.roundabout.anubis.diamond");
-            case PowersAnubis.CHORUS -> Component.translatable("skins.roundabout.anubis.chorus");
-            case PowersAnubis.ANCIENT -> Component.translatable("skins.roundabout.anubis.ancient");
-            case PowersAnubis.CLEAVER -> Component.translatable("skins.roundabout.anubis.cleaver");
-            case PowersAnubis.ILLUSORY -> Component.translatable("skins.roundabout.anubis.illusory");
-            case PowersAnubis.BLOODSTAINED -> Component.translatable("skins.roundabout.anubis.bloodstained");
-            case PowersAnubis.BRILLIANCE -> Component.translatable("skins.roundabout.anubis.brilliance");
-            case PowersAnubis.CHAINBLADE -> Component.translatable("skins.roundabout.anubis.chainblade");
-            case PowersAnubis.CHEF -> Component.translatable("skins.roundabout.anubis.chef");
-            case PowersAnubis.SERPENT -> Component.translatable("skins.roundabout.anubis.serpent");
-            case PowersAnubis.BONE_BLADE -> Component.translatable("skins.roundabout.anubis.boneblade");
-            case PowersAnubis.ITEM -> Component.translatable("skins.roundabout.anubis.item");
-            case PowersAnubis.SOULBORN -> Component.translatable("skins.roundabout.anubis.soulborn");
+            case PowersAnubis.EVIL -> Component.translatable("skins.sba.anubis.evil");
+            case PowersAnubis.ALLURING -> Component.translatable("skins.sba.anubis.alluring");
+            case PowersAnubis.RAGING -> Component.translatable("skins.sba.anubis.raging");
+            case PowersAnubis.WOODEN -> Component.translatable("skins.sba.anubis.wooden");
+            case PowersAnubis.STONE -> Component.translatable("skins.sba.anubis.stone");
+            case PowersAnubis.GRASS -> Component.translatable("skins.sba.anubis.grass");
+            case PowersAnubis.KHOPESPH -> Component.translatable("skins.sba.anubis.khopesh");
+            case PowersAnubis.AQUAMARINE -> Component.translatable("skins.sba.anubis.aquamarine");
+            case PowersAnubis.GRAY_WAGON -> Component.translatable("skins.sba.anubis.gray_wagon");
+            case PowersAnubis.TIMEKEEPER -> Component.translatable("skins.sba.anubis.timekeeper");
+            case PowersAnubis.DIAMOND -> Component.translatable("skins.sba.anubis.diamond");
+            case PowersAnubis.CHORUS -> Component.translatable("skins.sba.anubis.chorus");
+            case PowersAnubis.ANCIENT -> Component.translatable("skins.sba.anubis.ancient");
+            case PowersAnubis.CLEAVER -> Component.translatable("skins.sba.anubis.cleaver");
+            case PowersAnubis.ILLUSORY -> Component.translatable("skins.sba.anubis.illusory");
+            case PowersAnubis.BLOODSTAINED -> Component.translatable("skins.sba.anubis.bloodstained");
+            case PowersAnubis.BRILLIANCE -> Component.translatable("skins.sba.anubis.brilliance");
+            case PowersAnubis.CHAINBLADE -> Component.translatable("skins.sba.anubis.chainblade");
+            case PowersAnubis.CHEF -> Component.translatable("skins.sba.anubis.chef");
+            case PowersAnubis.SERPENT -> Component.translatable("skins.sba.anubis.serpent");
+            case PowersAnubis.BONE_BLADE -> Component.translatable("skins.sba.anubis.boneblade");
+            case PowersAnubis.ITEM -> Component.translatable("skins.sba.anubis.item");
+            case PowersAnubis.SOULBORN -> Component.translatable("skins.sba.anubis.soulborn");
 
-            default -> Component.translatable("skins.roundabout.anubis.anime");
+            default -> Component.translatable("skins.sba.anubis.anime");
         };
     }
 
@@ -2337,26 +2337,26 @@ public class PowersAnubis extends NewDashPreset {
     public void onStandSummon(boolean desummon) {
         if (!desummon) {
 
-            if (this.getStandUserSelf().roundabout$getStandSkin() == (byte)0) {
-                this.getStandUserSelf().roundabout$setStandSkin((byte) 1);
+            if (this.getStandUserSelf().sba$getStandSkin() == (byte)0) {
+                this.getStandUserSelf().sba$setStandSkin((byte) 1);
             }
 
             if (this.getSelf() instanceof Player PE && !isClient()) {
 
                 Level lv = PE.level();
-                ItemStack disc = this.getStandUserSelf().roundabout$getStandDisc();
+                ItemStack disc = this.getStandUserSelf().sba$getStandDisc();
                 CompoundTag tag = disc.getTagElement("Memory");
-                if (tag != null && !((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin()) {
+                if (tag != null && !((IPlayerEntity)PE).sba$getUnlockedBonusSkin()) {
                     if (tag.contains("AnubisSkin")) {
-                        ((IPlayerEntity)PE).roundabout$setUnlockedBonusSkin(true);
-                        this.getStandUserSelf().roundabout$setStandSkin(tag.getByte("AnubisSkin"));
+                        ((IPlayerEntity)PE).sba$setUnlockedBonusSkin(true);
+                        this.getStandUserSelf().sba$setStandSkin(tag.getByte("AnubisSkin"));
                         playSoundIfPossible(lv,null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                         sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY() + PE.getEyeHeight(), PE.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
                         PE.displayClientMessage(
-                                Component.translatable("unlock_skin.roundabout.anubis.traitor"), true);
+                                Component.translatable("unlock_skin.sba.anubis.traitor"), true);
 
                         tag.remove("AnubisSkin");
                     }
@@ -2611,7 +2611,7 @@ public class PowersAnubis extends NewDashPreset {
                 if (finalATime <= 1) {
 
 
-                    if (this.getActivePowerPhase() == standUser.roundabout$getActivePowerPhaseMax()) {
+                    if (this.getActivePowerPhase() == standUser.sba$getActivePowerPhaseMax()) {
                         barTexture = 24;
                     } else {
                         if (!TE.isEmpty()) {
@@ -2759,7 +2759,7 @@ public class PowersAnubis extends NewDashPreset {
 
         if (lastTime > this.getMaxPlayTime()) {
             if (this.getSelf() instanceof Player P) {
-                P.displayClientMessage(Component.translatable("roundabout.anubis.memory_fail").withStyle(ChatFormatting.RED),true);
+                P.displayClientMessage(Component.translatable("sba.anubis.memory_fail").withStyle(ChatFormatting.RED),true);
                 return;
             }
         }
@@ -2774,8 +2774,8 @@ public class PowersAnubis extends NewDashPreset {
             setPlayTime(time);
             lastPartialTick = -1;
             lastTick = -1;
-            //Roundabout.LOGGER.info("{}/{}",moments.get(moments.size()-1).time,moments.get(0).time);
-            this.getStandUserSelf().roundabout$setUniqueStandModeToggle(true);
+            //SBA.LOGGER.info("{}/{}",moments.get(moments.size()-1).time,moments.get(0).time);
+            this.getStandUserSelf().sba$setUniqueStandModeToggle(true);
 
 
         }
@@ -2810,8 +2810,8 @@ public class PowersAnubis extends NewDashPreset {
                 }
 
                 ret = ret + "]";
-            } else {/*Roundabout.LOGGER.warn("Null Memory Item: " + i);*/}
-        } else {/*Roundabout.LOGGER.warn("Null Memory: " + i);*/}
+            } else {/*SBA.LOGGER.warn("Null Memory Item: " + i);*/}
+        } else {/*SBA.LOGGER.warn("Null Memory: " + i);*/}
         return ret;
     }
 
@@ -2857,7 +2857,7 @@ public class PowersAnubis extends NewDashPreset {
                                     if(o.equals("}")) {break;}
                                     memBytes.add((byte)Integer.parseInt(o));
                                 } catch (NumberFormatException e) {
-                                    Roundabout.LOGGER.warn("Invalid Memory Token??  " + o);
+                                    SBA.LOGGER.warn("Invalid Memory Token??  " + o);
                                 }
                             }
 
@@ -2866,7 +2866,7 @@ public class PowersAnubis extends NewDashPreset {
                                     moments.add(new AnubisMoment(memBytes.get(i), memBytes.get(i + 1), memBytes.get(i + 2) == 1));
                                 }
                             } else {
-                                Roundabout.LOGGER.warn("Invalid Memory Length");
+                                SBA.LOGGER.warn("Invalid Memory Length");
                             }
 
                             if (cf.contains("[") && cf.contains("]")) {
@@ -2880,7 +2880,7 @@ public class PowersAnubis extends NewDashPreset {
                                     try {
                                         memrots.add(Float.parseFloat(o));
                                     } catch (NumberFormatException e) {
-                                        Roundabout.LOGGER.warn("Invalid Rotation Token??  " + o);
+                                        SBA.LOGGER.warn("Invalid Rotation Token??  " + o);
                                     }
                                 }
 
@@ -2893,13 +2893,13 @@ public class PowersAnubis extends NewDashPreset {
                             }
 
                         } else {
-                            // Roundabout.LOGGER.warn("Invalid Memory");
+                            // SBA.LOGGER.warn("Invalid Memory");
                         }
 
                     }
                 }
             }
-        } else {/*Roundabout.LOGGER.warn("Received Empty String from anubisMemories");*/}
+        } else {/*SBA.LOGGER.warn("Received Empty String from anubisMemories");*/}
         if (Mode != (byte)-1) {
             AnubisMemory AM = new AnubisMemory(item, new ArrayList<>());
             AM.memory_type = Mode;
@@ -2907,7 +2907,7 @@ public class PowersAnubis extends NewDashPreset {
             AM.rots = rots;
             return AM;
         } else {
-            //       Roundabout.LOGGER.warn("Invalid Memory Item");
+            //       SBA.LOGGER.warn("Invalid Memory Item");
         }
         return null;
     }
@@ -3038,13 +3038,13 @@ public class PowersAnubis extends NewDashPreset {
 
         if (this.getSelf() instanceof AnubisGuardian AG && AG.hasTotem() ) {return;}
 
-        if (attackTarget != null && !this.getStandUserSelf().roundabout$isDazed()) {
+        if (attackTarget != null && !this.getStandUserSelf().sba$isDazed()) {
 
 
             if (this.getSelf().distanceTo(attackTarget) < getRange() && !PowersAnubis.shouldDash((Mob)this.getSelf()) ) {
                 if (canAttack() && this.attackTime > 10) {
                     StandUser SU = (StandUser) this.getSelf();
-                    SU.roundabout$tryPower(PowerIndex.ATTACK, true);
+                    SU.sba$tryPower(PowerIndex.ATTACK, true);
                     this.getSelf().swing(InteractionHand.MAIN_HAND);
                     this.setAttackTimeDuring(0);
                 }
@@ -3106,21 +3106,21 @@ public class PowersAnubis extends NewDashPreset {
         Level lv = this.getSelf().level();
         if ((this.getSelf()) instanceof Player PE){
             StandUser user = ((StandUser)PE);
-            ItemStack stack = user.roundabout$getStandDisc();
+            ItemStack stack = user.sba$getStandDisc();
             if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_ANUBIS)){
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
-                if (!ipe.roundabout$getUnlockedBonusSkin()){
+                if (!ipe.sba$getUnlockedBonusSkin()){
                     if (!lv.isClientSide()) {
-                        ipe.roundabout$setUnlockedBonusSkin(true);
+                        ipe.sba$setUnlockedBonusSkin(true);
                         playSoundIfPossible(lv,null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                         sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
-                        user.roundabout$setStandSkin(b);
-                        user.roundabout$summonStand(this.getSelf().level(), true, false);
+                        user.sba$setStandSkin(b);
+                        user.sba$summonStand(this.getSelf().level(), true, false);
                         ((ServerPlayer) ipe).displayClientMessage(
-                                Component.translatable("unlock_skin.roundabout.anubis.traitor"), true);
+                                Component.translatable("unlock_skin.sba.anubis.traitor"), true);
                     }
                 }
             }
@@ -3150,8 +3150,8 @@ public class PowersAnubis extends NewDashPreset {
     }
 
     public void removeBubble() {
-        if (this.getStandUserSelf().roundabout$isLaunchBubbleEncased()) {
-            this.getStandUserSelf().roundabout$setBubbleEncased((byte)0);
+        if (this.getStandUserSelf().sba$isLaunchBubbleEncased()) {
+            this.getStandUserSelf().sba$setBubbleEncased((byte)0);
         }
     }
 }

@@ -14,9 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ContainerPilotMixin {
 
     @Inject(method = "stillValid", at = @At("HEAD"), cancellable = true)
-    private void roundabout$allowPilotingChestAccess(Player player, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$allowPilotingChestAccess(Player player, CallbackInfoReturnable<Boolean> cir) {
         if (player instanceof StandUser user) {
-            StandPowers powers = user.roundabout$getStandPowers();
+            StandPowers powers = user.sba$getStandPowers();
             if (powers != null && powers.isPiloting()) {
                 StandEntity stand = powers.getStandEntity(player);
                 if (stand != null) {

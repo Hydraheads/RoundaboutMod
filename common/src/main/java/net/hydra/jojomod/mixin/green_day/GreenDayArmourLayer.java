@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GreenDayArmourLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
     @Inject(method= "renderArmorPiece",at = @At(value="HEAD"),cancellable = true)
     private void hidespecifcpieces(PoseStack $$0, MultiBufferSource $$1, T $$2, EquipmentSlot $$3, int $$4, A $$5, CallbackInfo ci){
-        if(((StandUser) $$2).roundabout$getStandPowers() instanceof PowersGreenDay pgd) {
+        if(((StandUser) $$2).sba$getStandPowers() instanceof PowersGreenDay pgd) {
             boolean lowerhalf = $$3.getName().equals("legs") || $$3.getName().equals("feet");
             if (pgd.legGoneTicks>0 && lowerhalf) {
                 ci.cancel();

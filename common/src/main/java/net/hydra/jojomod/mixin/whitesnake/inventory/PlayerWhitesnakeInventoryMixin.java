@@ -23,100 +23,100 @@ public abstract class PlayerWhitesnakeInventoryMixin implements WhitesnakeInvent
     private static final EntityDataAccessor<CompoundTag> WHITESNAKE_INVENTORY =
             SynchedEntityData.defineId(Player.class, EntityDataSerializers.COMPOUND_TAG);
     @Unique
-    private NonNullList<ItemStack> roundaboutWhitesnake$inventory =
+    private NonNullList<ItemStack> sbaWhitesnake$inventory =
             NonNullList.withSize(WhitesnakeControlInventory.SIZE, ItemStack.EMPTY);
     @Unique
-    private final NonNullList<ItemStack> roundaboutWhitesnake$lastItems =
+    private final NonNullList<ItemStack> sbaWhitesnake$lastItems =
             NonNullList.withSize(WhitesnakeControlInventory.SIZE, ItemStack.EMPTY);
     @Unique
-    private CompoundTag roundaboutWhitesnake$lastSync = new CompoundTag();
+    private CompoundTag sbaWhitesnake$lastSync = new CompoundTag();
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
-    private void roundaboutWhitesnake$defineInventory(CallbackInfo ci) {
+    private void sbaWhitesnake$defineInventory(CallbackInfo ci) {
         ((Player) (Object) this).getEntityData().define(WHITESNAKE_INVENTORY, new CompoundTag());
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void roundaboutWhitesnake$saveInventory(CompoundTag tag, CallbackInfo ci) {
-        tag.put("WhitesnakeInventory", roundaboutWhitesnake$serialize());
+    private void sbaWhitesnake$saveInventory(CompoundTag tag, CallbackInfo ci) {
+        tag.put("WhitesnakeInventory", sbaWhitesnake$serialize());
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void roundaboutWhitesnake$loadInventory(CompoundTag tag, CallbackInfo ci) {
+    private void sbaWhitesnake$loadInventory(CompoundTag tag, CallbackInfo ci) {
         if (tag.contains("WhitesnakeInventory", Tag.TAG_COMPOUND)) {
-            roundaboutWhitesnake$read(tag.getCompound("WhitesnakeInventory"));
+            sbaWhitesnake$read(tag.getCompound("WhitesnakeInventory"));
         }
-        roundaboutWhitesnake$syncInventory();
+        sbaWhitesnake$syncInventory();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void roundaboutWhitesnake$tickInventory(CallbackInfo ci) {
+    private void sbaWhitesnake$tickInventory(CallbackInfo ci) {
         Player player = (Player) (Object) this;
         if (WhitesnakeControlInventory.isActive(player)) {
-            for (int i = 0; i < roundaboutWhitesnake$inventory.size(); i++) {
-                ItemStack stack = roundaboutWhitesnake$inventory.get(i);
+            for (int i = 0; i < sbaWhitesnake$inventory.size(); i++) {
+                ItemStack stack = sbaWhitesnake$inventory.get(i);
                 if (!stack.isEmpty()) stack.inventoryTick(player.level(), player, i, i == player.getInventory().selected);
             }
             if (!player.level().isClientSide()) WhitesnakeControlInventory.pickupNearby(player);
         }
         if (!player.level().isClientSide()) {
-            roundaboutWhitesnake$syncInventory();
+            sbaWhitesnake$syncInventory();
         }
     }
 
     @Override
-    public NonNullList<ItemStack> roundaboutWhitesnake$getInventory() {
+    public NonNullList<ItemStack> sbaWhitesnake$getInventory() {
         Player player = (Player) (Object) this;
         if (player.level().isClientSide()) {
             CompoundTag synced = player.getEntityData().get(WHITESNAKE_INVENTORY);
-            if (!synced.equals(roundaboutWhitesnake$lastSync)) roundaboutWhitesnake$read(synced);
+            if (!synced.equals(sbaWhitesnake$lastSync)) sbaWhitesnake$read(synced);
         }
-        return roundaboutWhitesnake$inventory;
+        return sbaWhitesnake$inventory;
     }
 
     @Override
-    public void roundaboutWhitesnake$setInventory(NonNullList<ItemStack> inventory) {
-        roundaboutWhitesnake$inventory = NonNullList.withSize(WhitesnakeControlInventory.SIZE, ItemStack.EMPTY);
-        for (int i = 0; i < Math.min(inventory.size(), roundaboutWhitesnake$inventory.size()); i++) {
-            roundaboutWhitesnake$inventory.set(i, inventory.get(i).copy());
+    public void sbaWhitesnake$setInventory(NonNullList<ItemStack> inventory) {
+        sbaWhitesnake$inventory = NonNullList.withSize(WhitesnakeControlInventory.SIZE, ItemStack.EMPTY);
+        for (int i = 0; i < Math.min(inventory.size(), sbaWhitesnake$inventory.size()); i++) {
+            sbaWhitesnake$inventory.set(i, inventory.get(i).copy());
         }
-        roundaboutWhitesnake$inventory.set(0, ItemStack.EMPTY);
-        roundaboutWhitesnake$syncInventory();
+        sbaWhitesnake$inventory.set(0, ItemStack.EMPTY);
+        sbaWhitesnake$syncInventory();
     }
 
     @Override
-    public void roundaboutWhitesnake$syncInventory() {
+    public void sbaWhitesnake$syncInventory() {
         Player player = (Player) (Object) this;
         if (player.level().isClientSide()) return;
         boolean changed = false;
-        for (int i = 0; i < roundaboutWhitesnake$inventory.size(); i++) {
-            if (!ItemStack.matches(roundaboutWhitesnake$inventory.get(i), roundaboutWhitesnake$lastItems.get(i))) {
+        for (int i = 0; i < sbaWhitesnake$inventory.size(); i++) {
+            if (!ItemStack.matches(sbaWhitesnake$inventory.get(i), sbaWhitesnake$lastItems.get(i))) {
                 changed = true;
                 break;
             }
         }
         if (!changed) return;
-        CompoundTag tag = roundaboutWhitesnake$serialize();
-        roundaboutWhitesnake$lastSync = tag.copy();
-        for (int i = 0; i < roundaboutWhitesnake$inventory.size(); i++) {
-            roundaboutWhitesnake$lastItems.set(i, roundaboutWhitesnake$inventory.get(i).copy());
+        CompoundTag tag = sbaWhitesnake$serialize();
+        sbaWhitesnake$lastSync = tag.copy();
+        for (int i = 0; i < sbaWhitesnake$inventory.size(); i++) {
+            sbaWhitesnake$lastItems.set(i, sbaWhitesnake$inventory.get(i).copy());
         }
         player.getEntityData().set(WHITESNAKE_INVENTORY, tag);
     }
 
     @Unique
-    private CompoundTag roundaboutWhitesnake$serialize() {
+    private CompoundTag sbaWhitesnake$serialize() {
         CompoundTag tag = new CompoundTag();
-        ContainerHelper.saveAllItems(tag, roundaboutWhitesnake$inventory);
+        ContainerHelper.saveAllItems(tag, sbaWhitesnake$inventory);
         return tag;
     }
 
     @Unique
-    private void roundaboutWhitesnake$read(CompoundTag tag) {
+    private void sbaWhitesnake$read(CompoundTag tag) {
         NonNullList<ItemStack> loaded = NonNullList.withSize(WhitesnakeControlInventory.SIZE, ItemStack.EMPTY);
         ContainerHelper.loadAllItems(tag, loaded);
         loaded.set(0, ItemStack.EMPTY);
-        roundaboutWhitesnake$inventory = loaded;
-        roundaboutWhitesnake$lastSync = tag.copy();
+        sbaWhitesnake$inventory = loaded;
+        sbaWhitesnake$lastSync = tag.copy();
     }
 }

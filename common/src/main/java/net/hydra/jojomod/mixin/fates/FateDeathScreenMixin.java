@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.fates;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -42,7 +42,7 @@ public abstract class FateDeathScreenMixin extends Screen {
             }).bounds(this.width / 2 - 100, this.height / 4 + 72, 200, 20).build()));
 
 
-                Component humanRespawn = Component.translatable("text.roundabout.respawn_as_human");
+                Component humanRespawn = Component.translatable("text.sba.respawn_as_human");
                 this.exitButtons.add(this.addRenderableWidget(Button.builder(humanRespawn, $$0x -> {
                     rdbt$respawnHumanPacket();
                     $$0x.active = false;

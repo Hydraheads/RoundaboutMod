@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.projectile.StandFireballModel;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
@@ -51,28 +51,28 @@ public class StandFireballRenderer extends EntityRenderer<StandFireballEntity> {
     }
 
 
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_blue.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_blue.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_blue.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_purple.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_purple.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_purple.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_green.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_green.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_green.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_dread.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_dread.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_dread.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_cream.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_2_cream.png");
-    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/stand_fireball_3_cream.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2 = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_2.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3 = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_3.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_BLUE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_blue.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_BLUE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_2_blue.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_BLUE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_3_blue.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_PURPLE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_purple.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_PURPLE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_2_purple.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_PURPLE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_3_purple.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_GREEN = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_green.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_GREEN = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_2_green.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_GREEN = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_3_green.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_DREAD = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_dread.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_DREAD = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_2_dread.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_DREAD = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_3_dread.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_CREAM = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_cream.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_2_CREAM = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_2_cream.png");
+    public static final ResourceLocation STAND_FIREBALL_TEXTURE_3_CREAM = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/stand_fireball_3_cream.png");
 
     public ResourceLocation getThird(StandFireballEntity var1){
         LivingEntity user = var1.getUser();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+        if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
                 return STAND_FIREBALL_TEXTURE_3_BLUE;
@@ -90,7 +90,7 @@ public class StandFireballRenderer extends EntityRenderer<StandFireballEntity> {
     }
     public ResourceLocation getFirst(StandFireballEntity var1){
         LivingEntity user = var1.getUser();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+        if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
                 return STAND_FIREBALL_TEXTURE_BLUE;
@@ -108,7 +108,7 @@ public class StandFireballRenderer extends EntityRenderer<StandFireballEntity> {
     }
     public ResourceLocation getSecond(StandFireballEntity var1){
         LivingEntity user = var1.getUser();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+        if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersMagiciansRed PMR){
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
                 return STAND_FIREBALL_TEXTURE_2_BLUE;

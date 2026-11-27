@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(FallingBlockEntity.class)
 public abstract class HallucinatoryAcidFallingBlockMixin {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$mergeFallingAcid(CallbackInfo ci) {
+    private void sbaWhitesnake$mergeFallingAcid(CallbackInfo ci) {
         FallingBlockEntity falling = (FallingBlockEntity) (Object) this;
         if (!(falling.level() instanceof ServerLevel level)) return;
         BlockState fallingState = falling.getBlockState();

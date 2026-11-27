@@ -18,7 +18,7 @@ public abstract class InventorySelectedItemMixin {
     @Shadow @Final public Player player;
 
     @Inject(method = "add(ILnet/minecraft/world/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$pickupItem(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+    private void sbaWhitesnake$pickupItem(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         ItemEntity item = WhitesnakeControlInventory.getPickupItem();
         if (item != null && item.getItem() == stack && WhitesnakeControlInventory.isActive(player)) {
             cir.setReturnValue(WhitesnakeControlInventory.insert(player, stack) > 0);
@@ -26,7 +26,7 @@ public abstract class InventorySelectedItemMixin {
     }
 
     @Inject(method = "getSelected", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$getSelected(CallbackInfoReturnable<ItemStack> cir) {
+    private void sbaWhitesnake$getSelected(CallbackInfoReturnable<ItemStack> cir) {
         WhitesnakeEntity stand = WhitesnakeControlInventory.controlledStand(player);
         if (stand != null && stand.isMeltingModeActive()) {
             cir.setReturnValue(ItemStack.EMPTY);

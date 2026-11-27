@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "item": "sba:ginkgo_planks"
+    }
+  },
+  "result": {
+    "item": "sba:ginkgo_trapdoor",
+    "count": 2
+  }
+}

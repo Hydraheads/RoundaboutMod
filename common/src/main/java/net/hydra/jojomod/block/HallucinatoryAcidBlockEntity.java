@@ -1,6 +1,6 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.whitesnake.AcidExposureTracker;
 import net.hydra.jojomod.util.config.Config;
@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public final class HallucinatoryAcidBlockEntity extends BlockEntity {
     private static final TagKey<Block> DISSOLVABLE_WOOD = TagKey.create(Registries.BLOCK,
-            Roundabout.location("acid_dissolvable_wood"));
+            SBA.location("acid_dissolvable_wood"));
     private UUID owner;
     private long expiresAt;
     private boolean acidTossAlwaysExpires;

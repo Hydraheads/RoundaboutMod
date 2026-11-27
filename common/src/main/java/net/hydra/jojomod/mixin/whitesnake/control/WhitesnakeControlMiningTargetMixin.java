@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = MultiPlayerGameMode.class, priority = 2000)
 public abstract class WhitesnakeControlMiningTargetMixin {
     @Inject(method = "startDestroyBlock", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$rejectBodyTarget(BlockPos pos, Direction direction,
+    private void sbaWhitesnake$rejectBodyTarget(BlockPos pos, Direction direction,
                                                        CallbackInfoReturnable<Boolean> cir) {
         if (WhitesnakeControlClient.rejectsBodyMiningTarget(Minecraft.getInstance(), pos)) {
             cir.setReturnValue(false);

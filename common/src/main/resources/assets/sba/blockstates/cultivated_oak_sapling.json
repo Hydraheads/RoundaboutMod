@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "sba:block/cultivated_oak_sapling"
+    },
+    "age=1": {
+      "model": "sba:block/cultivated_oak_sapling_2"
+    }
+  }
+}

@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.corpses.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.corpses.FallenSpider;
 import net.hydra.jojomod.entity.corpses.FallenZombie;
@@ -16,15 +16,15 @@ import net.minecraft.resources.ResourceLocation;
 
 public class FallenZombieRenderer extends HumanoidMobRenderer<FallenZombie, FallenZombieModel<FallenZombie>> {
     private static final ResourceLocation ZOMBIE_LOCATION = new ResourceLocation("textures/entity/zombie/zombie.png");
-    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_zombie.png");
-    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION_2 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_zombie_holes.png");
-    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION_R = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_zombie_red.png");
-    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION_G = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_zombie_green.png");
-    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_ZOMBIE_LOCATION_B = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_zombie_blue.png");
 
     public FallenZombieRenderer(EntityRendererProvider.Context $$0) {

@@ -123,16 +123,16 @@ public class FirearmLayer<T extends LivingEntity, A extends HumanoidModel<T>> ex
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
 
         if (entity != null) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision())
+            if (((IEntityAndData)entity).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision())
                 return;
-            if(((IEntityAndData)entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            if(((IEntityAndData)entity).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
                 return;
             }
         } else {
             return;
         }
 
-        if (((StandUser)entity).roundabout$getEffectiveCombatMode() && !entity.isUsingItem())
+        if (((StandUser)entity).sba$getEffectiveCombatMode() && !entity.isUsingItem())
             return;
 
         ItemStack held = entity.getMainHandItem();

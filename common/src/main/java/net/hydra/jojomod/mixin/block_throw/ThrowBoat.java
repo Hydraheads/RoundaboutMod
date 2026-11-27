@@ -18,8 +18,8 @@ public abstract class ThrowBoat extends Entity{
     /**A mixin dedicatied to preventing being pushed by boats you grab and throw.*/
 
     @Inject(method = "canCollideWith", at = @At("HEAD"), cancellable = true)
-    public void roundabout$canCollideWith(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
-        if ($$0 instanceof LivingEntity le && ((StandUser)le).roundabout$getStandPowers().cancelCollision(this)){
+    public void sba$canCollideWith(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
+        if ($$0 instanceof LivingEntity le && ((StandUser)le).sba$getStandPowers().cancelCollision(this)){
             cir.setReturnValue(false);
         }
         if (PowerTypes.isInADifferentExistence($$0,this)){
@@ -27,7 +27,7 @@ public abstract class ThrowBoat extends Entity{
         }
     }
     @Inject(method = "canVehicleCollide", at = @At("HEAD"), cancellable = true)
-    private static void roundabout$canVehicleCollide(Entity $$0, Entity $$1, CallbackInfoReturnable<Boolean> cir) {
+    private static void sba$canVehicleCollide(Entity $$0, Entity $$1, CallbackInfoReturnable<Boolean> cir) {
 
         if (PowerTypes.isInADifferentExistence($$0,$$1)){
             cir.setReturnValue(false);
@@ -35,9 +35,9 @@ public abstract class ThrowBoat extends Entity{
     }
 
     @Inject(method = "canBeCollidedWith", at = @At("HEAD"), cancellable = true)
-    public void roundabout$canBeCollidedWith(CallbackInfoReturnable<Boolean> cir) {
+    public void sba$canBeCollidedWith(CallbackInfoReturnable<Boolean> cir) {
         Entity $$0 = this.getVehicle();
-        if ($$0 instanceof StandEntity le && le.getUser() != null && ((StandUser)le.getUser()).roundabout$getStandPowers().cancelCollision(this)){
+        if ($$0 instanceof StandEntity le && le.getUser() != null && ((StandUser)le.getUser()).sba$getStandPowers().cancelCollision(this)){
             cir.setReturnValue(false);
         }
     }

@@ -26,11 +26,11 @@ public abstract class ChairCameraMixin implements ICamera {
     protected abstract void setPosition(double x, double y, double z);
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    private void roundabout$tick(CallbackInfo ci) {
+    private void sba$tick(CallbackInfo ci) {
         if (entity instanceof Player player) {
             if (ClientUtil.checkIfFirstPerson()) {
                 IPlayerEntity ipe = (IPlayerEntity) player;
-                byte poseEmote = ipe.roundabout$GetPoseEmote();
+                byte poseEmote = ipe.sba$GetPoseEmote();
                 if (poseEmote == Poses.SITTING.id && !player.isPassenger()) {
                     this.eyeHeightOld = this.eyeHeight;
                     this.eyeHeight += (this.entity.getEyeHeight() - this.eyeHeight) * 0.5F;
@@ -41,11 +41,11 @@ public abstract class ChairCameraMixin implements ICamera {
     }
 
     @Inject(method = "setup", at = @At("RETURN"))
-    private void roundabout$setup(BlockGetter level, Entity entity, boolean detached, boolean thirdPersonReverse, float partialTick, CallbackInfo ci) {
+    private void sba$setup(BlockGetter level, Entity entity, boolean detached, boolean thirdPersonReverse, float partialTick, CallbackInfo ci) {
         if (entity instanceof Player player) {
             if (ClientUtil.checkIfFirstPerson()) {
                 IPlayerEntity ipe = (IPlayerEntity) player;
-                byte poseEmote = ipe.roundabout$GetPoseEmote();
+                byte poseEmote = ipe.sba$GetPoseEmote();
                 if (poseEmote == Poses.SITTING.id && !player.isPassenger()) {
                     Camera self = (Camera) (Object) this;
                     Vec3 pos = self.getPosition();

@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AccessHorseModel {
 
     @Accessor("body")
-    ModelPart roundabout$getBody();
+    ModelPart sba$getBody();
 
 }

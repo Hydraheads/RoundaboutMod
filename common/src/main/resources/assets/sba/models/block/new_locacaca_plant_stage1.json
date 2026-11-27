@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross":"sba:block/new_locacaca_stage1"
+  },
+  "render_type": "cutout"
+}

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.networking;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.gui.FogInventoryScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
@@ -25,7 +25,7 @@ public class ZClientGamePacketListener {
     @Inject(method = "handleCustomPayload", at = @At("HEAD"), cancellable = true)
     private void stopErrorLogging(ClientboundCustomPayloadPacket packet, CallbackInfo ci)
     {
-        if (packet.getIdentifier().equals(Roundabout.location("messages2c")))
+        if (packet.getIdentifier().equals(SBA.location("messages2c")))
         {
             AbstractBaseS2CPacket p = ModNetworking.getS2C(packet.getIdentifier());
 

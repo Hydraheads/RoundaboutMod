@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin.gravity.fall_distance;
 
 import com.mojang.authlib.GameProfile;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;

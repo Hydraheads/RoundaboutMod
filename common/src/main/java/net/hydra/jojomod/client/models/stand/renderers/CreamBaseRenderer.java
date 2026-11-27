@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.CreamEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CreamBaseRenderer<T extends StandEntity> extends StandRenderer<CreamEntity> {
 
-    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cream/anime.png");
+    private static final ResourceLocation PART_3_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/cream/anime.png");
     public CreamBaseRenderer(EntityRendererProvider.Context context, StandModel<CreamEntity> entityModel, float f) {
         super(context, entityModel,f);
     }

@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ModelBlockRenderer.class)
 public abstract class HallucinationAcidModelRenderMixin {
     @Inject(method = "tesselateBlock", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$hideAcidModel(BlockAndTintGetter level, BakedModel model,
+    private void sbaWhitesnake$hideAcidModel(BlockAndTintGetter level, BakedModel model,
                                                      BlockState state, BlockPos pos, PoseStack pose,
                                                      VertexConsumer consumer, boolean checkSides,
                                                      RandomSource random, long seed, int overlay,

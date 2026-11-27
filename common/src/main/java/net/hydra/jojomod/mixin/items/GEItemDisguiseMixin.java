@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class GEItemDisguiseMixin {
 
     @ModifyVariable(method = "getModel", at = @At("HEAD"), argsOnly = true)
-    private ItemStack roundabout$disguiseGetModel(ItemStack stack) {
+    private ItemStack sba$disguiseGetModel(ItemStack stack) {
         ItemStack fake = PowersGoldExperience.getDisguisedDisplayStack(stack);
         return fake.isEmpty() ? stack : fake;
     }
 
     @ModifyVariable(method = "render", at = @At("HEAD"), argsOnly = true)
-    private ItemStack roundabout$disguiseRender(ItemStack stack) {
+    private ItemStack sba$disguiseRender(ItemStack stack) {
         ItemStack fake = PowersGoldExperience.getDisguisedDisplayStack(stack);
         return fake.isEmpty() ? stack : fake;
     }

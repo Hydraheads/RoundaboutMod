@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.IceTwisterModel;
 import net.hydra.jojomod.client.models.visages.parts.RipperEyesAnimation;
@@ -62,7 +62,7 @@ public class IceTwisterRenderer extends EntityRenderer<IceTwisterEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(IceTwisterEntity var1) {
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/stand/white_album/projectiles/ice_twister.png");
     }
 

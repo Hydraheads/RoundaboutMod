@@ -9,6 +9,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.function.Predicate;
 
 public interface IBoatItemAccess {
-    Boat roundabout$getBoat(Level $$0, Vec3 $$1);
-    Boat.Type roundabout$getType();
+    Boat sba$getBoat(Level $$0, Vec3 $$1);
+    Boat.Type sba$getType();
 }

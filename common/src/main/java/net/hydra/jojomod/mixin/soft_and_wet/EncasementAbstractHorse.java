@@ -19,9 +19,9 @@ public abstract class EncasementAbstractHorse extends Animal {
     /**Horses have their own fall damage logic, so this adds bubble encasement logic to it.*/
 
     @Inject(method = "calculateFallDamage", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$calculateFallDamage(float $$0, float $$1, CallbackInfoReturnable<Integer> cir) {
+    protected void sba$calculateFallDamage(float $$0, float $$1, CallbackInfoReturnable<Integer> cir) {
         StandUser user = ((StandUser) this);
-        if (user.roundabout$getLeapTicks() > -1 || user.roundabout$isBubbleEncased()) {
+        if (user.sba$getLeapTicks() > -1 || user.sba$isBubbleEncased()) {
             cir.setReturnValue(0);
             return;
         }

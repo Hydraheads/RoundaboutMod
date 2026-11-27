@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "sba:block/stripped_ginkgo_log"
+    },
+    "axis=x": {
+      "model": "sba:block/stripped_ginkgo_log",
+      "x": 90,
+      "y": 90
+    },
+    "axis=z": {
+      "model": "sba:block/stripped_ginkgo_log",
+      "x": 90
+    }
+  }
+}

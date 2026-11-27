@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.fates;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.hydra.jojomod.event.index.ShapeShifts;
@@ -22,10 +22,10 @@ public abstract class FateVillagerHostilesSensor {
 
     /**Villages consider scary (zombie) players enemies*/
     @Inject(method = "isHostile", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$customServerAiStep(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$customServerAiStep(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0 instanceof Player PE){
             IPlayerEntity ple = ((IPlayerEntity) PE);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift == ShapeShifts.PLAYER) {
                 if (FateTypes.isScary(PE)) {

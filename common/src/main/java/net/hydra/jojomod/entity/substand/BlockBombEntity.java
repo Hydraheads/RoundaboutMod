@@ -131,11 +131,11 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
         if (!client) {
             if(user == null){
                 this.discard();
-            }else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())){
+            }else if((!(((StandUser)user).sba$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())){
                 this.discard();
             }
             else{
-				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
+				if ((((StandUser)user).sba$getStandPowers() instanceof PowersKillerQueen PKQ)) {
 					if (this != PKQ.bombBlock || PKQ.getCurrentBombStatus() != 1) {
 						this.discard();
 						return;
@@ -193,7 +193,7 @@ public class BlockBombEntity extends StandEntity implements NoHitboxRendering {
 
 	@Override
     public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
-		if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.isContactModeEnabled() && this.getUser() != $$0 && !level().isClientSide()) {
+		if (((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.isContactModeEnabled() && this.getUser() != $$0 && !level().isClientSide()) {
 			PKQ.blockContacted($$0);
 		}
 		return  InteractionResult.PASS;

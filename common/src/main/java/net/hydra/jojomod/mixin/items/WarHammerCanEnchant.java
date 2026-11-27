@@ -15,7 +15,7 @@ public class WarHammerCanEnchant {
     //This will probably not work when it updates
 
     @Inject(method = "canEnchant", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$canEnchant(ItemStack $$0, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$canEnchant(ItemStack $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0.getItem() instanceof WarhammerItem) {
             cir.setReturnValue(true);
         }

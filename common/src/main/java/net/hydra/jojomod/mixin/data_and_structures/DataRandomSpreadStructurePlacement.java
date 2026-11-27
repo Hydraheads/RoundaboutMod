@@ -24,7 +24,7 @@ public abstract class DataRandomSpreadStructurePlacement extends StructurePlacem
     /**Literally intercept structures using their salt to change their rarity*/
 
     @Inject(method = "spacing", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$spacing(CallbackInfoReturnable<Integer> cir) {
+    protected void sba$spacing(CallbackInfoReturnable<Integer> cir) {
         //Cinderella spacing interception
         if (this.salt() == 99271345){
             Config conf = ClientNetworking.getAppropriateConfig();
@@ -48,7 +48,7 @@ public abstract class DataRandomSpreadStructurePlacement extends StructurePlacem
     }
 
     @Inject(method = "separation", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$separation(CallbackInfoReturnable<Integer> cir) {
+    protected void sba$separation(CallbackInfoReturnable<Integer> cir) {
         //Cinderella spacing interception
         if (this.salt() == 99271345){
             Config conf = ClientNetworking.getAppropriateConfig();
@@ -72,13 +72,13 @@ public abstract class DataRandomSpreadStructurePlacement extends StructurePlacem
     }
 
     @Inject(method = "getPotentialStructureChunk", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$getPotentialStructureChunk(long loong, int i1, int i2,CallbackInfoReturnable<ChunkPos> cir) {
+    protected void sba$getPotentialStructureChunk(long loong, int i1, int i2,CallbackInfoReturnable<ChunkPos> cir) {
         //Cinderella spacing interception
         if (this.salt() == 99271345){
             Config conf = ClientNetworking.getAppropriateConfig();
             if (conf != null && conf.worldgenSettings != null){
                 if (conf.worldgenSettings.cinderellaSpacing > conf.worldgenSettings.cinderellaSeparationMakeSmallerThanSpacing){
-                    cir.setReturnValue(roundabout$getPotentialStructureChunk2(loong, i1, i2, conf.worldgenSettings.cinderellaSpacing, conf.worldgenSettings.cinderellaSeparationMakeSmallerThanSpacing));
+                    cir.setReturnValue(sba$getPotentialStructureChunk2(loong, i1, i2, conf.worldgenSettings.cinderellaSpacing, conf.worldgenSettings.cinderellaSeparationMakeSmallerThanSpacing));
 
                 }
             }
@@ -89,7 +89,7 @@ public abstract class DataRandomSpreadStructurePlacement extends StructurePlacem
             Config conf = ClientNetworking.getAppropriateConfig();
             if (conf != null && conf.worldgenSettings != null){
                 if (conf.worldgenSettings.meteoriteSpacing > conf.worldgenSettings.meteoriteSeparationMakeSmallerThanSpacing){
-                    cir.setReturnValue(roundabout$getPotentialStructureChunk2(loong, i1, i2,
+                    cir.setReturnValue(sba$getPotentialStructureChunk2(loong, i1, i2,
                             conf.worldgenSettings.meteoriteSpacing, conf.worldgenSettings.meteoriteSeparationMakeSmallerThanSpacing));
                 }
             }
@@ -99,7 +99,7 @@ public abstract class DataRandomSpreadStructurePlacement extends StructurePlacem
 
 
     @Unique
-    public ChunkPos roundabout$getPotentialStructureChunk2(long loong, int i1, int i2, int space, int separa) {
+    public ChunkPos sba$getPotentialStructureChunk2(long loong, int i1, int i2, int space, int separa) {
         int i = Math.floorDiv(i1, space);
         int j = Math.floorDiv(i2, space);
         WorldgenRandom worldgenrandom = new WorldgenRandom(new LegacyRandomSource(0L));

@@ -122,7 +122,7 @@ public class PowersLyinEyes extends NewDashPreset {
             LyinEyesHighlighterRenderer.renderEnemy(entity, matrixStack, buffer);
         }
         // neutral mobs
-        else if (entity instanceof NeutralMob || entity instanceof Player || ((StandUser) entity).roundabout$hasAStand()) {
+        else if (entity instanceof NeutralMob || entity instanceof Player || ((StandUser) entity).sba$hasAStand()) {
             LyinEyesHighlighterRenderer.renderNeutral(entity, matrixStack, buffer);
         }
         // passive mobs
@@ -334,14 +334,14 @@ public class PowersLyinEyes extends NewDashPreset {
                 visionModeClient = true;
                 isSummon = false;
                 desummonFromMove = true;
-                PE.displayClientMessage(Component.translatable("text.roundabout.lyin_eyes.tension_highlight").withStyle(ChatFormatting.GOLD), true);
+                PE.displayClientMessage(Component.translatable("text.sba.lyin_eyes.tension_highlight").withStyle(ChatFormatting.GOLD), true);
             }
             else{
                 visionModeClient = false;
                 if (!mapModeClient) {
                     isSummon = true;
                 }
-                PE.displayClientMessage(Component.translatable("text.roundabout.lyin_eyes.tension_highlight_off").withStyle(ChatFormatting.GOLD), true);
+                PE.displayClientMessage(Component.translatable("text.sba.lyin_eyes.tension_highlight_off").withStyle(ChatFormatting.GOLD), true);
             }
         }
     }
@@ -420,16 +420,16 @@ public class PowersLyinEyes extends NewDashPreset {
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos,
                                                   int topPos, byte level, boolean bypas) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.lyin_eyes_tension_sensor",
-                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_TENSION_SENSOR, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.lyin_eyes_callout",
-                "instruction.roundabout.passive", StandIcons.LYIN_EYES_PASSIVE, 0, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.lyin_eyes_map",
-                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_MAP_OFF, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.lyin_eyes_inventory",
-                "instruction.roundabout.press_skill", StandIcons.LYIN_EYES_INVENTORY, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.lyin_eyes_tension_sensor",
+                "instruction.sba.press_skill", StandIcons.LYIN_EYES_TENSION_SENSOR, 1, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.lyin_eyes_callout",
+                "instruction.sba.passive", StandIcons.LYIN_EYES_PASSIVE, 0, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.lyin_eyes_map",
+                "instruction.sba.press_skill", StandIcons.LYIN_EYES_MAP_OFF, 2, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE, 3, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.sba.lyin_eyes_inventory",
+                "instruction.sba.press_skill", StandIcons.LYIN_EYES_INVENTORY, 4, level, bypas));
         return $$1;
     }
 
@@ -456,16 +456,16 @@ public class PowersLyinEyes extends NewDashPreset {
 
     @Override
     public Component getSkinName(byte skinId) {
-        return Component.translatable("skins.roundabout.lyin_eyes.base");
+        return Component.translatable("skins.sba.lyin_eyes.base");
     }
 
     @Override
     public Component getPosName(byte posID){
         return switch (posID) {
-            case (byte) 1 -> Component.translatable("idle.roundabout.lyin_eyes_2");
-            case (byte) 2 -> Component.translatable("idle.roundabout.lyin_eyes_3");
-            case (byte) 3 -> Component.translatable("idle.roundabout.lyin_eyes_4");
-            default -> Component.translatable("idle.roundabout.lyin_eyes_1");
+            case (byte) 1 -> Component.translatable("idle.sba.lyin_eyes_2");
+            case (byte) 2 -> Component.translatable("idle.sba.lyin_eyes_3");
+            case (byte) 3 -> Component.translatable("idle.sba.lyin_eyes_4");
+            default -> Component.translatable("idle.sba.lyin_eyes_1");
         };
     }
     
@@ -515,7 +515,7 @@ public class PowersLyinEyes extends NewDashPreset {
 
     @Override
     public Component ifWipListDevStatus() {
-        return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable("sba.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
 
     @Override

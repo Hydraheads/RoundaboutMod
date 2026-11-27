@@ -14,12 +14,12 @@ public abstract class AccessCreeper extends Monster implements ICreeper {
     /**There is no reason for these to be private or protected, we should be able to tap into them.*/
 
     @Override
-    public int roundabout$getSwell(){
+    public int sba$getSwell(){
         return swell;
     }
     @Override
 
-    public void roundabout$setSwell(int swell){
+    public void sba$setSwell(int swell){
         this.swell = swell;
     }
 

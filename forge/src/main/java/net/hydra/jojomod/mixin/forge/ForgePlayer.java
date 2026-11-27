@@ -59,8 +59,8 @@ public abstract class ForgePlayer extends LivingEntity {
 
     /**Block Breaking Speed Decreases when your hand is stone*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
-    protected void roundabout$getForgeDestroySpeed(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-        StandPowers powers = ((StandUser) this).roundabout$getStandPowers();
+    protected void sba$getForgeDestroySpeed(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
+        StandPowers powers = ((StandUser) this).sba$getStandPowers();
         GeneralPowers gp = ((IPowersPlayer)this).rdbt$getPowers();
         if (PowerTypes.hasStandActive(this) &&
                 (powers.canUseMiningStand()) || powers.isMiningRegardless()|| PowerTypes.isBrawling(this)) {
@@ -73,7 +73,7 @@ public abstract class ForgePlayer extends LivingEntity {
             return;
         }
 
-        byte curse = ((StandUser)this).roundabout$getLocacacaCurse();
+        byte curse = ((StandUser)this).sba$getLocacacaCurse();
         float f = this.inventory.getDestroySpeed($$0);
         boolean overwrite = false;
             if (curse > -1) {
@@ -98,9 +98,9 @@ public abstract class ForgePlayer extends LivingEntity {
         }
 
 
-        boolean active = ((StandUser) this).roundabout$getActive();
+        boolean active = ((StandUser) this).sba$getActive();
         if (active && PowerTypes.hasStandActivelyEquipped(this)){
-            float bpow = ((StandUser)this).roundabout$getStandPowers().getBonusPassiveMiningSpeed();
+            float bpow = ((StandUser)this).sba$getStandPowers().getBonusPassiveMiningSpeed();
                     if (bpow != 1){
                         f*= bpow;
                         overwrite = true;
@@ -114,7 +114,7 @@ public abstract class ForgePlayer extends LivingEntity {
         }
 
         if (!(PowerTypes.hasStandActive(this) &&
-                ((((StandUser) this).roundabout$getStandPowers().canUseMiningStand())))) {
+                ((((StandUser) this).sba$getStandPowers().canUseMiningStand())))) {
             float bpow = ((IFatePlayer) this).rdbt$getFatePowers().getBonusPassiveMiningSpeed();
             if (bpow != 1) {
                 f *= bpow;
@@ -122,7 +122,7 @@ public abstract class ForgePlayer extends LivingEntity {
             }
         }
 
-        if (((StandUser) this).roundabout$hasDiverArms()) {
+        if (((StandUser) this).sba$hasDiverArms()) {
             float bpow = 1F + (ClientNetworking.getAppropriateConfig().diverDownSettings.armMineBoost * 0.01F);
             if (bpow != 1) {
                 f *= bpow;
@@ -182,10 +182,10 @@ public abstract class ForgePlayer extends LivingEntity {
     }
 
     @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playSound(SoundEvent soundEvent, float f, float g, CallbackInfo ci) {
+    protected void sba$playSound(SoundEvent soundEvent, float f, float g, CallbackInfo ci) {
         Entity thrs = ((Entity) (Object)this);
-        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(thrs)){
-            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
+        if(((ILevelAccess)this.level()).sba$isSoundPlunderedEntity(thrs)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).sba$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds(soundEvent, this.getSoundSource(), f, g);
             }
@@ -247,7 +247,7 @@ public abstract class ForgePlayer extends LivingEntity {
     }
     /**stand mining intercepts mining speed as well*/
     @Inject(method = "getDigSpeed", at = @At(value = "HEAD"), cancellable = true, remap = false)
-    protected void roundabout$getForgeDestroySpeed2(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
+    protected void sba$getForgeDestroySpeed2(BlockState $$0, BlockPos pos, CallbackInfoReturnable<Float> cir) {
 
     }
 

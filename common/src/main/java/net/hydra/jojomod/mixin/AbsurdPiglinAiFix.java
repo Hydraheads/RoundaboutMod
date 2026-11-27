@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class AbsurdPiglinAiFix {
     @Inject(method = "setAngerTarget",
             at = @At(value = "HEAD"), cancellable = true)
-    private static <T extends Mob> void roundabout$setAngerTarget(AbstractPiglin $$0, LivingEntity $$1, CallbackInfo ci) {
+    private static <T extends Mob> void sba$setAngerTarget(AbstractPiglin $$0, LivingEntity $$1, CallbackInfo ci) {
 
         if ($$0 != null && $$1 != null) {
             /**Flesh buds prevent aggro on the planter*/
@@ -28,7 +28,7 @@ public class AbsurdPiglinAiFix {
                 return;
             }
             /**Stands that react to aggro like hey ya and wonder of u*/
-            ((StandUser)$$1).roundabout$getStandPowers().reactToAggro(((Mob) (Object)$$0));
+            ((StandUser)$$1).sba$getStandPowers().reactToAggro(((Mob) (Object)$$0));
         }
     }
 }

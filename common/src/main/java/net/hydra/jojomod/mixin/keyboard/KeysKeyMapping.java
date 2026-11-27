@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin.keyboard;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
@@ -35,44 +35,44 @@ public abstract class KeysKeyMapping implements IKeyMapping {
 
 
     @Inject(method = "releaseAll()V", at = @At(value = "HEAD"), cancellable = true)
-    private static void roundabout$KP1(CallbackInfo ci) {
+    private static void sba$KP1(CallbackInfo ci) {
         Minecraft placingBlocksAndSh = Minecraft.getInstance();
 
         if (placingBlocksAndSh.screen instanceof NoCancelInputScreen){
             ci.cancel();
             for (KeyMapping $$0 : ALL.values()) {
                 if ($$0.same(KeyInputRegistry.pose)){
-                    ((IKeyMapping)$$0).roundabout$release();
+                    ((IKeyMapping)$$0).sba$release();
                 }
             }
         }
     }
 
     @Unique
-    public void roundabout$addClick() {
+    public void sba$addClick() {
         this.clickCount += 1;
     }
 
     @Unique
     @Override
-    public InputConstants.Key roundabout$justTellMeTheKey(){
+    public InputConstants.Key sba$justTellMeTheKey(){
         return key;
     }
     @Unique
     @Override
-    public void roundabout$release(){
+    public void sba$release(){
         release();
     }
 
     @Inject(method = "isDown",at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$forcePressed(CallbackInfoReturnable<Boolean> cir) {
+    public void sba$forcePressed(CallbackInfoReturnable<Boolean> cir) {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         StandUser SU = (StandUser) player;
         if (SU != null) {
-            if (SU.roundabout$getStandPowers() != null) {
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                    if (SU.roundabout$getUniqueStandModeToggle()) {
+            if (SU.sba$getStandPowers() != null) {
+                if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
+                    if (SU.sba$getUniqueStandModeToggle()) {
                         int time = PA.getMaxPlayTime() - PA.playTime;
                         for (int i = 0; i < PA.playKeys.size(); i++) {
                             KeyMapping key = PA.playKeys.get(i);

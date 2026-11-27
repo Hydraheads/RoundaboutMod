@@ -24,17 +24,17 @@ public class StarPlatinumLightTexture {
      * This may have a ripple effect on other stands that access scoping like Ratt*/
 
     @ModifyVariable(method = "updateLightTexture(F)V", at = @At("STORE"), ordinal = 9)
-    protected float roundabout$updateLightTexture(float $$0) {
+    protected float sba$updateLightTexture(float $$0) {
         if (this.minecraft.player != null){
-            if (((StandUser)this.minecraft.player).roundabout$getStandPowers().scopeTime > -1) {
-                return (float) Math.min($$0 + (((((StandUser) this.minecraft.player).roundabout$getStandPowers().scopeTime) * 0.1)), 1F);
+            if (((StandUser)this.minecraft.player).sba$getStandPowers().scopeTime > -1) {
+                return (float) Math.min($$0 + (((((StandUser) this.minecraft.player).sba$getStandPowers().scopeTime) * 0.1)), 1F);
             } else if (((IFatePlayer)this.minecraft.player).rdbt$getFatePowers() instanceof VampiricFate vp) {
                 return (float) Math.min($$0 + 0.3F * ((10 - vp.dimTickEye) * 0.1F), 1F);
             } else if (ClientUtil.TimeErase > -1){
                 return (float) Math.min($$0 + 0.3F * ((ClientUtil.TimeErase/ClientUtil.fadeTime) * 0.25F), 1F);
-            } else if(ClientUtil.checkIfClientCanSeeMobsForWindVision() && ((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM){
+            } else if(ClientUtil.checkIfClientCanSeeMobsForWindVision() && ((StandUser) this.minecraft.player).sba$getStandPowers() instanceof PowersManhattanTransfer PM){
                 return (float) Math.min($$0 + 0.8F*((10-PM.visionTicks)*0.1F), 1F);
-            } else if (((StandUser)this.minecraft.player).roundabout$getStandPowers() instanceof PowersBlackSabbath pb) {
+            } else if (((StandUser)this.minecraft.player).sba$getStandPowers() instanceof PowersBlackSabbath pb) {
                 return (float) Math.min($$0 + 0.3F * ((10 - pb.visionTicks) * 0.1F), 1F);
             }
         }

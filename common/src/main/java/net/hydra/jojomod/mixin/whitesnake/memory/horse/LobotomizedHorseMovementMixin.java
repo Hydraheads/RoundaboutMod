@@ -13,21 +13,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractHorse.class)
 public abstract class LobotomizedHorseMovementMixin {
     @Inject(method = "getRiddenInput", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$preventRiddenMovement(Player player, Vec3 movement,
+    private void sbaWhitesnake$preventRiddenMovement(Player player, Vec3 movement,
                                                               CallbackInfoReturnable<Vec3> cir) {
         AbstractHorse horse = (AbstractHorse) (Object) this;
         if (DiscItemData.isLobotomized(horse)) cir.setReturnValue(Vec3.ZERO);
     }
 
     @Inject(method = "getRiddenSpeed", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$preventRiddenSpeed(Player player,
+    private void sbaWhitesnake$preventRiddenSpeed(Player player,
                                                            CallbackInfoReturnable<Float> cir) {
         AbstractHorse horse = (AbstractHorse) (Object) this;
         if (DiscItemData.isLobotomized(horse)) cir.setReturnValue(0.0F);
     }
 
     @Inject(method = "executeRidersJump", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$preventRiddenJump(float strength, Vec3 movement,
+    private void sbaWhitesnake$preventRiddenJump(float strength, Vec3 movement,
                                                           CallbackInfo ci) {
         AbstractHorse horse = (AbstractHorse) (Object) this;
         if (DiscItemData.isLobotomized(horse)) ci.cancel();

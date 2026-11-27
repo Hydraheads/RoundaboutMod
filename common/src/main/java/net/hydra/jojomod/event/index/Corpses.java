@@ -1,6 +1,6 @@
 package net.hydra.jojomod.event.index;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.minecraft.world.level.Level;

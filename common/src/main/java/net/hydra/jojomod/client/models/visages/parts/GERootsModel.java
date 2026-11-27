@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -82,7 +82,7 @@ public class GERootsModel extends PsuedoHierarchicalModel {
     }
 
     public ResourceLocation getTextureLocation() {
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/other_layers/ge_roots.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/entity/other_layers/ge_roots.png");
     }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource,
@@ -95,7 +95,7 @@ public class GERootsModel extends PsuedoHierarchicalModel {
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation()));
 
             StandUser user = ((StandUser) LE);
-            this.animate(user.roundabout$getGERootsAnimation(), isShrinking ? root_shrink : root_grow, context.tickCount + partialTicks, 1.0f);
+            this.animate(user.sba$getGERootsAnimation(), isShrinking ? root_shrink : root_grow, context.tickCount + partialTicks, 1.0f);
 
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }

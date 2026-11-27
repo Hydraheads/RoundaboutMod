@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -323,7 +323,7 @@ public class BladedBowlerHatEntity extends AbstractArrow {
             $$2 = addSkyAndBounceDamage($$1,$$2);
 
             if (isThrown){
-                if (((ISuperThrownAbstractArrow)this).roundabout$getSuperThrow()){
+                if (((ISuperThrownAbstractArrow)this).sba$getSuperThrow()){
                     $$2*=2F;
                 } else {
                     $$2*=1.5F;
@@ -345,7 +345,7 @@ public class BladedBowlerHatEntity extends AbstractArrow {
                 }
             }
 
-            ((ISuperThrownAbstractArrow)this).roundabout$cancelSuperThrow();
+            ((ISuperThrownAbstractArrow)this).sba$cancelSuperThrow();
             this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
             float $$8 = 1.0F;
             if (skyHit){

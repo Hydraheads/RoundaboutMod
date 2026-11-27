@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "roundabout:ginkgo_door",
-    "roundabout:fancy_ginkgo_door"
+    "sba:ginkgo_door",
+    "sba:fancy_ginkgo_door"
   ]
 }

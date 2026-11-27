@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "sba:block/wall_street_sign_dio",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "sba:block/wall_street_sign_dio",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "sba:block/wall_street_sign_dio",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "sba:block/wall_street_sign_dio",
+      "y": 90
+    }
+  }
+}

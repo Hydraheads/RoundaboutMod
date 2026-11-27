@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.stand.RattModel;
@@ -48,7 +48,7 @@ public class ReddShoulderModel extends PsuedoHierarchicalModel {
     public void setupAnim(Entity var1, float pAgeInTicks) {
     }
 
-    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/redd.png");
 
 

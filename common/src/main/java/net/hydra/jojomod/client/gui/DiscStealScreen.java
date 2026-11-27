@@ -40,7 +40,7 @@ public class DiscStealScreen extends Screen implements NoCancelInputScreen {
     protected void init() {
         super.init();
         Player player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers) {
+        if (player != null && ((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers) {
             currentlyHovered = powers.getSelectedDisc();
             for (int id = 0; id < POSITIONS.length; id++) {
                 if (!WhitesnakeDiscUtil.isDiscStealEnabled((byte) id)) continue;
@@ -67,12 +67,12 @@ public class DiscStealScreen extends Screen implements NoCancelInputScreen {
         super.render(graphics, mouseX, mouseY, delta);
 
         Component title = currentlyHovered < 0
-                ? Component.translatable("roundabout.whitesnake.no_disc_steal_types")
+                ? Component.translatable("sba.whitesnake.no_disc_steal_types")
                 : switch (currentlyHovered) {
-            case 1 -> Component.translatable("roundabout.whitesnake.sight_disc");
-            case 2 -> Component.translatable("roundabout.whitesnake.memory_disc");
-            case 3 -> Component.translatable("roundabout.whitesnake.hearing_disc");
-            default -> Component.translatable("roundabout.whitesnake.stand_disc");
+            case 1 -> Component.translatable("sba.whitesnake.sight_disc");
+            case 2 -> Component.translatable("sba.whitesnake.memory_disc");
+            case 3 -> Component.translatable("sba.whitesnake.hearing_disc");
+            default -> Component.translatable("sba.whitesnake.stand_disc");
         };
         graphics.drawCenteredString(font, title, width / 2, height / 2 - 63, -1);
 
@@ -91,7 +91,7 @@ public class DiscStealScreen extends Screen implements NoCancelInputScreen {
 
     private void applySelection() {
         if (minecraft == null || minecraft.player == null || currentlyHovered < 0) return;
-        if (((StandUser) minecraft.player).roundabout$getStandPowers() instanceof PowersWhitesnake powers) {
+        if (((StandUser) minecraft.player).sba$getStandPowers() instanceof PowersWhitesnake powers) {
             powers.tryIntPower(PowersWhitesnake.DISC_SELECTION, true, currentlyHovered);
             powers.tryIntPowerPacket(PowersWhitesnake.DISC_SELECTION, currentlyHovered);
         }
@@ -101,13 +101,13 @@ public class DiscStealScreen extends Screen implements NoCancelInputScreen {
         if (minecraft == null) return false;
         KeyMapping key = KeyInputRegistry.abilityOneKey;
         long window = minecraft.getWindow().getWindow();
-        boolean held = InputConstants.isKeyDown(window, ((IKeyMapping) key).roundabout$justTellMeTheKey().getValue())
+        boolean held = InputConstants.isKeyDown(window, ((IKeyMapping) key).sba$justTellMeTheKey().getValue())
                 || (key.same(minecraft.options.keyLoadHotbarActivator)
                 && InputConstants.isKeyDown(window, ((IKeyMapping) minecraft.options.keyLoadHotbarActivator)
-                .roundabout$justTellMeTheKey().getValue()))
+                .sba$justTellMeTheKey().getValue()))
                 || (key.same(minecraft.options.keySaveHotbarActivator)
                 && InputConstants.isKeyDown(window, ((IKeyMapping) minecraft.options.keySaveHotbarActivator)
-                .roundabout$justTellMeTheKey().getValue()));
+                .sba$justTellMeTheKey().getValue()));
         if (!held) {
             applySelection();
             minecraft.setScreen(null);

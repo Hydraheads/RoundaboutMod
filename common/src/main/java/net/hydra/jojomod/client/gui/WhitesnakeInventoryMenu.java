@@ -54,14 +54,14 @@ public final class WhitesnakeInventoryMenu extends AbstractContainerMenu {
         player.openMenu(new SimpleMenuProvider(
                 (containerId, inventory, menuPlayer) ->
                         new WhitesnakeInventoryMenu(containerId, inventory, menuPlayer),
-                Component.translatable("container.roundabout.whitesnake_inventory")));
+                Component.translatable("container.sba.whitesnake_inventory")));
         player.playNotifySound(ModSounds.WHITESNAKE_INVENTORY_OPEN_EVENT,
                 SoundSource.PLAYERS, 1.0F, 1.0F);
     }
 
     private static boolean hasWhitesnake(Player player) {
         return player.isAlive()
-                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake;
+                && ((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake;
     }
 
     private static boolean canPlaceInSlot(int slot, ItemStack stack) {
@@ -167,7 +167,7 @@ public final class WhitesnakeInventoryMenu extends AbstractContainerMenu {
 
         @Override
         public void setChanged() {
-            ((WhitesnakeInventoryAccess) owner).roundaboutWhitesnake$syncInventory();
+            ((WhitesnakeInventoryAccess) owner).sbaWhitesnake$syncInventory();
         }
 
         @Override

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -213,7 +213,7 @@ public class FollowingStandEntity extends StandEntity{
             if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FOLLOW_STYLE) {
                 return getIdleOffset(standUser);
             } else if (OffsetIndex.OffsetStyle(ot) == OffsetIndex.FIXED_STYLE) {
-                Direction direction = ((IGravityEntity) standUser).roundabout$getGravityDirection();
+                Direction direction = ((IGravityEntity) standUser).sba$getGravityDirection();
                 Vec3 finalized = getAttackOffset(standUser, ot);
                 if (direction != Direction.DOWN) {
                     finalized = RotationUtil.vecPlayerToWorld(finalized.subtract(standUser.position()), direction).add(standUser.position());
@@ -258,7 +258,7 @@ public class FollowingStandEntity extends StandEntity{
                 addXZ+= 0.15F;
                 distanceFront = 1.05F;
             } else {
-                distanceFront = ((StandUser) standUser).roundabout$getStandPowers().getDistanceOutAccurate(standUser,((StandUser) standUser).roundabout$getStandReach(),true);
+                distanceFront = ((StandUser) standUser).sba$getStandPowers().getDistanceOutAccurate(standUser,((StandUser) standUser).sba$getStandReach(),true);
             }
 
             Vec3 frontVectors = FrontVectors(standUser, 0, distanceFront);
@@ -324,7 +324,7 @@ public class FollowingStandEntity extends StandEntity{
         }
 
 
-        Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
+        Direction dir = ((IGravityEntity)standUser).sba$getGravityDirection();
         Vec3 offset = new Vec3(
                 (- (-1 * (r * (Math.sin(ang / 180))))),
                 (getIdleYOffsetModified() - yy),
@@ -460,7 +460,7 @@ public class FollowingStandEntity extends StandEntity{
         }
 
         if (!(OffsetIndex.OffsetStyle(ot) == OffsetIndex.LOOSE_STYLE) || this.isControlledByLocalInstance() ) {
-            ((StandUser) this.getFollowing()).roundabout$updateStandOutPosition(this);
+            ((StandUser) this.getFollowing()).sba$updateStandOutPosition(this);
         }
     }
 

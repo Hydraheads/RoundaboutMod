@@ -130,9 +130,9 @@ public class JusticeEntity extends FollowingStandEntity {
             if (perc < 0) {
                 if (this.getUser() != null) {
                     StandUser user = ((StandUser) this.getUser());
-                    user.roundabout$setSealedTicks(400,400);
-                    user.roundabout$setDrowning(true);
-                    user.roundabout$setActive(false);
+                    user.sba$setSealedTicks(400,400);
+                    user.sba$setDrowning(true);
+                    user.sba$setActive(false);
                 }
                 this.discard();
                 return;
@@ -141,7 +141,7 @@ public class JusticeEntity extends FollowingStandEntity {
     }
     @Override
     public void playerSetProperties(Player PE) {
-        this.setJusticeTeam(((IPlayerEntity)PE).roundabout$getTeamColor());
+        this.setJusticeTeam(((IPlayerEntity)PE).sba$getTeamColor());
         super.playerSetProperties(PE);
     }
     public int tsReleaseTime = 0;
@@ -228,7 +228,7 @@ public class JusticeEntity extends FollowingStandEntity {
     public boolean isControlledByLocalInstance() {
         LivingEntity user =  this.getUser();
         if (user != null){
-            Entity ent =  this.getUserData(user).roundabout$getStandPowers().getPilotingStand();
+            Entity ent =  this.getUserData(user).sba$getStandPowers().getPilotingStand();
             if (ent != null && ent.is(this)){
                 return (user instanceof Player $$0 ? $$0.isLocalPlayer() : this.isEffectiveAi());
             }
@@ -295,7 +295,7 @@ public class JusticeEntity extends FollowingStandEntity {
                 yy += 1;
             }
 
-            Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
+            Direction dir = ((IGravityEntity)standUser).sba$getGravityDirection();
             Vec3 offset = new Vec3(
                     (- (-1 * (r * (Math.sin(ang / 180))))),
                     (getIdleYOffset() - yy+2.1),

@@ -48,9 +48,9 @@ public abstract class PilotingServerPlayerGameMode {
 
     /**prevents door interactions with justice*/
     @Inject(method = "useItemOn(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$useItemOn(ServerPlayer serverPlayer, Level level, ItemStack itemStack, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sba$useItemOn(ServerPlayer serverPlayer, Level level, ItemStack itemStack, InteractionHand interactionHand, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
 
-        StandPowers powers = ((StandUser)serverPlayer).roundabout$getStandPowers();
+        StandPowers powers = ((StandUser)serverPlayer).sba$getStandPowers();
         if (serverPlayer != null && powers.isPiloting() && powers.getPilotPlaceRange() != 0) {
             InteractionResult interactionResult2;
             InteractionResult interactionResult;
@@ -91,16 +91,16 @@ public abstract class PilotingServerPlayerGameMode {
         }
     }
     @Inject(method = "handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;II)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$handleBlockBreakActionM(BlockPos $$0, ServerboundPlayerActionPacket.Action $$1, Direction $$2, int $$3, int $$4, CallbackInfo ci) {
+    private void sba$handleBlockBreakActionM(BlockPos $$0, ServerboundPlayerActionPacket.Action $$1, Direction $$2, int $$3, int $$4, CallbackInfo ci) {
         if (this.player != null) { StandUser standComp = ((StandUser) player);
-            StandPowers powers = standComp.roundabout$getStandPowers();
+            StandPowers powers = standComp.sba$getStandPowers();
             if (powers instanceof PowersWhitesnake) return;
             LivingEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() && powers.getPilotPlaceRange() != 0
             && MainUtil.getIsGamemodeApproriateForGrief(player)) {
                 BlockState $$6 = this.level.getBlockState($$0);
                 if (!$$6.isAir() && $$6.getBlock() instanceof FogBlock) {
-                    roundabout$handleBlockBreakAction($$0,$$1,$$2,$$3,$$4);
+                    sba$handleBlockBreakAction($$0,$$1,$$2,$$3,$$4);
                 }
                 ci.cancel();
             }
@@ -108,12 +108,12 @@ public abstract class PilotingServerPlayerGameMode {
     }
 
     @Unique
-    public void roundabout$handleBlockBreakAction(BlockPos $$0, ServerboundPlayerActionPacket.Action $$1, Direction $$2, int $$3, int $$4) {
+    public void sba$handleBlockBreakAction(BlockPos $$0, ServerboundPlayerActionPacket.Action $$1, Direction $$2, int $$3, int $$4) {
 
-        StandPowers powers = ((StandUser)this.player).roundabout$getStandPowers();
+        StandPowers powers = ((StandUser)this.player).sba$getStandPowers();
         if (powers != null) {
-            double ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(powers.getPilotPlaceRange());
-            if (this.player.getEyePosition().distanceToSqr(Vec3.atCenterOf($$0)) > ROUNDABOUT$MAX_INTERACTION_DISTANCE) {
+            double SBA$MAX_INTERACTION_DISTANCE = Mth.square(powers.getPilotPlaceRange());
+            if (this.player.getEyePosition().distanceToSqr(Vec3.atCenterOf($$0)) > SBA$MAX_INTERACTION_DISTANCE) {
             } else if ($$0.getY() >= $$3) {
                 this.player.connection.send(new ClientboundBlockUpdatePacket($$0, this.level.getBlockState($$0)));
             } else {

@@ -10,10 +10,10 @@ public abstract class ZBlockModelShaper {
 
 /**
     @Inject(method="stateToModelLocation(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/client/resources/model/ModelResourceLocation;", at=@At("HEAD"), cancellable = true)
-    private static void roundabout$stateToModelLocation(ResourceLocation identifier, BlockState state, CallbackInfoReturnable<ModelResourceLocation> cir)
+    private static void sba$stateToModelLocation(ResourceLocation identifier, BlockState state, CallbackInfoReturnable<ModelResourceLocation> cir)
     {
         if (identifier.getPath().startsWith("fog_"))
-            cir.setReturnValue(new ModelResourceLocation(Roundabout.location("fog_block"), statePropertiesToString(state.getValues())));
+            cir.setReturnValue(new ModelResourceLocation(SBA.location("fog_block"), statePropertiesToString(state.getValues())));
     }
     */
 }

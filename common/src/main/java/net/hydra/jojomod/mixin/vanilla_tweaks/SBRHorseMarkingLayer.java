@@ -17,7 +17,7 @@ public class SBRHorseMarkingLayer {
     /**Prevents horses with sbr names/skins from rendering other patterns*/
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/horse/Horse;FFFFFF)V", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$render(PoseStack $$0, MultiBufferSource $$1, int $$2, Horse $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+    public void sba$render(PoseStack $$0, MultiBufferSource $$1, int $$2, Horse $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         ClientConfig clientC = ConfigManager.getClientConfig();
         if (clientC != null && clientC.vanillaMinecraftTweaks != null) {
             if (clientC.vanillaMinecraftTweaks.namedSBRHorseSkins) {

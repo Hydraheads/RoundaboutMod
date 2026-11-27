@@ -14,7 +14,7 @@ public class FatesMobEffectMixin {
 
     /**You cannot get hurt while transformed*/
     @Inject(method = "applyEffectTick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$applyEffectTick(LivingEntity $$0, int $$1, CallbackInfo ci) {
+    protected void sba$applyEffectTick(LivingEntity $$0, int $$1, CallbackInfo ci) {
         if (!$$0.level().isClientSide()) {
             if (FateTypes.hasBloodHunger($$0)) {
                 if (((MobEffect) (Object) this) == MobEffects.HUNGER) {

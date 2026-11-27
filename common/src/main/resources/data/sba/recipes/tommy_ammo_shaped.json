@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:gunpowder"
+    },
+    "I":
+    {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "pattern": [
+    "I",
+    "B"
+  ],
+  "result": {
+    "count": 64,
+    "item": "sba:tommy_ammo"
+  },
+  "show_notification": true
+}

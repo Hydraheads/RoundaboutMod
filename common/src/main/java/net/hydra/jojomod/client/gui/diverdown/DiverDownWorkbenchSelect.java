@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui.diverdown;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.client.StandIcons;
@@ -50,7 +50,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
     private byte selectedWorkbench = 0;
 
     //Check out GamemodeSwitcherScreen
-    static final private ResourceLocation WORKBENCH_SELECT_GUI = new ResourceLocation(Roundabout.MOD_ID,
+    static final private ResourceLocation WORKBENCH_SELECT_GUI = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/diver_down/diver_gui.png");
     private WorkbenchType currentlyHovered;
     private int firstMouseX;
@@ -88,12 +88,12 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
     }
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
-        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityFourKey)) {
+        if (this.minecraft != null && !sba$sameKeyOne(KeyInputRegistry.abilityFourKey)) {
             this.selectHoveredWorkbench();
             this.minecraft.setScreen(null);
             if (this.minecraft.player != null){
                 StandUser SU = ((StandUser) this.minecraft.player);
-                if (SU.roundabout$getStandPowers().isBarraging()){
+                if (SU.sba$getStandPowers().isBarraging()){
                     //This prevents barrage canceling
                 } else {
                     this.minecraft.options.keyUse.setDown(false);
@@ -143,11 +143,11 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
             int reqLevel = 0;
 
             Player player = Minecraft.getInstance().player;
-            if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersDiverDown powers) {
+            if (player != null && ((StandUser) player).sba$getStandPowers() instanceof PowersDiverDown powers) {
                 reqLevel = this.currentlyHovered.getRequiredLevel(powers);
                 isUnlocked = powers.canExecuteMoveWithLevel(reqLevel);
                 if (!isUnlocked) {
-                    name = Component.translatable("ability.roundabout.locked");
+                    name = Component.translatable("ability.sba.locked");
                 }
             }
 
@@ -157,7 +157,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
             if (this.currentlyHovered != WorkbenchType.NONE) {
                 List<Component> compList = Lists.newArrayList();
                 if (!isUnlocked) {
-                    compList.add(Component.translatable("ability.roundabout.locked.desc", reqLevel));
+                    compList.add(Component.translatable("ability.sba.locked.desc", reqLevel));
                 } else {
                     String[] descLines = splitIntoLine(this.currentlyHovered.desc.getString(), 30);
                     for (String s : descLines) {
@@ -241,7 +241,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
             return;
         }
 
-        if (((StandUser) minecraft.player).roundabout$getStandPowers() instanceof PowersDiverDown powers) {
+        if (((StandUser) minecraft.player).sba$getStandPowers() instanceof PowersDiverDown powers) {
             if (!powers.canExecuteMoveWithLevel(workbench.getRequiredLevel(powers))) {
                 return;
             }
@@ -256,7 +256,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         }
     }
 
-    public boolean roundabout$sameKeyOne(KeyMapping key1){
+    public boolean sba$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
                 || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
         );
@@ -267,9 +267,9 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     private boolean checkToClose() {
@@ -312,19 +312,19 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
      * is for the description box.
      */
     public enum WorkbenchType {
-        CRAFTING_TABLE_ID(Component.translatable("roundabout.diver_workbench.crafting"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/crafting_table.png"),CRAFTING_TABLE,0,-11, Component.translatable("roundabout.diver_workbench.crafting.desc")),
-        LOOM_ID(Component.translatable("roundabout.diver_workbench.loom"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/loom.png"),LOOM,40,18, Component.translatable("roundabout.diver_workbench.loom.desc")),
-        STONECUTTER_ID(Component.translatable("roundabout.diver_workbench.stonecutter"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/stonecutter.png"),STONECUTTER,25,65, Component.translatable("roundabout.diver_workbench.stonecutter.desc")),
-        SMITHING_TABLE_ID(Component.translatable("roundabout.diver_workbench.smithing"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/diver_down/workbench_icons/smithing_table.png"),SMITHING_TABLE,-25,65, Component.translatable("roundabout.diver_workbench.smithing.desc")),
-        ANVIL_ID(Component.translatable("roundabout.diver_workbench.anvil"), new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/diver_down/workbench_icons/anvil.png"),ANVIL,-40,18, Component.translatable("roundabout.diver_workbench.anvil.desc")),
+        CRAFTING_TABLE_ID(Component.translatable("sba.diver_workbench.crafting"), new ResourceLocation(SBA.MOD_ID,
+            "textures/gui/diver_down/workbench_icons/crafting_table.png"),CRAFTING_TABLE,0,-11, Component.translatable("sba.diver_workbench.crafting.desc")),
+        LOOM_ID(Component.translatable("sba.diver_workbench.loom"), new ResourceLocation(SBA.MOD_ID,
+            "textures/gui/diver_down/workbench_icons/loom.png"),LOOM,40,18, Component.translatable("sba.diver_workbench.loom.desc")),
+        STONECUTTER_ID(Component.translatable("sba.diver_workbench.stonecutter"), new ResourceLocation(SBA.MOD_ID,
+            "textures/gui/diver_down/workbench_icons/stonecutter.png"),STONECUTTER,25,65, Component.translatable("sba.diver_workbench.stonecutter.desc")),
+        SMITHING_TABLE_ID(Component.translatable("sba.diver_workbench.smithing"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/diver_down/workbench_icons/smithing_table.png"),SMITHING_TABLE,-25,65, Component.translatable("sba.diver_workbench.smithing.desc")),
+        ANVIL_ID(Component.translatable("sba.diver_workbench.anvil"), new ResourceLocation(SBA.MOD_ID,
+            "textures/gui/diver_down/workbench_icons/anvil.png"),ANVIL,-40,18, Component.translatable("sba.diver_workbench.anvil.desc")),
 
-        NONE(Component.translatable("roundabout.diver_workbench.none"), new ResourceLocation(Roundabout.MOD_ID,
-                "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,75, Component.translatable("roundabout.stand_switch.main.desc"));
+        NONE(Component.translatable("sba.diver_workbench.none"), new ResourceLocation(SBA.MOD_ID,
+                "textures/gui/plunder_icons/main_stand.png"),(byte)0,0,75, Component.translatable("sba.stand_switch.main.desc"));
 
         protected static final WorkbenchType[] VALUES;
         protected static final int ICON_TOP_LEFT = 5;
@@ -398,7 +398,7 @@ public class DiverDownWorkbenchSelect extends Screen implements NoCancelInputScr
                 }
                 boolean isUnlocked = true;
                 Player player = Minecraft.getInstance().player;
-                if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersDiverDown powers) {
+                if (player != null && ((StandUser) player).sba$getStandPowers() instanceof PowersDiverDown powers) {
                     isUnlocked = powers.canExecuteMoveWithLevel(this.icon.getRequiredLevel(powers));
                 }
                 this.icon.drawIcon(guiGraphics, this.getX() + 7, this.getY() + 6, isUnlocked);

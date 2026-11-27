@@ -1,6 +1,6 @@
 package net.zetalasis.networking.packet.impl.packet;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.network.FriendlyByteBuf;
 import net.zetalasis.networking.message.api.ModMessageEvents;
 import net.zetalasis.networking.message.impl.IMessageEvent;
@@ -15,7 +15,7 @@ public class MessageC2S extends AbstractBaseC2SPacket {
         Object[] vargs = args.vargs;
 
         if (vargs.length == 0 || !(vargs[0] instanceof String messageName)) {
-            Roundabout.LOGGER.warn("Invalid message data received: {}", Arrays.toString(vargs));
+            SBA.LOGGER.warn("Invalid message data received: {}", Arrays.toString(vargs));
             return;
         }
 

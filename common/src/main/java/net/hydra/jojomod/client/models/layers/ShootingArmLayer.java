@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -30,7 +30,7 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
     }
 
     float scale = 1;
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) && !entity.isUsingItem()) {
@@ -38,8 +38,8 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
             if (!entity.isInvisible()) {
                 if (entity!= null) {
                     StandUser user = ((StandUser)livent);
-                    if (user.roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
-                        if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                    if (user.sba$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
+                        if (user.sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                             ClientUtil.pushPoseAndCooperate(poseStack,47);
 
                             // Translate to the right/left hand
@@ -77,8 +77,8 @@ public class ShootingArmLayer <T extends LivingEntity, A extends HumanoidModel<T
                 if (!entity.isInvisible()) {
                     if (entity != null) {
                         StandUser user = ((StandUser) entity);
-                        if (user.roundabout$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
-                            if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                        if (user.sba$getCombatMode() && PowerTypes.hasStandActivelyEquipped(entity)) {
+                            if (user.sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                                 ClientUtil.pushPoseAndCooperate(poseStack, 48);
 
                                 // Translate to the right/left hand

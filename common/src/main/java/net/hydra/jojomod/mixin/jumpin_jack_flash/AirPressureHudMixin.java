@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class AirPressureHudMixin {
 
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation("roundabout", "textures/gui/icons/jjf/air_pressure_meter.png");
+            new ResourceLocation("sba", "textures/gui/icons/jjf/air_pressure_meter.png");
 
     private static final int FRAME_SIZE = 20;
     private static final int FRAME_OFFSET = 22;

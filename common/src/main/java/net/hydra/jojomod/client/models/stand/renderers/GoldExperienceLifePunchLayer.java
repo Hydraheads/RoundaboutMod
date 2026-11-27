@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.GoldExperienceBetaModel;
 import net.hydra.jojomod.client.models.stand.GoldExperienceModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
@@ -16,8 +16,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class GoldExperienceLifePunchLayer extends RenderLayer<GoldExperienceEntity, StandModel<GoldExperienceEntity>> {
 
-    private static final ResourceLocation CORE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/life_punch_core.png");
-    private static final ResourceLocation SOFT_AURA_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/life_punch_aura.png");
+    private static final ResourceLocation CORE_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/life_punch_core.png");
+    private static final ResourceLocation SOFT_AURA_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/life_punch_aura.png");
 
     public GoldExperienceLifePunchLayer(RenderLayerParent<GoldExperienceEntity, StandModel<GoldExperienceEntity>> renderer) {
         super(renderer);

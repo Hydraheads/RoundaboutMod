@@ -27,27 +27,27 @@ public class TimestopShaderManager {
         Minecraft client = Minecraft.getInstance();
         Camera camera = client.gameRenderer.getMainCamera();
 
-        float fov = ((IShaderGameRenderer)client.gameRenderer).roundabout$getFov(
+        float fov = ((IShaderGameRenderer)client.gameRenderer).sba$getFov(
                 camera,
                 tickDelta,
                 true
         );
 
         Vector3f camPos = camera.getPosition().toVector3f();
-        RPostShaderRegistry.TIMESTOP.roundabout$setUniform("CameraPos", new Vector4f(camPos.x, camPos.y, camPos.z, fov));
+        RPostShaderRegistry.TIMESTOP.sba$setUniform("CameraPos", new Vector4f(camPos.x, camPos.y, camPos.z, fov));
 
         Quaternionf cameraRot = camera.rotation();
         Vector4f rot = new Vector4f(cameraRot.x, cameraRot.y, cameraRot.z, cameraRot.w);
 
-        RPostShaderRegistry.TIMESTOP.roundabout$setUniform("CameraRot", rot);
-        RPostShaderRegistry.TIMESTOP.roundabout$setUniform("BubblePos", pos.toVector3f());
-        RPostShaderRegistry.TIMESTOP.roundabout$setUniform("BubbleRadius", radius);
-        RPostShaderRegistry.TIMESTOP.roundabout$setUniform("BubbleMaxRadius", maxRadius);
-        RPostShaderRegistry.TIMESTOP.roundabout$setUniform("BubbleTint", tint.toVector3f());
-        RPostShaderRegistry.TIMESTOP.roundabout$setUniform("DesaturateAllInside", altType ? 1.f : 0.f);
-        RPostShaderRegistry.TIMESTOP.roundabout$setUniform("GroundLinesOpacity", groundLinesOpacity);
+        RPostShaderRegistry.TIMESTOP.sba$setUniform("CameraRot", rot);
+        RPostShaderRegistry.TIMESTOP.sba$setUniform("BubblePos", pos.toVector3f());
+        RPostShaderRegistry.TIMESTOP.sba$setUniform("BubbleRadius", radius);
+        RPostShaderRegistry.TIMESTOP.sba$setUniform("BubbleMaxRadius", maxRadius);
+        RPostShaderRegistry.TIMESTOP.sba$setUniform("BubbleTint", tint.toVector3f());
+        RPostShaderRegistry.TIMESTOP.sba$setUniform("DesaturateAllInside", altType ? 1.f : 0.f);
+        RPostShaderRegistry.TIMESTOP.sba$setUniform("GroundLinesOpacity", groundLinesOpacity);
 
-        RPostShaderRegistry.TIMESTOP.roundabout$process(tickDelta);
+        RPostShaderRegistry.TIMESTOP.sba$process(tickDelta);
     }
 
     public static void renderAll(float tickDelta)

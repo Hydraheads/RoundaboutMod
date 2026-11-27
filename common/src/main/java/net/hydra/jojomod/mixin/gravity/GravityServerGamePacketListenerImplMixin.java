@@ -128,7 +128,7 @@ public abstract class GravityServerGamePacketListenerImplMixin {
             ),
             cancellable = true
     )
-    private void roundabout$handleMovePlayer(ServerboundMovePlayerPacket $$0, CallbackInfo ci) {
+    private void sba$handleMovePlayer(ServerboundMovePlayerPacket $$0, CallbackInfo ci) {
         // When gravity is flipped, performs special instructions
         Direction gravityDirection = GravityAPI.getGravityDirection(this.player);
         if (gravityDirection == Direction.DOWN){
@@ -279,7 +279,7 @@ public abstract class GravityServerGamePacketListenerImplMixin {
                     target = "Lnet/minecraft/world/entity/Entity;move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V"
             )
     )
-    private void roundabout$handleMoveVehicle(ServerboundMoveVehiclePacket $$0, CallbackInfo ci) {
+    private void sba$handleMoveVehicle(ServerboundMoveVehiclePacket $$0, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(this.player);
         if (gravityDirection == Direction.DOWN)
             return;
@@ -296,7 +296,7 @@ public abstract class GravityServerGamePacketListenerImplMixin {
             ),
             cancellable = true
     )
-    private void roundabout$noBlocksAround(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$noBlocksAround(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection(this.player);
         if (gravityDirection == Direction.DOWN)
             return;

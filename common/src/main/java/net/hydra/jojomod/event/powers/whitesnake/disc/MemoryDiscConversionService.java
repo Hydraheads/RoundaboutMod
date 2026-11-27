@@ -17,7 +17,7 @@ public final class MemoryDiscConversionService {
 
     public static boolean canConvert(Player player) {
         return player != null && player.isAlive()
-                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake;
+                && ((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake;
     }
 
     public static void convert(ServerPlayer player, InteractionHand hand) {
@@ -28,16 +28,16 @@ public final class MemoryDiscConversionService {
         String message;
         if (DiscItemData.isCreeperMemory(held)) {
             result = new ItemStack(ModItems.EXPLOSIVE_COMMAND_DISC);
-            message = "message.roundabout.memory_conversion_explosive";
+            message = "message.sba.memory_conversion_explosive";
         } else if (DiscItemData.isSlimeMemory(held)) {
             result = new ItemStack(ModItems.JUMP_BACK_COMMAND_DISC);
-            message = "message.roundabout.memory_conversion_jump_back";
+            message = "message.sba.memory_conversion_jump_back";
         } else if (DiscItemData.isWolfMemory(held)) {
             result = new ItemStack(ModItems.ATTACK_COMMAND_DISC);
-            message = "message.roundabout.memory_conversion_attack";
+            message = "message.sba.memory_conversion_attack";
         } else {
             player.displayClientMessage(Component.translatable(
-                    "message.roundabout.memory_conversion_invalid"), true);
+                    "message.sba.memory_conversion_invalid"), true);
             return;
         }
 

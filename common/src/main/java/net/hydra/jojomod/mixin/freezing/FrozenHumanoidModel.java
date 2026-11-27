@@ -25,7 +25,7 @@ public abstract class FrozenHumanoidModel<T extends LivingEntity> extends Ageabl
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/model/AnimationUtils;bobModelPart(Lnet/minecraft/client/model/geom/ModelPart;FF)V",
             shift = At.Shift.BEFORE))
-    public void roundabout$setupAnimFreeze1(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5,CallbackInfo ci) {
+    public void sba$setupAnimFreeze1(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5,CallbackInfo ci) {
         if ($$0 != null && HeatUtil.isBodyFrozen($$0)) {
             rdbt$saveXRotR = this.rightArm.xRot;
             rdbt$saveZRotR = this.rightArm.zRot;
@@ -37,7 +37,7 @@ public abstract class FrozenHumanoidModel<T extends LivingEntity> extends Ageabl
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/model/AnimationUtils;bobModelPart(Lnet/minecraft/client/model/geom/ModelPart;FF)V",
                     shift = At.Shift.AFTER))
-    public void roundabout$setupAnimFreeze2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5,CallbackInfo ci) {
+    public void sba$setupAnimFreeze2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5,CallbackInfo ci) {
         if ($$0 != null && HeatUtil.isBodyFrozen($$0)) {
             this.rightArm.xRot = rdbt$saveXRotR;
             this.rightArm.zRot = rdbt$saveZRotR;

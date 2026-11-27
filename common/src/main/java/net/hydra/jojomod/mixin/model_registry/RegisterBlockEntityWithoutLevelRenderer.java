@@ -26,7 +26,7 @@ public class RegisterBlockEntityWithoutLevelRenderer implements IBlockEntityWith
      * and needs this to render, similar to tridents
      * */
     @Inject(method = "renderByItem", at = @At(value = "TAIL"), cancellable = true)
-    public void roundabout$render2(ItemStack $$0, ItemDisplayContext $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5, CallbackInfo ci){
+    public void sba$render2(ItemStack $$0, ItemDisplayContext $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5, CallbackInfo ci){
         if (!PowersGoldExperience.getDisguisedDisplayStack($$0).isEmpty()) {
             return;
         }
@@ -111,6 +111,6 @@ public class RegisterBlockEntityWithoutLevelRenderer implements IBlockEntityWith
 
     @Unique
     @Override
-    public void roundabout$bakeHarpoonModel(){
+    public void sba$bakeHarpoonModel(){
     }
 }

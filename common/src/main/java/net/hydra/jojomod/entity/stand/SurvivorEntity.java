@@ -73,7 +73,7 @@ public class SurvivorEntity extends MultipleTypeStand {
     @Override
 
     public boolean validatePowers(LivingEntity user){
-        return (((StandUser)user).roundabout$getStandPowers() instanceof PowersSurvivor);
+        return (((StandUser)user).sba$getStandPowers() instanceof PowersSurvivor);
     }
     public boolean hasNoPhysics(){
         return false;
@@ -156,10 +156,10 @@ public class SurvivorEntity extends MultipleTypeStand {
         }
     }
     public void matchEntities(LivingEntity one, LivingEntity two){
-        ((StandUser)one).roundabout$setZappedToID(two.getId());
-        ((StandUser)one).roundabout$aggressivelyEnforceZapAggro();
-        ((StandUser)two).roundabout$setZappedToID(one.getId());
-        ((StandUser)two).roundabout$aggressivelyEnforceZapAggro();
+        ((StandUser)one).sba$setZappedToID(two.getId());
+        ((StandUser)one).sba$aggressivelyEnforceZapAggro();
+        ((StandUser)two).sba$setZappedToID(one.getId());
+        ((StandUser)two).sba$aggressivelyEnforceZapAggro();
         drawParticleLine(this,one,10);
         drawParticleLine(this,two,10);
         drawParticleLine(one,two,10);
@@ -170,7 +170,7 @@ public class SurvivorEntity extends MultipleTypeStand {
 
     public void sendMessageTo(LivingEntity LE, LivingEntity LE2){
         if (LE instanceof ServerPlayer PE) {
-            PE.displayClientMessage(Component.translatable("text.roundabout.survivor.match", LE2.getDisplayName()).
+            PE.displayClientMessage(Component.translatable("text.sba.survivor.match", LE2.getDisplayName()).
                     withStyle(ChatFormatting.RED), true);
         }
     }
@@ -183,18 +183,18 @@ public class SurvivorEntity extends MultipleTypeStand {
                 !(ent instanceof KingCrimsonProjectionEntity)&&
                 !(ent instanceof Player PL && PL.isCreative()) &&
                 ent instanceof LivingEntity LE
-                && !((StandUser) LE).roundabout$isBubbleEncased());
+                && !((StandUser) LE).sba$isBubbleEncased());
     }
 
     public void attemptShock(){
         LivingEntity user = this.getUser();
-        if (user != null && !((StandUser)user).roundabout$getUniqueStandModeToggle()) {
+        if (user != null && !((StandUser)user).sba$getUniqueStandModeToggle()) {
             List<Entity> mobsInRange = MainUtil.getEntitiesInRange(this.level(), this.blockPosition(), ClientNetworking.getAppropriateConfig().survivorSettings.survivorRange, this);
             LivingEntity firstTarget = null;
             if (!mobsInRange.isEmpty()) {
                 for (Entity ent : mobsInRange) {
                     if (canZapEntity(ent) && ent instanceof LivingEntity LE
-                    && ((StandUser) LE).roundabout$getZappedToID() <= -1) {
+                    && ((StandUser) LE).sba$getZappedToID() <= -1) {
                         if (
                                 !(
                                         MainUtil.isBossMob(LE) &&
@@ -272,14 +272,14 @@ public class SurvivorEntity extends MultipleTypeStand {
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
-        $$0.putFloat("roundabout.randomSize",getRandomSize());
-        $$0.putBoolean("roundabout.activated",getActivated());
+        $$0.putFloat("sba.randomSize",getRandomSize());
+        $$0.putBoolean("sba.activated",getActivated());
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
-        setRandomSize($$0.getFloat("roundabout.randomSize"));
-        setActivated($$0.getBoolean("roundabout.activated"));
+        setRandomSize($$0.getFloat("sba.randomSize"));
+        setActivated($$0.getBoolean("sba.activated"));
         super.readAdditionalSaveData($$0);
     }
 

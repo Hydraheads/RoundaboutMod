@@ -1,6 +1,6 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
@@ -96,10 +96,10 @@ public class BowlerHatItem extends TieredItem implements Vanishable {
                 PowerTypes.copyPlaneOfExisting(player,$$7);
                 dimension.addFreshEntity($$7);
                 stack.shrink(1);
-                if (livingEntity != null && ((StandUser)livingEntity).roundabout$isBubbleEncased()){
+                if (livingEntity != null && ((StandUser)livingEntity).sba$isBubbleEncased()){
                     StandUser SE = ((StandUser)livingEntity);
                     if (!dimension.isClientSide()){
-                        SE.roundabout$setBubbleEncased((byte) 0);
+                        SE.sba$setBubbleEncased((byte) 0);
                         dimension.playSound(null, livingEntity.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                                 SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                         ((ServerLevel) dimension).sendParticles(ModParticles.BUBBLE_POP,

@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.mobs.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.mobs.PiranhaModel;
 import net.hydra.jojomod.entity.mobs.Piranha;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class PiranhaEyesLayer<T extends Piranha, M extends PiranhaModel<T>> extends EyesLayer<T, M> {
     private static final RenderType EYES_TEXTURE = RenderType.eyes(
-            new ResourceLocation(Roundabout.MOD_ID, "textures/entity/piranha/piranha_eyes.png")
+            new ResourceLocation(SBA.MOD_ID, "textures/entity/piranha/piranha_eyes.png")
     );
 
     public PiranhaEyesLayer(RenderLayerParent<T, M> renderer) {

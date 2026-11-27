@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 4.12.
 // Paste this class into your mod and generate all required imports
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
 import net.hydra.jojomod.entity.projectile.TuskNailEntity;

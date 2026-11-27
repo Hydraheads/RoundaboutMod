@@ -1,6 +1,6 @@
 package net.hydra.jojomod.registry;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolActions;
@@ -9,7 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(
-        modid = Roundabout.MOD_ID,
+        modid = SBA.MOD_ID,
         bus = Mod.EventBusSubscriber.Bus.FORGE
 )
 public class ForgeStrippableBlocks {

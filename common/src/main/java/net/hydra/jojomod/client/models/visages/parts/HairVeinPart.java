@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
@@ -85,7 +85,7 @@ public class HairVeinPart extends PsuedoHierarchicalModel {
 
 
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/hair/zombie_hair/zombie_vein.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/entity/hair/zombie_hair/zombie_vein.png");
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {

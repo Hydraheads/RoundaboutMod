@@ -63,8 +63,8 @@ public class JumpinJackFlashEntity extends FollowingStandEntity {
         if (!level().isClientSide()) {
             if (isLoadingSpit() && (tickCount - lastLoadSignal > 8
                     || !(getUser() instanceof Player player)
-                    || !(player instanceof StandUser user) || user.roundabout$getStand() != this
-                    || !(user.roundabout$getStandPowers() instanceof PowersJumpinJackFlash)
+                    || !(player instanceof StandUser user) || user.sba$getStand() != this
+                    || !(user.sba$getStandPowers() instanceof PowersJumpinJackFlash)
                     || !PowerTypes.hasStandActive(player))) {
                 stopSpitLoad();
             }

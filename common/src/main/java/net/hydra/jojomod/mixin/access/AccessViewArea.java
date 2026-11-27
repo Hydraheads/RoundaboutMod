@@ -15,7 +15,7 @@ public abstract class AccessViewArea implements IViewArea {
     /**There is no reason for these to be private or protected, we should be able to tap into them.*/
     @Unique
     @Override
-    public ChunkRenderDispatcher.RenderChunk roundabout$getRenderChunkAt(BlockPos $$0){
+    public ChunkRenderDispatcher.RenderChunk sba$getRenderChunkAt(BlockPos $$0){
         return getRenderChunkAt($$0);
     }
 

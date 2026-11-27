@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -203,7 +203,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public Entity entityTarget = null;
 	public Entity getEntityTarget() {
 		if (PowerTypes.isInADifferentExistence(entityTarget,this)) {
-			if (((StandUser)entityTarget).roundabout$getStandPowers() instanceof
+			if (((StandUser)entityTarget).sba$getStandPowers() instanceof
 					PowersKingCrimson pkc && pkc.timeEraseActive){
 				return pkc.activeClone;
 			} else {
@@ -279,8 +279,8 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (getTorchStatus()) {
 			hideTorch.stop();
 			LivingEntity user = getUser();
-			if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen) {
-				byte BT = ((StandUser) user).roundabout$getStandSkin();
+			if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersKillerQueen) {
+				byte BT = ((StandUser) user).sba$getStandSkin();
 				if (BT == KillerQueenEntity.SAMURAI || BT == KillerQueenEntity.SPIRIT) {
 					lowerTorch.stop();
 				}else{
@@ -308,7 +308,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	public Vec3 getRandPos(){
 		Vec3 funnyVec = new Vec3(0,(this.getBbHeight()*0.3f),0);
-		Direction gd = ((IGravityEntity)this).roundabout$getGravityDirection();
+		Direction gd = ((IGravityEntity)this).sba$getGravityDirection();
 		if (gd != Direction.DOWN){
 			funnyVec = RotationUtil.vecPlayerToWorld(funnyVec,gd);
 		}
@@ -360,12 +360,12 @@ public class SheerHeartAttackEntity extends StandEntity {
 		if (!client) {
 			if(user == null){
 				unsummon();
-			}else if((!(((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())
+			}else if((!(((StandUser)user).sba$getStandPowers() instanceof PowersKillerQueen)) || (!user.isAlive())
 			|| MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), user.getX(), user.getZ()) > 100){
 				unsummon();
 			}else {
 				PowersKillerQueen UP;
-				if ((((StandUser)user).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)) {
+				if ((((StandUser)user).sba$getStandPowers() instanceof PowersKillerQueen PKQ)) {
 					if (this != PKQ.SHA) {
 						unsummon();
 						return;
@@ -465,14 +465,14 @@ public class SheerHeartAttackEntity extends StandEntity {
 								if (MainUtil.getReducedDamage(LE)) {
 									float dmgAmound = (1.75f * (float)(ClientNetworking.getAppropriateConfig().
 											killerQueenSettings.killerQueenAttackMultOnPlayers*0.01));
-									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+									if (user instanceof Player && ((StandUser) user).sba$getStandPowers() instanceof PowersKillerQueen KQ) {
 										KQ.levelupDamageMod(dmgAmound);
 									}
 									LE.hurt(dmg, dmgAmound);
 								}else {
 									float dmgAmound = (3.35f * (float)(ClientNetworking.getAppropriateConfig().
 											killerQueenSettings.killerQueenAttackMultOnMobs*0.01));
-									if (user instanceof Player && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+									if (user instanceof Player && ((StandUser) user).sba$getStandPowers() instanceof PowersKillerQueen KQ) {
 										KQ.levelupDamageMod(dmgAmound);
 									}
 									LE.hurt(dmg, dmgAmound);
@@ -738,7 +738,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public void attackAt(Entity target) {
 		DamageSource dmg = ModDamageTypes.of(this.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getUser());
 
-		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
+		StandPowers SP = ((StandUser)this.getUser()).sba$getStandPowers();
 		if (!(SP instanceof PowersKillerQueen KQ)) { return; }
 
 		Vec3 pos = this.position().add(this.getForward().scale(0.15));
@@ -769,7 +769,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		this.explosions++;
 
-		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
+		StandPowers SP = ((StandUser)this.getUser()).sba$getStandPowers();
 		if (!(SP instanceof PowersKillerQueen KQ)) { return; }
 
 		if (this.getTargetType() == ENTITY){
@@ -788,7 +788,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 				}
 
 				if (getEntityTarget() instanceof LivingEntity LE) {
-					if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersGER) {
+					if (((StandUser)LE).sba$getStandPowers() instanceof PowersGER) {
 						setReturnStatus(true);
 					}
 				}
@@ -885,7 +885,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 	public boolean canDestroyBlocks() {
 		return ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction &&
 				!ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims &&
-				level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) &&
+				level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING) &&
 				this.getUser() instanceof Player PL && MainUtil.getIsGamemodeApproriateForGrief(PL);
 	}
 
@@ -909,7 +909,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 		}else {
 			setDeltaMovement(speed.x, getDeltaMovement().y, speed.z);
 		}
-		StandPowers SP = ((StandUser)this.getUser()).roundabout$getStandPowers();
+		StandPowers SP = ((StandUser)this.getUser()).sba$getStandPowers();
 		if (!(SP instanceof PowersKillerQueen)) { return; }
 		PowersKillerQueen KQ = (PowersKillerQueen)SP;
 
@@ -1028,9 +1028,9 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if (LE.isFullyFrozen()) { points -= 80;
 			}else if (LE.isFreezing()) { points -= 40;}
 			
-			if (((StandUser)LE).roundabout$hasAStand()) {
+			if (((StandUser)LE).sba$hasAStand()) {
 				StandUser SU = (StandUser)LE;
-				if(SU.roundabout$getStandPowers() instanceof PowersWhiteAlbum && SU.roundabout$getActive()) {
+				if(SU.sba$getStandPowers() instanceof PowersWhiteAlbum && SU.sba$getActive()) {
 					points -= 130;
 				}
 			}
@@ -1114,7 +1114,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		if (this.getUser() instanceof Player PE && ((IPlayerEntity) PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)) {
+		if (this.getUser() instanceof Player PE && ((IPlayerEntity) PE).sba$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)) {
 			return null;
 		}
 
@@ -1127,7 +1127,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 
 		if (user == null) { return null; }
 
-		byte skin = ((StandUser)user).roundabout$getStandSkin();
+		byte skin = ((StandUser)user).sba$getStandSkin();
 
 		double rand = Math.random();
 		if (skin == KillerQueenEntity.MINESWEEPER) {
@@ -1188,7 +1188,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			boolean $$4 = $$2.is(Items.TORCH) && this.getUser() == $$0
 					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
 					&& !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
-					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+					&& this.level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)
 					|| getTorchStatus();
 
 			return $$4 ? InteractionResult.CONSUME : InteractionResult.PASS;
@@ -1198,7 +1198,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 			if ($$2.is(Items.TORCH) && !getTorchStatus()
 					&& ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
 					&& !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
-					&& this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+					&& this.level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)) {
 				if (!$$0.getAbilities().instabuild) { $$2.shrink(1); }
 				setTorchStatus(true);
 				Vec3 dir = $$0.getLookAngle();

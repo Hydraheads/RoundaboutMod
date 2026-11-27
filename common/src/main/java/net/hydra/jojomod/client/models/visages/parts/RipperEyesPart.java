@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
@@ -76,7 +76,7 @@ public class RipperEyesPart extends PsuedoHierarchicalModel {
 
 
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/ripper_eyes.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/ripper_eyes.png");
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
@@ -90,8 +90,8 @@ public class RipperEyesPart extends PsuedoHierarchicalModel {
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;
             }
-            ((StandUser)LE).roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
-            this.animate(((StandUser)LE).roundabout$getWornStandIdleAnimation(),
+            ((StandUser)LE).sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+            this.animate(((StandUser)LE).sba$getWornStandIdleAnimation(),
                         RipperEyesAnimation.laser_rotation, partialTicks, 1f);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation()));
             //The number at the end is inversely proportional so 2 is half speed

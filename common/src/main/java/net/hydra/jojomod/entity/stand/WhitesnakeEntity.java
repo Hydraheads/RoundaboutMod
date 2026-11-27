@@ -180,13 +180,13 @@ public class WhitesnakeEntity extends FollowingStandEntity {
 
     public boolean isDisguiseGuarding() {
         LivingEntity user = getUser();
-        return isDisguised() && user != null && ((StandUser) user).roundabout$getStandPowers().isGuarding();
+        return isDisguised() && user != null && ((StandUser) user).sba$getStandPowers().isGuarding();
     }
 
     public boolean isDisguiseMining() {
         LivingEntity user = getUser();
         return isDisguised() && user != null
-                && ((StandUser) user).roundabout$getStandPowers().getActivePower() == PowerIndex.MINING;
+                && ((StandUser) user).sba$getStandPowers().getActivePower() == PowerIndex.MINING;
     }
 
     public boolean isAutoModeActive() {
@@ -216,7 +216,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         if (entityData.get(REMOTE_MODE) == mode) return;
         entityData.set(REMOTE_MODE, mode);
         boolean controlled = mode != REMOTE_MODE_NONE || mode == REMOTE_MODE_RETREAT;
-        if (controlled) ((IGravityEntity) this).roundabout$setGravityDirection(Direction.DOWN);
+        if (controlled) ((IGravityEntity) this).sba$setGravityDirection(Direction.DOWN);
         controlDimensionsActive = controlled;
         meltingDimensionsActive = controlled && isMeltingModeActive();
         if (!controlled) setPose(Pose.STANDING);
@@ -232,7 +232,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     public double getPunchYaw(double yaw, double multiplier) {
         LivingEntity user = getUser();
         if (!isRemoteControlled() && user != null
-                && ((StandUser) user).roundabout$getStandPowers() instanceof PowersWhitesnake powers
+                && ((StandUser) user).sba$getStandPowers() instanceof PowersWhitesnake powers
                 && powers.isAcidTossActive()) {
             return 0.0D;
         }
@@ -373,7 +373,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         }
         if (!level().isClientSide() && isDisguised()) {
             LivingEntity user = getUser();
-            if (!controlled || user == null || !((StandUser) user).roundabout$getActive()) clearDisguise();
+            if (!controlled || user == null || !((StandUser) user).sba$getActive()) clearDisguise();
         }
         if (!level().isClientSide() && getUser() instanceof Player player
                 && WhitesnakeControlInventory.controlledStand(player) == this) {
@@ -454,7 +454,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         }
         LivingEntity user = getUser();
         boolean hoverEnabled = controlled && user != null
-                && ((StandUser) user).roundabout$getStandPowers() instanceof PowersWhitesnake powers
+                && ((StandUser) user).sba$getStandPowers() instanceof PowersWhitesnake powers
                 && powers.isMeltingMode();
         boolean hovering = hoverEnabled && isMeltingHovering() && getMeltingHoverCharge() > 0;
         if (isMeltingHovering() != hovering) entityData.set(MELTING_HOVERING, hovering);
@@ -489,7 +489,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
         }
 
         meltingHoverDripTicks = 0;
-        Direction gravity = ((IGravityEntity) this).roundabout$getGravityDirection();
+        Direction gravity = ((IGravityEntity) this).sba$getGravityDirection();
         if (gravity != meltingTrailGravity) {
             meltingTrailAnchor = null;
             meltingTrailGravity = gravity;
@@ -516,7 +516,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     }
 
     private boolean hasGravitySurfaceSupport() {
-        Direction gravity = ((IGravityEntity) this).roundabout$getGravityDirection();
+        Direction gravity = ((IGravityEntity) this).sba$getGravityDirection();
         Vec3 gravityProbe = new Vec3(gravity.step()).scale(0.18D);
         return !level().noCollision(this, getBoundingBox().deflate(0.03D).move(gravityProbe));
     }
@@ -639,8 +639,8 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     public boolean isControlledByLocalInstance() {
         LivingEntity user = getUser();
         if (user instanceof Player player) {
-            if (((StandUser) player).roundabout$getStandPowers().isPiloting()) {
-                LivingEntity controlled = ((StandUser) player).roundabout$getStandPowers().getPilotingStand();
+            if (((StandUser) player).sba$getStandPowers().isPiloting()) {
+                LivingEntity controlled = ((StandUser) player).sba$getStandPowers().getPilotingStand();
                 if (controlled != null && controlled.is(this)) {
                     return player.isLocalPlayer();
                 }
@@ -655,7 +655,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     }
 
     public Vec3 threatMovement(Vec3 move) {
-        if ((getUser() != null) && (((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersWhitesnake PW)) {
+        if ((getUser() != null) && (((StandUser) getUser()).sba$getStandPowers() instanceof PowersWhitesnake PW)) {
             // stops movement when reaching max range
             double nextX = getX() + move.x;
             double nextZ = getZ() + move.z;
@@ -682,7 +682,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     @Override
     public void move(MoverType moverType, Vec3 movement) {
         if (isControlModeActive()) {
-            Direction gravity = ((IGravityEntity) this).roundabout$getGravityDirection();
+            Direction gravity = ((IGravityEntity) this).sba$getGravityDirection();
             Vec3 move = RotationUtil.vecPlayerToWorld(movement, gravity);
             Vec3 vec3 = threatMovement(move);
             if (vec3.x != move.x || vec3.z != move.z) {
@@ -718,7 +718,7 @@ public class WhitesnakeEntity extends FollowingStandEntity {
     @Override
     public void moveRelative(float p_19921_, Vec3 p_19922_) {
         if (isAutoModeActive() && getUser() instanceof StandUser user
-                && user.roundabout$getStandPowers() instanceof PowersWhitesnake powers) {
+                && user.sba$getStandPowers() instanceof PowersWhitesnake powers) {
             p_19921_ = powers.inputSpeedModifiers(p_19921_);
         }
         Vec3 vec3 = getInputVector(p_19922_, p_19921_, this.getYRot());

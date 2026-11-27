@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.fates;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientUtil;
@@ -28,7 +28,7 @@ public abstract class FatesLocalPlayerMixin extends Entity {
 
     /**You cannot spawn sprint particles while transforming*/
     @Inject(method = "canSpawnSprintParticle", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$canSpawnSprintParticle(CallbackInfoReturnable<Boolean> cir)
+    protected void sba$canSpawnSprintParticle(CallbackInfoReturnable<Boolean> cir)
     {
 
         if (PowerTypes.isExistentiallyElsewhere(this) && !(level().isClientSide()
@@ -46,7 +46,7 @@ public abstract class FatesLocalPlayerMixin extends Entity {
         }
 
 
-        if (((StandUser)this).roundabout$getStandPowers().cancelSprintParticles()){
+        if (((StandUser)this).sba$getStandPowers().cancelSprintParticles()){
             cir.setReturnValue(false);
             return;
         }
@@ -64,7 +64,7 @@ public abstract class FatesLocalPlayerMixin extends Entity {
     }
     /**Vampires can sprint even at low food*/
     @Inject(method = "hasEnoughFoodToStartSprinting", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$hasEnoughFoodToStartSprinting(CallbackInfoReturnable<Boolean> cir) {
+    protected void sba$hasEnoughFoodToStartSprinting(CallbackInfoReturnable<Boolean> cir) {
         if (FateTypes.hasBloodHunger(((LocalPlayer)(Object)this))) {
             cir.setReturnValue(true);
         }

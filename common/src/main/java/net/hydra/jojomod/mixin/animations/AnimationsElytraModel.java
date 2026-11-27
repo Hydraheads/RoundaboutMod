@@ -34,36 +34,36 @@ public abstract class AnimationsElytraModel<T extends LivingEntity> extends Agea
      * so it can be animated smoothly, and apply the same transformations as on the player.*/
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "HEAD"))
-    public void roundabout$SetupAnim4(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+    public void sba$SetupAnim4(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         this.leftWing.resetPose();
         this.rightWing.resetPose();
     }
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
-    public void roundabout$SetupAnim5(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+    public void sba$SetupAnim5(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         if ($$0 instanceof Player P) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             if (!P.isPassenger() && !$$0.isVisuallySwimming() && !$$0.isFallFlying()) {
                 if (Poses.getAnimation(P) != null) {
-                    this.roundabout$animate(ipe.getStyleAnimation(), Poses.getAnimation(P), $$3, 1f);
+                    this.sba$animate(ipe.getStyleAnimation(), Poses.getAnimation(P), $$3, 1f);
                 }
             }
         }
     }
 
     @Unique
-    private static final Vector3f roundabout$ANIMATION_VECTOR_CACHE = new Vector3f();
+    private static final Vector3f sba$ANIMATION_VECTOR_CACHE = new Vector3f();
     @Unique
-    protected void roundabout$animate(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3) {
+    protected void sba$animate(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3) {
         $$0.updateTime($$2, $$3);
-        $$0.ifStarted($$1x -> roundabout$animate($$1, $$1x.getAccumulatedTime(), 1.0F,
-                roundabout$ANIMATION_VECTOR_CACHE));
+        $$0.ifStarted($$1x -> sba$animate($$1, $$1x.getAccumulatedTime(), 1.0F,
+                sba$ANIMATION_VECTOR_CACHE));
     }
     @Unique
-    public void roundabout$animate(AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
-        float f = roundabout$getElapsedSeconds(p_232321_, p_232322_);
+    public void sba$animate(AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
+        float f = sba$getElapsedSeconds(p_232321_, p_232322_);
 
         for(Map.Entry<String, List<AnimationChannel>> entry : p_232321_.boneAnimations().entrySet()) {
-            Optional<ModelPart> optional = roundabout$getRight(entry.getKey());
+            Optional<ModelPart> optional = sba$getRight(entry.getKey());
             List<AnimationChannel> list = entry.getValue();
             optional.ifPresent((p_232330_) -> {
                 list.forEach((p_288241_) -> {
@@ -88,7 +88,7 @@ public abstract class AnimationsElytraModel<T extends LivingEntity> extends Agea
             });
         }
         for(Map.Entry<String, List<AnimationChannel>> entry : p_232321_.boneAnimations().entrySet()) {
-            Optional<ModelPart> optional = roundabout$getLeft(entry.getKey());
+            Optional<ModelPart> optional = sba$getLeft(entry.getKey());
             List<AnimationChannel> list = entry.getValue();
             optional.ifPresent((p_232330_) -> {
                 list.forEach((p_288241_) -> {
@@ -114,19 +114,19 @@ public abstract class AnimationsElytraModel<T extends LivingEntity> extends Agea
         }
     }
     @Unique
-    private static float roundabout$getElapsedSeconds(AnimationDefinition p_232317_, long p_232318_) {
+    private static float sba$getElapsedSeconds(AnimationDefinition p_232317_, long p_232318_) {
         float f = (float)p_232318_ / 1000.0F;
         return p_232317_.looping() ? f % p_232317_.lengthInSeconds() : f;
     }
     @Unique
-    public Optional<ModelPart> roundabout$getRight(String $$0) {
+    public Optional<ModelPart> sba$getRight(String $$0) {
         if (Objects.equals($$0, "body")){
             return Optional.of(this.rightWing);
         }
         return Optional.empty();
     }
     @Unique
-    public Optional<ModelPart> roundabout$getLeft(String $$0) {
+    public Optional<ModelPart> sba$getLeft(String $$0) {
         if (Objects.equals($$0, "body")){
             return Optional.of(this.leftWing);
         }

@@ -42,8 +42,8 @@ public class PowersItemStack {
     /**Stand code to gain experience from mining blocks.*/
 
     @Inject(method = "mineBlock(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$mineBlock(Level $$0, BlockState $$1, BlockPos $$2, Player $$3, CallbackInfo ci) {
-        StandPowers powers = ((StandUser) $$3).roundabout$getStandPowers();
+    protected void sba$mineBlock(Level $$0, BlockState $$1, BlockPos $$2, Player $$3, CallbackInfo ci) {
+        StandPowers powers = ((StandUser) $$3).sba$getStandPowers();
         if (PowerTypes.hasStandActive($$3) && powers.canUseMiningStand()) {
             powers.gainExpFromSpecialMining($$1, $$2);
             ci.cancel();
@@ -54,7 +54,7 @@ public class PowersItemStack {
         }
     }
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$fortHurt(int $$0, RandomSource $$1, ServerPlayer $$2, CallbackInfoReturnable<Boolean> cir) {
+    protected void sba$fortHurt(int $$0, RandomSource $$1, ServerPlayer $$2, CallbackInfoReturnable<Boolean> cir) {
         if ($$2 != null){
             if ($$2.hasEffect(ModEffects.FORTIFICATION)){
                 cir.setReturnValue(false);
@@ -62,7 +62,7 @@ public class PowersItemStack {
         }
     }
     @Inject(method = "hurtAndBreak", at = @At(value = "HEAD"), cancellable = true)
-    protected <T extends LivingEntity> void roundabout$fortHurtAndBreak(int $$0, T $$1, Consumer<T> $$2, CallbackInfo ci) {
+    protected <T extends LivingEntity> void sba$fortHurtAndBreak(int $$0, T $$1, Consumer<T> $$2, CallbackInfo ci) {
         if ($$1 != null){
             if ($$1.hasEffect(ModEffects.FORTIFICATION)){
                 ci.cancel();
@@ -73,7 +73,7 @@ public class PowersItemStack {
     // Gold Experience item imbue start
 
     @Inject(method = "getTooltipLines", at = @At("RETURN"))
-    private void roundabout$appendGEImbueTooltip(@Nullable Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir) {
+    private void sba$appendGEImbueTooltip(@Nullable Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir) {
         ItemStack self = (ItemStack) (Object) this;
         CompoundTag imbue = PowersGoldExperience.getImbueData(self);
         if (imbue == null) return;
@@ -84,10 +84,10 @@ public class PowersItemStack {
         if (imbueType == PowersGoldExperience.IMBUE_ANIMAL) {
             byte animalId = imbue.getByte("AnimalId");
             Component animalName = getAnimalDisplayName(animalId);
-            lines.add(1, Component.translatable("tooltip.roundabout.ge_imbue.animal", animalName)
+            lines.add(1, Component.translatable("tooltip.sba.ge_imbue.animal", animalName)
                     .withStyle(ChatFormatting.GOLD));
         } else if (imbueType == PowersGoldExperience.IMBUE_TREE) {
-            lines.add(1, Component.translatable("tooltip.roundabout.ge_imbue.tree")
+            lines.add(1, Component.translatable("tooltip.sba.ge_imbue.tree")
                     .withStyle(ChatFormatting.GOLD));
         } else if (imbueType == PowersGoldExperience.IMBUE_DISGUISE) {
             ItemStack fake = PowersGoldExperience.getDisguisedDisplayStack(self);
@@ -97,7 +97,7 @@ public class PowersItemStack {
             }
             // the user can see the real item that way they don't get shot in the head by their own banana gun
             if (player != null && imbue.hasUUID("Owner") && player.getUUID().equals(imbue.getUUID("Owner"))) {
-                lines.add(1, Component.translatable("tooltip.roundabout.ge_imbue.disguise", self.getItem().getDescription())
+                lines.add(1, Component.translatable("tooltip.sba.ge_imbue.disguise", self.getItem().getDescription())
                         .withStyle(ChatFormatting.GOLD));
             }
         }
@@ -113,7 +113,7 @@ public class PowersItemStack {
 
     // next 3 methods are all needed to make sure that the imbue triggers, regardless of what item is used
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
-    private void roundabout$onUseGEImbuedItem(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+    private void sba$onUseGEImbuedItem(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         ItemStack self = (ItemStack) (Object) this;
         if (PowersGoldExperience.getImbueData(self) != null && !PowersGoldExperience.isTreeImbuedProjectileItem(self)) {
             if (!level.isClientSide()) {
@@ -124,7 +124,7 @@ public class PowersItemStack {
     }
 
     @Inject(method = "useOn", at = @At("HEAD"), cancellable = true)
-    private void roundabout$onUseOnGEImbuedItem(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sba$onUseOnGEImbuedItem(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack self = (ItemStack) (Object) this;
         Player player = context.getPlayer();
         if (player != null && PowersGoldExperience.getImbueData(self) != null && !PowersGoldExperience.isTreeImbuedProjectileItem(self)) {
@@ -137,7 +137,7 @@ public class PowersItemStack {
     }
 
     @Inject(method = "interactLivingEntity", at = @At("HEAD"), cancellable = true)
-    private void roundabout$onInteractEntityGEImbuedItem(Player player, LivingEntity target, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sba$onInteractEntityGEImbuedItem(Player player, LivingEntity target, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack self = (ItemStack) (Object) this;
         if (PowersGoldExperience.getImbueData(self) != null && !PowersGoldExperience.isTreeImbuedProjectileItem(self)) {
             Level level = player.level();
@@ -149,7 +149,7 @@ public class PowersItemStack {
     }
 
     @Inject(method = "getHoverName", at = @At("HEAD"), cancellable = true)
-    private void roundabout$disguiseHoverName(CallbackInfoReturnable<Component> cir) {
+    private void sba$disguiseHoverName(CallbackInfoReturnable<Component> cir) {
         ItemStack self = (ItemStack) (Object) this;
         ItemStack fake = PowersGoldExperience.getDisguisedDisplayStack(self);
         if (!fake.isEmpty()) {
@@ -159,7 +159,7 @@ public class PowersItemStack {
 
     // stops the durability bar from showing up
     @Inject(method = "isBarVisible", at = @At("HEAD"), cancellable = true)
-    private void roundabout$disguiseBarVisible(CallbackInfoReturnable<Boolean> cir) {
+    private void sba$disguiseBarVisible(CallbackInfoReturnable<Boolean> cir) {
         ItemStack self = (ItemStack) (Object) this;
         if (!PowersGoldExperience.getDisguisedDisplayStack(self).isEmpty()) {
             cir.setReturnValue(false);

@@ -26,23 +26,23 @@ public class EnergizedFoodLoreTextMixin {
                     if (MainUtil.foodCuresThat.containsKey($$0.getItem())) {
                         List<MobEffect> effects = MainUtil.foodCuresThat.get($$0.getItem());
                         for (MobEffect effect : effects) {
-                            $$2.add(Component.translatable("text.roundabout.pearl_jam.cure_lore", Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
+                            $$2.add(Component.translatable("text.sba.pearl_jam.cure_lore", Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
                         }
                     }
                     if (MainUtil.foodAddsThat.containsKey($$0.getItem())) {
                         List<MobEffect> effects = MainUtil.foodAddsThat.get($$0.getItem());
                         for (MobEffect effect : effects) {
-                            $$2.add(Component.translatable("text.roundabout.pearl_jam.add_lore", Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
+                            $$2.add(Component.translatable("text.sba.pearl_jam.add_lore", Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
                         }
                     }
                     if (MainUtil.specialFoodRemoves.containsKey($$0.getItem())) {
                         List<String> conditions = MainUtil.specialFoodRemoves.get($$0.getItem());
                         for (String condition : conditions) {
-                            $$2.add(Component.translatable("text.roundabout.pearl_jam.remove_lore", Component.translatable("text.roundabout.condition.".concat(condition)).withStyle(ChatFormatting.GOLD)));
+                            $$2.add(Component.translatable("text.sba.pearl_jam.remove_lore", Component.translatable("text.sba.condition.".concat(condition)).withStyle(ChatFormatting.GOLD)));
                         }
                     }
                 } else {
-                    $$2.add(Component.translatable("text.roundabout.pearl_jam.cure_lore", Component.translatable(MainUtil.pearlJamFallback.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
+                    $$2.add(Component.translatable("text.sba.pearl_jam.cure_lore", Component.translatable(MainUtil.pearlJamFallback.getDescriptionId()).withStyle(ChatFormatting.GOLD)));
                 }
             }
         }

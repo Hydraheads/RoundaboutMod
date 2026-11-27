@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -44,16 +44,16 @@ public class BCAmmoLayer<T extends BCTroop, M extends StandModel<T>> extends Ren
 
         if (!ClientUtil.isPlayer(User) || !mobEntity.isRecharging()) {return; }
 
-        if (((((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
-                ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1)
-                || !(((StandUser)User).roundabout$getStandPowers() instanceof PowersBadCompany)){
+        if (((((IEntityAndData)User).sba$getTrueInvisibility() > -1) ||
+                ((IEntityAndData)mobEntity).sba$getTrueInvisibility() > -1)
+                || !(((StandUser)User).sba$getStandPowers() instanceof PowersBadCompany)){
             return;
         }
 
         if (mobEntity.getFadeOut() >= mobEntity.getMaxFade()){
 
 
-            if (((IEntityAndData)User).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            if (((IEntityAndData)User).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
                 return;
             }
             EntityRenderDispatcher renderDispatcher = Minecraft.getInstance().getEntityRenderDispatcher();

@@ -35,7 +35,7 @@ public abstract class AchtungGameRenderer {
      * function.
      */
     @Inject(method = "renderItemInHand", at = @At(value = "TAIL"))
-    private void roundabout$renderItemInHand(PoseStack $$0, Camera $$1, float $$2, CallbackInfo ci)
+    private void sba$renderItemInHand(PoseStack $$0, Camera $$1, float $$2, CallbackInfo ci)
     {
         ClientUtil.setThrowFadeToTheEther(1);
         ClientUtil.hideInvis = false;
@@ -43,7 +43,7 @@ public abstract class AchtungGameRenderer {
 
 
     @Inject(method = "pick", at = @At(value = "TAIL"))
-    private void roundabout$pick(float $$0, CallbackInfo ci)
+    private void sba$pick(float $$0, CallbackInfo ci)
     {
         if (this.minecraft.hitResult instanceof EntityHitResult ehr){
             if (ehr != null && ehr.getEntity() != null){

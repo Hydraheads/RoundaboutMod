@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.gui;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.ModGamerules;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation KILLER_QUEEN_BOMB_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation KILLER_QUEEN_BOMB_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/killer_queen_bomb.png");
     
     private static final int
@@ -71,17 +71,17 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         int offsetY = 10;
 
         this.slots.add(new ToggableIcon((byte)BLOCK_DESTRUCTION, this.width / 2 - 13 - offsetCenter, this.height / 2 + 31 - 44 + offsetY,
-                Component.translatable("roundabout.bomb_config.block_destruction")));
+                Component.translatable("sba.bomb_config.block_destruction")));
         this.slots.add(new ToggableIcon((byte)ON_CONTACT, this.width / 2 - 13 + offsetCenter, this.height / 2 + 31 - 44 + offsetY,
-                Component.translatable("roundabout.bomb_config.contact_explosion")));
+                Component.translatable("sba.bomb_config.contact_explosion")));
         this.slots.add(new ToggableIcon((byte)ITEM_DESTRUCTION, this.width / 2 - 13 - offsetCenter + 10, this.height / 2 + 31 - 80 + offsetY,
-                Component.translatable("roundabout.bomb_config.item_destruction")));
+                Component.translatable("sba.bomb_config.item_destruction")));
         this.slots.add(new ToggableIcon((byte)AUTO_BUBBLE_PLANT, this.width / 2 - 13 + offsetCenter - 10, this.height / 2 + 31 - 80 + offsetY,
-                Component.translatable("roundabout.bomb_config.auto_bubble_plant")));
+                Component.translatable("sba.bomb_config.auto_bubble_plant")));
 
-        this.sizes.add(new SwitchSelect(0, this.width / 2 - 33, this.height / 2 - 32 + 48 + offsetY, Component.translatable("roundabout.bomb_config.explosion_size_0")));
-        this.sizes.add(new SwitchSelect(1, this.width / 2 - 33 + 20, this.height / 2 - 32 + 48 + offsetY, Component.translatable("roundabout.bomb_config.explosion_size_1")));
-        this.sizes.add(new SwitchSelect(2, this.width / 2 - 33 + 40, this.height / 2 - 32 + 48 + offsetY, Component.translatable("roundabout.bomb_config.explosion_size_2")));
+        this.sizes.add(new SwitchSelect(0, this.width / 2 - 33, this.height / 2 - 32 + 48 + offsetY, Component.translatable("sba.bomb_config.explosion_size_0")));
+        this.sizes.add(new SwitchSelect(1, this.width / 2 - 33 + 20, this.height / 2 - 32 + 48 + offsetY, Component.translatable("sba.bomb_config.explosion_size_1")));
+        this.sizes.add(new SwitchSelect(2, this.width / 2 - 33 + 40, this.height / 2 - 32 + 48 + offsetY, Component.translatable("sba.bomb_config.explosion_size_2")));
     }
 
     public class SwitchSelect extends AbstractWidget {
@@ -119,7 +119,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             Player p = Minecraft.getInstance().player;
             if (p != null) {
                 StandUser SU = (StandUser) p;
-                if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen) {
+                if (SU.sba$getStandPowers() instanceof PowersKillerQueen) {
                     int conf = clientConfig.dynamicSettings.killerQueenCurrentBombSize;
 
                     return conf == context ? ENABLED : DISABLED;
@@ -160,7 +160,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 
             int conf = clientConfig.dynamicSettings.killerQueenCurrentBombConfig;
             if (this.context == AUTO_BUBBLE_PLANT && Minecraft.getInstance().player != null) {
-                if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
+                if (((StandUser)Minecraft.getInstance().player).sba$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
                     return ENABLED;
                 }
             }
@@ -181,9 +181,9 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             Level level = Minecraft.getInstance().player.level();
 
 			if (this.context == 0 && (!ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction
-                    || !level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) || ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims)) {status = 3;}
+                    || !level.getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING) || ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims)) {status = 3;}
             if (this.context == AUTO_BUBBLE_PLANT) {
-                if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
+                if (((StandUser)Minecraft.getInstance().player).sba$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()) {
                     status = 3;
                 }
             }
@@ -213,7 +213,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
 		private void drawIcon(GuiGraphics guiGraphics) {
 			int status = getMode(false);
             if (this.context == BLOCK_DESTRUCTION && (!ClientNetworking.getAppropriateConfig().killerQueenSettings.blocksDestruction || ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims)) {status = 2;}
-            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()
+            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).sba$getStandPowers() instanceof PowersKillerQueen PK && !PK.canUseStrayCat()
             && context == AUTO_BUBBLE_PLANT) {
                 status = 3;
             }
@@ -257,7 +257,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         if (pl != null) {
             StandUser SU = (StandUser) pl;
 
-            if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PK) {
+            if (SU.sba$getStandPowers() instanceof PowersKillerQueen PK) {
                 PK.bombConfigPacket();
             }
         }
@@ -277,7 +277,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
-        Component str = Component.translatable("roundabout.killer_queen.bomb_config");
+        Component str = Component.translatable("sba.killer_queen.bomb_config");
 
         guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32+8 - 10, -1);
 
@@ -331,9 +331,9 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
             if (currentlyHovered < MAX_TOGGLES) {
                 name = slots.get(currentlyHovered).getName().getString();
                 if (slots.get(currentlyHovered).getMode(false) == ENABLED) {
-                    name += Component.translatable("roundabout.bomb_config.on").getString();
+                    name += Component.translatable("sba.bomb_config.on").getString();
                 }else {
-                    name += Component.translatable("roundabout.bomb_config.off").getString();
+                    name += Component.translatable("sba.bomb_config.off").getString();
                 }
                 text = Component.literal(name);
             }else {
@@ -375,7 +375,7 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     }
 
     
-    public boolean roundabout$sameKeyOne(KeyMapping key1){
+    public boolean sba$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
                 || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
         );
@@ -383,12 +383,12 @@ public class BombConfigScreen extends Screen implements NoCancelInputScreen {
     
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
-        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
+        if (this.minecraft != null && !sba$sameKeyOne(KeyInputRegistry.abilityOneKey)) {
             this.exitBombConfig();
 
             if (this.minecraft.player != null){
                 StandUser SU = ((StandUser) this.minecraft.player);
-                if (SU.roundabout$getStandPowers().isBarraging()){
+                if (SU.sba$getStandPowers().isBarraging()){
                     //This prevents barrage canceling
                 } else {
                     this.minecraft.options.keyUse.setDown(false);

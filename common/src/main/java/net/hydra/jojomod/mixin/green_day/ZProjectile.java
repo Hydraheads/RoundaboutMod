@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.green_day;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 
 
 import net.hydra.jojomod.access.IPermaCasting;
@@ -38,8 +38,8 @@ public abstract class ZProjectile extends Entity implements TraceableEntity {
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void DestroyProjectilesInMoldField(CallbackInfo info) {
-        if (((IPermaCasting) this.level()).roundabout$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
-            LivingEntity mold_caster = ((IPermaCasting)this.level()).roundabout$inPermaCastRangeEntity(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD);
+        if (((IPermaCasting) this.level()).sba$inPermaCastRange(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD)) {
+            LivingEntity mold_caster = ((IPermaCasting)this.level()).sba$inPermaCastRangeEntity(this.getOnPos(), PermanentZoneCastInstance.MOLD_FIELD);
             Boolean Moldable = ((Projectile)(Object)this instanceof ThrownEgg) ||
             ((Projectile)(Object)this instanceof KnifeEntity)||
             ((Projectile)(Object)this instanceof MatchEntity)||
@@ -49,7 +49,7 @@ public abstract class ZProjectile extends Entity implements TraceableEntity {
                 Boolean lower = mold_caster.getY() > this.getY();
                 if(Moldable && lower) {
                     int color = PowersGreenDay.defaultMoldDustColor();
-                    if (((StandUser) mold_caster).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                    if (((StandUser) mold_caster).sba$getStandPowers() instanceof PowersGreenDay PGD) {
                         color = PGD.getMoldDustParticleColor();
                     }
                     for (int i = 0; i < 1; i = i + 1) {
@@ -62,9 +62,9 @@ public abstract class ZProjectile extends Entity implements TraceableEntity {
                     moldedTicks = moldedTicks + 1;
                     if (moldedTicks > 3) {
                         for (int i = 0; i < 43; i = i + 1) {
-                            float randXf = Roundabout.RANDOM.nextFloat(-0.1f, 0.1f);
-                            float randYf = Roundabout.RANDOM.nextFloat(-0.1f, 0.1f);
-                            float randZf = Roundabout.RANDOM.nextFloat(-0.1f, 0.1f);
+                            float randXf = SBA.RANDOM.nextFloat(-0.1f, 0.1f);
+                            float randYf = SBA.RANDOM.nextFloat(-0.1f, 0.1f);
+                            float randZf = SBA.RANDOM.nextFloat(-0.1f, 0.1f);
                             double randX = (double) randXf;
                             double randy = (double) randYf;
                             double randz = (double) randZf;
@@ -87,9 +87,9 @@ public abstract class ZProjectile extends Entity implements TraceableEntity {
     }
 
     @Inject(method = "canHitEntity", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$canHitEntity2(Entity $$0x, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$canHitEntity2(Entity $$0x, CallbackInfoReturnable<Boolean> cir) {
         if (PowerTypes.isInADifferentExistence($$0x,this) ||
-                ($$0x instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().phaseThroughProjectile(this))){
+                ($$0x instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers().phaseThroughProjectile(this))){
             cir.setReturnValue(false);
         }
     }

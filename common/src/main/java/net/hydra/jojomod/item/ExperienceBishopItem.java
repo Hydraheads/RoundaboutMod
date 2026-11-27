@@ -100,7 +100,7 @@ public class ExperienceBishopItem extends BlockItem implements Vanishable {
 
         player.displayClientMessage(
                 Component.translatable(
-                        "text.roundabout.memory.15"
+                        "text.sba.memory.15"
                 ).withStyle(ChatFormatting.AQUA),
                 true
         );
@@ -171,7 +171,7 @@ public class ExperienceBishopItem extends BlockItem implements Vanishable {
 
         player.displayClientMessage(
                 Component.translatable(
-                        "text.roundabout.memory.10"
+                        "text.sba.memory.10"
                 ).withStyle(ChatFormatting.AQUA),
                 true
         );

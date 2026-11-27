@@ -18,11 +18,11 @@ public abstract class CreamCancelPlayerHurtMixin extends LivingEntity {
     }
 
     @Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
-    public void roundabout$Render(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> cir) {
+    public void sba$Render(DamageSource $$0, float $$1, CallbackInfoReturnable<Boolean> cir) {
         Player pl = ((Player)(Object)this);
 
         if (pl instanceof StandUser standUser) {
-            if (standUser.roundabout$getStandPowers() instanceof PowersCream cream && cream.insideVoidInt > 0) {
+            if (standUser.sba$getStandPowers() instanceof PowersCream cream && cream.insideVoidInt > 0) {
                 cir.cancel();
             }
         }

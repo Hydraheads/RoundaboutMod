@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.corpses.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.corpses.FallenSkeleton;
 import net.hydra.jojomod.client.models.corpses.FallenSkeletonModel;
 import net.hydra.jojomod.entity.corpses.FallenZombie;
@@ -15,15 +15,15 @@ import net.minecraft.resources.ResourceLocation;
 
 public class FallenSkeletonRenderer extends HumanoidMobRenderer<FallenSkeleton, FallenSkeletonModel<FallenSkeleton>> {
     private static final ResourceLocation SKELETON_LOCATION = new ResourceLocation("textures/entity/skeleton/skeleton.png");
-    public static final ResourceLocation FALLEN_SKELETON_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton.png");
-    public static final ResourceLocation FALLEN_SKELETON_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION_2 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton_holes.png");
-    public static final ResourceLocation FALLEN_SKELETON_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION_B = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton_blue.png");
-    public static final ResourceLocation FALLEN_SKELETON_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION_G = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton_green.png");
-    public static final ResourceLocation FALLEN_SKELETON_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation FALLEN_SKELETON_LOCATION_R = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_skeleton_red.png");
 
     public FallenSkeletonRenderer(EntityRendererProvider.Context $$0) {

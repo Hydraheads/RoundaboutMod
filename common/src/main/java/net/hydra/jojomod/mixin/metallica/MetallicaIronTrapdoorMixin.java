@@ -23,13 +23,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MetallicaIronTrapdoorMixin {
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
-    private void roundabout$openIronTrapdoorWithMetallica(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sba$openIronTrapdoorWithMetallica(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
         if (state.is(Blocks.IRON_TRAPDOOR)) {
 
             boolean playerHasMetallica = false;
 
             if (player instanceof StandUser standUser) {
-                if (standUser.roundabout$getStandPowers() instanceof PowersMetallica) {
+                if (standUser.sba$getStandPowers() instanceof PowersMetallica) {
                     playerHasMetallica = true;
                 }
             }

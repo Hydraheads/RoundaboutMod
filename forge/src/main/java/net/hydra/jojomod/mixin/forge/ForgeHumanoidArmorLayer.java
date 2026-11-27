@@ -21,7 +21,7 @@ public class ForgeHumanoidArmorLayer {
 
     @Inject(method = "renderModel(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/item/ArmorItem;Lnet/minecraft/client/model/Model;ZFFFLnet/minecraft/resources/ResourceLocation;)V",
             at = @At(value = "HEAD"),cancellable = true, remap = false,require = 0)
-    public void roundabout$Render(PoseStack p_289664_, MultiBufferSource p_289689_, int p_289681_, ArmorItem p_289650_, Model p_289658_, boolean p_289668_, float p_289678_, float p_289674_, float p_289693_, ResourceLocation armorResource, CallbackInfo ci) {
+    public void sba$Render(PoseStack p_289664_, MultiBufferSource p_289689_, int p_289681_, ArmorItem p_289650_, Model p_289658_, boolean p_289668_, float p_289678_, float p_289674_, float p_289693_, ResourceLocation armorResource, CallbackInfo ci) {
         float fade = ClientUtil.getThrowFadeToTheEther();
         if (fade != 1) {
             if (fade <= 0){

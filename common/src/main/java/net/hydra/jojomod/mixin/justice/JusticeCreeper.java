@@ -20,20 +20,20 @@ public abstract class JusticeCreeper extends Monster implements IJusticeCreeper 
 
     /**This is a value used in the mob renderer to make creepers appear as a pig when transformed.*/
     @Unique
-    private static final EntityDataAccessor<Boolean> roundabout$IS_TRANSFORMED = SynchedEntityData.defineId(Creeper.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> sba$IS_TRANSFORMED = SynchedEntityData.defineId(Creeper.class, EntityDataSerializers.BOOLEAN);
 
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"))
-    protected void roundabout$DefineSyncedData(CallbackInfo ci) {
-        if (!((Creeper)(Object)this).getEntityData().hasItem(roundabout$IS_TRANSFORMED)) {
-            this.entityData.define(roundabout$IS_TRANSFORMED, false);
+    protected void sba$DefineSyncedData(CallbackInfo ci) {
+        if (!((Creeper)(Object)this).getEntityData().hasItem(sba$IS_TRANSFORMED)) {
+            this.entityData.define(sba$IS_TRANSFORMED, false);
         }
     }
     @Unique
-    public boolean roundabout$isTransformed(){
-        return this.getEntityData().get(roundabout$IS_TRANSFORMED);
+    public boolean sba$isTransformed(){
+        return this.getEntityData().get(sba$IS_TRANSFORMED);
     }
-    public void roundabout$setTransformed(boolean transformed){
-        this.getEntityData().set(roundabout$IS_TRANSFORMED, transformed);
+    public void sba$setTransformed(boolean transformed){
+        this.getEntityData().set(sba$IS_TRANSFORMED, transformed);
     }
 
 

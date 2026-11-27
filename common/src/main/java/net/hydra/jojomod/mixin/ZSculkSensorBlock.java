@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ZSculkSensorBlock {
 
     @Inject(method = "stepOn", at = @At(value = "HEAD"), cancellable = true)
-    private void RoundaboutCancelRenderTicks(Level $$0, BlockPos $$1, BlockState $$2, Entity $$3,
+    private void SBACancelRenderTicks(Level $$0, BlockPos $$1, BlockState $$2, Entity $$3,
                                              CallbackInfo ci){
         if (!$$0.isClientSide()){
             if ($$3 != null && PowerTypes.isExistentiallyElsewhere($$3) &&

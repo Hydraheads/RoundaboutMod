@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.minecraft.client.Minecraft;
@@ -19,7 +19,7 @@ import org.joml.Matrix4f;
 
 public final class DiverDownPointerRenderer {
     private static final ResourceLocation POINTER_ICON = new ResourceLocation(
-            Roundabout.MOD_ID, "textures/particle/pointer_diver_down.png");
+            SBA.MOD_ID, "textures/particle/pointer_diver_down.png");
 
     private DiverDownPointerRenderer() {}
 
@@ -29,7 +29,7 @@ public final class DiverDownPointerRenderer {
             return;
         }
 
-        if (((StandUser) viewer).roundabout$getStandPowers() instanceof PowersDiverDown dd) {
+        if (((StandUser) viewer).sba$getStandPowers() instanceof PowersDiverDown dd) {
             if (dd.isDiveActive() && !dd.isSelfDive() && dd.submergedTarget == entity) { */
         float size = 0.30F;
 

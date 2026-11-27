@@ -22,7 +22,7 @@ public class DataStructureTemplatePool {
      * rarities in the config*/
 
     @Inject(method = "<init>(Lnet/minecraft/core/Holder;Ljava/util/List;)V", at = @At(value = "RETURN"))
-    protected void roundabout$init(Holder $$0, List $$1, CallbackInfo ci) {
+    protected void sba$init(Holder $$0, List $$1, CallbackInfo ci) {
         Config conf = ClientNetworking.getAppropriateConfig();
         if (conf != null && conf.worldgenSettings != null && conf.worldgenSettings.modifyStructureWeights) {
 
@@ -33,9 +33,9 @@ public class DataStructureTemplatePool {
 
                 int second = pair.getSecond();
                 String str = structurePoolElement.toString();
-                if (str != null && str.contains("roundabout:meteorite_site")) {
+                if (str != null && str.contains("sba:meteorite_site")) {
                     second = conf.worldgenSettings.meteoriteWeight;
-                } else if (str != null && str.contains("roundabout:cinderella")) {
+                } else if (str != null && str.contains("sba:cinderella")) {
                     second = conf.worldgenSettings.cinderellaWeight;
                 }
 

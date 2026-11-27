@@ -1,6 +1,6 @@
 package net.hydra.jojomod.particles;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -15,7 +15,7 @@ public class RainShardParticle extends SimpleAnimatedParticle {
         this.gravity = 0;
         this.quadSize = 0.15f;
         this.lifetime = 40;
-        this.setAlpha(Roundabout.RANDOM.nextFloat(0.3f, 0.65f));
+        this.setAlpha(SBA.RANDOM.nextFloat(0.3f, 0.65f));
         this.setSpriteFromAge(spriteSet);
     }
 

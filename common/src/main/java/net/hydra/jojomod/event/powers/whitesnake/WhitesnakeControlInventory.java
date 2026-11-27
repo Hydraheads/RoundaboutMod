@@ -39,15 +39,15 @@ public final class WhitesnakeControlInventory {
     }
 
     public static WhitesnakeEntity controlledStand(Player player) {
-        StandEntity stand = ((StandUser) player).roundabout$getStand();
+        StandEntity stand = ((StandUser) player).sba$getStand();
         if (!(stand instanceof WhitesnakeEntity whitesnake)
-                || ((IPlayerEntity) player).roundabout$getControlling() != stand.getId()
+                || ((IPlayerEntity) player).sba$getControlling() != stand.getId()
                 || !stand.isAlive() || stand.isRemoved()) return null;
         return whitesnake;
     }
 
     public static NonNullList<ItemStack> get(Player player) {
-        return ((WhitesnakeInventoryAccess) player).roundaboutWhitesnake$getInventory();
+        return ((WhitesnakeInventoryAccess) player).sbaWhitesnake$getInventory();
     }
 
     public static ItemStack getSelected(Player player) {
@@ -110,7 +110,7 @@ public final class WhitesnakeControlInventory {
             }
         }
         int inserted = before - source.getCount();
-        if (inserted > 0) ((WhitesnakeInventoryAccess) player).roundaboutWhitesnake$syncInventory();
+        if (inserted > 0) ((WhitesnakeInventoryAccess) player).sbaWhitesnake$syncInventory();
         return inserted;
     }
 
@@ -179,7 +179,7 @@ public final class WhitesnakeControlInventory {
             amount -= removed;
             if (stack.isEmpty()) inventory.set(i, ItemStack.EMPTY);
         }
-        if (consumed > 0) ((WhitesnakeInventoryAccess) player).roundaboutWhitesnake$syncInventory();
+        if (consumed > 0) ((WhitesnakeInventoryAccess) player).sbaWhitesnake$syncInventory();
         return consumed;
     }
 

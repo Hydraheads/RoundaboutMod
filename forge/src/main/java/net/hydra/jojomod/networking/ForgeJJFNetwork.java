@@ -16,7 +16,7 @@ public final class ForgeJJFNetwork {
     private static final String PROTOCOL_VERSION = "2";
 
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation("roundabout", "jjf_network"),
+            new ResourceLocation("sba", "jjf_network"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals

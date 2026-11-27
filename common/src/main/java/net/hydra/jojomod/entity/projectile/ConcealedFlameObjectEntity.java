@@ -37,7 +37,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.UUID;
 
 public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implements UnburnableProjectile {
-    private void initDataTrackerRoundabout(CallbackInfo ci) {
+    private void initDataTrackerSBA(CallbackInfo ci) {
     }
     @Override
     protected float getGravity() {
@@ -129,7 +129,7 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
             this.setDeltaMovement(delta);
 
             if (!client && this.tickCount %2 == 0) {
-                if ($$0 instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                if ($$0 instanceof LivingEntity LE && ((StandUser) LE).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                     Vec3 $$2 = this.getDeltaMovement();
                     double $$3 = this.getX() + $$2.x;
                     double $$4 = this.getY() + $$2.y;
@@ -150,12 +150,12 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
         CompoundTag compoundtag = new CompoundTag();
-        $$0.put("roundabout.HeldItem",this.getItem().save(compoundtag));
+        $$0.put("sba.HeldItem",this.getItem().save(compoundtag));
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
-        CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+        CompoundTag compoundtag = $$0.getCompound("sba.HeldItem");
         ItemStack itemstack = ItemStack.of(compoundtag);
         this.setItem(itemstack);
         super.readAdditionalSaveData($$0);
@@ -230,7 +230,7 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
         LivingEntity user = this.getUser();
 
         if (source.getEntity() != null && user != null &&
-                ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                ((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
             if (source.getEntity().is(getUser()) ||
                     (source.getEntity().distanceTo(this) > 7 && source.is(DamageTypeTags.IS_PROJECTILE))) {
                 burst(PMR);
@@ -265,7 +265,7 @@ public class ConcealedFlameObjectEntity extends ThrowableItemProjectile implemen
         if (!this.level().isClientSide) {
             LivingEntity user = this.getUser();
             if (user != null &&
-                    ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                    ((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 if (!$$1.is(getUser())) {
                     burst(PMR);
                     if ($$1 instanceof LivingEntity LE) {

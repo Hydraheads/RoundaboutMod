@@ -1,0 +1,6 @@
+{
+  "parent": "sba:block/cultivation_pot_cross",
+  "textures": {
+    "plant": "sba:block/pot_locaca_1"
+  }
+}

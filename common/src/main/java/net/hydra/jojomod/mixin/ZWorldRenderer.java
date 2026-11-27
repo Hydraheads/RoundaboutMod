@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IDayInterpolationClientLevelData;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientEffectUtil;
@@ -80,12 +80,12 @@ public class ZWorldRenderer {
     }
 
     @Inject(method = "doesMobEffectBlockSky", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$doesMobEffectBlockSky(Camera $$0, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$doesMobEffectBlockSky(Camera $$0, CallbackInfoReturnable<Boolean> cir) {
 
     }
 
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$doNotDeltaTickEntityWhenTimeIsStopped1(Entity $$0, double $$1, double $$2, double $$3,
+    private void sba$doNotDeltaTickEntityWhenTimeIsStopped1(Entity $$0, double $$1, double $$2, double $$3,
             float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
 
         if (((TimeStop) level).inTimeStopRange($$0) && ((TimeStop) level).CanTimeStopEntity($$0)
@@ -94,40 +94,40 @@ public class ZWorldRenderer {
             double $$8 = Mth.lerp((double) $$4, $$0.yOld, $$0.getY());
             double $$9 = Mth.lerp((double) $$4, $$0.zOld, $$0.getZ());
             float $$10 = Mth.lerp($$4, $$0.yRotO, $$0.getYRot());
-            $$4 = ((IEntityAndData) $$0).roundabout$getPreTSTick();
+            $$4 = ((IEntityAndData) $$0).sba$getPreTSTick();
             this.entityRenderDispatcher
                     .render($$0, $$7 - $$1, $$8 - $$2, $$9 - $$3, $$10, $$4, $$5, $$6,
                             this.entityRenderDispatcher.getPackedLightCoords($$0, $$4));
             ci.cancel();
         } else {
             Minecraft mc = Minecraft.getInstance();
-            ((IEntityAndData) $$0).roundabout$setPreTSTick(mc.getFrameTime());
+            ((IEntityAndData) $$0).sba$setPreTSTick(mc.getFrameTime());
         }
     }
 
     @ModifyVariable(method = "renderSnowAndRain(Lnet/minecraft/client/renderer/LightTexture;FDDD)V", at = @At(value = "HEAD"), ordinal = 0)
-    private float roundabout$TSRainCancel(float $$1) {
+    private float sba$TSRainCancel(float $$1) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null) {
             if (((TimeStop) player.level()).inTimeStopRange(player)) {
-                return this.minecraft.level.getRainLevel(((IEntityAndData) player).roundabout$getPreTSTick());
+                return this.minecraft.level.getRainLevel(((IEntityAndData) player).sba$getPreTSTick());
             }
         }
         return $$1;
     }
 
     @Inject(method = "renderClouds", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5,
+    private void sba$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5,
             CallbackInfo ci) {
 
     }
 
     @ModifyVariable(method = "renderClouds(Lcom/mojang/blaze3d/vertex/PoseStack;Lorg/joml/Matrix4f;FDDD)V", at = @At(value = "HEAD"), ordinal = 0)
-    private float roundabout$TSCloudCancel(float $$2) {
+    private float sba$TSCloudCancel(float $$2) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null) {
             if (((TimeStop) player.level()).inTimeStopRange(player)) {
-                return ((IEntityAndData) player).roundabout$getPreTSTick();
+                return ((IEntityAndData) player).sba$getPreTSTick();
             }
         }
         return $$2;
@@ -135,24 +135,24 @@ public class ZWorldRenderer {
 
     /** Interpolate Time during/after timestop or made in heaven */
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
-    private void roundaboutRenderLevel(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4,
+    private void sbaRenderLevel(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4,
             GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci) {
         IDayInterpolationClientLevelData levelTimeData = ((IDayInterpolationClientLevelData) this.level.getLevelData());
-        if (levelTimeData.roundabout$getRoundaboutInterpolatingDaytime()) {
+        if (levelTimeData.sba$getSBAInterpolatingDaytime()) {
             /*
              * If a timestop is active, don't tick through a MIH or instead interpolate back
              */
-            if (!levelTimeData.roundabout$getRoundaboutTimeStopInitialized()) {
-                long dayTime = levelTimeData.roundabout$getRoundaboutDayTimeMinecraft();
-                long dayTimeOld = levelTimeData.roundabout$getRoundaboutDayTimeActual();
+            if (!levelTimeData.sba$getSBATimeStopInitialized()) {
+                long dayTime = levelTimeData.sba$getSBADayTimeMinecraft();
+                long dayTimeOld = levelTimeData.sba$getSBADayTimeActual();
                 long distance = dayTime - dayTimeOld;
                 if (Math.abs(distance) > 1L) {
-                    levelTimeData.roundabout$setRoundaboutDayTimeActual((long) (dayTimeOld
-                            + $$1 * Math.min(distance, levelTimeData.roundabout$getInterpolationMaxStep())));
-                    // levelTimeData.roundabout$setRoundaboutDayTimeActual((long)
+                    levelTimeData.sba$setSBADayTimeActual((long) (dayTimeOld
+                            + $$1 * Math.min(distance, levelTimeData.sba$getInterpolationMaxStep())));
+                    // levelTimeData.sba$setSBADayTimeActual((long)
                     // Mth.lerp((double)$$1, dayTimeOld, dayTime));
                 } else {
-                    levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(false);
+                    levelTimeData.sba$setSBAInterpolatingDaytime(false);
                 }
             }
         }
@@ -160,7 +160,7 @@ public class ZWorldRenderer {
     }
 
     @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/debug/DebugRenderer;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;DDD)V", shift = At.Shift.BEFORE))
-    private void roundabout$renderPurpleBox(
+    private void sba$renderPurpleBox(
             PoseStack poseStack,
             float partialTick,
             long finishTimeNano,
@@ -177,7 +177,7 @@ public class ZWorldRenderer {
         }
 
         if (ClientUtil.getPlayer() != null
-                && ((StandUser) ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersD4C pd4) {
+                && ((StandUser) ClientUtil.getPlayer()).sba$getStandPowers() instanceof PowersD4C pd4) {
             if (pd4.isInSelectionMode) {
                 if (pd4.altStartBlockPos != null) {
                     if (pd4.altEndBlockPos != null) {
@@ -236,7 +236,7 @@ public class ZWorldRenderer {
         }
         // hijacking d4c's block highlight for diver down ore highlight
         if (ClientUtil.getPlayer() != null
-                && ((StandUser) ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersDiverDown pdd) {
+                && ((StandUser) ClientUtil.getPlayer()).sba$getStandPowers() instanceof PowersDiverDown pdd) {
             if (pdd.isPiloting() && !pdd.detectedOres.isEmpty()) {
                     ClientEffectUtil.highlightBlocksThroughWalls(
                             poseStack,
@@ -252,7 +252,7 @@ public class ZWorldRenderer {
         }
         // what is a mere president to the king?
         if (ClientUtil.getPlayer() != null
-                && ((StandUser) ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
+                && ((StandUser) ClientUtil.getPlayer()).sba$getStandPowers() instanceof PowersKingNothing pkn) {
             if (pkn.isTrackingItem()) {
                 int color = pkn.getVisualInfo().highlightColor();
                 Set<BlockPos> alreadyRendered = new HashSet<>();
@@ -297,7 +297,7 @@ public class ZWorldRenderer {
     }
 
     @Inject(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V", ordinal = 0, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)
-    private void roundabout$RenderLevelEntities(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4,
+    private void sba$RenderLevelEntities(PoseStack $$0, float $$1, long $$2, boolean $$3, Camera $$4,
             GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci) {
         /*
          * Vec3 vec3 = $$4.getPosition();
@@ -339,7 +339,7 @@ public class ZWorldRenderer {
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    private void RoundaboutCancelRenderTicks(CallbackInfo ci) {
+    private void SBACancelRenderTicks(CallbackInfo ci) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null) {
             if (((TimeStop) player.level()).inTimeStopRange(player)) {

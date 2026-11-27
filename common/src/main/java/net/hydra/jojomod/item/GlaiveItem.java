@@ -1,6 +1,6 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
@@ -68,7 +68,7 @@ public class GlaiveItem extends SwordItem {
         ItemStack $$3 = $$1.getItemInHand($$2);
         if (ClientNetworking.getAppropriateConfig().itemSettings.noGlaiveDuringPunchRecharge) {
             if ($$1 != null) {
-                if (((StandUser) $$1).roundabout$getStandPowers().isInAttackString()) {
+                if (((StandUser) $$1).sba$getStandPowers().isInAttackString()) {
                     return InteractionResultHolder.fail($$3);
                 }
             }
@@ -78,7 +78,7 @@ public class GlaiveItem extends SwordItem {
             $$1.startUsingItem($$2);
                 if ($$1.getUseItem() == $$3 && $$1.getUseItemRemainingTicks() == $$1.getUseItem().getUseDuration()) {
                     if (!$$0.isClientSide) {
-                        ((StandUser) $$1).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
+                        ((StandUser) $$1).sba$getStandPowers().playSoundsIfNearby(SoundIndex.GLAIVE_CHARGE, 10, false);
                     }
                     return InteractionResultHolder.success($$3);
                 }
@@ -93,7 +93,7 @@ public class GlaiveItem extends SwordItem {
             int $$5 = this.getUseDuration($$0) - $$3;
             int itemTime = 20;
             if (!$$1.isClientSide) {
-                ((StandUser) $$4).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
+                ((StandUser) $$4).sba$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
             }
             if ($$5 >= itemTime) {
                 if ($$1.isClientSide){

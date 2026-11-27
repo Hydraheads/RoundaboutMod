@@ -42,7 +42,7 @@ public class MagiciansRedEntity extends FollowingStandEntity {
     }
 
     public boolean isPutOutByWater(){
-        if (this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+        if (this.getUser() != null && ((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersMagiciansRed PMR){
             return this.getUser().isUnderWater() || PMR.isInRain();
         }
         return false;

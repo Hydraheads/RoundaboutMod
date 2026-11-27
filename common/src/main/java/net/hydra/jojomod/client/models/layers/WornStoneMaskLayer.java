@@ -36,7 +36,7 @@ public class WornStoneMaskLayer<T extends LivingEntity, A extends HumanoidModel<
         boolean stoneMask = (MainUtil.isWearingStoneMask(entity));
         boolean bloodyMask = (MainUtil.isWearingBloodyStoneMask(entity));
         if (stoneMask || bloodyMask) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision())
+            if (((IEntityAndData)entity).sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)entity).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision())
                 return;
             LivingEntity livent = entity;
             float heyFull = 1;
@@ -50,7 +50,7 @@ public class WornStoneMaskLayer<T extends LivingEntity, A extends HumanoidModel<
             float g = isHurt ? 0.0F : 1.0F;
             float b = isHurt ? 0.0F : 1.0F;
             if (bloodyMask){
-                if (entity instanceof Player PE && ((IPlayerEntity)PE).roundabout$GetPoseEmote() == 12){
+                if (entity instanceof Player PE && ((IPlayerEntity)PE).sba$GetPoseEmote() == 12){
                     ModStrayModels.WORN_BLOODY_STONE_MASK.render(livent, partialTicks, poseStack, bufferSource, 15728880,
                             r, g, b, heyFull);
                 } else {

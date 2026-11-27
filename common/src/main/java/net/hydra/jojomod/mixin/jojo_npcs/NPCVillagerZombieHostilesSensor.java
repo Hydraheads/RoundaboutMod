@@ -16,14 +16,14 @@ public class NPCVillagerZombieHostilesSensor {
 
     /**Villages/Golems consider custom zombie types as enemies*/
     @Inject(method = "isHostile", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$customServerAiStep(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$customServerAiStep(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0 instanceof ZombieAesthetician PE){
             cir.setReturnValue(true);
             return;
         }
     }
     @Inject(method = "isClose", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$customServerAiStep(LivingEntity $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$customServerAiStep(LivingEntity $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
         if ($$1 instanceof ZombieAesthetician PE){
             cir.setReturnValue($$1.distanceToSqr($$0) <= (double)(64));
             return;

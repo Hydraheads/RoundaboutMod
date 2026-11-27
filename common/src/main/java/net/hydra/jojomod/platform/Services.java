@@ -1,6 +1,6 @@
 package net.hydra.jojomod.platform;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.platform.services.IPacketHelper;
 import net.hydra.jojomod.platform.services.IPlatformHelper;
 
@@ -26,7 +26,7 @@ public class Services {
         final T loadedService = ServiceLoader.load(clazz)
                 .findFirst()
                 .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
-        Roundabout.LOGGER.debug("Loaded {} for service {}", loadedService, clazz);
+        SBA.LOGGER.debug("Loaded {} for service {}", loadedService, clazz);
         return loadedService;
     }
 

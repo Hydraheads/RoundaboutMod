@@ -241,7 +241,7 @@ public class Zombiefish extends PathfinderMob {
                 this.setLastHurtByMob(null);
                 this.setLastHurtByPlayer(null);
                 this.setAggressive(false);
-                ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
+                ((StandUser)this).sba$deeplyRemoveAttackTarget();
             }
 
             if (controller == null || controller.isRemoved() || !controller.isAlive()){

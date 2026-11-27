@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sba:locacaca_pit"
+        }
+      ]
+    },
+    {
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sba:locacaca",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.8
+            },
+            {
+              "block": "sba:locacaca_plant",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": "4"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sba:locacaca_branch",
+          "conditions": [
+            {
+              "block": "sba:locacaca_plant",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": "3"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sba:locacaca_branch",
+          "conditions": [
+            {
+              "block": "sba:locacaca_plant",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": "4"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

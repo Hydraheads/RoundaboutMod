@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.SoftAndWetEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -13,25 +13,25 @@ import org.jetbrains.annotations.Nullable;
 
 public class SoftAndWetBaseRenderer<M extends StandEntity> extends StandRenderer<SoftAndWetEntity> {
 
-    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/manga.png");
-    private static final ResourceLocation LIGHT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/light.png");
-    private static final ResourceLocation BETA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/beta.png");
-    private static final ResourceLocation KING_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/king.png");
-    private static final ResourceLocation DROWNED_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/drowned.png");
-    private static final ResourceLocation FIGURE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/figure.png");
-    private static final ResourceLocation STRIPED_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/striped.png");
-    private static final ResourceLocation DEBUT_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/debut.png");
-    private static final ResourceLocation KIRA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/killer_queen.png");
-    private static final ResourceLocation COLORS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/colors.png");
-    private static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/green.png");
-    private static final ResourceLocation KNIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/knight.png");
-    private static final ResourceLocation MORIOH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/morioh.png");
-    private static final ResourceLocation NATURE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/nature.png");
-    private static final ResourceLocation ART = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/art.png");
-    private static final ResourceLocation MELON = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/melon.png");
-    private static final ResourceLocation WHEEL = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/wheel.png");
-    private static final ResourceLocation ACTION = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/action.png");
-    private static final ResourceLocation GREEN_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/soft_and_wet/green_2.png");
+    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/manga.png");
+    private static final ResourceLocation LIGHT_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/light.png");
+    private static final ResourceLocation BETA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/beta.png");
+    private static final ResourceLocation KING_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/king.png");
+    private static final ResourceLocation DROWNED_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/drowned.png");
+    private static final ResourceLocation FIGURE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/figure.png");
+    private static final ResourceLocation STRIPED_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/striped.png");
+    private static final ResourceLocation DEBUT_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/debut.png");
+    private static final ResourceLocation KIRA = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/killer_queen.png");
+    private static final ResourceLocation COLORS = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/colors.png");
+    private static final ResourceLocation GREEN = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/green.png");
+    private static final ResourceLocation KNIGHT = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/knight.png");
+    private static final ResourceLocation MORIOH = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/morioh.png");
+    private static final ResourceLocation NATURE = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/nature.png");
+    private static final ResourceLocation ART = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/art.png");
+    private static final ResourceLocation MELON = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/melon.png");
+    private static final ResourceLocation WHEEL = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/wheel.png");
+    private static final ResourceLocation ACTION = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/action.png");
+    private static final ResourceLocation GREEN_2 = new ResourceLocation(SBA.MOD_ID,"textures/stand/soft_and_wet/green_2.png");
 
     public SoftAndWetBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);

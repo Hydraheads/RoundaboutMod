@@ -23,9 +23,9 @@ public abstract class AnubisFoxItemMixin extends RenderLayer<Fox, FoxModel<Fox>>
     }
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/Fox;FFFFFF)V",at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$anubisCancelHeldItem(PoseStack $$0, MultiBufferSource $$1, int $$2, Fox $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+    private void sba$anubisCancelHeldItem(PoseStack $$0, MultiBufferSource $$1, int $$2, Fox $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         StandUser SU = (StandUser) $$3;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive($$3) ) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive($$3) ) {
             ci.cancel();
         }
     }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "sba:ginkgo_log"
+    }
+  },
+  "result": {
+    "item": "sba:ginkgo_wood",
+    "count": 3
+  }
+}

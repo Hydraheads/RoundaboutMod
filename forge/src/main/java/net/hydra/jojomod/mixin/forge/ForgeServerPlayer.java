@@ -36,14 +36,14 @@ public abstract class ForgeServerPlayer extends Player {
     }
 
     @Inject(method = "die", at = @At(value = "HEAD"))
-    public void roundabout$die(DamageSource $$0, CallbackInfo ci) {
+    public void sba$die(DamageSource $$0, CallbackInfo ci) {
         MainUtil.onDeath(this,$$0);
     }
     @Inject(method = "changeDimension", at = @At(value = "HEAD"), cancellable = true, remap = false)
-    private void roundabout$changeDim(ServerLevel p_9180_, net.minecraftforge.common.util.ITeleporter teleporter, CallbackInfoReturnable<Entity> cir) {
+    private void sba$changeDim(ServerLevel p_9180_, net.minecraftforge.common.util.ITeleporter teleporter, CallbackInfoReturnable<Entity> cir) {
         if (((Entity)(Object)this) instanceof LivingEntity LE){
-            if (((StandUser)this).roundabout$getStand() != null){
-                StandEntity stand = ((StandUser)this).roundabout$getStand();
+            if (((StandUser)this).sba$getStand() != null){
+                StandEntity stand = ((StandUser)this).sba$getStand();
                 if (!stand.getHeldItem().isEmpty()) {
                     if (stand.canAcquireHeldItem) {
                         double $$3 = this.getEyeY();
@@ -62,7 +62,7 @@ public abstract class ForgeServerPlayer extends Player {
                     }
                 }
             }
-            if (((StandUser) this).roundabout$getStandPowers() instanceof PowersDiverDown dd) {
+            if (((StandUser) this).sba$getStandPowers() instanceof PowersDiverDown dd) {
                 dd.emergeServer();
                 dd.recallLimbs();
             }

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "sba:shiny_quartz"
+  },
+  "result": "sba:shiny_quartz_tiles"
+}

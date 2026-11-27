@@ -7,16 +7,16 @@ import java.util.List;
 
 public interface IPostChainAccessor {
     /** Get all the passes defined by the post effect .json */
-    List<PostPass> roundabout$getPasses();
+    List<PostPass> sba$getPasses();
 
     /** Resizes the texture buffer if there's an update (i.e. window size changes). */
-    void roundabout$resize();
+    void sba$resize();
 
-    void roundabout$process(float tickDelta);
+    void sba$process(float tickDelta);
 
     /** Attempts to set the uniform in the post effect.
      * @return true if uniform is found, otherwise false */
-    boolean roundabout$setUniform(String name, Object value);
+    boolean sba$setUniform(String name, Object value);
 
     static IPostChainAccessor getInstance(PostChain chain)
     { return (IPostChainAccessor) chain; }

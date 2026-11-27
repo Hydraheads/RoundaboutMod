@@ -41,12 +41,12 @@ public abstract class blockContactInteraction {
 
     //@SuppressWarnings("deprecation")
     /*@Inject(method = "use", at = @At("TAIL"), cancellable = true)
-    public void roundabout$interaction(BlockState $$0, Level level, BlockPos pos, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> cir) {
+    public void sba$interaction(BlockState $$0, Level level, BlockPos pos, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> cir) {
         if (level != null && !level.isClientSide) {
             for (Entity ent : MainUtil.getEntitiesInRange(level, pos, 1.0f)) {
                 if (ent instanceof BlockBombEntity BBE) {
                     if (BBE.getUser() != null && BBE.getBlockPos() != null && BBE.getBlockPos().equals(pos)) {
-                        if (((StandUser)BBE.getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
+                        if (((StandUser)BBE.getUser()).sba$getStandPowers() instanceof PowersKillerQueen PKQ) {
                             PKQ.blockContact($$3);
                         }
                     }

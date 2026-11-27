@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MetallicaMobLootMixin {
 
     @Inject(method = "dropCustomDeathLoot", at = @At("RETURN"))
-    private void roundabout$dropIronNuggetsWithMetallica(DamageSource source, int looting, boolean hitByPlayer, CallbackInfo ci) {
+    private void sba$dropIronNuggetsWithMetallica(DamageSource source, int looting, boolean hitByPlayer, CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
 
         if (hitByPlayer && source.getEntity() instanceof Player player) {
@@ -24,7 +24,7 @@ public abstract class MetallicaMobLootMixin {
             boolean playerHasMetallica = false;
 
             if (player instanceof StandUser standUser) {
-                if (standUser.roundabout$getStandPowers() instanceof PowersMetallica) {
+                if (standUser.sba$getStandPowers() instanceof PowersMetallica) {
                     playerHasMetallica = true;
                 }
             }

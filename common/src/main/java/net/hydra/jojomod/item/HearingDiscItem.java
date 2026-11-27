@@ -14,15 +14,15 @@ public class HearingDiscItem extends AbstractBodyDiscItem {
     @Override
     protected boolean canImplant(ItemStack stack, LivingEntity target) {
         return WhitesnakeDiscUtil.isHearingDiscEnabled()
-                && !((DiscBearer) target).roundabout$ownsHearingDisc();
+                && !((DiscBearer) target).sba$ownsHearingDisc();
     }
 
     @Override
     protected void implant(ItemStack stack, LivingEntity target) {
         DiscBearer bearer = (DiscBearer) target;
-        bearer.roundabout$setHearingDiscOwnerId(DiscItemData.getOwnerId(stack));
-        bearer.roundabout$setHearingDiscOwnerName(DiscItemData.getOwnerName(stack));
-        bearer.roundabout$setHasHearingDisc(true);
+        bearer.sba$setHearingDiscOwnerId(DiscItemData.getOwnerId(stack));
+        bearer.sba$setHearingDiscOwnerName(DiscItemData.getOwnerName(stack));
+        bearer.sba$setHasHearingDisc(true);
     }
 
     @Override

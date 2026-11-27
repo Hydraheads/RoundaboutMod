@@ -61,7 +61,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     @Override
     public StandEntity getNewStandEntity(){
         if (this.getSelf() instanceof Player PE) {
-            byte skin = ((StandUser) PE).roundabout$getStandSkin();
+            byte skin = ((StandUser) PE).sba$getStandSkin();
             System.out.println("SKIN: " + skin + " COSMIC_CONST: " + PlanetWavesEntity.COSMIC + " ENTITY_TYPE: " + ModEntities.PLANET_WAVES_COSMIC);
             if (skin == PlanetWavesEntity.COSMIC) {
                 return ModEntities.PLANET_WAVES_COSMIC.create(this.getSelf().level());
@@ -86,7 +86,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.dropped").withStyle(ChatFormatting.YELLOW);
+        return Component.translatable(  "sba.dev_status.dropped").withStyle(ChatFormatting.YELLOW);
     }
     @Override
     public Component ifWipListDev(){
@@ -107,8 +107,8 @@ public class PowersPlanetWaves extends NewDashPreset {
             $$1.add(PlanetWavesEntity.PART_6_SKIN);
             $$1.add(PlanetWavesEntity.MANGA_SKIN);
             if (this.getSelf() instanceof Player PE) {
-                byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
-                ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+                byte Level = ((IPlayerEntity) PE).sba$getStandLevel();
+                ItemStack goldDisc = ((StandUser) PE).sba$getStandDisc();
                 boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
                 if (Level > 1 || bypass) {
                     $$1.add(PlanetWavesEntity.BLUE_SKIN);
@@ -125,7 +125,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                     $$1.add(PlanetWavesEntity.SPARTA);
                     $$1.add(PlanetWavesEntity.SPARTA2);
                 }
-                if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
+                if (((IPlayerEntity) PE).sba$getUnlockedBonusSkin() || bypass) {
                     $$1.add(PlanetWavesEntity.COSMIC);
                 }/* if (Level > 4 || bypass){
                 $$1.add(MagiciansRedEntity.GREEN_SKIN);
@@ -141,7 +141,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                 $$1.add(MagiciansRedEntity.MAGMA_SKIN);
                 $$1.add(MagiciansRedEntity.DEBUT_SKIN);
                 $$1.add(MagiciansRedEntity.BETA);
-            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+            } if (((IPlayerEntity)PE).sba$getUnlockedBonusSkin() || bypass){
                 $$1.add(MagiciansRedEntity.DREAD_BEAST_SKIN);
                 $$1.add(MagiciansRedEntity.DREAD_SKIN);
                 $$1.add(MagiciansRedEntity.DREAD_ABLAZE);
@@ -156,20 +156,20 @@ public class PowersPlanetWaves extends NewDashPreset {
     @Override public Component getSkinName(byte skinId) {
         switch (skinId)
         {
-            case PART_6_SKIN -> {return Component.translatable("skins.roundabout.planet_waves.base");}
-            case MANGA_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.manga");}
-            case BLUE_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.blue");}
-            case PURPLE_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.purple");}
-            case GREEN_SKIN  -> {return Component.translatable("skins.roundabout.planet_waves.green");}
-            case OCEAN_WAVES  -> {return Component.translatable("skins.roundabout.planet_waves.ocean_waves");}
-            case SYMPHONY_WAVES  -> {return Component.translatable("skins.roundabout.planet_waves.symphony_waves");}
-            case SPARTA  -> {return Component.translatable("skins.roundabout.planet_waves.sparta");}
-            case SPARTA2  -> {return Component.translatable("skins.roundabout.planet_waves.sparta2");}
-            case HALLOWEEN  -> {return Component.translatable("skins.roundabout.planet_waves.halloween");}
-            case COSMIC  -> {return Component.translatable("skins.roundabout.planet_waves.cosmic");}
-            case GRAPESODA  -> {return Component.translatable("skins.roundabout.planet_waves.grapesoda");}
+            case PART_6_SKIN -> {return Component.translatable("skins.sba.planet_waves.base");}
+            case MANGA_SKIN  -> {return Component.translatable("skins.sba.planet_waves.manga");}
+            case BLUE_SKIN  -> {return Component.translatable("skins.sba.planet_waves.blue");}
+            case PURPLE_SKIN  -> {return Component.translatable("skins.sba.planet_waves.purple");}
+            case GREEN_SKIN  -> {return Component.translatable("skins.sba.planet_waves.green");}
+            case OCEAN_WAVES  -> {return Component.translatable("skins.sba.planet_waves.ocean_waves");}
+            case SYMPHONY_WAVES  -> {return Component.translatable("skins.sba.planet_waves.symphony_waves");}
+            case SPARTA  -> {return Component.translatable("skins.sba.planet_waves.sparta");}
+            case SPARTA2  -> {return Component.translatable("skins.sba.planet_waves.sparta2");}
+            case HALLOWEEN  -> {return Component.translatable("skins.sba.planet_waves.halloween");}
+            case COSMIC  -> {return Component.translatable("skins.sba.planet_waves.cosmic");}
+            case GRAPESODA  -> {return Component.translatable("skins.sba.planet_waves.grapesoda");}
         }
-        return Component.translatable("skins.roundabout.planet_waves.base");
+        return Component.translatable("skins.sba.planet_waves.base");
 
     }
     public ResourceLocation getIconYes(int slot){
@@ -280,14 +280,14 @@ public class PowersPlanetWaves extends NewDashPreset {
     public void levelUp(){
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
-            byte level = ipe.roundabout$getStandLevel();
+            byte level = ipe.sba$getStandLevel();
             if (level == 4) {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
             } else { if(level== 3){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.both").
                         withStyle(ChatFormatting.AQUA), true);
-                }else ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.skins").
+                }else ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.skins").
                     withStyle(ChatFormatting.AQUA), true);
             }
         }
@@ -315,22 +315,22 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         if (this.getSelf() instanceof Player PE) {
             Level lv = this.getSelf().level();
-            ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
+            ItemStack goldDisc = ((StandUser) PE).sba$getStandDisc();
             StandUser user = (StandUser) PE;
             IPlayerEntity ipe = (IPlayerEntity) PE;
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
 
-            if (!ipe.roundabout$getUnlockedBonusSkin() && !bypass && this.self.getY() > 319) {
-                ipe.roundabout$setUnlockedBonusSkin(true);
+            if (!ipe.sba$getUnlockedBonusSkin() && !bypass && this.self.getY() > 319) {
+                ipe.sba$setUnlockedBonusSkin(true);
                 playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                         PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                 sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                         PE.getY() + PE.getEyeHeight(), PE.getZ(),
                         10, 0.5, 0.5, 0.5, 0.2);
-                user.roundabout$setStandSkin(PlanetWavesEntity.COSMIC); //COSMIC
+                user.sba$setStandSkin(PlanetWavesEntity.COSMIC); //COSMIC
                 ((ServerPlayer) PE).displayClientMessage(
-                        Component.translatable("unlock_skin.roundabout.planet_waves_cosmic"), true);
-                user.roundabout$summonStand(lv, true, false);
+                        Component.translatable("unlock_skin.sba.planet_waves_cosmic"), true);
+                user.sba$summonStand(lv, true, false);
             }
         }
         bigmeteor();
@@ -1079,7 +1079,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                     restrainHoldTicks = 60; // 3 seconds
 
                     if (restrainedEntity instanceof Mob mob) mob.setNoAi(true);
-                    if (entity instanceof StandUser SU)      SU.roundabout$setRestrainedTicks(60); // 3 seconds
+                    if (entity instanceof StandUser SU)      SU.sba$setRestrainedTicks(60); // 3 seconds
 
                     byte grabAnim;
                     byte animType;
@@ -1100,7 +1100,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         if (restrainedEntity != null && stand != null) {
 
             if (restrainedEntity instanceof StandUser SU) {
-                SU.roundabout$setRestrainedTicks(20);
+                SU.sba$setRestrainedTicks(20);
             }
 
             boolean dead = !restrainedEntity.isAlive();
@@ -1163,7 +1163,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             mob.setNoAi(false);
         }
         if (restrainedEntity instanceof StandUser SU) {
-            SU.roundabout$setRestrainedTicks(0);
+            SU.sba$setRestrainedTicks(0);
         }
         restrainedEntity = null;
         grabCooldownTicks = GRAB_COOLDOWN;
@@ -1253,7 +1253,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         }
         if(ClientNetworking.getAppropriateConfig().PlanetWavesSettings.PWtrackingmessage=false) {
             if (!isClient() && this.self instanceof ServerPlayer PE) {
-                PE.displayClientMessage(Component.translatable("text.roundabout.planet_waves.meteor_tracking_message").withStyle(ChatFormatting.RED), true);
+                PE.displayClientMessage(Component.translatable("text.sba.planet_waves.meteor_tracking_message").withStyle(ChatFormatting.RED), true);
             }
         }else redicon=true;
 
@@ -1312,7 +1312,7 @@ public class PowersPlanetWaves extends NewDashPreset {
             if (!isClient() && this.self instanceof ServerPlayer PE) {
                 PE.displayClientMessage(
                         Component.translatable(
-                                        "text.roundabout.planet_waves.meteor_tracking_message_off")
+                                        "text.sba.planet_waves.meteor_tracking_message_off")
                                 .withStyle(ChatFormatting.RED),
                         true
                 );
@@ -1419,7 +1419,7 @@ public class PowersPlanetWaves extends NewDashPreset {
                     && !this.self.isUnderWater()) {
 
                 ((StandUser) this.getSelf())
-                        .roundabout$tryPower(PowerIndex.POWER_1, true);
+                        .sba$tryPower(PowerIndex.POWER_1, true);
             }
 
             else if (dist > 8
@@ -1432,7 +1432,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
                 if (RNG < 0.2) {
                     ((StandUser) this.getSelf())
-                            .roundabout$tryPower(PowerIndex.POWER_2, true);
+                            .sba$tryPower(PowerIndex.POWER_2, true);
                 }
             }
 
@@ -1453,12 +1453,12 @@ public class PowersPlanetWaves extends NewDashPreset {
                                 && activePower == PowerIndex.NONE) {
 
                             ((StandUser) this.getSelf())
-                                    .roundabout$tryPower(PowerIndex.POWER_2, true);
+                                    .sba$tryPower(PowerIndex.POWER_2, true);
 
                         } else {
 
                             ((StandUser) this.getSelf())
-                                    .roundabout$tryPower(PowerIndex.ATTACK, true);
+                                    .sba$tryPower(PowerIndex.ATTACK, true);
                         }
                     }
                 }
@@ -1466,7 +1466,7 @@ public class PowersPlanetWaves extends NewDashPreset {
 
         }
     }
-//summon minecraft:zombie ~ ~ ~ {roundabout.StandDisc:{id:"roundabout:max_planet_waves_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
+//summon minecraft:zombie ~ ~ ~ {sba.StandDisc:{id:"sba:max_planet_waves_disc",tag:{Memory:{Pose:0b,Skin:1b}},Count:1b}}
     @Override
     protected Byte getSummonSound() {
         return SoundIndex.SUMMON_SOUND;
@@ -1660,31 +1660,31 @@ public class PowersPlanetWaves extends NewDashPreset {
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.meteor_shower",
-                "instruction.roundabout.press_skill", StandIcons.PLANET_WAVES_METEOR_SHOWER, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.big_meteor",
-                "instruction.roundabout.press_skill", StandIcons.PLANET_WAVES_BIG_METEOR,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.forced_dissintegration",
-                "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_FORCED_DISINTEGRATION,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 3, "ability.roundabout.stand_targeting",
-                "instruction.roundabout.press_skill", StandIcons.PLANET_WAVES_STAND_TARGETING, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 3, "ability.roundabout.stand_retrieving",
-                "instruction.roundabout.press_skill", StandIcons.PLANET_WAVES_STAND_RETRIEVING, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 4, "ability.roundabout.meteor_tracking",
-                "instruction.roundabout.press_skill_crouch", StandIcons.PLANET_WAVES_METEOR_TRACKING, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.desintegration",
-                "instruction.roundabout.passive", StandIcons.PLANET_WAVES_DESINTEGRATION, 4, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.grab",
-                "instruction.roundabout.passive", StandIcons.PLANET_WAVES_GRAB, 4, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.meteor_shower",
+                "instruction.sba.press_skill", StandIcons.PLANET_WAVES_METEOR_SHOWER, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.big_meteor",
+                "instruction.sba.press_skill", StandIcons.PLANET_WAVES_BIG_METEOR,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.forced_dissintegration",
+                "instruction.sba.press_skill_crouch", StandIcons.PLANET_WAVES_FORCED_DISINTEGRATION,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 3, "ability.sba.stand_targeting",
+                "instruction.sba.press_skill", StandIcons.PLANET_WAVES_STAND_TARGETING, 4, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 3, "ability.sba.stand_retrieving",
+                "instruction.sba.press_skill", StandIcons.PLANET_WAVES_STAND_RETRIEVING, 4, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 4, "ability.sba.meteor_tracking",
+                "instruction.sba.press_skill_crouch", StandIcons.PLANET_WAVES_METEOR_TRACKING, 4, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.sba.desintegration",
+                "instruction.sba.passive", StandIcons.PLANET_WAVES_DESINTEGRATION, 4, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.sba.grab",
+                "instruction.sba.passive", StandIcons.PLANET_WAVES_GRAB, 4, level, bypass));
 
         return $$1;
 
 
     }
     public byte getFireballColor(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skn = ((StandUser)this.getSelf()).sba$getStandSkin();
 
         return switch (skn) {
             /*case PlanetWavesEntity.BLUE_SKIN, PlanetWavesEntity.BLUE_ACE_SKIN, PlanetWavesEntity.BLUE_ABLAZE, PlanetWavesEntity.SKELETAL -> StandFireType.BLUE.id;
@@ -1717,7 +1717,7 @@ public class PowersPlanetWaves extends NewDashPreset {
     }
 
     public SimpleParticleType getFlameParticle(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skn = ((StandUser)this.getSelf()).sba$getStandSkin();
 
         return switch (skn) {
             //case PlanetWavesEntity.SPARTA
@@ -1730,7 +1730,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         };
     }
     public SimpleParticleType getFireballEXPLOSIONParticle(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skn = ((StandUser)this.getSelf()).sba$getStandSkin();
 
         return switch (skn) {
 
@@ -1744,7 +1744,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         };
     }
     public SimpleParticleType getBlastwaveEXPLOSIONParticle(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skn = ((StandUser)this.getSelf()).sba$getStandSkin();
 
         return switch (skn) {
 
@@ -1758,7 +1758,7 @@ public class PowersPlanetWaves extends NewDashPreset {
         };
     }
     public SimpleParticleType getMushroomEXPLOSIONParticle(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skn = ((StandUser)this.getSelf()).sba$getStandSkin();
 
         return switch (skn) {
 

@@ -20,11 +20,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MouseHandler.class)
 public abstract class MemoryMouseHandler {
     @Inject(method = "turnPlayer()V", at = @At("HEAD"), cancellable = true)
-    private void roundabout$memoryControlsView(CallbackInfo ci) {
-        Entity stand = roundabout$getControlledStand();
+    private void sba$memoryControlsView(CallbackInfo ci) {
+        Entity stand = sba$getControlledStand();
         if (stand != null) {
             ci.cancel();
-            roundabout$turnControlledStand(stand);
+            sba$turnControlledStand(stand);
             return;
         }
         if (minecraft.player != null && !DiscItemData.hasPlayerControl(minecraft.player)) {
@@ -32,7 +32,7 @@ public abstract class MemoryMouseHandler {
         }
     }
 
-    private void roundabout$turnControlledStand(Entity stand) {
+    private void sba$turnControlledStand(Entity stand) {
         double time = Blaze3D.getTime();
         double elapsed = time - lastMouseEventTime;
         lastMouseEventTime = time;
@@ -69,10 +69,10 @@ public abstract class MemoryMouseHandler {
         WhitesnakeControlClient.turnCamera(stand, yawDelta, pitchDelta);
     }
 
-    private Entity roundabout$getControlledStand() {
+    private Entity sba$getControlledStand() {
         LocalPlayer player = minecraft.player;
         if (player == null
-                || !(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
+                || !(((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers)
                 || !powers.isPiloting()) return null;
         return powers.getPilotingStand();
     }

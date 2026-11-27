@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class GEThornRenderer extends EntityRenderer<GEThornEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation("roundabout", "textures/entity/ge_thorn.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation("sba", "textures/entity/ge_thorn.png");
     private final GEThornModel model;
 
     public GEThornRenderer(EntityRendererProvider.Context context) {

@@ -70,10 +70,10 @@ public final class CommandDiscItem extends Item {
         }
         if (applied && target instanceof ServerPlayer player) {
             String message = switch (command) {
-                case JUMP_BACK -> "message.roundabout.command.jump_back";
-                case ATTACK -> "message.roundabout.command.attack";
-                case FORGET -> "message.roundabout.command.forget";
-                case EXPLOSIVE -> "message.roundabout.command.explosive";
+                case JUMP_BACK -> "message.sba.command.jump_back";
+                case ATTACK -> "message.sba.command.attack";
+                case FORGET -> "message.sba.command.forget";
+                case EXPLOSIVE -> "message.sba.command.explosive";
             };
             player.displayClientMessage(Component.translatable(message), true);
         }
@@ -142,7 +142,7 @@ public final class CommandDiscItem extends Item {
         neutral.setLastHurtByPlayer(null);
         mob.setTarget(null);
         mob.getNavigation().stop();
-        ((StandUser) target).roundabout$deeplyRemoveAttackTarget();
+        ((StandUser) target).sba$deeplyRemoveAttackTarget();
         return true;
     }
 

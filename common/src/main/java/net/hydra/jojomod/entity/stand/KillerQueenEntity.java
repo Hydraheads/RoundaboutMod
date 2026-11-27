@@ -326,7 +326,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
         }
 
 
-        Direction dir = ((IGravityEntity)standUser).roundabout$getGravityDirection();
+        Direction dir = ((IGravityEntity)standUser).sba$getGravityDirection();
         Vec3 offset = new Vec3(
                 (- (-1 * (r * (Math.sin(ang / 180))))),
                 (0.9f - yy),
@@ -345,7 +345,7 @@ public class KillerQueenEntity extends FollowingStandEntity {
 
 
     public LivingEntity getFollowingAggressive() {
-        if ((getUser() != null) && (((StandUser)getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) && PKQ.inBitesTheDustMode()) {
+        if ((getUser() != null) && (((StandUser)getUser()).sba$getStandPowers() instanceof PowersKillerQueen PKQ) && PKQ.inBitesTheDustMode()) {
             return PKQ.bitesTheDustPlantedEntity;
         }
 

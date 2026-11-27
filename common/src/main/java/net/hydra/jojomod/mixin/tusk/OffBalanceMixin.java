@@ -23,7 +23,7 @@ public abstract class OffBalanceMixin extends Entity implements TraceableEntity 
     }
 
     @ModifyVariable(method = "shoot", at = @At("HEAD"), index = 8, argsOnly = true)
-    private float roundabout$modifyAccuracy(float h) {
+    private float sba$modifyAccuracy(float h) {
         if (this.getOwner() != null) {
             if (this.getOwner() instanceof LivingEntity LE) {
                 if (LE instanceof AbstractSkeleton){

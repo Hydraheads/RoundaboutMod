@@ -1,6 +1,6 @@
 package net.hydra.jojomod.event.powers.visagedata.voicedata;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.VoiceLine;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.world.entity.LivingEntity;

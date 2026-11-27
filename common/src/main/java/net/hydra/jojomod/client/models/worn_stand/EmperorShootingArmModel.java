@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.LayerAnimations;
@@ -22,7 +22,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class EmperorShootingArmModel extends PsuedoHierarchicalModel {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "emperor_shooting_arm"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(SBA.MOD_ID, "emperor_shooting_arm"), "main");
     private final ModelPart armAddon;
     private final ModelPart Root;
 
@@ -66,9 +66,9 @@ public class EmperorShootingArmModel extends PsuedoHierarchicalModel {
     public void setupAnim(Entity var1,  float pAgeInTicks) {
 
     }
-    public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation anime = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/emperor/emperor_anime.png");
-    public static ResourceLocation manga = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation manga = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/emperor/emperor_manga.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){

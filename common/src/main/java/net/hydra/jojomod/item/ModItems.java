@@ -1,7 +1,7 @@
 package net.hydra.jojomod.item;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.powers.StandPowers;
 import net.hydra.jojomod.event.powers.VisageStoreEntry;
@@ -495,7 +495,7 @@ public class ModItems {
 
     /// Registers a stand disc and a max stand disc by the powers and base disc item name.
     /// @param powers The stand powers. Usually from new Powers(null);
-    /// @param itemLocation The stand disc name. An example being <code>new ResourceLocation(Roundabout.MOD_ID, "the_world_disc")</code>
+    /// @param itemLocation The stand disc name. An example being <code>new ResourceLocation(SBA.MOD_ID, "the_world_disc")</code>
     /// @return Returns a list of the items created. First index is the regular stand disc, second being maximum.
     public static <T extends StandPowers> List<Item> registerStand(T powers, ResourceLocation itemLocation)
     {
@@ -504,7 +504,7 @@ public class ModItems {
 
     /// Registers a stand disc (and a max stand disc when requested) by the powers and base disc item name.
     /// @param powers The stand powers. Usually from new Powers(null);
-    /// @param itemLocation The stand disc location. An example being <code>new ResourceLocation(Roundabout.MOD_ID, "the_world_disc")</code>
+    /// @param itemLocation The stand disc location. An example being <code>new ResourceLocation(SBA.MOD_ID, "the_world_disc")</code>
     /// @return Returns a list of the items created. First index is the regular stand disc, second being maximum.
     public static <T extends StandPowers> List<Item> registerStand(T powers, ResourceLocation itemLocation, boolean maxDisc)
     {
@@ -527,7 +527,7 @@ public class ModItems {
     }
 
     private static Item registerItem(String name, Item item){
-        return Registry.register(BuiltInRegistries.ITEM, Roundabout.location(name), item);
+        return Registry.register(BuiltInRegistries.ITEM, SBA.location(name), item);
     }
 
     private static Item registerItem(ResourceLocation location, Item item){

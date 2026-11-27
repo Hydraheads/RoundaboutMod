@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.SmithingScreen;
 import net.minecraft.world.inventory.SmithingMenu;
@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class DiverDownSmithingScreen extends SmithingScreen {
     private static final ResourceLocation TEXTURE =
-        new ResourceLocation(Roundabout.MOD_ID, "textures/gui/diver_down/workbench_ui/smithing_table.png");
+        new ResourceLocation(SBA.MOD_ID, "textures/gui/diver_down/workbench_ui/smithing_table.png");
 
     public DiverDownSmithingScreen(SmithingMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

@@ -23,8 +23,8 @@ public final class MemoryPersonality {
 
     public static boolean hasHorseMemory(LivingEntity entity) {
         DiscBearer bearer = (DiscBearer) entity;
-        return bearer.roundabout$hasMemoryDisc()
-                && bearer.roundabout$getMemoryPersonality() == HORSE;
+        return bearer.sba$hasMemoryDisc()
+                && bearer.sba$getMemoryPersonality() == HORSE;
     }
 
     public static byte classify(LivingEntity entity) {

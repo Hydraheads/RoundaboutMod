@@ -30,35 +30,35 @@ public abstract class PilotingCamera implements ICamera {
      * needing to spectate them*/
 
     @Unique
-    private Entity roundabout$povSwitch;
+    private Entity sba$povSwitch;
     @Override
     @Unique
-    public void roundabout$setEntity(Entity entity){
-        if (roundabout$povSwitch != entity) {
-            this.roundabout$povSwitch = entity;
+    public void sba$setEntity(Entity entity){
+        if (sba$povSwitch != entity) {
+            this.sba$povSwitch = entity;
         }
     }
     @Override
     @Unique
-    public Entity roundabout$getPovSwitch(){
-        return roundabout$povSwitch;
+    public Entity sba$getPovSwitch(){
+        return sba$povSwitch;
     }
 
     @Unique
-    public float roundabout$getViewXRot(Entity ent, float $$0) {
+    public float sba$getViewXRot(Entity ent, float $$0) {
         return $$0 == 1.0F ? ent.getXRot() : MainUtil.controlledLerpAngleDegrees($$0%1,ent.xRotO,ent.getXRot(),1);
     }
     
     @Unique
-    public float roundabout$getViewYRot(Entity ent, float $$0) {
+    public float sba$getViewYRot(Entity ent, float $$0) {
         return $$0 == 1.0F ? ent.getYRot() : MainUtil.controlledLerpAngleDegrees($$0%1,ent.yRotO,ent.getYRot(),1);
     }
     @Unique
-    public void roundabout$setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f) {
+    public void sba$setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f) {
         if (entity != null) {
             /**Gravity Edition*/
-            Direction gravityDirection = GravityAPI.getGravityDirection(roundabout$povSwitch);
-            RotationAnimation animation = GravityAPI.getRotationAnimation(roundabout$povSwitch);
+            Direction gravityDirection = GravityAPI.getGravityDirection(sba$povSwitch);
+            RotationAnimation animation = GravityAPI.getRotationAnimation(sba$povSwitch);
             if (animation != null) {
                 long timeMs = entity.level().getGameTime() * 50 + (long) (f%1 * 50);
                 animation.update(timeMs);
@@ -68,14 +68,14 @@ public abstract class PilotingCamera implements ICamera {
                     this.entity = entity;
                     this.detached = bl;
 
-                    this.setRotation(roundabout$getViewYRot(roundabout$povSwitch,f),roundabout$getViewXRot(roundabout$povSwitch,f));
+                    this.setRotation(sba$getViewYRot(sba$povSwitch,f),sba$getViewXRot(sba$povSwitch,f));
 
 
                     Quaternionf gravityRotation = animation.getCurrentGravityRotation(gravityDirection, timeMs);
 
-                    double entityX = Mth.lerp((double) f, roundabout$povSwitch.xo, roundabout$povSwitch.getX());
-                    double entityY = Mth.lerp((double) f, roundabout$povSwitch.yo, roundabout$povSwitch.getY());
-                    double entityZ = Mth.lerp((double) f, roundabout$povSwitch.zo, roundabout$povSwitch.getZ());
+                    double entityX = Mth.lerp((double) f, sba$povSwitch.xo, sba$povSwitch.getX());
+                    double entityY = Mth.lerp((double) f, sba$povSwitch.yo, sba$povSwitch.getY());
+                    double entityZ = Mth.lerp((double) f, sba$povSwitch.zo, sba$povSwitch.getZ());
 
                     double currentCameraY = Mth.lerp(f, this.eyeHeightOld, this.eyeHeight);
 
@@ -96,8 +96,8 @@ public abstract class PilotingCamera implements ICamera {
                         }
 
                         this.move(-this.getMaxZoom(4.0), 0.0, 0.0);
-                    } else if (roundabout$povSwitch instanceof LivingEntity && ((LivingEntity) roundabout$povSwitch).isSleeping()) {
-                        Direction $$5 = ((LivingEntity) roundabout$povSwitch).getBedOrientation();
+                    } else if (sba$povSwitch instanceof LivingEntity && ((LivingEntity) sba$povSwitch).isSleeping()) {
+                        Direction $$5 = ((LivingEntity) sba$povSwitch).getBedOrientation();
                         this.setRotation($$5 != null ? $$5.toYRot() - 180.0F : 0.0F, 0.0F);
                         this.move(0.0, 0.3, 0.0);
                     }
@@ -114,62 +114,62 @@ public abstract class PilotingCamera implements ICamera {
         this.level = blockGetter;
         this.entity = entity;
         this.detached = true;
-        this.setRotation(roundabout$getViewYRot(roundabout$povSwitch,f),roundabout$getViewXRot(roundabout$povSwitch,f));
-        double xx = Mth.lerp((double)f, roundabout$povSwitch.xo, roundabout$povSwitch.getX());
-        double yy = Mth.lerp((double)f, roundabout$povSwitch.yo, roundabout$povSwitch.getY()) +
+        this.setRotation(sba$getViewYRot(sba$povSwitch,f),sba$getViewXRot(sba$povSwitch,f));
+        double xx = Mth.lerp((double)f, sba$povSwitch.xo, sba$povSwitch.getX());
+        double yy = Mth.lerp((double)f, sba$povSwitch.yo, sba$povSwitch.getY()) +
                 (double)Mth.lerp(f, this.eyeHeightOld, this.eyeHeight);
-        double zz = Mth.lerp((double)f, roundabout$povSwitch.zo, roundabout$povSwitch.getZ());
+        double zz = Mth.lerp((double)f, sba$povSwitch.zo, sba$povSwitch.getZ());
         this.setPosition(xx, yy, zz);
         if (bl) {
             if (bl2) {
                 this.setRotation(this.yRot + 180.0f, -this.xRot);
             }
             this.move(-this.getMaxZoom(4.0), 0.0, 0.0);
-        } else if (roundabout$povSwitch instanceof LivingEntity && ((LivingEntity)roundabout$povSwitch).isSleeping()) {
-            Direction direction = ((LivingEntity)roundabout$povSwitch).getBedOrientation();
+        } else if (sba$povSwitch instanceof LivingEntity && ((LivingEntity)sba$povSwitch).isSleeping()) {
+            Direction direction = ((LivingEntity)sba$povSwitch).getBedOrientation();
             this.setRotation(direction != null ? direction.toYRot() - 180.0f : 0.0f, 0.0f);
             this.move(0.0, 0.3, 0.0);
         }
     }
     @Inject(method = "isDetached", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$isDetached(CallbackInfoReturnable<Boolean> cir) {
-        if (roundabout$povSwitch != null){
+    private void sba$isDetached(CallbackInfoReturnable<Boolean> cir) {
+        if (sba$povSwitch != null){
             cir.setReturnValue(true);
         }
     }
         @Unique
-    public boolean roundabout$cleared = false;
+    public boolean sba$cleared = false;
     @Inject(method = "setup", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$setup2(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
-        if (!roundabout$cleared) {
+    private void sba$setup2(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float f, CallbackInfo ci) {
+        if (!sba$cleared) {
             if (entity != null && ((TimeStop) entity.level()).CanTimeStopEntity(entity) && !entity.isPassenger()) {
-                    f = ((IEntityAndData) entity).roundabout$getPreTSTick();
-                    roundabout$cleared = true;
+                    f = ((IEntityAndData) entity).sba$getPreTSTick();
+                    sba$cleared = true;
                     this.setup(blockGetter, entity, bl, bl2, f);
-                    roundabout$cleared = false;
+                    sba$cleared = false;
                 ci.cancel();
                 return;
             }
         }
 
-        if (roundabout$povSwitch != null && entity != null && !roundabout$povSwitch.is(entity)){
-            if (roundabout$povSwitch.isAlive() && !roundabout$povSwitch.isRemoved()){
-                roundabout$setup(blockGetter, entity, bl, bl2, f);
+        if (sba$povSwitch != null && entity != null && !sba$povSwitch.is(entity)){
+            if (sba$povSwitch.isAlive() && !sba$povSwitch.isRemoved()){
+                sba$setup(blockGetter, entity, bl, bl2, f);
                 ci.cancel();
                 return;
             } else {
-                roundabout$povSwitch = null;
+                sba$povSwitch = null;
             }
         } else {
-            roundabout$povSwitch = null;
+            sba$povSwitch = null;
         }
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$tick(CallbackInfo ci) {
-        if (roundabout$povSwitch != null && !(entity !=null && roundabout$povSwitch.is(entity))){
+    private void sba$tick(CallbackInfo ci) {
+        if (sba$povSwitch != null && !(entity !=null && sba$povSwitch.is(entity))){
             this.eyeHeightOld = this.eyeHeight;
-            this.eyeHeight += (this.roundabout$povSwitch.getEyeHeight() - this.eyeHeight) * 0.5f;
+            this.eyeHeight += (this.sba$povSwitch.getEyeHeight() - this.eyeHeight) * 0.5f;
             ci.cancel();
         }
     }

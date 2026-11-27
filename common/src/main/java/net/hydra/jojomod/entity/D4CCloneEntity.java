@@ -713,9 +713,9 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
                 ItemStack $$1 = item.getItem();
                 Item $$2 = $$1.getItem();
                 int $$3 = $$1.getCount();
-                if (((IItemEntityAccess)item).roundabout$getPickupDelay() == 0 &&
-                        (((IItemEntityAccess)item).roundabout$getTarget() == null ||
-                                ((IItemEntityAccess)item).roundabout$getTarget().equals(this.getUUID()))) {
+                if (((IItemEntityAccess)item).sba$getPickupDelay() == 0 &&
+                        (((IItemEntityAccess)item).sba$getTarget() == null ||
+                                ((IItemEntityAccess)item).sba$getTarget().equals(this.getUUID()))) {
                     if (inventory.canAddItem($$1)) {
                         inventory.addItem($$1);
                         this.take(item, $$3);
@@ -850,15 +850,15 @@ public class D4CCloneEntity extends CloneEntity implements ContainerListener,Has
 
     public void openCustomInventoryScreen(Player player) {
         if (!this.level().isClientSide) {
-            ((IPlayerEntityServer)player).roundabout$openD4CCloneInventory(this, this.inventory);
+            ((IPlayerEntityServer)player).sba$openD4CCloneInventory(this, this.inventory);
         }
     }
 
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (getPlayerUUID().isPresent()) {
             if (player.getUUID().equals(getPlayerUUID().get())) {
-                if (((StandUser)player).roundabout$getStandPowers() instanceof PowersD4C pd4c && pd4c.isInSelectionMode
-                    || !((StandUser)player).roundabout$getActive()
+                if (((StandUser)player).sba$getStandPowers() instanceof PowersD4C pd4c && pd4c.isInSelectionMode
+                    || !((StandUser)player).sba$getActive()
                 ) {
                     setInteractedPlayer(player);
                     this.openCustomInventoryScreen(player);

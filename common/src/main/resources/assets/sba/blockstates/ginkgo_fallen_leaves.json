@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "": [
+      { "model": "sba:block/ginkgo_fallen_leaves" },
+      { "model": "sba:block/ginkgo_fallen_leaves", "y": 90 },
+      { "model": "sba:block/ginkgo_fallen_leaves", "y": 180 },
+      { "model": "sba:block/ginkgo_fallen_leaves", "y": 270 }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.registry;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.menu.LyinEyesInventoryMenu;
 import net.hydra.jojomod.menu.ModMenus;
 import net.hydra.jojomod.menu.GamblingTableMenu;
@@ -15,7 +15,7 @@ public final class ForgeMenus {
         //there's no registry yet for custom UI that doesn't use the default minecraft abstract menu, so I had to make one for the custom Diver Down workbenches textures.
         //If somebody has a better way to do this, please message me on discord- 88superguy
         public static final DeferredRegister<MenuType<?>> MENUS =
-                DeferredRegister.create(ForgeRegistries.MENU_TYPES, Roundabout.MOD_ID);
+                DeferredRegister.create(ForgeRegistries.MENU_TYPES, SBA.MOD_ID);
 
         //Diver Down Crafting Table registry
         public static final RegistryObject<MenuType<CraftingMenu>> DIVER_DOWN_CRAFTING =

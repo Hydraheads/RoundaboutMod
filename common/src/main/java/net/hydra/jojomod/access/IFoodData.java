@@ -1,7 +1,7 @@
 package net.hydra.jojomod.access;
 
 public interface IFoodData {
-    void roundabout$setSaturationLevel(float saturation);
-    void roundabout$setExhaustionLevel(float exhaustion);
-    void roundabout$setFoodLevel(int food);
+    void sba$setSaturationLevel(float saturation);
+    void sba$setExhaustionLevel(float exhaustion);
+    void sba$setFoodLevel(int food);
 }

@@ -39,11 +39,11 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     /**Allows access to abstract arrow functions and adds logic for dealing with arrows*/
 
     @Override
-    public void roundabout$resetPiercedEntities(){
+    public void sba$resetPiercedEntities(){
         resetPiercedEntities();
     }
     @Override
-    public void roundabout$setLastState(BlockState last){
+    public void sba$setLastState(BlockState last){
         lastState = last;
     }
 
@@ -69,41 +69,41 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     }
 
     @Override
-    public ItemStack roundabout$GetPickupItem(){
+    public ItemStack sba$GetPickupItem(){
         return this.getPickupItem();
     }
     @Override
-    public boolean roundabout$GetInGround(){
+    public boolean sba$GetInGround(){
         return this.inGround;
     }
 
     @Override
-    public void roundabout$SetInGround(boolean inGround){
+    public void sba$SetInGround(boolean inGround){
         this.inGround = inGround;
     }
 
-    public byte roundabout$GetPierceLevel(){
+    public byte sba$GetPierceLevel(){
         return this.getPierceLevel();
     }
     @Override
     @Nullable
-    public EntityHitResult roundabout$FindHitEntity(Vec3 $$0, Vec3 $$1){
+    public EntityHitResult sba$FindHitEntity(Vec3 $$0, Vec3 $$1){
         return this.findHitEntity($$0,$$1);
     }
 
     /**Manhattan Transfer*/
     @Override
-    public boolean roundabout$GetIsManhattan(){
+    public boolean sba$GetIsManhattan(){
         return this.isManhattanProjectile;
     }
 
     @Override
-    public void roundabout$SetIsManhattan(boolean isManhattanProjectile){
+    public void sba$SetIsManhattan(boolean isManhattanProjectile){
             this.isManhattanProjectile = isManhattanProjectile;
     }
 
     @Override
-    public void roundabout$isArrowTooSlow(boolean isTooSlow){
+    public void sba$isArrowTooSlow(boolean isTooSlow){
         this.isArrowTooSlow = isTooSlow;
     }
 
@@ -112,12 +112,12 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     public boolean isManhattanProjectileMobAI = false;
 
     @Override
-    public void roundabout$isMobAiArrow(boolean isMobAIArrow){
+    public void sba$isMobAiArrow(boolean isMobAIArrow){
         this.isManhattanProjectileMobAI = isMobAIArrow;
     }
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
+    private void sba$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
         AbstractArrow ABA = (AbstractArrow) (Object) this;
 
@@ -129,7 +129,7 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         if (entity instanceof LivingEntity LE){
             StandUser user = ((StandUser) entity);
 
-            StandPowers entityPowers = user.roundabout$getStandPowers();
+            StandPowers entityPowers = user.sba$getStandPowers();
 
             if (entityPowers.dealWithProjectile(this,$$0)){
                 ci.cancel();
@@ -153,7 +153,7 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         }
 
         if(entity instanceof ManhattanTransferEntity ME && isManhattanProjectile){
-            ME.getUser().hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
+            ME.getUser().hurt(damageSources().arrow(ABA, ABA.getOwner()), sba$lastHattanDamage);
             this.discard();
             ci.cancel();
         }
@@ -167,12 +167,12 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     }
 
     @Inject(method = "onHitEntity", at = @At(value = "TAIL"),cancellable = true)
-    private void roundabout$onHitEntityHattan(EntityHitResult $$0, CallbackInfo ci) {
+    private void sba$onHitEntityHattan(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
         AbstractArrow ABA = (AbstractArrow) (Object) this;
         if(isManhattanProjectile){
             if(!isManhattanProjectileMobAI) {
-                entity.hurt(damageSources().arrow(ABA, ABA.getOwner()), roundabout$lastHattanDamage);
+                entity.hurt(damageSources().arrow(ABA, ABA.getOwner()), sba$lastHattanDamage);
             }
             if(!isArrowTooSlow) {
                 entity.invulnerableTime = 0;
@@ -188,10 +188,10 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
         AbstractArrow ABA = (AbstractArrow) (Object) this;
         Entity entity2 = ABA.getOwner();
         damageSource = ModDamageTypes.of(this.level(), ModDamageTypes.STAND, this, entity2);
-        float amount = 1 + (roundabout$lastHattanDamage / 5);
+        float amount = 1 + (sba$lastHattanDamage / 5);
         float damage = amount <= 4 ? amount : 4;
 
-        float amountPlayersAndBosses = 1 + (roundabout$lastHattanDamage / 8);
+        float amountPlayersAndBosses = 1 + (sba$lastHattanDamage / 8);
         float damagePlayersAndBosses = Math.min(amountPlayersAndBosses, 1.5F);
 
         if(!isManhattanProjectileMobAI) {
@@ -207,18 +207,18 @@ public abstract class AccessAbstractArrow extends Entity implements IAbstractArr
     }
 
     @Unique
-    public float roundabout$lastHattanDamage = 0;
+    public float sba$lastHattanDamage = 0;
 
     @Unique
     @Override
-    public void roundabout$setHattanDamage(float manhattanDmg){
-            roundabout$lastHattanDamage = manhattanDmg;
+    public void sba$setHattanDamage(float manhattanDmg){
+            sba$lastHattanDamage = manhattanDmg;
     }
 
     @Unique
     @Override
-    public float roundabout$getHattanDamage(){
-        return  roundabout$lastHattanDamage;
+    public float sba$getHattanDamage(){
+        return  sba$lastHattanDamage;
     }
 
 

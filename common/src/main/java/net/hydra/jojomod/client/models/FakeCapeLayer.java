@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
@@ -72,7 +72,7 @@ public class FakeCapeLayer<T extends LivingEntity, M extends EntityModel<T>> ext
                                 $$0.mulPose(Axis.ZP.rotationDegrees($$19 / 2.0F));
                                 $$0.mulPose(Axis.YP.rotationDegrees(180.0F - $$19 / 2.0F));
                                 VertexConsumer $$21 = $$1.getBuffer(RenderType.entityTranslucent(
-                                        new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_capes/"+vd.getSkinPath()+".png")
+                                        new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/player_capes/"+vd.getSkinPath()+".png")
                                 ));
                                 this.getParentModel().renderCloak($$0, $$21, $$2, OverlayTexture.NO_OVERLAY);
                                 $$0.popPose();
@@ -132,7 +132,7 @@ public class FakeCapeLayer<T extends LivingEntity, M extends EntityModel<T>> ext
 
             ItemStack visage;
             IPlayerEntity pl = ((IPlayerEntity) $$3);
-            visage = pl.roundabout$getMaskSlot();
+            visage = pl.sba$getMaskSlot();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     VisageData vd = MI.visageData.generateVisageData(ce);
@@ -169,7 +169,7 @@ public class FakeCapeLayer<T extends LivingEntity, M extends EntityModel<T>> ext
                                 $$0.mulPose(Axis.ZP.rotationDegrees($$19 / 2.0F));
                                 $$0.mulPose(Axis.YP.rotationDegrees(180.0F - $$19 / 2.0F));
                                 VertexConsumer $$21 = $$1.getBuffer(RenderType.entityTranslucent(
-                                        new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_capes/"+vd.getSkinPath()+".png")
+                                        new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/player_capes/"+vd.getSkinPath()+".png")
                                 ));
                                 this.getParentModel().renderCloak($$0, $$21, $$2, OverlayTexture.NO_OVERLAY);
                                 $$0.popPose();

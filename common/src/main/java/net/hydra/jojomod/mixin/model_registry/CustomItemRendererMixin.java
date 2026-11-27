@@ -22,7 +22,7 @@ public class CustomItemRendererMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void roundabout$renderUsingCustomItemRenderer(ItemStack stack, ItemDisplayContext context, boolean isLeftHanded, PoseStack matrices, MultiBufferSource bufferSource, int light, int overlay, BakedModel model, CallbackInfo ci)
+    private void sba$renderUsingCustomItemRenderer(ItemStack stack, ItemDisplayContext context, boolean isLeftHanded, PoseStack matrices, MultiBufferSource bufferSource, int light, int overlay, BakedModel model, CallbackInfo ci)
     {
         CustomItemRenderer renderer = CustomItemRendererRegistry.getItemRenderer(stack.getItem());
         if (renderer != null)

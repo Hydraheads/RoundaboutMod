@@ -10,5 +10,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AccessQuadrupedModel {
 
     @Accessor("body")
-    ModelPart roundabout$getBody();
+    ModelPart sba$getBody();
 }

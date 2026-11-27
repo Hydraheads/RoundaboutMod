@@ -37,7 +37,7 @@ public abstract class GravityEntityRendererMixin<T extends Entity>  {
             ),
             cancellable = true
     )
-    private void roundabout$modifyExpressionValue_renderLabelIfPresent_getRotation_0(T $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
+    private void sba$modifyExpressionValue_renderLabelIfPresent_getRotation_0(T $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection($$0);
         if (gravityDirection == Direction.DOWN)
             return;

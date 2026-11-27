@@ -12,9 +12,9 @@ public class FogCoatBlockItem extends FogBlockItem {
     @Override
     public Component getName(ItemStack $$0) {
         if (mimicking != null) {
-            return Component.translatable("block.roundabout.fog_block.title").append(" ").
+            return Component.translatable("block.sba.fog_block.title").append(" ").
                     append(Component.translatable(mimicking.asItem().getDescriptionId(mimicking.asItem().getDefaultInstance())))
-                    .append(" ").append(Component.translatable("block.roundabout.fog_block_coating.title"));
+                    .append(" ").append(Component.translatable("block.sba.fog_block_coating.title"));
         } else {
             return super.getName($$0);
         }

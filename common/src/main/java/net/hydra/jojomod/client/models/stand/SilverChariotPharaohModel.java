@@ -343,7 +343,7 @@ public class SilverChariotPharaohModel<T extends SilverChariotEntity> extends St
         }
 
         /*
-        if (((StandUser) pEntity.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.onCooldown(PowersSilverChariot.SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
+        if (((StandUser) pEntity.getUser()).sba$getStandPowers() instanceof PowersSilverChariot PSC && PSC.onCooldown(PowersSilverChariot.SKILL_SILVER_CHARIOT_SWORD_SHOOT_INDEX)) {
             this.right_blade.visible = false;
             this.left_blade.visible = false;
         } else {

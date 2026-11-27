@@ -12,11 +12,11 @@ import net.minecraft.world.Container;
 public class ForgePacketHelper implements IPacketHelper {
     @Override
     public void sendBlackSabbathChestOpenPacket(ServerPlayer player, Container container) {
-        ForgeNetworkHandler.sendToClient(new ClientboundBlackSabbathOpenPacket(((IPlayerEntityServer)player).roundabout$getCounter(), player.getId()), player);
+        ForgeNetworkHandler.sendToClient(new ClientboundBlackSabbathOpenPacket(((IPlayerEntityServer)player).sba$getCounter(), player.getId()), player);
     }
 
     @Override
     public void sendD4CCloneInventoryOpenPacket(ServerPlayer player, D4CCloneEntity clone, Container container) {
-        ForgeNetworkHandler.sendToClient(new ClientboundD4CCloneOpenPacket(((IPlayerEntityServer)player).roundabout$getCounter(), clone.getId()), player);
+        ForgeNetworkHandler.sendToClient(new ClientboundD4CCloneOpenPacket(((IPlayerEntityServer)player).sba$getCounter(), clone.getId()), player);
     }
 }

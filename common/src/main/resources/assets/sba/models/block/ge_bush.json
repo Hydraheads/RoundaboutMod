@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "sba:block/ge_bush"
+  },
+  "render_type": "minecraft:cutout"
+}

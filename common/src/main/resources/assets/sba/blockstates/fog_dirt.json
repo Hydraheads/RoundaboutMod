@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "in_fog=true": {
+      "model": "minecraft:block/dirt"
+    },
+    "in_fog=false": {
+      "model": "sba:block/fog_block_invisible"
+    }
+  }
+}

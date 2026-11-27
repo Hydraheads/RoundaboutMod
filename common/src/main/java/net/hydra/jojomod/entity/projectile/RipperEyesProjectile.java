@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPowersPlayer;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.ModEntities;
@@ -30,18 +30,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**Notice: This is for early fired ripper eyes. Full charge is not an entity.*/
-public class RipperEyesProjectile extends RoundaboutGeneralProjectile{
-    public RipperEyesProjectile(EntityType<? extends RoundaboutGeneralProjectile> $$0, Level $$1) {
+public class RipperEyesProjectile extends SBAGeneralProjectile{
+    public RipperEyesProjectile(EntityType<? extends SBAGeneralProjectile> $$0, Level $$1) {
         super($$0, $$1);
     }
 
     public int charge = 0;
     public final AnimationState ripperEyes = new AnimationState();
-    protected RipperEyesProjectile(EntityType<? extends RoundaboutGeneralProjectile> $$0, double $$1, double $$2, double $$3, Level $$4) {
+    protected RipperEyesProjectile(EntityType<? extends SBAGeneralProjectile> $$0, double $$1, double $$2, double $$3, Level $$4) {
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
     }
-    protected RipperEyesProjectile(EntityType<RoundaboutGeneralProjectile> $$0, LivingEntity $$1, Level $$2) {
+    protected RipperEyesProjectile(EntityType<SBAGeneralProjectile> $$0, LivingEntity $$1, Level $$2) {
         this($$0, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
@@ -86,7 +86,7 @@ public class RipperEyesProjectile extends RoundaboutGeneralProjectile{
 
 
             float power = vgp.getRipperEyeStrayStrength(entity,charge);
-            //Roundabout.LOGGER.info("charge-> "+charge+" power-> "+power);
+            //SBA.LOGGER.info("charge-> "+charge+" power-> "+power);
             if (DamageHandler.RipperEyesDamage(entity, power, pl)) {
                 MainUtil.makeBleed(entity,0,400,pl);
             }

@@ -1,7 +1,7 @@
 package net.zetalasis.networking.packet.impl;
 
 import io.netty.buffer.Unpooled;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ClipContext;
@@ -89,13 +89,13 @@ public class ModNetworking {
 
     private static ResourceLocation buildFromClassName(Class<?> c)
     {
-        return (Roundabout.location(c.getSimpleName().toLowerCase()));
+        return (SBA.location(c.getSimpleName().toLowerCase()));
     }
 
     public static <T extends AbstractBaseC2SPacket> void register(T packet) {
         if (registrarC2S.containsValue(packet))
         {
-            Roundabout.LOGGER.warn("Duplicate caught while registering C2S packet \"{}\"", buildFromClassName(packet.getClass()));
+            SBA.LOGGER.warn("Duplicate caught while registering C2S packet \"{}\"", buildFromClassName(packet.getClass()));
             return;
         }
 
@@ -104,7 +104,7 @@ public class ModNetworking {
 
     public static <T extends AbstractBaseS2CPacket> void register(T packet) {
         if (registrarS2C.containsValue(packet)) {
-            Roundabout.LOGGER.warn("Duplicate caught while registering S2C packet \"{}\"", buildFromClassName(packet.getClass()));
+            SBA.LOGGER.warn("Duplicate caught while registering S2C packet \"{}\"", buildFromClassName(packet.getClass()));
             return;
         }
 
@@ -121,7 +121,7 @@ public class ModNetworking {
 
     public static <T extends AbstractBaseS2CPacket> void send(T packetType, ServerPlayer recipient, Object... args) {
         if (recipient != null && recipient.connection != null && ((IClientNetworking) recipient.connection) != null) {
-            Connection con = ((IClientNetworking) recipient.connection).roundabout$getServer();
+            Connection con = ((IClientNetworking) recipient.connection).sba$getServer();
             if (con == null)
                 return;
 

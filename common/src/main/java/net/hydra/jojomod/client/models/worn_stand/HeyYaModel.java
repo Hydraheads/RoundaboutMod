@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
@@ -98,55 +98,55 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
     public void setupAnim(Entity var1, float pAgeInTicks) {
 
     }
-    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/base.png");
-    public static ResourceLocation goth = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation goth = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/goth.png");
-    public static ResourceLocation volume_2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation volume_2 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/volume_2.png");
-    public static ResourceLocation chapter_24 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation chapter_24 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/chapter_24.png");
-    public static ResourceLocation greener = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation greener = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/greener.png");
-    public static ResourceLocation warden = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation warden = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/warden.png");
-    public static ResourceLocation fire_and_ice = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation fire_and_ice = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/fire_and_ice.png");
-    public static ResourceLocation world = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation world = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/world.png");
-    public static ResourceLocation ice_cold = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation ice_cold = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/ice_cold.png");
-    public static ResourceLocation villager = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation villager = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/villager.png");
-    public static ResourceLocation geezer = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation geezer = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/geezer.png");
-    public static ResourceLocation skeleton = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation skeleton = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/skeleton.png");
-    public static ResourceLocation wither = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation wither = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/wither.png");
-    public static ResourceLocation tusk = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation tusk = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/tusk.png");
-    public static ResourceLocation devil = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation devil = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/devil.png");
-    public static ResourceLocation hell_nah = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation hell_nah = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/hell_nah.png");
-    public static ResourceLocation alien = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation alien = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/alien.png");
-    public static ResourceLocation america = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation america = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/america.png");
-    public static ResourceLocation zombie = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation zombie = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/zombie.png");
-    public static ResourceLocation anti = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation anti = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/anti.png");
-    public static ResourceLocation grey_ya = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation grey_ya = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/grey_ya.png");
-    public static ResourceLocation angel = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation angel = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/angel.png");
-    public static ResourceLocation knight = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation knight = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/knight.png");
-    public static ResourceLocation saint = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation saint = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/saint.png");
-    public static ResourceLocation vampire = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation vampire = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/vampire.png");
 
     public ResourceLocation getTextureLocation(Entity context, byte skin){
@@ -185,8 +185,8 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
         if (this.root().getChild("stand").getChild("stand2").hasChild("head")) {
             ModelPart head = this.root().getChild("stand").getChild("stand2").getChild("head");
 
-            /*if ((user.roundabout$getStandPowers() instanceof PowersHeyYa && user.roundabout$getIdlePos() == 1)
-                    || (user.roundabout$getPreviousStandPowers() instanceof PowersHeyYa && user.roundabout$getPreviousPose() == 1)) {
+            /*if ((user.sba$getStandPowers() instanceof PowersHeyYa && user.sba$getIdlePos() == 1)
+                    || (user.sba$getPreviousStandPowers() instanceof PowersHeyYa && user.sba$getPreviousPose() == 1)) {
              */
             if (MainUtil.getWornStandIdleSafe(user, PowersHeyYa.class) == 1) {
                 head.setRotation((((context.getViewXRot(partialTicks)) * Mth.DEG_TO_RAD)), 0, 0);
@@ -210,16 +210,16 @@ public class HeyYaModel extends PsuedoHierarchicalModel {
             }
             StandUser user = ((StandUser) LE);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
-            user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
-            if (user.roundabout$getStandAnimation() == PowersHeyYa.YAP) {
-                user.roundabout$getWornStandAnimation().startIfStopped(context.tickCount);
+            user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+            if (user.sba$getStandAnimation() == PowersHeyYa.YAP) {
+                user.sba$getWornStandAnimation().startIfStopped(context.tickCount);
             } else {
-                user.roundabout$getWornStandAnimation().stop();
+                user.sba$getWornStandAnimation().stop();
             }
             rotateHead(context,partialTicks,user);
-            this.animate(user.roundabout$getWornStandIdleAnimation(), HeyYaAnimations.hangin_on, partialTicks, 1f);
-            this.animate(user.roundabout$getWornStandIdleAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
-            this.animate(user.roundabout$getWornStandAnimation(), HeyYaAnimations.talk, partialTicks, 1f);
+            this.animate(user.sba$getWornStandIdleAnimation(), HeyYaAnimations.hangin_on, partialTicks, 1f);
+            this.animate(user.sba$getWornStandIdleAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
+            this.animate(user.sba$getWornStandAnimation(), HeyYaAnimations.talk, partialTicks, 1f);
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
         }

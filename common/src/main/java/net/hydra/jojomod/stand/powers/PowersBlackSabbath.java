@@ -2,7 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -123,7 +123,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                                     if (ent != null && ent instanceof LivingEntity LE && LE.is(value)) {
                                         BE.setMeleeInteractionTicks(-1);
                                         BE.killSoul();
-                                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                        ((StandUser) LE).sba$setGrabberSabbath(0);
                                     }
                                 }
                             }
@@ -138,7 +138,7 @@ public class PowersBlackSabbath extends NewDashPreset {
                                     if (ent != null && ent instanceof LivingEntity LE && ent.is(value)) {
                                         BE.setMeleeInteractionTicks(-1);
                                         BE.killSoul();
-                                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                        ((StandUser) LE).sba$setGrabberSabbath(0);
                                     }
                                 }
                                 removeTargetEntities(value);
@@ -259,7 +259,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
             Entity e = be.level().getEntity(be.getGrabbing());
             if(e != null && e instanceof LivingEntity l) {
-                ((StandUser)l).roundabout$setGrabberSabbath(0);
+                ((StandUser)l).sba$setGrabberSabbath(0);
                 be.killSoul();
             }
             killTargetListClient();
@@ -302,7 +302,7 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
             if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
                 if(BE.level().getEntity(BE.getGrabbing()) != null) {
-                    ((StandUser)BE.level().getEntity(BE.getGrabbing())).roundabout$setGrabberSabbath(0);
+                    ((StandUser)BE.level().getEntity(BE.getGrabbing())).sba$setGrabberSabbath(0);
                     BE.killSoul();
                 }
             }
@@ -326,7 +326,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
     @Override
     public StandEntity getNewStandEntity(){
-        byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skin = ((StandUser)this.getSelf()).sba$getStandSkin();
         if (skin == BlackSabbathEntity.BEACH) {
             return ModEntities.BEACH_SABBATH.create(this.getSelf().level());
         } if(skin == BlackSabbathEntity.SANTA){
@@ -528,12 +528,12 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     if (stand != null) {
                         blackSelect = stand;
                         if (stand instanceof BlackSabbathEntity BE) {
-                            Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                            Direction gravD = ((IGravityEntity)this.self).sba$getGravityDirection();
                             BE.absMoveTo(pn.x(), this.self.getY() + (this.self.getBbHeight() / 2.45F), pn.z());
                             BE.setMaster(this.self);
                             BE.setYRot((self.getYRot() % 360) - 180);
-                            BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
-                            this.getStandUserSelf().roundabout$standMount(BE);
+                            BE.setSkin(((StandUser) this.getSelf()).sba$getStandSkin());
+                            this.getStandUserSelf().sba$standMount(BE);
                             BE.setShouldFloat(false);
                             BE.setShouldSelect(true);
                             BE.setDeltaMovement(Vec3.ZERO);
@@ -606,7 +606,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     public void eatFingerServer(){
             if (self instanceof ServerPlayer pl){
                 setFingerEatingTick(16);
-                ((IPlayerEntity)pl).roundabout$SetPoseEmote((byte) 37);
+                ((IPlayerEntity)pl).sba$SetPoseEmote((byte) 37);
             }
     }
     @Override
@@ -742,7 +742,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         } if (fingerEatingTick == 1) {
             if (self instanceof ServerPlayer pl) {
                 this.setAttackTimeDuring(0);
-                ((IPlayerEntity) pl).roundabout$SetPoseEmote((byte) 0);
+                ((IPlayerEntity) pl).sba$SetPoseEmote((byte) 0);
             }
         }
 
@@ -776,7 +776,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                         } else {
                             setNull();
                             if(this.getSelf() instanceof Player PE){
-                                PE.displayClientMessage(Component.translatable("text.roundabout.failed_black_sabbath_summon"), true);
+                                PE.displayClientMessage(Component.translatable("text.sba.failed_black_sabbath_summon"), true);
                             }
                             return;
                         }
@@ -956,7 +956,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                     if (ent != null && ent instanceof LivingEntity LE) {
                         be.setMeleeInteractionTicks(-1);
                         be.killSoul();
-                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                        ((StandUser) LE).sba$setGrabberSabbath(0);
                     }
                 }
                 this.clearTargetEntitiesOnStandDeath();
@@ -988,7 +988,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
 
 
             if (t != T) {
-                ((StandUser) this.self).roundabout$setActive(false);
+                ((StandUser) this.self).sba$setActive(false);
                 this.getStandEntity(this.getSelf()).discard();
                 setNull();
             }
@@ -1076,7 +1076,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             if(!isClient() && sealStandPenalty){
                 sealStandPenalty = false;
                 if(lostHp >= 3) {
-                    ((StandUser) this.getSelf()).roundabout$setSealedTicks(lostHp * 15);
+                    ((StandUser) this.getSelf()).sba$setSealedTicks(lostHp * 15);
                     this.setTickDown2(20);
                     lostHp = 0;
                 }
@@ -1175,8 +1175,8 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
     }
     public final Boolean getThrowable(Player pl) {
         IPlayerEntity play = ((IPlayerEntity) pl);
-        ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
-        return (blackFS.getItem() instanceof ArrowItem && !(blackFS.getItem() instanceof RoundaboutArrowItem) || blackFS.getItem() instanceof KnifeItem
+        ItemStack blackFS = play.sba$getBlckSabbathPlayerInventory().getItem(0);
+        return (blackFS.getItem() instanceof ArrowItem && !(blackFS.getItem() instanceof SBAArrowItem) || blackFS.getItem() instanceof KnifeItem
                 || blackFS.is(ModItems.KNIFE_BUNDLE) || blackFS.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(blackFS) <= 0 && !(blackFS.getDamageValue() >= blackFS.getMaxDamage() - 1)) && !(blackFS.is(ItemStack.EMPTY.getItem())
                 || blackFS.getItem() instanceof EggItem || blackFS.getItem() instanceof SnowballItem || blackFS.getItem() instanceof ThrowablePotionItem
                 || blackFS.getItem() instanceof EnderpearlItem || blackFS.getItem() instanceof GasolineBucketItem || blackFS.getItem() instanceof GasolineCanItem
@@ -1199,15 +1199,15 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                             }
                             BE.setYRot(randomInt);
                             BE.setMaster(this.self);
-                            BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
-                            this.getStandUserSelf().roundabout$standMount(BE);
+                            BE.setSkin(((StandUser) this.getSelf()).sba$getStandSkin());
+                            this.getStandUserSelf().sba$standMount(BE);
                             BE.setHunting(true);
                             BE.setShouldFloat(false);
                             BE.setShouldSelect(false);
                             PowerTypes.copyPlaneOfExisting(self,BE);
                             if(BE.getUser() != null && BE.getUser() instanceof Player pl) {
                                 IPlayerEntity play = ((IPlayerEntity) pl);
-                                ItemStack blackFS = play.roundabout$getBlckSabbathPlayerInventory().getItem(0);
+                                ItemStack blackFS = play.sba$getBlckSabbathPlayerInventory().getItem(0);
                                 if(!isClient()) {
                                     BE.setHeldItemSabbath(blackFS);
                                     if (blackFS.is(ItemStack.EMPTY.getItem())) {
@@ -1413,9 +1413,9 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
 
         if(gravityDirection != Direction.DOWN ){
             Vec2 vecGravity = RotationUtil.rotPlayerToWorld(selfie.getYRot(), selfie.getXRot(), gravityDirection);
-            return ((StandUser) selfie).roundabout$calculateViewVectorButICanUseIt(0, vecGravity.x);
+            return ((StandUser) selfie).sba$calculateViewVectorButICanUseIt(0, vecGravity.x);
         } else {
-            return ((StandUser)selfie).roundabout$calculateViewVectorButICanUseIt(0, selfie.getYRot());
+            return ((StandUser)selfie).sba$calculateViewVectorButICanUseIt(0, selfie.getYRot());
         }
     }
 
@@ -1433,8 +1433,8 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                 BE.absMoveTo(pn.x(), Math.round(evilY), pn.z());
                 BE.setMaster(this.self);
                 BE.setYRot((self.getYRot() % 360) - 180);
-                BE.setSkin(((StandUser) this.getSelf()).roundabout$getStandSkin());
-                this.getStandUserSelf().roundabout$standMount(BE);
+                BE.setSkin(((StandUser) this.getSelf()).sba$getStandSkin());
+                this.getStandUserSelf().sba$standMount(BE);
                 BE.setShouldFloat(true);
                 BE.setShouldSelect(false);
                 BE.setDeltaMovement(Vec3.ZERO);
@@ -1488,7 +1488,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET);
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be && be.getGrabbing() != 0){
-                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabberSabbath(0);/*((StandUser) e).roundabout$updateSealedTicks(-1);*/}
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).sba$setGrabberSabbath(0);/*((StandUser) e).sba$updateSealedTicks(-1);*/}
                 }
                 this.setAttackTime(0);
                 Entity target = this.getSelf().level().getEntity(value);
@@ -1502,7 +1502,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST);
                 this.setAttackTime(0);
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){be.killSoul();((StandUser)e).sba$setGrabberSabbath(0);}
                 }
                 setTickDown2(40);
                 this.clearTargetEntities();
@@ -1538,7 +1538,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
                 be.setMeleeInteractionTicks(-1);
                 be.killSoul();
-                ((StandUser)e).roundabout$setGrabberSabbath(0);
+                ((StandUser)e).sba$setGrabberSabbath(0);
             }
         }
         if(blackSabbathTargets.contains(LE)) {
@@ -1565,7 +1565,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                     if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
                         be.setMeleeInteractionTicks(-1);
                         be.killSoul();
-                        ((StandUser)e).roundabout$setGrabberSabbath(0);
+                        ((StandUser)e).sba$setGrabberSabbath(0);
                     }
                 }
                 if(blackSabbathTargets.contains(LE)) {
@@ -1584,7 +1584,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
             this.clearTargetEntities();
             setTickDown2(40);
             if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){be.killSoul();((StandUser)e).sba$setGrabberSabbath(0);}
             }
             tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, true, 0);
             tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, 0);
@@ -1648,7 +1648,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
         return super.cancelSprintParticles();
     }
     public boolean isLarpingOjiroSasame(){
-        return self instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPoseEmote() == 37;
+        return self instanceof Player pl && ((IPlayerEntity)pl).sba$GetPoseEmote() == 37;
     }
     @Override
     public void updateUniqueMoves() {
@@ -1656,61 +1656,61 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
     }
     @Override public Component getSkinName(byte skinId) {
         if (skinId == BlackSabbathEntity.PART_5_ANIME) {
-            return Component.translatable("skins.roundabout.black_sabbath.anime");
+            return Component.translatable("skins.sba.black_sabbath.anime");
         } else if (skinId == BlackSabbathEntity.PART_5_MANGA) {
-            return Component.translatable("skins.roundabout.black_sabbath.manga");
+            return Component.translatable("skins.sba.black_sabbath.manga");
         } else if (skinId == BlackSabbathEntity.BURNING) {
-            return Component.translatable("skins.roundabout.black_sabbath.burning");
+            return Component.translatable("skins.sba.black_sabbath.burning");
         } else if (skinId == BlackSabbathEntity.GIO_GIO) {
-            return Component.translatable("skins.roundabout.black_sabbath.giogio");
+            return Component.translatable("skins.sba.black_sabbath.giogio");
         } else if (skinId == BlackSabbathEntity.VERDANT) {
-            return Component.translatable("skins.roundabout.black_sabbath.verdant");
+            return Component.translatable("skins.sba.black_sabbath.verdant");
         } else if (skinId == BlackSabbathEntity.NIGHT) {
-            return Component.translatable("skins.roundabout.black_sabbath.night");
+            return Component.translatable("skins.sba.black_sabbath.night");
         } else if (skinId == BlackSabbathEntity.DEPARTURE) {
-            return Component.translatable("skins.roundabout.black_sabbath.departure");
+            return Component.translatable("skins.sba.black_sabbath.departure");
         } else if (skinId == BlackSabbathEntity.CHERRY){
-        return Component.translatable("skins.roundabout.black_sabbath.cherry");
+        return Component.translatable("skins.sba.black_sabbath.cherry");
         } else if (skinId == BlackSabbathEntity.GRAPE){
-            return Component.translatable("skins.roundabout.black_sabbath.grape");
+            return Component.translatable("skins.sba.black_sabbath.grape");
         } else if (skinId == BlackSabbathEntity.MINT) {
-            return Component.translatable("skins.roundabout.black_sabbath.mint");
+            return Component.translatable("skins.sba.black_sabbath.mint");
         } else if (skinId == BlackSabbathEntity.TACO) {
-            return Component.translatable("skins.roundabout.black_sabbath.taco");
+            return Component.translatable("skins.sba.black_sabbath.taco");
         } else if (skinId == BlackSabbathEntity.WOOL) {
-            return Component.translatable("skins.roundabout.black_sabbath.woven");
+            return Component.translatable("skins.sba.black_sabbath.woven");
         } else if (skinId == BlackSabbathEntity.WOODEN) {
-            return Component.translatable("skins.roundabout.black_sabbath.wooden");
+            return Component.translatable("skins.sba.black_sabbath.wooden");
         } else if (skinId == BlackSabbathEntity.DAPPER){
-            return Component.translatable("skins.roundabout.black_sabbath.dapper");
+            return Component.translatable("skins.sba.black_sabbath.dapper");
         } else if (skinId == BlackSabbathEntity.COPPER){
-            return Component.translatable("skins.roundabout.black_sabbath.copper");
+            return Component.translatable("skins.sba.black_sabbath.copper");
         } else if (skinId == BlackSabbathEntity.PHANTOM) {
-            return Component.translatable("skins.roundabout.black_sabbath.phantom");
+            return Component.translatable("skins.sba.black_sabbath.phantom");
         } else if (skinId == BlackSabbathEntity.SWEET) {
-            return Component.translatable("skins.roundabout.black_sabbath.sweet");
+            return Component.translatable("skins.sba.black_sabbath.sweet");
         } else if (skinId == BlackSabbathEntity.MAGMA) {
-            return Component.translatable("skins.roundabout.black_sabbath.magma");
+            return Component.translatable("skins.sba.black_sabbath.magma");
         }  else if (skinId == BlackSabbathEntity.OCULUS) {
-            return Component.translatable("skins.roundabout.black_sabbath.oculus");
+            return Component.translatable("skins.sba.black_sabbath.oculus");
         } else if (skinId == BlackSabbathEntity.SACTHOTH) {
-            return Component.translatable("skins.roundabout.black_sabbath.sacthoth");
+            return Component.translatable("skins.sba.black_sabbath.sacthoth");
         }else if (skinId == BlackSabbathEntity.COWBOY) {
-            return Component.translatable("skins.roundabout.black_sabbath.cowboy");
+            return Component.translatable("skins.sba.black_sabbath.cowboy");
         } else if (skinId == BlackSabbathEntity.BEACH){
-            return Component.translatable("skins.roundabout.black_sabbath.beach");
+            return Component.translatable("skins.sba.black_sabbath.beach");
         } else if (skinId == BlackSabbathEntity.SANTA) {
-            return Component.translatable("skins.roundabout.black_sabbath.santa");
+            return Component.translatable("skins.sba.black_sabbath.santa");
         }else if (skinId == BlackSabbathEntity.CRIMSON) {
-            return Component.translatable("skins.roundabout.black_sabbath.crimson");
+            return Component.translatable("skins.sba.black_sabbath.crimson");
         }else if (skinId == BlackSabbathEntity.FUNGUS) {
-            return Component.translatable("skins.roundabout.black_sabbath.mushroom");
+            return Component.translatable("skins.sba.black_sabbath.mushroom");
         }
-        return Component.translatable("skins.roundabout.black_sabbath.anime");
+        return Component.translatable("skins.sba.black_sabbath.anime");
     }
     @Override
     public int getDisplayPowerInventoryScale() {
-        byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skin = ((StandUser)this.getSelf()).sba$getStandSkin();
         if(skin == BlackSabbathEntity.SANTA){
             if(moveMode == 2){
                 return 27;
@@ -1826,32 +1826,32 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
         } else if(displayStand instanceof BlackSabbathEntity BSE){
             BSE.emerge.stop();
         }
-        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).sba$getStandSkin() != displayStand.getSkin()) {
             displayStand = this.getNewStandEntity();
-            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+            displayStand.setSkin(((IPlayerEntity) PL).sba$getStandSkin());
         }
         return displayStand;
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.black_sabbath_premise",
-                "instruction.roundabout.passive", StandIcons.POLPO_TUTORIAL, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.black_sabbath_weakness",
-                "instruction.roundabout.passive", StandIcons.POLPO_WEAKNESS,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.black_sabbath_inventory",
-                "instruction.roundabout.press_skill", StandIcons.POLPO_INVENTORY, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.black_sabbath_attack_slot_mechanics",
-                "instruction.roundabout.passive", StandIcons.POLPO_INVENTORY_ATTACK,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.black_sabbath_target_selection_tutorial",
-                "instruction.roundabout.press_skill", StandIcons.POLPO_SELECTING_TARGET_MODE,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.black_sabbath_target_selection_tutorial_2",
-                "instruction.roundabout.passive", StandIcons.POLPO_SELECTING_TARGET_CONFIRM,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.black_sabbath_biting_finger",
-                "instruction.roundabout.press_skill", StandIcons.BITE_FINGERS_POLPO,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.black_sabbath_lighter_mechanics",
-                "instruction.roundabout.passive", StandIcons.POLPO_LIGHTER_TUTORIAL,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.black_sabbath_premise",
+                "instruction.sba.passive", StandIcons.POLPO_TUTORIAL, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.black_sabbath_weakness",
+                "instruction.sba.passive", StandIcons.POLPO_WEAKNESS,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.black_sabbath_inventory",
+                "instruction.sba.press_skill", StandIcons.POLPO_INVENTORY, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.black_sabbath_attack_slot_mechanics",
+                "instruction.sba.passive", StandIcons.POLPO_INVENTORY_ATTACK,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.sba.black_sabbath_target_selection_tutorial",
+                "instruction.sba.press_skill", StandIcons.POLPO_SELECTING_TARGET_MODE,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.sba.black_sabbath_target_selection_tutorial_2",
+                "instruction.sba.passive", StandIcons.POLPO_SELECTING_TARGET_CONFIRM,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.sba.black_sabbath_biting_finger",
+                "instruction.sba.press_skill", StandIcons.BITE_FINGERS_POLPO,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.sba.black_sabbath_lighter_mechanics",
+                "instruction.sba.passive", StandIcons.POLPO_LIGHTER_TUTORIAL,4,level,bypass));
         return $$1;
     }
     @Override
@@ -1860,7 +1860,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.LIGHT_PURPLE);
+        return Component.translatable(  "sba.dev_status.active").withStyle(ChatFormatting.LIGHT_PURPLE);
     }
     @Override
     public Component ifWipListDev(){

@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.minions.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.minions.AxolotlMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class AxolotlMinionRenderer extends MobRenderer<AxolotlMinion, AxolotlMinionModel<AxolotlMinion>> {
-    private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/axolotl.png");
+    private static final ResourceLocation VINDICATOR = new ResourceLocation(SBA.MOD_ID,"textures/entity/minions/axolotl.png");
 
     public AxolotlMinionRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new AxolotlMinionModel<>($$0.bakeLayer(ModEntityRendererClient.AXOLOTL_MINION_LAYER)), 0.5F);

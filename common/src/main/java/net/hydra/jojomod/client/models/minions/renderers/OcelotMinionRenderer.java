@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.minions.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.minions.OcelotMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 
 public class OcelotMinionRenderer extends MobRenderer<OcelotMinion, OcelotMinionModel<OcelotMinion>> {
-    private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/ocelot.png");
+    private static final ResourceLocation VINDICATOR = new ResourceLocation(SBA.MOD_ID,"textures/entity/minions/ocelot.png");
 
     public OcelotMinionRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new OcelotMinionModel<>($$0.bakeLayer(ModEntityRendererClient.OCELOT_MINION_LAYER)), 0.4F);

@@ -1,6 +1,6 @@
 package net.zetalasis.client.shader.callback;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.zetalasis.client.shader.RRenderUtil;
 
 import java.util.HashSet;
@@ -13,34 +13,34 @@ public class RenderCallbackRegistry {
         registry.add(callback);
     }
 
-    public static void roundabout$LEVEL_RENDER_FINISH(float partialTick)
+    public static void sba$LEVEL_RENDER_FINISH(float partialTick)
     {
         for (IRendererCallback callback : registry)
         {
             try {
-                callback.roundabout$LEVEL_RENDER_FINISH(partialTick);
+                callback.sba$LEVEL_RENDER_FINISH(partialTick);
             }
             catch (Exception e)
             {
-                Roundabout.LOGGER.warn("Exception caught while firing LEVEL_RENDER_FINISH for a callback!\n\"{}\"", e.toString());
+                SBA.LOGGER.warn("Exception caught while firing LEVEL_RENDER_FINISH for a callback!\n\"{}\"", e.toString());
                 e.printStackTrace();
                 continue;
             }
         }
     }
 
-    public static void roundabout$GAME_RENDERER_FINISH(float tickDelta)
+    public static void sba$GAME_RENDERER_FINISH(float tickDelta)
     {
         RRenderUtil.sendFabulousWarning();
 
         for (IRendererCallback callback : registry)
         {
             try {
-                callback.roundabout$GAME_RENDERER_FINISH(tickDelta);
+                callback.sba$GAME_RENDERER_FINISH(tickDelta);
             }
             catch (Exception e)
             {
-                Roundabout.LOGGER.warn("Exception caught while firing GAME_RENDERER_FINISH for a callback!\n\"{}\"", e.toString());
+                SBA.LOGGER.warn("Exception caught while firing GAME_RENDERER_FINISH for a callback!\n\"{}\"", e.toString());
                 e.printStackTrace();
                 continue;
             }

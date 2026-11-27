@@ -42,10 +42,10 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
 
     /**Zombie and Skeleton morphs pacify aggro initially*/
     @Inject(method = "start", at = @At(value = "HEAD"))
-    protected void roundabout$start(CallbackInfo ci) {
+    protected void sba$start(CallbackInfo ci) {
         if (this.mob instanceof Zombie ZE && target instanceof Player $$0){
             IPlayerEntity ple = ((IPlayerEntity) $$0);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 if (ShapeShifts.isZombie(shift)) {
@@ -64,7 +64,7 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
             }
         } else if (this.mob instanceof AbstractSkeleton ZE && target instanceof Player $$0){
             IPlayerEntity ple = ((IPlayerEntity) $$0);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 if (ShapeShifts.isSkeleton(shift)) {
@@ -80,11 +80,11 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
 
     /**Skeleton morphs incur wolf anger*/
     @Unique
-    boolean roundabout$isAngryAt(LivingEntity $$0) {
+    boolean sba$isAngryAt(LivingEntity $$0) {
         if ($$0 instanceof Player PE){
             if (this.mob.canAttack($$0)) {
                 IPlayerEntity ple = ((IPlayerEntity) $$0);
-                byte shape = ple.roundabout$getShapeShift();
+                byte shape = ple.sba$getShapeShift();
                 ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
                 if (shift != ShapeShifts.PLAYER) {
                     if (ShapeShifts.isSkeleton(shift)) {
@@ -96,9 +96,9 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
         return false;
     }
     @Inject(method = "findTarget", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$findTarget2(CallbackInfo ci) {
+    protected void sba$findTarget2(CallbackInfo ci) {
         if (this.mob instanceof Wolf WE){
-            Predicate<LivingEntity> newCond = this::roundabout$isAngryAt;
+            Predicate<LivingEntity> newCond = this::sba$isAngryAt;
 
             TargetingConditions targetConditionsX = TargetingConditions.forCombat().range(this.getFollowDistance()).selector(newCond);
             LivingEntity TG = this.mob.level().getNearestPlayer(targetConditionsX, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
@@ -111,7 +111,7 @@ public abstract class JusticeNearestAttackableTargetGoal<T extends LivingEntity>
     }
 
     @Inject(method = "findTarget", at = @At("TAIL"))
-    private void roundabout$considerClone(CallbackInfo ci) {
+    private void sba$considerClone(CallbackInfo ci) {
         if (this.targetType != Player.class) {
             return;
         }

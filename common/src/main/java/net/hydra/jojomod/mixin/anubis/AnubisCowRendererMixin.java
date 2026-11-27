@@ -17,7 +17,7 @@ public abstract class AnubisCowRendererMixin extends MobRenderer<Cow, CowModel<C
     public AnubisCowRendererMixin(EntityRendererProvider.Context $$0, CowModel<Cow> $$1, float $$2) {super($$0, $$1, $$2);}
 
     @Inject(method = "<init>",at = @At(value = "RETURN"))
-    private void roundabout$anubisCowLayer(EntityRendererProvider.Context $$0, CallbackInfo ci) {
+    private void sba$anubisCowLayer(EntityRendererProvider.Context $$0, CallbackInfo ci) {
         this.addLayer(new AnubisMobLayer<>(this));
     }
 }

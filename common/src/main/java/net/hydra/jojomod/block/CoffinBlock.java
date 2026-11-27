@@ -2,7 +2,7 @@ package net.hydra.jojomod.block;
 
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class CoffinBlock extends BedBlock {
     public static final BooleanProperty VERTICAL = BooleanProperty.create("vertical");
-    private static final Map<Player.BedSleepingProblem, Component> sleepResults = ImmutableMap.of(Player.BedSleepingProblem.TOO_FAR_AWAY, Component.translatable("text.roundabout.vampire.coffin_too_far"), Player.BedSleepingProblem.OBSTRUCTED, Component.translatable("text.roundabout.vampire.coffin_obstructed"));
+    private static final Map<Player.BedSleepingProblem, Component> sleepResults = ImmutableMap.of(Player.BedSleepingProblem.TOO_FAR_AWAY, Component.translatable("text.sba.vampire.coffin_too_far"), Player.BedSleepingProblem.OBSTRUCTED, Component.translatable("text.sba.vampire.coffin_obstructed"));
     public CoffinBlock(DyeColor $$0, Properties $$1) {
         super($$0, $$1);
     }
@@ -69,7 +69,7 @@ public class CoffinBlock extends BedBlock {
         }
 
         if (!level.isDay() && !level.isThundering()) {
-            player.displayClientMessage(Component.translatable("text.roundabout.vampire.coffin_cant_sleep"), true);
+            player.displayClientMessage(Component.translatable("text.sba.vampire.coffin_cant_sleep"), true);
         }
 
         if (!state.getValue(BedBlock.OCCUPIED)) {
@@ -79,7 +79,7 @@ public class CoffinBlock extends BedBlock {
         if (!BedBlock.canSetSpawn(level)) {
 
         } else if (state.getValue(BedBlock.OCCUPIED)) {
-            player.displayClientMessage(Component.translatable("text.roundabout.vampire.coffin_occupied"), true);
+            player.displayClientMessage(Component.translatable("text.sba.vampire.coffin_occupied"), true);
             return InteractionResult.CONSUME;
         } else {
             final BlockPos finalPos = pos;
@@ -87,7 +87,7 @@ public class CoffinBlock extends BedBlock {
             player.startSleepInBed(pos).ifLeft(sleepResult1 -> {
                 if (sleepResult1 != null) {
                     if (Player.BedSleepingProblem.NOT_POSSIBLE_NOW.equals(sleepResult1)){
-                        player.displayClientMessage(Component.translatable("text.roundabout.vampire.coffin_cant_sleep"), true);
+                        player.displayClientMessage(Component.translatable("text.sba.vampire.coffin_cant_sleep"), true);
                     } else if (sleepResult1.getMessage() != null) {
                         player.displayClientMessage(sleepResults.getOrDefault(sleepResult1, sleepResult1.getMessage()), true);
                     }

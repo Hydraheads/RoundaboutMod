@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.gui;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.KeyInputRegistry;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class TroopTacticsScreen extends Screen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation TROOP_CHOOSER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation TROOP_CHOOSER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/troop_chooser.png");
 
     private static final int
@@ -68,25 +68,25 @@ public class TroopTacticsScreen extends Screen {
         int centerY = this.height / 2-10;
 
         this.slots.add(new SwitchSelect(STOP, centerX, centerY-25,
-                Component.translatable("roundabout.troop_tactics.stop")));
+                Component.translatable("sba.troop_tactics.stop")));
 
         this.slots.add(new SwitchSelect(ADVANCE, centerX-(offsetCenter*2), centerY-12,
-                Component.translatable("roundabout.troop_tactics.advance")));
+                Component.translatable("sba.troop_tactics.advance")));
         this.slots.add(new SwitchSelect(FIRE, centerX-offsetCenter, centerY-18,
-                Component.translatable("roundabout.troop_tactics.fire")));
+                Component.translatable("sba.troop_tactics.fire")));
         this.slots.add(new SwitchSelect(HUNT, centerX-(offsetCenter*2)+offsetY, centerY+16,
-                Component.translatable("roundabout.troop_tactics.hunt")));
+                Component.translatable("sba.troop_tactics.hunt")));
         this.slots.add(new SwitchSelect(WARD, centerX-offsetCenter+offsetY, centerY+10,
-                Component.translatable("roundabout.troop_tactics.ward")));
+                Component.translatable("sba.troop_tactics.ward")));
 
         this.slots.add(new SwitchSelect(TANK, centerX+(offsetCenter*2), centerY-12,
-                Component.translatable("roundabout.troop_tactics.tank")));
+                Component.translatable("sba.troop_tactics.tank")));
         this.slots.add(new SwitchSelect(HELICOPTER, centerX+offsetCenter, centerY-18,
-                Component.translatable("roundabout.troop_tactics.helicopter")));
+                Component.translatable("sba.troop_tactics.helicopter")));
         this.slots.add(new SwitchSelect(MISSILE, centerX+(offsetCenter*2)-offsetY, centerY+16,
-                Component.translatable("roundabout.troop_tactics.missile")));
+                Component.translatable("sba.troop_tactics.missile")));
         this.slots.add(new SwitchSelect(SOLDIER, centerX+offsetCenter-offsetY, centerY+10,
-                Component.translatable("roundabout.troop_tactics.soldier")));
+                Component.translatable("sba.troop_tactics.soldier")));
 
     }
 
@@ -118,7 +118,7 @@ public class TroopTacticsScreen extends Screen {
         guiGraphics.pose().popPose();
         super.render(guiGraphics, i, j, f);
 
-        Component str = Component.translatable("roundabout.bad_company.troop_tactics");
+        Component str = Component.translatable("sba.bad_company.troop_tactics");
 
         guiGraphics.drawCenteredString(this.font, str , this.width / 2, l, -1);
 
@@ -149,7 +149,7 @@ public class TroopTacticsScreen extends Screen {
             if (safeSelect && lastChangedConfig == currentlyHovered) {
                 return;
             }
-            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers() instanceof PowersBadCompany PBC) {
+            if (Minecraft.getInstance().player != null && ((StandUser)Minecraft.getInstance().player).sba$getStandPowers() instanceof PowersBadCompany PBC) {
                 PBC.selectedTactics(currentlyHovered);
                 lastChangedConfig = currentlyHovered;
             }
@@ -209,14 +209,14 @@ public class TroopTacticsScreen extends Screen {
     }
 
     /*public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }*/
 
 
-    public boolean roundabout$sameKeyOne(KeyMapping key1){
+    public boolean sba$sameKeyOne(KeyMapping key1){
         return (key1.isDown() || (key1.same(this.minecraft.options.keyLoadHotbarActivator) && this.minecraft.options.keyLoadHotbarActivator.isDown())
                 || (key1.same(this.minecraft.options.keySaveHotbarActivator) && this.minecraft.options.keySaveHotbarActivator.isDown())
         );
@@ -224,7 +224,7 @@ public class TroopTacticsScreen extends Screen {
 
     @Override
     public boolean keyReleased(int $$0, int $$1, int $$2) {
-        if (this.minecraft != null && !roundabout$sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
+        if (this.minecraft != null && !sba$sameKeyOne(KeyInputRegistry.abilityTwoKey)) {
             this.exitTroopSelect();
 
             this.minecraft.options.keyUse.setDown(false);

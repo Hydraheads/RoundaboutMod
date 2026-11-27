@@ -11,13 +11,13 @@ public class TimeStopBlockEntity implements IBlockEntityAccess {
      * and closed normally by the person moving in stopped time... ultra specific detail*/
 
     @Unique
-    private boolean roundabout$TimeInteracted = false;
+    private boolean sba$TimeInteracted = false;
     @Override
-    public void roundabout$setRoundaboutTimeInteracted(boolean roundaboutTimeInteracted) {
-        this.roundabout$TimeInteracted = roundaboutTimeInteracted;
+    public void sba$setSBATimeInteracted(boolean sbaTimeInteracted) {
+        this.sba$TimeInteracted = sbaTimeInteracted;
     }
     @Override
-    public boolean roundabout$getRoundaboutTimeInteracted() {
-        return this.roundabout$TimeInteracted;
+    public boolean sba$getSBATimeInteracted() {
+        return this.sba$TimeInteracted;
     }
 }

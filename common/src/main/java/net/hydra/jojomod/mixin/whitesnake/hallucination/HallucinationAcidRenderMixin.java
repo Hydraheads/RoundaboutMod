@@ -21,21 +21,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BlockRenderDispatcher.class)
 public abstract class HallucinationAcidRenderMixin {
     @Inject(method = "renderBatched", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$hideAcidInWorld(BlockState state, BlockPos pos,
+    private void sbaWhitesnake$hideAcidInWorld(BlockState state, BlockPos pos,
                                                       BlockAndTintGetter level, PoseStack pose,
                                                       VertexConsumer consumer, boolean checkSides,
                                                       RandomSource random, CallbackInfo ci) {
-        if (roundaboutWhitesnake$acidIsHidden(state)) ci.cancel();
+        if (sbaWhitesnake$acidIsHidden(state)) ci.cancel();
     }
 
     @Inject(method = "renderSingleBlock", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$hideSingleAcidBlock(BlockState state, PoseStack pose,
+    private void sbaWhitesnake$hideSingleAcidBlock(BlockState state, PoseStack pose,
                                                           MultiBufferSource buffers, int light,
                                                           int overlay, CallbackInfo ci) {
-        if (roundaboutWhitesnake$acidIsHidden(state)) ci.cancel();
+        if (sbaWhitesnake$acidIsHidden(state)) ci.cancel();
     }
 
-    private static boolean roundaboutWhitesnake$acidIsHidden(BlockState state) {
+    private static boolean sbaWhitesnake$acidIsHidden(BlockState state) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || !(state.is(ModBlocks.HALLUCINATORY_ACID)
                 || state.is(ModBlocks.HALLUCINATORY_ACID_WALL))) return false;

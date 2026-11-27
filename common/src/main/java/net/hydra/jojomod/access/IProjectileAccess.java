@@ -4,19 +4,19 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.HitResult;
 
 public interface IProjectileAccess {
-    float roundabout$getRoundaboutSpeedMultiplier();
-    float setRoundaboutSpeedMultiplier(float roundaboutSpeedMultiplier);
-    boolean roundabout$getRoundaboutIsTimeStopCreated();
-    void roundabout$setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated);
+    float sba$getSBASpeedMultiplier();
+    float setSBASpeedMultiplier(float sbaSpeedMultiplier);
+    boolean sba$getSBAIsTimeStopCreated();
+    void sba$setSBAIsTimeStopCreated(boolean sbaIsTimeStopCreated);
 
-    void roundaboutOnHit(HitResult $$0);
+    void sbaOnHit(HitResult $$0);
 
-    boolean roundabout$CanHitEntity(Entity $$0x);
+    boolean sba$CanHitEntity(Entity $$0x);
 
-    void roundabout$CheckInsideBlocks();
-    boolean roundabout$getIsDeflected();
-    void roundabout$setIsDeflected(boolean defl);
+    void sba$CheckInsideBlocks();
+    boolean sba$getIsDeflected();
+    void sba$setIsDeflected(boolean defl);
 
-    boolean roundabout$getManhattanProjectile();
-    void roundabout$setManhattanProjectile(boolean manhattanProjectile);
+    boolean sba$getManhattanProjectile();
+    void sba$setManhattanProjectile(boolean manhattanProjectile);
 }

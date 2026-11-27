@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.MandomLayer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.BlackSabbathModel;
@@ -19,47 +19,47 @@ import org.jetbrains.annotations.Nullable;
 
 public class MandomBlackSabbathRenderer extends StandRenderer<MandomEntity>{
 
-    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/base.png");
-    public static ResourceLocation purple = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation purple = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/purple.png");
-    public static ResourceLocation sky = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation sky = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/sky.png");
-    public static ResourceLocation squid = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation squid = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/squid.png");
-    public static ResourceLocation glow_squid = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation glow_squid = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/glow_squid.png");
-    public static ResourceLocation rose = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation rose = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/rose.png");
-    public static ResourceLocation nautilus = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation nautilus = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/nautilus.png");
-    public static ResourceLocation alien = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation alien = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/alien.png");
-    public static ResourceLocation dark = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation dark = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/dark.png");
-    public static ResourceLocation jellyfish = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation jellyfish = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/jellyfish.png");
-    public static ResourceLocation happy = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation happy = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/happy.png");
-    public static ResourceLocation melon = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation melon = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/melon.png");
-    public static ResourceLocation eye = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation eye = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/eye.png");
-    public static ResourceLocation esidisi = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation esidisi = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/esidisi.png");
-    public static ResourceLocation caps = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation caps = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/caps.png");
-    public static ResourceLocation command = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation command = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/command.png");
-    public static ResourceLocation command2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation command2 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/emissive/command.png");
-    public static ResourceLocation sculk = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation sculk = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/sculk.png");
-    public static ResourceLocation sculk2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation sculk2 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/emissive/sculk.png");
-    public static ResourceLocation tv = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation tv = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/tv.png");
-    public static ResourceLocation tv2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation tv2 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/emissive/tv.png");
 
     public MandomBlackSabbathRenderer(EntityRendererProvider.Context context) {

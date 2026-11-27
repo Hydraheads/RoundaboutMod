@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.PWMeteorModel;
@@ -85,19 +85,19 @@ public class PWMeteorRenderer extends EntityRenderer<PWMeteorEntity> {
     }
 
 
-    public static final ResourceLocation PW_METEOR_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor.png");
-    public static final ResourceLocation PW_METEOR_BLUE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_blue.png");
-    public static final ResourceLocation PW_METEOR_GREEN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_green.png");
-    public static final ResourceLocation PW_METEOR_PURPLE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_purple.png");
-    public static final ResourceLocation PW_METEOR_WATER_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_water.png");
-    public static final ResourceLocation PW_METEOR_WHITE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_white.png");
-    public static final ResourceLocation PW_METEOR_COMET_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_comet.png");
-    public static final ResourceLocation PW_METEOR_GRAPE_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/pw_meteor_grape.png");
+    public static final ResourceLocation PW_METEOR_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_meteor.png");
+    public static final ResourceLocation PW_METEOR_BLUE_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_meteor_blue.png");
+    public static final ResourceLocation PW_METEOR_GREEN_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_meteor_green.png");
+    public static final ResourceLocation PW_METEOR_PURPLE_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_meteor_purple.png");
+    public static final ResourceLocation PW_METEOR_WATER_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_meteor_water.png");
+    public static final ResourceLocation PW_METEOR_WHITE_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_meteor_white.png");
+    public static final ResourceLocation PW_METEOR_COMET_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_meteor_comet.png");
+    public static final ResourceLocation PW_METEOR_GRAPE_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/pw_meteor_grape.png");
 
     @Override
     public ResourceLocation getTextureLocation(PWMeteorEntity entity) {
         LivingEntity user = entity.getUser();
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+        if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersPlanetWaves PPW) {
             byte sft = PPW.getFireballColor();
             if (sft == 3) {
                 return PW_METEOR_BLUE_TEXTURE;

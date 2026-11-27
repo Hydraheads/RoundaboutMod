@@ -16,11 +16,11 @@ public class PilotingGameRenderer {
     /**Rendering block outlines should come from the stand that is being piloted rather than the user*/
 
     @Inject(method = "shouldRenderBlockOutline()Z", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$shouldOutline(CallbackInfoReturnable<Boolean> cir) {
+    private void sba$shouldOutline(CallbackInfoReturnable<Boolean> cir) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null) {
             StandUser sus = ((StandUser) player);
-            StandPowers powers = sus.roundabout$getStandPowers();
+            StandPowers powers = sus.sba$getStandPowers();
             if (powers.isPiloting()) {
                 cir.setReturnValue(false);
             }

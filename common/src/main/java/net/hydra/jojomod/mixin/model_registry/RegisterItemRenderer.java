@@ -2,7 +2,7 @@ package net.hydra.jojomod.mixin.model_registry;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IItemRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ModItemModels;
@@ -38,7 +38,7 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
 
     /**Modded items are attributed the custom models if their models change with context*/
     @ModifyVariable(method = "getModel", at = @At(value = "STORE"), ordinal = 0)
-    public BakedModel roundabout$render(
+    public BakedModel sba$render(
             BakedModel value,ItemStack $$0, @Nullable Level $$1, @Nullable LivingEntity $$2, int $$3) {
         if ($$0.is(Items.BOW) && $$2 !=null){
             if ($$2.getProjectile($$0).getItem() == ModItems.STAND_ARROW){
@@ -143,7 +143,7 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
     @Unique
     public Entity rdbt$tempent = null;
     @ModifyVariable(method = "render", at = @At(value = "HEAD"), argsOnly = true)
-    public BakedModel roundabout$render(
+    public BakedModel sba$render(
             BakedModel value, ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices,
             MultiBufferSource vertexConsumers, int light, int overlay, BakedModel $$7) {
         if (stack.is(ModItems.HARPOON) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
@@ -152,9 +152,9 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
         } if (stack.is(ModItems.SNUBNOSE_REVOLVER) && renderMode != ItemDisplayContext.GUI && renderMode != ItemDisplayContext.GROUND) {
 
             if (rdbt$tempent instanceof Player plent) {
-                if (((IPlayerEntity) plent).roundabout$getMaskSlot() != null &&
-                        !((IPlayerEntity) plent).roundabout$getMaskSlot().isEmpty() &&
-                        ((IPlayerEntity) plent).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
+                if (((IPlayerEntity) plent).sba$getMaskSlot() != null &&
+                        !((IPlayerEntity) plent).sba$getMaskSlot().isEmpty() &&
+                        ((IPlayerEntity) plent).sba$getMaskSlot().getItem() instanceof MaskItem ME &&
                         ME.visageData instanceof MistaVisage) {
                     return this.itemModelShaper.getModelManager().getModel(ModItemModels.MISTA_REVOLVER_IN_HAND);
                 }
@@ -248,14 +248,14 @@ public abstract class RegisterItemRenderer implements IItemRenderer {
     /**Just Accessor code*/
     @Unique
     @Override
-    public BlockEntityWithoutLevelRenderer roundabout$getBlockEntityRenderer(){
+    public BlockEntityWithoutLevelRenderer sba$getBlockEntityRenderer(){
         return this.blockEntityRenderer;
     }
 
 
     @Override
     @Unique
-    public void roundabout$renderModelLists(BakedModel $$0, ItemStack $$1, int $$2, int $$3, PoseStack $$4, VertexConsumer $$5) {
+    public void sba$renderModelLists(BakedModel $$0, ItemStack $$1, int $$2, int $$3, PoseStack $$4, VertexConsumer $$5) {
         renderModelLists($$0,$$1,$$2,$$3,$$4,$$5);
     }
 

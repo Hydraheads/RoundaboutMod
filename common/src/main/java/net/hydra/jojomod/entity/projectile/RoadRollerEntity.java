@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
@@ -161,7 +161,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
             return false;
         }
 
-        if (other instanceof LivingEntity le && ((StandUser) le).roundabout$getStandPowers().cancelCollision(this)) {
+        if (other instanceof LivingEntity le && ((StandUser) le).sba$getStandPowers().cancelCollision(this)) {
             return false;
         }
 
@@ -297,10 +297,10 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
                     && hitResult.getEntity() instanceof EnderMan em
                     && this.getVehicle() == null) {
 
-                if (((IEnderMan) em).roundabout$teleport()) return;
+                if (((IEnderMan) em).sba$teleport()) return;
 
                 for (int i = 0; i < 64; i++) {
-                    if (((IEnderMan) em).roundabout$teleport()) {
+                    if (((IEnderMan) em).sba$teleport()) {
                         return;
                     }
                 }
@@ -699,7 +699,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
         }
 
         if (!this.level().isClientSide) {
-            if (!(this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_ROAD_ROLLER_BREAK_ICE))) {
+            if (!(this.level().getGameRules().getBoolean(ModGamerules.SBA_ROAD_ROLLER_BREAK_ICE))) {
                 return;
             }
 
@@ -807,7 +807,7 @@ public class RoadRollerEntity extends LivingEntity implements PlayerRideable {
         if (cpas instanceof ServerPlayer SP){
             rideLengthTicks++;
             if (rideLengthTicks == 40){
-                SP.displayClientMessage(Component.translatable("text.roundabout.riding_road_roller").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                SP.displayClientMessage(Component.translatable("text.sba.riding_road_roller").withStyle(ChatFormatting.LIGHT_PURPLE), true);
             }
         } else {
             rideLengthTicks = 0;

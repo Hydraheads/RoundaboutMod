@@ -1,0 +1,14 @@
+{
+  "parent" : "item/generated",
+  "textures" : {
+    "layer0" : "sba:item/stray_cat_anime"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "sba:anim" : 0.1
+      },
+      "model" : "sba:item/stray_cat_anime_sleep"
+    }
+  ]
+}

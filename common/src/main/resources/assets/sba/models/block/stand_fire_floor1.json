@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_fire_floor",
+  "textures": {
+    "fire": "sba:block/stand_fire_1"
+  }
+}

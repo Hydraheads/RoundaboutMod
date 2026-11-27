@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AccessFoxModel {
 
     @Accessor("head")
-    ModelPart roundabout$getHead();
+    ModelPart sba$getHead();
 }

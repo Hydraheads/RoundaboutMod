@@ -34,7 +34,7 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
     at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+    public void sba$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         if (PowerTypes.isErasingTime(ClientUtil.getPlayer()) || PowerTypes.getPlaneOfExisting(ClientUtil.getPlayer()) == 12){
             if (PowerTypes.isExistentiallyElsewhere($$3)){
                 if (!(ClientUtil.isPlayer($$3))) {
@@ -60,49 +60,49 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
         boolean diverDownShowArmor =
                 // i am not putting all this in the if statement lmao
                 Minecraft.getInstance().player instanceof StandUser user
-                        && user.roundabout$getStandPowers() instanceof PowersDiverDown dd
+                        && user.sba$getStandPowers() instanceof PowersDiverDown dd
                         && dd.shouldShowDisguiseArmor();
 
         if ($$3 instanceof Player PE) {
-            if (!((IPlayerEntity)PE).roundabout$getMaskSlot().isEmpty()
-                    && ((IPlayerEntity)PE).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
+            if (!((IPlayerEntity)PE).sba$getMaskSlot().isEmpty()
+                    && ((IPlayerEntity)PE).sba$getMaskSlot().getItem() instanceof MaskItem ME
                     && !ME.visageData.generateVisageData(PE).rendersArmor()
-                    && (!((StandUser) PE).roundabout$isDisguised() || !diverDownShowArmor)
-                    && !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+                    && (!((StandUser) PE).sba$isDisguised() || !diverDownShowArmor)
+                    && !($$3.isInvisible() && ((IEntityAndData) $$3).sba$getTrueInvisibility() <= -1)
             ) {
                 ci.cancel();
                 return;
             }
         } else if ($$3 instanceof CloneEntity CE && CE.player != null) {
-            if (!((IPlayerEntity)CE.player).roundabout$getMaskSlot().isEmpty()
-                    && ((IPlayerEntity)CE.player).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
+            if (!((IPlayerEntity)CE.player).sba$getMaskSlot().isEmpty()
+                    && ((IPlayerEntity)CE.player).sba$getMaskSlot().getItem() instanceof MaskItem ME
                     && !ME.visageData.generateVisageData(CE.player).rendersArmor() &&
-                    !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+                    !($$3.isInvisible() && ((IEntityAndData) $$3).sba$getTrueInvisibility() <= -1)
             ){
                 ci.cancel();
                 return;
             }
         }
 
-        if (((StandUser)$$3).roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit() &&
-                !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+        if (((StandUser)$$3).sba$getStandPowers() instanceof PowersOasis po && po.renderSuit() &&
+                !($$3.isInvisible() && ((IEntityAndData) $$3).sba$getTrueInvisibility() <= -1)
         ){
             ci.cancel();
             return;
         }
-        if (((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet() &&
-                !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+        if (((StandUser)$$3).sba$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet() &&
+                !($$3.isInvisible() && ((IEntityAndData) $$3).sba$getTrueInvisibility() <= -1)
         ){
             ci.cancel();
             return;
         }
-        if (((StandUser)$$3).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.hasStandActive($$3) && ((StandUser) $$3).roundabout$getIdlePos() != 1 &&
-                !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)
+        if (((StandUser)$$3).sba$getStandPowers() instanceof Powers20thCenturyBoy PCB && PowerTypes.hasStandActive($$3) && ((StandUser) $$3).sba$getIdlePos() != 1 &&
+                !($$3.isInvisible() && ((IEntityAndData) $$3).sba$getTrueInvisibility() <= -1)
         ){
             ci.cancel();
             return;
         }
-        if ($$3 != null && ClientUtil.hideArmor($$3) && !($$3.isInvisible() && ((IEntityAndData) $$3).roundabout$getTrueInvisibility() <= -1)){
+        if ($$3 != null && ClientUtil.hideArmor($$3) && !($$3.isInvisible() && ((IEntityAndData) $$3).sba$getTrueInvisibility() <= -1)){
             ci.cancel();
             return;
         }
@@ -110,7 +110,7 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
 
     @Inject(method= "renderArmorPiece",at = @At(value="HEAD"),cancellable = true)
     private void hidespecifcpieces(PoseStack $$0, MultiBufferSource $$1, T $$2, EquipmentSlot $$3, int $$4, A $$5, CallbackInfo ci) {
-        if (((StandUser) $$2).roundabout$getStandPowers() instanceof PowersGreenDay pgd) {
+        if (((StandUser) $$2).sba$getStandPowers() instanceof PowersGreenDay pgd) {
             boolean lowerhalf = $$3.getName().equals("legs") || $$3.getName().equals("feet");
             if (pgd.legGoneTicks>0 && lowerhalf) {
                 ci.cancel();
@@ -121,7 +121,7 @@ public abstract class VisageHumanoidArmorLayer<T extends LivingEntity, M extends
             ci.cancel();
         }
 
-        if (((StandUser) $$2).roundabout$getStandPowers() instanceof PowersCatchTheRainbow pctr) {
+        if (((StandUser) $$2).sba$getStandPowers() instanceof PowersCatchTheRainbow pctr) {
             boolean headpart = $$3.getName().equals("head");
             if (pctr.hasStandActive(pctr.self) && headpart) {
                 ci.cancel();

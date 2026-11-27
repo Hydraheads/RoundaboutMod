@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.entity.visages.mobs.PlayerModifiedNPC;
@@ -355,10 +355,10 @@ public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> im
                 this.leftLeg.xRot = Mth.lerp(this.swimAmount, this.leftLeg.xRot, 0.3F * Mth.cos($$1 * 0.33333334F + (float) Math.PI));
                 this.rightLeg.xRot = Mth.lerp(this.swimAmount, this.rightLeg.xRot, 0.3F * Mth.cos($$1 * 0.33333334F));
             }
-            byte pos = $$0.roundabout$GetPos();
+            byte pos = $$0.sba$GetPos();
             if (pos == PlayerPosIndex.DODGE_FORWARD || pos == PlayerPosIndex.DODGE_BACKWARD) {
                 //this.body.xRot = -20.0F;
-                int dodgeTime = $$0.roundabout$getDodgeTime();
+                int dodgeTime = $$0.sba$getDodgeTime();
                 float fl;
                 if (dodgeTime > -1) {
                     if (dodgeTime > 5) {
@@ -435,23 +435,23 @@ public class  PlayerLikeModel<T extends JojoNPC> extends HierarchicalModel<T> im
 
 
         StandUser user = ((StandUser)$$0);
-        if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()){
-            if (user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
+        if (user.sba$getEffectiveCombatMode() && !$$0.isUsingItem()){
+            if (user.sba$rotateArmToShoot(HumanoidArm.RIGHT)) {
                 this.rightArm.yRot = -0.1F + this.head.yRot;
                 this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
             }
-            if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT)) {
+            if (user.sba$rotateArmToShoot(HumanoidArm.LEFT)) {
                 this.leftArm.yRot = 0.1F + this.head.yRot;
                 this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
             }
         } else if ($$0.host != null){
             StandUser user2 = ((StandUser)$$0.host);
-            if (user2.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()){
-                if (user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
+            if (user2.sba$getEffectiveCombatMode() && !$$0.isUsingItem()){
+                if (user.sba$rotateArmToShoot(HumanoidArm.RIGHT)) {
                     this.rightArm.yRot = -0.1F + this.head.yRot;
                     this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
                 }
-                if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT)) {
+                if (user.sba$rotateArmToShoot(HumanoidArm.LEFT)) {
                     this.leftArm.yRot = 0.1F + this.head.yRot;
                     this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
                 }

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class DiverDownLoomScreenMixin {
 
     @Redirect(method = "renderBg", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/LoomScreen;BG_LOCATION:Lnet/minecraft/resources/ResourceLocation;"))
-    private ResourceLocation roundabout$diverDownLoomTexture() {
+    private ResourceLocation sba$diverDownLoomTexture() {
         if ((Object) this instanceof DiverDownLoomScreen) {
             return DiverDownLoomScreen.TEXTURE;
         }

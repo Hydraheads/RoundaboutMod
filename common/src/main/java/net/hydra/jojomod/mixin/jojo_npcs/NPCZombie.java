@@ -27,7 +27,7 @@ public abstract class NPCZombie extends Monster {
     /**Zombie Aestheticians and Zombie versions of other JoJo NPCs need to be turned into when their base NPCs die*/
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$killedEntity(ServerLevel serverLevel, LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
+    protected void sba$killedEntity(ServerLevel serverLevel, LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
         boolean bl = super.killedEntity(serverLevel, livingEntity);
         if ((serverLevel.getDifficulty() == Difficulty.NORMAL || serverLevel.getDifficulty() == Difficulty.HARD) && livingEntity instanceof Aesthetician aesthetician) {
             if (serverLevel.getDifficulty() != Difficulty.HARD && this.random.nextBoolean()) {
@@ -51,7 +51,7 @@ public abstract class NPCZombie extends Monster {
 
     /**JoJo NPCs need to be attacked by zombies like villagers are*/
     @Inject(method = "addBehaviourGoals", at = @At(value = "TAIL"))
-    protected void roundabout$addBehaviourGoals(CallbackInfo ci) {
+    protected void sba$addBehaviourGoals(CallbackInfo ci) {
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, JojoNPC.class, false));
     }
 

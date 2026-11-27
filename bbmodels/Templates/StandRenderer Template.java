@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -19,9 +19,9 @@ import org.joml.Vector3f;
 public class [Stand Name Here]Renderer extends StandRenderer<[Stand Entity]> {
 
     // skin 1 is default skin
-    private static final ResourceLocation SKIN_1 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/[Stand Name Here]/skin_1.png");
-    private static final ResourceLocation SKIN_2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/[Stand Name Here]/skin_2.png");
-    private static final ResourceLocation SKIN_3 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/[Stand Name Here]/skin_3.png");
+    private static final ResourceLocation SKIN_1 = new ResourceLocation(SBA.MOD_ID,"textures/stand/[Stand Name Here]/skin_1.png");
+    private static final ResourceLocation SKIN_2 = new ResourceLocation(SBA.MOD_ID,"textures/stand/[Stand Name Here]/skin_2.png");
+    private static final ResourceLocation SKIN_3 = new ResourceLocation(SBA.MOD_ID,"textures/stand/[Stand Name Here]/skin_3.png");
 
 
 

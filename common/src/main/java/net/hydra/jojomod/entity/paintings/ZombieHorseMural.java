@@ -17,7 +17,7 @@ import org.apache.commons.lang3.Validate;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class ZombieHorseMural extends RoundaboutPainting {
+public class ZombieHorseMural extends SBAPainting {
 
 
 
@@ -32,12 +32,12 @@ public class ZombieHorseMural extends RoundaboutPainting {
 
 
 
-    public static EntityType<? extends RoundaboutPainting> getPaintingType(){
+    public static EntityType<? extends SBAPainting> getPaintingType(){
         return ModEntities.ZOMBIE_HORSE_MURAL;
     }
 
-    public static Optional<RoundaboutPainting> create(Level $$0, BlockPos $$1, Direction $$2) {
-        RoundaboutPainting $$3 = new ZombieHorseMural($$0, $$1,$$2);
+    public static Optional<SBAPainting> create(Level $$0, BlockPos $$1, Direction $$2) {
+        SBAPainting $$3 = new ZombieHorseMural($$0, $$1,$$2);
         if (!$$3.survives())
             return Optional.empty();
         return Optional.of($$3);

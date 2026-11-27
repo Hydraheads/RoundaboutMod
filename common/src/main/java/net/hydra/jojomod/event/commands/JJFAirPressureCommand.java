@@ -20,7 +20,7 @@ public final class JJFAirPressureCommand {
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("RoundaboutAirPressure")
+        dispatcher.register(Commands.literal("SBAAirPressure")
                 .requires(source -> source.hasPermission(2))
                 .then(Commands.literal("Clear")
                         .then(Commands.argument("targets", EntityArgument.players())

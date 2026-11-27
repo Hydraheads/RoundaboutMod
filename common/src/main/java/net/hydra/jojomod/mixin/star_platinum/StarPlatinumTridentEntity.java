@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.star_platinum;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -22,12 +22,12 @@ public class StarPlatinumTridentEntity {
      * will be a little rebellious until super throw wears off and keep careening forward*/
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
-        ((ISuperThrownAbstractArrow)this).roundabout$cancelSuperThrow();
+    private void sba$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
+        ((ISuperThrownAbstractArrow)this).sba$cancelSuperThrow();
     }
 
     @Inject(method = "onHitEntity", at = @At(value = "TAIL"),cancellable = true)
-    private void roundabout$onHitEntityManhattan(EntityHitResult $$0, CallbackInfo ci) {
+    private void sba$onHitEntityManhattan(EntityHitResult $$0, CallbackInfo ci) {
         Entity hit = $$0.getEntity();
         if(isManhattanTrident){
             doXTraHattanDmg(hit);
@@ -52,7 +52,7 @@ public class StarPlatinumTridentEntity {
 
     boolean isManhattanTrident = false;
 
-    public void roundabout$setIsTridentManhattan(boolean hattan){
+    public void sba$setIsTridentManhattan(boolean hattan){
         isManhattanTrident = hattan;
     }
 }

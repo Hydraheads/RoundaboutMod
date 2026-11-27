@@ -2,7 +2,7 @@ package net.hydra.jojomod.mixin.stand_users;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGossipContainerAccess;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -68,157 +68,157 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
 
     @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$ANUBIS_TICKS = SynchedEntityData.defineId(Villager.class,
+    private static final EntityDataAccessor<Integer> SBA$ANUBIS_TICKS = SynchedEntityData.defineId(Villager.class,
             EntityDataSerializers.INT);
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$ANUBIS_TYPE = SynchedEntityData.defineId(Villager.class,
+    private static final EntityDataAccessor<Byte> SBA$ANUBIS_TYPE = SynchedEntityData.defineId(Villager.class,
             EntityDataSerializers.BYTE);
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$TENSION_STATE = SynchedEntityData.defineId(Villager.class,
+    private static final EntityDataAccessor<Byte> SBA$TENSION_STATE = SynchedEntityData.defineId(Villager.class,
             EntityDataSerializers.BYTE
     );
     @Unique
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$CALLOUT_EFFECT_TICKS = SynchedEntityData.defineId(Villager.class,
+    private static final EntityDataAccessor<Integer> SBA$CALLOUT_EFFECT_TICKS = SynchedEntityData.defineId(Villager.class,
             EntityDataSerializers.INT);
 
     @Unique
     @Override
-    public int roundabout$getAnubisTicks() {
-        return this.getEntityData().get(ROUNDABOUT$ANUBIS_TICKS);
+    public int sba$getAnubisTicks() {
+        return this.getEntityData().get(SBA$ANUBIS_TICKS);
     }
     @Unique
     @Override
-    public void roundabout$setAnubisTicks(int i) {
-        this.getEntityData().set(ROUNDABOUT$ANUBIS_TICKS,i);
+    public void sba$setAnubisTicks(int i) {
+        this.getEntityData().set(SBA$ANUBIS_TICKS,i);
     }
     @Unique
     @Override
-    public void roundabout$clearGossips() {
+    public void sba$clearGossips() {
         ((IGossipContainerAccess)this.gossips).rdbt$clearGossips();
     }
     @Unique
-    public byte roundabout$getAnubisType() {
-        return this.getEntityData().get(ROUNDABOUT$ANUBIS_TYPE);
+    public byte sba$getAnubisType() {
+        return this.getEntityData().get(SBA$ANUBIS_TYPE);
     }
     @Unique
-    public void roundabout$setAnubisType(byte i) {
-        this.getEntityData().set(ROUNDABOUT$ANUBIS_TYPE,i);
+    public void sba$setAnubisType(byte i) {
+        this.getEntityData().set(SBA$ANUBIS_TYPE,i);
     }
 
 
 
 
     @Inject(method = "addAdditionalSaveData",at = @At("HEAD"))
-    private void roundabout$saveAdditionalData(CompoundTag $$0, CallbackInfo ci) {
-        if (this.roundabout$getAnubisTicks() != -1) {
-            $$0.putByte("roundabout.heldAnubis",this.roundabout$getAnubisType());
+    private void sba$saveAdditionalData(CompoundTag $$0, CallbackInfo ci) {
+        if (this.sba$getAnubisTicks() != -1) {
+            $$0.putByte("sba.heldAnubis",this.sba$getAnubisType());
         }
-        if (this.roundabout$getTensionState() != TENSION_UNROLLED) {
-            $$0.putByte("roundabout.tensionState", this.roundabout$getTensionState());
+        if (this.sba$getTensionState() != TENSION_UNROLLED) {
+            $$0.putByte("sba.tensionState", this.sba$getTensionState());
         }
     }
 
     @Inject(method = "readAdditionalSaveData",at = @At("HEAD"))
-    private void roundabout$readAddtionalData(CompoundTag $$0, CallbackInfo ci) {
-        if ($$0.contains("roundabout.heldAnubis")) {
-            this.roundabout$setAnubisTicks(30);
-            this.roundabout$setAnubisType($$0.getByte("roundabout.heldAnubis"));
+    private void sba$readAddtionalData(CompoundTag $$0, CallbackInfo ci) {
+        if ($$0.contains("sba.heldAnubis")) {
+            this.sba$setAnubisTicks(30);
+            this.sba$setAnubisType($$0.getByte("sba.heldAnubis"));
         }
-        if ($$0.contains("roundabout.tensionState")) {
-            this.roundabout$setTensionState($$0.getByte("roundabout.tensionState"));
+        if ($$0.contains("sba.tensionState")) {
+            this.sba$setTensionState($$0.getByte("sba.tensionState"));
         }
     }
 
     @Inject(method = "defineSynchedData",at=@At(value = "TAIL"))
-    private void roundabout$addVillagerSynched(CallbackInfo ci) {
-        if (!((Villager)(Object)this).getEntityData().hasItem(ROUNDABOUT$ANUBIS_TICKS) ) {
-            ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TICKS, -1);
-            ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$ANUBIS_TYPE, (byte)-1);
+    private void sba$addVillagerSynched(CallbackInfo ci) {
+        if (!((Villager)(Object)this).getEntityData().hasItem(SBA$ANUBIS_TICKS) ) {
+            ((Villager)(Object)this).getEntityData().define(SBA$ANUBIS_TICKS, -1);
+            ((Villager)(Object)this).getEntityData().define(SBA$ANUBIS_TYPE, (byte)-1);
         }
-        if (!((Villager)(Object)this).getEntityData().hasItem(ROUNDABOUT$TENSION_STATE)) {
-            ((Villager)(Object)this).getEntityData().define(ROUNDABOUT$TENSION_STATE, TENSION_UNROLLED);
+        if (!((Villager)(Object)this).getEntityData().hasItem(SBA$TENSION_STATE)) {
+            ((Villager)(Object)this).getEntityData().define(SBA$TENSION_STATE, TENSION_UNROLLED);
         }
-        if (!this.getEntityData().hasItem(ROUNDABOUT$CALLOUT_EFFECT_TICKS)) {
-            this.getEntityData().define(ROUNDABOUT$CALLOUT_EFFECT_TICKS, 0);
+        if (!this.getEntityData().hasItem(SBA$CALLOUT_EFFECT_TICKS)) {
+            this.getEntityData().define(SBA$CALLOUT_EFFECT_TICKS, 0);
         }
     }
     /// currently broken, unsure why
 
     @Unique
     @Override
-    public byte roundabout$getTensionState() {
-        return this.getEntityData().get(ROUNDABOUT$TENSION_STATE);
+    public byte sba$getTensionState() {
+        return this.getEntityData().get(SBA$TENSION_STATE);
     }
 
     @Unique
     @Override
-    public void roundabout$setTensionState(byte state) {
-        this.getEntityData().set(ROUNDABOUT$TENSION_STATE, state);
+    public void sba$setTensionState(byte state) {
+        this.getEntityData().set(SBA$TENSION_STATE, state);
     }
 
     @Unique
     @Override
-    public boolean roundabout$isTense() {
-        return this.roundabout$getTensionState() == TENSION_TENSE;
+    public boolean sba$isTense() {
+        return this.sba$getTensionState() == TENSION_TENSE;
     }
 
     @Unique
     @Override
-    public void roundabout$setTense(boolean tense) {
-        this.roundabout$setTensionState(tense ? TENSION_TENSE : TENSION_RELAXED);
+    public void sba$setTense(boolean tense) {
+        this.sba$setTensionState(tense ? TENSION_TENSE : TENSION_RELAXED);
     }
 
     @Unique
     @Override
-    public boolean roundabout$isUnnerved() {
-        return this.roundabout$getTensionState() == TENSION_UNNERVED;
+    public boolean sba$isUnnerved() {
+        return this.sba$getTensionState() == TENSION_UNNERVED;
     }
 
     @Unique
     @Override
-    public void roundabout$setUnnerved() {
-        this.roundabout$setTensionState(TENSION_UNNERVED);
-        this.getEntityData().set(ROUNDABOUT$CALLOUT_EFFECT_TICKS, 160);
+    public void sba$setUnnerved() {
+        this.sba$setTensionState(TENSION_UNNERVED);
+        this.getEntityData().set(SBA$CALLOUT_EFFECT_TICKS, 160);
         this.level().playSound(null, this.blockPosition(), ModSounds.VILLAGER_CALLED_OUT_EVENT, SoundSource.NEUTRAL, 0.9F, 0.75F);
     }
 
     @Unique
     @Override
-    public boolean roundabout$hasRolledTension() {
-        return this.roundabout$getTensionState() != TENSION_UNROLLED;
+    public boolean sba$hasRolledTension() {
+        return this.sba$getTensionState() != TENSION_UNROLLED;
     }
 
     @Unique
     @Override
-    public void roundabout$rollTensionIfUnrolled() {
-        if (!this.roundabout$hasRolledTension() && !this.isClientSide()) {
+    public void sba$rollTensionIfUnrolled() {
+        if (!this.sba$hasRolledTension() && !this.isClientSide()) {
             // note to self: replace this with the lyin eyes config in the future - 88superguy
             boolean isTense = this.random.nextFloat() < 0.65F;
-            this.roundabout$setTense(isTense);
+            this.sba$setTense(isTense);
         }
     }
 
     @Unique
     @Override
-    public int roundabout$getCalloutTicks() {
-        return this.getEntityData().get(ROUNDABOUT$CALLOUT_EFFECT_TICKS);
+    public int sba$getCalloutTicks() {
+        return this.getEntityData().get(SBA$CALLOUT_EFFECT_TICKS);
     }
 
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    public void roundabout$villagerTick(CallbackInfo ci) {
-        int at = this.roundabout$getAnubisTicks();
-        int calloutTick = this.roundabout$getCalloutTicks();
-        int lockout = this.roundabout$getSnakeOilLockout();
+    public void sba$villagerTick(CallbackInfo ci) {
+        int at = this.sba$getAnubisTicks();
+        int calloutTick = this.sba$getCalloutTicks();
+        int lockout = this.sba$getSnakeOilLockout();
         if (!isClientSide()) {
             if (lockout > 0) {
-                this.roundabout$setSnakeOilLockout(lockout - 1);
+                this.sba$setSnakeOilLockout(lockout - 1);
             }
             if (at >= 0) {
                 at--;
 
                 ItemStack stack = new ItemStack(ModItems.ANUBIS_ITEM);
-                stack.getOrCreateTag().putFloat("CustomModelData",this.roundabout$getAnubisType()+1);
+                stack.getOrCreateTag().putFloat("CustomModelData",this.sba$getAnubisType()+1);
 
                 this.setItemSlot(EquipmentSlot.MAINHAND,stack);
                 this.setDropChance(EquipmentSlot.MAINHAND, 1.0F);
@@ -227,14 +227,14 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
                         this.getY() + this.getEyeHeight(), this.getZ(),
                         1, 0, 0, 0, 0.4);
 
-                this.roundabout$setAnubisTicks(at);
+                this.sba$setAnubisTicks(at);
                 if (at == 0) {
                     doAnubis();
                 }
             }
             if (calloutTick >= 0) {
                 calloutTick--;
-                this.getEntityData().set(ROUNDABOUT$CALLOUT_EFFECT_TICKS, calloutTick);
+                this.getEntityData().set(SBA$CALLOUT_EFFECT_TICKS, calloutTick);
                 if (calloutTick % 2 == 0) {
                     ((ServerLevel) this.level()).sendParticles(ModParticles.SWEAT, this.getRandomX(0.45),
                             this.getY() + this.getEyeHeight() * 0.85, this.getRandomZ(0.45),
@@ -247,18 +247,18 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
     // handles tension for interaction
     @Inject(method = "mobInteract", at = @At("HEAD"), cancellable = true)
-    private void roundabout$handleTensionOnInteract(
+    private void sba$handleTensionOnInteract(
             Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (!isClientSide()
-                && (((StandUser) player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes)
+                && (((StandUser) player).sba$getStandPowers() instanceof PowersLyinEyes lyinEyes)
                 && lyinEyes.getVisionModeClient()) {
-            boolean tensionWasAlreadyRolled = this.roundabout$hasRolledTension();
+            boolean tensionWasAlreadyRolled = this.sba$hasRolledTension();
             if (!tensionWasAlreadyRolled) {
-                this.roundabout$rollTensionIfUnrolled();
+                this.sba$rollTensionIfUnrolled();
                 return;
             }
-            if (this.roundabout$isTense()) {
-                this.roundabout$setUnnerved();
+            if (this.sba$isTense()) {
+                this.sba$setUnnerved();
                 Villager This = (Villager) (Object) this;
                 if (This.getVillagerData().getProfession() == VillagerProfession.NITWIT) {
                     List<Item> junkItems = List.of(
@@ -279,11 +279,11 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
     //taken from CinderellaVillager
     @Inject(method = "updateSpecialPrices(Lnet/minecraft/world/entity/player/Player;)V", at = @At(value = "TAIL"),cancellable = true)
-    private void roundabout$updateSpecialPrices(Player player, CallbackInfo ci) {
+    private void sba$updateSpecialPrices(Player player, CallbackInfo ci) {
         if (!player.hasEffect(MobEffects.HERO_OF_THE_VILLAGE)) {
             //lyin eyes discount
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes
-                    && this.roundabout$isUnnerved()) {
+            if (((StandUser)player).sba$getStandPowers() instanceof PowersLyinEyes
+                    && this.sba$isUnnerved()) {
                 for (MerchantOffer offer : this.getOffers()) {
                     // rn it's a 20% discount, turn this into a config later :thumbsup:
                     int discount = (int) Math.floor(0.20 * (double) offer.getBaseCostA().getCount());
@@ -295,7 +295,7 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
     @Inject(method = "mobInteract", at = @At(value = "HEAD"), cancellable = true)
     private void villagerAnubisInteraction(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!isClientSide() &&  this.entityData.get(ROUNDABOUT$ANUBIS_TICKS) <= 0  ) {
+        if (!isClientSide() &&  this.entityData.get(SBA$ANUBIS_TICKS) <= 0  ) {
             Villager This = (Villager) (Object) this;
             ItemStack stack = $$0.getItemInHand($$1);
             if (This.getVillagerData().getProfession() == VillagerProfession.CLERIC) {
@@ -311,10 +311,10 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
                         This.level().playSound(null,This.blockPosition(), SoundEvents.EVOKER_PREPARE_SUMMON,SoundSource.NEUTRAL,1F,1F);
                         This.setVillagerXp(This.getVillagerXp()+2);
 
-                        roundabout$setAnubisTicks(60);
+                        sba$setAnubisTicks(60);
                         CompoundTag tag = stack.getTagElement("SkinType");
                         if (tag != null) {
-                            roundabout$setAnubisType(tag.getByte("SkinType"));
+                            sba$setAnubisType(tag.getByte("SkinType"));
                         }
 
                         $$0.setItemInHand(InteractionHand.MAIN_HAND,new ItemStack(Items.AIR));
@@ -345,22 +345,22 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
                 This.getY() + This.getEyeHeight(), This.getZ(),
                 20, 0, 0, 0, 0.4);
         ItemStack stack = new ItemStack(ModItems.STAND_DISC_ANUBIS,1);
-        if (roundabout$getAnubisType() != (byte)-1) {
+        if (sba$getAnubisType() != (byte)-1) {
             CompoundTag $$4 = stack.getOrCreateTagElement("Memory");
-            $$4.putByte("AnubisSkin",roundabout$getAnubisType());
+            $$4.putByte("AnubisSkin",sba$getAnubisType());
         }
-        roundabout$setAnubisType((byte)-1);
+        sba$setAnubisType((byte)-1);
 
         this.spawnAtLocation(stack);
 
         Player player = This.level().getNearestPlayer(This,10);
         if (player != null) {
-            player.displayClientMessage(Component.translatable("item.roundabout.anubis_item.sword_cleansed").withStyle(ChatFormatting.WHITE), true);
+            player.displayClientMessage(Component.translatable("item.sba.anubis_item.sword_cleansed").withStyle(ChatFormatting.WHITE), true);
         }
     }
 
     @Inject(method = "mobInteract", at = @At("HEAD"))
-    private void roundabout$trackClientVillager(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sba$trackClientVillager(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (this.isClientSide()) {
             TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER = (Villager) (Object) this;
         }
@@ -374,52 +374,52 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
 
     @Unique
-    public boolean roundabout$initializedViolence = false;
+    public boolean sba$initializedViolence = false;
     @Inject(method = "customServerAiStep", at = @At(value = "HEAD"))
-    private void roundabout$customServerAiStep(CallbackInfo ci) {
+    private void sba$customServerAiStep(CallbackInfo ci) {
         StandUser user = ((StandUser)this);
-        boolean hasAStand = user.roundabout$hasAStand();
+        boolean hasAStand = user.sba$hasAStand();
         boolean isAggressive = MainUtil.forceAggression(this);
         if (isAggressive) {
-            if (!roundabout$initializedViolence){
-                ((IMob)this).roundabout$toggleFightOrFlight(true);
-                roundabout$initializedViolence = true;
+            if (!sba$initializedViolence){
+                ((IMob)this).sba$toggleFightOrFlight(true);
+                sba$initializedViolence = true;
             }
 
             if (hasAStand) {
-                if (((IMob) this).roundabout$getFightOrFlight() && this.getHealth() > this.getMaxHealth() * 0.6) {
+                if (((IMob) this).sba$getFightOrFlight() && this.getHealth() > this.getMaxHealth() * 0.6) {
                     this.refreshBrain(((ServerLevel) this.level()));
-                    ((IMob) this).roundabout$toggleFightOrFlight(false);
-                } else if (!((IMob) this).roundabout$getFightOrFlight() && this.getHealth() < this.getMaxHealth() * 0.35) {
-                    this.roundabout$refreshBrainOG(((ServerLevel) this.level()));
-                    ((IMob) this).roundabout$toggleFightOrFlight(true);
+                    ((IMob) this).sba$toggleFightOrFlight(false);
+                } else if (!((IMob) this).sba$getFightOrFlight() && this.getHealth() < this.getMaxHealth() * 0.35) {
+                    this.sba$refreshBrainOG(((ServerLevel) this.level()));
+                    ((IMob) this).sba$toggleFightOrFlight(true);
                 }
             }
 
-            if (!((IMob)this).roundabout$getFightOrFlight()){
+            if (!((IMob)this).sba$getFightOrFlight()){
             }
         } else {
-            if (roundabout$initializedViolence){
-                roundabout$initializedViolence = false;
+            if (sba$initializedViolence){
+                sba$initializedViolence = false;
                 this.refreshBrain(((ServerLevel) this.level()));
             }
         }
     }
 
     @Inject(method = "refreshBrain", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$refreshBrain(ServerLevel $$0,CallbackInfo ci) {
-        if (!((StandUser)this).roundabout$getStandDisc().isEmpty()) {
+    private void sba$refreshBrain(ServerLevel $$0,CallbackInfo ci) {
+        if (!((StandUser)this).sba$getStandDisc().isEmpty()) {
             Brain<Villager> $$1 = this.getBrain();
             $$1.stopAll($$0, ((Villager)(Object)this));
             this.brain = $$1.copyWithoutBehaviors();
-            this.roundabout$registerBrainGoals(this.getBrain());
+            this.sba$registerBrainGoals(this.getBrain());
             ci.cancel();
         }
     }
 
 
     @Unique
-    private void roundabout$refreshBrainOG(ServerLevel $$0) {
+    private void sba$refreshBrainOG(ServerLevel $$0) {
         Brain<Villager> $$1 = this.getBrain();
         $$1.stopAll($$0, ((Villager)(Object)this));
         this.brain = $$1.copyWithoutBehaviors();
@@ -428,7 +428,7 @@ public abstract class ZVillager extends AbstractVillager implements ReputationEv
 
 
     @Unique
-    private void roundabout$registerBrainGoals(Brain<Villager> $$0) {
+    private void sba$registerBrainGoals(Brain<Villager> $$0) {
         VillagerProfession $$1 = this.getVillagerData().getProfession();
         if (this.isBaby()) {
             $$0.setSchedule(Schedule.VILLAGER_BABY);

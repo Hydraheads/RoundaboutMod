@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "sba:block/memory_bishop",
+      "y": 0
+    },
+    "facing=north": {
+      "model": "sba:block/memory_bishop",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "sba:block/memory_bishop",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "sba:block/memory_bishop",
+      "y": 180
+    }
+  }
+}

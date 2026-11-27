@@ -1,0 +1,6 @@
+{
+  "parent": "sba:block/hallucinatory_acid_wall_base",
+  "textures": {
+    "acid": "sba:block/hallucinatory_acid_0"
+  }
+}

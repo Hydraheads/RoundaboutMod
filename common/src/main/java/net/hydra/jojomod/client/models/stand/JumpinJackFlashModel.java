@@ -453,7 +453,7 @@ public class JumpinJackFlashModel<T extends FollowingStandEntity> extends StandM
         boolean active = jjf.getAnimation() == JumpinJackFlashEntity.JJF_SHOOT_WINDUP_ANIMATION
                 || jjf.getAnimation() == JumpinJackFlashEntity.JJF_SHOOT_LOOP_ANIMATION;
         if (entity.getUser() instanceof StandUser user
-                && user.roundabout$getStandPowers() instanceof PowersJumpinJackFlash powers) {
+                && user.sba$getStandPowers() instanceof PowersJumpinJackFlash powers) {
             active = active || powers.jjf$isUsingLauncherClient();
         }
         right_arm.visible = !armsMode || active;

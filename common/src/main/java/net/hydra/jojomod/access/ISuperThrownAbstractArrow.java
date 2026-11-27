@@ -3,14 +3,14 @@ package net.hydra.jojomod.access;
 import net.minecraft.world.phys.Vec3;
 
 public interface ISuperThrownAbstractArrow {
-    void roundabout$starThrowInit();
-    void roundabout$starThrowInit2();
+    void sba$starThrowInit();
+    void sba$starThrowInit2();
 
-    void roundabout$cancelSuperThrow();
-    boolean roundabout$getSuperThrow();
-    int roundabout$getSuperThrowTicks();
-    void roundabout$setSuperThrowTicks(int sTHrow);
-    void roundabout$setDelta(Vec3 delta);
+    void sba$cancelSuperThrow();
+    boolean sba$getSuperThrow();
+    int sba$getSuperThrowTicks();
+    void sba$setSuperThrowTicks(int sTHrow);
+    void sba$setDelta(Vec3 delta);
 
-    void roundabout$setIsTridentManhattan(boolean hattan);
+    void sba$setIsTridentManhattan(boolean hattan);
 }

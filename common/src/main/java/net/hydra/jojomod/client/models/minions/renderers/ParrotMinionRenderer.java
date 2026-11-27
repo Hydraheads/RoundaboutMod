@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.minions.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.minions.ParrotMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.AxolotlMinion;
@@ -18,7 +18,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.Parrot;
 
 public class ParrotMinionRenderer extends MobRenderer<ParrotMinion, ParrotMinionModel> {
-    private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/parrot.png");
+    private static final ResourceLocation VINDICATOR = new ResourceLocation(SBA.MOD_ID,"textures/entity/minions/parrot.png");
 
     public ParrotMinionRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new ParrotMinionModel($$0.bakeLayer(ModEntityRendererClient.PARROT_MINION_LAYER)), 0.3F);

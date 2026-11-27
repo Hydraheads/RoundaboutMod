@@ -35,7 +35,7 @@ import java.util.List;
 
 public class PowersBadCompany extends NewDashPreset {
     @Override public boolean isWip(){return true;}
-    @Override public Component ifWipListDevStatus(){ return Component.translatable(  "roundabout.dev_status.paused").withStyle(ChatFormatting.YELLOW);}
+    @Override public Component ifWipListDevStatus(){ return Component.translatable(  "sba.dev_status.paused").withStyle(ChatFormatting.YELLOW);}
     @Override public Component ifWipListDev(){ return Component.literal("DOGael Arts").withStyle(ChatFormatting.AQUA);}
 
     public PowersBadCompany(LivingEntity self) { super(self); }
@@ -86,14 +86,14 @@ public class PowersBadCompany extends NewDashPreset {
 
         switch (skinId)
         {
-            case ANIME_SKIN -> { return Component.translatable("skins.roundabout.bad_company.anime"); }
-            case MANGA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.manga"); }
-            case BETA_SKIN -> { return Component.translatable("skins.roundabout.bad_company.beta"); }
-            case MARINE_SKIN -> { return Component.translatable("skins.roundabout.bad_company.marine"); }
-            case SAND_SKIN -> { return Component.translatable("skins.roundabout.bad_company.sand"); }
+            case ANIME_SKIN -> { return Component.translatable("skins.sba.bad_company.anime"); }
+            case MANGA_SKIN -> { return Component.translatable("skins.sba.bad_company.manga"); }
+            case BETA_SKIN -> { return Component.translatable("skins.sba.bad_company.beta"); }
+            case MARINE_SKIN -> { return Component.translatable("skins.sba.bad_company.marine"); }
+            case SAND_SKIN -> { return Component.translatable("skins.sba.bad_company.sand"); }
         }
 
-        return Component.translatable("skins.roundabout.bad_company.anime");
+        return Component.translatable("skins.sba.bad_company.anime");
     }
 
     public static final int
@@ -116,7 +116,7 @@ public class PowersBadCompany extends NewDashPreset {
     public BCSoldier getSoldierEntity(boolean bundle) {
         BCSoldier soldier = ModEntities.BAD_COMPANY_SOLDIER.create(self.level());
         if (soldier != null) {
-            soldier.setSkin(((StandUser)self).roundabout$getStandSkin());
+            soldier.setSkin(((StandUser)self).sba$getStandSkin());
             soldier.setBundle(bundle);
         }
         return soldier;
@@ -471,9 +471,9 @@ public class PowersBadCompany extends NewDashPreset {
         if (displayStand == null){
             displayStand = getSoldierEntity(false);
         }
-        if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+        if (this.self instanceof Player PL && ((IPlayerEntity) PL).sba$getStandSkin() != displayStand.getSkin()) {
             displayStand = getSoldierEntity(false);
-            displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+            displayStand.setSkin(((IPlayerEntity) PL).sba$getStandSkin());
         }
 
         // All of this is code to have the idle animation appear.
@@ -485,8 +485,8 @@ public class PowersBadCompany extends NewDashPreset {
             displayStand.setUser(this.self);
             displayStand.tickCount = this.self.tickCount;
 
-            displayStand.setAnimation(su.roundabout$getStandAnimation());
-            displayStand.setIdleAnimation(su.roundabout$getIdlePos());
+            displayStand.setAnimation(su.sba$getStandAnimation());
+            displayStand.setIdleAnimation(su.sba$getIdlePos());
 
             StandEntity realStand = this.getStandEntity(this.self);
             if (realStand != null) {
@@ -502,7 +502,7 @@ public class PowersBadCompany extends NewDashPreset {
 
     @Override
     public boolean replaceHudActively() {
-        return ((StandUser)self).roundabout$getActive();
+        return ((StandUser)self).sba$getActive();
     }
 
     @Override

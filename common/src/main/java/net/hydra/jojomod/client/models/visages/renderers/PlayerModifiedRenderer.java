@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.visages.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.layers.HumanoidLikeArmorLayer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 
 public class PlayerModifiedRenderer<T extends JojoNPC> extends PlayerLikeRenderer<JojoNPCPlayer> {
-    private static final ResourceLocation STEVE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/steve.png");
+    private static final ResourceLocation STEVE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/entity/visage/steve.png");
 
     public PlayerModifiedRenderer(EntityRendererProvider.Context context) {
         super(context, new PlayerModifiedModel<>(context.bakeLayer(ModEntityRendererClient.MODIFIED_LAYER)),0f);
@@ -34,7 +34,7 @@ public class PlayerModifiedRenderer<T extends JojoNPC> extends PlayerLikeRendere
     @Override
     public void render(JojoNPCPlayer mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         if (mobEntity.host instanceof AbstractClientPlayer AP && mobEntity instanceof PlayerModifiedNPC pmn) {
-            ItemStack stack = ((IPlayerEntity)AP).roundabout$getMaskSlot();
+            ItemStack stack = ((IPlayerEntity)AP).sba$getMaskSlot();
             if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ModificationMaskItem && !pmn.isDisplay){
                 pmn.height = stack.getOrCreateTagElement("modifications").getInt("height");
                 pmn.width = stack.getOrCreateTagElement("modifications").getInt("width");

@@ -79,7 +79,7 @@ public class GroundHurricaneEntity extends GroundPathfindingStandAttackEntity {
     public boolean doHurtTarget(Entity $$0) {
         LivingEntity user = this.getUser();
         if (user != null &&
-                ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                ((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
 
             if ($$0 != null && $$0.getUUID().equals(user.getUUID())){
                 return false;
@@ -104,7 +104,7 @@ public class GroundHurricaneEntity extends GroundPathfindingStandAttackEntity {
         LivingEntity $$0 = this.getUser();
         super.tick();
         if (!client && this.tickCount %2 == 0) {
-            if ($$0 != null && ((StandUser) $$0).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            if ($$0 != null && ((StandUser) $$0).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 Vec3 $$2 = this.getDeltaMovement();
                 double $$3 = this.getX() + $$2.x;
                 double $$4 = this.getY() + $$2.y;

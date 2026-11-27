@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.data_and_structures;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.ILootTable;
 import net.hydra.jojomod.util.loot.BrushingLoot;
 import net.hydra.jojomod.util.loot.WanderingTrades;
@@ -48,28 +48,28 @@ public abstract class BrushableBlockMixin extends BlockEntity {
     }
 
     @Unique
-    private ResourceLocation roundabout$saveLootTable;
+    private ResourceLocation sba$saveLootTable;
 
     @Inject(method = "unpackLootTable",at = @At("HEAD"))
-    private void roundabout$saveLootTable(Player $$0, CallbackInfo ci) {
-        roundabout$saveLootTable = this.lootTable;
+    private void sba$saveLootTable(Player $$0, CallbackInfo ci) {
+        sba$saveLootTable = this.lootTable;
     }
 
     @Inject(method = "unpackLootTable",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BrushableBlockEntity;setChanged()V"))
-    private void roundabout$addBrushingLoot(Player $$0, CallbackInfo ci) {
+    private void sba$addBrushingLoot(Player $$0, CallbackInfo ci) {
         BrushingLoot.updateBrushingLoot();
 
 
 
         List<Pair<Float,ItemStack>> moddedLoot = null;
-        if (this.roundabout$saveLootTable.equals(BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY)
-                || this.roundabout$saveLootTable.equals(BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY)
-                || this.roundabout$saveLootTable.equals(BuiltInLootTables.OCEAN_RUIN_WARM_ARCHAEOLOGY))
+        if (this.sba$saveLootTable.equals(BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY)
+                || this.sba$saveLootTable.equals(BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY)
+                || this.sba$saveLootTable.equals(BuiltInLootTables.OCEAN_RUIN_WARM_ARCHAEOLOGY))
         {
             moddedLoot = BrushingLoot.DRY_LOOT;
-        } else if (this.roundabout$saveLootTable.equals(BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_COMMON)
-                || this.roundabout$saveLootTable.equals(BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE)
-                || this.roundabout$saveLootTable.equals(BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY))
+        } else if (this.sba$saveLootTable.equals(BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_COMMON)
+                || this.sba$saveLootTable.equals(BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE)
+                || this.sba$saveLootTable.equals(BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY))
         {
             moddedLoot = BrushingLoot.LOOT;
         }
@@ -77,9 +77,9 @@ public abstract class BrushableBlockMixin extends BlockEntity {
         if (moddedLoot != null) {
             ItemStack item = null;
 
-            LootTable table = this.level.getServer().getLootData().getLootTable(this.roundabout$saveLootTable);
+            LootTable table = this.level.getServer().getLootData().getLootTable(this.sba$saveLootTable);
 
-            int size = ((ILootTable) table).roundabout$getSize();
+            int size = ((ILootTable) table).sba$getSize();
 
             int maxChance = size;
             for (Pair<Float, ItemStack> f : moddedLoot) {maxChance += f.getA();}
@@ -103,7 +103,7 @@ public abstract class BrushableBlockMixin extends BlockEntity {
 
             if (item != null) {
                 this.item = item;
-                this.roundabout$saveLootTable = null;
+                this.sba$saveLootTable = null;
             }
         }
 

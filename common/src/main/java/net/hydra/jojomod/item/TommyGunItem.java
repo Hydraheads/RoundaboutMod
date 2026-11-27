@@ -1,6 +1,6 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.projectile.SBABulletEntity;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.S2CPacketUtil;
@@ -34,7 +34,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
     public int getFireCooldown() { return 2; }
 
     @Override
-    public byte getBulletType() { return RoundaboutBulletEntity.TOMMY_GUN; }
+    public byte getBulletType() { return SBABulletEntity.TOMMY_GUN; }
 
     @Override
     public SoundEvent getFireSound() { return ModSounds.TOMMY_FIRE_EVENT; }
@@ -59,7 +59,7 @@ public class TommyGunItem extends FirearmItem implements Vanishable {
     }
 
     @Override
-    public void configureBulletTrajectory(RoundaboutBulletEntity bullet, LivingEntity shooter) {
+    public void configureBulletTrajectory(SBABulletEntity bullet, LivingEntity shooter) {
         bullet.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 3.0F, 5.0F);
     }
 

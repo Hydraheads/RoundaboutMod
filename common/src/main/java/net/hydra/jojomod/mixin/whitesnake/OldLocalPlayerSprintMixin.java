@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LocalPlayer.class)
 public abstract class OldLocalPlayerSprintMixin {
     @Inject(method = "canStartSprinting", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$disableOldSprinting(CallbackInfoReturnable<Boolean> cir) {
+    private void sbaWhitesnake$disableOldSprinting(CallbackInfoReturnable<Boolean> cir) {
         if (((LocalPlayer) (Object) this).hasEffect(ModEffects.OLD)) {
             cir.setReturnValue(false);
         }

@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.stand;// Made with Blockbench 4.12.5
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -132,7 +132,7 @@ public class ReddModel<T extends ReddEntity> extends RattModel<T> {
 	}
 
 
-	public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/ratt/anime.png");
 	public ResourceLocation getTextureLocation(Entity context, byte skin){
 		return base;

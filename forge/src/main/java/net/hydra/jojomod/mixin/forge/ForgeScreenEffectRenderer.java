@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ForgeScreenEffectRenderer {
     /**Block Breaking Speed Decreases when your hand is stone*/
     @Inject(method = "getOverlayBlock(Lnet/minecraft/world/entity/player/Player;)Lorg/apache/commons/lang3/tuple/Pair;", at = @At(value = "HEAD"), cancellable = true, remap = false)
-    private static void roundabout$getOverlayBlock(Player player, CallbackInfoReturnable<Pair<BlockState, BlockPos>> cir) {
+    private static void sba$getOverlayBlock(Player player, CallbackInfoReturnable<Pair<BlockState, BlockPos>> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection(player);
         if (gravityDirection == Direction.DOWN) return;
 

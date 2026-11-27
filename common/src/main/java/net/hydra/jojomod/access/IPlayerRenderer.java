@@ -6,7 +6,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 
 public interface IPlayerRenderer {
-    Mob roundabout$getShapeShift(Player pe);
-    void roundabout$setModelProperties(AbstractClientPlayer $$0);
+    Mob sba$getShapeShift(Player pe);
+    void sba$setModelProperties(AbstractClientPlayer $$0);
     void rdbt$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2);
 }

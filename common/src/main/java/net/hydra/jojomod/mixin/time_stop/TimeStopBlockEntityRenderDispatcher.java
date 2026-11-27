@@ -26,14 +26,14 @@ public class TimeStopBlockEntityRenderDispatcher {
     @Inject(
             method = "render",
             at = @At(value = "HEAD"), cancellable = true)
-    private <E extends BlockEntity> void roundabout$doNotDeltaTickBlockWhenTimeIsStopped(E $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, CallbackInfo ci) {
+    private <E extends BlockEntity> void sba$doNotDeltaTickBlockWhenTimeIsStopped(E $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, CallbackInfo ci) {
         if ($$0 != null && $$0.getBlockPos() != null && $$0.getLevel() != null && $$0.getLevel().getBlockState($$0.getBlockPos()) != null
         && $$0.getType() != null) {
             if (((TimeStop) $$0.getLevel()).inTimeStopRange($$0.getBlockPos()) && !($$0.getLevel().getBlockState($$0.getBlockPos()).is(Blocks.MOVING_PISTON))) {
-                if (((IBlockEntityAccess) $$0).roundabout$getRoundaboutTimeInteracted()) {
+                if (((IBlockEntityAccess) $$0).sba$getSBATimeInteracted()) {
                     return;
                 }
-                final float f1 = ((IBlockEntityClientAccess) $$0).roundabout$getPreTSTick();
+                final float f1 = ((IBlockEntityClientAccess) $$0).sba$getPreTSTick();
                 BlockEntityRenderer<E> $$4 = this.getRenderer($$0);
                 if ($$4 != null) {
                     if ($$0.hasLevel() && $$0.getType().isValid($$0.getBlockState())) {
@@ -44,8 +44,8 @@ public class TimeStopBlockEntityRenderDispatcher {
                 }
                 ci.cancel();
             } else {
-                ((IBlockEntityClientAccess) $$0).roundabout$setPreTSTick();
-                ((IBlockEntityAccess) $$0).roundabout$setRoundaboutTimeInteracted(false);
+                ((IBlockEntityClientAccess) $$0).sba$setPreTSTick();
+                ((IBlockEntityAccess) $$0).sba$setSBATimeInteracted(false);
             }
         }
     }

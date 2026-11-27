@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "sba:block/cultivated_locacaca"
+    },
+    "age=1": {
+      "model": "sba:block/cultivated_locacaca_2"
+    }
+  }
+}

@@ -35,10 +35,10 @@ public class AchtungItemPickupParticle {
      * not have to do with throwfade to ether. So it is now worth keeping in.
      */
     @Unique
-    public boolean roundabout$invisibilityPickedUp = false;
+    public boolean sba$invisibilityPickedUp = false;
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$renderHead(VertexConsumer $$0, Camera $$1, float $$2, CallbackInfo ci) {
-        if (roundabout$invisibilityPickedUp){
+    protected void sba$renderHead(VertexConsumer $$0, Camera $$1, float $$2, CallbackInfo ci) {
+        if (sba$invisibilityPickedUp){
             /**Achtung users with invis vision are the only ones that can see items being picked up by achtung invis
              * players*/
 
@@ -48,16 +48,16 @@ public class AchtungItemPickupParticle {
                 if (target != null) {
 
                     IEntityAndData entityAndData = ((IEntityAndData) target);
-                    if (entityAndData.roundabout$getTrueInvisibility() > -1){
-                        roundabout$invisibilityPickedUp = true;
+                    if (entityAndData.sba$getTrueInvisibility() > -1){
+                        sba$invisibilityPickedUp = true;
                         if (itemEntity != null){
-                            ((IEntityAndData)itemEntity).roundabout$setTrueInvisibility(entityAndData.roundabout$getTrueInvisibility());
+                            ((IEntityAndData)itemEntity).sba$setTrueInvisibility(entityAndData.sba$getTrueInvisibility());
                         }
                     }
 
 
                     float throwFadeToTheEther = 1f;
-                    if (entityAndData.roundabout$getTrueInvisibility() > -1) {
+                    if (entityAndData.sba$getTrueInvisibility() > -1) {
                         throwFadeToTheEther = throwFadeToTheEther * 0.4F;
                     }
                     ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
@@ -68,21 +68,21 @@ public class AchtungItemPickupParticle {
         ClientUtil.setThrowFadeToTheEther(1);
     }
     @Inject(method = "render", at = @At(value = "TAIL"))
-    protected void roundabout$renderTail(VertexConsumer $$0, Camera $$1, float $$2, CallbackInfo ci) {
+    protected void sba$renderTail(VertexConsumer $$0, Camera $$1, float $$2, CallbackInfo ci) {
         ClientUtil.setThrowFadeToTheEther(1);
     }
     @Inject(method = "getRenderType()Lnet/minecraft/client/particle/ParticleRenderType;", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$getRenderType(CallbackInfoReturnable<ParticleRenderType> cir) {
-        //if (roundabout$invisibilityPickedUp && !ClientUtil.isFabulous()){
+    protected void sba$getRenderType(CallbackInfoReturnable<ParticleRenderType> cir) {
+        //if (sba$invisibilityPickedUp && !ClientUtil.isFabulous()){
             //cir.setReturnValue(ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT);
         //}
     }
     @Inject(method = "<init>(Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;Lnet/minecraft/client/renderer/RenderBuffers;Lnet/minecraft/client/multiplayer/ClientLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "TAIL"))
-    protected void roundabout$init(EntityRenderDispatcher $$0, RenderBuffers $$1, ClientLevel $$2, Entity $$3, Entity $$4, CallbackInfo ci) {
-        if ($$4 != null && ((IEntityAndData)$$4).roundabout$getTrueInvisibility() > -1){
-            roundabout$invisibilityPickedUp = true;
+    protected void sba$init(EntityRenderDispatcher $$0, RenderBuffers $$1, ClientLevel $$2, Entity $$3, Entity $$4, CallbackInfo ci) {
+        if ($$4 != null && ((IEntityAndData)$$4).sba$getTrueInvisibility() > -1){
+            sba$invisibilityPickedUp = true;
              if ($$3 != null){
-               ((IEntityAndData)$$3).roundabout$setTrueInvisibility(((IEntityAndData)$$4).roundabout$getTrueInvisibility());
+               ((IEntityAndData)$$3).sba$setTrueInvisibility(((IEntityAndData)$$4).sba$getTrueInvisibility());
              }
         }
     }

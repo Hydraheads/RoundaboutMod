@@ -116,7 +116,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
     public void tick(){
         if (!this.level().isClientSide){
             if (getSplatterType() == 2){
-                if (!(getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+                if (!(getOwner() instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers()
                         instanceof PowersKingCrimson pkc && pkc.isErasingTime())){
                     discard();
                 }
@@ -135,7 +135,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
 
             if (getSplatterType() == 0){
                 if ($$0.getEntity() instanceof EnderMan em) {
-                    ((IEnderMan) em).roundabout$teleport();
+                    ((IEnderMan) em).sba$teleport();
                     return;
                 }
                 if ($$0.getEntity() instanceof GentlyWeepsEntity gwe){
@@ -148,14 +148,14 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                 if ($$0.getEntity() instanceof LivingEntity LE && (MainUtil.getMobBleed(LE) ||
                         LE instanceof Player pl || LE instanceof BaseMinion bm)) {
                     LE.setHealth(Math.min(LE.getMaxHealth(),LE.getHealth()+healthAmt));
-                    if ((LE instanceof Mob mb && !((IMob)mb).roundabout$isVampire() && MainUtil.canMobResurrectWithBlood(mb))
+                    if ((LE instanceof Mob mb && !((IMob)mb).sba$isVampire() && MainUtil.canMobResurrectWithBlood(mb))
                             || (LE instanceof Player pl && FateTypes.isHuman(pl))){
                         LE.addEffect(new MobEffectInstance(ModEffects.VAMPIRE_BLOOD, 12000, 0),getOwner());
                     }
                 }
             } else if (getSplatterType() == 1) {
                 if ($$0.getEntity() instanceof EnderMan em) {
-                    ((IEnderMan) em).roundabout$teleport();
+                    ((IEnderMan) em).sba$teleport();
                     return;
                 }
                 if ($$0.getEntity() instanceof GentlyWeepsEntity gwe){
@@ -166,7 +166,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                 SoundEvent $$6 = ModSounds.BLOOD_SLICE_EVENT;
                 this.playSound($$6, 1F, 1F);
                 float damage = 1;
-                if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+                if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers()
                 instanceof PowersKingCrimson pkc){
                     damage = pkc.getBloodSplashStrength($$0.getEntity());
                     pkc.addEXP(4);
@@ -180,7 +180,7 @@ public class BloodSplatterEntity extends ThrowableProjectile {
                 if ($$0.getEntity() instanceof KingCrimsonCloneEntity){
                     return;
                 }
-                if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+                if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers()
                         instanceof PowersKingCrimson pkc && $$0.getEntity() instanceof LivingEntity jle){
                     pkc.bloodSplatterHits.add(jle);
                     if (getOwner() instanceof ServerPlayer sp){

@@ -47,17 +47,17 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
     private final TextureAtlas armorTrimAtlas;
 
     @Unique
-    public int roundabout$ArmorPhase;
+    public int sba$ArmorPhase;
     @Unique
-    public boolean roundabout$ModifyEntity;
+    public boolean sba$ModifyEntity;
     @Unique
-    public @org.jetbrains.annotations.Nullable ItemStack roundabout$RenderChest;
+    public @org.jetbrains.annotations.Nullable ItemStack sba$RenderChest;
     @Unique
-    public @org.jetbrains.annotations.Nullable ItemStack roundabout$RenderLegs;
+    public @org.jetbrains.annotations.Nullable ItemStack sba$RenderLegs;
     @Unique
-    public @org.jetbrains.annotations.Nullable ItemStack roundabout$RenderBoots;
+    public @org.jetbrains.annotations.Nullable ItemStack sba$RenderBoots;
     @Unique
-    public @org.jetbrains.annotations.Nullable ItemStack roundabout$RenderHead;
+    public @org.jetbrains.annotations.Nullable ItemStack sba$RenderHead;
 
     public HumanoidLikeArmorLayer(RenderLayerParent<T, M> $$0, A $$1, A $$2, ModelManager $$3) {
         super($$0);
@@ -67,54 +67,54 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
     }
 
     public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
-        roundabout$ArmorPhase = 0;
+        sba$ArmorPhase = 0;
         if ($$3.host != null) {
             IPlayerEntity ipe = ((IPlayerEntity) $$3.host);
-            if (ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift()) == ShapeShifts.EERIE){
+            if (ShapeShifts.getShiftFromByte(ipe.sba$getShapeShift()) == ShapeShifts.EERIE){
                 return;
             }
             StandUserClient userclient = ((StandUserClient) $$3);
 
-            roundabout$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3) || ClientUtil.getScreenFreeze();
-            if (roundabout$ModifyEntity) {
-                if (userclient.roundabout$getRoundaboutRenderChest() == null){
-                    userclient.roundabout$setRoundaboutRenderChest($$3.getItemBySlot(EquipmentSlot.CHEST).copy());
+            sba$ModifyEntity = ((TimeStop) $$3.level()).CanTimeStopEntity($$3) || ClientUtil.getScreenFreeze();
+            if (sba$ModifyEntity) {
+                if (userclient.sba$getSBARenderChest() == null){
+                    userclient.sba$setSBARenderChest($$3.getItemBySlot(EquipmentSlot.CHEST).copy());
                 }
-                if (userclient.roundabout$getRoundaboutRenderLegs() == null){
-                    userclient.roundabout$setRoundaboutRenderLegs($$3.getItemBySlot(EquipmentSlot.LEGS).copy());
+                if (userclient.sba$getSBARenderLegs() == null){
+                    userclient.sba$setSBARenderLegs($$3.getItemBySlot(EquipmentSlot.LEGS).copy());
                 }
-                if (userclient.roundabout$getRoundaboutRenderBoots() == null){
-                    userclient.roundabout$setRoundaboutRenderBoots($$3.getItemBySlot(EquipmentSlot.FEET).copy());
+                if (userclient.sba$getSBARenderBoots() == null){
+                    userclient.sba$setSBARenderBoots($$3.getItemBySlot(EquipmentSlot.FEET).copy());
                 }
-                if (userclient.roundabout$getRoundaboutRenderHead() == null){
-                    userclient.roundabout$setRoundaboutRenderHead($$3.getItemBySlot(EquipmentSlot.HEAD).copy());
+                if (userclient.sba$getSBARenderHead() == null){
+                    userclient.sba$setSBARenderHead($$3.getItemBySlot(EquipmentSlot.HEAD).copy());
                 }
-                roundabout$RenderChest = userclient.roundabout$getRoundaboutRenderChest();
-                roundabout$RenderLegs = userclient.roundabout$getRoundaboutRenderLegs();
-                roundabout$RenderBoots = userclient.roundabout$getRoundaboutRenderBoots();
-                roundabout$RenderHead = userclient.roundabout$getRoundaboutRenderHead();
+                sba$RenderChest = userclient.sba$getSBARenderChest();
+                sba$RenderLegs = userclient.sba$getSBARenderLegs();
+                sba$RenderBoots = userclient.sba$getSBARenderBoots();
+                sba$RenderHead = userclient.sba$getSBARenderHead();
             } else {
-                if (userclient.roundabout$getRoundaboutRenderChest() != null){
-                    userclient.roundabout$setRoundaboutRenderChest(null);
+                if (userclient.sba$getSBARenderChest() != null){
+                    userclient.sba$setSBARenderChest(null);
                 }
-                if (userclient.roundabout$getRoundaboutRenderLegs() != null){
-                    userclient.roundabout$setRoundaboutRenderLegs(null);
+                if (userclient.sba$getSBARenderLegs() != null){
+                    userclient.sba$setSBARenderLegs(null);
                 }
-                if (userclient.roundabout$getRoundaboutRenderBoots() != null){
-                    userclient.roundabout$setRoundaboutRenderBoots(null);
+                if (userclient.sba$getSBARenderBoots() != null){
+                    userclient.sba$setSBARenderBoots(null);
                 }
-                if (userclient.roundabout$getRoundaboutRenderHead() != null){
-                    userclient.roundabout$setRoundaboutRenderHead(null);
+                if (userclient.sba$getSBARenderHead() != null){
+                    userclient.sba$setSBARenderHead(null);
                 }
             }
 
-            if (!((IPlayerEntity)$$3.host).roundabout$getMaskSlot().isEmpty()
-                    && ((IPlayerEntity)$$3.host).roundabout$getMaskSlot().getItem() instanceof MaskItem ME
+            if (!((IPlayerEntity)$$3.host).sba$getMaskSlot().isEmpty()
+                    && ((IPlayerEntity)$$3.host).sba$getMaskSlot().getItem() instanceof MaskItem ME
                     && !ME.visageData.rendersArmor()){return;
             }
 
         } else {
-            roundabout$ModifyEntity = false;
+            sba$ModifyEntity = false;
         }
         if (ConfigManager.getClientConfig().renderArmorOnPlayerCloneAbilities) {
             this.renderArmorPiece($$0, $$1, $$3, EquipmentSlot.CHEST, $$2, this.getArmorModel(EquipmentSlot.CHEST));
@@ -171,24 +171,24 @@ public class HumanoidLikeArmorLayer<T extends JojoNPC, M extends PlayerLikeModel
     }
 
     public ItemStack store(ItemStack stack){
-        if (roundabout$ModifyEntity) {
+        if (sba$ModifyEntity) {
             ItemStack rewrite;
-            roundabout$ArmorPhase++;
-            if (roundabout$ArmorPhase == 1){
-                if (roundabout$RenderChest != null) {
-                    return roundabout$RenderChest;
+            sba$ArmorPhase++;
+            if (sba$ArmorPhase == 1){
+                if (sba$RenderChest != null) {
+                    return sba$RenderChest;
                 }
-            } else if (roundabout$ArmorPhase == 2){
-                if (roundabout$RenderLegs != null) {
-                    return roundabout$RenderLegs;
+            } else if (sba$ArmorPhase == 2){
+                if (sba$RenderLegs != null) {
+                    return sba$RenderLegs;
                 }
-            } else if (roundabout$ArmorPhase == 3){
-                if (roundabout$RenderBoots != null) {
-                    return roundabout$RenderBoots;
+            } else if (sba$ArmorPhase == 3){
+                if (sba$RenderBoots != null) {
+                    return sba$RenderBoots;
                 }
             } else {
-                if (roundabout$RenderHead != null) {
-                    return roundabout$RenderHead;
+                if (sba$RenderHead != null) {
+                    return sba$RenderHead;
                 }
             }
             return stack;

@@ -42,16 +42,16 @@ public class WhiteAlbumSkatingSound extends AbstractTickableSoundInstance {
             return;
         }
         if(user instanceof LivingEntity LE){
-            if ((!(((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated() &&
+            if ((!(((StandUser)LE).sba$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated() &&
             user.isSprinting())) || PowerTypes.isInADifferentExistenceNoTE(ClientUtil.getPlayer(),LE)){
                 //Stop if you stop skating
                 stop();
                 return;
             } else if (user instanceof Player pl){
                 //Also stop if you jump
-                byte bt = ((IPlayerEntity)pl).roundabout$GetPos();
+                byte bt = ((IPlayerEntity)pl).sba$GetPos();
                 if (bt == PlayerPosIndex.SKATE_JUMP || bt == PlayerPosIndex.SKATE_TWIRL || pl.isCrouching()
-                || pl.isFallFlying() || pl.isSwimming() || ((StandUser)pl).roundabout$isDazed()
+                || pl.isFallFlying() || pl.isSwimming() || ((StandUser)pl).sba$isDazed()
                 || pl.isPassenger()){
                     stop();
                     return;

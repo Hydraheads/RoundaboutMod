@@ -24,7 +24,7 @@ public class CreativeStandDiscItem extends MaxStandDiscItem {
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         tooltip.add(
-                Component.translatable("item.roundabout.hairspray.info")
+                Component.translatable("item.sba.hairspray.info")
                         .withStyle(ChatFormatting.AQUA)
                         .withStyle(ChatFormatting.ITALIC)
         );

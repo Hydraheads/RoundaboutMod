@@ -31,7 +31,7 @@ public abstract class GravityMobMixin extends LivingEntity implements Targeting 
             return;
 
         if (target instanceof LivingEntity LE) {
-            ((IGravityLivingEntity)LE).roundabout$augmentKB(this);
+            ((IGravityLivingEntity)LE).sba$augmentKB(this);
         }
     }
 

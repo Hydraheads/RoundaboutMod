@@ -386,11 +386,11 @@ public class FallenPhantom extends FallenMob implements PlayerRideableJumping {
             rideLengthTicks++;
             if (rideLengthTicks == 40){
                 if(this.level().dimension() != Level.OVERWORLD){
-                    SP.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature.dimension").withStyle(ChatFormatting.YELLOW), true);
+                    SP.displayClientMessage(Component.translatable("text.sba.riding_flying_creature.dimension").withStyle(ChatFormatting.YELLOW), true);
                 } else if (this.level().getDayTime() % 24000L < 13000){
-                    SP.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature.day").withStyle(ChatFormatting.YELLOW), true);
+                    SP.displayClientMessage(Component.translatable("text.sba.riding_flying_creature.day").withStyle(ChatFormatting.YELLOW), true);
                 } else {
-                    SP.displayClientMessage(Component.translatable("text.roundabout.riding_flying_creature").withStyle(ChatFormatting.YELLOW), true);
+                    SP.displayClientMessage(Component.translatable("text.sba.riding_flying_creature").withStyle(ChatFormatting.YELLOW), true);
                 }
             }
         } else {

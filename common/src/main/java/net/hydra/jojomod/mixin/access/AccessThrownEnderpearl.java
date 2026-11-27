@@ -30,9 +30,9 @@ public abstract class AccessThrownEnderpearl extends ThrowableItemProjectile {
     }
 
     @Inject(method = "onHit", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$onHit(HitResult $$0, CallbackInfo ci) {
+    private void sba$onHit(HitResult $$0, CallbackInfo ci) {
         if (getOwner() instanceof LivingEntity LE){
-            ((StandUser)LE).roundabout$getStandPowers().onEnderPearlLand();
+            ((StandUser)LE).sba$getStandPowers().onEnderPearlLand();
         }
 
         HitResult.Type $$1 = $$0.getType();
@@ -47,7 +47,7 @@ public abstract class AccessThrownEnderpearl extends ThrowableItemProjectile {
                 if (!ii.isEmpty()) {
                     ci.cancel();
                     if (ci.isCancelled()) {
-                        if (ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                        if (ME.getUser() instanceof Player PL && ((StandUser) PL).sba$getStandPowers() instanceof PowersManhattanTransfer PM) {
                             if (ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
                                 PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
                             } else {

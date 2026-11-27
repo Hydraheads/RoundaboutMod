@@ -1,6 +1,6 @@
 package net.hydra.jojomod.registry;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -10,7 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 public class ForgeParticles {
-    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Roundabout.MOD_ID);
+    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, SBA.MOD_ID);
 
     public static final RegistryObject<SimpleParticleType> HIT_IMPACT = PARTICLES.register("hit_impact",
             () -> new SimpleParticleType(true)

@@ -15,10 +15,10 @@ public class DazeProjectileAtk {
 
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$Tick(CallbackInfo ci) {
-        if (((StandUser)mob).roundabout$isDazed() ||
-                (!((StandUser)mob).roundabout$getStandDisc().isEmpty() &&
-                ((StandUser)mob).roundabout$getStandPowers().disableMobAiAttack())
+    protected void sba$Tick(CallbackInfo ci) {
+        if (((StandUser)mob).sba$isDazed() ||
+                (!((StandUser)mob).sba$getStandDisc().isEmpty() &&
+                ((StandUser)mob).sba$getStandPowers().disableMobAiAttack())
     ) {
             ci.cancel();
         }

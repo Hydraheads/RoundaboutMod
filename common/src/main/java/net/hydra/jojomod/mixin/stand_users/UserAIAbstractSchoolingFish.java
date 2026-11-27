@@ -15,8 +15,8 @@ public abstract class UserAIAbstractSchoolingFish extends AbstractFish {
 
     /**Stand User fish do not path to their leader while targeting mobs*/
     @Inject(method = "pathToLeader", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$pathToLeader(CallbackInfo ci) {
-        if (!((StandUser)this).roundabout$getStandDisc().isEmpty() && this.getTarget() != null){
+    private void sba$pathToLeader(CallbackInfo ci) {
+        if (!((StandUser)this).sba$getStandDisc().isEmpty() && this.getTarget() != null){
             ci.cancel();
         }
     }

@@ -76,7 +76,7 @@ public class BannerFlagModel extends PsuedoHierarchicalModel {
     }
 
     @Unique
-    public void roundabout$renderInSpot(ItemStack stack, Vec3 pos, Level $$0, float $$1, PoseStack $$2,
+    public void sba$renderInSpot(ItemStack stack, Vec3 pos, Level $$0, float $$1, PoseStack $$2,
                                         MultiBufferSource $$3, int $$4, int $$5, float scale) {
         if (stack.getItem() instanceof BannerItem bi && bi.getBlock() instanceof BannerBlock bb) {
             long $$9 = $$9 = $$0.getGameTime();

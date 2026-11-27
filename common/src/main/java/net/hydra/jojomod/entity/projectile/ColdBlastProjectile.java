@@ -30,8 +30,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
-    public ColdBlastProjectile(EntityType<? extends RoundaboutGeneralProjectile> $$0, Level $$1) {
+public class ColdBlastProjectile extends SBAGeneralProjectile{
+    public ColdBlastProjectile(EntityType<? extends SBAGeneralProjectile> $$0, Level $$1) {
         super($$0, $$1);
     }
 
@@ -41,14 +41,14 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
         this(ModEntities.COLD_BLAST_PROJECTILE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
-    protected ColdBlastProjectile(EntityType<? extends RoundaboutGeneralProjectile> $$0, double $$1, double $$2, double $$3, Level $$4) {
+    protected ColdBlastProjectile(EntityType<? extends SBAGeneralProjectile> $$0, double $$1, double $$2, double $$3, Level $$4) {
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
     }
     public int getMaxLifeSpan(){
         return 19;
     }
-    protected ColdBlastProjectile(EntityType<RoundaboutGeneralProjectile> $$0, LivingEntity $$1, Level $$2) {
+    protected ColdBlastProjectile(EntityType<SBAGeneralProjectile> $$0, LivingEntity $$1, Level $$2) {
         this($$0, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
@@ -99,7 +99,7 @@ public class ColdBlastProjectile extends RoundaboutGeneralProjectile{
     }
     public void blastEntity(LivingEntity entity){
         //Add hurt code here
-        //Roundabout.LOGGER.info("charge-> "+charge+" power-> "+power);
+        //SBA.LOGGER.info("charge-> "+charge+" power-> "+power);
         if (PowerTypes.isInADifferentExistence(entity,this)){
             return;
         }

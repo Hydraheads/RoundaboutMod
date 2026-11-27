@@ -46,7 +46,7 @@ public class StickyIceCoatingBlock
     }
     public void entityInside(BlockState $$0, Level $$1, BlockPos $$2, Entity $$3) {
         if ($$3 instanceof LivingEntity LE && !LE.isInvulnerable() && !MainUtil.isBossMob($$3)) {
-            if (!(((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
+            if (!(((StandUser)LE).sba$getStandPowers() instanceof PowersWhiteAlbum PW &&
                     PowerTypes.hasStandActive(LE))) {
                 if (LE.onGround()) {
                     if (FateTypes.isVampire(LE)) {
@@ -58,16 +58,16 @@ public class StickyIceCoatingBlock
                     } else {
                         if (LE instanceof Player || LE instanceof CloneEntity) {
                             if ((LE.hurtTime <= 3) ||
-                                    (((StandUser)LE).roundabout$getLogSource() == null) ||
-                                    !(((StandUser)LE).roundabout$getLogSource() != null &&
+                                    (((StandUser)LE).sba$getLogSource() == null) ||
+                                    !(((StandUser)LE).sba$getLogSource() != null &&
                                             (
-                                                    ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.STAND) ||
-                                            ((StandUser)LE).roundabout$getLogSource().is(DamageTypes.PLAYER_ATTACK) ||
-                                    ((StandUser)LE).roundabout$getLogSource().is(DamageTypes.ARROW) ||
-                                                            ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.BULLET) ||
-                                                            ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.SNIPER_BULLET)||
-                                                            ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.GASOLINE_EXPLOSION)||
-                                                            ((StandUser)LE).roundabout$getLogSource().is(ModDamageTypes.KNIFE)
+                                                    ((StandUser)LE).sba$getLogSource().is(ModDamageTypes.STAND) ||
+                                            ((StandUser)LE).sba$getLogSource().is(DamageTypes.PLAYER_ATTACK) ||
+                                    ((StandUser)LE).sba$getLogSource().is(DamageTypes.ARROW) ||
+                                                            ((StandUser)LE).sba$getLogSource().is(ModDamageTypes.BULLET) ||
+                                                            ((StandUser)LE).sba$getLogSource().is(ModDamageTypes.SNIPER_BULLET)||
+                                                            ((StandUser)LE).sba$getLogSource().is(ModDamageTypes.GASOLINE_EXPLOSION)||
+                                                            ((StandUser)LE).sba$getLogSource().is(ModDamageTypes.KNIFE)
                                     ))
                             ) {
                                 if (!(LE.level().getBlockState(
@@ -89,7 +89,7 @@ public class StickyIceCoatingBlock
                         }
                     }
                 } else {
-                    ((StandUser)LE).roundabout$setStuckSpeedMulti(Vec3.ZERO);
+                    ((StandUser)LE).sba$setStuckSpeedMulti(Vec3.ZERO);
                 }
             }
             if (!$$1.isClientSide) {

@@ -52,7 +52,7 @@ public class JusticeFogRenderer {
      * Star Platinum's scoping and Justice users can see through the fog better.*/
 
     @Inject(method = "setupFog(Lnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/FogRenderer$FogMode;FZF)V", at = @At(value = "HEAD"),cancellable = true)
-    private static void roundabout$setupFog(Camera $$0, FogRenderer.FogMode $$1, float $$2, boolean $$3, float $$4, CallbackInfo ci) {
+    private static void sba$setupFog(Camera $$0, FogRenderer.FogMode $$1, float $$2, boolean $$3, float $$4, CallbackInfo ci) {
         //i needed an anti-xray for diver down and justice fog was literally perfect for this because it uses fog rendering
         //thanks hydra!
         if (DiverDownControlsClient.isDiving()) {
@@ -103,14 +103,14 @@ public class JusticeFogRenderer {
         if (Minecraft.getInstance().player != null){
             Level lvl = Minecraft.getInstance().player.level();
             IClientLevel icl = ((IClientLevel) lvl);
-            float skyLerp = icl.roundabout$getSkyLerp();
-            float maxSkyLerp = icl.roundabout$getMaxSkyLerp();
+            float skyLerp = icl.sba$getSkyLerp();
+            float maxSkyLerp = icl.sba$getMaxSkyLerp();
             Entity $$6 = $$0.getEntity();
             if (skyLerp > 0){
 
                 FogType $$5 = $$0.getFluidInCamera();
                 float fogCutRange = 60f;
-                if (((StandUser)Minecraft.getInstance().player).roundabout$getStandPowers().canSeeThroughFog()){
+                if (((StandUser)Minecraft.getInstance().player).sba$getStandPowers().canSeeThroughFog()){
                     fogCutRange = 140;
                 }
 
@@ -203,7 +203,7 @@ public class JusticeFogRenderer {
     }
 
     @Inject(method = "setupFog", at = @At("TAIL"))
-    private static void roundabout$timeEraseFog(
+    private static void sba$timeEraseFog(
             Camera camera,
             FogRenderer.FogMode mode,
             float renderDistance,
@@ -239,7 +239,7 @@ public class JusticeFogRenderer {
         RenderSystem.setShaderFogEnd(end);
     }
     @Inject(method = "setupColor", at = @At("RETURN"))
-    private static void roundabout$timeEraseFogColor(
+    private static void sba$timeEraseFogColor(
             Camera camera,
             float partialTick,
             ClientLevel level,
@@ -279,7 +279,7 @@ public class JusticeFogRenderer {
     }
 
     @Inject(method = "setupFog", at = @At("TAIL"))
-    private static void roundabout$gerNetherIllusionFog(
+    private static void sba$gerNetherIllusionFog(
             Camera camera,
             FogRenderer.FogMode mode,
             float renderDistance,
@@ -294,7 +294,7 @@ public class JusticeFogRenderer {
     }
 
     @Inject(method = "setupColor", at = @At("RETURN"))
-    private static void roundabout$gerNetherIllusionFogColor(
+    private static void sba$gerNetherIllusionFogColor(
             Camera camera,
             float partialTick,
             ClientLevel level,
@@ -318,7 +318,7 @@ public class JusticeFogRenderer {
 
     //basically the same checks as above, but this time for color
     @Inject(method = "setupColor", at = @At("HEAD"), cancellable = true)
-    private static void roundabout$diverDownXrayColorBlock(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, CallbackInfo ci) {
+    private static void sba$diverDownXrayColorBlock(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, CallbackInfo ci) {
         if (DiverDownControlsClient.isDiving() && level != null) {
             Vec3 pos = camera.getPosition();
             AABB camBox = new AABB(

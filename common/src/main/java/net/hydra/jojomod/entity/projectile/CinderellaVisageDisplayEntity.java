@@ -117,7 +117,7 @@ public class CinderellaVisageDisplayEntity extends ThrowableItemProjectile imple
 
         LivingEntity le = this.getStandUser();
         if (le != null){
-            if (((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersCinderella PCR) {
+            if (((StandUser)this.getStandUser()).sba$getStandPowers() instanceof PowersCinderella PCR) {
                 int crossnum = this.getCrossNumber();
                 if (crossnum > 0) {
                     this.setDeltaMovement(Vec3.ZERO);
@@ -158,12 +158,12 @@ public class CinderellaVisageDisplayEntity extends ThrowableItemProjectile imple
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
         CompoundTag compoundtag = new CompoundTag();
-        $$0.put("roundabout.HeldItem",this.getItem().save(compoundtag));
+        $$0.put("sba.HeldItem",this.getItem().save(compoundtag));
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
-        CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+        CompoundTag compoundtag = $$0.getCompound("sba.HeldItem");
         ItemStack itemstack = ItemStack.of(compoundtag);
         this.setItem(itemstack);
         super.readAdditionalSaveData($$0);

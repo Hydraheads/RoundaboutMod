@@ -27,14 +27,14 @@ public class AchtungCustomHeadLayer {
      */
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
-    void roundabout$renderHeadItemsAchtung(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+    void sba$renderHeadItemsAchtung(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         if ($$3 != null){
             StandUser user = ((StandUser)$$3);
 
             float throwFadeToTheEther = 1f;
             IEntityAndData entityAndData = ((IEntityAndData) user);
             throwFadeToTheEther = ClientUtil.getThrowFadePercent($$3,$$4);
-            if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || ClientUtil.checkIfClientCanSeeMobsForWindVision() && entityAndData.roundabout$getTrueInvisibilityManhattan() < 1){
+            if (entityAndData.sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || ClientUtil.checkIfClientCanSeeMobsForWindVision() && entityAndData.sba$getTrueInvisibilityManhattan() < 1){
                 if (!ClientUtil.checkIfClientCanSeeInvisAchtung()){
                     ClientUtil.setThrowFadeToTheEther(throwFadeToTheEther);
                     ci.cancel();

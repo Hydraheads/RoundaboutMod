@@ -23,7 +23,7 @@ public class HairsprayItem extends Item {
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
         if (ConfigManager.getClientConfig().showCreativeTextOnWorthinessArrow) {
             $$2.add(
-                    Component.translatable("item.roundabout.hairspray.info").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.ITALIC)
+                    Component.translatable("item.sba.hairspray.info").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.ITALIC)
             );
         }
     }

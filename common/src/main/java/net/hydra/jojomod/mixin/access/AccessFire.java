@@ -12,31 +12,31 @@ import org.spongepowered.asm.mixin.Shadow;
 public class AccessFire implements IFireBlock {
     /**Allows us to both access fire functions and add flammable blocks to the game's fire registry*/
     @Override
-    public void roundabout$setFlammableBlock(Block $$0, int $$1, int $$2) {
+    public void sba$setFlammableBlock(Block $$0, int $$1, int $$2) {
         this.setFlammable($$0, $$1, $$2);
     }
 
     @Override
-    public int roundabout$getBurnOdds(BlockState $$0){
+    public int sba$getBurnOdds(BlockState $$0){
         return getBurnOdds($$0);
     }
     @Override
-    public int roundabout$getIgniteOdds(BlockState $$0){
+    public int sba$getIgniteOdds(BlockState $$0){
         return getIgniteOdds($$0);
     }
     @Override
-    public boolean roundabout$canBurn(BlockState $$0) {
+    public boolean sba$canBurn(BlockState $$0) {
         return canBurn($$0);
     }
 
 
 
     /**Register Flammable blocks here*/
-    public void roundabout$bootstrap() {
-        this.roundabout$setFlammableBlock(ModBlocks.GASOLINE_SPLATTER, 15, 100);
-        this.roundabout$setFlammableBlock(ModBlocks.REGAL_WALL, 5, 5);
-        this.roundabout$setFlammableBlock(ModBlocks.REGAL_FLOOR, 5, 5);
-        this.roundabout$setFlammableBlock(ModBlocks.WOODEN_MANOR_TABLE, 5, 5);
+    public void sba$bootstrap() {
+        this.sba$setFlammableBlock(ModBlocks.GASOLINE_SPLATTER, 15, 100);
+        this.sba$setFlammableBlock(ModBlocks.REGAL_WALL, 5, 5);
+        this.sba$setFlammableBlock(ModBlocks.REGAL_FLOOR, 5, 5);
+        this.sba$setFlammableBlock(ModBlocks.WOODEN_MANOR_TABLE, 5, 5);
     }
 
 

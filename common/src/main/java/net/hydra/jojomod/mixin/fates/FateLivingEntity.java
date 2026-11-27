@@ -35,7 +35,7 @@ public abstract class FateLivingEntity extends Entity {
     @Inject(method = "getFluidFallingAdjustedMovement(DZLnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;", at = @At(value = "HEAD"), cancellable = true)
     protected void rdbt$getFluidFallingAdjustedMovement(double $$0, boolean $$1, Vec3 $$2,CallbackInfoReturnable<Vec3> cir) {
         if (FateTypes.hasBloodHunger((LivingEntity) (Object) this)) {
-            if (((StandUser)this).roundabout$getDrowning() || getAirSupply() <= 0) {
+            if (((StandUser)this).sba$getDrowning() || getAirSupply() <= 0) {
                 if (!this.isNoGravity() && !this.isSprinting()) {
                     return;
                 } else {

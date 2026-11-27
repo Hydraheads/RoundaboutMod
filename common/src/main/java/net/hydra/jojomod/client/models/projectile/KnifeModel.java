@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 4.10.
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class KnifeModel extends Model {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "knife"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(SBA.MOD_ID, "knife"), "main");
 	private final ModelPart knife;
 
 	public KnifeModel(ModelPart root) {

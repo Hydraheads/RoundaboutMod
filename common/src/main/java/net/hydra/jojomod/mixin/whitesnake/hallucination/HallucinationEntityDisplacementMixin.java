@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HallucinationEntityDisplacementMixin {
 
     @Inject(method = "render", at = @At("HEAD"))
-    private <E extends Entity> void roundaboutWhitesnake$applyDisplacement(E rendered,
+    private <E extends Entity> void sbaWhitesnake$applyDisplacement(E rendered,
                                                                            double x, double y, double z,
                                                                            float yaw, float partialTick,
                                                                            PoseStack poseStack,
@@ -26,7 +26,7 @@ public abstract class HallucinationEntityDisplacementMixin {
     }
 
     @Inject(method = "render", at = @At("RETURN"))
-    private <E extends Entity> void roundaboutWhitesnake$stopDisplacement(E rendered,
+    private <E extends Entity> void sbaWhitesnake$stopDisplacement(E rendered,
                                                                           double x, double y, double z,
                                                                           float yaw, float partialTick,
                                                                           PoseStack poseStack,

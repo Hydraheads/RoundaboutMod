@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "sba:match"
+    },
+    {
+      "item": "sba:match"
+    },
+    {
+      "item": "sba:match"
+    },
+    {
+      "item": "sba:match"
+    }
+  ],
+  "result": {
+    "item": "sba:match_bundle"
+  }
+}

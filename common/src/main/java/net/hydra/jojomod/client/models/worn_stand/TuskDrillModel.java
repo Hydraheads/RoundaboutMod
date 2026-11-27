@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.LayerAnimations;
@@ -27,14 +27,14 @@ public class TuskDrillModel extends PsuedoHierarchicalModel {
     public ResourceLocation getTextureLocation(Entity context){
         if (drills[0] == null) {
             for(int i=0;i<drills.length-1;i++) {
-                drills[i] = new ResourceLocation(Roundabout.MOD_ID,
+                drills[i] = new ResourceLocation(SBA.MOD_ID,
                         "textures/stand/tusk/projectiles/drill_spin_" + (i+1) + ".png");
             }
         }
         int state = context.tickCount%11;
         if (context instanceof LivingEntity LE) {
             StandUser SU = (StandUser) LE;
-            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (SU.sba$getStandPowers() instanceof PowersTusk PT) {
                 if (PT.isFastSpin()) {
                //     state = context.tickCount % 6;
                 }
@@ -43,7 +43,7 @@ public class TuskDrillModel extends PsuedoHierarchicalModel {
         return drills[state];
     }
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_drill_spin"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(SBA.MOD_ID, "tusk_drill_spin"), "main");
     private final ModelPart armAddon;
     private final ModelPart Root;
 
@@ -78,7 +78,7 @@ public class TuskDrillModel extends PsuedoHierarchicalModel {
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, float alpha) {
-        if (context instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
+        if (context instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers() instanceof PowersTusk PT) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             if (((TimeStop)context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()){
                 partialTicks = 0;

@@ -30,9 +30,9 @@ public abstract class DisguiseVillager extends AbstractVillager implements Reput
      * If the player is disguised, the villager uses the disguised profile's UUID for reputation.
      */
     @Inject(method = "getPlayerReputation", at = @At("HEAD"), cancellable = true)
-    private void roundabout$getDisguisedPlayerReputation(Player player, CallbackInfoReturnable<Integer> cir) {
-        if (player instanceof StandUser su && su.roundabout$isDisguised()) {
-            GameProfile disguise = su.roundabout$getDisguiseProfile();
+    private void sba$getDisguisedPlayerReputation(Player player, CallbackInfoReturnable<Integer> cir) {
+        if (player instanceof StandUser su && su.sba$isDisguised()) {
+            GameProfile disguise = su.sba$getDisguiseProfile();
             if (disguise != null && disguise.getId() != null) {
                 cir.setReturnValue(this.gossips.getReputation(disguise.getId(), (gossipType) -> true));
             }

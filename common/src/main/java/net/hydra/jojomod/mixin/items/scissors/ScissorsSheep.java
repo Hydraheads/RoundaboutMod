@@ -22,7 +22,7 @@ public abstract class ScissorsSheep extends Animal implements Shearable {
     /**This mixin allows you to use scissors to shear sheep*/
 
     @Inject(method = "mobInteract", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$interact(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+    public void sba$interact(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack $$2 = $$0.getItemInHand($$1);
         if ($$2.is(ModItems.SCISSORS)) {
             if (!this.level().isClientSide && this.readyForShearing()) {

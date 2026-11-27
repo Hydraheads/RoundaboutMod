@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.mobs.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.minecraft.client.model.WolfModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,9 +13,9 @@ import net.minecraft.world.entity.animal.Wolf;
 
 
 public class TerrierEntityRenderer extends MobRenderer<Wolf, WolfModel<Wolf>> {
-    private static final ResourceLocation WILD_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/terrier.png");
-    private static final ResourceLocation TAMED_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/terrier_tame.png");
-    private static final ResourceLocation ANGRY_TEXTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/terrier_angry.png");
+    private static final ResourceLocation WILD_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/terrier.png");
+    private static final ResourceLocation TAMED_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/terrier_tame.png");
+    private static final ResourceLocation ANGRY_TEXTURE = new ResourceLocation(SBA.MOD_ID,"textures/entity/terrier_angry.png");
 
 
     public TerrierEntityRenderer(EntityRendererProvider.Context context) {

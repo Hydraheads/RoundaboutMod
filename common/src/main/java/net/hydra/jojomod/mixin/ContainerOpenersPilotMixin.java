@@ -16,11 +16,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ContainerOpenersPilotMixin {
 
     @Inject(method = "getOpenCount", at = @At("RETURN"), cancellable = true)
-    private void roundabout$addStandOpeners(Level level, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
+    private void sba$addStandOpeners(Level level, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
         int count = cir.getReturnValue();
         for (Player player : level.players()) {
             if (player instanceof StandUser user) {
-                StandPowers powers = user.roundabout$getStandPowers();
+                StandPowers powers = user.sba$getStandPowers();
                 if (powers != null && powers.isPiloting()) {
                     StandEntity stand = powers.getStandEntity(player);
                     // Check if stand is within 8 blocks of the chest

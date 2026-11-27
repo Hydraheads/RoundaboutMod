@@ -19,9 +19,9 @@ public abstract class AnubisSpellcasterMixin extends AbstractIllager {
     }
 
     @Inject(method = "getArmPose",at = @At("HEAD"),cancellable = true)
-    private void roundabout$cancelArmPose(CallbackInfoReturnable<IllagerArmPose> cir) {
+    private void sba$cancelArmPose(CallbackInfoReturnable<IllagerArmPose> cir) {
         StandUser SU = (StandUser) this;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis && this.isAggressive()) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis && this.isAggressive()) {
             cir.setReturnValue(IllagerArmPose.ATTACKING);
         }
     }

@@ -1,10 +1,10 @@
 {
   "replace": false,
   "values": [
-    "roundabout:impact_mound",
-    "roundabout:frozen_sand",
-    "roundabout:frozen_red_sand",
-    "roundabout:frozen_dirt",
-    "roundabout:frozen_gravel"
+    "sba:impact_mound",
+    "sba:frozen_sand",
+    "sba:frozen_red_sand",
+    "sba:frozen_dirt",
+    "sba:frozen_gravel"
   ]
 }

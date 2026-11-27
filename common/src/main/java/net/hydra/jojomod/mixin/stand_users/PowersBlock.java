@@ -18,9 +18,9 @@ public class PowersBlock {
 
     /**Mandom code to incur mining penalty. Design to be flexibly hooked into other stands.*/
     @Inject(method = "playerDestroy", at = @At(value = "HEAD"))
-    private void roundabout$playerDestroy(Level $$0, Player $$1, BlockPos $$2, BlockState $$3, BlockEntity $$4, ItemStack $$5, CallbackInfo ci) {
+    private void sba$playerDestroy(Level $$0, Player $$1, BlockPos $$2, BlockState $$3, BlockEntity $$4, ItemStack $$5, CallbackInfo ci) {
         if ($$1 != null && !$$0.isClientSide()){
-            ((StandUser)$$1).roundabout$getStandPowers().onDestroyBlock($$0,$$1,$$2,$$3,$$4,$$5);
+            ((StandUser)$$1).sba$getStandPowers().onDestroyBlock($$0,$$1,$$2,$$3,$$4,$$5);
         }
     }
 }

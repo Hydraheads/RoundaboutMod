@@ -23,7 +23,7 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
 
     static class KillAllTargets extends NearestAttackableTargetGoal<LivingEntity> {
         public KillAllTargets(AnubisPossessorEntity e) {
-            super(e, LivingEntity.class, 0, true, true, livingEntity -> !((StandUser)livingEntity).roundabout$isPossessed() && !(livingEntity instanceof FlyingMob) );
+            super(e, LivingEntity.class, 0, true, true, livingEntity -> !((StandUser)livingEntity).sba$isPossessed() && !(livingEntity instanceof FlyingMob) );
         }
 
         @Override
@@ -69,7 +69,7 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
             if (this.targets.isEmpty() && !this.level().isClientSide()) {
                 this.setLifeSpan(this.getLifeSpan() - 1);
                 if (this.getLifeSpan() <= 1) {
-                    ((StandUser)this.getUser()).roundabout$onPossessionFinish();
+                    ((StandUser)this.getUser()).sba$onPossessionFinish();
                 }
             }
         }
@@ -100,7 +100,7 @@ public class AnubisPossessorEntity extends GroundPathfindingStandAttackEntity {
     public List<LivingEntity> targets = new ArrayList<>();
     public AnubisPossessorEntity(Level $$1, LivingEntity user, List<LivingEntity> targets) {
         super(ModEntities.ANUBIS_POSSESSOR, $$1);
-        ((StandUser) user ).roundabout$setPossessor(this);
+        ((StandUser) user ).sba$setPossessor(this);
         this.setUser(user);
         this.targets = targets;
         this.lifeSpan = PowersAnubis.MaxPossessionTime;

@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.GentlyWeepsModel;
@@ -37,7 +37,7 @@ public class GentlyWeepsRenderer extends EntityRenderer<GentlyWeepsEntity> {
 
         if ($$0.getBled() || ClientUtil.checkIfClientCanSeeMobsForWindVision() ||
                 (ClientUtil.getPlayer() != null &&
-                        ((StandUser)ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersWhiteAlbum
+                        ((StandUser)ClientUtil.getPlayer()).sba$getStandPowers() instanceof PowersWhiteAlbum
                 && PowerTypes.hasStandActive(ClientUtil.getPlayer()))) {
             if (((TimeStop) $$0.level()).inTimeStopRange($$0)) {
                 $$2 = 0;
@@ -71,10 +71,10 @@ public class GentlyWeepsRenderer extends EntityRenderer<GentlyWeepsEntity> {
     @Override
     public ResourceLocation getTextureLocation(GentlyWeepsEntity var1) {
         if (var1.getBled()){
-            return new ResourceLocation(Roundabout.MOD_ID,
+            return new ResourceLocation(SBA.MOD_ID,
                     "textures/stand/white_album/projectiles/gently_bleeds.png");
         }
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/stand/white_album/projectiles/gently_weeps.png");
     }
 

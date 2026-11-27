@@ -14,7 +14,7 @@ public class ZEnchantmentTableBlockEntity {
             at = @At(value = "STORE"),
             ordinal = 0
     )
-    private static Player roundabout$bookAnimationTick(Player player) {
+    private static Player sba$bookAnimationTick(Player player) {
         if (player != null && PowerTypes.isExistentiallyElsewhere(player)) {
             return null;
         }

@@ -32,7 +32,7 @@ public abstract class MagiciansRedAbstractFurnaceBlockEntityMixin extends BaseCo
 
     @Unique
     @Override
-    public void roundabout$setFurnaceHeatingTime(int heatingTime){
+    public void sba$setFurnaceHeatingTime(int heatingTime){
         this.litTime =heatingTime;
         this.litDuration = litTime;
         this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(AbstractFurnaceBlock.LIT, Boolean.valueOf(this.isLit())), 3);

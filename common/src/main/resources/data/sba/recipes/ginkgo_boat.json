@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "sba:ginkgo_planks"
+    }
+  },
+  "result": {
+    "item": "sba:ginkgo_boat",
+    "count": 1
+  }
+}

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Player.class)
 public abstract class DiscMeleeImplantMixin {
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$implantWithoutDamage(Entity targetEntity, CallbackInfo ci) {
+    private void sbaWhitesnake$implantWithoutDamage(Entity targetEntity, CallbackInfo ci) {
         Player player = (Player) (Object) this;
         ItemStack stack = player.getMainHandItem();
         if (!(targetEntity instanceof LivingEntity target)) return;

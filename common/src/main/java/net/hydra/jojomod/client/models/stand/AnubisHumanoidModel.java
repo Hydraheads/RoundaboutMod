@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.stand;// Made with Blockbench 5.0.3
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
@@ -102,7 +102,7 @@ public class AnubisHumanoidModel<T extends AnubisEntity> extends StandModel<T> {
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
-    public static final ResourceLocation texture = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime_human.png");
+    public static final ResourceLocation texture = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/anime_human.png");
     public ResourceLocation getTextureLocation(Entity context) {
         return texture;
     }

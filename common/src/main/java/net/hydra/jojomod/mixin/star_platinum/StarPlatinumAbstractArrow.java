@@ -27,66 +27,66 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class StarPlatinumAbstractArrow extends Entity implements ISuperThrownAbstractArrow {
 
     /**Makes super thrown abstract arrows have super throw physics */
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN =
+    private static final EntityDataAccessor<Boolean> SBA$SUPER_THROWN =
             SynchedEntityData.defineId(AbstractArrow.class, EntityDataSerializers.BOOLEAN);
     @Unique
-    private int roundabout$superThrowTicks = -1;
+    private int sba$superThrowTicks = -1;
 
     @Unique
     @Override
-    public int roundabout$getSuperThrowTicks() {
-        return roundabout$superThrowTicks;
+    public int sba$getSuperThrowTicks() {
+        return sba$superThrowTicks;
     }
     @Unique
     @Override
-    public boolean roundabout$getSuperThrow() {
-        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+    public boolean sba$getSuperThrow() {
+        return this.getEntityData().get(SBA$SUPER_THROWN);
     }
 
 
     @Unique
     @Override
-    public void roundabout$cancelSuperThrow(){
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+    public void sba$cancelSuperThrow(){
+        this.entityData.set(SBA$SUPER_THROWN, false);
     }
     @Unique
     @Override
-    public void roundabout$setSuperThrowTicks(int sTHrow){
-        roundabout$superThrowTicks = sTHrow;
+    public void sba$setSuperThrowTicks(int sTHrow){
+        sba$superThrowTicks = sTHrow;
     }
     @Unique
     @Override
-    public void roundabout$starThrowInit(){
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
-        roundabout$superThrowTicks = 50;
+    public void sba$starThrowInit(){
+        this.entityData.set(SBA$SUPER_THROWN, true);
+        sba$superThrowTicks = 50;
     }
     @Unique
     @Override
-    public void roundabout$starThrowInit2(){
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
-        roundabout$superThrowTicks = 20;
+    public void sba$starThrowInit2(){
+        this.entityData.set(SBA$SUPER_THROWN, true);
+        sba$superThrowTicks = 20;
     }
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$defineSynchedData(CallbackInfo ci) {
-        if (!((AbstractArrow)(Object)this).getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
-            this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
+    private void sba$defineSynchedData(CallbackInfo ci) {
+        if (!((AbstractArrow)(Object)this).getEntityData().hasItem(SBA$SUPER_THROWN)) {
+            this.entityData.define(SBA$SUPER_THROWN, false);
         }
     }
     @Inject(method = "tick", at = @At(value = "TAIL"),cancellable = true)
-    private void roundabout$SuperThrow(CallbackInfo ci) {
-        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+    private void sba$SuperThrow(CallbackInfo ci) {
+        if (this.getEntityData().get(SBA$SUPER_THROWN)) {
             if (!this.isNoPhysics() && !this.inGround) {
-                this.setDeltaMovement(roundabout$delta);
+                this.setDeltaMovement(sba$delta);
             } else if (this.inGround){
-                this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                this.entityData.set(SBA$SUPER_THROWN, false);
             }
         }
         if (!this.level().isClientSide) {
             if (!this.isNoPhysics()) {
-                if (roundabout$superThrowTicks > -1) {
-                    roundabout$superThrowTicks--;
-                    if (roundabout$superThrowTicks <= -1) {
-                        this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                if (sba$superThrowTicks > -1) {
+                    sba$superThrowTicks--;
+                    if (sba$superThrowTicks <= -1) {
+                        this.entityData.set(SBA$SUPER_THROWN, false);
                     } else {
                         if (this.tickCount % 4 == 0) {
                             ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
@@ -96,24 +96,24 @@ public abstract class StarPlatinumAbstractArrow extends Entity implements ISuper
                     }
                 }
             } else {
-                if (roundabout$superThrowTicks > -1) {
-                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                if (sba$superThrowTicks > -1) {
+                    this.entityData.set(SBA$SUPER_THROWN, false);
                 }
             }
         }
     }
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    private void roundabout$SetPosForTS(CallbackInfo ci) {
-        if (!(((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this)) && ((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated())) {
-            roundabout$delta = this.getDeltaMovement();
+    private void sba$SetPosForTS(CallbackInfo ci) {
+        if (!(((TimeStop)this.level()).inTimeStopRange(((AbstractArrow)(Object)this)) && ((IProjectileAccess) this).sba$getSBAIsTimeStopCreated())) {
+            sba$delta = this.getDeltaMovement();
         }
     }
     @Unique
-    private Vec3 roundabout$delta = Vec3.ZERO;
+    private Vec3 sba$delta = Vec3.ZERO;
     @Unique
     @Override
-    public void roundabout$setDelta(Vec3 delta){
-        roundabout$delta = delta;
+    public void sba$setDelta(Vec3 delta){
+        sba$delta = delta;
     }
 
 

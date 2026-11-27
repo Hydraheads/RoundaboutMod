@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 5.0.3
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.Poses;
 import net.minecraft.client.model.HierarchicalModel;
@@ -85,7 +85,7 @@ public class JackalRifleModel<T extends Entity> extends HierarchicalModel<T> {
     }
 
     public ResourceLocation getTextureLocation(Entity entity){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/item/jackal_rifle.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/item/jackal_rifle.png");
     }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float r, float g, float b, float heyFull) {
@@ -102,11 +102,11 @@ public class JackalRifleModel<T extends Entity> extends HierarchicalModel<T> {
             if (LE instanceof Player player) {
                 mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_MODEL_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_MODEL_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.TOMMY_MODEL_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.TOMMY_MODEL_RECOIL.ad, partialTicks, 1f);
                 } else if (!mainHandRight) {
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_MODEL_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.TOMMY_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.TOMMY_MODEL_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.TOMMY_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);

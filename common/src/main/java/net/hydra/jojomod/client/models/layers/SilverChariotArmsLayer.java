@@ -67,7 +67,7 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
 
         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;
         if (entity instanceof StandUser SU) {
-            byte skin = SU.roundabout$getStandSkin();
+            byte skin = SU.sba$getStandSkin();
             ResourceLocation texture = SilverChariotBaseRenderer.getSkin(skin);
             ArmPair arms = (ArmPair) ModStrayModels.chariotArmsLayer.skinArmModels.getOrDefault(skin, ModStrayModels.chariotArmsLayer.defaultArms);
 
@@ -81,7 +81,7 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
             arms.rightArm().setPos(1.1F, -1.0F, 0.0F);
             arms.leftArm().setPos(-1.1F, -1.0F, 0.0F);
 
-            if (SU.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.hasHandsOut()) {
+            if (SU.sba$getStandPowers() instanceof PowersSilverChariot PSC && PSC.hasHandsOut()) {
                 // Has to use the left arm for part 5 skins
                 if (SilverChariotEntity.isPart5Skin(skin) || (entity instanceof Player player && player.getMainArm() == HumanoidArm.LEFT)) {
                     poseStack.pushPose();
@@ -110,7 +110,7 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
 
         StandUser SU = (StandUser) player;
 
-        byte skin = SU.roundabout$getStandSkin();
+        byte skin = SU.sba$getStandSkin();
         ResourceLocation texture = SilverChariotBaseRenderer.getSkin(skin);
         ArmPair arms = INSTANCE.skinArmModels.getOrDefault(skin, INSTANCE.defaultArms);
         ModelPart armToRender = isRightArm ? arms.rightArm() : arms.leftArm();

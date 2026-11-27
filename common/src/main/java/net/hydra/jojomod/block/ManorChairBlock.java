@@ -179,7 +179,7 @@ public class ManorChairBlock extends Block implements SimpleWaterloggedBlock {
             }
         }
 
-        if (((IGravityEntity) player).roundabout$getGravityDirection() != Direction.DOWN) {
+        if (((IGravityEntity) player).sba$getGravityDirection() != Direction.DOWN) {
             return InteractionResult.PASS;
         }
 
@@ -208,7 +208,7 @@ public class ManorChairBlock extends Block implements SimpleWaterloggedBlock {
                     sp.setYHeadRot(yaw);
                     sp.setYBodyRot(yaw);
                     IPlayerEntity ipe = (IPlayerEntity) player;
-                    ipe.roundabout$SetPoseEmote((byte) 11);
+                    ipe.sba$SetPoseEmote((byte) 11);
                 } else {
                     player.teleportTo(x, y, z);
                     player.setYRot(yaw);

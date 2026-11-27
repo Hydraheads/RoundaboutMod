@@ -8,9 +8,9 @@
         "${mod_author}"
     ],
     "contact": {
-        "homepage": "https://modrinth.com/mod/roundabout_the_jojo_mod",
-        "sources": "https://github.com/Hydraheads/RoundaboutMod",
-        "issues": "https://github.com/Hydraheads/RoundaboutMod/issues"
+        "homepage": "https://modrinth.com/mod/sba_the_jojo_mod",
+        "sources": "https://github.com/Hydraheads/SBAMod",
+        "issues": "https://github.com/Hydraheads/SBAMod/issues"
     },
     "license": "${license}",
     "icon": "${mod_id}.png",
@@ -20,10 +20,10 @@
             "net.hydra.jojomod.JojoModDataGenerator"
         ],
         "main": [
-            "net.hydra.jojomod.RoundaboutFabric"
+            "net.hydra.jojomod.SBAFabric"
         ],
         "client": [
-            "net.hydra.jojomod.client.RoundaboutFabricClient"
+            "net.hydra.jojomod.client.SBAFabricClient"
         ]
     },
     "mixins": [

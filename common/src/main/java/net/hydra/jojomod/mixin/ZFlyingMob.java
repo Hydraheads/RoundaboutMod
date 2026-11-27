@@ -26,7 +26,7 @@ public abstract class ZFlyingMob extends Mob {
     @Unique
     public int rdbt$enough = 0;
     @Inject(method = "travel", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$travel(Vec3 $$0, CallbackInfo ci){
+    public void sba$travel(Vec3 $$0, CallbackInfo ci){
         if (((IMob)this).rdbt$getStolen()){
             setDeltaMovement(0,-0.8,0);
             super.travel($$0);

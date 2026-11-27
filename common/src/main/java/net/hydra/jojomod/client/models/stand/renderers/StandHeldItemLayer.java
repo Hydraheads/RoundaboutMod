@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.GoldExperienceRequiemEntity;
@@ -81,7 +81,7 @@ public class StandHeldItemLayer <T extends StandEntity, M extends StandModel<T>>
             else if (MainUtil.isThrownBlockItem((itemStack.getItem()))){
                 if(!(livingEntity instanceof SeperatedArmEntity)) {
                     if (((StandEntity) livingEntity).getUser() != null) {
-                        shiftZ = 0 - Math.max(0, Math.min(((StandUser) ((StandEntity) livingEntity).getUser()).roundabout$getAttackTimeDuring(), 10F)) * 1.4F;
+                        shiftZ = 0 - Math.max(0, Math.min(((StandUser) ((StandEntity) livingEntity).getUser()).sba$getAttackTimeDuring(), 10F)) * 1.4F;
                         shiftY = -0.5F;
                         shiftX = 4;
                     }

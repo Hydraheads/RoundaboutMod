@@ -31,7 +31,7 @@ public class EmptyStandDiscItem extends Item {
     }
 
     public void generateStandPowers(LivingEntity entity){
-        ((StandUser)entity).roundabout$setStandPowers(null);
+        ((StandUser)entity).sba$setStandPowers(null);
     }
     @Override
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
@@ -41,7 +41,7 @@ public class EmptyStandDiscItem extends Item {
         } else {
             $$3 = $$1.getItemBySlot(EquipmentSlot.OFFHAND);
         }
-        if ($$1 != null && ((StandUser)$$1).roundabout$getStandPowers() instanceof PowersGER GER) {
+        if ($$1 != null && ((StandUser)$$1).sba$getStandPowers() instanceof PowersGER GER) {
             if (GER.hasNormalGEDisc()) {
                 GER.goBackToGE();
                 //return InteractionResultHolder.fail($$3);
@@ -50,17 +50,17 @@ public class EmptyStandDiscItem extends Item {
 
         if (!$$0.isClientSide && $$1 instanceof ServerPlayer sp) {
             if (!$$3.isEmpty() && $$3.getItem() instanceof EmptyStandDiscItem) {
-                ItemStack currentDisc = ((StandUser) $$1).roundabout$getStandDisc().copy();
+                ItemStack currentDisc = ((StandUser) $$1).sba$getStandDisc().copy();
                 if (!currentDisc.isEmpty()) {
                     StandUser user = ((StandUser) $$1);
-                    user.roundabout$getStandPowers().onStandSwitch();
+                    user.sba$getStandPowers().onStandSwitch();
                     if (!$$1.isCreative()) {
-                        ((StandUser)$$1).roundabout$sealStand(
+                        ((StandUser)$$1).sba$sealStand(
                                 ClientNetworking.getAppropriateConfig().itemSettings.switchStandDiscLength);
                     }
-                    user.roundabout$setStand(null);
-                    user.roundabout$setActive(false);
-                    user.roundabout$setStandDisc(ItemStack.EMPTY);
+                    user.sba$setStand(null);
+                    user.sba$setActive(false);
+                    user.sba$setStandDisc(ItemStack.EMPTY);
                     this.generateStandPowers($$1);
                     if ($$2.equals(InteractionHand.MAIN_HAND)){
                         $$1.setItemSlot(

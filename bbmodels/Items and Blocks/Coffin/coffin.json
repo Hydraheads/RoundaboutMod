@@ -4,8 +4,8 @@
 	"texture_size": [160, 160],
 	"textures": {
 		"0": "block/Wooden Coffin",
-		"3": "roundabout:block/coffin",
-		"particle": "roundabout:block/coffin"
+		"3": "sba:block/coffin",
+		"particle": "sba:block/coffin"
 	},
 	"elements": [
 		{

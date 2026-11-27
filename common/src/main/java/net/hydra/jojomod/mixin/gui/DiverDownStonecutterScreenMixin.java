@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class DiverDownStonecutterScreenMixin {
 
     @Redirect(method = "renderBg", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/StonecutterScreen;BG_LOCATION:Lnet/minecraft/resources/ResourceLocation;"))
-    private ResourceLocation roundabout$diverDownStonecutterBg() {
+    private ResourceLocation sba$diverDownStonecutterBg() {
         if ((Object) this instanceof DiverDownStonecutterScreen) {
             return DiverDownStonecutterScreen.TEXTURE;
         }
@@ -19,7 +19,7 @@ public class DiverDownStonecutterScreenMixin {
     }
 
     @Redirect(method = "renderButtons", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/inventory/StonecutterScreen;BG_LOCATION:Lnet/minecraft/resources/ResourceLocation;"))
-    private ResourceLocation roundabout$diverDownStonecutterButtons() {
+    private ResourceLocation sba$diverDownStonecutterButtons() {
         if ((Object) this instanceof DiverDownStonecutterScreen) {
             return DiverDownStonecutterScreen.TEXTURE;
         }

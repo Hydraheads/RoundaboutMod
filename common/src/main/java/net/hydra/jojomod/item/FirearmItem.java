@@ -5,7 +5,7 @@ import com.google.common.collect.Multimap;
 import net.hydra.jojomod.access.IGEProjectile;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
-import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.projectile.SBABulletEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.SoundIndex;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -167,14 +167,14 @@ public abstract class FirearmItem extends Item {
                 setReloading(itemStack, true);
                 player.getCooldowns().addCooldown(this, getReloadCooldown());
                 player.stopUsingItem();
-                ((StandUser) player).roundabout$getStandPowers().playSoundsIfNearby(getReloadSound(), 10, false);
+                ((StandUser) player).sba$getStandPowers().playSoundsIfNearby(getReloadSound(), 10, false);
             }
             return InteractionResultHolder.consume(itemStack);
         } else {
             if (isCrouchingOrSomething(player, itemStack) && getAmmo(itemStack) == getMaxAmmo()) {
-                if (player instanceof ServerPlayer SP) SP.displayClientMessage(Component.translatable("text.roundabout.already_reloaded").withStyle(ChatFormatting.GRAY), true);
+                if (player instanceof ServerPlayer SP) SP.displayClientMessage(Component.translatable("text.sba.already_reloaded").withStyle(ChatFormatting.GRAY), true);
             } else if (isCrouchingOrSomething(player, itemStack) && getAmmo(itemStack) != getMaxAmmo() && !hasAmmoInInventory(player)) {
-                if (player instanceof ServerPlayer SP) SP.displayClientMessage(Component.translatable("text.roundabout.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
+                if (player instanceof ServerPlayer SP) SP.displayClientMessage(Component.translatable("text.sba.no_more_usable_ammo").withStyle(ChatFormatting.GRAY), true);
             } else {
                 player.startUsingItem(hand);
             }
@@ -230,11 +230,11 @@ public abstract class FirearmItem extends Item {
             if (!player.isCreative()) setAmmo(itemStack, getAmmo(itemStack) - 1);
 
             LivingEntity shotSource = player;
-            RoundaboutBulletEntity bullet = new RoundaboutBulletEntity(level, shotSource);
+            SBABulletEntity bullet = new SBABulletEntity(level, shotSource);
 
             // for whitesnake
             if (canWhitesnakeUse() && WhitesnakeControlInventory.isActive(player)
-                    && ((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers
+                    && ((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers
                     && powers.getPilotingStand() != null) {
                 shotSource = powers.getPilotingStand();
                 bullet.setPos(shotSource.getX(), shotSource.getEyeY() - 0.15D, shotSource.getZ());
@@ -245,9 +245,9 @@ public abstract class FirearmItem extends Item {
             bullet.setAmmoType(getBulletType());
             if (imbuedShots > 0) {
                 itemStack.getOrCreateTag().putInt(TREE_IMBUED_SHOTS_TAG, imbuedShots - 1);
-                ((IGEProjectile) bullet).roundabout$setGETreeImbue(true);
+                ((IGEProjectile) bullet).sba$setGETreeImbue(true);
                 if (itemStack.getOrCreateTag().hasUUID(TREE_IMBUED_OWNER_TAG)) {
-                    ((IGEProjectile) bullet).roundabout$setGETreeImbueOwner(itemStack.getOrCreateTag().getUUID(TREE_IMBUED_OWNER_TAG));
+                    ((IGEProjectile) bullet).sba$setGETreeImbueOwner(itemStack.getOrCreateTag().getUUID(TREE_IMBUED_OWNER_TAG));
                     if (imbuedShots - 1 <= 0) {
                         itemStack.getOrCreateTag().remove(TREE_IMBUED_OWNER_TAG);
                     }
@@ -270,16 +270,16 @@ public abstract class FirearmItem extends Item {
                 spawnMuzzleFlash(serverLevel, pos);
             }
 
-            if (((StandUser) player).roundabout$isBubbleEncased()) {
+            if (((StandUser) player).sba$isBubbleEncased()) {
                 if (!level.isClientSide()) {
-                    ((StandUser) player).roundabout$setBubbleEncased((byte) 0);
+                    ((StandUser) player).sba$setBubbleEncased((byte) 0);
                     level.playSound(null, player.blockPosition(), ModSounds.BUBBLE_POP_EVENT, SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                     ((ServerLevel) level).sendParticles(ModParticles.BUBBLE_POP, player.getX(), player.getY() + player.getBbHeight() * 0.5, player.getZ(), 5, 0.25, 0.25, 0.25, 0.025);
                 }
             }
         } else {
             level.playSound(null, player, ModSounds.SNUBNOSE_DRY_FIRE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
-            if (player instanceof ServerPlayer SP) SP.displayClientMessage(Component.translatable("text.roundabout.out_of_bullets").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            if (player instanceof ServerPlayer SP) SP.displayClientMessage(Component.translatable("text.sba.out_of_bullets").withStyle(ChatFormatting.LIGHT_PURPLE), true);
         }
     }
 
@@ -288,7 +288,7 @@ public abstract class FirearmItem extends Item {
         if (isReloading(stack)) {
             setReloading(stack, false);
             if (player != null) {
-                ((StandUser) player).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 10, false);
+                ((StandUser) player).sba$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 10, false);
                 player.getCooldowns().removeCooldown(stack.getItem());
                 player.level().playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
             }
@@ -346,7 +346,7 @@ public abstract class FirearmItem extends Item {
     public abstract float getFireSoundVolume();
     public abstract float getFireSoundPitch();
     public abstract void applyRecoil(Player player);
-    public abstract void configureBulletTrajectory(RoundaboutBulletEntity bullet, LivingEntity shooter);
+    public abstract void configureBulletTrajectory(SBABulletEntity bullet, LivingEntity shooter);
     public abstract Vec3 getMuzzleOffset();
     // you're welcome Olive
     public abstract boolean canWhitesnakeUse();

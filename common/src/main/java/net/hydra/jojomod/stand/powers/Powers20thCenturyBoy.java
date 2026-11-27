@@ -160,27 +160,27 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = com.google.common.collect.Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.changing_stance",
-                "instruction.roundabout.press_skill", StandIcons.SWITCH_STANCE, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.ground_stance",
-                "instruction.roundabout.press_skill", StandIcons.GROUND_STANCE,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.neutral_stance",
-                "instruction.roundabout.press_skill", StandIcons.NEUTRAL_STANCE,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.knockback_stance",
-                "instruction.roundabout.press_skill", StandIcons.KNOCKBACK_STANCE,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.redstone_stance",
-                "instruction.roundabout.press_skill", StandIcons.REDSTONE_STANCE,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.activate_invincibility",
-                "instruction.roundabout.press_skill", StandIcons.TOGGLE_INVINCIBILITY,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.changing_stance",
+                "instruction.sba.press_skill", StandIcons.SWITCH_STANCE, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.ground_stance",
+                "instruction.sba.press_skill", StandIcons.GROUND_STANCE,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.neutral_stance",
+                "instruction.sba.press_skill", StandIcons.NEUTRAL_STANCE,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.knockback_stance",
+                "instruction.sba.press_skill", StandIcons.KNOCKBACK_STANCE,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.sba.redstone_stance",
+                "instruction.sba.press_skill", StandIcons.REDSTONE_STANCE,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.sba.activate_invincibility",
+                "instruction.sba.press_skill", StandIcons.TOGGLE_INVINCIBILITY,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
         return $$1;
     }
 
     /** wip stuffz **/
     public boolean isWip(){return true;}
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.DARK_PURPLE);
+        return Component.translatable(  "sba.dev_status.active").withStyle(ChatFormatting.DARK_PURPLE);
     }
     public Component ifWipListDev(){
         return Component.literal(  "Waiter").withStyle(ChatFormatting.WHITE);
@@ -252,30 +252,30 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     @Override
     public Component getSkinName(byte skinId) {
         return switch (skinId){
-            case Powers20thCenturyBoy.BEDROCK -> Component.translatable("skins.roundabout.20_centuryboy.bedrock");
-            case Powers20thCenturyBoy.BEE -> Component.translatable("skins.roundabout.20_centuryboy.bee");
-            case Powers20thCenturyBoy.BIKER -> Component.translatable("skins.roundabout.20_centuryboy.biker");
-            case Powers20thCenturyBoy.RETRO -> Component.translatable("skins.roundabout.20_centuryboy.retro");
-            case Powers20thCenturyBoy.GOLD -> Component.translatable("skins.roundabout.20_centuryboy.gold");
-            case Powers20thCenturyBoy.OLD_CENTURY_BOY -> Component.translatable("skins.roundabout.20_centuryboy.19th_century_boy");
-            case Powers20thCenturyBoy.SHULKER -> Component.translatable("skins.roundabout.20_centuryboy.shulker");
-            case Powers20thCenturyBoy.SULFUR -> Component.translatable("skins.roundabout.20_centuryboy.sulfur");
-            case Powers20thCenturyBoy.LEMON -> Component.translatable("skins.roundabout.20_centuryboy.lemon");
-            case Powers20thCenturyBoy.BLUE -> Component.translatable("skins.roundabout.20_centuryboy.blue");
-            case Powers20thCenturyBoy.GRAPE -> Component.translatable("skins.roundabout.20_centuryboy.grape");
-            case Powers20thCenturyBoy.STRAWBERRY -> Component.translatable("skins.roundabout.20_centuryboy.strawberry");
-            case Powers20thCenturyBoy.CHICKEN -> Component.translatable("skins.roundabout.20_centuryboy.chicken");
-            case Powers20thCenturyBoy.OLDER_CENTURY_BOY -> Component.translatable("skins.roundabout.20_centuryboy.10th_century_boy");
-            case Powers20thCenturyBoy.OLDEST_CENTURY_BOY -> Component.translatable("skins.roundabout.20_centuryboy.11th_century_boy");
-            case Powers20thCenturyBoy.SALMONBERRY -> Component.translatable("skins.roundabout.20_centuryboy.salmonberry");
-            case Powers20thCenturyBoy.BETA -> Component.translatable("skins.roundabout.20_centuryboy.beta");
-            case Powers20thCenturyBoy.PUMPKIN -> Component.translatable("skins.roundabout.20_centuryboy.pumpkin");
-            case Powers20thCenturyBoy.EVIL_PUMPKIN -> Component.translatable("skins.roundabout.20_centuryboy.evil_pumpkin");
-            case Powers20thCenturyBoy.GHOST -> Component.translatable("skins.roundabout.20_centuryboy.ghost");
-            case Powers20thCenturyBoy.WANDERING -> Component.translatable("skins.roundabout.20_centuryboy.wandering");
-            case Powers20thCenturyBoy.PARASITE -> Component.translatable("skins.roundabout.20_centuryboy.parasite");
-            case Powers20thCenturyBoy.CHORUS -> Component.translatable("skins.roundabout.20_centuryboy.chorus");
-            default -> Component.translatable("skins.roundabout.20_centuryboy.manga");
+            case Powers20thCenturyBoy.BEDROCK -> Component.translatable("skins.sba.20_centuryboy.bedrock");
+            case Powers20thCenturyBoy.BEE -> Component.translatable("skins.sba.20_centuryboy.bee");
+            case Powers20thCenturyBoy.BIKER -> Component.translatable("skins.sba.20_centuryboy.biker");
+            case Powers20thCenturyBoy.RETRO -> Component.translatable("skins.sba.20_centuryboy.retro");
+            case Powers20thCenturyBoy.GOLD -> Component.translatable("skins.sba.20_centuryboy.gold");
+            case Powers20thCenturyBoy.OLD_CENTURY_BOY -> Component.translatable("skins.sba.20_centuryboy.19th_century_boy");
+            case Powers20thCenturyBoy.SHULKER -> Component.translatable("skins.sba.20_centuryboy.shulker");
+            case Powers20thCenturyBoy.SULFUR -> Component.translatable("skins.sba.20_centuryboy.sulfur");
+            case Powers20thCenturyBoy.LEMON -> Component.translatable("skins.sba.20_centuryboy.lemon");
+            case Powers20thCenturyBoy.BLUE -> Component.translatable("skins.sba.20_centuryboy.blue");
+            case Powers20thCenturyBoy.GRAPE -> Component.translatable("skins.sba.20_centuryboy.grape");
+            case Powers20thCenturyBoy.STRAWBERRY -> Component.translatable("skins.sba.20_centuryboy.strawberry");
+            case Powers20thCenturyBoy.CHICKEN -> Component.translatable("skins.sba.20_centuryboy.chicken");
+            case Powers20thCenturyBoy.OLDER_CENTURY_BOY -> Component.translatable("skins.sba.20_centuryboy.10th_century_boy");
+            case Powers20thCenturyBoy.OLDEST_CENTURY_BOY -> Component.translatable("skins.sba.20_centuryboy.11th_century_boy");
+            case Powers20thCenturyBoy.SALMONBERRY -> Component.translatable("skins.sba.20_centuryboy.salmonberry");
+            case Powers20thCenturyBoy.BETA -> Component.translatable("skins.sba.20_centuryboy.beta");
+            case Powers20thCenturyBoy.PUMPKIN -> Component.translatable("skins.sba.20_centuryboy.pumpkin");
+            case Powers20thCenturyBoy.EVIL_PUMPKIN -> Component.translatable("skins.sba.20_centuryboy.evil_pumpkin");
+            case Powers20thCenturyBoy.GHOST -> Component.translatable("skins.sba.20_centuryboy.ghost");
+            case Powers20thCenturyBoy.WANDERING -> Component.translatable("skins.sba.20_centuryboy.wandering");
+            case Powers20thCenturyBoy.PARASITE -> Component.translatable("skins.sba.20_centuryboy.parasite");
+            case Powers20thCenturyBoy.CHORUS -> Component.translatable("skins.sba.20_centuryboy.chorus");
+            default -> Component.translatable("skins.sba.20_centuryboy.manga");
         };
     }
 
@@ -303,7 +303,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
         switch (context) {
             case SKILL_1_NORMAL, SKILL_1_CROUCH -> {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1, true);
                 tryPowerPacket(PowerIndex.POWER_1);
             }
             case SKILL_2_NORMAL,SKILL_2_CROUCH -> {
@@ -347,16 +347,16 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void switchMode(){
         if (mode == 1){
             mode = 2;
-            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.neutral_stance").withStyle(ChatFormatting.AQUA), true);}
+            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.century_stances.neutral_stance").withStyle(ChatFormatting.AQUA), true);}
         } else if (mode == 2) {
             mode = 3;
-            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.knockback_stance").withStyle(ChatFormatting.GREEN), true);}
+            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.century_stances.knockback_stance").withStyle(ChatFormatting.GREEN), true);}
         } else if (mode == 3) {
             mode = 4;
-            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.redstone_stance").withStyle(ChatFormatting.RED), true);}
+            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.century_stances.redstone_stance").withStyle(ChatFormatting.RED), true);}
         } else{
             mode = 1;
-            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.century_stances.ground_stance").withStyle(ChatFormatting.DARK_GREEN), true);}
+            if (!isClient()){((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.century_stances.ground_stance").withStyle(ChatFormatting.DARK_GREEN), true);}
         }
 
         if (this.getSelf() instanceof Player) {
@@ -378,7 +378,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         }
 
         self.dismountTo(self.getX(), self.getY(), self.getZ());
-        ((ILivingEntityAccess) self).roundabout$setSharedFlag(7, false);
+        ((ILivingEntityAccess) self).sba$setSharedFlag(7, false);
 
         invincibleState = invincible;
         if (invincible) {
@@ -412,15 +412,15 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         }
         if (!isClient()) {
             if (self instanceof ServerPlayer PL) {
-                ((StandUser) PL).roundabout$setStandAnimation((byte) staticMode);
+                ((StandUser) PL).sba$setStandAnimation((byte) staticMode);
             }
 
             if (self instanceof Mob) {
                 StandUser SU = ((StandUser)self);
                 if (invincible) {
-                    SU.roundabout$setIdlePosX((byte)0);
-                }else if (SU.roundabout$getIdlePos() != (byte)1){
-                    ((StandUser)self).roundabout$setIdlePosX((byte)1);
+                    SU.sba$setIdlePosX((byte)0);
+                }else if (SU.sba$getIdlePos() != (byte)1){
+                    ((StandUser)self).sba$setIdlePosX((byte)1);
                 }
             }
         }
@@ -473,26 +473,26 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
             if (ClientNetworking.getAppropriateConfig().centuryBoySettings.CBHasDurability && hasStandActive(this.getSelf())) {
                 if (amount > ClientNetworking.getAppropriateConfig().centuryBoySettings.CBDurability) {
-                    user.roundabout$breakGuard();
+                    user.sba$breakGuard();
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1F, 1.5F);
                     if (self instanceof Player player) {
                         player.getCooldowns().addCooldown(Items.SHIELD, 100);
                     }
                 } else {
-                    user.roundabout$damageGuard(amount);
-                    if (user.roundabout$getGuardBroken()) {
+                    user.sba$damageGuard(amount);
+                    if (user.sba$getGuardBroken()) {
                         playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1F, 1.5F);
                         if (self instanceof Player player) {
                             player.getCooldowns().addCooldown(Items.SHIELD, 100);
                         }
                     }
                 }
-                if (user.roundabout$getGuardBroken()) {
+                if (user.sba$getGuardBroken()) {
                     return false;
                 }
             }
 
-            if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
+            if (user.sba$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
 
                 if (source.is(DamageTypes.FELL_OUT_OF_WORLD) ||
                         source.is(DamageTypes.WITHER) ||
@@ -510,7 +510,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     self.hurtMarked = true;
                     Level level = self.level();
 
-                    if (!level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE)) {
+                    if (!level.getGameRules().getBoolean(ModGamerules.SBA_STAND_REDSTONE_INTERFERENCE)) {
                         deflect();
                         return true;
                     }
@@ -564,7 +564,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                     Level level = self.level();
 
                     if (ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
-                            || !level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                            || !level.getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)
                             || !(this.getSelf() instanceof Player && MainUtil.getIsGamemodeApproriateForGrief(self))
 
                     ) {
@@ -820,7 +820,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         staticMode = 1;
         if (!isClient()) {
             if (self instanceof ServerPlayer PL) {
-                ((StandUser) PL).roundabout$setStandAnimation((byte) staticMode);
+                ((StandUser) PL).sba$setStandAnimation((byte) staticMode);
             }
 
             if (effect.getDuration() == 10) {
@@ -846,16 +846,16 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     /** animation thingy **/
     public static AnimationDefinition getAnimation(StandUser SU, boolean fp){
         AnimationDefinition anim = null;
-        if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB){
+        if (SU.sba$getStandPowers() instanceof Powers20thCenturyBoy PCB){
             if (!fp){
-                switch (SU.roundabout$getStandAnimation()){
+                switch (SU.sba$getStandAnimation()){
                     case 1 -> anim = CenturyBoyAnimations.ground;
                     case 2 -> anim = CenturyBoyAnimations.neutral;
                     case 3 -> anim = CenturyBoyAnimations.knockback;
                     case 4 -> anim = CenturyBoyAnimations.redstone;
                 }
             } else{
-                switch (SU.roundabout$getStandAnimation()){
+                switch (SU.sba$getStandAnimation()){
                     case 1 -> anim = CenturyBoyAnimations.FPground;
                     case 2 -> anim = CenturyBoyAnimations.FPneutral;
                     case 3 -> anim = CenturyBoyAnimations.FPknockback;
@@ -867,20 +867,20 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
     public void setAnimation(byte b) {
         if (this.getSelf() instanceof Player P && this.isClient()) {
-            ((IPlayerEntity) P).roundabout$SetPoseEmote(Poses.NONE.id);
+            ((IPlayerEntity) P).sba$SetPoseEmote(Poses.NONE.id);
         }
-        this.getStandUserSelf().roundabout$setStandAnimation(b);
-        this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
-        this.getStandUserSelf().roundabout$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
+        this.getStandUserSelf().sba$setStandAnimation(b);
+        this.getStandUserSelf().sba$getWornStandAnimation().stop();
+        this.getStandUserSelf().sba$getWornStandAnimation().startIfStopped(this.getSelf().tickCount);
 
     }
 
     @Override
     public Component getPosName(byte posID) {
         switch (posID){
-            case (byte) 1 -> {return Component.translatable("idle.roundabout.century_boy2"); }
-            case (byte) 2 -> {return Component.translatable("idle.roundabout.century_boy3"); }
-            default -> {return Component.translatable("idle.roundabout.century_boy1");}
+            case (byte) 1 -> {return Component.translatable("idle.sba.century_boy2"); }
+            case (byte) 2 -> {return Component.translatable("idle.sba.century_boy3"); }
+            default -> {return Component.translatable("idle.sba.century_boy1");}
         }
 
     }

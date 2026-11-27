@@ -64,17 +64,17 @@ public class DiverLegsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
         if (entity == null || entity.isInvisible() || !MainUtil.isHumanoid2(entity)) return;
         if (ModStrayModels.diverLegsLayer == null) return;
 
-        if (entity instanceof StandUser su && su.roundabout$hasDiverLegs()) {
+        if (entity instanceof StandUser su && su.sba$hasDiverLegs()) {
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;
 
             StandUser diverOwner = null;
-            if (su.roundabout$getStandPowers() instanceof PowersDiverDown) {
+            if (su.sba$getStandPowers() instanceof PowersDiverDown) {
                 diverOwner = su;
-            } else if (su.roundabout$getDiverUser() != null && su.roundabout$getDiverUser().getSelf() instanceof StandUser ownerSu) {
+            } else if (su.sba$getDiverUser() != null && su.sba$getDiverUser().getSelf() instanceof StandUser ownerSu) {
                 diverOwner = ownerSu;
             }
 
-            byte skinByte = (diverOwner != null) ? diverOwner.roundabout$getStandSkin() : (byte) 0;
+            byte skinByte = (diverOwner != null) ? diverOwner.sba$getStandSkin() : (byte) 0;
             ResourceLocation texture = DiverDownBaseRenderer.getSkin(skinByte);
 
             LegPair legs = (LegPair) ModStrayModels.diverLegsLayer.skinLegModels.getOrDefault(skinByte, ModStrayModels.diverLegsLayer.defaultLegs);

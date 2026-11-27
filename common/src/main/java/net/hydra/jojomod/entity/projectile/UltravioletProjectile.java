@@ -33,8 +33,8 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UltravioletProjectile extends RoundaboutGeneralProjectile{
-    public UltravioletProjectile(EntityType<? extends RoundaboutGeneralProjectile> $$0, Level $$1) {
+public class UltravioletProjectile extends SBAGeneralProjectile{
+    public UltravioletProjectile(EntityType<? extends SBAGeneralProjectile> $$0, Level $$1) {
         super($$0, $$1);
     }
 
@@ -42,14 +42,14 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
         this(ModEntities.ULTRAVIOLET_PROJECTILE, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
-    protected UltravioletProjectile(EntityType<? extends RoundaboutGeneralProjectile> $$0, double $$1, double $$2, double $$3, Level $$4) {
+    protected UltravioletProjectile(EntityType<? extends SBAGeneralProjectile> $$0, double $$1, double $$2, double $$3, Level $$4) {
         this($$0, $$4);
         this.setPos($$1, $$2, $$3);
     }
     public int getMaxLifeSpan(){
         return 20;
     }
-    protected UltravioletProjectile(EntityType<RoundaboutGeneralProjectile> $$0, LivingEntity $$1, Level $$2) {
+    protected UltravioletProjectile(EntityType<SBAGeneralProjectile> $$0, LivingEntity $$1, Level $$2) {
         this($$0, $$1.getX(), $$1.getEyeY() - 0.1F, $$1.getZ(), $$2);
         this.setOwner($$1);
     }
@@ -134,7 +134,7 @@ public class UltravioletProjectile extends RoundaboutGeneralProjectile{
     }
     public void blastEntity(Entity entity){
         //Add hurt code here
-        //Roundabout.LOGGER.info("charge-> "+charge+" power-> "+power);
+        //SBA.LOGGER.info("charge-> "+charge+" power-> "+power);
         if (PowerTypes.isInADifferentExistence(entity,this)){
             return;
         }

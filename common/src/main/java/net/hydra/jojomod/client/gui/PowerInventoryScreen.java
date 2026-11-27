@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -59,9 +59,9 @@ public class PowerInventoryScreen
         extends EffectRenderingInventoryScreen<PowerInventoryMenu> {
     /**Currently unfinished, this is when you press the stand power inventory key.
      * It should render your current stand, as well as its moves and stuff.*/
-    public static final ResourceLocation POWER_INVENTORY_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation POWER_INVENTORY_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/power_inventory.png");
-    public static final ResourceLocation POWER_INVENTORY_GEAR_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation POWER_INVENTORY_GEAR_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/stand_user_settings.png");
 
     private static final ResourceLocation RECIPE_BUTTON_LOCATION = new ResourceLocation("textures/gui/recipe_button.png");
@@ -85,7 +85,7 @@ public class PowerInventoryScreen
     }
 
     public PowerInventoryScreen(Player player, PowerInventoryMenu pim) {
-        super(pim, player.getInventory(), ((StandUser)player).roundabout$getStandPowers().getStandName());
+        super(pim, player.getInventory(), ((StandUser)player).sba$getStandPowers().getStandName());
         this.titleLabelX = 80;
 
         if (player != null){
@@ -93,7 +93,7 @@ public class PowerInventoryScreen
             int tab2 = tab;
             boolean hasFate = !FateTypes.isHuman(player);
             StandUser standUser = ((StandUser) player);
-            boolean hasStand =standUser.roundabout$hasAStand();
+            boolean hasStand =standUser.sba$hasAStand();
             if (tab == 2 && !hasStand){
                 if (hasFate){
                     tab2 = 1;
@@ -162,10 +162,10 @@ public class PowerInventoryScreen
         int j = this.topPos;
         context.blit(POWER_INVENTORY_LOCATION, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
-        if (!(pl != null && ((IPlayerEntity)pl).roundabout$getMaskSlot() != null && !((IPlayerEntity)pl).roundabout$getMaskSlot().isEmpty())) {
+        if (!(pl != null && ((IPlayerEntity)pl).sba$getMaskSlot() != null && !((IPlayerEntity)pl).sba$getMaskSlot().isEmpty())) {
             context.blit(POWER_INVENTORY_LOCATION, i+8, j+8, 182, 98, 16, 16);
         }
-        if (!(pl != null && ((IPlayerEntity)pl).roundabout$getMaskVoiceSlot() != null && !((IPlayerEntity)pl).roundabout$getMaskVoiceSlot().isEmpty())) {
+        if (!(pl != null && ((IPlayerEntity)pl).sba$getMaskVoiceSlot() != null && !((IPlayerEntity)pl).sba$getMaskVoiceSlot().isEmpty())) {
             context.blit(POWER_INVENTORY_LOCATION, i+8, j+26, 182, 115, 16, 16);
         }
 
@@ -176,23 +176,23 @@ public class PowerInventoryScreen
 
             int slot = 1;
             boolean hasFate = !FateTypes.isHuman(pl);
-            boolean hasStand =standUser.roundabout$hasAStand();
+            boolean hasStand =standUser.sba$hasAStand();
             tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
             boolean shouldPowers = shouldRenderPowersTab(pl);
 
             if (hasFate){
                 renderTabChosen(slot,tab == 1, context, i, j, ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK.asItem().getDefaultInstance(),
-                        mouseX,mouseY,"power_inventory.roundabout.tabs.fate");
+                        mouseX,mouseY,"power_inventory.sba.tabs.fate");
                 slot++;
             }
             if (hasStand){
                 renderTabChosen(slot,tab == 2, context, i, j, ModItems.STAND_DISC.getDefaultInstance(),
-                        mouseX,mouseY,"power_inventory.roundabout.tabs.stand");
+                        mouseX,mouseY,"power_inventory.sba.tabs.stand");
                 slot++;
             }
             if (shouldPowers){
                 renderTabChosen(slot,tab == 3, context, i, j, ModItems.METEORITE.getDefaultInstance(),
-                        mouseX,mouseY,"power_inventory.roundabout.tabs.powers");
+                        mouseX,mouseY,"power_inventory.sba.tabs.powers");
                 slot++;
             }
 
@@ -203,14 +203,14 @@ public class PowerInventoryScreen
                 );
             } else if (hasStand && tab == 2) {
 
-                StandPowers sp = standUser.roundabout$getStandPowers();
+                StandPowers sp = standUser.sba$getStandPowers();
                 if (sp.rendersPlayer()) {
 
                     renderEntityInInventoryFollowsMouse2(
                             context, i + 51, j + 75, 30, (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, this.minecraft.player
                     );
                 } else {
-                    stand = standUser.roundabout$getStandPowers().getStandForHUD();
+                    stand = standUser.sba$getStandPowers().getStandForHUD();
                     if (stand != null) {
                         renderStandEntityInInventoryFollowsMouse(context, i + 51, j + 75 - sp.getDisplayPowerInventoryYOffset(), sp.getDisplayPowerInventoryScale(),
                                 (float) (i + 51) - this.xMouse, (float) (j + 75 - 50) - this.yMouse, stand, pl);
@@ -252,21 +252,21 @@ public class PowerInventoryScreen
 
                 int ss = this.leftPos + 78;
                 int sss = this.topPos + 57;
-                byte level = ((IPlayerEntity) pl).roundabout$getStandLevel();
-                int exp = ((IPlayerEntity) pl).roundabout$getStandExp();
-                int maxXP = standUser.roundabout$getStandPowers().getExpForLevelUp(level);
+                byte level = ((IPlayerEntity) pl).sba$getStandLevel();
+                int exp = ((IPlayerEntity) pl).sba$getStandExp();
+                int maxXP = standUser.sba$getStandPowers().getExpForLevelUp(level);
 
                 Component display;
-                if (level == standUser.roundabout$getStandPowers().getMaxLevel() ||
-                        (!standUser.roundabout$getStandDisc().isEmpty() && standUser.roundabout$getStandDisc().getItem()
+                if (level == standUser.sba$getStandPowers().getMaxLevel() ||
+                        (!standUser.sba$getStandDisc().isEmpty() && standUser.sba$getStandDisc().getItem()
                                 instanceof MaxStandDiscItem)) {
                     exp = maxXP;
-                    display = Component.translatable("leveling.roundabout.disc_maxed");
+                    display = Component.translatable("leveling.sba.disc_maxed");
 
 
 
                 } else {
-                    display = Component.translatable("leveling.roundabout.disc_development_potential_level",
+                    display = Component.translatable("leveling.sba.disc_development_potential_level",
                             level);
                 }
                 context.drawString(this.font, display, this.titleLabelX + ss - 78, this.titleLabelY + sss + 2, 4210752, false);
@@ -274,7 +274,7 @@ public class PowerInventoryScreen
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 244, 92, 4);
                 context.blit(POWER_INVENTORY_LOCATION, ss, sss, 10, 240, blt, 4);
 
-                if (standUser.roundabout$getStandPowers() instanceof PowersGoldExperience PGE && PGE.canUseRequiem()) {
+                if (standUser.sba$getStandPowers() instanceof PowersGoldExperience PGE && PGE.canUseRequiem()) {
                     float resolvePoints = PGE.getResolvePoints();
                     float resolvePointsMax = PGE.getNeededResolvePoints();
 
@@ -406,22 +406,22 @@ public class PowerInventoryScreen
 
             if (isOptionsOut){
                 IPlayerEntity ipe = ((IPlayerEntity) pl);
-                int anchorPlace = ipe.roundabout$getAnchorPlace();
-                int anchorPlaceAttack = ipe.roundabout$getAnchorPlaceAttack();
-                float distanceOut = ipe.roundabout$getDistanceOut();
+                int anchorPlace = ipe.sba$getAnchorPlace();
+                int anchorPlaceAttack = ipe.sba$getAnchorPlaceAttack();
+                float distanceOut = ipe.sba$getDistanceOut();
                 float idleOpacity =  ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
                 float combatOpacity = ConfigManager.getClientConfig().opacitySettings.opacityWhileAttacking;
                 float enemyOpacity = ConfigManager.getClientConfig().opacitySettings.opacityOfOthers;
-                float standSize = ipe.roundabout$getSizePercent();
-                float idleRot = ipe.roundabout$getIdleRotation();
-                float idleY = ipe.roundabout$getIdleYOffset();
+                float standSize = ipe.sba$getSizePercent();
+                float idleRot = ipe.sba$getIdleRotation();
+                float idleY = ipe.sba$getIdleYOffset();
 
                 context.blit(POWER_INVENTORY_GEAR_LOCATION, i-150, j, 0, 0, 148, 167);
-                context.drawString(this.font, Component.translatable(  "power_inventory.roundabout.settings.general").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.WHITE), i- 135, j+24, 4210752, false);
+                context.drawString(this.font, Component.translatable(  "power_inventory.sba.settings.general").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.WHITE), i- 135, j+24, 4210752, false);
 
                 if (pageNumber == 1) {
 
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.offset").withStyle(ChatFormatting.GRAY), i - 135, j + 36, 4210752, false);
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.offset").withStyle(ChatFormatting.GRAY), i - 135, j + 36, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 46, 11, 173, 118, 11);
                     int renderSpot1 = (int) Math.floor(((double) 114 / 359) * (anchorPlace));
                     if (isSurelyHovering(i - 136, j + 45, 118, 11, mouseX, mouseY) || sliderHeld == 1) {
@@ -430,7 +430,7 @@ public class PowerInventoryScreen
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 173, 5, 11);
                     }
 
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.distance").withStyle(ChatFormatting.GRAY), i - 135, j + 58, 4210752, false);
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.distance").withStyle(ChatFormatting.GRAY), i - 135, j + 58, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 67, 11, 173, 118, 11);
 
                     int renderSpot2 = (int) Math.floor(((double) 114 / 2) * (distanceOut));
@@ -440,7 +440,7 @@ public class PowerInventoryScreen
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 173, 5, 11);
                     }
 
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 80, 4210752, false);
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 80, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 89, 11, 173, 118, 11);
                     int renderSpot3 = (int) Math.floor(((double) 114 / 100) * (idleOpacity));
                     if (isSurelyHovering(i - 136, j + 89, 118, 11, mouseX, mouseY) || sliderHeld == 3) {
@@ -449,7 +449,7 @@ public class PowerInventoryScreen
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot3, j + 89, 5, 173, 5, 11);
                     }
 
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.attack_opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 102, 4210752, false);
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.attack_opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 102, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 111, 11, 173, 118, 11);
                     int renderSpot4 = (int) Math.floor(((double) 114 / 100) * (combatOpacity));
                     if (isSurelyHovering(i - 136, j + 111, 118, 11, mouseX, mouseY) || sliderHeld == 4) {
@@ -458,7 +458,7 @@ public class PowerInventoryScreen
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot4, j + 111, 5, 173, 5, 11);
                     }
 
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.enemy_opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 124, 4210752, false);
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.enemy_opacity").withStyle(ChatFormatting.GRAY), i - 135, j + 124, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 134, 11, 173, 118, 11);
                     int renderSpot5 = (int) Math.floor(((double) 114 / 100) * (enemyOpacity));
                     if (isSurelyHovering(i - 136, j + 133, 118, 11, mouseX, mouseY) || sliderHeld == 5) {
@@ -468,7 +468,7 @@ public class PowerInventoryScreen
                     }
                 } else if (pageNumber == 2) {
 
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.size").withStyle(ChatFormatting.GRAY), i - 135, j + 36, 4210752, false);
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.size").withStyle(ChatFormatting.GRAY), i - 135, j + 36, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 46, 11, 173, 118, 11);
                     int renderSpot1 = (int) Math.floor(((double) 114 / 2) * (standSize));
                     if (isSurelyHovering(i - 136, j + 45, 118, 11, mouseX, mouseY) || sliderHeld == 6) {
@@ -477,7 +477,7 @@ public class PowerInventoryScreen
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot1, j + 45, 5, 173, 5, 11);
                     }
 
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.rotation").withStyle(ChatFormatting.GRAY), i - 135, j + 58, 4210752, false);
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.rotation").withStyle(ChatFormatting.GRAY), i - 135, j + 58, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 67, 11, 173, 118, 11);
 
                     int renderSpot2 = (int) Math.floor(((double) 114 / 360) * (idleRot));
@@ -487,7 +487,7 @@ public class PowerInventoryScreen
                         context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136 + renderSpot2, j + 67, 5, 173, 5, 11);
                     }
 
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.yOffset").withStyle(ChatFormatting.GRAY), i - 135, j + 80, 4210752, false);
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.yOffset").withStyle(ChatFormatting.GRAY), i - 135, j + 80, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 89, 11, 173, 118, 11);
                     int renderSpot3 = (int) Math.floor(((double) 114 / 2) * (idleY));
                     if (isSurelyHovering(i - 136, j + 89, 118, 11, mouseX, mouseY) || sliderHeld == 8) {
@@ -497,7 +497,7 @@ public class PowerInventoryScreen
                     }
 
 
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.attack_offset").withStyle(ChatFormatting.GRAY), i - 135, j + 102, 4210752, false);
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.attack_offset").withStyle(ChatFormatting.GRAY), i - 135, j + 102, 4210752, false);
                     context.blit(POWER_INVENTORY_GEAR_LOCATION, i - 136, j + 111, 11, 173, 118, 11);
                     int renderSpot4 = (int) Math.floor(((double) 114 / 359) * (anchorPlaceAttack));
                     if (isSurelyHovering(i - 136, j + 111, 118, 11, mouseX, mouseY) || sliderHeld == 9) {
@@ -508,18 +508,18 @@ public class PowerInventoryScreen
                 }
 
                 if (isSurelyHovering(i-136, j+146, 65, 11, mouseX, mouseY)) {
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.reset")
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.reset")
                             .withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.ITALIC), i- 135, j+148, 4210752, false);
                 } else {
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.reset")
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.reset")
                             .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC), i- 135, j+148, 4210752, false);
                 }
 
                 if (isSurelyHovering(i-66, j+146, 65, 11, mouseX, mouseY)) {
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.next")
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.next")
                             .withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.ITALIC), i- 65, j+148, 4210752, false);
                 } else {
-                    context.drawString(this.font, Component.translatable("power_inventory.roundabout.settings.next")
+                    context.drawString(this.font, Component.translatable("power_inventory.sba.settings.next")
                             .withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC), i- 65, j+148, 4210752, false);
                 }
             }
@@ -527,7 +527,7 @@ public class PowerInventoryScreen
 
             boolean hasFate = !FateTypes.isHuman(pl);
             StandUser user = ((StandUser) pl);
-            boolean hasStand =user.roundabout$hasAStand();
+            boolean hasStand =user.sba$hasAStand();
             boolean shouldPowers = shouldRenderPowersTab(pl);
             tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
             if (tab == 1 && hasFate) {
@@ -538,27 +538,27 @@ public class PowerInventoryScreen
                 }
                 fp.drawOtherGUIElements(this.font, context, delta, mouseX, mouseY, i, j, POWER_INVENTORY_LOCATION);
                 abilityList = fp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
-                        ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+                        ((IPlayerEntity) pl).sba$getStandLevel(), bypass);
                 drawIcons(context,mouseX,mouseY);
             } else if (tab == 2 && hasStand) {
                 context.blit(POWER_INVENTORY_LOCATION, i +85, j + 19, 178, 221, 78, 35);
                 StandUser standUser = ((StandUser) pl);
                 boolean bypass = false;
-                if ((!((StandUser) pl).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser) pl).roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
+                if ((!((StandUser) pl).sba$getStandDisc().isEmpty() &&
+                        ((StandUser) pl).sba$getStandDisc().getItem() instanceof MaxStandDiscItem) ||
                         pl.isCreative()) {
                     bypass = true;
                 }
                 if (!ClientNetworking.getAppropriateConfig().standLevelingSettings.enableStandLeveling) {
                     bypass = true;
                 }
-                StandPowers sp = standUser.roundabout$getStandPowers();
+                StandPowers sp = standUser.sba$getStandPowers();
                 abilityList = sp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
-                        ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+                        ((IPlayerEntity) pl).sba$getStandLevel(), bypass);
 
                 drawIcons(context,mouseX,mouseY);
-                context.drawString(this.font, sp.getSkinName(((StandUser) pl).roundabout$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
-                context.drawString(this.font, sp.getPosName(standUser.roundabout$getIdlePos()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 36 + topPos, 16777215, false);
+                context.drawString(this.font, sp.getSkinName(((StandUser) pl).sba$getStandSkin()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 18 + topPos, 16777215, false);
+                context.drawString(this.font, sp.getPosName(standUser.sba$getIdlePos()), this.titleLabelX + 11 + leftPos, this.titleLabelY + 36 + topPos, 16777215, false);
 
             } else if (tab == 3 && shouldPowers) {
                 GeneralPowers gp = ((IPowersPlayer)pl).rdbt$getPowers();
@@ -569,7 +569,7 @@ public class PowerInventoryScreen
                 }
                 gp.drawOtherGUIElements(this.font, context, delta, mouseX, mouseY, i, j, POWER_INVENTORY_LOCATION);
                 abilityList = gp.drawGUIIcons(context, delta, mouseX, mouseY, i, j,
-                        ((IPlayerEntity) pl).roundabout$getStandLevel(), bypass);
+                        ((IPlayerEntity) pl).sba$getStandLevel(), bypass);
 
                 int lefXPos = leftPos + 77;
                 int rightXPos = leftPos + 164;
@@ -591,12 +591,12 @@ public class PowerInventoryScreen
                 }
 
                 if (PowerTypes.getPowerType(pl) == PowerTypes.STAND.ordinal()) {
-                    StandPowers sp = ((StandUser)pl).roundabout$getStandPowers();
+                    StandPowers sp = ((StandUser)pl).sba$getStandPowers();
                     if (sp instanceof PowersTusk){
                         if (isSurelyHovering(i + 100, j + 40, 19, 18, mouseX, mouseY)) {
                             context.blit(POWER_INVENTORY_LOCATION, i + 100, j + 40, 236, 131, 19, 18);
                             List<Component> compList = Lists.newArrayList();
-                            compList.add(Component.translatable("text.roundabout.tusk_nail_color").withStyle(ChatFormatting.WHITE));
+                            compList.add(Component.translatable("text.sba.tusk_nail_color").withStyle(ChatFormatting.WHITE));
                             context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
                         } else {
                             context.blit(POWER_INVENTORY_LOCATION, i + 100, j + 40, 236, 112, 19, 18);
@@ -606,7 +606,7 @@ public class PowerInventoryScreen
                         if (isSurelyHovering(i + 100, j + 40, 19, 18, mouseX, mouseY)) {
                             context.blit(POWER_INVENTORY_LOCATION, i + 100, j + 40, 236, 93, 19, 18);
                             List<Component> compList = Lists.newArrayList();
-                            compList.add(Component.translatable("text.roundabout.killer_queen_remove_stray_cat").withStyle(ChatFormatting.WHITE));
+                            compList.add(Component.translatable("text.sba.killer_queen_remove_stray_cat").withStyle(ChatFormatting.WHITE));
                             context.renderTooltip(Minecraft.getInstance().font, compList, Optional.empty(), mouseX, mouseY);
                         } else {
                             context.blit(POWER_INVENTORY_LOCATION, i + 100, j + 40, 236, 74, 19, 18);
@@ -748,8 +748,8 @@ public class PowerInventoryScreen
                     if (sliderHeld == 1) {
                         int initialX = (int) ($$0 - jump);
                         initialX = (int) (((float) 359 / 118) * initialX);
-                        if (initialX != ipe.roundabout$getAnchorPlace()) {
-                            ipe.roundabout$setAnchorPlace(initialX);
+                        if (initialX != ipe.sba$getAnchorPlace()) {
+                            ipe.sba$setAnchorPlace(initialX);
                             C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE,initialX);
                         }
                         return true;
@@ -757,8 +757,8 @@ public class PowerInventoryScreen
                     if (sliderHeld == 2) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 2 / 118) * initialX;
-                        if (initialX != ipe.roundabout$getDistanceOut()) {
-                            ipe.roundabout$setDistanceOut(initialX);
+                        if (initialX != ipe.sba$getDistanceOut()) {
+                            ipe.sba$setDistanceOut(initialX);
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_DISTANCE_OUT,initialX);
                         }
                         return true;
@@ -797,8 +797,8 @@ public class PowerInventoryScreen
                     if (sliderHeld == 6) {
                         float initialX = (int) ($$0 - jump);
                         initialX = ((float) 2 / 118) * initialX;
-                        if (initialX != ipe.roundabout$getSizePercent()) {
-                            ipe.roundabout$setSizePercent(initialX);
+                        if (initialX != ipe.sba$getSizePercent()) {
+                            ipe.sba$setSizePercent(initialX);
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_SIZE_PERCENT,initialX);
                         }
                         return true;
@@ -806,8 +806,8 @@ public class PowerInventoryScreen
                     if (sliderHeld == 7) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 360 / 118) * initialX;
-                        if (initialX != ipe.roundabout$getIdleRotation()) {
-                            ipe.roundabout$setIdleRotation(initialX);
+                        if (initialX != ipe.sba$getIdleRotation()) {
+                            ipe.sba$setIdleRotation(initialX);
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_IDLE_ROTATION,initialX);
                         }
                         return true;
@@ -815,8 +815,8 @@ public class PowerInventoryScreen
                     if (sliderHeld == 8) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 2 / 118) * initialX;
-                        if (initialX != ipe.roundabout$getIdleYOffset()) {
-                            ipe.roundabout$setIdleYOffset(initialX);
+                        if (initialX != ipe.sba$getIdleYOffset()) {
+                            ipe.sba$setIdleYOffset(initialX);
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_IDLE_Y_OFFSET,initialX);
                         }
                         return true;
@@ -824,8 +824,8 @@ public class PowerInventoryScreen
                     if (sliderHeld == 9) {
                         int initialX = ((int) $$0) - jump;
                         initialX = (int) (((float) 359 / 118) * initialX);
-                        if (initialX != ipe.roundabout$getAnchorPlaceAttack()) {
-                            ipe.roundabout$setAnchorPlaceAttack(initialX);
+                        if (initialX != ipe.sba$getAnchorPlaceAttack()) {
+                            ipe.sba$setAnchorPlaceAttack(initialX);
                             C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE_ATTACK,initialX);
                         }
                         return true;
@@ -853,8 +853,8 @@ public class PowerInventoryScreen
                     if (isSurelyHovering(jump, j + 45, 118, 11, $$0, $$1)) {
                         int initialX = (int) ($$0 - jump);
                         initialX = (int) (((float) 359 / 118) * initialX);
-                        if (initialX != ipe.roundabout$getAnchorPlace()) {
-                            ipe.roundabout$setAnchorPlace(initialX);
+                        if (initialX != ipe.sba$getAnchorPlace()) {
+                            ipe.sba$setAnchorPlace(initialX);
                             C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE,initialX);
                         }
                         sliderHeld = 1;
@@ -863,8 +863,8 @@ public class PowerInventoryScreen
                     if (isSurelyHovering(jump, j + 67, 118, 11, $$0, $$1)) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 2 / 118) * initialX;
-                        if (initialX != ipe.roundabout$getDistanceOut()) {
-                            ipe.roundabout$setDistanceOut(initialX);
+                        if (initialX != ipe.sba$getDistanceOut()) {
+                            ipe.sba$setDistanceOut(initialX);
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_DISTANCE_OUT,initialX);
                         }
                         sliderHeld = 2;
@@ -907,8 +907,8 @@ public class PowerInventoryScreen
                     if (isSurelyHovering(jump, j + 45, 118, 11, $$0, $$1)) {
                         float initialX = (int) ($$0 - jump);
                         initialX = ((float) 2 / 118) * initialX;
-                        if (initialX != ipe.roundabout$getSizePercent()) {
-                            ipe.roundabout$setSizePercent(initialX);
+                        if (initialX != ipe.sba$getSizePercent()) {
+                            ipe.sba$setSizePercent(initialX);
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_SIZE_PERCENT,initialX);
                         }
                         sliderHeld = 6;
@@ -917,8 +917,8 @@ public class PowerInventoryScreen
                     if (isSurelyHovering(jump, j + 67, 118, 11, $$0, $$1)) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 360 / 118) * initialX;
-                        if (initialX != ipe.roundabout$getIdleRotation()) {
-                            ipe.roundabout$setIdleRotation(initialX);
+                        if (initialX != ipe.sba$getIdleRotation()) {
+                            ipe.sba$setIdleRotation(initialX);
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_IDLE_ROTATION,initialX);
                         }
                         sliderHeld = 7;
@@ -927,8 +927,8 @@ public class PowerInventoryScreen
                     if (isSurelyHovering(jump, j + 89, 118, 11, $$0, $$1)) {
                         float initialX = (float) ($$0 - jump);
                         initialX = ((float) 2 / 118) * initialX;
-                        if (initialX != ipe.roundabout$getIdleYOffset()) {
-                            ipe.roundabout$setIdleYOffset(initialX);
+                        if (initialX != ipe.sba$getIdleYOffset()) {
+                            ipe.sba$setIdleYOffset(initialX);
                             C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_IDLE_Y_OFFSET,initialX);
                         }
                         sliderHeld = 8;
@@ -937,8 +937,8 @@ public class PowerInventoryScreen
                     if (isSurelyHovering(jump, j + 111, 118, 11, $$0, $$1)) {
                         int initialX = ((int) $$0) - jump;
                         initialX = (int) (((float) 359 / 118) * initialX);
-                        if (initialX != ipe.roundabout$getAnchorPlaceAttack()) {
-                            ipe.roundabout$setAnchorPlaceAttack(initialX);
+                        if (initialX != ipe.sba$getAnchorPlaceAttack()) {
+                            ipe.sba$setAnchorPlaceAttack(initialX);
                             C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE_ATTACK,initialX);
                         }
                         sliderHeld = 9;
@@ -957,7 +957,7 @@ public class PowerInventoryScreen
         Player pl = Minecraft.getInstance().player;
         if (pl != null) {
             StandUser user = ((StandUser) pl);
-            StandPowers powers = user.roundabout$getStandPowers();
+            StandPowers powers = user.sba$getStandPowers();
             powers.displayStand = null;
         }
         super.onClose();
@@ -981,14 +981,14 @@ public class PowerInventoryScreen
             int slot = 1;
             boolean hasFate = !FateTypes.isHuman(pl);
             StandUser user = ((StandUser) pl);
-            boolean hasStand =user.roundabout$hasAStand();
+            boolean hasStand =user.sba$hasAStand();
             boolean shouldPowers = shouldRenderPowersTab(pl);
             tab = ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab;
 
             StandUser standUser = ((StandUser) pl);
-            StandPowers sp = standUser.roundabout$getStandPowers();
+            StandPowers sp = standUser.sba$getStandPowers();
             StandUserClientPlayer scp = ((StandUserClientPlayer) pl);
-            int menuTicks = scp.roundabout$getMenuTicks();
+            int menuTicks = scp.sba$getMenuTicks();
             if (hasFate){
                 if (tab != 1) {
                     if (isSurelyHovering(i - 25 + (25 * slot), j - 24, 24, 26, mouseX, mouseY)) {
@@ -1017,13 +1017,13 @@ public class PowerInventoryScreen
                     int rightXPos = leftPos + 164;
                     int topYPos = topPos + 22;
                     int bottomYPos = topPos + 40;
-                    stand = standUser.roundabout$getStandPowers().getStandForHUD();
+                    stand = standUser.sba$getStandPowers().getStandForHUD();
                     if (sp.hasMoreThanOneSkin()) {
                         if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
                             if (menuTicks <= -1) {
-                                scp.roundabout$setMenuTicks(5);
-                                scp.roundabout$setMenuTicks(5);
-                                if (standUser.roundabout$isSealed()) {
+                                scp.sba$setMenuTicks(5);
+                                scp.sba$setMenuTicks(5);
+                                if (standUser.sba$isSealed()) {
                                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT_SEALED);
                                 } else {
                                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_RIGHT);
@@ -1034,8 +1034,8 @@ public class PowerInventoryScreen
 
                         if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
                             if (menuTicks <= -1) {
-                                scp.roundabout$setMenuTicks(5);
-                                if (standUser.roundabout$isSealed()) {
+                                scp.sba$setMenuTicks(5);
+                                if (standUser.sba$isSealed()) {
                                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT_SEALED);
                                 } else {
                                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SKIN_LEFT);
@@ -1047,7 +1047,7 @@ public class PowerInventoryScreen
                     if (sp.hasMoreThanOnePos()) {
                         if (isSurelyHovering(rightXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
                             if (menuTicks <= -1) {
-                                scp.roundabout$setMenuTicks(5);
+                                scp.sba$setMenuTicks(5);
                                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_RIGHT);
                             }
                             return true;
@@ -1055,7 +1055,7 @@ public class PowerInventoryScreen
 
                         if (isSurelyHovering(lefXPos, bottomYPos, 7, 13, mouseX, mouseY)) {
                             if (menuTicks <= -1) {
-                                scp.roundabout$setMenuTicks(5);
+                                scp.sba$setMenuTicks(5);
                                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_IDLE_LEFT);
                             }
                             return true;
@@ -1081,7 +1081,7 @@ public class PowerInventoryScreen
                     if (powerList.size() > 1) {
                         if (isSurelyHovering(rightXPos, topYPos, 7, 13, mouseX, mouseY)) {
                             if (menuTicks <= -1) {
-                                scp.roundabout$setMenuTicks(5);
+                                scp.sba$setMenuTicks(5);
                                 C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_RIGHT_POWERS);
                             }
                             return true;
@@ -1089,7 +1089,7 @@ public class PowerInventoryScreen
 
                         if (isSurelyHovering(lefXPos, topYPos, 7, 13, mouseX, mouseY)) {
                             if (menuTicks <= -1) {
-                                scp.roundabout$setMenuTicks(5);
+                                scp.sba$setMenuTicks(5);
                                     C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_LEFT_POWERS);
                             }
                             return true;
@@ -1097,9 +1097,9 @@ public class PowerInventoryScreen
                     }
                     if (PowerTypes.getPowerType(pl)==PowerTypes.STAND.ordinal()) {
                         if (isSurelyHovering(i +100, j + 40,19,18,mouseX,mouseY)){
-                            if (standUser.roundabout$getStandPowers() instanceof PowersTusk) {
+                            if (standUser.sba$getStandPowers() instanceof PowersTusk) {
                                 ClientUtil.openNailScreen();
-                            }else if (standUser.roundabout$getStandPowers() instanceof PowersKillerQueen PKQ) {
+                            }else if (standUser.sba$getStandPowers() instanceof PowersKillerQueen PKQ) {
                                 PKQ.removeStrayCatClient();
                             }
                         }
@@ -1114,8 +1114,8 @@ public class PowerInventoryScreen
             IPlayerEntity ipe = ((IPlayerEntity) pl);
             if (isSurelyHovering(i - 136, j + 146, 65, 11, mouseX, mouseY)) {
                 if (pageNumber == 1) {
-                    ipe.roundabout$setAnchorPlace(55);
-                    ipe.roundabout$setDistanceOut(1.07F);
+                    ipe.sba$setAnchorPlace(55);
+                    ipe.sba$setDistanceOut(1.07F);
                     C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE,55);
                     C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_DISTANCE_OUT,1.07F);
                     ConfigManager.getClientConfig().opacitySettings.opacityOfStand = 100F;
@@ -1123,10 +1123,10 @@ public class PowerInventoryScreen
                     ConfigManager.getClientConfig().opacitySettings.opacityOfOthers = 100F;
                     ConfigManager.saveClientConfig();
                 } else if (pageNumber == 2) {
-                    ipe.roundabout$setAnchorPlaceAttack(55);
-                    ipe.roundabout$setSizePercent(1F);
-                    ipe.roundabout$setIdleRotation(0F);
-                    ipe.roundabout$setIdleYOffset(0.1F);
+                    ipe.sba$setAnchorPlaceAttack(55);
+                    ipe.sba$setSizePercent(1F);
+                    ipe.sba$setIdleRotation(0F);
+                    ipe.sba$setIdleYOffset(0.1F);
                     C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_ANCHOR_PLACE_ATTACK,55);
                     C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_SIZE_PERCENT,1F);
                     C2SPacketUtil.floatToServerPacket(PacketDataIndex.FLOAT_IDLE_ROTATION,0F);
@@ -1180,7 +1180,7 @@ public class PowerInventoryScreen
                 && isOptionsOut
                 && pageNumber == 2
                 && ConfigManager.getClientConfig().dynamicSettings.currentPowerInventoryTab == 2
-                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersJumpinJackFlash;
+                && ((StandUser) player).sba$getStandPowers() instanceof PowersJumpinJackFlash;
     }
 
     private void jjf$renderHudSettings(GuiGraphics context, int mouseX, int mouseY) {

@@ -18,8 +18,8 @@ public class BarrageBossBar {
      * so that they don't obstruct each other.*/
     /** When in a barrage clash, boss bars are hidden.*/
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    public void roundabout$Render(GuiGraphics context, CallbackInfo ci) {
-        if (minecraft.player != null && ((StandUser)minecraft.player).roundabout$getStandPowers().isClashing()) {
+    public void sba$Render(GuiGraphics context, CallbackInfo ci) {
+        if (minecraft.player != null && ((StandUser)minecraft.player).sba$getStandPowers().isClashing()) {
             ci.cancel();
         }
     }

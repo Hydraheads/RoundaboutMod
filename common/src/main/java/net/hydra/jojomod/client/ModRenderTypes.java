@@ -14,7 +14,7 @@ public class ModRenderTypes extends RenderType {
     }
 
     public static final RenderType TRAIL_RENDER_TYPE = create(
-            "roundabout_projectile_trail",
+            "sba_projectile_trail",
             DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP,
             VertexFormat.Mode.QUADS,
             256,

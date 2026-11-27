@@ -31,7 +31,7 @@ public enum StandType implements StringRepresentable {
         this.id = $$0;
         this.name = $$1;
         this.item = standDisc;
-        this.translatedName = Component.translatable("item.roundabout."+$$1+"_disc.desc" );
+        this.translatedName = Component.translatable("item.sba."+$$1+"_disc.desc" );
     }
 
     public int getId() {

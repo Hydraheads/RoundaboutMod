@@ -20,7 +20,7 @@ public final class WhitesnakeDisguiseScreen extends Screen {
         int centerX = width / 2;
         int centerY = height / 2;
         username = new EditBox(font, centerX - 100, centerY - 10, 200, 20,
-                Component.translatable("roundabout.whitesnake.disguise.username"));
+                Component.translatable("sba.whitesnake.disguise.username"));
         username.setMaxLength(16);
         addRenderableWidget(username);
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> submit())
@@ -59,7 +59,7 @@ public final class WhitesnakeDisguiseScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
         renderBackground(graphics);
-        graphics.drawCenteredString(font, Component.translatable("roundabout.whitesnake.disguise.title"),
+        graphics.drawCenteredString(font, Component.translatable("sba.whitesnake.disguise.title"),
                 width / 2, height / 2 - 36, -1);
         super.render(graphics, mouseX, mouseY, delta);
     }

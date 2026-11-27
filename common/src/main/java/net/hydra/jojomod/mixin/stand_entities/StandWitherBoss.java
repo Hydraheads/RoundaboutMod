@@ -24,10 +24,10 @@ public abstract class StandWitherBoss extends Monster implements PowerableMob, R
     /**Stand Entities are not targeted, their users are*/
 
     @Unique
-    private boolean roundabout$antiRecurse = false;
+    private boolean sba$antiRecurse = false;
     @Inject(method = "setAlternativeTarget", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$setAlternativeTarget(int $$0, int $$1, CallbackInfo ci) {
-        if (!roundabout$antiRecurse) {
+    protected void sba$setAlternativeTarget(int $$0, int $$1, CallbackInfo ci) {
+        if (!sba$antiRecurse) {
             Entity ent = this.level().getEntity($$1);
             if (ent instanceof WhitesnakeEntity stand && stand.isControlModeActive()) return;
             if (ent instanceof StandEntity SE) {
@@ -36,18 +36,18 @@ public abstract class StandWitherBoss extends Monster implements PowerableMob, R
                         ci.cancel();
                     }
                     $$1 = SE.getUser().getId();
-                    roundabout$antiRecurse = true;
+                    sba$antiRecurse = true;
                     setAlternativeTarget($$0,$$1);
-                    roundabout$antiRecurse = false;
+                    sba$antiRecurse = false;
                     ci.cancel();
                 } else if (SE.getUser() != null) {
                     if (SE.getUser() instanceof ServerPlayer PE && !PE.gameMode.isCreative() && !PE.isSpectator()){
                         ci.cancel();
                     }
                     $$1 = SE.getUser().getId();
-                    roundabout$antiRecurse = true;
+                    sba$antiRecurse = true;
                     setAlternativeTarget($$0,$$1);
-                    roundabout$antiRecurse = false;
+                    sba$antiRecurse = false;
                     ci.cancel();
                 }
             }

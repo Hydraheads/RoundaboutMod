@@ -1,11 +1,11 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.block.InvisiBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
-import net.hydra.jojomod.block.RoundaboutAttackBlock;
+import net.hydra.jojomod.block.SBAAttackBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.client.hud.StandHudRender;
@@ -74,12 +74,12 @@ public class PowersAchtungBaby extends NewDashPreset {
     @Override
     public void onStandSwitch(){
         if (!self.level().isClientSide()) {
-            ((IEntityAndData) self).roundabout$setTrueInvisibility(-1);
+            ((IEntityAndData) self).sba$setTrueInvisibility(-1);
         }
         super.onStandSwitch();
     }
     public boolean invisibleVisionOn(){
-        return !getStandUserSelf().roundabout$getUniqueStandModeToggle();
+        return !getStandUserSelf().sba$getUniqueStandModeToggle();
     }
     public boolean canSummonStandAsEntity(){
         return false;
@@ -160,8 +160,8 @@ public class PowersAchtungBaby extends NewDashPreset {
         if (!onCooldown(PowerIndex.SKILL_3)) {
             this.setCooldown(PowerIndex.SKILL_3, 2);
             if (!stack.isEmpty()) {
-                if (((IEntityAndData) this.self).roundabout$getTrueInvisibility() > -1) {
-                    ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.POWER_3, true,
+                if (((IEntityAndData) this.self).sba$getTrueInvisibility() > -1) {
+                    ((StandUser) this.getSelf()).sba$tryIntPower(PowerIndex.POWER_3, true,
                             ((Player) this.getSelf()).getInventory().selected);
                     tryIntPowerPacket(PowerIndex.POWER_3,
                             ((Player) this.getSelf()).getInventory().selected);
@@ -184,19 +184,19 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     public void invisiburstClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
         }
     }
     public void invisiburstSimpleClient(){
         if (!this.onCooldown(PowerIndex.SKILL_2)) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_2_SNEAK);
         }
     }
 
     public void switchModeClient(){
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1, true);
             tryPowerPacket(PowerIndex.POWER_1);
     }
 
@@ -226,7 +226,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     public boolean inventoryGrab() {
         if (!this.getSelf().level().isClientSide()) {
             if (this.getSelf() instanceof Player) {
-                if (((IEntityAndData) this.self).roundabout$getTrueInvisibility() > -1) {
+                if (((IEntityAndData) this.self).sba$getTrueInvisibility() > -1) {
                     ItemStack stack = ((Player) this.getSelf()).getInventory().getItem(this.grabInventorySlot);
                     if (!stack.isEmpty() && stack.getItem() instanceof BlockItem BE && !(
                             BE.getBlock() instanceof ShulkerBoxBlock)) {
@@ -334,7 +334,7 @@ public class PowersAchtungBaby extends NewDashPreset {
                                 $$4.gameEvent(GameEvent.BLOCK_PLACE, $$3, GameEvent.Context.of($$5, $$7));
 
                                 IBE.setOriginal2(BI.getBlock().getStateForPlacement($$1));
-                                IBE.ticksUntilRestore = ((IEntityAndData) this.self).roundabout$getTrueInvisibility();
+                                IBE.ticksUntilRestore = ((IEntityAndData) this.self).sba$getTrueInvisibility();
                                 spawnExplosionParticles(this.self.level(), pos.getCenter(), 10, 0.2);
                                 return true;
                             }
@@ -382,7 +382,7 @@ public class PowersAchtungBaby extends NewDashPreset {
                                 BlockState oldState = this.self.level().getBlockState(targetPos);
 
                                 // Example: Replace dirt with glowstone
-                                if (!oldState.isAir() && !(oldState.getBlock() instanceof RoundaboutAttackBlock) && !oldState.is(Blocks.OBSIDIAN) && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
+                                if (!oldState.isAir() && !(oldState.getBlock() instanceof SBAAttackBlock) && !oldState.is(Blocks.OBSIDIAN) && oldState.getBlock().isCollisionShapeFullBlock(oldState, this.self.level(), targetPos)
                                         && this.self.level().getBlockEntity(targetPos) == null && !MainUtil.confirmIsOre(oldState)) {
                                     BlockState replaced = sl.getBlockState(targetPos);
                                     BlockEntity replacedEntity = sl.getBlockEntity(targetPos);
@@ -393,7 +393,7 @@ public class PowersAchtungBaby extends NewDashPreset {
                                     BlockEntity maybeEntity = sl.getBlockEntity(targetPos);
                                     if (maybeEntity instanceof InvisiBlockEntity entity) {
                                         entity.setOriginal(replaced, replacedTag, this.self.level());
-                                        entity.ticksUntilRestore = ((IEntityAndData) this.self).roundabout$getTrueInvisibility();
+                                        entity.ticksUntilRestore = ((IEntityAndData) this.self).sba$getTrueInvisibility();
                                     }
                                     this.self.level().setBlock(targetPos, ModBlocks.INVISIBLOCK.defaultBlockState(), 3);
                                 }
@@ -466,7 +466,7 @@ public class PowersAchtungBaby extends NewDashPreset {
             for (Entity ent : mobsInRange) {
                 if (ent.distanceTo(this.self) <= range){
                     IEntityAndData entityAndData = ((IEntityAndData) ent);
-                    entityAndData.roundabout$setTrueInvisibility(ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstDuration);
+                    entityAndData.sba$setTrueInvisibility(ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstDuration);
                 }
             }
         }
@@ -481,7 +481,7 @@ public class PowersAchtungBaby extends NewDashPreset {
                 for (Entity ent : mobsInRange) {
                     if (ent instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(this.self)) {
                         if (mb.distanceTo(this.self) >= range2) {
-                            ((StandUser)mb).roundabout$aggressivelyEnforceAggro(null);
+                            ((StandUser)mb).sba$aggressivelyEnforceAggro(null);
                         }
                     }
                 }
@@ -599,7 +599,7 @@ public class PowersAchtungBaby extends NewDashPreset {
     }
 
     @Override public Component getSkinName(byte skinId) {
-        return Component.translatable("skins.roundabout.achtung_baby.base");
+        return Component.translatable("skins.sba.achtung_baby.base");
     }
 
     @Override
@@ -626,7 +626,7 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         if (ClientNetworking.getAppropriateConfig().achtungSettings.hidesPlacedBlocks) {
-            if (slot == 3 && isHoldingSneak() && ((IEntityAndData) this.self).roundabout$getTrueInvisibility() <= -1)
+            if (slot == 3 && isHoldingSneak() && ((IEntityAndData) this.self).sba$getTrueInvisibility() <= -1)
                 return true;
         }
         return super.isAttackIneptVisually(activeP,slot);
@@ -636,17 +636,17 @@ public class PowersAchtungBaby extends NewDashPreset {
             BURST = 61;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.invisivision",
-                "instruction.roundabout.press_skill", StandIcons.BABY_VISION_ON, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.invisiburst",
-                "instruction.roundabout.press_skill", StandIcons.BURST_INVIS,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.controlled_burst",
-                "instruction.roundabout.press_skill_crouch", StandIcons.SELF_INVIS,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.invisivision",
+                "instruction.sba.press_skill", StandIcons.BABY_VISION_ON, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.invisiburst",
+                "instruction.sba.press_skill", StandIcons.BURST_INVIS,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.controlled_burst",
+                "instruction.sba.press_skill_crouch", StandIcons.SELF_INVIS,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
         if (ClientNetworking.getAppropriateConfig().achtungSettings.hidesPlacedBlocks) {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.place_invis",
-                    "instruction.roundabout.press_skill_crouch", StandIcons.INVIS_BLOCK, 3, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.sba.place_invis",
+                    "instruction.sba.press_skill_crouch", StandIcons.INVIS_BLOCK, 3, level, bypass));
         }
         return $$1;
     }
@@ -656,7 +656,7 @@ public class PowersAchtungBaby extends NewDashPreset {
         return true;
     }
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "sba.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
@@ -666,12 +666,12 @@ public class PowersAchtungBaby extends NewDashPreset {
 
     public boolean invisibleVisionSwitch(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(invisibleVisionOn());
+            getStandUserSelf().sba$setUniqueStandModeToggle(invisibleVisionOn());
             if (!isClient() && this.self instanceof ServerPlayer PE) {
                 if (invisibleVisionOn()) {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.achtung.vision_on").withStyle(ChatFormatting.AQUA), true);
+                    PE.displayClientMessage(Component.translatable("text.sba.achtung.vision_on").withStyle(ChatFormatting.AQUA), true);
                 } else {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.achtung.vision_off").withStyle(ChatFormatting.AQUA), true);
+                    PE.displayClientMessage(Component.translatable("text.sba.achtung.vision_off").withStyle(ChatFormatting.AQUA), true);
                 }
             }
         }

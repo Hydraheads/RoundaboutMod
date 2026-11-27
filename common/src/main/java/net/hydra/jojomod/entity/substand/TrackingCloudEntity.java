@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -45,7 +45,7 @@ public class TrackingCloudEntity extends StandEntity {
     public void tick() {
         this.setFadeOut(((byte) 1));
         if (getUser() == null || !getUser().isAlive() || !(getUserData(
-                getUser()).roundabout$getStandPowers() instanceof PowersKingNothing PKN)) {
+                getUser()).sba$getStandPowers() instanceof PowersKingNothing PKN)) {
                     this.discard();
                     return;
                 }
@@ -85,7 +85,7 @@ public class TrackingCloudEntity extends StandEntity {
     }
 
     public void redirectVector() {
-        if (((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersKingNothing PKN) {
+        if (((StandUser) getUser()).sba$getStandPowers() instanceof PowersKingNothing PKN) {
             byte memorizedScentType = PKN.getMemorizedScentType();
             Vec3 targetPos = null;
             switch (memorizedScentType) {
@@ -95,10 +95,10 @@ public class TrackingCloudEntity extends StandEntity {
                         hasTarget = false;
                         break;
                     }
-                    if (((StandUser) player).roundabout$getLifePunchClone() != null) {
-                        player = ((StandUser) player).roundabout$getLifePunchClone();
+                    if (((StandUser) player).sba$getLifePunchClone() != null) {
+                        player = ((StandUser) player).sba$getLifePunchClone();
                     }
-                    else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC
+                    else if (((StandUser) player).sba$getStandPowers() instanceof PowersKingCrimson PKC
                             && PKC.timeEraseActive && PKC.activeClone != null) {
                         player = PKC.activeClone;
                     }
@@ -188,7 +188,7 @@ public class TrackingCloudEntity extends StandEntity {
     }
 
     public boolean isInsideTrackedBlock() {
-        return ((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersKingNothing PKN
+        return ((StandUser) getUser()).sba$getStandPowers() instanceof PowersKingNothing PKN
                 && PKN.isInBlockGroup(level().getBlockState(blockPosition()).getBlock());
     }
 }

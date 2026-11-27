@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
 import net.hydra.jojomod.block.*;
@@ -68,8 +68,8 @@ import java.util.List;
 public class ThrownObjectEntity extends ThrowableItemProjectile {
    public boolean places;
 
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$STYLE = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> SBA$SUPER_THROWN = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> SBA$STYLE = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.BYTE);
 
     private final List<Vec3> trailPoints = new ArrayList<>();
     private static final int MAX_TRAIL_POINTS = 16;
@@ -80,7 +80,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     private int superThrowTicks = -1;
 
-    private void initDataTrackerRoundabout(CallbackInfo ci) {
+    private void initDataTrackerSBA(CallbackInfo ci) {
     }
 
     public ThrownObjectEntity(EntityType<? extends ThrowableItemProjectile> $$0, Level $$1) {
@@ -100,15 +100,15 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     }
 
     public void starThrowInit(){
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        this.entityData.set(SBA$SUPER_THROWN, true);
         superThrowTicks = 50;
     }
     public void disableThrow(){
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+        this.entityData.set(SBA$SUPER_THROWN, false);
     }
 
     public void setSuperThrowTicks(int ticks) {
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN,true);
+        this.entityData.set(SBA$SUPER_THROWN,true);
         superThrowTicks = ticks;
     }
 
@@ -122,7 +122,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
     public void tick(){
         Vec3 delta = this.getDeltaMovement();
         super.tick();
-        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+        if (this.getEntityData().get(SBA$SUPER_THROWN)) {
             this.setDeltaMovement(delta);
         }
         if (!this.level().isClientSide()) {
@@ -141,7 +141,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             if (superThrowTicks > -1) {
                 superThrowTicks--;
                 if (superThrowTicks <= -1) {
-                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                    this.entityData.set(SBA$SUPER_THROWN, false);
                 } else {
                     if ((this.tickCount+2) % 4 == 0){
                         if (this.getItem().getItem() instanceof BlockItem){
@@ -210,7 +210,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 $$7.shootFromRotation(thrower, xRot, yRot, getThrowAngle3, 2.4F * mult, getShotAccuracy);
 
                 if (canSnipe) {
-                    ((ISuperThrownAbstractArrow) $$7).roundabout$starThrowInit();
+                    ((ISuperThrownAbstractArrow) $$7).sba$starThrowInit();
                 }
                 thrower.level().addFreshEntity($$7);
                 if (playSounds) {
@@ -308,13 +308,13 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                         thrower.level().playSound(null, $$4, ModSounds.BLOCK_THROW_EVENT, SoundSource.PLAYERS, 1.0F, 1.3F);
                     }
                 }
-            } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof RoundaboutArrowItem)) {
+            } else if (item.getItem() instanceof ArrowItem && !(item.getItem() instanceof SBAArrowItem)) {
                 ArrowItem $$10 = (ArrowItem) item.getItem();
                 AbstractArrow $$11 = $$10.createArrow(thrower.level(), item, thrower);
                 $$11.setPos(pos);
                 $$11.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F * mult, getShotAccuracy);
                 $$11.setCritArrow(true);
-                StandEntity standEntity = ((StandUser) thrower).roundabout$getStand();
+                StandEntity standEntity = ((StandUser) thrower).sba$getStand();
                 if (standEntity != null && (styleType == SPTHROW || styleType == TWTHROW)) {
                     if (!standEntity.canAcquireHeldItem) {
                         $$11.pickup = AbstractArrow.Pickup.DISALLOWED;
@@ -326,7 +326,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 }
 
                 if (canSnipe) {
-                    ((ISuperThrownAbstractArrow) $$11).roundabout$starThrowInit();
+                    ((ISuperThrownAbstractArrow) $$11).sba$starThrowInit();
                 }
                 thrower.level().addFreshEntity($$11);
                 if (playSounds) {
@@ -338,7 +338,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     $$7.setPos(pos);
                     $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F * mult, getShotAccuracy);
                     if (canSnipe) {
-                        ((ISuperThrownAbstractArrow) $$7).roundabout$starThrowInit2();
+                        ((ISuperThrownAbstractArrow) $$7).sba$starThrowInit2();
                     }
                     thrower.level().addFreshEntity($$7);
                     if (playSounds) {
@@ -351,7 +351,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     $$7.setPos(pos);
                     $$7.shootFromRotation(thrower, xRot, yRot, 0.0F, 3.0F * mult, getShotAccuracy);
                     if (canSnipe) {
-                        ((ISuperThrownAbstractArrow) $$7).roundabout$starThrowInit2();
+                        ((ISuperThrownAbstractArrow) $$7).sba$starThrowInit2();
                     }
                     if ((styleType == SPTHROW || styleType == TWTHROW)) {
                         $$7.isThrown = true;
@@ -413,17 +413,17 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
-        $$0.putBoolean("roundabout.AcquireHeldItem",places);
-        $$0.putByte("roundabout.style",getStyle());
+        $$0.putBoolean("sba.AcquireHeldItem",places);
+        $$0.putByte("sba.style",getStyle());
         CompoundTag compoundtag = new CompoundTag();
-        $$0.put("roundabout.HeldItem",this.getItem().save(compoundtag));
+        $$0.put("sba.HeldItem",this.getItem().save(compoundtag));
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
-        this.places = $$0.getBoolean("roundabout.AcquireHeldItem");
-        setStyle($$0.getByte("roundabout.style"));
-        CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+        this.places = $$0.getBoolean("sba.AcquireHeldItem");
+        setStyle($$0.getByte("sba.style"));
+        CompoundTag compoundtag = $$0.getCompound("sba.HeldItem");
         ItemStack itemstack = ItemStack.of(compoundtag);
         this.setItem(itemstack);
         super.readAdditionalSaveData($$0);
@@ -431,20 +431,20 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
 
     @Override
     protected void defineSynchedData() {
-        if (!this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
+        if (!this.getEntityData().hasItem(SBA$SUPER_THROWN)) {
             super.defineSynchedData();
-            this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
-            this.getEntityData().define(ROUNDABOUT$STYLE, (byte)0);
+            this.getEntityData().define(SBA$SUPER_THROWN, false);
+            this.getEntityData().define(SBA$STYLE, (byte)0);
         }
     }
     public boolean getSuperThrow() {
-        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+        return this.getEntityData().get(SBA$SUPER_THROWN);
     }
     public byte getStyle() {
-        return this.getEntityData().get(ROUNDABOUT$STYLE);
+        return this.getEntityData().get(SBA$STYLE);
     }
     public void setStyle(byte style) {
-        this.getEntityData().set(ROUNDABOUT$STYLE,style);
+        this.getEntityData().set(SBA$STYLE,style);
     }
     @Override
     protected Item getDefaultItem() {
@@ -507,14 +507,14 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                     }
                 } catch(Exception e) {
                     //put shader debug stuff here
-                    Roundabout.LOGGER.info("Mod does not make a safe null check for players, report to devs who made blocks");
+                    SBA.LOGGER.info("Mod does not make a safe null check for players, report to devs who made blocks");
                 }
             }
 
         }
         } catch(Exception e) {
             //put shader debug stuff here
-            Roundabout.LOGGER.info("Mod does not make a safe null check for players, report to devs who made blocks");
+            SBA.LOGGER.info("Mod does not make a safe null check for players, report to devs who made blocks");
         }
         return false;
     }
@@ -811,10 +811,10 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
         }
         Entity $$1 = $$0.getEntity();
         if ($$1 instanceof LivingEntity LE){
-            if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
+            if (((StandUser)LE).sba$getStandPowers().dealWithProjectile(this,$$0)){
                 this.discard();
                 return;
-            } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
+            } else if (((StandUser)LE).sba$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
                 return;
             }
         } else if ($$1 instanceof SoftAndWetPlunderBubbleEntity){
@@ -881,8 +881,8 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
         } else if (!isGEThrow && this.getItem().getItem() instanceof StandDiscItem SD) {
             if (this.places && $$1 instanceof LivingEntity LE && MainUtil.canGrantStand(LE) &&
             SD.standPowers.isWorthinessType(LE)){
-                ((StandUser) LE).roundabout$setStandDisc(this.getItem());
-                ((StandUser) LE).roundabout$summonStand($$1.level(),true,true);
+                ((StandUser) LE).sba$setStandDisc(this.getItem());
+                ((StandUser) LE).sba$summonStand($$1.level(),true,true);
             } else {
                 this.dropItem($$1.getOnPos());
             }
@@ -891,10 +891,10 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
                 this.dropItem($$1.getOnPos());
             }
         } else if (!isGEThrow && this.getItem().getItem() instanceof MaskItem && $$1 instanceof Player pe) {
-            if (ClientNetworking.getAppropriateConfig().itemSettings.canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(0).isEmpty()) {
-                ((IPlayerEntity) pe).roundabout$getMaskInventory().setItem(0, this.getItem().copy());
-            } else if (ClientNetworking.getAppropriateConfig().itemSettings.canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(1).isEmpty()){
-                ((IPlayerEntity)pe).roundabout$getMaskInventory().setItem(1,this.getItem().copy());
+            if (ClientNetworking.getAppropriateConfig().itemSettings.canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).sba$getMaskInventory().getItem(0).isEmpty()) {
+                ((IPlayerEntity) pe).sba$getMaskInventory().setItem(0, this.getItem().copy());
+            } else if (ClientNetworking.getAppropriateConfig().itemSettings.canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).sba$getMaskInventory().getItem(1).isEmpty()){
+                ((IPlayerEntity)pe).sba$getMaskInventory().setItem(1,this.getItem().copy());
             } else {
                 this.dropItem($$1.getOnPos());
             }
@@ -919,7 +919,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
                 if ($$1 instanceof LivingEntity L){
 
                     if (this.getOwner() instanceof Player PE){
-                        ((StandUser)PE).roundabout$getStandPowers().addEXP(1);
+                        ((StandUser)PE).sba$getStandPowers().addEXP(1);
                     }
 
                     if (this.getItem().is(Items.COBWEB)) {
@@ -932,7 +932,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
                         L.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 0), this);
                     }
                     if (this.getItem().is(ModItems.GASOLINE_BUCKET)){
-                        ((StandUser) L).roundabout$setGasolineTime(((StandUser) L).roundabout$getMaxBucketGasolineTime());
+                        ((StandUser) L).sba$setGasolineTime(((StandUser) L).sba$getMaxBucketGasolineTime());
                     }
                 }
 
@@ -1008,7 +1008,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             if (!this.getItem().isEmpty()) {
                 if (this.getItem().getItem() instanceof GlaiveItem || this.getItem().getItem() instanceof AxeItem) {
                     if ($$1 instanceof Player PE) {
-                        if (PE.isBlocking() && !((StandUser) PE).roundabout$isGuarding()) {
+                        if (PE.isBlocking() && !((StandUser) PE).sba$isGuarding()) {
                             PE.getCooldowns().addCooldown(Items.SHIELD, 100);
                             PE.stopUsingItem();
                             PE.level().broadcastEntityEvent(this, (byte) 30);
@@ -1042,11 +1042,11 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
 
         Entity targetEntity = hit.getEntity();
         if (targetEntity instanceof LivingEntity target) {
-            if (((StandUser) target).roundabout$getStandPowers().dealWithProjectile(this, hit)) {
+            if (((StandUser) target).sba$getStandPowers().dealWithProjectile(this, hit)) {
                 discard();
                 return true;
             }
-            if (((StandUser) target).roundabout$getStandPowers().dealWithProjectileNoDiscard(this, hit)) {
+            if (((StandUser) target).sba$getStandPowers().dealWithProjectileNoDiscard(this, hit)) {
                 return true;
             }
             if (target.isBlocking() && discHitsFront(target)) {
@@ -1074,7 +1074,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
 
     private boolean canImplantMusicDisc() {
         return getOwner() instanceof LivingEntity thrower
-                && ((StandUser) thrower).roundabout$getStandPowers().canImplantMusicDisc();
+                && ((StandUser) thrower).sba$getStandPowers().canImplantMusicDisc();
     }
 
     private boolean discHitsFront(LivingEntity target) {
@@ -1161,7 +1161,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
     // GE
     private boolean tryTransformIntoLifeform(Vec3 spawnPos) {
         if ((this.getStyle() == GETHROW || this.getStyle() == GERTHROW) && this.getOwner() instanceof StandUser entity) {
-            StandPowers powers = entity.roundabout$getStandPowers();
+            StandPowers powers = entity.sba$getStandPowers();
 
             if (powers instanceof PowersGoldExperience gePowers) {
                 EntityType<?> typeToSpawn = getGELifeformType(gePowers.getSelectedAnimalType());
@@ -1177,7 +1177,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
 
     private boolean tryTransformIntoLifeform(BlockHitResult hitResult) {
         if ((this.getStyle() == GETHROW || this.getStyle() == GERTHROW) && this.getOwner() instanceof StandUser entity) {
-            StandPowers powers = entity.roundabout$getStandPowers();
+            StandPowers powers = entity.sba$getStandPowers();
 
             if (powers instanceof PowersGoldExperience gePowers) {
                 EntityType<?> typeToSpawn = getGELifeformType(gePowers.getSelectedAnimalType());

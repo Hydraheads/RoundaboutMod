@@ -91,10 +91,10 @@ public class KnifeItem extends Item{
 
                             }
 
-                            if ($$2 != null && ((StandUser)$$2).roundabout$isBubbleEncased()){
+                            if ($$2 != null && ((StandUser)$$2).sba$isBubbleEncased()){
                                 StandUser SE = ((StandUser)$$2);
                                 if (!$$1.isClientSide()){
-                                    SE.roundabout$setBubbleEncased((byte) 0);
+                                    SE.sba$setBubbleEncased((byte) 0);
                                     $$1.playSound(null, $$2.blockPosition(), ModSounds.BUBBLE_POP_EVENT,
                                             SoundSource.PLAYERS, 2F, (float) (0.98 + (Math.random() * 0.04)));
                                     ((ServerLevel) $$1).sendParticles(ModParticles.BUBBLE_POP,

@@ -86,7 +86,7 @@ public class FleshBucketItem extends Item {
         }
 
         int cooldown = 40;
-        if (( ((StandUser)$$2).roundabout$getStandPowers() instanceof PowersRatt)) {cooldown = 20;}
+        if (( ((StandUser)$$2).sba$getStandPowers() instanceof PowersRatt)) {cooldown = 20;}
         $$2.getCooldowns().addCooldown(Items.BUCKET,cooldown);
         $$2.getCooldowns().addCooldown(ModItems.FLESH_BUCKET,cooldown);
 

@@ -1,6 +1,6 @@
 /*
 This shader is licensed under CC BY-SA 4.0 (see here: https://creativecommons.org/licenses/by-sa/4.0/deed.en)
-Made by GoldenGate9 for Roundabout in 2025
+Made by GoldenGate9 for SBA in 2025
 */
 
 // == World Space Calculation Code == //

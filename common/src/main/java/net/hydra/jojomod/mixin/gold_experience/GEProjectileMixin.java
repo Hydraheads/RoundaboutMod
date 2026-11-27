@@ -19,55 +19,55 @@ import java.util.UUID;
 public abstract class GEProjectileMixin implements IGEProjectile {
 
     @Unique
-    private boolean roundabout$geTreeImbue = false;
+    private boolean sba$geTreeImbue = false;
 
     @Unique
     @Nullable
-    private UUID roundabout$geTreeImbueOwner = null;
+    private UUID sba$geTreeImbueOwner = null;
 
     @Override
-    public boolean roundabout$hasGETreeImbue() {
-        return this.roundabout$geTreeImbue;
+    public boolean sba$hasGETreeImbue() {
+        return this.sba$geTreeImbue;
     }
 
     @Override
-    public void roundabout$setGETreeImbue(boolean value) {
-        this.roundabout$geTreeImbue = value;
+    public void sba$setGETreeImbue(boolean value) {
+        this.sba$geTreeImbue = value;
     }
 
     @Nullable
-    public UUID roundabout$getGETreeImbueOwner() {
-        return this.roundabout$geTreeImbueOwner;
+    public UUID sba$getGETreeImbueOwner() {
+        return this.sba$geTreeImbueOwner;
     }
 
-    public void roundabout$setGETreeImbueOwner(@Nullable UUID ownerId) {
-        this.roundabout$geTreeImbueOwner = ownerId;
+    public void sba$setGETreeImbueOwner(@Nullable UUID ownerId) {
+        this.sba$geTreeImbueOwner = ownerId;
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("HEAD"))
-    private void roundabout$saveGETreeImbue(CompoundTag tag, CallbackInfo ci) {
-        if (this.roundabout$geTreeImbue) {
+    private void sba$saveGETreeImbue(CompoundTag tag, CallbackInfo ci) {
+        if (this.sba$geTreeImbue) {
             tag.putBoolean("GETreeImbue", true);
         }
-        if (this.roundabout$geTreeImbueOwner != null) {
-            tag.putUUID("GETreeImbueOwner", this.roundabout$geTreeImbueOwner);
+        if (this.sba$geTreeImbueOwner != null) {
+            tag.putUUID("GETreeImbueOwner", this.sba$geTreeImbueOwner);
         }
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
-    private void roundabout$loadGETreeImbue(CompoundTag tag, CallbackInfo ci) {
-        this.roundabout$geTreeImbue = tag.getBoolean("GETreeImbue");
-        this.roundabout$geTreeImbueOwner = tag.hasUUID("GETreeImbueOwner") ? tag.getUUID("GETreeImbueOwner") : null;
+    private void sba$loadGETreeImbue(CompoundTag tag, CallbackInfo ci) {
+        this.sba$geTreeImbue = tag.getBoolean("GETreeImbue");
+        this.sba$geTreeImbueOwner = tag.hasUUID("GETreeImbueOwner") ? tag.getUUID("GETreeImbueOwner") : null;
     }
 
     @Inject(method = "onHitBlock", at = @At("HEAD"))
-    private void roundabout$onGEImbuedProjectileHitBlock(BlockHitResult result, CallbackInfo ci) {
+    private void sba$onGEImbuedProjectileHitBlock(BlockHitResult result, CallbackInfo ci) {
         Projectile self = (Projectile) (Object) this;
         PowersGoldExperience.applyTreeImbueOnBlockHit(self, result);
     }
 
     @Inject(method = "onHitEntity", at = @At("HEAD"))
-    private void roundabout$onGEImbuedProjectileHit(EntityHitResult result, CallbackInfo ci) {
+    private void sba$onGEImbuedProjectileHit(EntityHitResult result, CallbackInfo ci) {
         Projectile self = (Projectile) (Object) this;
         PowersGoldExperience.applyTreeImbueOnProjectileHit(self, result.getEntity());
     }

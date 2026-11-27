@@ -95,15 +95,15 @@ public class DietSavedSecond {
 
             LE.setRemainingFireTicks(onFireTicks);
             StandUser user = ((StandUser) LE);
-            user.roundabout$setRemainingStandFireTicks(onStandFireTicks);
-            user.roundabout$setOnStandFire(onStandFireType);
-            user.roundabout$setGasolineTime(gasolineTicks);
-            user.roundabout$setHeat(heatLevel);
+            user.sba$setRemainingStandFireTicks(onStandFireTicks);
+            user.sba$setOnStandFire(onStandFireType);
+            user.sba$setGasolineTime(gasolineTicks);
+            user.sba$setHeat(heatLevel);
             if (ent instanceof Player PE) {
                 IFoodData ifp = ((IFoodData) PE.getFoodData());
-                ifp.roundabout$setExhaustionLevel(this.exhaustionLevel);
-                ifp.roundabout$setSaturationLevel(this.saturationLevel);
-                ifp.roundabout$setFoodLevel(this.foodLevel);
+                ifp.sba$setExhaustionLevel(this.exhaustionLevel);
+                ifp.sba$setSaturationLevel(this.saturationLevel);
+                ifp.sba$setFoodLevel(this.foodLevel);
             }
         }
     }
@@ -115,10 +115,10 @@ public class DietSavedSecond {
                     PL.getActiveEffects(),
                     PL.getHealth(),
                     PL.getRemainingFireTicks(),
-                    ((StandUser)PL).roundabout$getRemainingFireTicks(),
-                    ((StandUser)PL).roundabout$getOnStandFire(),
-                    ((StandUser)PL).roundabout$getGasolineTime(),
-                    ((StandUser)PL).roundabout$getHeat(),
+                    ((StandUser)PL).sba$getRemainingFireTicks(),
+                    ((StandUser)PL).sba$getOnStandFire(),
+                    ((StandUser)PL).sba$getGasolineTime(),
+                    ((StandUser)PL).sba$getHeat(),
                     PL.getFoodData().getFoodLevel(),
                     PL.getFoodData().getSaturationLevel(),
                     PL.getFoodData().getExhaustionLevel()

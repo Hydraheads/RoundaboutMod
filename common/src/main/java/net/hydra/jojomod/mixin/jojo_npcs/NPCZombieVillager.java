@@ -34,16 +34,16 @@ public abstract class NPCZombieVillager extends Zombie implements VillagerDataHo
 
     /**Replace naturally spawned zombie villagers with Zombie Aestheticians and Zombie versions of other JoJo NPCs*/
     @Unique
-    public boolean roundabout$ceaseSound = false;
+    public boolean sba$ceaseSound = false;
 
     @Inject(method = "getAmbientSound", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playAmbientSound(CallbackInfoReturnable<SoundEvent> cir) {
-        if (roundabout$ceaseSound) {
+    protected void sba$playAmbientSound(CallbackInfoReturnable<SoundEvent> cir) {
+        if (sba$ceaseSound) {
             cir.setReturnValue(null);
         }
     }
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
-    protected void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
+    protected void sba$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         if ($$2.equals(MobSpawnType.NATURAL) || $$2.equals(MobSpawnType.CHUNK_GENERATION)) {
             float rand = this.level().random.nextFloat();
             if (rand < (ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.percentOfZombieVillagersThatBecomeZombieAestheticians * 0.01)) {
@@ -53,17 +53,17 @@ public abstract class NPCZombieVillager extends Zombie implements VillagerDataHo
                     $$7.rollStand();
                     this.level().addFreshEntity($$7);
                     this.discard();
-                    roundabout$ceaseSound = true;
+                    sba$ceaseSound = true;
                 }
             }
         }
     }
 
     @Inject(method = "finishConversion", at = @At("HEAD"))
-    private void roundabout$onZombieVillagerCured(ServerLevel level, CallbackInfo ci) {
+    private void sba$onZombieVillagerCured(ServerLevel level, CallbackInfo ci) {
         if (this.conversionStarter != null
                 && level.getPlayerByUUID(this.conversionStarter) instanceof ServerPlayer player
-                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+                && ((StandUser) player).sba$getStandPowers() instanceof PowersGoldExperience ge) {
             ge.onZombieVillagerCured();
         }
     }

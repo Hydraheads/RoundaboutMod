@@ -47,8 +47,8 @@ public abstract class AnubisIllagerModelMixin<T extends AbstractIllager>
     private ModelPart arms;
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/monster/AbstractIllager;FFFFF)V",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/AbstractIllager;getArmPose()Lnet/minecraft/world/entity/monster/AbstractIllager$IllagerArmPose;"), cancellable = true)
-    private void roundabout$cancelIllagerPose(T abstractIllager, float f, float g, float h, float i, float j, CallbackInfo ci) {
-        if ( ((StandUser)abstractIllager).roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.isUsingStand(abstractIllager) ) {
+    private void sba$cancelIllagerPose(T abstractIllager, float f, float g, float h, float i, float j, CallbackInfo ci) {
+        if ( ((StandUser)abstractIllager).sba$getStandPowers() instanceof PowersAnubis && PowerTypes.isUsingStand(abstractIllager) ) {
             if (abstractIllager.getMainHandItem().isEmpty()) {
                 AnimationUtils.animateZombieArms(this.leftArm, this.rightArm, true, this.attackTime, h);
             } else {

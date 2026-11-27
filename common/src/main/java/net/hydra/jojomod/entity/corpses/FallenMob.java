@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.corpses;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPermaCasting;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -304,7 +304,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     }
 
     public float getAtkPower(Entity $$0){
-        if (((StandUser)this).roundabout$getStandPowers().getReducedDamage($$0)){
+        if (((StandUser)this).sba$getStandPowers().getReducedDamage($$0)){
             return getDamageMod((float) ((float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE)*0.67F)
                                 * (ClientNetworking.getAppropriateConfig().justiceSettings.corpseDamageMultOnPlayers *0.01)));
         }
@@ -319,7 +319,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     /**If rpg leveling config is on*/
     public float getDamageMod(float pow){
         if (this.controller != null){
-            return ((StandUser)this.controller).roundabout$getStandPowers().levelupDamageMod(pow);
+            return ((StandUser)this.controller).sba$getStandPowers().levelupDamageMod(pow);
         }
         return pow;
     }
@@ -340,9 +340,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
     @Override
     public boolean doHurtTarget(Entity $$0) {
 
-        if (((StandUser) this).roundabout$isDazed() ||
-                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack()) || ((StandUser) this).roundabout$isRestrained()) {
+        if (((StandUser) this).sba$isDazed() ||
+                (!((StandUser)this).sba$getStandDisc().isEmpty() &&
+                        ((StandUser)this).sba$getStandPowers().disableMobAiAttack()) || ((StandUser) this).sba$isRestrained()) {
             return false;
         }
 
@@ -380,7 +380,7 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                 }
 
                 if ($$0 instanceof Player $$5) {
-                    ((IMob)this).roundabout$maybeDisableShield($$5, this.getMainHandItem(), $$5.isUsingItem() ? $$5.getUseItem() : ItemStack.EMPTY);
+                    ((IMob)this).sba$maybeDisableShield($$5, this.getMainHandItem(), $$5.isUsingItem() ? $$5.getUseItem() : ItemStack.EMPTY);
                 }
 
                 this.doEnchantDamageEffects(this, $$0);
@@ -532,16 +532,16 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                 this.setPersistentAngerTarget(null);
                 this.setLastHurtByPlayer(null);
                 this.setAggressive(false);
-                ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
+                ((StandUser)this).sba$deeplyRemoveAttackTarget();
             }
 
             IPermaCasting icast = ((IPermaCasting) this.level());
-            boolean isDiverActive = ((StandUser) this).roundabout$isDisguised() || ((StandUser) this).roundabout$hasRibcageTrap();
+            boolean isDiverActive = ((StandUser) this).sba$isDisguised() || ((StandUser) this).sba$hasRibcageTrap();
             if (!getActivated()) {
                 // for diver down corpse activation
                 if (isDiverActive) {
                     setActivated(true);
-                    if (((StandUser) this).roundabout$isDisguised()) {
+                    if (((StandUser) this).sba$isDisguised()) {
                         setTargetTactic(Tactics.PEACEFUL.id);
                         setMovementTactic(Tactics.ROAM.id);
                     }
@@ -550,9 +550,9 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                         this.setSelected(false);
                     }
                     if (ticksThroughPhases >= 10) {
-                        LivingEntity pcaster = icast.roundabout$inPermaCastRangeEntityJustice(this, this.getOnPos());
+                        LivingEntity pcaster = icast.sba$inPermaCastRangeEntityJustice(this, this.getOnPos());
                         if (pcaster != null && !pcaster.isRemoved() && pcaster.isAlive()) {
-                            if (((StandUser) pcaster).roundabout$getStandPowers() instanceof PowersJustice PJ) {
+                            if (((StandUser) pcaster).sba$getStandPowers() instanceof PowersJustice PJ) {
                                 setActivated(true);
                                 this.setController(pcaster);
                                 PJ.addJusticeEntities(this);
@@ -573,14 +573,14 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
             } else {
                 // for diver down disguise controls
                 if (isDiverActive) {
-                    if (((StandUser) this).roundabout$isDisguised()) {
+                    if (((StandUser) this).sba$isDisguised()) {
                         if (getTargetTactic() != Tactics.PEACEFUL.id) setTargetTactic(Tactics.PEACEFUL.id);
                         if (getMovementTactic() != Tactics.ROAM.id) setMovementTactic(Tactics.ROAM.id);
                         if (this.getTarget() != null) setTarget(null);
                     }
                 } else if (controller == null || controller.isRemoved() || !controller.isAlive() ||
-                        !icast.roundabout$inPermaCastFogRange(this) ||  (controller instanceof LivingEntity LE &&
-                        !icast.roundabout$isPermaCastingEntity(LE))){
+                        !icast.sba$inPermaCastFogRange(this) ||  (controller instanceof LivingEntity LE &&
+                        !icast.sba$isPermaCastingEntity(LE))){
                     setActivated(false);
                     this.setController(null);
                 } else {
@@ -624,10 +624,10 @@ public class FallenMob extends PathfinderMob implements NeutralMob {
                         }
                     }
 
-                    if (this.getSelected() && !((StandUser) controller).roundabout$getStandPowers().isPiloting()){
+                    if (this.getSelected() && !((StandUser) controller).sba$getStandPowers().isPiloting()){
                         this.setSelected(false);
                     }
-                    if (((StandUser) controller).roundabout$getStandPowers() instanceof PowersJustice PJ) {
+                    if (((StandUser) controller).sba$getStandPowers() instanceof PowersJustice PJ) {
                         if (!PJ.isCastingFog()){
                             setActivated(false);
                             this.setController(null);

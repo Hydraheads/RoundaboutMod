@@ -29,7 +29,7 @@ import net.minecraft.world.level.Level;
 import java.util.Optional;
 
 public final class DiscItemData {
-    public static final String DATA_TAG = "RoundaboutDiscData";
+    public static final String DATA_TAG = "SBADiscData";
     public static final String OWNER_ID = "OwnerId";
     public static final String OWNER_NAME = "OwnerName";
     public static final String OWNER_TYPE = "OwnerType";
@@ -126,8 +126,8 @@ public final class DiscItemData {
 
     public static void copyTameOwner(ItemStack stack, LivingEntity source) {
         DiscBearer bearer = (DiscBearer) source;
-        String id = bearer.roundabout$getMemoryTameOwnerId();
-        String name = bearer.roundabout$getMemoryTameOwnerName();
+        String id = bearer.sba$getMemoryTameOwnerId();
+        String name = bearer.sba$getMemoryTameOwnerName();
         if ((id == null || id.isEmpty()) && source instanceof TamableAnimal tamable
                 && tamable.isTame() && tamable.getOwnerUUID() != null) {
             id = tamable.getOwnerUUID().toString();
@@ -261,30 +261,30 @@ public final class DiscItemData {
     public static boolean canUseAbilities(LivingEntity entity) {
         if (entity instanceof Player && entity.hasEffect(ModEffects.SLEEPING)) return false;
         DiscBearer bearer = (DiscBearer) entity;
-        if (!bearer.roundabout$hasMemoryDisc()) return WhitesnakeDiscUtil.hasUsableStandDisc(entity);
+        if (!bearer.sba$hasMemoryDisc()) return WhitesnakeDiscUtil.hasUsableStandDisc(entity);
         return true;
     }
 
     public static boolean isLobotomized(LivingEntity entity) {
-        return (!((DiscBearer) entity).roundabout$hasMemoryDisc()
+        return (!((DiscBearer) entity).sba$hasMemoryDisc()
                 && !WhitesnakeDiscUtil.hasUsableStandDisc(entity))
                 || (entity instanceof Player && entity.hasEffect(ModEffects.SLEEPING))
                 || (entity instanceof Mob mob && DreamingMemoryController.isDreamingWithoutMemory(mob));
     }
 
     public static boolean isMemoryDevelopmentLimited(LivingEntity entity) {
-        return entity instanceof Player && !((DiscBearer) entity).roundabout$hasMemoryDisc()
+        return entity instanceof Player && !((DiscBearer) entity).sba$hasMemoryDisc()
                 && WhitesnakeDiscUtil.hasUsableStandDisc(entity);
     }
 
     public static boolean isBlankMemoryMob(LivingEntity entity) {
-        return entity instanceof Mob && !((DiscBearer) entity).roundabout$hasMemoryDisc()
+        return entity instanceof Mob && !((DiscBearer) entity).sba$hasMemoryDisc()
                 && WhitesnakeDiscUtil.hasUsableStandDisc(entity);
     }
 
     public static boolean canSelfImplantHeldMemory(Player player) {
         DiscBearer bearer = (DiscBearer) player;
-        if (bearer.roundabout$ownsMemoryDisc()) return false;
+        if (bearer.sba$ownsMemoryDisc()) return false;
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offhand = player.getOffhandItem();
         return isPlayerMemory(mainHand) || isPlayerMemory(offhand);

@@ -2,13 +2,13 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisLayer;
 import net.hydra.jojomod.entity.Zombiefish;
 import net.hydra.jojomod.entity.goals.AnubisAttackGoal;
-import net.hydra.jojomod.entity.goals.RoundaboutFollowGoal;
+import net.hydra.jojomod.entity.goals.SBAFollowGoal;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -105,97 +105,97 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Shadow public abstract boolean isAggressive();
 
     @Shadow @Final protected GoalSelector goalSelector;
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$IS_WORTHY = SynchedEntityData.defineId(Mob.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$FATE = SynchedEntityData.defineId(Mob.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> SBA$IS_WORTHY = SynchedEntityData.defineId(Mob.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> SBA$FATE = SynchedEntityData.defineId(Mob.class, EntityDataSerializers.BYTE);
 
 
     /**Prevent aggro scumming with bubble spam*/
     @Unique
-    public int roundabout$sightProtectionTicks = 0;
+    public int sba$sightProtectionTicks = 0;
     @Override
     @Unique
-    public int roundabout$getSightProtectionTicks(){
-        return roundabout$sightProtectionTicks;
+    public int sba$getSightProtectionTicks(){
+        return sba$sightProtectionTicks;
     }
     @Override
     @Unique
-    public void roundabout$setSightProtectionTicks(int sightProt){
-        roundabout$sightProtectionTicks = sightProt;
-    }
-
-    @Override
-    @Unique
-    public boolean roundabout$isWorthy() {
-        return this.getEntityData().get(ROUNDABOUT$IS_WORTHY);
-    }
-    @Override
-    @Unique
-    public void roundabout$setWorthy(boolean $$0) {
-        this.getEntityData().set(ROUNDABOUT$IS_WORTHY, $$0);
-    }
-    @Override
-    @Unique
-    public byte roundabout$getFate() {
-        return this.getEntityData().get(ROUNDABOUT$FATE);
-    }
-    @Override
-    @Unique
-    public void roundabout$setFate(byte fate) {
-        this.getEntityData().set(ROUNDABOUT$FATE, fate);
+    public void sba$setSightProtectionTicks(int sightProt){
+        sba$sightProtectionTicks = sightProt;
     }
 
     @Override
     @Unique
-    public GoalSelector roundabout$getGoalSelector() {
+    public boolean sba$isWorthy() {
+        return this.getEntityData().get(SBA$IS_WORTHY);
+    }
+    @Override
+    @Unique
+    public void sba$setWorthy(boolean $$0) {
+        this.getEntityData().set(SBA$IS_WORTHY, $$0);
+    }
+    @Override
+    @Unique
+    public byte sba$getFate() {
+        return this.getEntityData().get(SBA$FATE);
+    }
+    @Override
+    @Unique
+    public void sba$setFate(byte fate) {
+        this.getEntityData().set(SBA$FATE, fate);
+    }
+
+    @Override
+    @Unique
+    public GoalSelector sba$getGoalSelector() {
         return goalSelector;
     }
     @Override
     @Unique
-    public boolean roundabout$getIsNaturalStandUser() {
-        return roundabout$isNaturalStandUser;
+    public boolean sba$getIsNaturalStandUser() {
+        return sba$isNaturalStandUser;
     }
     @Override
     @Unique
-    public void roundabout$setIsNaturalStandUser(boolean set) {
-        roundabout$isNaturalStandUser = set;
+    public void sba$setIsNaturalStandUser(boolean set) {
+        sba$isNaturalStandUser = set;
     }
     @Unique
-    public boolean roundabout$isNaturalStandUser = false;
+    public boolean sba$isNaturalStandUser = false;
     @Unique
-    public boolean roundabout$isBred = false;
+    public boolean sba$isBred = false;
     @Unique
-    public int roundabout$confusionTicks = 0;
+    public int sba$confusionTicks = 0;
 
     @Override
     @Unique
-    public boolean roundabout$getIsBred() {
-        return roundabout$isBred;
+    public boolean sba$getIsBred() {
+        return sba$isBred;
     }
     @Override
     @Unique
-    public void roundabout$setIsBred(boolean set) {
-        roundabout$isBred = set;
+    public void sba$setIsBred(boolean set) {
+        sba$isBred = set;
     }
 
     @Unique
-    private LivingEntity roundabout$hypnotizedBy = null;
+    private LivingEntity sba$hypnotizedBy = null;
     @Unique
-    private int roundabout$hypnosisTime = 0;
+    private int sba$hypnosisTime = 0;
     @Override
     @Unique
-    public void roundabout$setHypnotizedBy(LivingEntity set, int time) {
-        roundabout$hypnotizedBy = set;
-        roundabout$hypnosisTime = time;
+    public void sba$setHypnotizedBy(LivingEntity set, int time) {
+        sba$hypnotizedBy = set;
+        sba$hypnosisTime = time;
     }
     @Override
     @Unique
-    public void roundabout$setHypnotizedBy(LivingEntity set) {
-        roundabout$setHypnotizedBy(set,10);
+    public void sba$setHypnotizedBy(LivingEntity set) {
+        sba$setHypnotizedBy(set,10);
     }
     @Override
     @Unique
-    public LivingEntity roundabout$getHypnotizedBy() {
-        return roundabout$hypnotizedBy;
+    public LivingEntity sba$getHypnotizedBy() {
+        return sba$hypnotizedBy;
     }
 
 
@@ -215,21 +215,21 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Override
     @Unique
-    public void roundabout$setConfusionTicks(int set) {
-        roundabout$confusionTicks = set;
+    public void sba$setConfusionTicks(int set) {
+        sba$confusionTicks = set;
     }
     @Override
     @Unique
-    public int roundabout$getConfusionTicks() {
-        return roundabout$confusionTicks;
+    public int sba$getConfusionTicks() {
+        return sba$confusionTicks;
     }
 
     //Injects universal behaviors that all mobs can share
     @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At(value = "RETURN"))
-    private void roundabout$initRegisterCustomGoals(EntityType type, Level level, CallbackInfo ci) {
+    private void sba$initRegisterCustomGoals(EntityType type, Level level, CallbackInfo ci) {
         if (level != null && !level.isClientSide) {
             if (((Mob)(Object)this) instanceof PathfinderMob pm){
-                this.goalSelector.addGoal(2, new RoundaboutFollowGoal(pm, 1));
+                this.goalSelector.addGoal(2, new SBAFollowGoal(pm, 1));
             }
 
             if (((Mob)(Object)this) instanceof AbstractIllager AI) {
@@ -240,16 +240,16 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Inject(method = "playAmbientSound()V", at = @At(value = "HEAD"), cancellable = true)
     private void rdbt$playAmbientSound(CallbackInfo ci) {
-        if (((StandUser)this).roundabout$isDazed()){
+        if (((StandUser)this).sba$isDazed()){
             ci.cancel();
         }
     }
 
     @Inject(method = "dropCustomDeathLoot", at = @At(value = "HEAD"))
-    private void roundabout$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
-        if (roundabout$isNaturalStandUser){
+    private void sba$dropCustomLoot(DamageSource $$0, int $$1, boolean $$2, CallbackInfo ci) {
+        if (sba$isNaturalStandUser){
             if ($$0.getEntity() != null) {
-                if (((StandUser)this).roundabout$hasAStand() && !roundabout$isBred) {
+                if (((StandUser)this).sba$hasAStand() && !sba$isBred) {
                     boolean isStrong = (!(((Mob)(Object)this) instanceof Animal) &&
                             !(((Mob)(Object)this) instanceof WaterAnimal) &&
                             !(((Mob)(Object)this) instanceof AbstractVillager));
@@ -282,35 +282,35 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
-    private void initDataTrackerRoundabout(CallbackInfo ci) {
-        if (!((Mob)(Object)this).getEntityData().hasItem(ROUNDABOUT$IS_WORTHY)) {
-            this.getEntityData().define(ROUNDABOUT$IS_WORTHY, false);
-            this.getEntityData().define(ROUNDABOUT$FATE, (byte)0);
+    private void initDataTrackerSBA(CallbackInfo ci) {
+        if (!((Mob)(Object)this).getEntityData().hasItem(SBA$IS_WORTHY)) {
+            this.getEntityData().define(SBA$IS_WORTHY, false);
+            this.getEntityData().define(SBA$FATE, (byte)0);
         }
     }
 
 
     @Unique
     @Override
-    public boolean roundabout$isVampire(){
-        return roundabout$getFate() == FateTypes.VAMPIRE.ordinal();
+    public boolean sba$isVampire(){
+        return sba$getFate() == FateTypes.VAMPIRE.ordinal();
     }
     @Unique
     @Override
-    public void roundabout$setVampire(boolean vampire){
+    public void sba$setVampire(boolean vampire){
         if (vampire){
-            roundabout$setFate((byte) FateTypes.VAMPIRE.ordinal());
+            sba$setFate((byte) FateTypes.VAMPIRE.ordinal());
         } else {
-            roundabout$setFate((byte) FateTypes.HUMAN.ordinal());
+            sba$setFate((byte) FateTypes.HUMAN.ordinal());
         }
     }
     @ModifyVariable(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
-    public CompoundTag roundabout$addAdditionalSaveData(CompoundTag $$0){
+    public CompoundTag sba$addAdditionalSaveData(CompoundTag $$0){
         return MainUtil.saveMobData($$0,this);
     }
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"))
-    public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
+    public void sba$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci){
         MainUtil.loadMobData($$0,this);
     }
 
@@ -320,15 +320,15 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
     @Override
-    public void roundabout$maybeDisableShield(Player $$0, ItemStack $$1, ItemStack $$2) {
+    public void sba$maybeDisableShield(Player $$0, ItemStack $$1, ItemStack $$2) {
         maybeDisableShield($$0,$$1,$$2);
     }
 
     @Inject(method = "doHurtTarget", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
+    private void sba$TryAttack(Entity $$0, CallbackInfoReturnable<Boolean> ci) {
             if (MainUtil.forceAggression(this)){
                 float $$1 = 1F;
-                if (roundabout$isVampire()){
+                if (sba$isVampire()){
                     $$1 = 3F;
                 }
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)){
@@ -373,19 +373,19 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
     @Inject(method = "finalizeSpawn", at = @At(value = "HEAD"))
-    private void roundabout$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
+    private void sba$finalizeSpawn(ServerLevelAccessor $$0, DifficultyInstance $$1, MobSpawnType $$2, SpawnGroupData $$3, CompoundTag $$4, CallbackInfoReturnable<SpawnGroupData> cir) {
         RandomSource $$5 = $$0.getRandom();
 
 
-        if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_USER_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))
+        if (this.level().getGameRules().getBoolean(ModGamerules.SBA_STAND_USER_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getStandUserOdds(((Mob)(Object)this))
         && !ModItems.getPoolForMob(this).isEmpty()) {
-            this.roundabout$setWorthy(true);
-            this.roundabout$setIsNaturalStandUser(true);
+            this.sba$setWorthy(true);
+            this.sba$setIsNaturalStandUser(true);
             int index = (int) (Math.floor(Math.random()* ModItems.getPoolForMob(this).size()));
             ItemStack stack = ModItems.getPoolForMob(this).get(index).getDefaultInstance();
             if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
-                ((StandUser)this).roundabout$setStandDisc(stack);
-                ((StandUser)this).roundabout$getStandPowers().rollSkin();
+                ((StandUser)this).sba$setStandDisc(stack);
+                ((StandUser)this).sba$getStandPowers().rollSkin();
             }
             // diver down extra zombies spawn
             if (stack.getItem() == ModItems.STAND_DISC_DIVER_DOWN && ((Object) this) instanceof Zombie
@@ -402,8 +402,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     $$0.addFreshEntity(backup);
                 }
             }
-        } else if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_WORTHY_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
-            this.roundabout$setWorthy(true);
+        } else if (this.level().getGameRules().getBoolean(ModGamerules.SBA_WORTHY_MOB_SPAWNS) && $$5.nextFloat() < MainUtil.getWorthyOdds(((Mob)(Object)this))) {
+            this.sba$setWorthy(true);
         }
     }
 
@@ -432,56 +432,56 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
     @Unique
-    private double roundabout$speedModifier = 1.25F;
+    private double sba$speedModifier = 1.25F;
     @Unique
-    private boolean roundabout$followingTargetEvenIfNotSeen;
+    private boolean sba$followingTargetEvenIfNotSeen;
     @Unique
-    private Path roundabout$path;
+    private Path sba$path;
     @Unique
-    private double roundabout$pathedTargetX;
+    private double sba$pathedTargetX;
     @Unique
-    private double roundabout$pathedTargetY;
+    private double sba$pathedTargetY;
     @Unique
-    private double roundabout$pathedTargetZ;
+    private double sba$pathedTargetZ;
     @Unique
-    private int roundabout$ticksUntilNextPathRecalculation = 0;
+    private int sba$ticksUntilNextPathRecalculation = 0;
     @Unique
-    private int roundabout$ticksUntilNextAttack = 0;
+    private int sba$ticksUntilNextAttack = 0;
     @Unique
-    private final int roundabout$attackInterval = 20;
+    private final int sba$attackInterval = 20;
     @Unique
-    private long roundabout$lastCanUseCheck;
+    private long sba$lastCanUseCheck;
     @Unique
-    private static long roundabout$COOLDOWN_BETWEEN_CAN_USE_CHECKS = 20L;
+    private static long sba$COOLDOWN_BETWEEN_CAN_USE_CHECKS = 20L;
 
     @Unique
-    public void roundabout$resetAtkCD(){
-        this.roundabout$ticksUntilNextPathRecalculation = 0;
-        this.roundabout$ticksUntilNextAttack = 0;
+    public void sba$resetAtkCD(){
+        this.sba$ticksUntilNextPathRecalculation = 0;
+        this.sba$ticksUntilNextAttack = 0;
     }
 
 
     @Unique
-    protected int roundabout$reducedTickDelay(int $$0) {
+    protected int sba$reducedTickDelay(int $$0) {
         return Mth.positiveCeilDiv($$0, 2);
     }
 
 
     @Unique
-    protected int roundabout$adjustedTickDelay(int $$0) {
-        return roundabout$reducedTickDelay($$0);
+    protected int sba$adjustedTickDelay(int $$0) {
+        return sba$reducedTickDelay($$0);
     }
 
 
 
     @Unique
-    protected double roundabout$getAttackReachSqr(LivingEntity $$0) {
+    protected double sba$getAttackReachSqr(LivingEntity $$0) {
         return (double)(this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + $$0.getBbWidth());
     }
     @Unique
-    protected void roundabout$checkAndPerformAttack(LivingEntity $$0, double $$1) {
-        double $$2 = this.roundabout$getAttackReachSqr($$0);
-        if ($$1 <= $$2 && this.roundabout$ticksUntilNextAttack <= 0) {
+    protected void sba$checkAndPerformAttack(LivingEntity $$0, double $$1) {
+        double $$2 = this.sba$getAttackReachSqr($$0);
+        if ($$1 <= $$2 && this.sba$ticksUntilNextAttack <= 0) {
             this.resetAttackCooldown();
             this.swing(InteractionHand.MAIN_HAND);
             this.doHurtTarget($$0);
@@ -489,13 +489,13 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
     @Unique
     protected void resetAttackCooldown() {
-        this.roundabout$ticksUntilNextAttack = 30;
+        this.sba$ticksUntilNextAttack = 30;
     }
 
     @Unique
-    protected boolean roundabout$mustSee = false;
+    protected boolean sba$mustSee = false;
     @Unique
-    private int roundabout$unseenTicks;
+    private int sba$unseenTicks;
 
     @Shadow
     public void setTarget(@Nullable LivingEntity $$0) {
@@ -514,29 +514,29 @@ public abstract class ZMob extends LivingEntity implements IMob {
     @Shadow public abstract void lookAt(Entity entity, float f, float g);
 
     @Unique
-    protected int roundabout$unseenMemoryTicks = 300;
+    protected int sba$unseenMemoryTicks = 300;
 
 
 
     @Unique
-    protected double roundabout$getFollowDistance() {
+    protected double sba$getFollowDistance() {
         /**Soft and Wet Plunder sight*/
-        if (roundabout$getConfusionTicks() > 0){
+        if (sba$getConfusionTicks() > 0){
             return 0;
         }
-        if (((StandUser)this).roundabout$getEyeSightTaken() != null && this.getLastHurtByMob() == null){
+        if (((StandUser)this).sba$getEyeSightTaken() != null && this.getLastHurtByMob() == null){
             return (this.getAttributeValue(Attributes.FOLLOW_RANGE)*0.07);
         }
         return this.getAttributeValue(Attributes.FOLLOW_RANGE);
     }
 
     @Unique
-    protected boolean roundabout$nav = false;
+    protected boolean sba$nav = false;
 
     @Unique
-    public boolean roundabout$canContinueToUse() {
+    public boolean sba$canContinueToUse() {
         if (((Mob)(Object)this) instanceof AbstractHorse ah && !ah.getPassengers().isEmpty()) {
-            ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
+            ((StandUser)this).sba$deeplyRemoveAttackTarget();
             return false;
         }
             LivingEntity $$0 = this.getTarget();
@@ -553,14 +553,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 if ($$1 != null && $$2 == $$1) {
                     return false;
                 } else {
-                    double $$3 = this.roundabout$getFollowDistance();
+                    double $$3 = this.sba$getFollowDistance();
                     if (this.distanceToSqr($$0) > $$3 * $$3) {
                         return false;
                     } else {
-                        if (roundabout$mustSee) {
+                        if (sba$mustSee) {
                             if (this.getSensing().hasLineOfSight($$0)) {
-                                this.roundabout$unseenTicks = 0;
-                            } else if (++this.roundabout$unseenTicks > roundabout$reducedTickDelay(this.roundabout$unseenMemoryTicks)) {
+                                this.sba$unseenTicks = 0;
+                            } else if (++this.sba$unseenTicks > sba$reducedTickDelay(this.sba$unseenMemoryTicks)) {
                                 return false;
                             }
                         }
@@ -573,7 +573,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
     @Unique
-    public void roundabout$targetVillageEnemies(){
+    public void sba$targetVillageEnemies(){
         LivingEntity potentialTarget = null;
         AABB $$0 = this.getBoundingBox().inflate(15.0, 8.0, 15.0);
         List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.attackTargeting, this, $$0);
@@ -591,7 +591,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                     potentialTarget = $$3;
                 }
             } else if ($$3 instanceof Player PE){
-                if (ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(((IPlayerEntity)PE).roundabout$getShapeShift()))){
+                if (ShapeShifts.isZombie(ShapeShifts.getShiftFromByte(((IPlayerEntity)PE).sba$getShapeShift()))){
                     if (mindist == -1 || this.distanceToSqr($$3) < mindist) {
                         mindist = (float) this.distanceToSqr($$3);
                         potentialTarget = $$3;
@@ -606,37 +606,37 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
 
     @Unique
-    public boolean roundabout$fightOrFlight = false;
+    public boolean sba$fightOrFlight = false;
     @Unique
-    public void roundabout$toggleFightOrFlight(boolean flight){
-        roundabout$fightOrFlight = flight;
+    public void sba$toggleFightOrFlight(boolean flight){
+        sba$fightOrFlight = flight;
     }
     @Unique
-    public boolean roundabout$getFightOrFlight(){
-        return roundabout$fightOrFlight;
+    public boolean sba$getFightOrFlight(){
+        return sba$fightOrFlight;
     }
     @Unique
-    public int roundabout$retractTicks = 140;
+    public int sba$retractTicks = 140;
     @Unique
     @Override
-    public void roundabout$setRetractTicks(int ticks){
-        roundabout$retractTicks = ticks;
+    public void sba$setRetractTicks(int ticks){
+        sba$retractTicks = ticks;
     }
 
     @Unique
     @Override
-    public void roundabout$deeplyRemoveTargets(){
+    public void sba$deeplyRemoveTargets(){
         String nameSpace = getType().builtInRegistryHolder().key().location().getNamespace();
         if (!(nameSpace.equals("mutantmonsters")) && !(nameSpace.equals("walkers"))) {
             if (this.goalSelector != null) {
                 this.goalSelector.getAvailableGoals().stream()
                         .map(WrappedGoal::getGoal)
-                        .forEach(this::roundabout$removeGoalTarget);
+                        .forEach(this::sba$removeGoalTarget);
             }
             if (this.targetSelector != null) {
                 this.targetSelector.getAvailableGoals().stream()
                         .map(WrappedGoal::getGoal)
-                        .forEach(this::roundabout$removeGoalTarget);
+                        .forEach(this::sba$removeGoalTarget);
 
 
                 Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
@@ -661,7 +661,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Unique
     @Override
-    public void roundabout$purgePiglinAggro(Entity purge){
+    public void sba$purgePiglinAggro(Entity purge){
         if (purge != null) {
             Optional<? extends ExpirableValue<?>> $$1 = brain.getMemories().get(MemoryModuleType.ATTACK_TARGET);
             if ($$1 != null) {
@@ -694,7 +694,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
     }
     @Unique
     @Override
-    public void roundabout$deeplyEnforceTarget(Entity ent){
+    public void sba$deeplyEnforceTarget(Entity ent){
 
         if (ent instanceof LivingEntity LE){
             setTarget(LE);
@@ -702,7 +702,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
                 wrappedGoalStream.forEach(wrappedGoal -> {
                     Goal goal = wrappedGoal.getGoal();
-                    this.roundabout$enforceGoalTarget(goal, LE);
+                    this.sba$enforceGoalTarget(goal, LE);
                 });
             }
 
@@ -728,7 +728,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
             if (this.targetSelector != null) {
                 Stream<WrappedGoal> wrappedGoalStream = this.targetSelector.getRunningGoals();
-                wrappedGoalStream.forEach(this::roundabout$removeGoalTarget);
+                wrappedGoalStream.forEach(this::sba$removeGoalTarget);
             }
             Optional<? extends ExpirableValue<?>> $$x = brain.getMemories().get(MemoryModuleType.ANGRY_AT);
             if ($$x != null) {
@@ -747,9 +747,9 @@ public abstract class ZMob extends LivingEntity implements IMob {
         }
     }
     @Unique
-    public void roundabout$removeGoalTarget(Goal goal){
+    public void sba$removeGoalTarget(Goal goal){
         if (goal instanceof TargetGoal tg) {
-            ((ITargetGoal) tg).roundabout$removeTarget();
+            ((ITargetGoal) tg).sba$removeTarget();
         } else if (goal instanceof SwellGoal sg){
             sg.stop();
         } else if (goal instanceof PanicGoal tg) {
@@ -759,14 +759,14 @@ public abstract class ZMob extends LivingEntity implements IMob {
         }
     }
     @Unique
-    public void roundabout$enforceGoalTarget(Goal goal, LivingEntity ent){
+    public void sba$enforceGoalTarget(Goal goal, LivingEntity ent){
         if (goal instanceof TargetGoal tg) {
-            ((ITargetGoal) tg).roundabout$setTarget(ent);
+            ((ITargetGoal) tg).sba$setTarget(ent);
         }
     }
 
     @Unique
-    public void roundabout$standUserAttraction(){
+    public void sba$standUserAttraction(){
         if (this.tickCount % 3600 == 0 && Math.random() < 0.1) {
             LivingEntity potentialTarget = null;
             AABB $$0 = this.getBoundingBox().inflate(35.0, 13.0, 35.0);
@@ -775,7 +775,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
             float mindist = -1;
 
             for (LivingEntity $$3 : $$1) {
-                if (!((StandUser)$$3).roundabout$hasAStand()){
+                if (!((StandUser)$$3).sba$hasAStand()){
                     if (mindist == -1 || this.distanceToSqr($$3) < mindist){
                         mindist = (float) this.distanceToSqr($$3);
                         potentialTarget = $$3;
@@ -785,46 +785,46 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
 
             if (potentialTarget != null && (!(potentialTarget instanceof Player) || !potentialTarget.isSpectator() && !((Player) potentialTarget).isCreative())) {
-                roundabout$standPath = this.getNavigation().createPath(potentialTarget, 2);
-                this.getNavigation().moveTo(roundabout$standPath, 1.1);
-                roundabout$standAttractionTicks = 100;
+                sba$standPath = this.getNavigation().createPath(potentialTarget, 2);
+                this.getNavigation().moveTo(sba$standPath, 1.1);
+                sba$standAttractionTicks = 100;
             }
         }
     }
 
-    Path roundabout$standPath;
-    int roundabout$standAttractionTicks = -1;
+    Path sba$standPath;
+    int sba$standAttractionTicks = -1;
 
     @SuppressWarnings("deprecation")
     @Inject(method = "serverAiStep", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/ai/navigation/PathNavigation;tick()V",
     shift= At.Shift.BEFORE))
-    private void roundabout$serverAiStep(CallbackInfo ci) {
+    private void sba$serverAiStep(CallbackInfo ci) {
 
         /**Passive to neutral stuff for stand users + survivor zapped mobs*/
         if (this.isAlive()) {
             StandUser user = ((StandUser)this);
-            boolean isStandUser = user.roundabout$hasAStand();
+            boolean isStandUser = user.sba$hasAStand();
             if (MainUtil.forceAggression(this)) {
 
                 Mob mb = ((Mob) (Object) this);
                 if (isStandUser) {
-                    if (this.getTarget() != null && !this.roundabout$getFightOrFlight()) {
+                    if (this.getTarget() != null && !this.sba$getFightOrFlight()) {
                         if (!PowerTypes.hasStandActive(this) &&
-                                !user.roundabout$isSealed()) {
-                            user.roundabout$summonStand(this.level(), true, true);
+                                !user.sba$isSealed()) {
+                            user.sba$summonStand(this.level(), true, true);
                         }
-                        if (roundabout$retractTicks != 100) {
-                            roundabout$retractTicks = 100;
+                        if (sba$retractTicks != 100) {
+                            sba$retractTicks = 100;
                         }
                     } else {
-                        if (user.roundabout$getStandPowers().getActivePower() == PowerIndex.NONE) {
-                            roundabout$retractTicks = Math.max(roundabout$retractTicks - 1, -1);
-                            if (roundabout$retractTicks == -1 ||
-                                    (this.roundabout$getFightOrFlight() && !((Mob) (Object) this instanceof JojoNPC JP &&
+                        if (user.sba$getStandPowers().getActivePower() == PowerIndex.NONE) {
+                            sba$retractTicks = Math.max(sba$retractTicks - 1, -1);
+                            if (sba$retractTicks == -1 ||
+                                    (this.sba$getFightOrFlight() && !((Mob) (Object) this instanceof JojoNPC JP &&
                                             JP.canSummonStandThroughFightOrFlightActive()))
                             ) {
                                 if (PowerTypes.hasStandActive(this)) {
-                                    user.roundabout$summonStand(this.level(), false, false);
+                                    user.sba$summonStand(this.level(), false, false);
                                 }
                             }
                         }
@@ -834,7 +834,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 if (!(((Mob) (Object) this) instanceof Enemy)
                         && !(((Mob) (Object) this) instanceof CloneEntity)
                         && !(((Mob) (Object) this) instanceof NeutralMob) &&
-                        !(isStandUser && this.roundabout$getFightOrFlight())) {
+                        !(isStandUser && this.sba$getFightOrFlight())) {
                     if (this.getTarget() != null && this.getTarget() instanceof Player PE && PE.isCreative()){
                         this.setTarget(null);
                     }
@@ -844,7 +844,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         if (mb instanceof AbstractVillager || (mb instanceof JojoNPC jn && jn.villageDefends())) {
                             if (this.getTarget() == null) {
                                 if (this.tickCount % 4 == 0) {
-                                    roundabout$targetVillageEnemies();
+                                    sba$targetVillageEnemies();
                                 }
                                 if (this.getTarget() instanceof AbstractVillager || this.getLastHurtByMob()
                                         instanceof AbstractVillager ||
@@ -857,62 +857,62 @@ public abstract class ZMob extends LivingEntity implements IMob {
                         }
                     }
 
-                    if (roundabout$canContinueToUse() && this.getTarget() != null) {
-                        if (!roundabout$nav) {
+                    if (sba$canContinueToUse() && this.getTarget() != null) {
+                        if (!sba$nav) {
                             this.getNavigation().createPath(this.getTarget(), 0);
-                            roundabout$nav = true;
+                            sba$nav = true;
                         }
 
                         LivingEntity $$0 = this.getTarget();
                         if ($$0 != null) {
                             this.getLookControl().setLookAt($$0, 30.0F, 30.0F);
                             double $$1 = this.getPerceivedTargetDistanceSquareForMeleeAttack($$0);
-                            this.roundabout$ticksUntilNextPathRecalculation = Math.max(this.roundabout$ticksUntilNextPathRecalculation - 1, 0);
-                            if ((this.roundabout$followingTargetEvenIfNotSeen || this.getSensing().hasLineOfSight($$0))
-                                    && this.roundabout$ticksUntilNextPathRecalculation <= 0
+                            this.sba$ticksUntilNextPathRecalculation = Math.max(this.sba$ticksUntilNextPathRecalculation - 1, 0);
+                            if ((this.sba$followingTargetEvenIfNotSeen || this.getSensing().hasLineOfSight($$0))
+                                    && this.sba$ticksUntilNextPathRecalculation <= 0
                                     && (
-                                    this.roundabout$pathedTargetX == 0.0 && this.roundabout$pathedTargetY == 0.0 && this.roundabout$pathedTargetZ == 0.0
-                                            || $$0.distanceToSqr(this.roundabout$pathedTargetX, this.roundabout$pathedTargetY, this.roundabout$pathedTargetZ) >= 1.0
+                                    this.sba$pathedTargetX == 0.0 && this.sba$pathedTargetY == 0.0 && this.sba$pathedTargetZ == 0.0
+                                            || $$0.distanceToSqr(this.sba$pathedTargetX, this.sba$pathedTargetY, this.sba$pathedTargetZ) >= 1.0
                                             || this.getRandom().nextFloat() < 0.05F
                             )) {
-                                this.roundabout$pathedTargetX = $$0.getX();
-                                this.roundabout$pathedTargetY = $$0.getY();
-                                this.roundabout$pathedTargetZ = $$0.getZ();
-                                this.roundabout$ticksUntilNextPathRecalculation = 4 + this.getRandom().nextInt(7);
+                                this.sba$pathedTargetX = $$0.getX();
+                                this.sba$pathedTargetY = $$0.getY();
+                                this.sba$pathedTargetZ = $$0.getZ();
+                                this.sba$ticksUntilNextPathRecalculation = 4 + this.getRandom().nextInt(7);
                                 if ($$1 > 1024.0) {
-                                    this.roundabout$ticksUntilNextPathRecalculation += 10;
+                                    this.sba$ticksUntilNextPathRecalculation += 10;
                                 } else if ($$1 > 256.0) {
-                                    this.roundabout$ticksUntilNextPathRecalculation += 5;
+                                    this.sba$ticksUntilNextPathRecalculation += 5;
                                 }
 
-                                if (!this.getNavigation().moveTo($$0, this.roundabout$speedModifier)) {
-                                    this.roundabout$ticksUntilNextPathRecalculation += 15;
+                                if (!this.getNavigation().moveTo($$0, this.sba$speedModifier)) {
+                                    this.sba$ticksUntilNextPathRecalculation += 15;
                                 }
 
-                                this.roundabout$ticksUntilNextPathRecalculation = this.roundabout$adjustedTickDelay(this.roundabout$ticksUntilNextPathRecalculation);
+                                this.sba$ticksUntilNextPathRecalculation = this.sba$adjustedTickDelay(this.sba$ticksUntilNextPathRecalculation);
                             }
 
-                            this.roundabout$ticksUntilNextAttack = Math.max(this.roundabout$ticksUntilNextAttack - 1, 0);
-                            this.roundabout$checkAndPerformAttack($$0, $$1);
+                            this.sba$ticksUntilNextAttack = Math.max(this.sba$ticksUntilNextAttack - 1, 0);
+                            this.sba$checkAndPerformAttack($$0, $$1);
                         }
                     } else {
-                        if (roundabout$nav) {
-                            roundabout$nav = false;
+                        if (sba$nav) {
+                            sba$nav = false;
                             this.setTarget(null);
-                            roundabout$resetAtkCD();
+                            sba$resetAtkCD();
                         }
                     }
                 }
 
                 if (isStandUser) {
                     if (this.getTarget() == null) {
-                        if (roundabout$standAttractionTicks > -1) {
-                            roundabout$standAttractionTicks = Math.max(roundabout$standAttractionTicks - 1, -1);
-                            if (roundabout$standPath != null) {
-                                this.getNavigation().moveTo(roundabout$standPath, 1.1);
+                        if (sba$standAttractionTicks > -1) {
+                            sba$standAttractionTicks = Math.max(sba$standAttractionTicks - 1, -1);
+                            if (sba$standPath != null) {
+                                this.getNavigation().moveTo(sba$standPath, 1.1);
                             }
                         }
-                        roundabout$standUserAttraction();
+                        sba$standUserAttraction();
                     }
                 }
 
@@ -929,8 +929,8 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Inject(method = "tick",
             at = @At(value = "TAIL"))
-    private void roundabout$tickMob(CallbackInfo ci) {
-        //((IEntityAndData)((Entity) (Object) this)).roundabout$setInitialDayPos();
+    private void sba$tickMob(CallbackInfo ci) {
+        //((IEntityAndData)((Entity) (Object) this)).sba$setInitialDayPos();
         if (!level().isClientSide()) {
             if (FateTypes.takesSunlightDamage(this)) {
                 if (FateTypes.isInSunlight(this)) {
@@ -950,7 +950,7 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
     @Inject(method = "setTarget",
             at = @At(value = "HEAD"), cancellable = true)
-    private <T extends Mob> void roundabout$setTarget(LivingEntity $$0, CallbackInfo ci) {
+    private <T extends Mob> void sba$setTarget(LivingEntity $$0, CallbackInfo ci) {
         if ($$0 != null) {
             /**Flesh buds prevent aggro on the planter*/
             UUID fleshPlanter = (((StandUser)this).rdbt$getFleshBud());
@@ -966,48 +966,48 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 return;
             }
             /**Stands that react to aggro like hey ya and wonder of u*/
-            ((StandUser)$$0).roundabout$getStandPowers().reactToAggro(((Mob) (Object)this));
+            ((StandUser)$$0).sba$getStandPowers().reactToAggro(((Mob) (Object)this));
         }
     }
     @Unique
-    Mob roundabout$Mob;
+    Mob sba$Mob;
 
     @Inject(method = "convertTo(Lnet/minecraft/world/entity/EntityType;Z)Lnet/minecraft/world/entity/Mob;",
             at = @At(value = "HEAD"))
-    private <T extends Mob> void roundabout$convertTo1(EntityType<T> $$0, boolean $$1, CallbackInfoReturnable<T> cir) {
+    private <T extends Mob> void sba$convertTo1(EntityType<T> $$0, boolean $$1, CallbackInfoReturnable<T> cir) {
         if ($$0 != null) {
-            roundabout$Mob = ((Mob)(Object)this);
+            sba$Mob = ((Mob)(Object)this);
         }
     }
     @ModifyVariable(method = "convertTo(Lnet/minecraft/world/entity/EntityType;Z)Lnet/minecraft/world/entity/Mob;",
             at = @At(value = "STORE"),ordinal = 1)
-    private <T extends Mob> T roundabout$convertTo(Mob value) {
+    private <T extends Mob> T sba$convertTo(Mob value) {
         if (value != null) {
-            if (!((StandUser)roundabout$Mob).roundabout$getStandDisc().isEmpty()){
-                ((StandUser)value).roundabout$setStandDisc(((StandUser)roundabout$Mob).roundabout$getStandDisc());
+            if (!((StandUser)sba$Mob).sba$getStandDisc().isEmpty()){
+                ((StandUser)value).sba$setStandDisc(((StandUser)sba$Mob).sba$getStandDisc());
             }
-             ((IMob)value).roundabout$setWorthy(((IMob)roundabout$Mob).roundabout$isWorthy());
+             ((IMob)value).sba$setWorthy(((IMob)sba$Mob).sba$isWorthy());
         }
         return (T) value;
     }
 
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
-    private void roundabout$TickTail(CallbackInfo ci) {
+    private void sba$TickTail(CallbackInfo ci) {
         StandUser user = ((StandUser)this);
-        user.roundabout$removeQueForTargetDeletion();
+        user.sba$removeQueForTargetDeletion();
     }
 
 
     @SuppressWarnings("deprecation")
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    private void roundabout$Tick(CallbackInfo ci) {
+    private void sba$Tick(CallbackInfo ci) {
         if (this.isAlive() && !this.level().isClientSide()) {
-            if (roundabout$confusionTicks > 0){
-                roundabout$confusionTicks--;
+            if (sba$confusionTicks > 0){
+                sba$confusionTicks--;
             }
             if (getHealth() < getMaxHealth()){
-                if (roundabout$isVampire()){
+                if (sba$isVampire()){
                     if (tickCount % 82 == 0){
                         AABB $$0 = this.getBoundingBox().inflate(10.0, 8.0, 10.0);
                         List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.attackTargeting, this, $$0);
@@ -1041,13 +1041,13 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
                 if (getTarget() != null){
                     if (((StandUser)getTarget()).rdbt$getFleshBud() == fleshTarget){
-                        ((StandUser) this).roundabout$deeplyRemoveAttackTarget();
+                        ((StandUser) this).sba$deeplyRemoveAttackTarget();
                     }
                 }
 
                 Entity fleshTargetEntity = SL.getEntity(fleshTarget);
                 if (fleshTargetEntity instanceof LivingEntity LE){
-                    roundabout$purgePiglinAggro(LE);
+                    sba$purgePiglinAggro(LE);
                     LivingEntity hurtMob = LE.getLastHurtMob();
                     if (hurtMob != null && hurtMob.isAlive() && !hurtMob.is(this) && !hurtMob.is(LE)
                     && ((StandUser)hurtMob).rdbt$getFleshBud() != fleshTarget){
@@ -1062,20 +1062,20 @@ public abstract class ZMob extends LivingEntity implements IMob {
                 }
             }
 
-            if (roundabout$sightProtectionTicks > 0){
-                roundabout$sightProtectionTicks--;
+            if (sba$sightProtectionTicks > 0){
+                sba$sightProtectionTicks--;
             }
 
-            if (roundabout$hypnosisTime > 0){
-                roundabout$hypnosisTime--;
-                if (roundabout$hypnosisTime <= 0) {
-                    roundabout$hypnotizedBy = null;
+            if (sba$hypnosisTime > 0){
+                sba$hypnosisTime--;
+                if (sba$hypnosisTime <= 0) {
+                    sba$hypnotizedBy = null;
                 }
             }
 
-            if (!((StandUser) this).roundabout$getStandDisc().isEmpty()) {
-                if (!this.roundabout$getFightOrFlight()) {
-                    if (((StandUser) this).roundabout$getGrabberSabbath() == 0 && !(((StandUser) this).roundabout$getSealedTicks() > -1)) {
+            if (!((StandUser) this).sba$getStandDisc().isEmpty()) {
+                if (!this.sba$getFightOrFlight()) {
+                    if (((StandUser) this).sba$getGrabberSabbath() == 0 && !(((StandUser) this).sba$getSealedTicks() > -1)) {
                         if (this.getTarget() != null) {
                             if (this.getVehicle() != null && (this.getVehicle() instanceof Boat ||
                                     this.getVehicle() instanceof Minecart)) {
@@ -1084,18 +1084,18 @@ public abstract class ZMob extends LivingEntity implements IMob {
                                 this.dismountTo(vec.x, vec.y, vec.z);
                             }
                         }
-                        ((StandUser) this).roundabout$getStandPowers().tickMobAI(this.getTarget());
+                        ((StandUser) this).sba$getStandPowers().tickMobAI(this.getTarget());
                     }
                 }
             }
         }
 
         if (this instanceof Enemy || this.getTarget() != null) {
-            if (((StandUser) this).roundabout$isRestrained()) {
-                int ticks = ((StandUser) this).roundabout$getRestrainedTicks();
+            if (((StandUser) this).sba$isRestrained()) {
+                int ticks = ((StandUser) this).sba$getRestrainedTicks();
                 if (ticks < 50) {
                     ticks++;
-                    ((StandUser) this).roundabout$setRestrainedTicks(ticks);
+                    ((StandUser) this).sba$setRestrainedTicks(ticks);
                 }
                 if (ticks >= 50) {
                     if (this.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()) {
@@ -1125,23 +1125,23 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
 
                         }
-                        ((StandUser) this).roundabout$setRestrainedTicks(-1);
+                        ((StandUser) this).sba$setRestrainedTicks(-1);
                     }
                 }
             } else {
-                int ticks = ((StandUser) this).roundabout$getRestrainedTicks();
+                int ticks = ((StandUser) this).sba$getRestrainedTicks();
                 if (ticks != -1) {
                     ticks = -1;
-                    ((StandUser) this).roundabout$setRestrainedTicks(ticks);
+                    ((StandUser) this).sba$setRestrainedTicks(ticks);
                 }
             }
         }
 
         StandUser SU = (StandUser) this;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis) {
             if (PowersAnubis.shouldDash((Mob)(Object)this)) {
-                if (this.roundabout$ticksUntilNextAttack < 10 && this.roundabout$ticksUntilNextAttack > 1) {
-                    this.roundabout$ticksUntilNextAttack = 1;
+                if (this.sba$ticksUntilNextAttack < 10 && this.sba$ticksUntilNextAttack > 1) {
+                    this.sba$ticksUntilNextAttack = 1;
                 }
             }
         }
@@ -1150,12 +1150,12 @@ public abstract class ZMob extends LivingEntity implements IMob {
 
 
     @Inject(method = "mobInteract",at=@At(value = "HEAD"))
-    private void roundabout$giveAnubis(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sba$giveAnubis(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
         if (!$$0.level().isClientSide) {
             ItemStack stack = $$0.getItemInHand($$1);
             if (stack.getItem() instanceof AnubisItem) {
                 if (((Mob) (Object) this) instanceof AbstractIllager AI) {
-                    if (!((StandUser) AI).roundabout$hasAStand()) {
+                    if (!((StandUser) AI).sba$hasAStand()) {
                         $$0.setItemInHand($$1,new ItemStack(Items.AIR));
                         $$0.level().playSound(null,$$0.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,3F,1F);
 

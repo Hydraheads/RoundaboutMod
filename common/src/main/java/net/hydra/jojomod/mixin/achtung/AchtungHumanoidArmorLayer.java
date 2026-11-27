@@ -39,7 +39,7 @@ public abstract class AchtungHumanoidArmorLayer<T extends LivingEntity, M extend
 
     @Inject(method = "renderModel(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/item/ArmorItem;Lnet/minecraft/client/model/HumanoidModel;ZFFFLjava/lang/String;)V",
             at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$RenderModelAchtung(PoseStack $$0, MultiBufferSource $$1,int $$2, ArmorItem $$3, A $$4,boolean $$5,
+    public void sba$RenderModelAchtung(PoseStack $$0, MultiBufferSource $$1,int $$2, ArmorItem $$3, A $$4,boolean $$5,
     float $$6, float $$7, float $$8, String $$9, CallbackInfo ci){
         float fade = ClientUtil.getThrowFadeToTheEther();
         if (fade != 1) {
@@ -55,13 +55,13 @@ public abstract class AchtungHumanoidArmorLayer<T extends LivingEntity, M extend
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
             at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+    public void sba$Render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         IEntityAndData entityAndData = ((IEntityAndData) $$3);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1
+        if (entityAndData.sba$getTrueInvisibility() > -1
                 && (!ClientUtil.checkIfClientCanSeeInvisAchtung())
                 && ClientNetworking.getAppropriateConfig() != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings != null &&
-                ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || ClientUtil.checkIfClientCanSeeMobsForWindVision() && entityAndData.roundabout$getTrueInvisibilityManhattan() < 1) {
+                ClientNetworking.getAppropriateConfig().achtungSettings.hidesArmor && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || ClientUtil.checkIfClientCanSeeMobsForWindVision() && entityAndData.sba$getTrueInvisibilityManhattan() < 1) {
             ci.cancel();
             return;
         }

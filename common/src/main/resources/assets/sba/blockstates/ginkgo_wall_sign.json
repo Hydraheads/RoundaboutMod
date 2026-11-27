@@ -1,0 +1,9 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "sba:block/ginkgo_wall_sign"
+      }
+    }
+  ]
+}

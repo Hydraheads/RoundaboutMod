@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.items;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IItemEntityAccess;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.item.FancyLighterItem;
@@ -34,7 +34,7 @@ import java.util.UUID;
 public abstract class FancyLighterItemEntity extends Entity{
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$tick(CallbackInfo ci) {
+    protected void sba$tick(CallbackInfo ci) {
         if (!this.level().isClientSide()) {
             ItemStack stack = getItem();
             if (stack != null && !stack.isEmpty() && stack.is(ModItems.FANCY_LIGHTER.asItem())

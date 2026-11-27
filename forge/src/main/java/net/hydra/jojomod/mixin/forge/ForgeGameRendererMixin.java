@@ -34,7 +34,7 @@ public abstract class ForgeGameRendererMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void roundabout$inject_renderWorldForge(float tickDelta, long limitTime, PoseStack matrix, CallbackInfo ci) {
+    private void sba$inject_renderWorldForge(float tickDelta, long limitTime, PoseStack matrix, CallbackInfo ci) {
         if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
             if (this.mainCamera.getEntity() != null) {
                 Entity focusedEntity = this.mainCamera.getEntity();
@@ -43,7 +43,7 @@ public abstract class ForgeGameRendererMixin {
                 if (animation == null) {
                     return;
                 }
-                if(focusedEntity instanceof LivingEntity LV && ((StandUser)LV).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isPiloting()){
+                if(focusedEntity instanceof LivingEntity LV && ((StandUser)LV).sba$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isPiloting()){
                     return;
                 }
                 long timeMs = focusedEntity.level().getGameTime() * 50 + (long) (tickDelta%1 * 50);

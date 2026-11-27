@@ -32,19 +32,19 @@ public abstract class DazeWitch extends Raider {
      * The daze that barrages inflict prevent witches from using and drinking potions*/
 
     @Inject(method = "isDrinkingPotion", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$isDrinkingPotion(CallbackInfoReturnable<Boolean> ci) {
-        if (((StandUser) this).roundabout$isDazed() ||
-                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
+    protected void sba$isDrinkingPotion(CallbackInfoReturnable<Boolean> ci) {
+        if (((StandUser) this).sba$isDazed() ||
+                (!((StandUser)this).sba$getStandDisc().isEmpty() &&
+                        ((StandUser)this).sba$getStandPowers().disableMobAiAttack())) {
             ci.setReturnValue(false);
         }
     }
 
     @Inject(method = "setUsingItem", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$setUsingItem(boolean $$0, CallbackInfo ci) {
-        if (((StandUser) this).roundabout$isDazed() ||
-                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
+    protected void sba$setUsingItem(boolean $$0, CallbackInfo ci) {
+        if (((StandUser) this).sba$isDazed() ||
+                (!((StandUser)this).sba$getStandDisc().isEmpty() &&
+                        ((StandUser)this).sba$getStandPowers().disableMobAiAttack())) {
             ((Witch) (Object) this).getEntityData().set(DATA_USING_ITEM, false);
             ci.cancel();
             return;

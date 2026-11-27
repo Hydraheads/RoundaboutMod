@@ -22,16 +22,16 @@ public abstract class ZMerchantResultSlotMixin {
     @Shadow @Final private MerchantContainer slots;
 
     @Inject(method = "onTake", at = @At("HEAD"))
-    private void roundabout$triggerSnakeOilScam(Player player, ItemStack stack, CallbackInfo ci) {
+    private void sba$triggerSnakeOilScam(Player player, ItemStack stack, CallbackInfo ci) {
         ItemStack inputA = this.slots.getItem(0);
         ItemStack inputB = this.slots.getItem(1);
         if (inputA.is(ModItems.SNAKE_OIL) || inputB.is(ModItems.SNAKE_OIL)) {
             if (this.merchant instanceof IVillagerAccess villagerAccess) {
-                villagerAccess.roundabout$applySnakeOilScam(player);
+                villagerAccess.sba$applySnakeOilScam(player);
             }
             // client side insta update for visual bug fix
             else if (this.merchant instanceof ClientSideMerchant && TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER != null) {
-                ((IVillagerAccess) TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER).roundabout$setSnakeOilLockout(72000);
+                ((IVillagerAccess) TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER).sba$setSnakeOilLockout(72000);
             }
         }
     }

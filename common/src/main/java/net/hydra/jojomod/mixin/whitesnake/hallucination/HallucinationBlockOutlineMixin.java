@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class HallucinationBlockOutlineMixin {
 
     @Inject(method = "shouldRenderBlockOutline()Z", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$hideAcidOutline(CallbackInfoReturnable<Boolean> cir) {
+    private void sbaWhitesnake$hideAcidOutline(CallbackInfoReturnable<Boolean> cir) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null || minecraft.level == null
                 || !HallucinationEffect.hasDistortion(minecraft.player.getEffect(ModEffects.HALLUCINATION))

@@ -35,7 +35,7 @@ public abstract class AccessEgg extends ThrowableItemProjectile implements IProj
     }
 
     @Inject(method = "onHit", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$onHit(HitResult $$0,CallbackInfo ci) {
+    private void sba$onHit(HitResult $$0,CallbackInfo ci) {
         HitResult.Type $$1 = $$0.getType();
         if ($$1 == HitResult.Type.ENTITY) {
             Entity $$2x = ((EntityHitResult) $$0).getEntity();
@@ -48,7 +48,7 @@ public abstract class AccessEgg extends ThrowableItemProjectile implements IProj
                     if (!ii.isEmpty()) {
                         ci.cancel();
                         if(ci.isCancelled()) {
-                            if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                            if(ME.getUser() instanceof Player PL && ((StandUser) PL).sba$getStandPowers() instanceof  PowersManhattanTransfer PM){
                                 if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
                                     PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
                                 } else {
@@ -90,7 +90,7 @@ public abstract class AccessEgg extends ThrowableItemProjectile implements IProj
         }
 
             ThrownEgg thrownEgg = (ThrownEgg) (Object) (this);
-            if(((IProjectileAccess)thrownEgg).roundabout$getManhattanProjectile() && this.getOwner() instanceof Chicken){
+            if(((IProjectileAccess)thrownEgg).sba$getManhattanProjectile() && this.getOwner() instanceof Chicken){
                 System.out.println("aa");
                 ci.cancel();
                 super.onHit($$0);

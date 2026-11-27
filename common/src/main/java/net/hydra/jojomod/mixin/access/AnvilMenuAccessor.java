@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AnvilMenuAccessor {
     // method to get cost for anvil menu, that way I can add 1 to it
     @Accessor("cost")
-    DataSlot roundabout$getCostSlot();
+    DataSlot sba$getCostSlot();
 }

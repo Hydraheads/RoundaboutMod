@@ -2,7 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.models.layers.*;
@@ -96,16 +96,16 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     public boolean originalArms;
 
     @Inject(method="<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At(value = "RETURN"))
-    private void roundabout$initRend(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
+    private void sba$initRend(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
         /**Access to slim and not slim models simultaneously*/
-        roundabout$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), !$$1);
-        roundabout$mainModel = this.model;
+        sba$otherModel = new PlayerModel<>($$0.bakeLayer($$1 ? ModelLayers.PLAYER : ModelLayers.PLAYER_SLIM), !$$1);
+        sba$mainModel = this.model;
         originalArms = $$1;
     }
     @Unique
-    protected PlayerModel roundabout$otherModel;
+    protected PlayerModel sba$otherModel;
     @Unique
-    protected PlayerModel roundabout$mainModel;
+    protected PlayerModel sba$mainModel;
 
     private static AbstractClientPlayer ACP;
     private static InteractionHand IH;
@@ -119,16 +119,16 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
         /**Stone Arms with locacaca first person*/
     @Inject(method = "renderRightHand", at = @At(value = "TAIL"))
-    public void roundabout$renderRightHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
+    public void sba$renderRightHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
 
         if (AnubisLayer.shouldRender(player) != null){
             return;
         }
-        if (((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
+        if (((StandUser)player).sba$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
             return;
         }
 
-        byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
+        byte curse = ((StandUser) player).sba$getLocacacaCurse();
         float delta = ClientUtil.getDelta();
         if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
             delta = 0;
@@ -140,19 +140,19 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             float r = 1;
             float g = 1;
             float b = 1;
-            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            byte skin = ((StandUser) player).sba$getStandSkin();
             String path = PowersWhiteAlbum.getSkinString(skin);
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 path = "ice";
             }
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+            if (((StandUser) player).sba$getStandPowers() instanceof PowersWhiteAlbum PW
                     && PW.cracked) {
                 path = "cracked/" + path;
             }
             ClientUtil.pushPoseAndCooperate(poseStack, 8);
 
             model.rightArm.translateAndRotate(poseStack);
-            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+            if (((IPlayerModel) this.model).sba$getSlim()) {
                 ModStrayModels.WhiteAlbumSlimRightArm.render(
                         player, delta, poseStack, bufferSource, packedLight,
                         r, g, b, whiteAmt, path);
@@ -167,13 +167,13 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             float r = 1;
             float g = 1;
             float b = 1;
-            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            byte skin = ((StandUser) player).sba$getStandSkin();
             String path = PowersOasis.getSkinString(skin);
 
             ClientUtil.pushPoseAndCooperate(poseStack,8);
 
             model.rightArm.translateAndRotate(poseStack);
-            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+            if (((IPlayerModel) this.model).sba$getSlim()) {
                 ModStrayModels.OasisSlimRightArm.render(
                         player, delta, poseStack, bufferSource, packedLight,
                         r, g, b, oasisAmt, path);
@@ -184,10 +184,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
             ClientUtil.popPoseAndCooperate(poseStack,8);
 
-        } else if (((StandUser) player).roundabout$hasDiverArms()) {
+        } else if (((StandUser) player).sba$hasDiverArms()) {
             // had my own diver arms thing that i made before realizing it should also appear in first person, so all the code for that goes there.
             DiverArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.rightArm, true, 1.0F);
-        } else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && (!SilverChariotEntity.isPart5Skin(((StandUser) player).roundabout$getStandSkin()) && player.getMainArm() == HumanoidArm.RIGHT)) {
+        } else if (((StandUser) player).sba$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && (!SilverChariotEntity.isPart5Skin(((StandUser) player).sba$getStandSkin()) && player.getMainArm() == HumanoidArm.RIGHT)) {
             SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.rightArm, true, 1.0F);
         } else if (curse == LocacacaCurseIndex.RIGHT_HAND) {
             this.model.rightSleeve.xScale += 0.04F;
@@ -202,7 +202,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             float g = 1;
             float b = 1;
             StandUser user = ((StandUser) player);
-            int muscle = user.roundabout$getZappedToID();
+            int muscle = user.sba$getZappedToID();
             //muscle = 100;
             if (muscle > -1) {
                 float scale = 1.055F;
@@ -213,11 +213,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 float oscillation = Math.abs(((player.tickCount % 10) + (delta % 1)) - 5) * 0.04F;
                 alpha += oscillation;
                 if (player.getMainArm() == HumanoidArm.RIGHT) {
-                    if (((IPlayerModel) this.model).roundabout$getSlim()) {
-                        roundabout$renderRightArmExtraModelSlim(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
+                    if (((IPlayerModel) this.model).sba$getSlim()) {
+                        sba$renderRightArmExtraModelSlim(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
                                 1, 1, 1, StandIcons.MUSCLE_SLIM, 0.01F, 0, 0, alpha);
                     } else {
-                        roundabout$renderRightArmExtraModel(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
+                        sba$renderRightArmExtraModel(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
                                 r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
                     }
                 }
@@ -227,12 +227,12 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
 
     @Inject(method = "renderLeftHand", at = @At(value = "TAIL"))
-    public void roundabout$renderLeftHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
-        if (((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
+    public void sba$renderLeftHand(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, CallbackInfo ci) {
+        if (((StandUser)player).sba$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(player)) {
             return;
         }
 
-        byte curse = ((StandUser) player).roundabout$getLocacacaCurse();
+        byte curse = ((StandUser) player).sba$getLocacacaCurse();
         float delta = ClientUtil.getDelta();
         if (((TimeStop) player.level()).CanTimeStopEntity(player)) {
             delta = 0;
@@ -244,18 +244,18 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             float r = 1;
             float g = 1;
             float b = 1;
-            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            byte skin = ((StandUser) player).sba$getStandSkin();
             String path = PowersWhiteAlbum.getSkinString(skin);
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
                 path = "ice";
             }
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+            if (((StandUser)player).sba$getStandPowers() instanceof PowersWhiteAlbum PW
                     && PW.cracked){
                 path = "cracked/"+path;
             }
             ClientUtil.pushPoseAndCooperate(poseStack,8);
             model.leftArm.translateAndRotate(poseStack);
-            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+            if (((IPlayerModel) this.model).sba$getSlim()) {
                 ModStrayModels.WhiteAlbumSlimLeftArm.render(
                         player, delta, poseStack, bufferSource, packedLight,
                         r, g, b, whiteAmt, path);
@@ -270,12 +270,12 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             float r = 1;
             float g = 1;
             float b = 1;
-            byte skin = ((StandUser) player).roundabout$getStandSkin();
+            byte skin = ((StandUser) player).sba$getStandSkin();
             String path = PowersOasis.getSkinString(skin);
 
             ClientUtil.pushPoseAndCooperate(poseStack,8);
             model.leftArm.translateAndRotate(poseStack);
-            if (((IPlayerModel) this.model).roundabout$getSlim()) {
+            if (((IPlayerModel) this.model).sba$getSlim()) {
                 ModStrayModels.OasisSlimLeftArm.render(
                         player, delta, poseStack, bufferSource, packedLight,
                         r, g, b, oasisAmt, path);
@@ -286,10 +286,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
             ClientUtil.popPoseAndCooperate(poseStack,8);
 
-        } else if (((StandUser) player).roundabout$hasDiverArms()) {
+        } else if (((StandUser) player).sba$hasDiverArms()) {
             // had my own diver arms thing that i made before realizing it should also appear in first person, so all the code for that goes there.
             DiverArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.leftArm, false, 1.0F);
-        } else if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && (SilverChariotEntity.isPart5Skin(((StandUser) player).roundabout$getStandSkin()) || player.getMainArm() == HumanoidArm.LEFT)) {
+        } else if (((StandUser) player).sba$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(player) && PSC.hasHandsOut() && (SilverChariotEntity.isPart5Skin(((StandUser) player).sba$getStandSkin()) || player.getMainArm() == HumanoidArm.LEFT)) {
             SilverChariotArmsLayer.renderFirstPersonArm(poseStack, bufferSource, packedLight, player, this.model.leftArm, false, 1.0F);
         } else if (curse == LocacacaCurseIndex.LEFT_HAND) {
             this.model.leftSleeve.xScale += 0.04F;
@@ -303,7 +303,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             float g = 1;
             float b = 1;
             StandUser user = ((StandUser) player);
-            int muscle = user.roundabout$getZappedToID();
+            int muscle = user.sba$getZappedToID();
             //muscle = 100;
             if (muscle > -1) {
                 float scale = 1.055F;
@@ -311,11 +311,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 float oscillation = Math.abs(((player.tickCount % 10) + (delta % 1)) - 5) * 0.04F;
                 alpha += oscillation;
                 if (player.getMainArm() == HumanoidArm.LEFT) {
-                    if (((IPlayerModel) this.model).roundabout$getSlim()) {
-                        roundabout$renderLeftArmExtraModelSlim(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
+                    if (((IPlayerModel) this.model).sba$getSlim()) {
+                        sba$renderLeftArmExtraModelSlim(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
                                 r, g, b, StandIcons.MUSCLE_SLIM, -0.01F, 0, 0, alpha);
                     } else {
-                        roundabout$renderLeftArmExtraModel(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
+                        sba$renderLeftArmExtraModel(poseStack, bufferSource, packedLight, (T) player, scale, scale, scale, delta,
                                 r, g, b, StandIcons.MUSCLE, -0.01F, 0, 0, alpha);
                     }
                 }
@@ -324,7 +324,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
     @Unique
-    public void roundabout$renderRightArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
+    public void sba$renderRightArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
                                                     float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.rightArm.visible) {
             ClientUtil.pushPoseAndCooperate(poseStack,8);
@@ -335,7 +335,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
     @Unique
-    public void roundabout$renderRightLegExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
+    public void sba$renderRightLegExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
                                                     float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.rightLeg.visible) {
             ModStrayModels.RightLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
@@ -343,7 +343,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
     @Unique
-    public void roundabout$renderLeftLegExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
+    public void sba$renderLeftLegExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
                                                     float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.leftLeg.visible) {
             ModStrayModels.LeftLeg.render(entity, partialTicks, poseStack, bufferSource, packedLight,
@@ -351,7 +351,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
 
-    public void roundabout$renderRightArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
+    public void sba$renderRightArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
                                    float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.rightArm.visible) {
             ClientUtil.pushPoseAndCooperate(poseStack,13);
@@ -361,7 +361,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             ClientUtil.popPoseAndCooperate(poseStack,13);
         }
     }
-    public void roundabout$renderLeftArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
+    public void sba$renderLeftArmExtraModel(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float xx, float yy, float zz, float partialTicks,
                               float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.leftArm.visible) {
             ClientUtil.pushPoseAndCooperate(poseStack,15);
@@ -371,7 +371,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             ClientUtil.popPoseAndCooperate(poseStack,15);
         }
     }
-    public void roundabout$renderLeftArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+    public void sba$renderLeftArmExtraModelSlim(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
                                   float r, float g, float b, ResourceLocation RL, float xtrans, float ytrans, float ztrans, float alpha) {
         if (model.leftArm.visible) {
             ClientUtil.pushPoseAndCooperate(poseStack,18);
@@ -389,21 +389,21 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
     @Inject(method = "getArmPose", at = @At(value = "HEAD"),cancellable = true)
-    private static void roundabout$GetArmPose(AbstractClientPlayer $$0, InteractionHand $$1, CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
+    private static void sba$GetArmPose(AbstractClientPlayer $$0, InteractionHand $$1, CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
         ACP = $$0;
         IH = $$1;
 
         // ratt scope spyglass hand position
         StandUser SU = ((StandUser) $$0);
         if ($$1.equals(InteractionHand.MAIN_HAND)) {
-            if (SU.roundabout$getStandPowers() instanceof PowersRatt && PowerTypes.hasStandActive($$0)) {
-                if (SU.roundabout$getCombatMode()) {
+            if (SU.sba$getStandPowers() instanceof PowersRatt && PowerTypes.hasStandActive($$0)) {
+                if (SU.sba$getCombatMode()) {
                     ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
                     return;
                 }
             }
 
-            if (((IPlayerEntity)$$0).roundabout$GetPos2() == PlayerPosIndex.BLOOD_SUCK){
+            if (((IPlayerEntity)$$0).sba$GetPos2() == PlayerPosIndex.BLOOD_SUCK){
                 ci.setReturnValue(HumanoidModel.ArmPose.SPYGLASS);
                 return;
             }
@@ -423,27 +423,27 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
 
     @ModifyVariable(method = "getArmPose", at = @At(value = "STORE"),ordinal = 0)
-    private static ItemStack roundabout$GetArmPose2(ItemStack $$0) {
-        if (IH == InteractionHand.MAIN_HAND && ((StandUserClient)ACP).roundabout$getRoundaboutRenderMainHand() != null){
-            $$0 = ((StandUserClient)ACP).roundabout$getRoundaboutRenderMainHand();
-        } if (IH == InteractionHand.OFF_HAND && ((StandUserClient)ACP).roundabout$getRoundaboutRenderOffHand() != null){
-            $$0 = ((StandUserClient)ACP).roundabout$getRoundaboutRenderOffHand();
+    private static ItemStack sba$GetArmPose2(ItemStack $$0) {
+        if (IH == InteractionHand.MAIN_HAND && ((StandUserClient)ACP).sba$getSBARenderMainHand() != null){
+            $$0 = ((StandUserClient)ACP).sba$getSBARenderMainHand();
+        } if (IH == InteractionHand.OFF_HAND && ((StandUserClient)ACP).sba$getSBARenderOffHand() != null){
+            $$0 = ((StandUserClient)ACP).sba$getSBARenderOffHand();
         }
         return $$0;
     }
 
 
    @Inject(method = "renderHand",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/PlayerRenderer;setModelProperties(Lnet/minecraft/client/player/AbstractClientPlayer;)V",shift = At.Shift.AFTER))
-    private void roundabout$hideAnubisArm(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, ModelPart $$4, ModelPart $$5, CallbackInfo ci) {
+    private void sba$hideAnubisArm(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, ModelPart $$4, ModelPart $$5, CallbackInfo ci) {
         HumanoidArm arm = null;
         if (AnubisLayer.shouldRender($$3) != null) {
             arm = AnubisLayer.shouldRender($$3);
         }
         StandUser SU = (StandUser) $$3;
-        if (SU.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand($$3)) {
+        if (SU.sba$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand($$3)) {
             arm = $$3.getMainArm();
         }
-       if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
+       if (SU.sba$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
            arm = $$3.getMainArm();
        }
 
@@ -457,10 +457,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
     @Inject(method = "setModelProperties", at = @At(value = "TAIL"))
-    private void roundabout$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
+    private void sba$setModelProperties(AbstractClientPlayer $$0, CallbackInfo ci) {
         if ($$0 instanceof StandUser standUser) {
             PlayerModel<AbstractClientPlayer> playerModel = this.getModel();
-            if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+            if (standUser.sba$getStandPowers() instanceof PowersGreenDay PGD) {
 
                 if (PGD.legGoneTicks > 0) {
                     playerModel.leftLeg.visible = false;
@@ -494,7 +494,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 }
             }
 
-            if (standUser.roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCTR){
+            if (standUser.sba$getStandPowers() instanceof PowersCatchTheRainbow PCTR){
 
                 if(!PCTR.HasOffHand && (PCTR.self.getMainArm() ==HumanoidArm.RIGHT)){
                     playerModel.leftArm.visible=false;
@@ -508,7 +508,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
 
             if (!(ClientUtil.checkIfFirstPerson() && $$0.is(ClientUtil.getPlayer()))
-            || !((IEntityAndData)$$0).roundabout$getExclusiveLayers()){
+            || !((IEntityAndData)$$0).sba$getExclusiveLayers()){
                 if (ClientUtil.hasChangedArms($$0)){
                     playerModel.rightArm.visible = false;
                     playerModel.rightSleeve.visible = false;
@@ -531,8 +531,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 }
                 if (ClientUtil.hideCapeAndEars($$0)){
                     IPlayerModel iPlayerModel = ((IPlayerModel) playerModel);
-                    iPlayerModel.roundabout$getEar().visible = false;
-                    iPlayerModel.roundabout$getCloak().visible = false;
+                    iPlayerModel.sba$getEar().visible = false;
+                    iPlayerModel.sba$getCloak().visible = false;
                 }
             }
 
@@ -544,15 +544,15 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
     /**Render external layers like soft and wet shooting mode out of context. This particular inject is for Achtung Baby*/
     @Inject(method = "renderHand", at = @At(value = "HEAD"), cancellable = true)
-    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandHEAD(PoseStack stack, MultiBufferSource buffer, int integer,
+    private  <T extends LivingEntity, M extends EntityModel<T>>void sba$renderHandHEAD(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                 CallbackInfo ci) {
-        ((IEntityAndData)acl).roundabout$setExclusiveLayers(true);
+        ((IEntityAndData)acl).sba$setExclusiveLayers(true);
         boolean shouldRenderArms = true; // make this an AbilityScapeBasis thing at some point idk
         StandUser standUser = (StandUser) acl;
         if (AnubisLayer.shouldRender(acl) != null) {shouldRenderArms = false;}
-        if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){shouldRenderArms = false;}
-        if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(acl)) {shouldRenderArms = false;}
+        if (standUser.sba$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){shouldRenderArms = false;}
+        if (standUser.sba$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(acl)) {shouldRenderArms = false;}
 
         if ( (ClientUtil.getThrowFadeToTheEther() != 1 || ClientUtil.hasChangedArms(acl)) && shouldRenderArms ){
             ci.cancel();
@@ -563,9 +563,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             $$6.swimAmount = 0.0F;
             $$6.setupAnim(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
             PlayerModel<AbstractClientPlayer> pbm = this.getModel();
-            if (((IPlayerModel)pbm).roundabout$setupFirstPersonAnimations(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,$$4,$$5,
+            if (((IPlayerModel)pbm).sba$setupFirstPersonAnimations(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,$$4,$$5,
                     buffer,integer,stack)){
-                roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+                sba$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
                 return;
             }
             $$4.xRot = 0.0F;
@@ -576,21 +576,21 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             $$4.render(stack, buffer.getBuffer(tl), integer, OverlayTexture.NO_OVERLAY);
             $$5.xRot = 0.0F;
             $$5.render(stack, buffer.getBuffer(tl), integer, OverlayTexture.NO_OVERLAY);
-            roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
-            ((IEntityAndData)acl).roundabout$setExclusiveLayers(false);
+            sba$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+            ((IEntityAndData)acl).sba$setExclusiveLayers(false);
         }
     }
     
 
     /**Render external layers like soft and wet shooting mode out of context*/
     @Inject(method = "renderHand", at = @At(value = "TAIL"))
-    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandLayers(PoseStack stack, MultiBufferSource buffer, int integer,
+    private  <T extends LivingEntity, M extends EntityModel<T>>void sba$renderHandLayers(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                 CallbackInfo ci) {
         //PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity,
         // float var5, float var6, float var7, float partialTicks, float var9, float var10)
-        roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
-        ((IEntityAndData)acl).roundabout$setExclusiveLayers(false);
+        sba$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+        ((IEntityAndData)acl).sba$setExclusiveLayers(false);
     }
     @Unique
     public void rdbt$copyTo(ModelPart $$0, ModelPart $$1) {
@@ -606,19 +606,19 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     /**Apply hand animations to make the hand rotate*/
     @Inject(method = "renderHand", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/model/PlayerModel;setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",shift = At.Shift.AFTER), cancellable = true)
-    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandAnimations(PoseStack stack, MultiBufferSource buffer, int integer,
+    private  <T extends LivingEntity, M extends EntityModel<T>>void sba$renderHandAnimations(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                 AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                 CallbackInfo ci) {
 
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
-        if (((IPlayerModel)$$6).roundabout$setupFirstPersonAnimations(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,$$4,$$5,
+        if (((IPlayerModel)$$6).sba$setupFirstPersonAnimations(acl, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F,$$4,$$5,
                 buffer,integer,stack)){
             ci.cancel();
-            roundabout$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
+            sba$renderHandLayers2(stack,buffer,integer,acl,$$4,$$5);
             return;
         }
 
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()
+        if (acl != null && ((StandUser)acl).sba$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()
         ) {
 
             $$6.rightLeg.copyFrom($$6.rightArm);
@@ -637,11 +637,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
     @Inject(method = "renderHand", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/model/geom/ModelPart;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;II)V"), cancellable = true)
-    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandAnimationsRender(PoseStack stack, MultiBufferSource buffer, int integer,
+    private  <T extends LivingEntity, M extends EntityModel<T>>void sba$renderHandAnimationsRender(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                     AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                     CallbackInfo ci) {
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
+        if (acl != null && ((StandUser)acl).sba$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
             $$6.rightLeg.xRot = 0.2F;
             $$6.rightPants.copyFrom($$6.rightLeg);
             $$6.leftLeg.xRot = 0.2F;
@@ -649,19 +649,19 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
     }
     @Inject(method = "renderHand", at = @At(value = "TAIL"), cancellable = true)
-    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandAnimationsRenderTail(PoseStack stack, MultiBufferSource buffer, int integer,
+    private  <T extends LivingEntity, M extends EntityModel<T>>void sba$renderHandAnimationsRenderTail(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                               AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5,
                                                                                                               CallbackInfo ci) {
 
         PlayerModel<AbstractClientPlayer> $$6 = this.getModel();
-        if (acl != null && ((StandUser)acl).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()) {
+        if (acl != null && ((StandUser)acl).sba$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()) {
 
             boolean isHurt = acl.hurtTime > 0;
             float r = 1;
             float g = 1;
             float b = 1;
             StandUser user = ((StandUser) acl);
-            int muscle = user.roundabout$getZappedToID();
+            int muscle = user.sba$getZappedToID();
             //muscle = 100;
                 float scale = 1.055F;
                 float alpha = 0.6F;
@@ -679,7 +679,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 ModStrayModels.LeftHeel.render(acl, ClientUtil.getDelta(), stack, buffer, integer,
                         1, 1, 1, 1, acl.getSkinTextureLocation());
                 if (muscle > -1) {
-                        roundabout$renderRightLegExtraModel(stack, buffer, integer, acl, scale, scale, scale, delta,
+                        sba$renderRightLegExtraModel(stack, buffer, integer, acl, scale, scale, scale, delta,
                                 r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
                 }
                 stack.popPose();
@@ -689,7 +689,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 ModStrayModels.RightHeel.render(acl, ClientUtil.getDelta(), stack, buffer, integer,
                         1, 1, 1, 1, acl.getSkinTextureLocation());
                 if (muscle > -1) {
-                    roundabout$renderLeftLegExtraModel(stack, buffer, integer, acl, scale, scale, scale, delta,
+                    sba$renderLeftLegExtraModel(stack, buffer, integer, acl, scale, scale, scale, delta,
                             r, g, b, StandIcons.MUSCLE, 0.01F, 0, 0, alpha);
                 }
                 stack.popPose();
@@ -698,7 +698,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
     @Unique
-    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderHandLayers2(PoseStack stack, MultiBufferSource buffer, int integer,
+    private  <T extends LivingEntity, M extends EntityModel<T>>void sba$renderHandLayers2(PoseStack stack, MultiBufferSource buffer, int integer,
                                                                                                  AbstractClientPlayer acl, ModelPart $$4, ModelPart $$5) {
         float yes = acl.tickCount;
         if (!ClientUtil.checkIfGamePaused() && !((TimeStop)acl.level()).CanTimeStopEntity(acl)){
@@ -709,11 +709,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         AnubisLayer.renderOutOfContext(stack,buffer,getPackedLightCoords(acl,1F),acl,yes,$$4);
         if ($$4 != null && $$4.equals(this.model.rightArm)) {
             MandomLayer.renderWatchFirstPerson(stack, buffer, getPackedLightCoords(acl, 1F), acl, 1, 1, 1, yes,
-                    0, 0, $$4, ((IPlayerModel) this.model).roundabout$getSlim()
+                    0, 0, $$4, ((IPlayerModel) this.model).sba$getSlim()
             );
 
-            if (((StandUser)acl).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa &&
-                    ((IPlayerEntity)acl).roundabout$GetPos2() == PlayerPosIndex.CHARGE_SHOT){
+            if (((StandUser)acl).sba$getStandPowers() instanceof PowersWhiteAlbum pwa &&
+                    ((IPlayerEntity)acl).sba$GetPos2() == PlayerPosIndex.CHARGE_SHOT){
 
                 ClientUtil.pushPoseAndCooperate(stack,33);
                 $$4.translateAndRotate(stack);
@@ -727,9 +727,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
     @Inject(method = "renderRightHand", at = @At(value = "HEAD"), cancellable = true)
-    private  <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderRightHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+    private  <T extends LivingEntity, M extends EntityModel<T>>void sba$renderRightHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
 
-        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
+        if ($$3 != null && ((StandUser)$$3).sba$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
             this.renderHand($$0, $$1, $$2, $$3, this.model.rightLeg, this.model.rightLeg);
             ci.cancel();
             return;
@@ -737,11 +737,11 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
         /**Access to slim and not slim models simultaneously*/
         IPlayerEntity ipe = ((IPlayerEntity) $$3);
-        ItemStack visage = ipe.roundabout$getMaskSlot();
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
-        roundabout$changeTheModel($$3,visage,shift);
+        ItemStack visage = ipe.sba$getMaskSlot();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.sba$getShapeShift());
+        sba$changeTheModel($$3,visage,shift);
 
-        if (roundabout$renderHandX($$0,$$1,$$2,$$3,true)){
+        if (sba$renderHandX($$0,$$1,$$2,$$3,true)){
             ci.cancel();
         }
 
@@ -751,8 +751,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
 
     @Inject(method = "renderLeftHand", at = @At(value = "HEAD"), cancellable = true)
-    private <T extends LivingEntity, M extends EntityModel<T>>void roundabout$renderLeftHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
-        if ($$3 != null && ((StandUser)$$3).roundabout$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
+    private <T extends LivingEntity, M extends EntityModel<T>>void sba$renderLeftHandX(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, CallbackInfo ci) {
+        if ($$3 != null && ((StandUser)$$3).sba$getStandPowers() instanceof PowersWalkingHeart PW && PW.rendersInCombatMode()){
             this.renderHand($$0, $$1, $$2, $$3, this.model.leftLeg, this.model.leftLeg);
             ci.cancel();
             return;
@@ -760,15 +760,15 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
         /**Access to slim and not slim models simultaneously*/
         IPlayerEntity ipe = ((IPlayerEntity) $$3);
-        ItemStack visage = ipe.roundabout$getMaskSlot();
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
-        roundabout$changeTheModel($$3,visage,shift);
+        ItemStack visage = ipe.sba$getMaskSlot();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.sba$getShapeShift());
+        sba$changeTheModel($$3,visage,shift);
 
-        if (roundabout$renderHandX($$0,$$1,$$2,$$3,false)){
+        if (sba$renderHandX($$0,$$1,$$2,$$3,false)){
             ci.cancel();
         }
     }
-    protected void roundabout$renderNameTagSpecial(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4) {
+    protected void sba$renderNameTagSpecial(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4) {
         double $$5 = this.entityRenderDispatcher.distanceToSqr($$0);
         ClientUtil.pushPoseAndCooperate($$2,16);
         if ($$5 < 100.0) {
@@ -787,20 +787,20 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         ClientUtil.popPoseAndCooperate($$2,16);
     }
     @Inject(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$renderNameTag(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
-        if ($$0 instanceof StandUser su && su.roundabout$isDisguised()) {
-            GameProfile profile = su.roundabout$getDisguiseProfile();
+    private void sba$renderNameTag(AbstractClientPlayer $$0, Component $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, CallbackInfo ci) {
+        if ($$0 instanceof StandUser su && su.sba$isDisguised()) {
+            GameProfile profile = su.sba$getDisguiseProfile();
             if (profile != null && profile.getName() != null && !profile.getName().isEmpty()) {
                 if ($$0 != Minecraft.getInstance().player && !$$0.isInvisible() && !Minecraft.getInstance().options.hideGui) {
-                    this.roundabout$renderNameTagSpecial($$0, Component.literal(profile.getName()), $$2, $$3, $$4);
+                    this.sba$renderNameTagSpecial($$0, Component.literal(profile.getName()), $$2, $$3, $$4);
                 }
                 ci.cancel();
                 return;
             }
         }
         //deletes original nametag
-        if ($$0 instanceof StandUser su && su.roundabout$isDisguised()) {
-            com.mojang.authlib.GameProfile profile = su.roundabout$getDisguiseProfile();
+        if ($$0 instanceof StandUser su && su.sba$isDisguised()) {
+            com.mojang.authlib.GameProfile profile = su.sba$getDisguiseProfile();
             if (profile != null && profile.getName() != null) {
                 if (!$$1.getString().equals(profile.getName())) {
                     ci.cancel();
@@ -809,7 +809,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
         }
         IPlayerEntity ple = ((IPlayerEntity) $$0);
-        byte shape = ple.roundabout$getShapeShift();
+        byte shape = ple.sba$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
             if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null
@@ -821,8 +821,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 }
             }
         }
-        if (Minecraft.getInstance().player != null && !((StandUser) Minecraft.getInstance().player).roundabout$getStandPowers().canSeeThroughFog()
-                && ((IPermaCasting) $$0.level()).roundabout$inPermaCastFogRange($$0)) {
+        if (Minecraft.getInstance().player != null && !((StandUser) Minecraft.getInstance().player).sba$getStandPowers().canSeeThroughFog()
+                && ((IPermaCasting) $$0.level()).sba$inPermaCastFogRange($$0)) {
             if (ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null
                     && !ClientNetworking.getAppropriateConfig().nameTagSettings.renderNameTagsInJusticeFog) {
                 if (!(Minecraft.getInstance().player != null && Minecraft.getInstance().player.isCreative() &&
@@ -834,7 +834,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
 
 
-        ItemStack visage = ple.roundabout$getMaskSlot();
+        ItemStack visage = ple.sba$getMaskSlot();
         boolean characterType = true;
         if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
             characterType = ME.visageData.isCharacterVisage();
@@ -851,7 +851,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                     if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages) {
                         if (this.shouldShowName($$0)) {
                             Component comp = ME.getDisplayNameTag();
-                            this.roundabout$renderNameTagSpecial($$0, comp, $$2, $$3, $$4);
+                            this.sba$renderNameTagSpecial($$0, comp, $$2, $$3, $$4);
                             ci.cancel();
                             return;
                         }
@@ -868,84 +868,84 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
     @Unique
-    public void roundabout$setShapeShift(Player pe, Mob me){
+    public void sba$setShapeShift(Player pe, Mob me){
         if (pe instanceof AbstractClientPlayer lpe){
-            ((IPlayerEntityAbstractClient)lpe).roundabout$setShapeShiftTemp(me);
+            ((IPlayerEntityAbstractClient)lpe).sba$setShapeShiftTemp(me);
         }
     }
     @Unique
     @Override
-    public Mob roundabout$getShapeShift(Player pe){
+    public Mob sba$getShapeShift(Player pe){
         if (pe instanceof AbstractClientPlayer lpe){
-            rdbt$loadModel(ShapeShifts.getShiftFromByte(((IPlayerEntity)pe).roundabout$getShapeShift()),
+            rdbt$loadModel(ShapeShifts.getShiftFromByte(((IPlayerEntity)pe).sba$getShapeShift()),
                     lpe,((IPlayerEntity)pe));
-            return ((IPlayerEntityAbstractClient)lpe).roundabout$getShapeShiftTemp();
+            return ((IPlayerEntityAbstractClient)lpe).sba$getShapeShiftTemp();
         }
         return null;
     }
     @Unique
-    public void roundabout$setVisageData(Player pe, VisageData me){
+    public void sba$setVisageData(Player pe, VisageData me){
         if (pe instanceof AbstractClientPlayer lpe){
-            ((IPlayerEntityAbstractClient)lpe).roundabout$setVisageData(me);
+            ((IPlayerEntityAbstractClient)lpe).sba$setVisageData(me);
         }
     }
     @Unique
-    public VisageData roundabout$getVisageData(Player pe){
+    public VisageData sba$getVisageData(Player pe){
         if (pe instanceof AbstractClientPlayer lpe){
-            return ((IPlayerEntityAbstractClient)lpe).roundabout$getVisageData();
-        }
-        return null;
-    }
-    @Unique
-    public void roundabout$setLastVisage(Player pe, ItemStack me){
-        if (pe instanceof AbstractClientPlayer lpe){
-            ((IPlayerEntityAbstractClient)lpe).roundabout$setLastVisage(me);
-        }
-    }
-    @Unique
-    public ItemStack roundabout$getLastVisage(Player pe){
-        if (pe instanceof AbstractClientPlayer lpe){
-            return ((IPlayerEntityAbstractClient)lpe).roundabout$getLastVisage();
+            return ((IPlayerEntityAbstractClient)lpe).sba$getVisageData();
         }
         return null;
     }
     @Unique
-    public void roundabout$setSwappedModel(Player pe, Mob me){
+    public void sba$setLastVisage(Player pe, ItemStack me){
         if (pe instanceof AbstractClientPlayer lpe){
-            ((IPlayerEntityAbstractClient)lpe).roundabout$setSwappedModel(me);
+            ((IPlayerEntityAbstractClient)lpe).sba$setLastVisage(me);
         }
     }
     @Unique
-    public Mob roundabout$getSwappedModel(Player pe){
+    public ItemStack sba$getLastVisage(Player pe){
         if (pe instanceof AbstractClientPlayer lpe){
-            return ((IPlayerEntityAbstractClient)lpe).roundabout$getSwappedModel();
+            return ((IPlayerEntityAbstractClient)lpe).sba$getLastVisage();
+        }
+        return null;
+    }
+    @Unique
+    public void sba$setSwappedModel(Player pe, Mob me){
+        if (pe instanceof AbstractClientPlayer lpe){
+            ((IPlayerEntityAbstractClient)lpe).sba$setSwappedModel(me);
+        }
+    }
+    @Unique
+    public Mob sba$getSwappedModel(Player pe){
+        if (pe instanceof AbstractClientPlayer lpe){
+            return ((IPlayerEntityAbstractClient)lpe).sba$getSwappedModel();
         }
         return null;
     }
 
     public void rdbt$loadModel(ShapeShifts shift, AbstractClientPlayer acl, IPlayerEntity ipe){
 
-        Mob shapeTemp = ((IPlayerEntityAbstractClient)ipe).roundabout$getShapeShiftTemp();
+        Mob shapeTemp = ((IPlayerEntityAbstractClient)ipe).sba$getShapeShiftTemp();
         if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE && shift != ShapeShifts.OVA) {
             if (shift == ShapeShifts.ZOMBIE) {
                 if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Zombie))) {
-                    roundabout$setShapeShift(acl, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
+                    sba$setShapeShift(acl, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
                 }
             } else if (shift == ShapeShifts.VILLAGER) {
                 if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Villager))) {
-                    roundabout$setShapeShift(acl, roundabout$getVillager(Minecraft.getInstance().level, ipe));
+                    sba$setShapeShift(acl, sba$getVillager(Minecraft.getInstance().level, ipe));
                 }
             } else if (shift == ShapeShifts.SKELETON) {
                 if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Skeleton))) {
-                    roundabout$setShapeShift(acl, roundabout$getSkeleton(Minecraft.getInstance().level, ipe));
+                    sba$setShapeShift(acl, sba$getSkeleton(Minecraft.getInstance().level, ipe));
                 }
             } else if (shift == ShapeShifts.WITHER_SKELETON) {
                 if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof WitherSkeleton))) {
-                    roundabout$setShapeShift(acl, roundabout$getWither(Minecraft.getInstance().level, ipe));
+                    sba$setShapeShift(acl, sba$getWither(Minecraft.getInstance().level, ipe));
                 }
             } else if (shift == ShapeShifts.STRAY) {
                 if (Minecraft.getInstance().level != null && (!(shapeTemp instanceof Stray))) {
-                    roundabout$setShapeShift(acl, roundabout$getStray(Minecraft.getInstance().level, ipe));
+                    sba$setShapeShift(acl, sba$getStray(Minecraft.getInstance().level, ipe));
                 }
             }
         }
@@ -953,108 +953,108 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
 
     @Unique
-    private <T extends LivingEntity, M extends EntityModel<T>>boolean roundabout$renderHandX(PoseStack stack,
+    private <T extends LivingEntity, M extends EntityModel<T>>boolean sba$renderHandX(PoseStack stack,
                                                                                           MultiBufferSource buffer,
                                                                                           int packedLight,
                                                                                           AbstractClientPlayer acl,
                                                                                           boolean right) {
         IPlayerEntity ipe = ((IPlayerEntity) acl);
         StandUser standUser = ((StandUser) acl);
-        StandPowers sp = standUser.roundabout$getStandPowers();
+        StandPowers sp = standUser.sba$getStandPowers();
 
 
-        byte shape = ipe.roundabout$getShapeShift();
+        byte shape = ipe.sba$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
 
 
         if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE && shift != ShapeShifts.OVA) {
             if (shift == ShapeShifts.ZOMBIE) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Zombie))) {
-                    roundabout$setShapeShift(acl,EntityType.ZOMBIE.create(Minecraft.getInstance().level));
+                if (Minecraft.getInstance().level != null && (!(sba$getShapeShift(acl) instanceof Zombie))) {
+                    sba$setShapeShift(acl,EntityType.ZOMBIE.create(Minecraft.getInstance().level));
                 }
             } else if (shift == ShapeShifts.VILLAGER) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Villager))) {
-                    roundabout$setShapeShift(acl,roundabout$getVillager(Minecraft.getInstance().level,ipe));
+                if (Minecraft.getInstance().level != null && (!(sba$getShapeShift(acl) instanceof Villager))) {
+                    sba$setShapeShift(acl,sba$getVillager(Minecraft.getInstance().level,ipe));
                 }
             } else if (shift == ShapeShifts.SKELETON) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Skeleton))) {
-                    roundabout$setShapeShift(acl,roundabout$getSkeleton(Minecraft.getInstance().level,ipe));
+                if (Minecraft.getInstance().level != null && (!(sba$getShapeShift(acl) instanceof Skeleton))) {
+                    sba$setShapeShift(acl,sba$getSkeleton(Minecraft.getInstance().level,ipe));
                 }
             } else if (shift == ShapeShifts.WITHER_SKELETON) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof WitherSkeleton))) {
-                    roundabout$setShapeShift(acl,roundabout$getWither(Minecraft.getInstance().level,ipe));
+                if (Minecraft.getInstance().level != null && (!(sba$getShapeShift(acl) instanceof WitherSkeleton))) {
+                    sba$setShapeShift(acl,sba$getWither(Minecraft.getInstance().level,ipe));
                 }
             } else if (shift == ShapeShifts.STRAY) {
-                if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift(acl) instanceof Stray))) {
-                    roundabout$setShapeShift(acl,roundabout$getStray(Minecraft.getInstance().level,ipe));
+                if (Minecraft.getInstance().level != null && (!(sba$getShapeShift(acl) instanceof Stray))) {
+                    sba$setShapeShift(acl,sba$getStray(Minecraft.getInstance().level,ipe));
                 }
             }
-            if (roundabout$getShapeShift(acl) != null) {
+            if (sba$getShapeShift(acl) != null) {
                 EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
-                EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$getShapeShift(acl));
+                EntityRenderer<? super T> ER = $$7.getRenderer(sba$getShapeShift(acl));
                 if (ER instanceof LivingEntityRenderer) {
                     Model ml = ((LivingEntityRenderer<?, ?>) ER).getModel();
 
                     if (shift == ShapeShifts.ZOMBIE) {
                         if (ml instanceof ZombieModel<?> zm) {
-                            if (ER instanceof ZombieRenderer zr && roundabout$getShapeShift(acl) instanceof Zombie zmb) {
+                            if (ER instanceof ZombieRenderer zr && sba$getShapeShift(acl) instanceof Zombie zmb) {
                                 this.setModelProperties(acl);
                                 zm.attackTime = 0.0F;
                                 zm.crouching = false;
                                 zm.swimAmount = 0.0F;
                                 if (right) {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, zm.rightArm, null, ml, zr.getTextureLocation(zmb));
+                                    sba$renderOtherHand(stack, buffer, packedLight, acl, zm.rightArm, null, ml, zr.getTextureLocation(zmb));
                                 } else {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, zm.leftArm, null, ml, zr.getTextureLocation(zmb));
+                                    sba$renderOtherHand(stack, buffer, packedLight, acl, zm.leftArm, null, ml, zr.getTextureLocation(zmb));
                                 }
                             }
                         }
                     } else if (shift == ShapeShifts.VILLAGER) {
                         if (ml instanceof VillagerModel<?> zm) {
-                            if (ER instanceof VillagerRenderer zr && roundabout$getShapeShift(acl) instanceof Villager zmb) {
+                            if (ER instanceof VillagerRenderer zr && sba$getShapeShift(acl) instanceof Villager zmb) {
                                 this.setModelProperties(acl);
                                 zm.attackTime = 0.0F;
                             }
                         }
                     } else if (shift == ShapeShifts.SKELETON) {
                         if (ml instanceof SkeletonModel<?> sm) {
-                            if (ER instanceof SkeletonRenderer zr && roundabout$getShapeShift(acl) instanceof Skeleton skl) {
+                            if (ER instanceof SkeletonRenderer zr && sba$getShapeShift(acl) instanceof Skeleton skl) {
                                 this.setModelProperties(acl);
                                 sm.attackTime = 0.0F;
                                 sm.crouching = false;
                                 sm.swimAmount = 0.0F;
                                 if (right) {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                    sba$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
                                 } else {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                    sba$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
                                 }
                             }
                         }
                     } else if (shift == ShapeShifts.WITHER_SKELETON) {
                         if (ml instanceof SkeletonModel<?> sm) {
-                            if (ER instanceof WitherSkeletonRenderer zr && roundabout$getShapeShift(acl) instanceof WitherSkeleton skl) {
+                            if (ER instanceof WitherSkeletonRenderer zr && sba$getShapeShift(acl) instanceof WitherSkeleton skl) {
                                 this.setModelProperties(acl);
                                 sm.attackTime = 0.0F;
                                 sm.crouching = false;
                                 sm.swimAmount = 0.0F;
                                 if (right) {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                    sba$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
                                 } else {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                    sba$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
                                 }
                             }
                         }
                     } else if (shift == ShapeShifts.STRAY) {
                         if (ml instanceof SkeletonModel<?> sm) {
-                            if (ER instanceof StrayRenderer zr && roundabout$getShapeShift(acl) instanceof Stray skl) {
+                            if (ER instanceof StrayRenderer zr && sba$getShapeShift(acl) instanceof Stray skl) {
                                 this.setModelProperties(acl);
                                 sm.attackTime = 0.0F;
                                 sm.crouching = false;
                                 sm.swimAmount = 0.0F;
                                 if (right) {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
+                                    sba$renderOtherHand(stack, buffer, packedLight, acl, sm.rightArm, null, ml, zr.getTextureLocation(skl));
                                 } else {
-                                    roundabout$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
+                                    sba$renderOtherHand(stack, buffer, packedLight, acl, sm.leftArm, null, ml, zr.getTextureLocation(skl));
                                 }
                             }
                         }
@@ -1065,9 +1065,9 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 }
             }
         } else {
-            if (roundabout$getSwappedModel(acl) != null){
+            if (sba$getSwappedModel(acl) != null){
                 EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
-                EntityRenderer<? super T> ER = $$7.getRenderer(roundabout$getSwappedModel(acl));
+                EntityRenderer<? super T> ER = $$7.getRenderer(sba$getSwappedModel(acl));
                 if (ER instanceof LivingEntityRenderer) {
                 }
             }
@@ -1076,7 +1076,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
         @Unique
-    private void roundabout$renderOtherHand(PoseStack stack, MultiBufferSource buffer, int $$2, AbstractClientPlayer acl,
+    private void sba$renderOtherHand(PoseStack stack, MultiBufferSource buffer, int $$2, AbstractClientPlayer acl,
                                             ModelPart $$4, @Nullable ModelPart $$5, Model ML, ResourceLocation texture){
 
         if ($$4 != null && texture != null) {
@@ -1101,7 +1101,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
 
     @Unique
-    public void roundabout$corpseShowName(AbstractClientPlayer $$0, PoseStack $$3, MultiBufferSource $$4, int $$5){
+    public void sba$corpseShowName(AbstractClientPlayer $$0, PoseStack $$3, MultiBufferSource $$4, int $$5){
         if (Minecraft.getInstance().player !=null && Minecraft.getInstance().player.isCreative() &&
                 ClientNetworking.getAppropriateConfig() != null && ClientNetworking.getAppropriateConfig().nameTagSettings != null &&
                 ClientNetworking.getAppropriateConfig().nameTagSettings.bypassAllNametagHidesInCreativeMode) {
@@ -1118,22 +1118,22 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             }
         }
     }
-    boolean roundabout$switched = false;
-    public void roundabout$changeTheModel(AbstractClientPlayer player, ItemStack visage, ShapeShifts shifts){
-        if (player instanceof StandUser su && su.roundabout$isDisguised()) {
-            GameProfile profile = su.roundabout$getDisguiseProfile();
+    boolean sba$switched = false;
+    public void sba$changeTheModel(AbstractClientPlayer player, ItemStack visage, ShapeShifts shifts){
+        if (player instanceof StandUser su && su.sba$isDisguised()) {
+            GameProfile profile = su.sba$getDisguiseProfile();
             if (profile != null) {
                 SkinUtil.SkinData skin = SkinUtil.getSkin(profile);
                 if (skin.slim() != originalArms) {
-                    model = roundabout$otherModel;
+                    model = sba$otherModel;
                 } else {
-                    model = roundabout$mainModel;
+                    model = sba$mainModel;
                 }
                 return;
             }
         }
         IPlayerEntity pl = ((IPlayerEntity) player);
-        visage = pl.roundabout$getMaskSlot();
+        visage = pl.sba$getMaskSlot();
         if (shifts == ShapeShifts.OVA) {
             visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
         } else if (shifts == ShapeShifts.EERIE) {
@@ -1144,40 +1144,40 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
             if (visage.getItem() instanceof MaskItem MI) {
                 VisageData vd = MI.visageData.generateVisageData(player);
                 if (vd.isCharacterVisage()) {
-                    if (((IPlayerModel)this.model).roundabout$getSlim() != vd.isSlim()){
+                    if (((IPlayerModel)this.model).sba$getSlim() != vd.isSlim()){
                         if (vd.isSlim() != originalArms){
-                            model = roundabout$otherModel;
+                            model = sba$otherModel;
                         } else {
-                            model = roundabout$mainModel;
+                            model = sba$mainModel;
                         }
                     }
                     return;
                 } else if (visage.is(ModItems.RAT_MASK)){
-                    if (((IPlayerModel) this.model).roundabout$getSlim()){
+                    if (((IPlayerModel) this.model).sba$getSlim()){
                         if (originalArms){
-                            model = roundabout$otherModel;
+                            model = sba$otherModel;
                         } else {
-                            model = roundabout$mainModel;
+                            model = sba$mainModel;
                         }
                     }
                 }
             }
         }
-        if (((IPlayerModel)this.model).roundabout$getSlim() != originalArms) {
-            model = roundabout$mainModel;
+        if (((IPlayerModel)this.model).sba$getSlim() != originalArms) {
+            model = sba$mainModel;
         }
     }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"), cancellable = true)
-    public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+    public<T extends LivingEntity, M extends EntityModel<T>> void sba$render(AbstractClientPlayer $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
 
         /**Access to slim and not slim models simultaneously*/
         IPlayerEntity ipe = ((IPlayerEntity) $$0);
-        ItemStack visage = ipe.roundabout$getMaskSlot();
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.roundabout$getShapeShift());
-        roundabout$changeTheModel($$0,visage,shift);
+        ItemStack visage = ipe.sba$getMaskSlot();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ipe.sba$getShapeShift());
+        sba$changeTheModel($$0,visage,shift);
 
-            byte playerP = ((IPlayerEntity)$$0).roundabout$GetPos();
+            byte playerP = ((IPlayerEntity)$$0).sba$GetPos();
 
             /*When you die to the sun you don't appear*/
             if (playerP == PlayerPosIndex.SUNLIGHT){
@@ -1187,26 +1187,26 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
 
         if (!ClientUtil.checkIfIsFirstPerson($$0)) {
-            Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
+            Poses pose = Poses.getPosFromByte(ipe.sba$GetPoseEmote());
             if (shift != ShapeShifts.PLAYER && shift != ShapeShifts.EERIE && shift != ShapeShifts.OVA) {
 
                 if (shift == ShapeShifts.ZOMBIE) {
-                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Zombie))) {
-                        roundabout$setShapeShift($$0, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
+                    if (Minecraft.getInstance().level != null && (!(sba$getShapeShift($$0) instanceof Zombie))) {
+                        sba$setShapeShift($$0, EntityType.ZOMBIE.create(Minecraft.getInstance().level));
                     }
-                    if (roundabout$getShapeShift($$0) != null) {
+                    if (sba$getShapeShift($$0) != null) {
                         ItemStack tem = $$0.getMainHandItem();
-                        roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
-                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
+                        sba$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                        sba$renderEntityForce1($$1, $$2, $$3, $$4, sba$getShapeShift($$0), $$0, $$5);
                         ci.cancel();
-                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
+                        sba$corpseShowName($$0, $$3, $$4, $$5);
                     }
                 } else if (shift == ShapeShifts.VILLAGER) {
-                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Villager))) {
-                        roundabout$setShapeShift($$0, roundabout$getVillager(Minecraft.getInstance().level, ipe));
+                    if (Minecraft.getInstance().level != null && (!(sba$getShapeShift($$0) instanceof Villager))) {
+                        sba$setShapeShift($$0, sba$getVillager(Minecraft.getInstance().level, ipe));
                     }
-                    if (roundabout$getShapeShift($$0) != null) {
-                        if (roundabout$getShapeShift($$0) instanceof Villager ve) {
+                    if (sba$getShapeShift($$0) != null) {
+                        if (sba$getShapeShift($$0) instanceof Villager ve) {
                             if ($$0.isSleeping() && !ve.isSleeping()) {
                                 Optional<BlockPos> blk = $$0.getSleepingPos();
                                 blk.ifPresent(ve::startSleeping);
@@ -1216,62 +1216,62 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                                 }
                             }
                         }
-                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
+                        sba$renderEntityForce1($$1, $$2, $$3, $$4, sba$getShapeShift($$0), $$0, $$5);
                         ci.cancel();
-                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
+                        sba$corpseShowName($$0, $$3, $$4, $$5);
                     }
                 } else if (shift == ShapeShifts.SKELETON) {
-                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Skeleton))) {
-                        roundabout$setShapeShift($$0, roundabout$getSkeleton(Minecraft.getInstance().level, ipe));
+                    if (Minecraft.getInstance().level != null && (!(sba$getShapeShift($$0) instanceof Skeleton))) {
+                        sba$setShapeShift($$0, sba$getSkeleton(Minecraft.getInstance().level, ipe));
                     }
-                    if (roundabout$getShapeShift($$0) != null) {
+                    if (sba$getShapeShift($$0) != null) {
                         ItemStack tem = $$0.getMainHandItem();
-                        roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
-                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
+                        sba$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                        sba$renderEntityForce1($$1, $$2, $$3, $$4, sba$getShapeShift($$0), $$0, $$5);
                         ci.cancel();
-                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
+                        sba$corpseShowName($$0, $$3, $$4, $$5);
                     }
                 } else if (shift == ShapeShifts.WITHER_SKELETON) {
-                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof WitherSkeleton))) {
-                        roundabout$setShapeShift($$0, roundabout$getWither(Minecraft.getInstance().level, ipe));
+                    if (Minecraft.getInstance().level != null && (!(sba$getShapeShift($$0) instanceof WitherSkeleton))) {
+                        sba$setShapeShift($$0, sba$getWither(Minecraft.getInstance().level, ipe));
                     }
-                    if (roundabout$getShapeShift($$0) != null) {
+                    if (sba$getShapeShift($$0) != null) {
                         ItemStack tem = $$0.getMainHandItem();
-                        roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
-                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
+                        sba$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                        sba$renderEntityForce1($$1, $$2, $$3, $$4, sba$getShapeShift($$0), $$0, $$5);
                         ci.cancel();
-                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
+                        sba$corpseShowName($$0, $$3, $$4, $$5);
                     }
                 } else if (shift == ShapeShifts.STRAY) {
-                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof Stray))) {
-                        roundabout$setShapeShift($$0, roundabout$getStray(Minecraft.getInstance().level, ipe));
+                    if (Minecraft.getInstance().level != null && (!(sba$getShapeShift($$0) instanceof Stray))) {
+                        sba$setShapeShift($$0, sba$getStray(Minecraft.getInstance().level, ipe));
                     }
-                    if (roundabout$getShapeShift($$0) != null) {
+                    if (sba$getShapeShift($$0) != null) {
                         ItemStack tem = $$0.getMainHandItem();
-                        roundabout$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
-                        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, roundabout$getShapeShift($$0), $$0, $$5);
+                        sba$getShapeShift($$0).setAggressive(!tem.isEmpty() && tem.getMaxDamage() > 0);
+                        sba$renderEntityForce1($$1, $$2, $$3, $$4, sba$getShapeShift($$0), $$0, $$5);
                         ci.cancel();
-                        roundabout$corpseShowName($$0, $$3, $$4, $$5);
+                        sba$corpseShowName($$0, $$3, $$4, $$5);
                     }
                 } else if (shift == ShapeShifts.OVA) {
-                    if (Minecraft.getInstance().level != null && (!(roundabout$getShapeShift($$0) instanceof OVAEnyaNPC))) {
-                        roundabout$setShapeShift($$0, ModEntities.OVA_ENYA.create(Minecraft.getInstance().level));
+                    if (Minecraft.getInstance().level != null && (!(sba$getShapeShift($$0) instanceof OVAEnyaNPC))) {
+                        sba$setShapeShift($$0, ModEntities.OVA_ENYA.create(Minecraft.getInstance().level));
                     }
-                    if (roundabout$getShapeShift($$0) != null) {
-                        if (roundabout$getShapeShift($$0) instanceof OVAEnyaNPC ve) {
+                    if (sba$getShapeShift($$0) != null) {
+                        if (sba$getShapeShift($$0) instanceof OVAEnyaNPC ve) {
                             ve.standPos = pose;
                             ve.setupAnimationStates();
                             ve.host = $$0;
                             assertOnPlayerLike(ve, $$0, $$1, $$2, $$3, $$4, $$5,
-                                    roundabout$getShapeShift($$0));
+                                    sba$getShapeShift($$0));
                             ci.cancel();
-                            roundabout$corpseShowName($$0, $$3, $$4, $$5);
+                            sba$corpseShowName($$0, $$3, $$4, $$5);
                         }
                     }
                 }
             } else {
 
-               roundabout$setSwappedModel($$0, null);
+               sba$setSwappedModel($$0, null);
 
                 /*** REPAIR THIS CODE ON THE NAMETAG SECTION
                         boolean characterType = true;
@@ -1308,13 +1308,13 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
     @Inject(method = "setModelProperties",
             at = @At(value = "TAIL"), cancellable = true)
-    public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$setModelProps(AbstractClientPlayer $$0, CallbackInfo ci) {
+    public<T extends LivingEntity, M extends EntityModel<T>> void sba$setModelProps(AbstractClientPlayer $$0, CallbackInfo ci) {
         /**Set visibility of limbs*/
         /**Generally sleeves and whatnot gotta go for modded layers*/
         StandUser user = ((StandUser) $$0);
-        int muscle = user.roundabout$getZappedToID();
+        int muscle = user.sba$getZappedToID();
         //muscle = 100;
-        byte curse = user.roundabout$getLocacacaCurse();
+        byte curse = user.sba$getLocacacaCurse();
         PlayerModel<AbstractClientPlayer> $$1 = this.getModel();
         if (muscle > -1){
             if ($$0.getMainArm() == HumanoidArm.RIGHT){
@@ -1337,12 +1337,12 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "TAIL"), cancellable = true)
-    public<T extends LivingEntity, M extends EntityModel<T>> void roundabout$renderTail(AbstractClientPlayer entity, float $$1, float $$2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
+    public<T extends LivingEntity, M extends EntityModel<T>> void sba$renderTail(AbstractClientPlayer entity, float $$1, float $$2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
 
     }
 
         @Unique
-    public void roundabout$doJojoAnims(JojoNPC jj){
+    public void sba$doJojoAnims(JojoNPC jj){
         jj.WRYYY.stop();
         jj.JOTARO.stop();
         jj.KOICHI.stop();
@@ -1357,7 +1357,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
 
     @Unique
-    boolean roundabout$wasJustCreated;
+    boolean sba$wasJustCreated;
 
     public void assertOnPlayerLike(JojoNPC ve, Player $$0,float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4,
                                    int $$5, LivingEntity entityeah){
@@ -1369,16 +1369,16 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         ve.setLeftHanded($$0.getMainArm().equals(HumanoidArm.LEFT));
         ILivingEntityAccess ila = ((ILivingEntityAccess) $$0);
         ILivingEntityAccess ila2 = ((ILivingEntityAccess) entityeah);
-        ila2.roundabout$setSwimAmount(ila.roundabout$getSwimAmount());
-        ila2.roundabout$setSwimAmountO(ila.roundabout$getSwimAmountO());
-        ila2.roundabout$setWasTouchingWater(ila.roundabout$getWasTouchingWater());
-        ila2.roundabout$setFallFlyingTicks($$0.getFallFlyingTicks());
-        ila2.roundabout$setSharedFlag(1, ila.roundabout$getSharedFlag(1));
-        ila2.roundabout$setSharedFlag(2, ila.roundabout$getSharedFlag(2));
-        ila2.roundabout$setSharedFlag(3, ila.roundabout$getSharedFlag(3));
-        ila2.roundabout$setSharedFlag(4, ila.roundabout$getSharedFlag(4));
-        ila2.roundabout$setSharedFlag(5, ila.roundabout$getSharedFlag(5));
-        ila2.roundabout$setSharedFlag(6, ila.roundabout$getSharedFlag(6));
+        ila2.sba$setSwimAmount(ila.sba$getSwimAmount());
+        ila2.sba$setSwimAmountO(ila.sba$getSwimAmountO());
+        ila2.sba$setWasTouchingWater(ila.sba$getWasTouchingWater());
+        ila2.sba$setFallFlyingTicks($$0.getFallFlyingTicks());
+        ila2.sba$setSharedFlag(1, ila.sba$getSharedFlag(1));
+        ila2.sba$setSharedFlag(2, ila.sba$getSharedFlag(2));
+        ila2.sba$setSharedFlag(3, ila.sba$getSharedFlag(3));
+        ila2.sba$setSharedFlag(4, ila.sba$getSharedFlag(4));
+        ila2.sba$setSharedFlag(5, ila.sba$getSharedFlag(5));
+        ila2.sba$setSharedFlag(6, ila.sba$getSharedFlag(6));
         entityeah.deathTime = $$0.deathTime;
         entityeah.setHealth($$0.getHealth());
 
@@ -1390,21 +1390,21 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         ve.setItemSlot(EquipmentSlot.LEGS, stackL);
         ItemStack stackF = $$0.getItemBySlot(EquipmentSlot.FEET);
         ve.setItemSlot(EquipmentSlot.FEET, stackF);
-        ve.roundabout$setDodgeTime(ipe.roundabout$getDodgeTime());
-        ve.roundabout$setClientDodgeTime(ipe.roundabout$getClientDodgeTime());
-        ve.roundabout$SetPos(ipe.roundabout$GetPos());
-        ila2.roundabout$setUseItem($$0.getUseItem());
-        ila2.roundabout$setUseItemTicks($$0.getUseItemRemainingTicks());
+        ve.sba$setDodgeTime(ipe.sba$getDodgeTime());
+        ve.sba$setClientDodgeTime(ipe.sba$getClientDodgeTime());
+        ve.sba$SetPos(ipe.sba$GetPos());
+        ila2.sba$setUseItem($$0.getUseItem());
+        ila2.sba$setUseItemTicks($$0.getUseItemRemainingTicks());
         ve.host = $$0;
 
 
         if ($$0.isFallFlying()){
-            if (!ila2.roundabout$getSharedFlag(7)) {
-                ila2.roundabout$setSharedFlag(7, true);
+            if (!ila2.sba$getSharedFlag(7)) {
+                ila2.sba$setSharedFlag(7, true);
             }
         } else {
-            if (ila2.roundabout$getSharedFlag(7)){
-                ila2.roundabout$setSharedFlag(7,false);
+            if (ila2.sba$getSharedFlag(7)){
+                ila2.sba$setSharedFlag(7,false);
             }
         }
 
@@ -1416,21 +1416,21 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 ve.stopSleeping();
             }
         }
-        roundabout$renderEntityForce1($$1, $$2, $$3, $$4, entityeah, $$0, $$5);
+        sba$renderEntityForce1($$1, $$2, $$3, $$4, entityeah, $$0, $$5);
     }
 
     @Unique
-    public Villager roundabout$getVillager(ClientLevel lev, IPlayerEntity ipe){
+    public Villager sba$getVillager(ClientLevel lev, IPlayerEntity ipe){
         Villager vil = EntityType.VILLAGER.create(lev);
         if (vil != null) {
-            byte BT = ipe.roundabout$getShapeShiftExtraData();
+            byte BT = ipe.sba$getShapeShiftExtraData();
             vil.setVillagerData(vil.getVillagerData().setType(ShapeShifts.getTypeFromByte(BT)));
             vil.setVillagerData(vil.getVillagerData().setProfession(ShapeShifts.getProfessionFromByte(BT)));
         }
         return vil;
     }
     @Unique
-    public Skeleton roundabout$getSkeleton(ClientLevel lev, IPlayerEntity ipe){
+    public Skeleton sba$getSkeleton(ClientLevel lev, IPlayerEntity ipe){
         Skeleton vil = EntityType.SKELETON.create(lev);
         if (vil != null) {
             vil.setItemInHand(InteractionHand.MAIN_HAND, Items.BOW.getDefaultInstance());
@@ -1438,7 +1438,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         return vil;
     }
     @Unique
-    public Stray roundabout$getStray(ClientLevel lev, IPlayerEntity ipe){
+    public Stray sba$getStray(ClientLevel lev, IPlayerEntity ipe){
         Stray vil = EntityType.STRAY.create(lev);
         if (vil != null) {
             vil.setItemInHand(InteractionHand.MAIN_HAND, Items.BOW.getDefaultInstance());
@@ -1446,7 +1446,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         return vil;
     }
     @Unique
-    public WitherSkeleton roundabout$getWither(ClientLevel lev, IPlayerEntity ipe){
+    public WitherSkeleton sba$getWither(ClientLevel lev, IPlayerEntity ipe){
         WitherSkeleton vil = EntityType.WITHER_SKELETON.create(lev);
         if (vil != null) {
             vil.setItemInHand(InteractionHand.MAIN_HAND, Items.STONE_SWORD.getDefaultInstance());
@@ -1456,7 +1456,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
 
 
     @Unique
-    public void roundabout$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Player user, int light) {
+    public void sba$renderEntityForce1(float f1, float f2, PoseStack $$3, MultiBufferSource $$4, LivingEntity $$6, Player user, int light) {
 
         ClientUtil.pushPoseAndCooperate($$3,23);
         $$6.deathTime = user.deathTime;
@@ -1481,32 +1481,32 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         $$6.oAttackAnim = user.oAttackAnim;
         $$6.hurtDuration = user.hurtDuration;
         $$6.hurtTime = user.hurtTime;
-        ((StandUser) $$6).roundabout$setBubbleEncased(((StandUser)user).roundabout$getBubbleEncased());
-        ((IEntityAndData)$$6).roundabout$setExclusiveLayers(((IEntityAndData)user).roundabout$getExclusiveLayers());
-        ((StandUser) $$6).roundabout$setEmulator(user);
+        ((StandUser) $$6).sba$setBubbleEncased(((StandUser)user).sba$getBubbleEncased());
+        ((IEntityAndData)$$6).sba$setExclusiveLayers(((IEntityAndData)user).sba$getExclusiveLayers());
+        ((StandUser) $$6).sba$setEmulator(user);
         IEntityAndData entd = ((IEntityAndData) user);
         IEntityAndData entd2 = ((IEntityAndData) $$6);
-        entd2.roundabout$setVehicle(entd.roundabout$getVehicle());
+        entd2.sba$setVehicle(entd.sba$getVehicle());
 
         $$6.walkAnimation.setSpeed(user.walkAnimation.speed());
         IWalkAnimationState iwalk = ((IWalkAnimationState) $$6.walkAnimation);
         IWalkAnimationState uwalk = ((IWalkAnimationState) user.walkAnimation);
-        iwalk.roundabout$setPosition(uwalk.roundabout$getPosition());
-        iwalk.roundabout$setSpeedOld(uwalk.roundabout$getSpeedOld());
+        iwalk.sba$setPosition(uwalk.sba$getPosition());
+        iwalk.sba$setSpeedOld(uwalk.sba$getSpeedOld());
 
         ILivingEntityAccess ilive = ((ILivingEntityAccess)$$6);
         ILivingEntityAccess ulive = ((ILivingEntityAccess)user);
-        ilive.roundabout$setAnimStep(ulive.roundabout$getAnimStep());
-        ilive.roundabout$setAnimStepO(ulive.roundabout$getAnimStepO());
+        ilive.sba$setAnimStep(ulive.sba$getAnimStep());
+        ilive.sba$setAnimStepO(ulive.sba$getAnimStepO());
         $$6.setSpeed(user.getSpeed());
-        ((IEntityAndData)$$6).roundabout$setNoAAB();
+        ((IEntityAndData)$$6).sba$setNoAAB();
 
-        roundabout$renderEntityForce2(f1,f2,$$3,$$4,$$6, light, user);
+        sba$renderEntityForce2(f1,f2,$$3,$$4,$$6, light, user);
         ClientUtil.popPoseAndCooperate($$3,23);
     }
 
     @Unique
-    public void roundabout$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6, int light, LivingEntity user) {
+    public void sba$renderEntityForce2(float f1, float f2, PoseStack $$3, MultiBufferSource $$4,LivingEntity $$6, int light, LivingEntity user) {
         EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
         Vec3 renderoffset = $$7.getRenderer(user).getRenderOffset(user,0);
 
@@ -1515,8 +1515,8 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
         }
 
         if (light == 15728880) {
-            ((IEntityAndData) $$6).roundabout$setShadow(false);
-            ((IEntityAndData) user).roundabout$setShadow(false);
+            ((IEntityAndData) $$6).sba$setShadow(false);
+            ((IEntityAndData) user).sba$setShadow(false);
         }
         $$7.setRenderShadow(false);
         boolean hb = $$7.shouldRenderHitBoxes();
@@ -1537,10 +1537,10 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     @Inject(method = "scale(Lnet/minecraft/client/player/AbstractClientPlayer;Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
             at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2, CallbackInfo ci) {
+    public void sba$scale(AbstractClientPlayer $$0, PoseStack $$1, float $$2, CallbackInfo ci) {
         IPlayerEntity ple = ((IPlayerEntity) $$0);
-        ItemStack visage = ple.roundabout$getMaskSlot();
-        ShapeShifts shift = ShapeShifts.getShiftFromByte(ple.roundabout$getShapeShift());
+        ItemStack visage = ple.sba$getMaskSlot();
+        ShapeShifts shift = ShapeShifts.getShiftFromByte(ple.sba$getShapeShift());
         if (shift == ShapeShifts.OVA) {
             visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
         } else if (shift == ShapeShifts.EERIE) {
@@ -1568,7 +1568,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
                 ci.cancel();
             }
         }
-        byte widthMod = ((IPlayerEntity)$$0).roundabout$getWidthFactor();
+        byte widthMod = ((IPlayerEntity)$$0).sba$getWidthFactor();
         if (widthMod > 0){
             if (widthMod < 5){
                 float factor = 1f-(0.03F*widthMod);
@@ -1583,7 +1583,7 @@ public abstract class ZPlayerRender<T extends LivingEntity, M extends EntityMode
     }
     @Inject(method = "getTextureLocation(Lnet/minecraft/client/player/AbstractClientPlayer;)Lnet/minecraft/resources/ResourceLocation;",
             at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$getTextureLocation(AbstractClientPlayer $$0, CallbackInfoReturnable<ResourceLocation> cir) {
+    public void sba$getTextureLocation(AbstractClientPlayer $$0, CallbackInfoReturnable<ResourceLocation> cir) {
     }
     @Shadow
     public ResourceLocation getTextureLocation(AbstractClientPlayer var1) {

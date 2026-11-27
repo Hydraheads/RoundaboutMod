@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "": {
-      "model": "roundabout:block/d4c_portal"
-    }
-  },
-  "render_type": "translucent"
-}

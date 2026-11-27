@@ -2,7 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -75,15 +75,15 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
 
     @Unique
-    private void roundabout$standTickCheck(Entity entity){
+    private void sba$standTickCheck(Entity entity){
         if (entity.showVehicleHealth()) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            if (((StandUser) livingEntity).roundabout$getStand() != null) {
-                StandEntity stand = ((StandUser) livingEntity).roundabout$getStand();
+            if (((StandUser) livingEntity).sba$getStand() != null) {
+                StandEntity stand = ((StandUser) livingEntity).sba$getStand();
                 if (stand instanceof FollowingStandEntity FE && FE.getFollowing() != null && FE.getFollowing().getId() == livingEntity.getId()){
 
-                    if (!(entity.getVehicle() != null && entity.getVehicle() == ((StandUser) entity).roundabout$getStand())) {
-                        this.roundabout$tickStandIn(livingEntity, FE);
+                    if (!(entity.getVehicle() != null && entity.getVehicle() == ((StandUser) entity).sba$getStand())) {
+                        this.sba$tickStandIn(livingEntity, FE);
                     }
                 }
             }
@@ -91,15 +91,15 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     }
 
     @Unique
-    private void roundabout$updateStandTS(Entity entity){
+    private void sba$updateStandTS(Entity entity){
         if (entity.showVehicleHealth()) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            if (((StandUser) livingEntity).roundabout$getStand() instanceof FollowingStandEntity FE) {
-                StandEntity stand = ((StandUser) livingEntity).roundabout$getStand();
+            if (((StandUser) livingEntity).sba$getStand() instanceof FollowingStandEntity FE) {
+                StandEntity stand = ((StandUser) livingEntity).sba$getStand();
                 if (FE.getFollowing() != null && FE.getFollowing().getId() == livingEntity.getId()
                         && !FE.getFollowing().isRemoved()){
                     if (!(stand.isRemoved() || stand.getUser() != entity)) {
-                        roundabout$TickLivingEntityTS(stand);
+                        sba$TickLivingEntityTS(stand);
                     }
                 }
             }
@@ -107,15 +107,15 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     }
 
     @Unique
-    private void roundabout$tickStandIn(LivingEntity entity, FollowingStandEntity stand) {
+    private void sba$tickStandIn(LivingEntity entity, FollowingStandEntity stand) {
         if (stand == null || stand.isRemoved()) {
             if (entity !=null) {
-                ((StandUser) entity).roundabout$removeFollower(stand);
+                ((StandUser) entity).sba$removeFollower(stand);
             }
             return;
         }
         if (stand.getFollowing() != null && entity != null && stand.getFollowing().getId() != entity.getId()) {
-            ((StandUser) entity).roundabout$removeFollower(stand);
+            ((StandUser) entity).sba$removeFollower(stand);
             return;
         }
         byte ot = stand.getOffsetType();
@@ -139,11 +139,11 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
 
     @Unique
-    private void roundabout$TickLivingEntityTS(LivingEntity livingEntity){
+    private void sba$TickLivingEntityTS(LivingEntity livingEntity){
         if (livingEntity instanceof Player){
-            Inventory inv = ((IPlayerEntity) livingEntity).roundabout$GetInventory();
+            Inventory inv = ((IPlayerEntity) livingEntity).sba$GetInventory();
             int idx = 0;
-            for(NonNullList<ItemStack> nonnulllist : ((AccessInventory)inv).roundabout$GetCompartments()) {
+            for(NonNullList<ItemStack> nonnulllist : ((AccessInventory)inv).sba$GetCompartments()) {
                 for(int i = 0; i < nonnulllist.size(); ++i) {
 
                     if (!nonnulllist.get(i).isEmpty()) {
@@ -157,7 +157,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
 
         //if (!livingEntity.isPassenger())
-            ((ILivingEntityAccess) livingEntity).roundabout$setAnimStepO(((ILivingEntityAccess) livingEntity).roundabout$getAnimStep());
+            ((ILivingEntityAccess) livingEntity).sba$setAnimStepO(((ILivingEntityAccess) livingEntity).sba$getAnimStep());
             livingEntity.setOldPosAndRot();
         //if (!livingEntity.isPassenger()){
             livingEntity.yBodyRotO = livingEntity.yBodyRot;
@@ -170,19 +170,19 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             livingEntity.setPos(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
 
         } else {
-            int LS = ((ILivingEntityAccess) livingEntity).roundabout$getLerpSteps();
+            int LS = ((ILivingEntityAccess) livingEntity).sba$getLerpSteps();
             if (LS > 0) {
                 //if (!livingEntity.isPassenger())
                     //{
-                        double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).roundabout$getLerpX() - livingEntity.getX()) / (double) LS;
-                        double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).roundabout$getLerpY() - livingEntity.getY()) / (double) LS;
-                        double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).roundabout$getLerpZ() - livingEntity.getZ()) / (double) LS;
-                        ((ILivingEntityAccess) livingEntity).roundabout$setLerpSteps(LS - 1);
+                        double LX = livingEntity.getX() + (((ILivingEntityAccess) livingEntity).sba$getLerpX() - livingEntity.getX()) / (double) LS;
+                        double LY = livingEntity.getY() + (((ILivingEntityAccess) livingEntity).sba$getLerpY() - livingEntity.getY()) / (double) LS;
+                        double LZ = livingEntity.getZ() + (((ILivingEntityAccess) livingEntity).sba$getLerpZ() - livingEntity.getZ()) / (double) LS;
+                        ((ILivingEntityAccess) livingEntity).sba$setLerpSteps(LS - 1);
                         livingEntity.setPos(LX, LY, LZ);
                     //}
             }
 
-            ((ILivingEntityAccess) livingEntity).roundabout$PushEntities();
+            ((ILivingEntityAccess) livingEntity).sba$PushEntities();
         }
     }
     @Shadow
@@ -192,12 +192,12 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     @Shadow @Final private Minecraft minecraft;
 
     @Unique
-    public void roundabout$TSTickEntity(Entity $$0){
+    public void sba$TSTickEntity(Entity $$0){
         if ($$0 instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) $$0;
-            roundabout$TickLivingEntityTS(livingEntity);
-            ((StandUser)livingEntity).roundabout$getStandPowers().timeTick();
-            roundabout$updateStandTS(livingEntity);
+            sba$TickLivingEntityTS(livingEntity);
+            ((StandUser)livingEntity).sba$getStandPowers().timeTick();
+            sba$updateStandTS(livingEntity);
             $$0.invulnerableTime = 0;
             ((LivingEntity) $$0).hurtTime = 0;
         } else {
@@ -215,7 +215,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                 $$0.xo = $$0.getX();
                 $$0.yo = $$0.getY();
                 $$0.zo = $$0.getZ();
-                ((IBoatAccess)$$0).roundabout$TickLerp();
+                ((IBoatAccess)$$0).sba$TickLerp();
                 $$0.lerpTo($$0.getX(),$$0.getY(),$$0.getZ(),$$0.getYRot(),$$0.getXRot(),3,false);
                 $$0.walkDistO = $$0.walkDist;
                 $$0.xRotO = $$0.getXRot();
@@ -223,29 +223,29 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
             }
         }
         if ($$0 instanceof ItemEntity) {
-            ((IItemEntityTimeStopAccess)$$0).roundabout$TickPickupDelay();
+            ((IItemEntityTimeStopAccess)$$0).sba$TickPickupDelay();
         } else if ($$0 instanceof FishingHook){
-            ((IFishingRodAccess)$$0).roundabout$UpdateRodInTS();
+            ((IFishingRodAccess)$$0).sba$UpdateRodInTS();
         }
     }
 
     /**Time Stop Code*/
     @Inject(method = "tickNonPassenger", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$TickEntity2(Entity $$0, CallbackInfo ci) {
+    private void sba$TickEntity2(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof FollowingStandEntity SE) {
-                if (SE.getFollowing() != null && !SE.getFollowing().isRemoved() && ((StandUser)SE.getFollowing()).roundabout$getFollowers().contains(SE)){
+                if (SE.getFollowing() != null && !SE.getFollowing().isRemoved() && ((StandUser)SE.getFollowing()).sba$getFollowers().contains(SE)){
                     ci.cancel();
                 }
             }
 
             if ($$0 instanceof LivingEntity) {
-                ((StandUser) $$0).roundabout$UniversalTick();
+                ((StandUser) $$0).sba$UniversalTick();
             }
 
-            roundabout$StoreOldPositionsForTS($$0);
+            sba$StoreOldPositionsForTS($$0);
             if (((TimeStop) this).CanTimeStopEntity($$0)){
-                roundabout$TSTickEntity($$0);
+                sba$TSTickEntity($$0);
                 for (Entity $$1 : $$0.getPassengers()) {
                     this.tickPassenger($$0, $$1);
                 }
@@ -257,13 +257,13 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     /**Here is where we generate all the lovely Magician's Red flame particles when firestorm is active*/
 
     @Inject(method = "doAnimateTick(IIIILnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/core/BlockPos$MutableBlockPos;)V", at = @At(value = "TAIL"), cancellable = true)
-    private void roundabout$doAnimateTick(int $$0, int $$1, int $$2, int $$3, RandomSource $$4, Block $$5, BlockPos.MutableBlockPos $$6, CallbackInfo ci) {
+    private void sba$doAnimateTick(int $$0, int $$1, int $$2, int $$3, RandomSource $$4, Block $$5, BlockPos.MutableBlockPos $$6, CallbackInfo ci) {
 
-        LivingEntity roundabout$spawnMRTicks = (((IPermaCasting)this).roundabout$inPermaCastRangeEntity(new Vec3i($$6.getX(),$$6.getY(),$$6.getZ()), PermanentZoneCastInstance.FIRESTORM));
-        if (roundabout$spawnMRTicks != null && ((StandUser)roundabout$spawnMRTicks).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR){
+        LivingEntity sba$spawnMRTicks = (((IPermaCasting)this).sba$inPermaCastRangeEntity(new Vec3i($$6.getX(),$$6.getY(),$$6.getZ()), PermanentZoneCastInstance.FIRESTORM));
+        if (sba$spawnMRTicks != null && ((StandUser)sba$spawnMRTicks).sba$getStandPowers() instanceof PowersMagiciansRed PMR){
             BlockState $$10 = this.getBlockState($$6);
             if (!$$10.isCollisionShapeFullBlock(this, $$6)) {
-                if (roundabout$canSpawn(this.random)) {
+                if (sba$canSpawn(this.random)) {
                     /**
                     float randomX = (float) ((Math.random()* 0.1) - 0.05F);
                     float randomY = (float) ((Math.random()* 0.1) - 0.05F);
@@ -273,9 +273,9 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                             0,
                             this.getSharedSpawnPos().getZ()-$$6.getZ()).normalize();
                     /**
-                    Vec3 pushVec = new Vec3((roundabout$spawnMRTicks.getX()-$$6.getX()),
-                            (roundabout$spawnMRTicks.getY()-$$6.getY()),
-                            (roundabout$spawnMRTicks.getZ()-$$6.getZ())).normalize();
+                    Vec3 pushVec = new Vec3((sba$spawnMRTicks.getX()-$$6.getX()),
+                            (sba$spawnMRTicks.getY()-$$6.getY()),
+                            (sba$spawnMRTicks.getZ()-$$6.getZ())).normalize();
                      **/
                     this.addParticle(
                             PMR.getFlameParticle(),
@@ -293,17 +293,17 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
     /**The rate of particles for magician's red embers while ankh is active*/
     @Unique
-    public boolean roundabout$canSpawn(RandomSource $$0) {
+    public boolean sba$canSpawn(RandomSource $$0) {
         return $$0.nextFloat() <= ConfigManager.getClientConfig().particleSettings.magiciansRedFirestormEmbersRate;
     }
 
     /**Code to tick stands on the client*/
     @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"), cancellable = true)
-    private void roundabout$TickEntityX(Entity $$0, CallbackInfo ci) {
+    private void sba$TickEntityX(Entity $$0, CallbackInfo ci) {
         if (!$$0.isRemoved()) {
             if ($$0 instanceof LivingEntity LE) {
-                for (FollowingStandEntity SE : ((StandUser) $$0).roundabout$getFollowers()) {
-                    this.roundabout$tickStandIn(LE, SE);
+                for (FollowingStandEntity SE : ((StandUser) $$0).sba$getFollowers()) {
+                    this.sba$tickStandIn(LE, SE);
                 }
             }
         }
@@ -311,30 +311,30 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
     /**Forcefully hold entities in place, but visually for the client*/
     @Unique
-    public void roundabout$StoreOldPositionsForTS(Entity entity){
-        ((IEntityAndData) entity).roundabout$setRoundaboutPrevX(entity.getX());
-        ((IEntityAndData) entity).roundabout$setRoundaboutPrevY(entity.getY());
-        ((IEntityAndData) entity).roundabout$setRoundaboutPrevZ(entity.getZ());
+    public void sba$StoreOldPositionsForTS(Entity entity){
+        ((IEntityAndData) entity).sba$setSBAPrevX(entity.getX());
+        ((IEntityAndData) entity).sba$setSBAPrevY(entity.getY());
+        ((IEntityAndData) entity).sba$setSBAPrevZ(entity.getZ());
     }
 
     @Inject(method = "tickPassenger", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$TickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
+    private void sba$TickEntity5(Entity $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof FollowingStandEntity SE) {
             if (SE.getFollowing() != null && !SE.getFollowing().isRemoved()){
                 ci.cancel();
             }
         }
         if ($$1 instanceof LivingEntity) {
-            ((StandUser) $$1).roundabout$UniversalTick();
+            ((StandUser) $$1).sba$UniversalTick();
         }
 
-        roundabout$StoreOldPositionsForTS($$1);
+        sba$StoreOldPositionsForTS($$1);
         if ($$1.isRemoved() || $$1.getVehicle() != $$0) {
             $$1.stopRiding();
         } else if ($$1 instanceof Player || this.tickingEntities.contains($$1)) {
             if (((TimeStop) this).CanTimeStopEntity($$1)) {
                 $$1.setDeltaMovement(Vec3.ZERO);
-                roundabout$TSTickEntity($$1);
+                sba$TSTickEntity($$1);
                 if ($$1.isPassenger()) {
                     $$1.getVehicle().positionRider($$1);
                 }
@@ -348,65 +348,65 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
     /**When a stand is literally a passenger, allows it to still tick*/
     @Inject(method = "tickPassenger", at = @At(value = "TAIL"), cancellable = true)
-    private void roundabout$TickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
+    private void sba$TickEntity6(Entity $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof LivingEntity LE) {
-            for (FollowingStandEntity SE : ((StandUser)$$1).roundabout$getFollowers()) {
-                this.roundabout$tickStandIn(LE, SE);
+            for (FollowingStandEntity SE : ((StandUser)$$1).sba$getFollowers()) {
+                this.sba$tickStandIn(LE, SE);
             }
         }
     }
     @Unique
-    private ImmutableList<SetBlockInstance> roundabout$setBlockInstance = ImmutableList.of();
+    private ImmutableList<SetBlockInstance> sba$setBlockInstance = ImmutableList.of();
     @Inject(method = "setBlock", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$setBlock(BlockPos $$0, BlockState $$1, int $$2, int $$3, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$setBlock(BlockPos $$0, BlockState $$1, int $$2, int $$3, CallbackInfoReturnable<Boolean> cir) {
         if (ClientUtil.getScreenFreeze()) {
 
-            if (roundabout$setBlockInstance == null){
-                roundabout$setBlockInstance = ImmutableList.of();
+            if (sba$setBlockInstance == null){
+                sba$setBlockInstance = ImmutableList.of();
             }
-            if (roundabout$setBlockInstance.isEmpty()) {
-                roundabout$setBlockInstance = ImmutableList.of(new SetBlockInstance($$0,$$1,$$2,$$3));
+            if (sba$setBlockInstance.isEmpty()) {
+                sba$setBlockInstance = ImmutableList.of(new SetBlockInstance($$0,$$1,$$2,$$3));
             } else {
-                List<SetBlockInstance> $$b = Lists.newArrayList(roundabout$setBlockInstance);
+                List<SetBlockInstance> $$b = Lists.newArrayList(sba$setBlockInstance);
                 $$b.add(new SetBlockInstance($$0,$$1,$$2,$$3));
-                roundabout$setBlockInstance = ImmutableList.copyOf($$b);
+                sba$setBlockInstance = ImmutableList.copyOf($$b);
             }
             cir.setReturnValue(false);
         }
     }
     @Inject(method = "setServerVerifiedBlockState", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$setBlock2(BlockPos $$0, BlockState $$1, int $$2, CallbackInfo ci) {
+    private void sba$setBlock2(BlockPos $$0, BlockState $$1, int $$2, CallbackInfo ci) {
         if (!this.blockStatePredictionHandler.updateKnownServerState($$0, $$1)) {
             if (ClientUtil.getScreenFreeze()) {
 
-                if (roundabout$setBlockInstance == null) {
-                    roundabout$setBlockInstance = ImmutableList.of();
+                if (sba$setBlockInstance == null) {
+                    sba$setBlockInstance = ImmutableList.of();
                 }
-                if (roundabout$setBlockInstance.isEmpty()) {
-                    roundabout$setBlockInstance = ImmutableList.of(new SetBlockInstance($$0, $$1, $$2, 512));
+                if (sba$setBlockInstance.isEmpty()) {
+                    sba$setBlockInstance = ImmutableList.of(new SetBlockInstance($$0, $$1, $$2, 512));
                 } else {
-                    List<SetBlockInstance> $$b = Lists.newArrayList(roundabout$setBlockInstance);
+                    List<SetBlockInstance> $$b = Lists.newArrayList(sba$setBlockInstance);
                     $$b.add(new SetBlockInstance($$0, $$1, $$2, 512));
-                    roundabout$setBlockInstance = ImmutableList.copyOf($$b);
+                    sba$setBlockInstance = ImmutableList.copyOf($$b);
                 }
                 ci.cancel();
             }
         }
     }
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    private void roundabout$tickInGeneral(BooleanSupplier $$0, CallbackInfo ci) {
-        ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
+    private void sba$tickInGeneral(BooleanSupplier $$0, CallbackInfo ci) {
+        ((ILevelAccess)this).sba$tickPlunderBubbleRemoval();
         if (!ClientUtil.getScreenFreeze()) {
 
-            if (roundabout$setBlockInstance == null){
-                roundabout$setBlockInstance = ImmutableList.of();
+            if (sba$setBlockInstance == null){
+                sba$setBlockInstance = ImmutableList.of();
             }
-            if (!roundabout$setBlockInstance.isEmpty()){
-                for (int i = roundabout$setBlockInstance.size() - 1; i >= 0; --i) {
-                    SetBlockInstance sbi = roundabout$setBlockInstance.get(i);
+            if (!sba$setBlockInstance.isEmpty()){
+                for (int i = sba$setBlockInstance.size() - 1; i >= 0; --i) {
+                    SetBlockInstance sbi = sba$setBlockInstance.get(i);
                     setBlock(sbi.pos,sbi.state,sbi.integer,sbi.integer2);
                 }
-                roundabout$setBlockInstance = ImmutableList.of();
+                sba$setBlockInstance = ImmutableList.of();
             }
         }
 
@@ -414,24 +414,24 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     }
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
-    private void roundabout$tickInGeneralTail(BooleanSupplier $$0, CallbackInfo ci) {
-        ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
+    private void sba$tickInGeneralTail(BooleanSupplier $$0, CallbackInfo ci) {
+        ((ILevelAccess)this).sba$tickPlunderBubbleRemoval();
     }
 
     @Inject(method = "playSeededSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/Holder;Lnet/minecraft/sounds/SoundSource;FFJ)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$playSeed(Player $$0, Entity $$1, Holder<SoundEvent> $$2, SoundSource $$3, float $$4, float $$5, long $$6, CallbackInfo ci) {
+    private void sba$playSeed(Player $$0, Entity $$1, Holder<SoundEvent> $$2, SoundSource $$3, float $$4, float $$5, long $$6, CallbackInfo ci) {
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
             return;
-        } if(((ILevelAccess)this).roundabout$isSoundPlundered($$1.blockPosition())){
-            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble($$1.blockPosition());
+        } if(((ILevelAccess)this).sba$isSoundPlundered($$1.blockPosition())){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).sba$getSoundPlunderedBubble($$1.blockPosition());
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
             }
             ci.cancel();
             return;
-        } else if(((ILevelAccess)this).roundabout$isSoundPlunderedEntity($$1)){
-            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubbleEntity($$1);
+        } else if(((ILevelAccess)this).sba$isSoundPlunderedEntity($$1)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).sba$getSoundPlunderedBubbleEntity($$1);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$2.value(), $$3, $$4, $$5);
             }
@@ -448,13 +448,13 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
     }
     @Inject(method = "playSound(DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFZJ)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$playSeed(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, long $$8, CallbackInfo ci) {
+    private void sba$playSeed(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, long $$8, CallbackInfo ci) {
         BlockPos bpos = new BlockPos((int) $$0, (int) $$1, (int) $$2);
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
             return;
-        } if(((ILevelAccess)this).roundabout$isSoundPlundered(bpos)){
-            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble(bpos);
+        } if(((ILevelAccess)this).sba$isSoundPlundered(bpos)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).sba$getSoundPlunderedBubble(bpos);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$3, $$4, $$5, $$6);
             }
@@ -468,13 +468,13 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
     }
     @Inject(method = "playLocalSound", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$playLocalSound(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
+    private void sba$playLocalSound(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, CallbackInfo ci) {
         BlockPos bpos = new BlockPos((int) $$0, (int) $$1, (int) $$2);
         if (ClientUtil.getScreenFreeze()){
             ci.cancel();
             return;
-        } if(((ILevelAccess)this).roundabout$isSoundPlundered(bpos)){
-            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble(bpos);
+        } if(((ILevelAccess)this).sba$isSoundPlundered(bpos)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).sba$getSoundPlunderedBubble(bpos);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$3, $$4, $$5, $$6);
             }
@@ -488,10 +488,10 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
         }
     }
     @Inject(method = "playSound(DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FFZJ)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$playSound(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, long $$8, CallbackInfo ci) {
+    private void sba$playSound(double $$0, double $$1, double $$2, SoundEvent $$3, SoundSource $$4, float $$5, float $$6, boolean $$7, long $$8, CallbackInfo ci) {
         BlockPos bpos = new BlockPos((int) $$0, (int) $$1, (int) $$2);
-        if(((ILevelAccess)this).roundabout$isSoundPlundered(bpos)){
-            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).roundabout$getSoundPlunderedBubble(bpos);
+        if(((ILevelAccess)this).sba$isSoundPlundered(bpos)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this).sba$getSoundPlunderedBubble(bpos);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$3, $$4, $$5, $$6);
             }
@@ -513,11 +513,11 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     /**When time ticks amidst a time change, use the actual time rater
      * than the custom time to tick the proper time*/
     @Inject(method = "tickTime", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$TickTime(CallbackInfo ci) {
-        if (((IDayInterpolationClientLevelData) this.levelData).roundabout$getRoundaboutInterpolatingDaytime()) {
+    private void sba$TickTime(CallbackInfo ci) {
+        if (((IDayInterpolationClientLevelData) this.levelData).sba$getSBAInterpolatingDaytime()) {
             this.setGameTime(this.levelData.getGameTime() + 1L);
             if (this.levelData.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
-                this.setDayTime(((IDayInterpolationClientLevelData)this.levelData).roundabout$getRoundaboutDayTimeMinecraft() + 1L);
+                this.setDayTime(((IDayInterpolationClientLevelData)this.levelData).sba$getSBADayTimeMinecraft() + 1L);
             }
             ci.cancel();
             return;
@@ -544,43 +544,43 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
 
     @Unique
     @Override
-    public float roundabout$getSkyLerp(){
-        return roundabout$skyLerp;
+    public float sba$getSkyLerp(){
+        return sba$skyLerp;
     }
     @Unique
     @Override
-    public float roundabout$getMaxSkyLerp(){
-        return roundabout$maxSkyLerp;
+    public float sba$getMaxSkyLerp(){
+        return sba$maxSkyLerp;
     }
 
     @Unique
-    public float roundabout$skyLerp = 0;
+    public float sba$skyLerp = 0;
     @Unique
-    public float roundabout$maxSkyLerp = 30;
+    public float sba$maxSkyLerp = 30;
     @Unique
-    public Vec3 roundabout$fogSky = new Vec3(
+    public Vec3 sba$fogSky = new Vec3(
             ConfigManager.getClientConfig().justiceFogBrightness,
             ConfigManager.getClientConfig().justiceFogBrightness,
             ConfigManager.getClientConfig().justiceFogBrightness);
 
     /*Fog color, fog sky color, fog sky brightness*/
     @Inject(method = "getSkyColor", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$getSkyColor(Vec3 cameraPos, float tickDelta, CallbackInfoReturnable<Vec3> cir) {
+    private void sba$getSkyColor(Vec3 cameraPos, float tickDelta, CallbackInfoReturnable<Vec3> cir) {
         if (minecraft.player != null) {
 
             /**
-            if (((IPlayerEntity)minecraft.player).roundabout$getBlinded()){
+            if (((IPlayerEntity)minecraft.player).sba$getBlinded()){
                 cir.setReturnValue(new Vec3(-40,-40,-40));
                 return;
             }
              **/
 
-            if (roundabout$skyLerp >= 1) {
+            if (sba$skyLerp >= 1) {
                 float lerp = tickDelta;
-                if (!((IPermaCasting) minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)) {
+                if (!((IPermaCasting) minecraft.player.level()).sba$inPermaCastFogRange(minecraft.player)) {
                     lerp *= -1;
                 }
-                if (roundabout$skyLerp >= roundabout$maxSkyLerp) {
+                if (sba$skyLerp >= sba$maxSkyLerp) {
                     lerp = 0;
                 }
 
@@ -629,7 +629,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                 }
 
                 Vec3 interp = new Vec3((double) f2, (double) f3, (double) f4)
-                        .lerp(roundabout$fogSky, ((((roundabout$skyLerp + lerp) / roundabout$maxSkyLerp)) / 100) * 0.95);
+                        .lerp(sba$fogSky, ((((sba$skyLerp + lerp) / sba$maxSkyLerp)) / 100) * 0.95);
 
                 cir.setReturnValue(interp);
             }
@@ -637,28 +637,28 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     }
 
     @Inject(method = "tickEntities", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$TickEntity3(CallbackInfo ci) {
+    private void sba$TickEntity3(CallbackInfo ci) {
 
 
         if (minecraft.player != null){
-            if (((IPermaCasting)minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)){
-                Roundabout.worldInFog = 1;
+            if (((IPermaCasting)minecraft.player.level()).sba$inPermaCastFogRange(minecraft.player)){
+                SBA.worldInFog = 1;
             } else {
-                Roundabout.worldInFog = 0;
+                SBA.worldInFog = 0;
             }
 
-            if (((IPermaCasting)minecraft.player.level()).roundabout$inPermaCastFogRange(minecraft.player)){
-                if (roundabout$skyLerp < roundabout$maxSkyLerp){
-                    roundabout$skyLerp++;
+            if (((IPermaCasting)minecraft.player.level()).sba$inPermaCastFogRange(minecraft.player)){
+                if (sba$skyLerp < sba$maxSkyLerp){
+                    sba$skyLerp++;
                 }
             } else {
-                if (roundabout$skyLerp > 0){
-                    roundabout$skyLerp--;
+                if (sba$skyLerp > 0){
+                    sba$skyLerp--;
                 }
             }
 
             if (((TimeStop) this).isTimeStoppingEntity(minecraft.player)) {
-                ((StandUser) minecraft.player).roundabout$getStandPowers().timeTickStopPower();
+                ((StandUser) minecraft.player).sba$getStandPowers().timeTickStopPower();
             }
         }
         this.tickingEntities.forEach($$0x -> {
@@ -666,11 +666,11 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
                 if (standEntity.getFollowing() != null && !standEntity.getFollowing().isRemoved()){
                     if (!standEntity.getFollowing().isRemoved()) {
                         LivingEntity LE = standEntity.getFollowing();
-                        if (!((StandUser) LE).roundabout$hasFollower(standEntity)) {
-                            ((StandUser) LE).roundabout$addFollower(standEntity);
+                        if (!((StandUser) LE).sba$hasFollower(standEntity)) {
+                            ((StandUser) LE).sba$addFollower(standEntity);
                         }
                     } else {
-                        roundabout$tickStandIn(null,standEntity);
+                        sba$tickStandIn(null,standEntity);
                     }
                 }
             }
@@ -678,7 +678,7 @@ public abstract class WorldTickClient extends Level implements IClientLevel {
     }
 
     @Inject(method = "addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V", at = @At("HEAD"), cancellable = true)
-    private void roundabout$StopParticles(ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfo ci) {
+    private void sba$StopParticles(ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ, CallbackInfo ci) {
         if (((TimeStop) this).inTimeStopRange(new Vec3i((int) x, (int) y, (int) z))){
             ci.cancel();
         }

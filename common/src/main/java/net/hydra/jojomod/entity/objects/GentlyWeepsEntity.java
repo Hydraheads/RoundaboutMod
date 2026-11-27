@@ -81,7 +81,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
     public static void dealWithProjectile(Projectile pj, GentlyWeepsEntity this2){
         if (pj.level() instanceof ServerLevel sl) {
             if (!this2.getBled() && !(pj.getOwner() instanceof LivingEntity LE &&
-                    ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum
+                    ((StandUser) LE).sba$getStandPowers() instanceof PowersWhiteAlbum
                     && PowerTypes.hasStandActive(LE))) {
                 if (pj instanceof BloodSplatterEntity ||
                         (pj instanceof SoftAndWetPlunderBubbleEntity pb && pb.getLiquidStolen() == 4)
@@ -91,15 +91,15 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                     if (pj instanceof AbstractArrow || pj instanceof IronBallEntity || pj instanceof ThrownObjectEntity ||
                             pj instanceof RipperEyesProjectile ||
                             pj instanceof MatchEntity) {
-                        if (!(pj instanceof AbstractArrow aa && ((IAbstractArrowAccess) aa).roundabout$GetIsManhattan())
-                                && !(pj instanceof RoundaboutBulletEntity abe && abe.isHattan)) {
+                        if (!(pj instanceof AbstractArrow aa && ((IAbstractArrowAccess) aa).sba$GetIsManhattan())
+                                && !(pj instanceof SBABulletEntity abe && abe.isHattan)) {
                             IProjectileAccess ipa = (IProjectileAccess) pj;
-                            if (!ipa.roundabout$getIsDeflected()) {
+                            if (!ipa.sba$getIsDeflected()) {
                                 if (pj instanceof ThrownObjectEntity ttt){
                                     ttt.disableThrow();
                                 }
-                                if (pj instanceof AbstractArrow ttt && ((ISuperThrownAbstractArrow)ttt).roundabout$getSuperThrow()){
-                                    ((ISuperThrownAbstractArrow)ttt).roundabout$cancelSuperThrow();
+                                if (pj instanceof AbstractArrow ttt && ((ISuperThrownAbstractArrow)ttt).sba$getSuperThrow()){
+                                    ((ISuperThrownAbstractArrow)ttt).sba$cancelSuperThrow();
                                 }
                                 ((ServerLevel) this2.level()).sendParticles(ModParticles.ICE_SPARKLE,
                                         pj.getX(),
@@ -108,11 +108,11 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                                         10, 0, 0, 0, 0.2);
                                 pj.level().playSound(null, pj.blockPosition(), ModSounds.ICE_BREAKER_EVENT,
                                         SoundSource.PLAYERS, 1.0F, 2.0F);
-                                if (pj instanceof RoundaboutBulletEntity) {
+                                if (pj instanceof SBABulletEntity) {
                                     pj.setOwner(this2);
-                                    ((RoundaboutBulletEntity) pj).setSuperThrown(false);
+                                    ((SBABulletEntity) pj).setSuperThrown(false);
                                 }
-                                ipa.roundabout$setIsDeflected(true);
+                                ipa.sba$setIsDeflected(true);
                                 ((IEntityAndData) pj).rdbt$forceDeltaMovement(pj.getDeltaMovement().scale(-0.4));
                                 pj.setYRot(pj.getYRot() + 180.0F);
                                 pj.yRotO += 180.0F;
@@ -153,8 +153,8 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                             if (!getAttachedToEntity()){
                                 if (mob.isOnFire()){
                                     mob.setRemainingFireTicks(0);
-                                } if (mob instanceof LivingEntity lv && ((StandUser)lv).roundabout$isOnStandFire()){
-                                    ((StandUser)lv).roundabout$setRemainingStandFireTicks(0);
+                                } if (mob instanceof LivingEntity lv && ((StandUser)lv).sba$isOnStandFire()){
+                                    ((StandUser)lv).sba$setRemainingStandFireTicks(0);
                                 }
                                 if (MainUtil.canFreeze(mob)) {
                                     if (this.tickCount > 10) {
@@ -229,7 +229,7 @@ public class GentlyWeepsEntity extends WhiteAlbumFreezingEntity {
                     }
                     if (mob.getBoundingBox().intersects(wallBox)) {
                         if (mob.isAlive()) {
-                            if (((StandUser) mob).roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa) {
+                            if (((StandUser) mob).sba$getStandPowers() instanceof PowersWhiteAlbum pwa) {
                                 pwa.gwNear = this;
                                 pwa.inGWRange = 3;
                             }

@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -11,17 +11,17 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 public class GoldExperienceBaseRenderer extends StandRenderer<GoldExperienceEntity> {
-    public static final ResourceLocation PART_5 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/base.png");
-    public static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/beta.png");
-    public static final ResourceLocation DIAMOND = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/diamond.png");
-    public static final ResourceLocation GUARD = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/guard.png");
-    public static final ResourceLocation PS2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/ps2.png");
-    public static final ResourceLocation DEIMOS = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/deimos.png");
-    public static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/manga.png");
-    public static final ResourceLocation AGOGO = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/agogo.png");
-    public static final ResourceLocation JOJOVELLER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/jojoveller.png");
-    public static final ResourceLocation TITLE_PAGE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/title_page.png");
-    public static final ResourceLocation CATERPILLAR = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/caterpillar.png");
+    public static final ResourceLocation PART_5 = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/base.png");
+    public static final ResourceLocation BETA = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/beta.png");
+    public static final ResourceLocation DIAMOND = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/diamond.png");
+    public static final ResourceLocation GUARD = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/guard.png");
+    public static final ResourceLocation PS2 = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/ps2.png");
+    public static final ResourceLocation DEIMOS = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/deimos.png");
+    public static final ResourceLocation MANGA = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/manga.png");
+    public static final ResourceLocation AGOGO = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/agogo.png");
+    public static final ResourceLocation JOJOVELLER = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/jojoveller.png");
+    public static final ResourceLocation TITLE_PAGE = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/title_page.png");
+    public static final ResourceLocation CATERPILLAR = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/caterpillar.png");
 
     public GoldExperienceBaseRenderer(EntityRendererProvider.Context context, StandModel<GoldExperienceEntity> entityModel, float f) {
         super(context, entityModel, f);

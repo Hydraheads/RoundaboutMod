@@ -20,18 +20,18 @@ public class KeysKeyboardHandler {
      * they are important for active combat selection like the soft and wet bubble menu*/
 
     @Inject(method = "keyPress(JIIII)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$KP1(long $$0, int $$1, int $$2, int $$3, int $$4, CallbackInfo ci) {
+    protected void sba$KP1(long $$0, int $$1, int $$2, int $$3, int $$4, CallbackInfo ci) {
         Screen screen = this.minecraft.screen;
         if (screen instanceof NoCancelInputScreen){
-            roundabout$SaveScreen = screen;
+            sba$SaveScreen = screen;
             this.minecraft.screen = null;
         }
     }
     @Inject(method = "keyPress(JIIII)V", at = @At(value = "TAIL"), cancellable = true)
-    protected void roundabout$KP2(long l, int i, int j, int k, int m, CallbackInfo ci) {
-        if (roundabout$SaveScreen != null){
-            this.minecraft.screen = roundabout$SaveScreen;
-            roundabout$SaveScreen = null;
+    protected void sba$KP2(long l, int i, int j, int k, int m, CallbackInfo ci) {
+        if (sba$SaveScreen != null){
+            this.minecraft.screen = sba$SaveScreen;
+            sba$SaveScreen = null;
             Screen screen =  this.minecraft.screen;
             if (screen != null) {
                 boolean[] bls = new boolean[]{false};
@@ -54,7 +54,7 @@ public class KeysKeyboardHandler {
     }
 
     @Unique
-    Screen roundabout$SaveScreen = null;
+    Screen sba$SaveScreen = null;
 
 
     /**Shadows, ignore

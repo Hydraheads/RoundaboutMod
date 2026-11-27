@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.minions.head_parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.entity.zombie_minion.AxolotlMinion;
@@ -59,7 +59,7 @@ public class VillagerHeadPart extends PsuedoHierarchicalModel {
 
 
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/minions/villager.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/entity/minions/villager.png");
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light) {

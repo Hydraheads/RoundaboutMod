@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.badCompanyTroops;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.goals.badCompanyGoals.*;
 import net.hydra.jojomod.entity.projectile.BadCompanyBulletEntity;

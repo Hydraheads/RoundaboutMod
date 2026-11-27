@@ -35,34 +35,34 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            if (((IEntityAndData)entity).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
                 if (entity != null) {
                     StandUser user = ((StandUser) livent);
-                    boolean hasCatchTheRainbowOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow);
+                    boolean hasCatchTheRainbowOut = (PowerTypes.hasStandActive(livent) && user.sba$getStandPowers() instanceof PowersCatchTheRainbow);
 
-                    //int heyTicks = user.roundabout$getCatchTheRainbowVanishTicks();
+                    //int heyTicks = user.sba$getCatchTheRainbowVanishTicks();
                     int rainbowTicks = MainUtil.getWornStandVanishticksSafe(user, PowersCatchTheRainbow.class);/*0;
 
-                    if (user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
-                        rainbowTicks = user.roundabout$getCurrentStandVanishTicks();
-                    }else if (user.roundabout$getPreviousStandPowers() instanceof PowersCatchTheRainbow) {
-                        rainbowTicks = user.roundabout$getPreviousStandVanishTicks();
+                    if (user.sba$getStandPowers() instanceof PowersCatchTheRainbow) {
+                        rainbowTicks = user.sba$getCurrentStandVanishTicks();
+                    }else if (user.sba$getPreviousStandPowers() instanceof PowersCatchTheRainbow) {
+                        rainbowTicks = user.sba$getPreviousStandVanishTicks();
                     }*/
 
                     if (rainbowTicks > 0 || hasCatchTheRainbowOut) {
-                        byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
-                            if (user.roundabout$getLastStandSkin() != skin) {
-                                user.roundabout$setLastStandSkin(skin);
+                        byte skin = user.sba$getStandSkin();
+                        if (user.sba$getStandPowers() instanceof PowersCatchTheRainbow) {
+                            if (user.sba$getLastStandSkin() != skin) {
+                                user.sba$setLastStandSkin(skin);
                                 rainbowTicks = 0;
 
-                                user.roundabout$setCurrentStandVanishTicks(0);
+                                user.sba$setCurrentStandVanishTicks(0);
                             }
                         }else {
-                            skin = user.roundabout$getPreviousSkin();
+                            skin = user.sba$getPreviousSkin();
                         }
 
                         float heyFull = 0;

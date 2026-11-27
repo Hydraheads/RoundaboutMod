@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -94,38 +94,38 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
     }
 
-    public static ResourceLocation item = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime_item.png");
-    public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/anime.png");
-    public static ResourceLocation raging = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/raging_katana.png");
-    public static ResourceLocation alluring = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/alluring_katana.png");
-    public static ResourceLocation evil = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/evil.png");
-    public static ResourceLocation wooden = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/wooden.png");
-    public static ResourceLocation stone = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/stone.png");
-    public static ResourceLocation grass = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/grass.png");
-    public static ResourceLocation aquamarine = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/aquamarine.png");
-    public static ResourceLocation gray_wagon = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/gray_wagon.png");
-    public static ResourceLocation timekeeper = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/timekeeper.png");
-    public static ResourceLocation diamond = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/diamond.png");
-    public static ResourceLocation chorus = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/ender.png");
-    public static ResourceLocation ancient = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/ancient.png");
-    public static ResourceLocation khopesh = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/khopesh.png");
-    public static ResourceLocation cleaver = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/cleaver.png");
-    public static ResourceLocation cleaver_sheathed = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/cleaver_sheathed.png");
-    public static ResourceLocation illusory = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/illusory.png");
-    public static ResourceLocation illusory_sheathed = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/illusory_sheathed.png");
-    public static ResourceLocation bloodstained = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/bloodstained.png");
-    public static ResourceLocation brilliance = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/brilliance.png");
-    public static ResourceLocation chainblade_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/chainblade_1.png");
-    public static ResourceLocation chainblade_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/chainblade_2.png");
-    public static ResourceLocation chef = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/chef.png");
-    public static ResourceLocation serpent = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/serpent.png");
-    public static ResourceLocation[] soul = {new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul.png"),
-                                            new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul_2.png"),
-                                            new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/soul_3.png")};
-    public static ResourceLocation boneblade = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/boneblade.png");
+    public static ResourceLocation item = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/anime_item.png");
+    public static ResourceLocation anime = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/anime.png");
+    public static ResourceLocation raging = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/raging_katana.png");
+    public static ResourceLocation alluring = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/alluring_katana.png");
+    public static ResourceLocation evil = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/evil.png");
+    public static ResourceLocation wooden = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/wooden.png");
+    public static ResourceLocation stone = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/stone.png");
+    public static ResourceLocation grass = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/grass.png");
+    public static ResourceLocation aquamarine = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/aquamarine.png");
+    public static ResourceLocation gray_wagon = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/gray_wagon.png");
+    public static ResourceLocation timekeeper = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/timekeeper.png");
+    public static ResourceLocation diamond = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/diamond.png");
+    public static ResourceLocation chorus = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/ender.png");
+    public static ResourceLocation ancient = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/ancient.png");
+    public static ResourceLocation khopesh = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/khopesh.png");
+    public static ResourceLocation cleaver = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/cleaver.png");
+    public static ResourceLocation cleaver_sheathed = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/cleaver_sheathed.png");
+    public static ResourceLocation illusory = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/illusory.png");
+    public static ResourceLocation illusory_sheathed = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/illusory_sheathed.png");
+    public static ResourceLocation bloodstained = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/bloodstained.png");
+    public static ResourceLocation brilliance = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/brilliance.png");
+    public static ResourceLocation chainblade_1 = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/chainblade_1.png");
+    public static ResourceLocation chainblade_2 = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/chainblade_2.png");
+    public static ResourceLocation chef = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/chef.png");
+    public static ResourceLocation serpent = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/serpent.png");
+    public static ResourceLocation[] soul = {new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/soul.png"),
+                                            new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/soul_2.png"),
+                                            new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/soul_3.png")};
+    public static ResourceLocation boneblade = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/boneblade.png");
 
-    public static ResourceLocation emissive_chainblade_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/emissive/chainblade_1.png");
-    public static ResourceLocation emissive_chainblade_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/anubis/emissive/chainblade_2.png");
+    public static ResourceLocation emissive_chainblade_1 = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/emissive/chainblade_1.png");
+    public static ResourceLocation emissive_chainblade_2 = new ResourceLocation(SBA.MOD_ID, "textures/stand/anubis/emissive/chainblade_2.png");
 
 
 
@@ -193,7 +193,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
             this.root().getAllParts().forEach(ModelPart::resetPose);
 
             if (LE.getUseItem().getItem() instanceof AnubisItem && animations && LE instanceof Player P) {
-                this.animate(((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisFirstPersonAnimations.ItemUnsheath,partialTicks,1F  );
+                this.animate(((IPlayerEntity)P).sba$getItemAnimation(),AnubisFirstPersonAnimations.ItemUnsheath,partialTicks,1F  );
             }
 
             if (skin == PowersAnubis.ITEM){
@@ -214,7 +214,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
             StandUser SU = (StandUser) context;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+            if (SU.sba$getStandPowers() instanceof PowersAnubis) {
                 if (skin == PowersAnubis.CHAINBLADE || skin == PowersAnubis.BRILLIANCE || skin == PowersAnubis.ILLUSORY ) {
                     VertexConsumer Consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getEmissive(context, skin)));
                     root().render(poseStack, Consumer, 15728880, OverlayTexture.NO_OVERLAY, 1, 1, 1, alpha);
@@ -232,7 +232,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
     };
 
     public void renderFirstPerson(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks) {
-        if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
+        if (((IEntityAndData) entity).sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
         this.root().getAllParts().forEach(ModelPart::resetPose);
 
         if (((TimeStop)entity.level()).CanTimeStopEntity(entity) || ClientUtil.checkIfGamePaused()){
@@ -247,7 +247,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
         float alphaTicks = AnubisLayer.getTicks(entity,partialTicks);
 
-        if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
+        if (user.sba$getPossessor() instanceof AnubisPossessorEntity) {
             skin = (byte)1;
            /* CompoundTag tag = entity.getMainHandItem().getTag();
             if (tag != null) {
@@ -257,9 +257,9 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                     skin = (byte) 18;
                 }
             } */
-        } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (ticks != 0 && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
+        } else if ( (user.sba$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (ticks != 0 && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
             skin = MainUtil.getWornStandSkinSafe(user, PowersAnubis.class);
-        } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
+        } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.sba$getEffectiveCombatMode()) {
             CompoundTag tag = entity.getMainHandItem().getTag();
             if (tag != null) {
                 if (tag.getFloat("CustomModelData") == 2F) {
@@ -271,17 +271,17 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         }
 
 
-        boolean renderItem = entity.getMainHandItem().is(ModItems.ANUBIS_ITEM) && !(PowerTypes.isUsingStand(entity) && user.roundabout$getStandPowers() instanceof PowersAnubis);
+        boolean renderItem = entity.getMainHandItem().is(ModItems.ANUBIS_ITEM) && !(PowerTypes.isUsingStand(entity) && user.sba$getStandPowers() instanceof PowersAnubis);
 
         poseStack.translate(0,0,-1.27); // -forward
         poseStack.translate(0.85,0,0); // +left
-        if (renderItem || user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
+        if (renderItem || user.sba$getPossessor() instanceof AnubisPossessorEntity) {
             alphaTicks = 1;
         }
         poseStack.translate(0,-0.3 - ((1-alphaTicks)*0.9) ,0); //  +up
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,-15),0,0,0); // positive towards camera
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,100),0,0,0); // around Y axis
-        if (renderItem && !(user.roundabout$getPossessor() instanceof AnubisPossessorEntity)) {
+        if (renderItem && !(user.sba$getPossessor() instanceof AnubisPossessorEntity)) {
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,180),0,0,0);
             poseStack.translate(0,0.35,0);
             poseStack.translate(0.1,0,0);
@@ -295,14 +295,14 @@ public class AnubisModel extends PsuedoHierarchicalModel {
 
         if (entity.getUseItem().getItem() instanceof AnubisItem) {
             if (entity instanceof Player P) {
-                this.animate( ((IPlayerEntity)P).roundabout$getItemAnimation(),AnubisFirstPersonAnimations.Unsheath,partialTicks,1F);
+                this.animate( ((IPlayerEntity)P).sba$getItemAnimation(),AnubisFirstPersonAnimations.Unsheath,partialTicks,1F);
             }
-        } else if (((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis PA) {
+        } else if (((StandUser)entity).sba$getStandPowers() instanceof PowersAnubis PA) {
             AnimationDefinition anim = PA.getFirstPersonAnimation((StandUser) entity);
 
             if (anim != null) {
-                user.roundabout$getWornStandAnimation().startIfStopped(entity.tickCount);
-                this.animate(user.roundabout$getWornStandAnimation(), anim, partialTicks, 1F);
+                user.sba$getWornStandAnimation().startIfStopped(entity.tickCount);
+                this.animate(user.sba$getWornStandAnimation(), anim, partialTicks, 1F);
                 if (skin == PowersAnubis.ITEM){
                     sword.translateAndRotate(poseStack);
                     stand.translateAndRotate(poseStack);
@@ -312,8 +312,8 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                     poseStack.translate(0.1,0,0);
                     poseStack.translate(0,0,0.04);
 
-                    if (user.roundabout$getStandAnimation() == PowersAnubis.FLURRY) {
-                        float time = user.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
+                    if (user.sba$getStandAnimation() == PowersAnubis.FLURRY) {
+                        float time = user.sba$getWornStandAnimation().getAccumulatedTime()/1000F;
                         time -= (15/20.0F);
                         if (time > 0 && time < (15/20.0F)) {
                             float scaler = 0.75F * Math.min(time * 0.7F, 1);
@@ -333,8 +333,8 @@ public class AnubisModel extends PsuedoHierarchicalModel {
                     }
                 } else {
 
-                    if (user.roundabout$getStandAnimation() == PowersAnubis.FLURRY) {
-                        float time = user.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
+                    if (user.sba$getStandAnimation() == PowersAnubis.FLURRY) {
+                        float time = user.sba$getWornStandAnimation().getAccumulatedTime()/1000F;
                         time -= (15/20.0F);
                         if (time > 0 && time < (15/20.0F)) {
                             float scaler = 0.75F * Math.min(time * 0.7F, 1);
@@ -383,7 +383,7 @@ public class AnubisModel extends PsuedoHierarchicalModel {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(entity, skin )));
         root().render(poseStack,consumer,packedLight,OverlayTexture.NO_OVERLAY,1,1,1,alpha);
         StandUser SU = (StandUser) entity;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.isUsingStand(entity)) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis && PowerTypes.isUsingStand(entity)) {
             if (skin == PowersAnubis.CHAINBLADE || skin == PowersAnubis.BRILLIANCE || skin == PowersAnubis.ILLUSORY ) {
                 VertexConsumer Consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getEmissive(entity, skin)));
                 root().render(poseStack, Consumer, 15728880, OverlayTexture.NO_OVERLAY, 1, 1, 1, alpha);

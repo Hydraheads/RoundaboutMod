@@ -84,7 +84,7 @@ public class GEThornEntity extends Entity {
 
                     Vec3 prevVelocity = target.getDeltaMovement();
                     float damage = 0.4F; // it was 1.2F
-                    if (caster != null && ((StandUser) caster).roundabout$getStandPowers() instanceof PowersGoldExperience gePowers) {
+                    if (caster != null && ((StandUser) caster).sba$getStandPowers() instanceof PowersGoldExperience gePowers) {
                         damage = gePowers.getBrambleDamage(actualVictim);
                     }
                     if (target.hurt(ModDamageTypes.of(target.level(), ModDamageTypes.BRAMBLE, caster != null ? caster : this), damage)) {
@@ -97,7 +97,7 @@ public class GEThornEntity extends Entity {
 
             boolean groundBarrageActive = false;
             if (this.ownerUUID != null && getOwner() instanceof StandUser standUser) {
-                if (standUser.roundabout$getStandPowers() instanceof PowersGoldExperience gePowers) {
+                if (standUser.sba$getStandPowers() instanceof PowersGoldExperience gePowers) {
                     groundBarrageActive = gePowers.isGroundBarraging();
                 }
             }

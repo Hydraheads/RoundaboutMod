@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.index.PlunderTypes;
@@ -23,11 +23,11 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class PHCapsuleRenderer extends EntityRenderer<PHCapsuleEntity> {
-    private static final ResourceLocation PINK_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/pink.png");
-    private static final ResourceLocation POD = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/pod.png");
-    private static final ResourceLocation CYAN_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/cyan.png");
-    private static final ResourceLocation YELLOW_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/yellow.png");
-    private static final ResourceLocation BOMB_BUBBLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/killer_queen/projectiles/bomb.png");
+    private static final ResourceLocation PINK_BUBBLE = new ResourceLocation(SBA.MOD_ID, "textures/stand/killer_queen/projectiles/pink.png");
+    private static final ResourceLocation POD = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/pod.png");
+    private static final ResourceLocation CYAN_BUBBLE = new ResourceLocation(SBA.MOD_ID, "textures/stand/killer_queen/projectiles/cyan.png");
+    private static final ResourceLocation YELLOW_BUBBLE = new ResourceLocation(SBA.MOD_ID, "textures/stand/killer_queen/projectiles/yellow.png");
+    private static final ResourceLocation BOMB_BUBBLE = new ResourceLocation(SBA.MOD_ID, "textures/stand/killer_queen/projectiles/bomb.png");
 
     private final float scale;
 

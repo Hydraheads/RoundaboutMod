@@ -14,9 +14,9 @@ public class PowersEnchantmentHelper {
 
     /**Stands like white album can make increased knockback apply to weapon attacks*/
     @Inject(method = "getKnockbackBonus", at = @At("HEAD"), require = 0, cancellable = true)
-    private static void roundabout$getKnockbackBonus(LivingEntity $$0, CallbackInfoReturnable<Integer> cir) {
+    private static void sba$getKnockbackBonus(LivingEntity $$0, CallbackInfoReturnable<Integer> cir) {
         if ($$0 != null){
-            int knockback = ((StandUser)$$0).roundabout$getStandPowers().bufferAttackKnockbackLevel();
+            int knockback = ((StandUser)$$0).sba$getStandPowers().bufferAttackKnockbackLevel();
             if (knockback > 0){
                 knockback = Math.max(
                         EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, $$0), knockback);

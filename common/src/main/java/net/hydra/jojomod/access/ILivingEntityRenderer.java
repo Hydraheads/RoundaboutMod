@@ -5,5 +5,5 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.LivingEntity;
 
 public interface ILivingEntityRenderer {
-    RenderType roundabout$getRenderType(LivingEntity $$0, boolean $$1, boolean $$2, boolean $$3);
+    RenderType sba$getRenderType(LivingEntity $$0, boolean $$1, boolean $$2, boolean $$3);
 }

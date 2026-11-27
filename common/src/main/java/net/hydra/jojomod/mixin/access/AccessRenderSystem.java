@@ -14,7 +14,7 @@ public class AccessRenderSystem implements IRenderSystem {
 
     @Unique
     @Override
-    public Vector3f[] roundabout$getShaderLightDirections(){
+    public Vector3f[] sba$getShaderLightDirections(){
         return shaderLightDirections;
     }
 

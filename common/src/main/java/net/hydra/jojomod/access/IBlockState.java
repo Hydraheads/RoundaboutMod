@@ -4,7 +4,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 public interface IBlockState {
 /***
-    void roundabout$setInvis(boolean invis);
-    boolean roundabout$getInvis();
+    void sba$setInvis(boolean invis);
+    boolean sba$getInvis();
  **/
 }

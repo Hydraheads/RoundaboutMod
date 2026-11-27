@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -23,7 +23,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public abstract class SethanRenderer {
 
-    public static ResourceLocation SETHAN_TEXTURE = new ResourceLocation(Roundabout.MOD_ID + ":textures/stand/sethan.png");
+    public static ResourceLocation SETHAN_TEXTURE = new ResourceLocation(SBA.MOD_ID + ":textures/stand/sethan.png");
     private static final RenderType SHADOW_RENDER_TYPE = RenderType.entityShadow(SETHAN_TEXTURE);
 
 

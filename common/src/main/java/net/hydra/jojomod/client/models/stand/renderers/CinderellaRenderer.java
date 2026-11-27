@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.CinderellaModel;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
@@ -13,12 +13,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class CinderellaRenderer extends StandRenderer<CinderellaEntity> {
 
-    private static final ResourceLocation PART_4_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/anime.png");
-    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/manga.png");
-    private static final ResourceLocation ZOMBIE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/zombie.png");
-    private static final ResourceLocation JACK_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/jack.png");
-    private static final ResourceLocation BUSINESS_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/business.png");
-    private static final ResourceLocation FACE_OFF = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/cinderella/face_off.png");
+    private static final ResourceLocation PART_4_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/cinderella/anime.png");
+    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/cinderella/manga.png");
+    private static final ResourceLocation ZOMBIE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/cinderella/zombie.png");
+    private static final ResourceLocation JACK_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/cinderella/jack.png");
+    private static final ResourceLocation BUSINESS_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/cinderella/business.png");
+    private static final ResourceLocation FACE_OFF = new ResourceLocation(SBA.MOD_ID,"textures/stand/cinderella/face_off.png");
 
     public CinderellaRenderer(EntityRendererProvider.Context context) {
         super(context, new CinderellaModel<>(context.bakeLayer(ModEntityRendererClient.CINDERELLA_LAYER)), 0f);

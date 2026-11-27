@@ -15,8 +15,8 @@ public class TimeStopSlime {
     /**Make slime not attack you in stopped time, slime attacks are based on player collision and
      * rather unconventional*/
     @Inject(method = "playerTouch", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$playerTouch(Player $$0, CallbackInfo ci) {
-        if (((TimeStop) $$0.level()).CanTimeStopEntity((Slime)(Object)this) || ((StandUser)this).roundabout$isDazed()){
+    public void sba$playerTouch(Player $$0, CallbackInfo ci) {
+        if (((TimeStop) $$0.level()).CanTimeStopEntity((Slime)(Object)this) || ((StandUser)this).sba$isDazed()){
             ci.cancel();
         }
     }

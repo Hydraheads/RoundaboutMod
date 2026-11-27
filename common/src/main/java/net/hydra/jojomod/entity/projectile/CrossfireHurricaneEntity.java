@@ -102,7 +102,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     @Override
     public boolean isControlledByLocalInstance() {
         /**
-        if (this.getStandUser() != null && ((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+        if (this.getStandUser() != null && ((StandUser)this.getStandUser()).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
             if (this.getCrossNumber() > 0) {
                 return true;
             }
@@ -202,9 +202,9 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         if (crossnum == 7 && !this.level().isClientSide()) {
             LivingEntity le = this.getStandUser();
             if (le != null) {
-                if (((StandUser) this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                if (((StandUser) this.getStandUser()).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                     PMR.sealFromKamikaze();
-                    StandEntity stand = ((StandUser)le).roundabout$getStand();
+                    StandEntity stand = ((StandUser)le).sba$getStand();
                     if (stand != null){
                         stand.discard();
                     }
@@ -233,7 +233,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
 
         LivingEntity le = this.getStandUser();
         if (le != null){
-            if (((StandUser)this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            if (((StandUser)this.getStandUser()).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 int crossnum = this.getCrossNumber();
                 if (crossnum > 0 && crossnum < 6) {
                     this.setDeltaMovement(Vec3.ZERO);
@@ -256,7 +256,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                     if (crossnum == 6){
 
                         IPermaCasting icast = ((IPermaCasting) le.level());
-                        if (!icast.roundabout$isPermaCastingEntity(le)) {
+                        if (!icast.sba$isPermaCastingEntity(le)) {
                             this.discard();
                             return;
                         } else {
@@ -269,7 +269,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                             }
                         }
                     } else if (crossnum == 7){
-                        StandEntity stand = ((StandUser)le).roundabout$getStand();
+                        StandEntity stand = ((StandUser)le).sba$getStand();
                         if (stand == null){
                             this.discard();
                             return;
@@ -293,7 +293,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 int ticks = ConfigManager.getClientConfig().particleSettings.cfhTicksPerFlameParticle;
                 if (ticks > -1 && this.tickCount % ticks == 0) {
                     LivingEntity lv = this.getUser();
-                    if (lv != null && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersMagiciansRed MR) {
+                    if (lv != null && ((StandUser)lv).sba$getStandPowers() instanceof PowersMagiciansRed MR) {
                         //for (int i = 0; i < 1; i++) {
                         this.level()
                                 .addParticle(
@@ -323,10 +323,10 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
         }
 
         if (le != null) {
-            if (((StandUser) this.getStandUser()).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            if (((StandUser) this.getStandUser()).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 int crossnum = this.getCrossNumber();
                 if (crossnum == 7) {
-                    StandEntity stand = ((StandUser)le).roundabout$getStand();
+                    StandEntity stand = ((StandUser)le).sba$getStand();
                     if (stand == null){
                         this.discard();
                         return;
@@ -359,7 +359,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
             if (!this.level().isClientSide()) {
                 LivingEntity user = this.getStandUser();
                 int size = this.getSize();
-                if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                     BlockPos pos = $$0.getBlockPos().relative($$0.getDirection());
                     PMR.createStandFire2(pos);
                     if (size >= PowersMagiciansRed.getChargingCrossfireSize()) {
@@ -436,7 +436,7 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
     public void radialExplosion(LivingEntity mainTarget){
         if (!this.level().isClientSide()){
             LivingEntity user = this.getStandUser();
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 PMR.addEXP(2);
                 this.level().playSound(null, this.blockPosition(), ModSounds.CROSSFIRE_EXPLODE_EVENT,
                         SoundSource.PLAYERS, 2F, 1F);
@@ -500,11 +500,11 @@ public class CrossfireHurricaneEntity extends AbstractHurtingProjectile implemen
                 StandUser userLE = ((StandUser) LE);
                 int ticks = 21;
                 ticks += size*2;
-                if (userLE.roundabout$getRemainingFireTicks() > -1){
-                    ticks+=userLE.roundabout$getRemainingFireTicks();
+                if (userLE.sba$getRemainingFireTicks() > -1){
+                    ticks+=userLE.sba$getRemainingFireTicks();
                 }
-                userLE.roundabout$setOnStandFire(PMR.getFireColor(), user);
-                userLE.roundabout$setRemainingStandFireTicks(ticks);
+                userLE.sba$setOnStandFire(PMR.getFireColor(), user);
+                userLE.sba$setRemainingStandFireTicks(ticks);
             }
         } else if (gotten instanceof LivingEntity LE && LE.isBlocking()) {
             int breakShield = 0;

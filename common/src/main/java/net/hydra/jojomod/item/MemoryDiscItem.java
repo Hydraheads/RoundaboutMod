@@ -24,7 +24,7 @@ public class MemoryDiscItem extends AbstractBodyDiscItem {
             return false;
         }
         if (DreamingMemoryController.canTemporarilyImplant(target)) return true;
-        return !((DiscBearer) target).roundabout$ownsMemoryDisc();
+        return !((DiscBearer) target).sba$ownsMemoryDisc();
     }
 
     @Override
@@ -38,13 +38,13 @@ public class MemoryDiscItem extends AbstractBodyDiscItem {
 
     public static void applyMemory(ItemStack stack, LivingEntity target) {
         DiscBearer bearer = (DiscBearer) target;
-        bearer.roundabout$setMemoryDiscOwnerId(DiscItemData.getOwnerId(stack));
-        bearer.roundabout$setMemoryDiscOwnerName(DiscItemData.getOwnerName(stack));
-        bearer.roundabout$setMemoryPersonality(DiscItemData.getPersonality(stack));
-        bearer.roundabout$setMemoryTameOwnerId(DiscItemData.getTameOwnerId(stack));
-        bearer.roundabout$setMemoryTameOwnerName(DiscItemData.getTameOwnerName(stack));
-        bearer.roundabout$setMemoryReading(DiscItemData.getMemoryReading(stack));
-        bearer.roundabout$setHasMemoryDisc(true);
+        bearer.sba$setMemoryDiscOwnerId(DiscItemData.getOwnerId(stack));
+        bearer.sba$setMemoryDiscOwnerName(DiscItemData.getOwnerName(stack));
+        bearer.sba$setMemoryPersonality(DiscItemData.getPersonality(stack));
+        bearer.sba$setMemoryTameOwnerId(DiscItemData.getTameOwnerId(stack));
+        bearer.sba$setMemoryTameOwnerName(DiscItemData.getTameOwnerName(stack));
+        bearer.sba$setMemoryReading(DiscItemData.getMemoryReading(stack));
+        bearer.sba$setHasMemoryDisc(true);
         if (target instanceof Mob mob) {
             mob.setNoAi(false);
             mob.setTarget(null);

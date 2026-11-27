@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -33,10 +33,10 @@ public class MetallicaClientRenderer {
         if (entity == mc.player && mc.options.getCameraType().isFirstPerson()) return;
 
             StandUser data = ((StandUser) entity);
-            float meter = data.roundabout$getMetalMeter();
+            float meter = data.sba$getMetalMeter();
             if (meter > 0.1f) {
                 if (mc.player == null) return;
-                if (!(((StandUser)mc.player).roundabout$getStandPowers() instanceof PowersMetallica)) return;
+                if (!(((StandUser)mc.player).sba$getStandPowers() instanceof PowersMetallica)) return;
                 if (mc.player.distanceToSqr(entity) > 1024) return;
 
                 matrixStack.pushPose();
@@ -83,7 +83,7 @@ public class MetallicaClientRenderer {
             }
         }
 
-        if (((StandUser)entity).roundabout$getStandPowers() instanceof PowersMetallica pm &&
+        if (((StandUser)entity).sba$getStandPowers() instanceof PowersMetallica pm &&
         pm.isMagneticFieldActive()) {
             spawnMagneticFieldWave(entity, level, interpX, interpY, interpZ);
         }
@@ -111,7 +111,7 @@ public class MetallicaClientRenderer {
                 double z = zBase + dz;
 
                 if (hasLineOfSight(entity, x, y, z)) {
-                    ResourceLocation loc = new ResourceLocation(Roundabout.MOD_ID, "metallica_field_png");
+                    ResourceLocation loc = new ResourceLocation(SBA.MOD_ID, "metallica_field_png");
                     if (BuiltInRegistries.PARTICLE_TYPE.containsKey(loc)) {
                         level.addParticle((ParticleOptions) BuiltInRegistries.PARTICLE_TYPE.get(loc), x, y, z, 0, 0, 0);
                     }
@@ -121,7 +121,7 @@ public class MetallicaClientRenderer {
     }
 
     private static void spawnParticleWithID(LivingEntity entity, String type, double x, double y, double z) {
-        ResourceLocation loc = new ResourceLocation(Roundabout.MOD_ID, type);
+        ResourceLocation loc = new ResourceLocation(SBA.MOD_ID, type);
         if (BuiltInRegistries.PARTICLE_TYPE.containsKey(loc)) {
             ParticleOptions pOptions = (ParticleOptions) BuiltInRegistries.PARTICLE_TYPE.get(loc);
 

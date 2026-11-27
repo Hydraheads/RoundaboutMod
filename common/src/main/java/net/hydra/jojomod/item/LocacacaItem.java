@@ -19,7 +19,7 @@ public class LocacacaItem extends Item {
     }
 
     public void randomizeStone(LivingEntity entity){
-        byte curse = ((StandUser)entity).roundabout$getLocacacaCurse();
+        byte curse = ((StandUser)entity).sba$getLocacacaCurse();
         if (curse < 0){
             entity.removeEffect(ModEffects.MELTING);
             float health = entity.getHealth();
@@ -33,7 +33,7 @@ public class LocacacaItem extends Item {
 
         MobEffectInstance effect = entity.getEffect(ModEffects.HEX);
         if (effect != null && effect.getAmplifier() > 1){
-            ((StandUser)entity).roundabout$setLocacacaCurse(LocacacaCurseIndex.HEART);
+            ((StandUser)entity).sba$setLocacacaCurse(LocacacaCurseIndex.HEART);
             return;
         }
 
@@ -62,7 +62,7 @@ public class LocacacaItem extends Item {
                 curse=LocacacaCurseIndex.LEFT_LEG;
             }
         }
-        ((StandUser)entity).roundabout$setLocacacaCurse(curse);
+        ((StandUser)entity).sba$setLocacacaCurse(curse);
 
     }
     @Override

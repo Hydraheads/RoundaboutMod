@@ -16,11 +16,11 @@ public interface AccessBoatRenderer {
 
     @Accessor("boatResources")
     Map<Boat.Type, Pair<ResourceLocation, ListModel<Boat>>>
-    roundabout$getBoatResources();
+    sba$getBoatResources();
 
     @Mutable
     @Accessor("boatResources")
-    void roundabout$setBoatResources(
+    void sba$setBoatResources(
             Map<Boat.Type, Pair<ResourceLocation, ListModel<Boat>>> resources
     );
 }

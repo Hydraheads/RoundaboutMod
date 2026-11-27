@@ -2,8 +2,8 @@
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "roundabout:block/white_knight",
-		"particle": "roundabout:block/black_knight"
+		"0": "sba:block/white_knight",
+		"particle": "sba:block/black_knight"
 	},
 	"elements": [
 		{

@@ -15,7 +15,7 @@ public class GinkgoTreeGrower extends AbstractTreeGrower {
     private static ResourceKey<ConfiguredFeature<?, ?>> key(String name) {
         return ResourceKey.create(
                 Registries.CONFIGURED_FEATURE,
-                new ResourceLocation("roundabout", name)
+                new ResourceLocation("sba", name)
         );
     }
 

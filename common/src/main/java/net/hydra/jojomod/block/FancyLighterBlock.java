@@ -151,14 +151,14 @@ public class FancyLighterBlock extends BaseEntityBlock {
                 ownerEntity = $$0.getEntity(tag.getUUID("StuffOther"));
             if ($$2.getValue(LIT) &&
                     ownerEntity != null && !stepper.is(ownerEntity)
-                    && ownerEntity instanceof StandUser se && se.roundabout$getStandPowers() instanceof PowersBlackSabbath bs) {
+                    && ownerEntity instanceof StandUser se && se.sba$getStandPowers() instanceof PowersBlackSabbath bs) {
                 if (ownerEntity instanceof ServerPlayer spl) {
-                    boolean userPowers = ownerEntity instanceof Player p && ((IPlayerEntity)p).roundabout$getPower() == PowerTypes.STAND.ordinal();
+                    boolean userPowers = ownerEntity instanceof Player p && ((IPlayerEntity)p).sba$getPower() == PowerTypes.STAND.ordinal();
                     if (stepper.getUUID() != fbe.getOwner()) {
                         if(userPowers) {
                             if (bs.tickDown2 <= -9) {
-                                if (!((StandUser) se).roundabout$getActive()) {
-                                    ((StandUser) se).roundabout$setActive(true);
+                                if (!((StandUser) se).sba$getActive()) {
+                                    ((StandUser) se).sba$setActive(true);
                                 }
 
                                 if (!bs.blackSabbathTargets.contains(stepper)) {

@@ -19,7 +19,7 @@ public abstract class AnubisIllagerRendererMixin<T extends AbstractIllager> exte
     }
 
     @Inject(method= "<init>", at = @At(value = "RETURN"))
-    private void roundabout$addIllagerLayers(EntityRendererProvider.Context $$0, IllagerModel $$1, float $$2, CallbackInfo ci) {
+    private void sba$addIllagerLayers(EntityRendererProvider.Context $$0, IllagerModel $$1, float $$2, CallbackInfo ci) {
         this.addLayer(new AnubisMobLayer<>(this));
     }
 

@@ -105,7 +105,7 @@ public class PurpleHazeEntity extends FollowingStandEntity{
             }
 
             if (this.getAnimation() == POD_LAUNCH) {
-                /*if (getUser() instanceof Player PL && ((IPlayerEntity) PL).roundabout$getPurpleHazePods() < 3) {
+                /*if (getUser() instanceof Player PL && ((IPlayerEntity) PL).sba$getPurpleHazePods() < 3) {
                     this.podLaunch.stop();
                     this.podLaunch2.startIfStopped(this.tickCount);
                 }else {

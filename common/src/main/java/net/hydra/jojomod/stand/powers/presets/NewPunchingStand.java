@@ -1,7 +1,7 @@
 package net.hydra.jojomod.stand.powers.presets;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -79,7 +79,7 @@ public class NewPunchingStand extends NewDashPreset {
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (!this.isGuarding() && canGuard()) {
-            ((StandUser)this.getSelf()).roundabout$tryPower(PowerIndex.GUARD,true);
+            ((StandUser)this.getSelf()).sba$tryPower(PowerIndex.GUARD,true);
             tryPowerPacket(PowerIndex.GUARD);
             return true;
         }
@@ -137,8 +137,8 @@ public class NewPunchingStand extends NewDashPreset {
                 }
                 boolean lastHit = (hitNumber >= this.getKickBarrageLength());
                 if (entity != null) {
-                    if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging() && ((StandUser) entity).roundabout$getStandPowers().canClash()
-                            && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
+                    if (entity instanceof LivingEntity && ((StandUser) entity).sba$isBarraging() && ((StandUser) entity).sba$getStandPowers().canClash()
+                            && ((StandUser) entity).sba$getAttackTimeDuring() > -1 && !(((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                         initiateClash(entity);
                     } else {
                         hitParticles(entity);
@@ -171,15 +171,15 @@ public class NewPunchingStand extends NewDashPreset {
                             if (entity instanceof LivingEntity LE) {
                                 if (lastHit) {
                                     if (entity instanceof Player PE){
-                                        ((IPlayerEntity) PE).roundabout$setCameraHits(-1);
+                                        ((IPlayerEntity) PE).sba$setCameraHits(-1);
                                     }
                                     if (!sideHit) {
-                                        ((StandUser)LE).roundabout$setDestructionTrailTicks(80);
+                                        ((StandUser)LE).sba$setDestructionTrailTicks(80);
                                         playBarrageEndNoise(0, entity);
                                     }
                                 } else {
                                     if (entity instanceof Player PE){
-                                        ((IPlayerEntity) PE).roundabout$setCameraHits(2);
+                                        ((IPlayerEntity) PE).sba$setCameraHits(2);
                                     }
                                     if (!sideHit) {
                                         playKickBarrageNoise(hitNumber, entity);
@@ -211,7 +211,7 @@ public class NewPunchingStand extends NewDashPreset {
                     this.attackTimeDuring = -10;
                 }
             } else {
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.self).sba$tryPower(PowerIndex.NONE, true);
             }
         } else {
             if (this.isBarrageAttacking()) {
@@ -226,8 +226,8 @@ public class NewPunchingStand extends NewDashPreset {
                     }
                     boolean lastHit = (hitNumber >= this.getBarrageLength());
                     if (entity != null) {
-                        if (entity instanceof LivingEntity && ((StandUser) entity).roundabout$isBarraging() && ((StandUser) entity).roundabout$getStandPowers().canClash()
-                                && ((StandUser) entity).roundabout$getAttackTimeDuring() > -1 && !(((TimeStop) this.getSelf().level()).CanTimeStopEntity(entity)) && !this.getStandUserSelf().roundabout$isPossessed()) {
+                        if (entity instanceof LivingEntity && ((StandUser) entity).sba$isBarraging() && ((StandUser) entity).sba$getStandPowers().canClash()
+                                && ((StandUser) entity).sba$getAttackTimeDuring() > -1 && !(((TimeStop) this.getSelf().level()).CanTimeStopEntity(entity)) && !this.getStandUserSelf().sba$isPossessed()) {
                             initiateClash(entity);
                         } else {
                             hitParticles(entity);
@@ -262,7 +262,7 @@ public class NewPunchingStand extends NewDashPreset {
                                         setDazed((LivingEntity) entity, (byte) 0);
 
                                         if (!sideHit) {
-                                            ((StandUser) LE).roundabout$setDestructionTrailTicks(80);
+                                            ((StandUser) LE).sba$setDestructionTrailTicks(80);
                                             addEXP(8, LE);
                                             playBarrageEndNoise(0, entity);
                                         }
@@ -297,10 +297,10 @@ public class NewPunchingStand extends NewDashPreset {
                         this.attackTimeDuring = -10;
                     }
                 } else {
-                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+                    ((StandUser) this.self).sba$tryPower(PowerIndex.NONE, true);
                 }
             } else {
-                ((StandUser) this.self).roundabout$tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.self).sba$tryPower(PowerIndex.NONE, true);
             }
         }
     }
@@ -349,7 +349,7 @@ public class NewPunchingStand extends NewDashPreset {
     }
     public void updateBarrage(){
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+            ((StandUser) this.self).sba$tryPower(PowerIndex.GUARD, true);
         } else {
             if (this.attackTimeDuring > this.getBarrageLength()) {
                 this.attackTimeDuring = -20;
@@ -386,10 +386,10 @@ public class NewPunchingStand extends NewDashPreset {
                     double RNG = Math.random();
                     if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge){
                         wentForCharge = true;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BARRAGE_CHARGE, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.BARRAGE_CHARGE, true);
                     } else if (this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) {
                         wentForCharge = false;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.ATTACK, true);
                     }
                 }
             }
@@ -455,7 +455,7 @@ public class NewPunchingStand extends NewDashPreset {
             if (this.attackTimeDuring > this.attackTimeMax) {
                 this.attackTime = -1;
                 this.attackTimeMax = 0;
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE,true);
             } else {
                 int meltLevel = getMeltLevel();
                 if ((this.attackTimeDuring == (5+meltLevel) && this.activePowerPhase == 1)
@@ -487,7 +487,7 @@ public class NewPunchingStand extends NewDashPreset {
                 pow = getHeavyPunchStrengthBase(entity);
                 if (didSummonPunch()) {
                     if (!MainUtil.getReducedDamage(entity)) {
-                        Roundabout.LOGGER.info("boost");
+                        SBA.LOGGER.info("boost");
                         pow += getPunchStrengthBase(entity) * 2;
                     }
                 }
@@ -507,9 +507,9 @@ public class NewPunchingStand extends NewDashPreset {
             } else {
                 if (this.activePowerPhase >= this.activePowerPhaseMax) {
                     if (entity instanceof LivingEntity LE) {
-                        StandPowers powers = ((StandUser) LE).roundabout$getStandPowers();
+                        StandPowers powers = ((StandUser) LE).sba$getStandPowers();
                         if (powers.interceptGuard()
-                                && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()) {
+                                && LE.isBlocking() && !((StandUser) LE).sba$isGuarding()) {
                             knockShield2(entity, 60);
                         } else {
                             if (powers instanceof PowersWhiteAlbum){
@@ -784,7 +784,7 @@ public class NewPunchingStand extends NewDashPreset {
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)){
 
-            airTriggered = (((StandUser) this.getSelf()).roundabout$getLeapTicks() > 0);
+            airTriggered = (((StandUser) this.getSelf()).sba$getLeapTicks() > 0);
             this.setAttackTimeDuring(0);
             this.setActivePower(PowerIndex.POWER_1_SNEAK);
             playSoundsIfNearby(IMPALE_NOISE, 27, false);
@@ -830,33 +830,33 @@ public class NewPunchingStand extends NewDashPreset {
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
 
-        float attackTimeDuring = standUser.roundabout$getAttackTimeDuring();
-        if (standOn && standUser.roundabout$isClashing()) {
+        float attackTimeDuring = standUser.sba$getAttackTimeDuring();
+        if (standOn && standUser.sba$isClashing()) {
             int ClashTime = 15 - Math.round((attackTimeDuring / 60) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
-        } else if (standOn && standUser.roundabout$getStandPowers().isBarrageAttacking() && attackTimeDuring > -1) {
-            int ClashTime = 15 - Math.round((attackTimeDuring / standUser.roundabout$getStandPowers().getBarrageLength()) * 15);
+        } else if (standOn && standUser.sba$getStandPowers().isBarrageAttacking() && attackTimeDuring > -1) {
+            int ClashTime = 15 - Math.round((attackTimeDuring / standUser.sba$getStandPowers().getBarrageLength()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
-        } else if (standOn && standUser.roundabout$getStandPowers().isBarrageCharging()) {
-            int ClashTime = Math.round((attackTimeDuring / standUser.roundabout$getStandPowers().getBarrageWindup()) * 15);
+        } else if (standOn && standUser.sba$getStandPowers().isBarrageCharging()) {
+            int ClashTime = Math.round((attackTimeDuring / standUser.sba$getStandPowers().getBarrageWindup()) * 15);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             context.blit(StandIcons.JOJO_ICONS, k, j, 193, 30, ClashTime, 6);
 
         } else {
             int barTexture = 0;
-            Entity TE = standUser.roundabout$getStandPowers().getTargetEntity(playerEntity, -1, getPunchAngle());
-            float attackTimeMax = standUser.roundabout$getAttackTimeMax();
+            Entity TE = standUser.sba$getStandPowers().getTargetEntity(playerEntity, -1, getPunchAngle());
+            float attackTimeMax = standUser.sba$getAttackTimeMax();
             if (attackTimeMax > 0) {
-                float attackTime = standUser.roundabout$getAttackTime();
+                float attackTime = standUser.sba$getAttackTime();
                 float finalATime = attackTime / attackTimeMax;
                 if (finalATime <= 1) {
 
 
-                    if (standUser.roundabout$getActivePowerPhase() == standUser.roundabout$getActivePowerPhaseMax()) {
+                    if (standUser.sba$getActivePowerPhase() == standUser.sba$getActivePowerPhaseMax()) {
                         barTexture = 24;
                     } else {
                         if (TE != null) {
@@ -919,7 +919,7 @@ public class NewPunchingStand extends NewDashPreset {
     }
     public void updateKickBarrageCharge(){
         if (this.attackTimeDuring >= this.getKickBarrageWindup()) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.BARRAGE_2, true);
+            ((StandUser) this.self).sba$tryPower(PowerIndex.BARRAGE_2, true);
         }
     }
     @Override
@@ -932,7 +932,7 @@ public class NewPunchingStand extends NewDashPreset {
     }
     public void updateKickBarrage(){
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+            ((StandUser) this.self).sba$tryPower(PowerIndex.GUARD, true);
         } else {
             if (this.attackTimeDuring > this.getKickBarrageLength()) {
                 this.attackTimeDuring = -20;

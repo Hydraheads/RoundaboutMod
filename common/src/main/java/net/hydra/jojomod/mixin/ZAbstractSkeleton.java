@@ -20,13 +20,13 @@ public abstract class ZAbstractSkeleton extends Monster
         implements RangedAttackMob {
     /**Skeletons run from dog minions*/
     @Inject(method = "registerGoals()V", at = @At(value = "HEAD"))
-    protected void roundabout$registerGoals(CallbackInfo ci) {
+    protected void sba$registerGoals(CallbackInfo ci) {
         this.goalSelector.addGoal(3, new AvoidEntityGoal<DogMinion>(this, DogMinion.class, 6.0f, 1.0, 1.2));
     }
 
     @Inject(method = "performRangedAttack", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$performRangedAttack(LivingEntity $$0, float $$1, CallbackInfo ci) {
-        if (((StandUser) (Object)this).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
+    public void sba$performRangedAttack(LivingEntity $$0, float $$1, CallbackInfo ci) {
+        if (((StandUser) (Object)this).sba$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
             ci.cancel();
             return;
         }

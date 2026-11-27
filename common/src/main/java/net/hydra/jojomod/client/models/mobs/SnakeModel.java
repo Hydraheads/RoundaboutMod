@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.mobs;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.mobs.animations.SnakeAnimations;
 import net.hydra.jojomod.entity.mobs.Snake;
 import net.minecraft.client.model.HierarchicalModel;
@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class SnakeModel<T extends Snake> extends HierarchicalModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "snake"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(SBA.MOD_ID, "snake"), "main");
 
     private final ModelPart root;
     private final ModelPart Snake;

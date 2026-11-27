@@ -1,7 +1,7 @@
 package net.hydra.jojomod.block;
 
 import com.google.common.annotations.VisibleForTesting;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;

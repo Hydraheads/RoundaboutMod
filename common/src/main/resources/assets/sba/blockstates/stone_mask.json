@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "sba:block/stone_mask",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "sba:block/stone_mask",
+      "y": 0
+    },
+    "facing=south": {
+      "model": "sba:block/stone_mask",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sba:block/stone_mask",
+      "y": 270
+    }
+  }
+}

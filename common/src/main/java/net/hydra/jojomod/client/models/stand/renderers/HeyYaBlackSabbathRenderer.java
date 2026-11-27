@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.HeyYaBlackSabbathModel;
 import net.hydra.jojomod.client.models.stand.MandomBlackSabbathModel;
@@ -17,55 +17,55 @@ import org.jetbrains.annotations.Nullable;
 
 public class HeyYaBlackSabbathRenderer extends StandRenderer<HeyYaEntity>{
 
-    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/base.png");
-    public static ResourceLocation goth = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation goth = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/goth.png");
-    public static ResourceLocation volume_2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation volume_2 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/volume_2.png");
-    public static ResourceLocation chapter_24 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation chapter_24 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/chapter_24.png");
-    public static ResourceLocation greener = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation greener = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/greener.png");
-    public static ResourceLocation warden = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation warden = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/warden.png");
-    public static ResourceLocation fire_and_ice = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation fire_and_ice = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/fire_and_ice.png");
-    public static ResourceLocation world = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation world = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/world.png");
-    public static ResourceLocation ice_cold = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation ice_cold = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/ice_cold.png");
-    public static ResourceLocation villager = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation villager = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/villager.png");
-    public static ResourceLocation geezer = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation geezer = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/geezer.png");
-    public static ResourceLocation skeleton = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation skeleton = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/skeleton.png");
-    public static ResourceLocation wither = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation wither = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/wither.png");
-    public static ResourceLocation tusk = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation tusk = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/tusk.png");
-    public static ResourceLocation devil = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation devil = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/devil.png");
-    public static ResourceLocation hell_nah = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation hell_nah = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/hell_nah.png");
-    public static ResourceLocation alien = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation alien = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/alien.png");
-    public static ResourceLocation america = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation america = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/america.png");
-    public static ResourceLocation zombie = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation zombie = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/zombie.png");
-    public static ResourceLocation anti = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation anti = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/anti.png");
-    public static ResourceLocation grey_ya = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation grey_ya = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/grey_ya.png");
-    public static ResourceLocation angel = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation angel = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/angel.png");
-    public static ResourceLocation knight = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation knight = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/knight.png");
-    public static ResourceLocation saint = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation saint = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/saint.png");
-    public static ResourceLocation vampire = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation vampire = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/hey_ya/vampire.png");
 
     public HeyYaBlackSabbathRenderer(EntityRendererProvider.Context context) {

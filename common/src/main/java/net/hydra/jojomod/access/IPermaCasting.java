@@ -9,35 +9,35 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
 public interface IPermaCasting {
-    void roundabout$addPermaCaster(LivingEntity $$0);
-    void roundabout$addPermaCastingEntityClient(int id, double x, double y, double z, double range, byte context);
-    void roundabout$removePermaCastingEntity(LivingEntity $$0);
-    void roundabout$removePermaCastingEntityClient(int id);
-    void roundabout$streamPermaCastToClients();
-    boolean roundabout$isPermaCastingEntity(LivingEntity entity);
-    LivingEntity roundabout$inPermaCastRangeEntity(Vec3i pos);
-    LivingEntity roundabout$inPermaCastRangeEntity(Entity entity);
-    LivingEntity roundabout$inPermaCastRangeEntity(Vec3i pos, byte permacast);
-    LivingEntity roundabout$inPermaCastRangeEntityJustice(FallenMob fm, Vec3i pos);
-    PermanentZoneCastInstance roundabout$getPermaCastingInstanceClient(Vec3 pos);
-    boolean roundabout$inPermaCastRange(Entity entity);
-    boolean roundabout$inPermaCastRange(Vec3i pos);
-    ImmutableList<LivingEntity> roundabout$getPermaCastingEntities();
-    void roundabout$tickAllPermaCasts();
+    void sba$addPermaCaster(LivingEntity $$0);
+    void sba$addPermaCastingEntityClient(int id, double x, double y, double z, double range, byte context);
+    void sba$removePermaCastingEntity(LivingEntity $$0);
+    void sba$removePermaCastingEntityClient(int id);
+    void sba$streamPermaCastToClients();
+    boolean sba$isPermaCastingEntity(LivingEntity entity);
+    LivingEntity sba$inPermaCastRangeEntity(Vec3i pos);
+    LivingEntity sba$inPermaCastRangeEntity(Entity entity);
+    LivingEntity sba$inPermaCastRangeEntity(Vec3i pos, byte permacast);
+    LivingEntity sba$inPermaCastRangeEntityJustice(FallenMob fm, Vec3i pos);
+    PermanentZoneCastInstance sba$getPermaCastingInstanceClient(Vec3 pos);
+    boolean sba$inPermaCastRange(Entity entity);
+    boolean sba$inPermaCastRange(Vec3i pos);
+    ImmutableList<LivingEntity> sba$getPermaCastingEntities();
+    void sba$tickAllPermaCasts();
     void roundabut$tickPermaCastingEntity();
-    void roundabout$processPermaCastRemovePacket(int permaCastingEntity);
-    void roundabout$permaCastRemovalToClients(LivingEntity removedCastingEntity);
-    void roundabout$processPermaCastPacket(int permaCastingEntity, double x, double y, double z, double range, byte context);
+    void sba$processPermaCastRemovePacket(int permaCastingEntity);
+    void sba$permaCastRemovalToClients(LivingEntity removedCastingEntity);
+    void sba$processPermaCastPacket(int permaCastingEntity, double x, double y, double z, double range, byte context);
 
-    boolean roundabout$inPermaCastFogRange(Entity entity);
-    boolean roundabout$inPermaCastFogRange(Vec3i pos);
-    boolean roundabout$inPermaCastRange(Vec3i pos, byte type);
-    LivingEntity roundabout$inPermaCastFogRangeEntity(Entity entity);
-    LivingEntity roundabout$inPermaCastFogRangeEntity(Vec3i pos);
+    boolean sba$inPermaCastFogRange(Entity entity);
+    boolean sba$inPermaCastFogRange(Vec3i pos);
+    boolean sba$inPermaCastRange(Vec3i pos, byte type);
+    LivingEntity sba$inPermaCastFogRangeEntity(Entity entity);
+    LivingEntity sba$inPermaCastFogRangeEntity(Vec3i pos);
 
-    boolean roundabout$inPurpleHazeRange(Entity entity);
-    boolean roundabout$inPurpleHazeRange(Vec3i pos);
+    boolean sba$inPurpleHazeRange(Entity entity);
+    boolean sba$inPurpleHazeRange(Vec3i pos);
 
-    LivingEntity roundabout$inPurpleHazeRangeEntity(Entity entity);
-    LivingEntity roundabout$inPurpleHazeRangeEntity(Vec3i pos);
+    LivingEntity sba$inPurpleHazeRangeEntity(Entity entity);
+    LivingEntity sba$inPurpleHazeRangeEntity(Vec3i pos);
 }

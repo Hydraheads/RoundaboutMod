@@ -38,38 +38,38 @@ public class TimeStopGameRenderer {
     /**When time is stopped, you shouldn't experience bobbing from getting hurt*/
 
     @Unique
-    public boolean roundabout$cleared = false;
+    public boolean sba$cleared = false;
 
     @Shadow
     private void bobHurt(PoseStack $$0, float $$1){}
     @Inject(method = "bobHurt", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$tiltViewWhenHurt2(PoseStack $$0, float $$1, CallbackInfo ci){
+    private void sba$tiltViewWhenHurt2(PoseStack $$0, float $$1, CallbackInfo ci){
         //$$0 is matrcices, $$1 is tickdelta
-        if (!roundabout$cleared) {
+        if (!sba$cleared) {
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).CanTimeStopEntity(minecraft.player)) {
                 if (this.minecraft.getCameraEntity() instanceof LivingEntity) {
                     Player $$2 = (Player) this.minecraft.getCameraEntity();
-                    $$1 = ((IEntityAndData) $$2).roundabout$getPreTSTick();
+                    $$1 = ((IEntityAndData) $$2).sba$getPreTSTick();
                     //recursive logic, set to true is important even if the compiler doesnt know it
-                    roundabout$cleared = true;
+                    sba$cleared = true;
                     this.bobHurt($$0, $$1);
-                    roundabout$cleared = false;
+                    sba$cleared = false;
                 }
                 ci.cancel();
             }
         }
     }
     @Inject(method = "bobView", at = @At(value = "HEAD"), cancellable = true)
-    private void RoundaboutBobView(PoseStack $$0, float $$1, CallbackInfo ci) {
+    private void SBABobView(PoseStack $$0, float $$1, CallbackInfo ci) {
         LivingEntity player = minecraft.player;
-        if (!roundabout$cleared) {
+        if (!sba$cleared) {
             if (player != null && ((TimeStop) player.level()).CanTimeStopEntity(player)) {
                 if (this.minecraft.getCameraEntity() instanceof Player) {
                     Player $$2 = (Player) this.minecraft.getCameraEntity();
-                    $$1 = ((IEntityAndData) $$2).roundabout$getPreTSTick();
-                    roundabout$cleared = true;
+                    $$1 = ((IEntityAndData) $$2).sba$getPreTSTick();
+                    sba$cleared = true;
                     this.bobView($$0, $$1);
-                    roundabout$cleared = false;
+                    sba$cleared = false;
                 }
                 ci.cancel();
             }
@@ -77,7 +77,7 @@ public class TimeStopGameRenderer {
     }
 
     @Inject(method = "renderItemInHand", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$RenderHandsWithItems(PoseStack $$0, Camera $$1, float $$2, CallbackInfo ci){
+    private void sba$RenderHandsWithItems(PoseStack $$0, Camera $$1, float $$2, CallbackInfo ci){
         //$$0 is matrcices, $$1 is tickdelta
 
         ClientUtil.isBlocked = false;
@@ -87,7 +87,7 @@ public class TimeStopGameRenderer {
         Camera camera = $$1;
         if (player != null) {
             StandUser standComp = ((StandUser) player);
-            StandPowers powers = standComp.roundabout$getStandPowers();
+            StandPowers powers = standComp.sba$getStandPowers();
             LivingEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
                 Vec3 camPos = camera.getPosition();
@@ -109,14 +109,14 @@ public class TimeStopGameRenderer {
         }
 
 
-        if (!roundabout$cleared) {
+        if (!sba$cleared) {
             if (minecraft.player != null && ((TimeStop) minecraft.player.level()).CanTimeStopEntity(minecraft.player)) {
                 if (this.minecraft.getCameraEntity() != null) {
                     Entity Ent = this.minecraft.getCameraEntity();
-                    $$2 = ((IEntityAndData) Ent).roundabout$getPreTSTick();
-                    roundabout$cleared = true;
+                    $$2 = ((IEntityAndData) Ent).sba$getPreTSTick();
+                    sba$cleared = true;
                     this.renderItemInHand($$0, $$1, $$2);
-                    roundabout$cleared = false;
+                    sba$cleared = false;
                 }
                 ci.cancel();
                 return;

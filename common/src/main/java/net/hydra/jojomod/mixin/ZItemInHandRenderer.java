@@ -4,7 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.AccessLoweringRenderer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -88,33 +88,33 @@ public abstract class ZItemInHandRenderer {
 
     @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
-    void roundabout$renderHandsWithItems(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
+    void sba$renderHandsWithItems(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
                                          LocalPlayer localPlayer, int light, CallbackInfo ci) {
         if (localPlayer != null){
             boolean fp = Minecraft.getInstance().options.getCameraType().isFirstPerson();
             StandUser user = ((StandUser)localPlayer);
-            StandPowers powers = user.roundabout$getStandPowers();
-            if (user.roundabout$getStand() instanceof StarPlatinumEntity SE){
+            StandPowers powers = user.sba$getStandPowers();
+            if (user.sba$getStand() instanceof StarPlatinumEntity SE){
                 if (fp && SE.getScoping()){
                     ci.cancel();
                     return;
                 }
             }
-            if (user.roundabout$getStandPowers() instanceof PowersRatt) {
-                if (user.roundabout$getStandPowers().scopeLevel != 0) {
+            if (user.sba$getStandPowers() instanceof PowersRatt) {
+                if (user.sba$getStandPowers().scopeLevel != 0) {
                     ci.cancel();
                     return;
                 }
             }
 
-           // if (user.roundabout$getStandPowers() instanceof PowersGreenDay PGD ) {
+           // if (user.sba$getStandPowers() instanceof PowersGreenDay PGD ) {
            //     if (!PGD.HasMainArm || !(PGD.Main_arm == null)) {
            //         ci.cancel();
            //         return;
            //     }
            // }
 
-            if (user.roundabout$getStandPowers() instanceof PowersEmperor emperor && user.roundabout$getCombatMode() && !emperor.emperorZoomActive()) {
+            if (user.sba$getStandPowers() instanceof PowersEmperor emperor && user.sba$getCombatMode() && !emperor.emperorZoomActive()) {
 
                 poseStack.pushPose();
                 poseStack.translate(0.3, -0.25, -0.7);
@@ -122,23 +122,23 @@ public abstract class ZItemInHandRenderer {
                 poseStack.mulPose(Axis.YP.rotationDegrees(135.0F));
                 poseStack.mulPose(Axis.ZP.rotationDegrees(-30.0F));
                 poseStack.scale(0.9F, 0.9F, 0.9F);
-                ModStrayModels.EMPEROR_MODEL.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.entityCutoutNoCull(new ResourceLocation(Roundabout.MOD_ID, "textures/stand/emperor/emperor_anime.png"))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                ModStrayModels.EMPEROR_MODEL.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.entityCutoutNoCull(new ResourceLocation(SBA.MOD_ID, "textures/stand/emperor/emperor_anime.png"))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 poseStack.popPose();
 
                 poseStack.scale(0.0F, 0.0F, 0.0F);
 
-            } else if (user.roundabout$getStandPowers() instanceof PowersEmperor emperor && user.roundabout$getCombatMode() && emperor.emperorZoomActive()){
+            } else if (user.sba$getStandPowers() instanceof PowersEmperor emperor && user.sba$getCombatMode() && emperor.emperorZoomActive()){
                 ci.cancel();
             }
 
-            if (user.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(localPlayer) && PowerTypes.hasHandsActive(localPlayer)) {
+            if (user.sba$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(localPlayer) && PowerTypes.hasHandsActive(localPlayer)) {
                 /*
                 poseStack.pushPose();
                 poseStack.translate(0.3, -0.25, -0.7);
                 poseStack.mulPose(Axis.XP.rotationDegrees(290.0F));
                 poseStack.mulPose(Axis.YP.rotationDegrees(135.0F));
                 poseStack.mulPose(Axis.ZP.rotationDegrees(-30.0F));
-                ModStrayModels.SILVER_CHARIOT_SWORD.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(ModStrayModels.SILVER_CHARIOT_SWORD.getTextureLocation(user.roundabout$getStandSkin()))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                ModStrayModels.SILVER_CHARIOT_SWORD.renderToBuffer(poseStack, bufferSource.getBuffer(RenderType.entityTranslucent(ModStrayModels.SILVER_CHARIOT_SWORD.getTextureLocation(user.sba$getStandSkin()))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                 poseStack.scale(0.9F, 0.9F, 0.9F);
                 */
             }
@@ -171,12 +171,12 @@ public abstract class ZItemInHandRenderer {
                                 /**
                                 float $$11 = hando == InteractionHand.MAIN_HAND ? aan : 0.0F;
                                 float $$12 = 1.0F - Mth.lerp($$0, oMainHandHeight, this.mainHandHeight);
-                                this.roundabout$renderJusticeArmWithItem(
+                                this.sba$renderJusticeArmWithItem(
                                         $$3, $$0, sev, InteractionHand.MAIN_HAND, $$11, $$12, $$1, $$2, $$4,skl);
 
                                 float $$13 = hando == InteractionHand.OFF_HAND ? aan : 0.0F;
                                 float $$14 = 1.0F - Mth.lerp($$0, this.oOffHandHeight, this.offHandHeight);
-                                this.roundabout$renderJusticeArmWithItem(
+                                this.sba$renderJusticeArmWithItem(
                                         $$3, $$0, sev, InteractionHand.OFF_HAND, $$13, $$14, $$1, $$2, $$4,skl);
                                  **/
 
@@ -191,7 +191,7 @@ public abstract class ZItemInHandRenderer {
     }
     @Inject(method = "renderHandsWithItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch()V", shift = At.Shift.BEFORE), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
-    void roundabout$renderHandsWithItemsX(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
+    void sba$renderHandsWithItemsX(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
                                          LocalPlayer localPlayer, int light, CallbackInfo ci) {
 
         //We can render any model here in first person
@@ -199,7 +199,7 @@ public abstract class ZItemInHandRenderer {
     }
 
     @Unique
-    private<T extends StandEntity>  void roundabout$renderJusticeArm(PoseStack $$0, MultiBufferSource $$1, int $$2,
+    private<T extends StandEntity>  void sba$renderJusticeArm(PoseStack $$0, MultiBufferSource $$1, int $$2,
                                                                      float $$3, float $$4, HumanoidArm $$5, JusticeEntity JE) {
         boolean $$6 = $$5 != HumanoidArm.LEFT;
         float $$7 = $$6 ? 1.0F : -1.0F;
@@ -228,10 +228,10 @@ public abstract class ZItemInHandRenderer {
         }
     }
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$tick(CallbackInfo ci) {
+    public void sba$tick(CallbackInfo ci) {
     }
     @Inject(method = "isChargedCrossbow", at = @At(value = "HEAD"), cancellable = true, require = 0)
-    private static void roundabout$charge(ItemStack $$0, CallbackInfoReturnable<Boolean> cir) {
+    private static void sba$charge(ItemStack $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0.is(ModItems.IRON_BALL_CROSSBOW) && IronBallCrossbowItem.isCharged($$0)){
             cir.setReturnValue(true);
         }
@@ -240,7 +240,7 @@ public abstract class ZItemInHandRenderer {
     @Unique
     public boolean rdbt$returnToZero = false;
     @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true, require = 0)
-    public void roundabout$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer,
+    public void sba$renderArmWithItemAbstractClientPlayer(AbstractClientPlayer abstractClientPlayer,
                                                                  float partialTick, float g,
                                                                  InteractionHand interactionHand, float h,
                                                                  ItemStack itemStack, float attackProg,
@@ -251,17 +251,17 @@ public abstract class ZItemInHandRenderer {
             return;
         }
 
-        if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
+        if (((StandUser)abstractClientPlayer).sba$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
             ci.cancel();
             return;
         }
 
-        if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isRenderingArms) {
+        if (((StandUser)abstractClientPlayer).sba$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isRenderingArms) {
             ci.cancel();
             return;
         }
 
-        if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0) {
+        if (((StandUser)abstractClientPlayer).sba$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0) {
             ci.cancel();
             return;
         }
@@ -284,21 +284,21 @@ public abstract class ZItemInHandRenderer {
 
         StandUser standUser = (StandUser) abstractClientPlayer;
 
-        if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay) {
-            if (!((PowersGreenDay)standUser.roundabout$getStandPowers()).HasMainArm && interactionHand == InteractionHand.MAIN_HAND){
+        if (standUser.sba$getStandPowers() instanceof PowersGreenDay) {
+            if (!((PowersGreenDay)standUser.sba$getStandPowers()).HasMainArm && interactionHand == InteractionHand.MAIN_HAND){
                 ci.cancel();
                 return;
             }
         }
 
-        if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay) {
-            if (!((PowersGreenDay)standUser.roundabout$getStandPowers()).HasOffHand && interactionHand == InteractionHand.OFF_HAND){
+        if (standUser.sba$getStandPowers() instanceof PowersGreenDay) {
+            if (!((PowersGreenDay)standUser.sba$getStandPowers()).HasOffHand && interactionHand == InteractionHand.OFF_HAND){
                 ci.cancel();
                 return;
             }
         }
 
-        if (standUser.roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
+        if (standUser.sba$getStandPowers() instanceof PowersSilverChariot PSC) {
             if (PowerTypes.hasStandActive(abstractClientPlayer) && PSC.hasHandsOut()) {
                 // ci.cancel();
                 // return;
@@ -306,17 +306,17 @@ public abstract class ZItemInHandRenderer {
         }
 
         boolean emperorFP =
-                standUser.roundabout$getStandPowers() instanceof PowersEmperor
-                        && standUser.roundabout$getCombatMode();
+                standUser.sba$getStandPowers() instanceof PowersEmperor
+                        && standUser.sba$getCombatMode();
 
-        if (standUser.roundabout$getStandPowers().hasHandsOut() &&
-                standUser.roundabout$getStandAnimation() == StandPowers.GUARD){
+        if (standUser.sba$getStandPowers().hasHandsOut() &&
+                standUser.sba$getStandAnimation() == StandPowers.GUARD){
             ci.cancel();
             return;
         }
         if (emperorFP ||
                 (abstractClientPlayer != null &&
-                        standUser.roundabout$getEffectiveCombatMode() &&
+                        standUser.sba$getEffectiveCombatMode() &&
                         !abstractClientPlayer.isUsingItem())
                 || AnubisLayer.shouldRender(abstractClientPlayer) != null
                 || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM)) {
@@ -328,10 +328,10 @@ public abstract class ZItemInHandRenderer {
         }
 
 
-        byte posByte2 = ((IPlayerEntity) abstractClientPlayer).roundabout$GetPoseEmote();
-        byte posByte3 = ((StandUser) abstractClientPlayer).roundabout$getStandAnimation();
+        byte posByte2 = ((IPlayerEntity) abstractClientPlayer).sba$GetPoseEmote();
+        byte posByte3 = ((StandUser) abstractClientPlayer).sba$getStandAnimation();
 
-        if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).roundabout$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
+        if (abstractClientPlayer != null && ((StandUser)abstractClientPlayer).sba$getEffectiveCombatMode() && !abstractClientPlayer.isUsingItem() ||
                 AnubisLayer.shouldRender(abstractClientPlayer) != null || abstractClientPlayer.getItemInHand(interactionHand).is(ModItems.ANUBIS_ITEM) ||
                 posByte2 == 35 || posByte3 == StandPowers.HEEL_RAISE) {
             ((AccessLoweringRenderer)this).rdbt$assertSelf();
@@ -573,8 +573,8 @@ public abstract class ZItemInHandRenderer {
             } else {
                 if (itemStack.getItem() instanceof StandArrowItem SI){
                     boolean standsCanUse = false;
-                    if (((StandUser)abstractClientPlayer).roundabout$getStandPowers() != null) {
-                        standsCanUse = ((StandUser)abstractClientPlayer).roundabout$getStandPowers().shouldStandArrowShake();
+                    if (((StandUser)abstractClientPlayer).sba$getStandPowers() != null) {
+                        standsCanUse = ((StandUser)abstractClientPlayer).sba$getStandPowers().shouldStandArrowShake();
                     }
                     LivingEntity ME =  MainUtil.homeOnWorthy(abstractClientPlayer.level(),abstractClientPlayer.position(),5);
                     if (standsCanUse) {

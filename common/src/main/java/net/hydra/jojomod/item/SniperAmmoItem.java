@@ -16,6 +16,6 @@ public class SniperAmmoItem extends AmmoItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("text.roundabout.bullets.sniper").withStyle(ChatFormatting.YELLOW));
+        tooltip.add(Component.translatable("text.sba.bullets.sniper").withStyle(ChatFormatting.YELLOW));
     }
 }

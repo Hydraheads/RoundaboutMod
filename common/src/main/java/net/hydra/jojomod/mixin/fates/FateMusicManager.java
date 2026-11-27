@@ -46,7 +46,7 @@ public abstract class FateMusicManager {
 
     /*Creepy vampire music*/
     @Inject(method = "tick()V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$tick(CallbackInfo ci) {
+    protected void sba$tick(CallbackInfo ci) {
         if (minecraft.player != null){
             if (ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().vampireOSTChange) {
                 if (FateTypes.isEvil(minecraft.player)) {

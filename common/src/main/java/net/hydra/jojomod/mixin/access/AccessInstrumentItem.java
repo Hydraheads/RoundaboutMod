@@ -16,7 +16,7 @@ public abstract class AccessInstrumentItem implements IInstrumentItemAccess {
     //Mojang likes to make every method private so I need to unprivate some methods for Black Sabbath. -Signed, 14Kacper
 
     @Override
-    public Optional<? extends Holder<Instrument>> roundabout$GetInstrument(ItemStack p_220135_) {
+    public Optional<? extends Holder<Instrument>> sba$GetInstrument(ItemStack p_220135_) {
         return this.getInstrument(p_220135_);
     }
 

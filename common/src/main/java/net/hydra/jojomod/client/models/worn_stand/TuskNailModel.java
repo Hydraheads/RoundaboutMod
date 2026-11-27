@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -28,13 +28,13 @@ import org.joml.Quaternionf;
 
 
 public class TuskNailModel extends PsuedoHierarchicalModel {
-    public static ResourceLocation uno = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation uno = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/tusk/projectiles/nail.png");
     public ResourceLocation getTextureLocation(Entity context){
         return uno;
     }
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "tusk_drill_spin"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(SBA.MOD_ID, "tusk_drill_spin"), "main");
     private final ModelPart Root;
 
     public TuskNailModel() {
@@ -70,9 +70,9 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             StandUser user = ((StandUser) LE);
-            if (user.roundabout$getStandPowers() instanceof  PowersTusk PT) {
-                user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount + i * 3);
-                this.animate(user.roundabout$getWornStandIdleAnimation(), TuskAnimations.NAIL_FLOAT, animated ? (partialTicks + i * 3) : 0, 1.0F);
+            if (user.sba$getStandPowers() instanceof  PowersTusk PT) {
+                user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount + i * 3);
+                this.animate(user.sba$getWornStandIdleAnimation(), TuskAnimations.NAIL_FLOAT, animated ? (partialTicks + i * 3) : 0, 1.0F);
 
                 VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
                 //The number at the end is inversely proportional so 2 is half speed
@@ -92,11 +92,11 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
 
     public void tuskNail(LivingEntity livingEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int time, int nailCount) {
         StandUser SU = (StandUser) livingEntity;
-        if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
+        if (SU.sba$getStandPowers() instanceof PowersTusk PT) {
             if (PT.getAct() > 1 && ( (nailCount == 4 && PT.getMaxActiveNails() > 5) || (PT.getMaxActiveNails() == nailCount && PT.getMaxActiveNails() <= 5)  ) ) {
                 poseStack.pushPose();
                 boolean golden = false;
-                if (SU.roundabout$getStandAnimation() == PowersTusk.CHARGE_NAIL) {
+                if (SU.sba$getStandAnimation() == PowersTusk.CHARGE_NAIL) {
                     float scale = PT.getChargeScale(PT.getAttackTimeDuring()+partialTicks%1);
                     poseStack.scale(1+scale*1.3F,1+scale*1.3F,1+scale*1.3F);
                     golden = scale == 1;
@@ -111,7 +111,7 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
 
     public void firstPersonTuskNail(LivingEntity livingEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int time, int nailCount) {
         StandUser SU = (StandUser) livingEntity;
-        if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
+        if (SU.sba$getStandPowers() instanceof PowersTusk PT) {
             if (PT.getAct() > 1 && ( (nailCount == 4 && PT.getMaxActiveNails() > 5) || (PT.getMaxActiveNails() == nailCount && PT.getMaxActiveNails() <= 5)  ) ) {
                 boolean isLeftHand = (livingEntity.getMainArm() == HumanoidArm.LEFT && nailCount <= 5) || (livingEntity.getMainArm() == HumanoidArm.RIGHT && nailCount > 5);
 
@@ -124,7 +124,7 @@ public class TuskNailModel extends PsuedoHierarchicalModel {
                 }
                 poseStack.rotateAround(new Quaternionf(0, 1, 0, nailCount > 5 ? -1 : 1), 0, 0, 0);
                 boolean golden = false;
-                if (SU.roundabout$getStandAnimation() == PowersTusk.CHARGE_NAIL) {
+                if (SU.sba$getStandAnimation() == PowersTusk.CHARGE_NAIL) {
                     float scale = PT.getChargeScale(PT.getAttackTimeDuring()+partialTicks%1);
                     poseStack.scale(1+scale,1+scale,1+scale);
                     golden = scale == 1;

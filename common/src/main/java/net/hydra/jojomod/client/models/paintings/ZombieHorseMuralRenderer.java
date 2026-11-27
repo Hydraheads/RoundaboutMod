@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.models.paintings;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
@@ -20,12 +20,12 @@ public class ZombieHorseMuralRenderer extends CustomPaintingRenderer {
 
     @Override
     public ResourceLocation getTexture() {
-        return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/painting/zombie_horse_mural.png");
+        return new ResourceLocation(SBA.MOD_ID,"textures/entity/painting/zombie_horse_mural.png");
     }
 
     @Override
     public ResourceLocation getTextureBack() {
-        return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/painting/empty_back.png");
+        return new ResourceLocation(SBA.MOD_ID,"textures/entity/painting/empty_back.png");
     }
 
     @Override

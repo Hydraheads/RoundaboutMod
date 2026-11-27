@@ -249,7 +249,7 @@ public final class HallucinatoryAcidProjectile extends ThrowableItemProjectile {
 
     private static int ownerSkin(Entity owner) {
         if (owner instanceof StandUser standUser) {
-            return Mth.clamp(standUser.roundabout$getStandSkin(),
+            return Mth.clamp(standUser.sba$getStandSkin(),
                     WhitesnakeEntity.ANIME_SKIN, WhitesnakeEntity.FLESHSNAKE_SKIN);
         }
         return WhitesnakeEntity.ANIME_SKIN;

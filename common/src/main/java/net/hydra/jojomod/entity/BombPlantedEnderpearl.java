@@ -23,7 +23,7 @@ public class BombPlantedEnderpearl extends ThrownEnderpearl {
         super.onHitEntity(result);
 
         Entity target = result.getEntity();
-        if (target != getOwner() && (getOwner() != null && ((StandUser) getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ)
+        if (target != getOwner() && (getOwner() != null && ((StandUser) getOwner()).sba$getStandPowers() instanceof PowersKillerQueen PKQ)
                 && PKQ.bombEntity.getId() == getId()) {
             boolean success = target.hurt(this.damageSources().thrown(this, this.getOwner()), 0.0F);
 

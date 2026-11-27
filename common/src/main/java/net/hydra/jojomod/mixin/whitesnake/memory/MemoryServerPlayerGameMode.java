@@ -29,19 +29,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerPlayerGameMode.class)
 public abstract class MemoryServerPlayerGameMode {
-    @Unique private BlockState roundabout$preUseBlockState = null;
+    @Unique private BlockState sba$preUseBlockState = null;
 
     @Inject(method = "handleBlockBreakAction", at = @At("HEAD"), cancellable = true)
-    private void roundabout$blockMemorylessBreaking(BlockPos pos, ServerboundPlayerActionPacket.Action action,
+    private void sba$blockMemorylessBreaking(BlockPos pos, ServerboundPlayerActionPacket.Action action,
                                                      Direction direction, int height, int sequence, CallbackInfo ci) {
-        ServerPlayer player = ((ServerPlayerGameModeAccessor) this).roundabout$getPlayer();
+        ServerPlayer player = ((ServerPlayerGameModeAccessor) this).sba$getPlayer();
         if (!DiscItemData.hasPlayerControl(player)) ci.cancel();
     }
 
     @Inject(method = "useItem", at = @At("HEAD"), cancellable = true)
-    private void roundabout$blockControlledItemUse(ServerPlayer player, Level level, ItemStack stack,
+    private void sba$blockControlledItemUse(ServerPlayer player, Level level, ItemStack stack,
                                                     InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers) {
+        if (((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers) {
             if (powers.isPiloting() && powers.isMeltingMode()) {
                 cir.setReturnValue(InteractionResult.FAIL);
                 return;
@@ -53,16 +53,16 @@ public abstract class MemoryServerPlayerGameMode {
         }
         if (!DiscItemData.hasPlayerControl(player)
                 && !(stack.getItem() instanceof MemoryDiscItem
-                && !((DiscBearer) player).roundabout$hasMemoryDisc())) {
+                && !((DiscBearer) player).sba$hasMemoryDisc())) {
             cir.setReturnValue(InteractionResult.FAIL);
         }
     }
 
     @Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
-    private void roundabout$blockControlledBlockUse(ServerPlayer player, Level level, ItemStack stack,
+    private void sba$blockControlledBlockUse(ServerPlayer player, Level level, ItemStack stack,
                                                      InteractionHand hand, BlockHitResult hit,
                                                      CallbackInfoReturnable<InteractionResult> cir) {
-        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers
+        if (((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers
                 && powers.isPiloting() && powers.isMeltingMode()) {
             cir.setReturnValue(InteractionResult.FAIL);
             return;
@@ -71,9 +71,9 @@ public abstract class MemoryServerPlayerGameMode {
     }
 
     @Inject(method = "destroyBlock", at = @At("HEAD"))
-    private void roundabout$onBlockMined(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        ServerPlayer player = ((ServerPlayerGameModeAccessor) this).roundabout$getPlayer();
-        if (!player.isCreative() && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+    private void sba$onBlockMined(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+        ServerPlayer player = ((ServerPlayerGameModeAccessor) this).sba$getPlayer();
+        if (!player.isCreative() && ((StandUser) player).sba$getStandPowers() instanceof PowersGoldExperience ge) {
             BlockState state = player.level().getBlockState(pos);
             if (PowersGoldExperience.isMatureCrop(state)) {
                 ge.onCropHarvested();
@@ -84,26 +84,26 @@ public abstract class MemoryServerPlayerGameMode {
     }
 
     @Inject(method = "useItemOn", at = @At("HEAD"))
-    private void roundabout$beforeUseItemOn(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
-        this.roundabout$preUseBlockState = null;
+    private void sba$beforeUseItemOn(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
+        this.sba$preUseBlockState = null;
         if (cir.isCancelled()) {
             return;
         }
         BlockState state = level.getBlockState(hitResult.getBlockPos());
         if (PowersGoldExperience.isRightClickHarvestable(state)) {
-            this.roundabout$preUseBlockState = state;
+            this.sba$preUseBlockState = state;
         }
     }
 
     @Inject(method = "useItemOn", at = @At("RETURN"))
-    private void roundabout$afterUseItemOn(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
-        if (this.roundabout$preUseBlockState != null) {
+    private void sba$afterUseItemOn(ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
+        if (this.sba$preUseBlockState != null) {
             BlockState postState = level.getBlockState(hitResult.getBlockPos());
-            if (PowersGoldExperience.wasRightClickHarvested(this.roundabout$preUseBlockState, postState)
-                    && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+            if (PowersGoldExperience.wasRightClickHarvested(this.sba$preUseBlockState, postState)
+                    && ((StandUser) player).sba$getStandPowers() instanceof PowersGoldExperience ge) {
                 ge.onCropHarvested();
             }
-            this.roundabout$preUseBlockState = null;
+            this.sba$preUseBlockState = null;
         }
     }
 }

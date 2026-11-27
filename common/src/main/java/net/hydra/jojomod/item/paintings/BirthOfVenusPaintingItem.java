@@ -2,7 +2,7 @@ package net.hydra.jojomod.item.paintings;
 
 import net.hydra.jojomod.entity.paintings.BirthOfVenusPainting;
 import net.hydra.jojomod.entity.paintings.MonaLisaPainting;
-import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
+import net.hydra.jojomod.entity.paintings.SBAPainting;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,7 +38,7 @@ public class BirthOfVenusPaintingItem extends Item {
         } else {
             Level level = p_41331_.getLevel();
             HangingEntity hangingentity;
-            Optional<RoundaboutPainting> optional = BirthOfVenusPainting.create(level, blockpos1, direction);
+            Optional<SBAPainting> optional = BirthOfVenusPainting.create(level, blockpos1, direction);
             if (optional.isEmpty()) {
                 return InteractionResult.CONSUME;
             }

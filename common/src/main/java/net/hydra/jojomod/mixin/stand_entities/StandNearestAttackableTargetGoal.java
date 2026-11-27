@@ -21,7 +21,7 @@ public abstract class StandNearestAttackableTargetGoal<T extends LivingEntity> e
     /**Stand Entities are not targeted, their users are*/
 
     @Inject(method = "findTarget", at = @At(value = "TAIL"))
-    protected void roundabout$findTarget(CallbackInfo ci) {
+    protected void sba$findTarget(CallbackInfo ci) {
         if (this.target instanceof WhitesnakeEntity stand && stand.isControlModeActive()) return;
         if (this.target instanceof StandEntity SE) {
             if(SE.getUser() != null && !(SE.getUser() instanceof StandEntity)){

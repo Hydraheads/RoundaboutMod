@@ -72,8 +72,8 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                 if (mob.getBoundingBox().intersects(wallBox)) {
                     if (mob.isOnFire()){
                         mob.setRemainingFireTicks(0);
-                    } if ( ((StandUser)mob).roundabout$isOnStandFire()){
-                        ((StandUser)mob).roundabout$setRemainingStandFireTicks(0);
+                    } if ( ((StandUser)mob).sba$isOnStandFire()){
+                        ((StandUser)mob).sba$setRemainingStandFireTicks(0);
                     }
                     if (MainUtil.canFreeze(mob)) {
                         if (mob instanceof Player || mob instanceof CloneEntity){
@@ -142,7 +142,7 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                 }
                 if (mob.getBoundingBox().intersects(wallBox)) {
                     if (!mob.onGround()){
-                        if (!(((StandUser)mob).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
+                        if (!(((StandUser)mob).sba$getStandPowers() instanceof PowersWhiteAlbum PW &&
                                 PowerTypes.hasStandActive(mob))) {
                             MainUtil.takeLiteralUnresistableKnockbackWithY(mob, 0, -0.5F, 0);
                         }

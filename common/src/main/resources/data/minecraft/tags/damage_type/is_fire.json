@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "roundabout:gas_explosion"
+    "sba:gas_explosion"
   ]
 }

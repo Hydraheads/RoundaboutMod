@@ -24,12 +24,12 @@ public abstract class WhitesnakeControlChatMixin {
                     + "Lnet/minecraft/network/chat/PlayerChatMessage;"
                     + "Lnet/minecraft/server/level/ServerPlayer;"
                     + "Lnet/minecraft/network/chat/ChatType$Bound;)V"), index = 2)
-    private ChatType.Bound roundaboutWhitesnake$useControlModeName(ChatType.Bound original) {
-        if (!(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
+    private ChatType.Bound sbaWhitesnake$useControlModeName(ChatType.Bound original) {
+        if (!(((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers)
                 || !powers.isPiloting() || !ClientNetworking.getAppropriateConfig().whitesnakeSettings.whitesnakeNameChangingText) {
             return original;
         }
-        StandEntity stand = ((StandUser) player).roundabout$getStand();
+        StandEntity stand = ((StandUser) player).sba$getStand();
         String name = stand instanceof WhitesnakeEntity whitesnake && whitesnake.isDisguised()
                 ? whitesnake.getDisguiseName() : "Whitesnake";
         return new ChatType.Bound(original.chatType(), Component.literal(name), original.targetName());

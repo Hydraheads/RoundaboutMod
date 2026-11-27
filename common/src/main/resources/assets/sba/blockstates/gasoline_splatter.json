@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "sba:block/gasoline_splatter_large"
+    },
+    "level=1": {
+      "model": "sba:block/gasoline_splatter_medium"
+    },
+    "level=2": {
+      "model": "sba:block/gasoline_splatter_small"
+    }
+  }
+}

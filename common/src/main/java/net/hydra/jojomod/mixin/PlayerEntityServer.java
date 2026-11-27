@@ -87,65 +87,65 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
 
     @Override
     @Unique
-    public int roundabout$getCounter(){
+    public int sba$getCounter(){
         return containerCounter;
     }
     @Override
     @Unique
-    public void roundabout$nextContainerCounter(){
+    public void sba$nextContainerCounter(){
         nextContainerCounter();
     }
     @Override
     @Unique
-    public void roundabout$initMenu(AbstractContainerMenu $$0){
+    public void sba$initMenu(AbstractContainerMenu $$0){
         initMenu($$0);
     }
     @Unique
-    private boolean roundabout$initializeDataOnClient = false;
+    private boolean sba$initializeDataOnClient = false;
     @Shadow
     public ServerGamePacketListenerImpl connection;
     @Shadow private int containerCounter;
     @Shadow private int spawnInvulnerableTime;
-    @Unique private int roundabout$invincibleTicks = 0;
-    @Unique private int roundabout$gerScenarioTicks = 0;
-    @Unique private boolean roundabout$gerScenarioStarted = false;
-    @Unique private final List<Entity> roundabout$gerTempEntities = new ArrayList<>();
-    @Unique private ResourceKey<Level> roundabout$gerLoopDeathDim = Level.OVERWORLD;
-    @Unique @Nullable private Vec3 roundabout$gerLoopDeathVec = null;
+    @Unique private int sba$invincibleTicks = 0;
+    @Unique private int sba$gerScenarioTicks = 0;
+    @Unique private boolean sba$gerScenarioStarted = false;
+    @Unique private final List<Entity> sba$gerTempEntities = new ArrayList<>();
+    @Unique private ResourceKey<Level> sba$gerLoopDeathDim = Level.OVERWORLD;
+    @Unique @Nullable private Vec3 sba$gerLoopDeathVec = null;
 
     @Override
-    public void roundabout$setInvincibleTicks(int ticks){
-        roundabout$invincibleTicks = ticks;
+    public void sba$setInvincibleTicks(int ticks){
+        sba$invincibleTicks = ticks;
     }
     @Inject(method = "onEffectRemoved", at = @At(value = "HEAD"))
-    public void roundabout$oneffectRemoved(MobEffectInstance $$0, CallbackInfo ci) {
+    public void sba$oneffectRemoved(MobEffectInstance $$0, CallbackInfo ci) {
 
     }
     @Inject(method = "isChangingDimension()Z", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$changeDimensions(CallbackInfoReturnable<Boolean> cir) {
-        if (roundabout$invincibleTicks > 0){
+    public void sba$changeDimensions(CallbackInfoReturnable<Boolean> cir) {
+        if (sba$invincibleTicks > 0){
             cir.setReturnValue(true);
         }
     }
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    public void roundabout$tick(CallbackInfo ci) {
-        if (!this.level().isClientSide() && !roundabout$initializeDataOnClient && connection !=null && connection.isAcceptingMessages()){
+    public void sba$tick(CallbackInfo ci) {
+        if (!this.level().isClientSide() && !sba$initializeDataOnClient && connection !=null && connection.isAcceptingMessages()){
             IPlayerEntity ipe = ((IPlayerEntity)this);
             S2CPacketUtil.sendPowerInventorySettings(
-                    ((ServerPlayer)((Player)(Object)this)), ipe.roundabout$getAnchorPlace(),
-                    ipe.roundabout$getDistanceOut(),
-                    ipe.roundabout$getSizePercent(),
-                    ipe.roundabout$getIdleRotation(),
-                    ipe.roundabout$getIdleYOffset(),
-                    ipe.roundabout$getAnchorPlaceAttack());
-            roundabout$initializeDataOnClient = true;
+                    ((ServerPlayer)((Player)(Object)this)), ipe.sba$getAnchorPlace(),
+                    ipe.sba$getDistanceOut(),
+                    ipe.sba$getSizePercent(),
+                    ipe.sba$getIdleRotation(),
+                    ipe.sba$getIdleYOffset(),
+                    ipe.sba$getAnchorPlaceAttack());
+            sba$initializeDataOnClient = true;
         }
         if (!this.level().isClientSide) {
-            if (roundabout$invincibleTicks > 0){
-                roundabout$invincibleTicks--;
+            if (sba$invincibleTicks > 0){
+                sba$invincibleTicks--;
             }
-            ((IPlayerEntity) this).roundabout$getMaskInventory().update();
-            ((IPlayerEntity) this).roundabout$getBlckSabbathPlayerInventory().update();
+            ((IPlayerEntity) this).sba$getMaskInventory().update();
+            ((IPlayerEntity) this).sba$getBlckSabbathPlayerInventory().update();
             IPlayerEntity ipe = (IPlayerEntity) this;
             int loops = ipe.rdbt$getGerDeathLoops();
 
@@ -153,35 +153,35 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                 if (PowerTypes.getPlaneOfExisting((Entity) this) != 13) {
                     PowerTypes.setPlaneOfExisting((Entity) this, (byte) 13);
                 }
-                ((StandUser) this).roundabout$sealStand(1300);
+                ((StandUser) this).sba$sealStand(1300);
 
-                if (!roundabout$gerScenarioStarted) {
-                    roundabout$gerScenarioStarted = true;
-                    roundabout$gerScenarioTicks = 0;
-                    roundabout$startGerDeathScenario(10 - loops);
+                if (!sba$gerScenarioStarted) {
+                    sba$gerScenarioStarted = true;
+                    sba$gerScenarioTicks = 0;
+                    sba$startGerDeathScenario(10 - loops);
                 }
 
-                roundabout$gerScenarioTicks++;
-                roundabout$tickGerDeathScenario(10 - loops, roundabout$gerScenarioTicks);
+                sba$gerScenarioTicks++;
+                sba$tickGerDeathScenario(10 - loops, sba$gerScenarioTicks);
             }
         }
     }
 
 
     @Inject(method = "teleportTo(Lnet/minecraft/server/level/ServerLevel;DDDFF)V", at = @At(value = "TAIL"))
-    public void roundabout$teleportTo(ServerLevel p_9000_, double p_9001_, double p_9002_, double p_9003_, float p_9004_, float p_9005_, CallbackInfo info) {
+    public void sba$teleportTo(ServerLevel p_9000_, double p_9001_, double p_9002_, double p_9003_, float p_9004_, float p_9005_, CallbackInfo info) {
         if (p_9000_ == this.level()) {
-            ((StandUser) this).roundabout$getFollowers().forEach($$0 -> {
-                for (StandEntity $$1 : ((StandUser) this).roundabout$getFollowers()) {
+            ((StandUser) this).sba$getFollowers().forEach($$0 -> {
+                for (StandEntity $$1 : ((StandUser) this).sba$getFollowers()) {
                     if ($$1.level().dimension() == this.level().dimension()) {
                         $$1.moveTo(this.getX(), this.getY(), this.getZ());
                     }
                 }
             });
             StandUser standUserData = ((StandUser) this);
-            if (standUserData.roundabout$hasStandOut()  && standUserData.roundabout$getStand() instanceof FollowingStandEntity fe) {
+            if (standUserData.sba$hasStandOut()  && standUserData.sba$getStand() instanceof FollowingStandEntity fe) {
                 if (fe.level().dimension() == this.level().dimension()) {
-                    standUserData.roundabout$updateStandOutPosition(fe, Entity::moveTo);
+                    standUserData.sba$updateStandOutPosition(fe, Entity::moveTo);
                 }
             }
         }
@@ -190,37 +190,37 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     /**Make NBT save on death*/
     /** respawn */
     @Inject(method = "restoreFrom(Lnet/minecraft/server/level/ServerPlayer;Z)V", at = @At(value = "TAIL"))
-    public void roundabout$respawn(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
-        if ($$0.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_KEEP_STANDS_ON_DEATH)){
-            ((StandUser)this).roundabout$setStandDisc(MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc()));
+    public void sba$respawn(ServerPlayer $$0, boolean $$1, CallbackInfo info) {
+        if ($$0.level().getGameRules().getBoolean(ModGamerules.SBA_KEEP_STANDS_ON_DEATH)){
+            ((StandUser)this).sba$setStandDisc(MainUtil.saveToDiscData($$0,((StandUser)$$0).sba$getStandDisc()));
         } else {
             if (ClientNetworking.getAppropriateConfig().itemSettings.standDiscsDropWithKeepGameRuleOff){
-                ItemStack disc = MainUtil.saveToDiscData($$0,((StandUser)$$0).roundabout$getStandDisc());
+                ItemStack disc = MainUtil.saveToDiscData($$0,((StandUser)$$0).sba$getStandDisc());
                 $$0.drop(disc,true,false);
             }
-            ((StandUser)this).roundabout$setStandDisc(ItemStack.EMPTY);
+            ((StandUser)this).sba$setStandDisc(ItemStack.EMPTY);
         }
         IPlayerEntity ipe = ((IPlayerEntity)this);
-        ipe.roundabout$setMaskInventory(((IPlayerEntity)$$0).roundabout$getMaskInventory());
-        ipe.roundabout$setBlckSabbathPlayerInventory(((IPlayerEntity)$$0).roundabout$getBlckSabbathPlayerInventory());
+        ipe.sba$setMaskInventory(((IPlayerEntity)$$0).sba$getMaskInventory());
+        ipe.sba$setBlckSabbathPlayerInventory(((IPlayerEntity)$$0).sba$getBlckSabbathPlayerInventory());
         if (!this.level().isClientSide) {
-            ((IPlayerEntity) this).roundabout$setMaskSlot(((IPlayerEntity) $$0).roundabout$getMaskSlot());
-            ((IPlayerEntity) this).roundabout$setMaskVoiceSlot(((IPlayerEntity) $$0).roundabout$getMaskVoiceSlot());
+            ((IPlayerEntity) this).sba$setMaskSlot(((IPlayerEntity) $$0).sba$getMaskSlot());
+            ((IPlayerEntity) this).sba$setMaskVoiceSlot(((IPlayerEntity) $$0).sba$getMaskVoiceSlot());
 
-            int anchorPlace = ((IPlayerEntity) $$0).roundabout$getAnchorPlace();
-            int anchorPlaceAttack = ((IPlayerEntity) $$0).roundabout$getAnchorPlaceAttack();
-            float distanceOut = ((IPlayerEntity) $$0).roundabout$getDistanceOut();
-            float size = ((IPlayerEntity) $$0).roundabout$getSizePercent();
-            float rotat = ((IPlayerEntity) $$0).roundabout$getIdleRotation();
-            float yOffset = ((IPlayerEntity) $$0).roundabout$getIdleYOffset();
-            byte teamColor = ((IPlayerEntity) $$0).roundabout$getTeamColor();
-            ipe.roundabout$setAnchorPlace(anchorPlace);
-            ipe.roundabout$setDistanceOut(distanceOut);
-            ipe.roundabout$setSizePercent(size);
-            ipe.roundabout$setIdleRotation(rotat);
-            ipe.roundabout$setIdleYOffset(yOffset);
-            ipe.roundabout$setTeamColor(teamColor);
-            ipe.roundabout$setAnchorPlaceAttack(anchorPlaceAttack);
+            int anchorPlace = ((IPlayerEntity) $$0).sba$getAnchorPlace();
+            int anchorPlaceAttack = ((IPlayerEntity) $$0).sba$getAnchorPlaceAttack();
+            float distanceOut = ((IPlayerEntity) $$0).sba$getDistanceOut();
+            float size = ((IPlayerEntity) $$0).sba$getSizePercent();
+            float rotat = ((IPlayerEntity) $$0).sba$getIdleRotation();
+            float yOffset = ((IPlayerEntity) $$0).sba$getIdleYOffset();
+            byte teamColor = ((IPlayerEntity) $$0).sba$getTeamColor();
+            ipe.sba$setAnchorPlace(anchorPlace);
+            ipe.sba$setDistanceOut(distanceOut);
+            ipe.sba$setSizePercent(size);
+            ipe.sba$setIdleRotation(rotat);
+            ipe.sba$setIdleYOffset(yOffset);
+            ipe.sba$setTeamColor(teamColor);
+            ipe.sba$setAnchorPlaceAttack(anchorPlaceAttack);
 
             ipe.rdbt$setHairColorX(((IPlayerEntity) $$0).rdbt$getHairColorX());
             ipe.rdbt$setHairColorY(((IPlayerEntity) $$0).rdbt$getHairColorY());
@@ -229,20 +229,20 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
 
             S2CPacketUtil.sendPowerInventorySettings(
                         ((ServerPlayer)((Player)(Object)this)), anchorPlace,distanceOut,
-                    ipe.roundabout$getSizePercent(),
-                    ipe.roundabout$getIdleRotation(),
-                    ipe.roundabout$getIdleYOffset(),
+                    ipe.sba$getSizePercent(),
+                    ipe.sba$getIdleRotation(),
+                    ipe.sba$getIdleYOffset(),
                     anchorPlaceAttack);
 
-            if (!this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_LOSE_FATE_ON_DEATH)) {
+            if (!this.level().getGameRules().getBoolean(ModGamerules.SBA_LOSE_FATE_ON_DEATH)) {
                 byte strat = ((IPlayerEntity) $$0).rdbt$getRespawnStrategy();
                 if (strat < 1) {
-                    ipe.roundabout$setFate(((IPlayerEntity) $$0).roundabout$getFate());
+                    ipe.sba$setFate(((IPlayerEntity) $$0).sba$getFate());
                 }
             }
 
             ipe.rdbt$setVampireData(((IPlayerEntity) $$0).rdbt$getVampireData());
-            ipe.roundabout$setPower(((IPlayerEntity) $$0).roundabout$getPower());
+            ipe.sba$setPower(((IPlayerEntity) $$0).sba$getPower());
 
             IPlayerEntity oldIpe = (IPlayerEntity) $$0;
             int loops = oldIpe.rdbt$getGerDeathLoops();
@@ -257,15 +257,15 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                 ipe.rdbt$setGerSavedInventory(savedInv);
                 this.getInventory().clearContent();
 
-                this.roundabout$copySavedGerSpawnFrom((IPlayerEntityServer) $$0);
-                if (this.roundabout$gerLoopDeathVec != null && this.getServer() != null) {
-                    ServerLevel targetLevel = this.getServer().getLevel(this.roundabout$gerLoopDeathDim);
+                this.sba$copySavedGerSpawnFrom((IPlayerEntityServer) $$0);
+                if (this.sba$gerLoopDeathVec != null && this.getServer() != null) {
+                    ServerLevel targetLevel = this.getServer().getLevel(this.sba$gerLoopDeathDim);
                     if (targetLevel != null) {
                         ((ServerPlayer) (Object) this).teleportTo(
                                 targetLevel,
-                                this.roundabout$gerLoopDeathVec.x,
-                                this.roundabout$gerLoopDeathVec.y,
-                                this.roundabout$gerLoopDeathVec.z,
+                                this.sba$gerLoopDeathVec.x,
+                                this.sba$gerLoopDeathVec.y,
+                                this.sba$gerLoopDeathVec.z,
                                 this.getYRot(),
                                 this.getXRot()
                         );
@@ -279,14 +279,14 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     }
 
     @Inject(method = "disconnect", at = @At("HEAD"))
-    public void roundabout$onDisconnect(CallbackInfo ci) {
+    public void sba$onDisconnect(CallbackInfo ci) {
         IPlayerEntity ipe = (IPlayerEntity) this;
-        if (this.roundabout$gerLoopDeathVec != null || ipe.rdbt$getGerDeathLoops() > 0) {
-            roundabout$cleanupGerScenario();
+        if (this.sba$gerLoopDeathVec != null || ipe.rdbt$getGerDeathLoops() > 0) {
+            sba$cleanupGerScenario();
             ipe.rdbt$setGerDeathLoops(0);
-            roundabout$gerScenarioStarted = false;
-            roundabout$gerScenarioTicks = 0;
-            this.roundabout$gerLoopDeathVec = null;
+            sba$gerScenarioStarted = false;
+            sba$gerScenarioTicks = 0;
+            this.sba$gerLoopDeathVec = null;
 
             ListTag savedInv = ipe.rdbt$getGerSavedInventory();
             if (savedInv != null) {
@@ -298,7 +298,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         }
     }
 
-    public void roundabout$openBlackSabbathInventory(BlackSabbathEntity $$0, Container $$1) {
+    public void sba$openBlackSabbathInventory(BlackSabbathEntity $$0, Container $$1) {
         ServerPlayer player = (ServerPlayer) (Object) this;
         if(this.containerMenu != this.inventoryMenu){
             this.closeContainer();
@@ -308,7 +308,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         this.containerMenu = new BlackSabbathPlayerInventoryMenu(this.getInventory(), this, this.containerCounter);
         this.initMenu(this.containerMenu);
     }
-    public void roundabout$openD4CCloneInventory(D4CCloneEntity $$0, Container $$1) {
+    public void sba$openD4CCloneInventory(D4CCloneEntity $$0, Container $$1) {
         ServerPlayer player = (ServerPlayer) (Object) this;
         if(this.containerMenu != this.inventoryMenu){
             this.closeContainer();
@@ -320,8 +320,8 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     }
 
     @Inject(method = "die", at = @At("HEAD"))
-    public void roundabout$onServerPlayerDie(DamageSource $$0, CallbackInfo ci) {
-        if (((StandUser) this).roundabout$getStandPowers() instanceof PowersDiverDown dd
+    public void sba$onServerPlayerDie(DamageSource $$0, CallbackInfo ci) {
+        if (((StandUser) this).sba$getStandPowers() instanceof PowersDiverDown dd
                 && dd.isTransferringDamage && dd.submergedTarget != null) {
             DamageSource customSource = ModDamageTypes.of(
                     this.level(),
@@ -333,20 +333,20 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
         IPlayerEntity ipe = (IPlayerEntity) this;
         int loops = ipe.rdbt$getGerDeathLoops();
         if (loops > 0) {
-            roundabout$cleanupGerScenario();
+            sba$cleanupGerScenario();
             int remaining = loops - 1;
             ipe.rdbt$setGerDeathLoops(remaining);
-            roundabout$gerScenarioStarted = false;
-            roundabout$gerScenarioTicks = 0;
+            sba$gerScenarioStarted = false;
+            sba$gerScenarioTicks = 0;
 
             if (remaining <= 0) {
-                this.roundabout$gerLoopDeathVec = null;
+                this.sba$gerLoopDeathVec = null;
             }
         }
     }
 
     @Unique
-    private void roundabout$startGerDeathScenario(int index) {
+    private void sba$startGerDeathScenario(int index) {
         if (!(this.level() instanceof ServerLevel sl)) return;
         this.spawnInvulnerableTime = 0;
         this.invulnerableTime = 0;
@@ -360,7 +360,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                     anvil.setHurtsEntities(12.0F, 40);
                     anvil.dropItem = false;
                     PowerTypes.setPlaneOfExisting(anvil, (byte) 13);
-                    roundabout$gerTempEntities.add(anvil);
+                    sba$gerTempEntities.add(anvil);
                 }
             }
             // fall damage
@@ -380,7 +380,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                     brute.setTarget(this);
                     PowerTypes.setPlaneOfExisting(brute, (byte) 13);
                     sl.addFreshEntity(brute);
-                    roundabout$gerTempEntities.add(brute);
+                    sba$gerTempEntities.add(brute);
                 }
             }
             // blaze jumpscare
@@ -394,7 +394,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                         blaze.setTarget(this);
                         PowerTypes.setPlaneOfExisting(blaze, (byte) 13);
                         sl.addFreshEntity(blaze);
-                        roundabout$gerTempEntities.add(blaze);
+                        sba$gerTempEntities.add(blaze);
                     }
                 }
             }
@@ -416,7 +416,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                     creeper.ignite();
                     PowerTypes.setPlaneOfExisting(creeper, (byte) 13);
                     sl.addFreshEntity(creeper);
-                    roundabout$gerTempEntities.add(creeper);
+                    sba$gerTempEntities.add(creeper);
                 }
             }
             // firing squad
@@ -431,7 +431,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                         skel.setItemSlot(EquipmentSlot.MAINHAND, powerBow);
                         PowerTypes.setPlaneOfExisting(skel, (byte) 13);
                         sl.addFreshEntity(skel);
-                        roundabout$gerTempEntities.add(skel);
+                        sba$gerTempEntities.add(skel);
                     }
                 }
             }
@@ -456,7 +456,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                     enderman.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8.0);
                     PowerTypes.setPlaneOfExisting(enderman, (byte) 13);
                     sl.addFreshEntity(enderman);
-                    roundabout$gerTempEntities.add(enderman);
+                    sba$gerTempEntities.add(enderman);
                 }
             }
             // lightning storm (in tick)
@@ -471,16 +471,16 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     }
 
     @Unique
-    private void roundabout$tickGerDeathScenario(int index, int ticks) {
+    private void sba$tickGerDeathScenario(int index, int ticks) {
         if (!(this.level() instanceof ServerLevel sl)) return;
         if (this.spawnInvulnerableTime > 0) {
             this.spawnInvulnerableTime = 0;
         }
 
-        for (Entity e : new ArrayList<>(roundabout$gerTempEntities)) {
+        for (Entity e : new ArrayList<>(sba$gerTempEntities)) {
             if (!this.isAlive()) return;
             if (e == null || !e.isAlive()) {
-                roundabout$gerTempEntities.remove(e);
+                sba$gerTempEntities.remove(e);
                 continue;
             }
 
@@ -498,7 +498,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
                 if (hitsPlayer || hitsGround) {
                     sl.playSound(null, anvil.blockPosition(), SoundEvents.ANVIL_LAND, SoundSource.BLOCKS, 1.0F, 1.0F);
                     anvil.discard();
-                    roundabout$gerTempEntities.remove(e);
+                    sba$gerTempEntities.remove(e);
                     if (hitsPlayer) {
                         this.invulnerableTime = 0;
                         this.hurt(this.damageSources().anvil(anvil), 12.0F);
@@ -576,7 +576,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             if (e instanceof Creeper creeper && creeper.getSwelling(0.0F) >= 0.9F) {
                 double x = creeper.getX(), y = creeper.getY(), z = creeper.getZ();
                 creeper.discard();
-                roundabout$gerTempEntities.remove(e);
+                sba$gerTempEntities.remove(e);
                 sl.explode(null, x, y, z, 3.5F, Level.ExplosionInteraction.NONE);
                 this.invulnerableTime = 0;
                 this.hurt(this.damageSources().explosion(null, null), 30.0F);
@@ -600,7 +600,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             for (SmallFireball fireball : fireballs) {
                 if (fireball.getClass() == SmallFireball.class
                         && fireball.getOwner() != null
-                        && roundabout$gerTempEntities.contains(fireball.getOwner())) {
+                        && sba$gerTempEntities.contains(fireball.getOwner())) {
                     fireball.discard();
                 }
             }
@@ -644,7 +644,7 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
     }
 
     @Unique
-    private void roundabout$cleanupGerScenario() {
+    private void sba$cleanupGerScenario() {
         if (this.connection != null && this.level() instanceof ServerLevel sl) {
             this.connection.send(new ClientboundGameEventPacket(
                     sl.isRaining() ? ClientboundGameEventPacket.START_RAINING : ClientboundGameEventPacket.STOP_RAINING,
@@ -653,28 +653,28 @@ public abstract class PlayerEntityServer extends Player implements IPlayerEntity
             this.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.RAIN_LEVEL_CHANGE, sl.getRainLevel(1.0F)));
             this.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.THUNDER_LEVEL_CHANGE, sl.getThunderLevel(1.0F)));
         }
-        for (Entity e : roundabout$gerTempEntities) {
+        for (Entity e : sba$gerTempEntities) {
             if (e != null && !e.isRemoved()) {
                 e.discard();
             }
         }
-        roundabout$gerTempEntities.clear();
+        sba$gerTempEntities.clear();
     }
 
     @Override
     @Unique
-    public void roundabout$setTemporaryGerSpawn(BlockPos deathPos) {
+    public void sba$setTemporaryGerSpawn(BlockPos deathPos) {
         ServerPlayer sp = (ServerPlayer) (Object) this;
-        this.roundabout$gerLoopDeathDim = sp.level().dimension();
-        this.roundabout$gerLoopDeathVec = sp.position();
+        this.sba$gerLoopDeathDim = sp.level().dimension();
+        this.sba$gerLoopDeathVec = sp.position();
     }
 
     @Override
     @Unique
-    public void roundabout$copySavedGerSpawnFrom(IPlayerEntityServer oldPlayer) {
-        if (oldPlayer instanceof PlayerEntityServer oldPes && oldPes.roundabout$gerLoopDeathVec != null) {
-            this.roundabout$gerLoopDeathDim = oldPes.roundabout$gerLoopDeathDim;
-            this.roundabout$gerLoopDeathVec = oldPes.roundabout$gerLoopDeathVec;
+    public void sba$copySavedGerSpawnFrom(IPlayerEntityServer oldPlayer) {
+        if (oldPlayer instanceof PlayerEntityServer oldPes && oldPes.sba$gerLoopDeathVec != null) {
+            this.sba$gerLoopDeathDim = oldPes.sba$gerLoopDeathDim;
+            this.sba$gerLoopDeathVec = oldPes.sba$gerLoopDeathVec;
         }
     }
 }

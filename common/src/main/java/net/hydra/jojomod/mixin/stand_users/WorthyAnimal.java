@@ -26,12 +26,12 @@ public abstract class WorthyAnimal extends AgeableMob {
 
     /**Stand User reproduction*/
     @Inject(method = "spawnChildFromBreeding", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$spawnChildFromBreeding(ServerLevel $$0, Animal $$1, CallbackInfo ci) {
+    private void sba$spawnChildFromBreeding(ServerLevel $$0, Animal $$1, CallbackInfo ci) {
         if ($$1 != null){
-            boolean partnerUser = (!((StandUser)$$1).roundabout$getStandDisc().isEmpty());
-            boolean partnerWorthy = ((IMob)$$1).roundabout$isWorthy();
-            boolean thisUser = (!((StandUser)this).roundabout$getStandDisc().isEmpty());
-            boolean thisWorthy = ((IMob)this).roundabout$isWorthy();
+            boolean partnerUser = (!((StandUser)$$1).sba$getStandDisc().isEmpty());
+            boolean partnerWorthy = ((IMob)$$1).sba$isWorthy();
+            boolean thisUser = (!((StandUser)this).sba$getStandDisc().isEmpty());
+            boolean thisWorthy = ((IMob)this).sba$isWorthy();
             if (partnerWorthy || partnerUser || thisUser || thisWorthy){
                 ci.cancel();
                 AgeableMob $$2 = this.getBreedOffspring($$0, $$1);
@@ -51,14 +51,14 @@ public abstract class WorthyAnimal extends AgeableMob {
 
                     RandomSource $$5 = $$0.getRandom();
                     if ($$5.nextFloat() < UserOdds && !(ModItems.getPoolForMob($$2)).isEmpty()) {
-                        ((IMob)$$2).roundabout$setWorthy(true);
-                        ((IMob)$$2).roundabout$setIsNaturalStandUser(true);
-                        ((IMob)$$2).roundabout$setIsBred(true);
+                        ((IMob)$$2).sba$setWorthy(true);
+                        ((IMob)$$2).sba$setIsNaturalStandUser(true);
+                        ((IMob)$$2).sba$setIsBred(true);
                         int index = (int) (Math.floor(Math.random()* ModItems.getPoolForMob($$2).size()));
                         ItemStack stack = ModItems.getPoolForMob($$2).get(index).getDefaultInstance();
                         if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD){
-                            ((StandUser)$$2).roundabout$setStandDisc(stack);
-                            ((StandUser)$$2).roundabout$getStandPowers().rollSkin();
+                            ((StandUser)$$2).sba$setStandDisc(stack);
+                            ((StandUser)$$2).sba$getStandPowers().rollSkin();
                         }
                     } else {
                         double WorthyOdds = MainUtil.getWorthyOdds($$2);
@@ -68,7 +68,7 @@ public abstract class WorthyAnimal extends AgeableMob {
                             WorthyOdds+= MainUtil.getWorthyBreedBonus($$2);
                         }
                         if ($$5.nextFloat() < WorthyOdds) {
-                            ((IMob)$$2).roundabout$setWorthy(true);
+                            ((IMob)$$2).sba$setWorthy(true);
                         }
                     }
 

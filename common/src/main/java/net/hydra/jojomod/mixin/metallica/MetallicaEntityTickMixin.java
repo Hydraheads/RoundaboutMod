@@ -14,10 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MetallicaEntityTickMixin {
 
     @Inject(method = "spawnSprintParticle", at = @At("HEAD"), cancellable = true)
-    private void roundabout$cancelSprintParticles(CallbackInfo ci) {
+    private void sba$cancelSprintParticles(CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
         if (self instanceof LivingEntity living && MainUtil.isUsingMetallica(living)) {
-            if (living instanceof StandUser su && su.roundabout$getStandPowers() instanceof PowersMetallica pm) {
+            if (living instanceof StandUser su && su.sba$getStandPowers() instanceof PowersMetallica pm) {
                 if (pm.isInvisible()) {
                     ci.cancel();
                 }

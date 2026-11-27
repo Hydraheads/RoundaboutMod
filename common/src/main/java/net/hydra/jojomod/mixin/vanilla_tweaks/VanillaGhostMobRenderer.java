@@ -26,7 +26,7 @@ public abstract class VanillaGhostMobRenderer <T extends Mob, M extends EntityMo
 
     @Inject(method = "render(Lnet/minecraft/world/entity/Mob;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
             at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+    private void sba$render(T $$0, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
         if ($$0 instanceof Ghast || $$0 instanceof Allay || $$0 instanceof Vex) {
             if (ConfigManager.getClientConfig().vanillaMinecraftTweaks.onlyStandUsersCanSeeVanillaGhostMobs) {
                 LocalPlayer lp = Minecraft.getInstance().player;

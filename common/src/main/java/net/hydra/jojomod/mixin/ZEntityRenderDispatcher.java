@@ -3,7 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.NoHitboxRendering;
@@ -56,12 +56,12 @@ public abstract class ZEntityRenderDispatcher {
 
 
     @Unique
-    public boolean roundabout$recurse = false;
+    public boolean sba$recurse = false;
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
-    protected <E extends Entity>  void roundabout$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7,
+    protected <E extends Entity>  void sba$render(E entity, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7,
                                                          int light, CallbackInfo ci) {
         if (entity instanceof LivingEntity){
-            ((StandUser)entity).roundabout$tryBlip();
+            ((StandUser)entity).sba$tryBlip();
         }
         if (entity instanceof Projectile && ClientUtil.getScreenFreeze()){
             ci.cancel();
@@ -72,7 +72,7 @@ public abstract class ZEntityRenderDispatcher {
             return;
         }
 
-        if (!roundabout$recurse){
+        if (!sba$recurse){
             if (entity instanceof GentlyWeepsEntity gw) {
                 Entity attached = gw.level().getEntity(gw.getAttached());
 
@@ -89,16 +89,16 @@ public abstract class ZEntityRenderDispatcher {
                     double rz = pos.z - camPos.z;
 
                     // Render at the player's exact interpolated position
-                    roundabout$recurse = true;
+                    sba$recurse = true;
                     this.render(entity, rx, ry, rz, $$4, $$5, $$6, $$7, light);
-                    roundabout$recurse = false;
+                    sba$recurse = false;
 
                     ci.cancel();
                 }
             }
         }
-        if (entity instanceof LivingEntity LE && !roundabout$recurse){
-            byte bt =  ((StandUser)LE).roundabout$getGlow();
+        if (entity instanceof LivingEntity LE && !sba$recurse){
+            byte bt =  ((StandUser)LE).sba$getGlow();
             if (bt > 0) {
                 int light2 = light;
                 if (bt == 1) {
@@ -110,17 +110,17 @@ public abstract class ZEntityRenderDispatcher {
                     /**
                      * Unfortunately, the light value decrease never seems to never work with ANY amount of variance, just /2
                      *
-                     Roundabout.LOGGER.info("1:"+light2);
-                     Roundabout.LOGGER.info("2:"+((float)light2));
-                     Roundabout.LOGGER.info("3:"+(((float)light2)*0.7F));
-                     Roundabout.LOGGER.info("4:"+Mth.floor(((float)light2)*0.7F));
+                     SBA.LOGGER.info("1:"+light2);
+                     SBA.LOGGER.info("2:"+((float)light2));
+                     SBA.LOGGER.info("3:"+(((float)light2)*0.7F));
+                     SBA.LOGGER.info("4:"+Mth.floor(((float)light2)*0.7F));
                      **/
                 } else if (bt == 2){
                     light2 = 15728880;
                 }
-                roundabout$recurse = true;
+                sba$recurse = true;
                 render(entity, $$1, $$2, $$3, $$4, $$5, $$6, $$7, light2);
-                roundabout$recurse = false;
+                sba$recurse = false;
                 ci.cancel();
             }
         }
@@ -131,13 +131,13 @@ public abstract class ZEntityRenderDispatcher {
 
     /**Cancel hitbox rendering for stuff like go beyond*/
     @Inject(method = "renderHitbox(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/entity/Entity;F)V", at = @At(value = "HEAD"), cancellable = true)
-    private static <E extends Entity>  void roundabout$renderHitbox(PoseStack $$0, VertexConsumer $$1, Entity $$2, float $$3, CallbackInfo ci) {
+    private static <E extends Entity>  void sba$renderHitbox(PoseStack $$0, VertexConsumer $$1, Entity $$2, float $$3, CallbackInfo ci) {
         if ($$2 instanceof NoHitboxRendering || ClientUtil.getThrowFadePercent($$2,$$3) <= 0){
             ci.cancel();
             return;
         }
         if ($$2 instanceof Player P) {
-            if (((StandUser)P).roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (((StandUser)P).sba$getStandPowers() instanceof PowersTusk PT) {
                 if (PT.getActivePower() == PowersTusk.FLATTEN) {
                     ci.cancel();
                 }
@@ -153,29 +153,29 @@ public abstract class ZEntityRenderDispatcher {
 
         /**This is where red bind and other string-like moves will be rendered*/
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;render(Lnet/minecraft/world/entity/Entity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",shift = At.Shift.BEFORE))
-    protected <E extends Entity>  void roundabout$preRender(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int $$8, CallbackInfo ci) {
+    protected <E extends Entity>  void sba$preRender(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int $$8, CallbackInfo ci) {
 
         if ($$0 instanceof LivingEntity LE) {
-            Entity entity = ((StandUser)$$0).roundabout$getBoundTo();
+            Entity entity = ((StandUser)$$0).sba$getBoundTo();
             if (entity != null) {
-                ClientUtil.roundabout$renderBound(LE, $$5, $$6, $$7, entity, 0);
+                ClientUtil.sba$renderBound(LE, $$5, $$6, $$7, entity, 0);
             }
         }
     }
     @Inject(method = "render(Lnet/minecraft/world/entity/Entity;DDDFFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE",
     target="Lnet/minecraft/client/renderer/entity/EntityRenderer;render(Lnet/minecraft/world/entity/Entity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
     shift = At.Shift.AFTER), cancellable = true)
-    protected <E extends Entity>  void roundabout$renderFlame(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int $$8, CallbackInfo ci) {
+    protected <E extends Entity>  void sba$renderFlame(E $$0, double $$1, double $$2, double $$3, float $$4, float $$5, PoseStack $$6, MultiBufferSource $$7, int $$8, CallbackInfo ci) {
         if ($$0 instanceof LivingEntity LE){
-            if (roundabout$displayFireAnimation(LE)){
-                roundabout$renderFlame($$6, $$7, LE);
+            if (sba$displayFireAnimation(LE)){
+                sba$renderFlame($$6, $$7, LE);
             }
         }
     }
 
 
-    private void roundabout$renderFlame(PoseStack $$0, MultiBufferSource $$1, LivingEntity $$2) {
-        byte bt = ((StandUser) $$2).roundabout$getOnStandFire();
+    private void sba$renderFlame(PoseStack $$0, MultiBufferSource $$1, LivingEntity $$2) {
+        byte bt = ((StandUser) $$2).sba$getOnStandFire();
         if (bt > 0) {
             ClientUtil.pushPoseAndCooperate($$0,14);
             BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
@@ -208,34 +208,34 @@ public abstract class ZEntityRenderDispatcher {
 
             RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
             if (bt == StandFireType.BLUE.id){
-                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_blue_0.png")));
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(SBA.location("textures/block/stand_fire_blue_0.png")));
             } else if (bt == StandFireType.PURPLE.id){
-                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_purple_0.png")));
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(SBA.location("textures/block/stand_fire_purple_0.png")));
             } else if (bt == StandFireType.GREEN.id){
-                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_green_0.png")));
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(SBA.location("textures/block/stand_fire_green_0.png")));
             } else if (bt == StandFireType.DREAD.id){
-                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_dread_0.png")));
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(SBA.location("textures/block/stand_fire_dread_0.png")));
             } else if (bt == StandFireType.CREAM.id){
-                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_cream_0.png")));
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(SBA.location("textures/block/stand_fire_cream_0.png")));
             } else {
-                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(Roundabout.location("textures/block/stand_fire_0.png")));
+                vertexConsumer = $$1.getBuffer(RenderType.entityTranslucent(SBA.location("textures/block/stand_fire_0.png")));
             }
 
             for (PoseStack.Pose matrices = $$0.last(); $$8 > 0.0F; $$11++) {
 
                 RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
                 if (bt == StandFireType.BLUE.id){
-                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_blue_0.png"));
+                    RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_blue_0.png"));
                 } else if (bt == StandFireType.PURPLE.id){
-                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_purple_0.png"));
+                    RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_purple_0.png"));
                 } else if (bt == StandFireType.GREEN.id){
-                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_green_0.png"));
+                    RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_green_0.png"));
                 } else if (bt == StandFireType.DREAD.id){
-                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_dread_0.png"));
+                    RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_dread_0.png"));
                 } else if (bt == StandFireType.CREAM.id){
-                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_cream_0.png"));
+                    RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_cream_0.png"));
                 } else {
-                    RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+                    RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_0.png"));
                 }
 
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
@@ -257,8 +257,8 @@ public abstract class ZEntityRenderDispatcher {
     }
 
     @Unique
-    public boolean roundabout$displayFireAnimation(LivingEntity LE) {
-        return ((StandUser)LE).roundabout$isOnStandFire() && !LE.isSpectator();
+    public boolean sba$displayFireAnimation(LivingEntity LE) {
+        return ((StandUser)LE).sba$isOnStandFire() && !LE.isSpectator();
     }
     @Shadow
     private static void renderBlockShadow(
@@ -283,15 +283,15 @@ public abstract class ZEntityRenderDispatcher {
     }
 
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
-    private static void roundabout$RenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
+    private static void sba$RenderShadow(PoseStack $$0, MultiBufferSource $$1, Entity $$2, float renderDistance, float $$4, LevelReader $$5, float shadowRadius, CallbackInfo ci) {
         if ($$2 instanceof CloneEntity ce){
             if (ce.getPlayer() != null && (!ce.turned) &&((IEntityAndData)ce.getPlayer()).rdbt$getSharedFlag(5)){
                 ci.cancel();
                 return;
             }
         }
-        if (!((IEntityAndData)$$2).roundabout$getShadow()){
-            ((IEntityAndData)$$2).roundabout$setShadow(true);
+        if (!((IEntityAndData)$$2).sba$getShadow()){
+            ((IEntityAndData)$$2).sba$setShadow(true);
             ci.cancel();
             return;
         }
@@ -304,7 +304,7 @@ public abstract class ZEntityRenderDispatcher {
             return;
         }
         if ($$2 instanceof Player PL){
-            byte playerP = ((IPlayerEntity)PL).roundabout$GetPos();
+            byte playerP = ((IPlayerEntity)PL).sba$GetPos();
 
             /*Dodge makes you lean forward visually*/
             if (playerP == PlayerPosIndex.SUNLIGHT){
@@ -327,9 +327,9 @@ public abstract class ZEntityRenderDispatcher {
                 $$7 = shadowRadius * 0.5F;
             }
 
-            double $$9 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).roundabout$getRoundaboutPrevX(), $$2.getX());
-            double $$10 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).roundabout$getRoundaboutPrevY(), $$2.getY());
-            double $$11 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).roundabout$getRoundaboutPrevZ(), $$2.getZ());
+            double $$9 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).sba$getSBAPrevX(), $$2.getX());
+            double $$10 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).sba$getSBAPrevY(), $$2.getY());
+            double $$11 = Mth.lerp((double)$$4, ((IEntityAndData)$$2).sba$getSBAPrevZ(), $$2.getZ());
             float $$12 = Math.min(renderDistance / 0.5F, $$7);
             int $$13 = Mth.floor($$9 - (double) $$7);
             int $$14 = Mth.floor($$9 + (double) $$7);

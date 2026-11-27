@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.mobs.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.StarPlatinumEntity;
@@ -21,7 +21,7 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 
 public class HorseVampireEyeLayer <T extends AbstractHorse, M extends HorseModel<T>> extends EyesLayer<T, M> {
-    private static final ResourceLocation SPIDER_EYES = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/vampire/horse_eyes.png");
+    private static final ResourceLocation SPIDER_EYES = new ResourceLocation(SBA.MOD_ID,"textures/entity/vampire/horse_eyes.png");
 
     public HorseVampireEyeLayer(RenderLayerParent<T, M> $$0) {
         super($$0);
@@ -30,8 +30,8 @@ public class HorseVampireEyeLayer <T extends AbstractHorse, M extends HorseModel
     @Override
     public void render(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
 
-        if (($$3 != null && ((IEntityAndData)$$3).roundabout$getTrueInvisibility() > -1) ||
-                ((IEntityAndData)$$3).roundabout$getTrueInvisibility() > -1){
+        if (($$3 != null && ((IEntityAndData)$$3).sba$getTrueInvisibility() > -1) ||
+                ((IEntityAndData)$$3).sba$getTrueInvisibility() > -1){
             return;
         }
 

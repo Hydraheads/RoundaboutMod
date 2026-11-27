@@ -63,16 +63,16 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
-        $$0.putBoolean("roundabout.Finished",done);
-        $$0.putInt("roundabout.Bounces",bounces);
-        $$0.putBoolean("roundabout.Launched",getLaunched());
+        $$0.putBoolean("sba.Finished",done);
+        $$0.putInt("sba.Bounces",bounces);
+        $$0.putBoolean("sba.Launched",getLaunched());
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
-        this.done = $$0.getBoolean("roundabout.Finished");
-        this.bounces = $$0.getInt("roundabout.Bounces");
-        setLaunched($$0.getBoolean("roundabout.Launched"));
+        this.done = $$0.getBoolean("sba.Finished");
+        this.bounces = $$0.getInt("sba.Bounces");
+        setLaunched($$0.getBoolean("sba.Launched"));
         super.readAdditionalSaveData($$0);
     }
 
@@ -83,7 +83,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
         Vec3 delta = this.getDeltaMovement();
         if (!this.level().isClientSide) {
-            if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+            if (this.getEntityData().get(SBA$SUPER_THROWN)) {
 
             }
         }
@@ -103,14 +103,14 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
         }
         super.tick();
 
-        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+        if (this.getEntityData().get(SBA$SUPER_THROWN)) {
             this.setDeltaMovement(delta);
         }
         if (!this.level().isClientSide) {
             if (superThrowTicks > -1) {
                 superThrowTicks--;
                 if (superThrowTicks <= -1) {
-                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                    this.entityData.set(SBA$SUPER_THROWN, false);
                 } else {
                     if ((this.tickCount+2) % 4 == 0){
                         if (this.getItem().getItem() instanceof BlockItem){
@@ -141,7 +141,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
     protected void onHitBlock(BlockHitResult $$0) {
         bounces--;
         if (this.getSuperThrow()){
-            this.getEntityData().set(ROUNDABOUT$SUPER_THROWN,false);
+            this.getEntityData().set(SBA$SUPER_THROWN,false);
         }
         if (bounces < 0 || !$$0.getDirection().equals(Direction.UP)) {
             bounces = 0;
@@ -178,31 +178,31 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     private int superThrowTicks = -1;
 
-    private void initDataTrackerRoundabout(CallbackInfo ci) {
+    private void initDataTrackerSBA(CallbackInfo ci) {
     }
 
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$LAUNCHED = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$LAUNCHER = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> SBA$SUPER_THROWN = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SBA$LAUNCHED = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> SBA$LAUNCHER = SynchedEntityData.defineId(GasolineCanEntity.class, EntityDataSerializers.INT);
     public void starThrowInit(){
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        this.entityData.set(SBA$SUPER_THROWN, true);
         superThrowTicks = 50;
     }
 
     public void setLauncher(int launcher) {
-        this.getEntityData().set(ROUNDABOUT$LAUNCHER,launcher);
+        this.getEntityData().set(SBA$LAUNCHER,launcher);
     }
     public void setLaunched(boolean launched) {
-        this.getEntityData().set(ROUNDABOUT$LAUNCHED,launched);
+        this.getEntityData().set(SBA$LAUNCHED,launched);
     }
     public int getLauncher() {
-        return this.getEntityData().get(ROUNDABOUT$LAUNCHER);
+        return this.getEntityData().get(SBA$LAUNCHER);
     }
     public boolean getLaunched() {
-        return this.getEntityData().get(ROUNDABOUT$LAUNCHED);
+        return this.getEntityData().get(SBA$LAUNCHED);
     }
     public boolean getSuperThrow() {
-        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+        return this.getEntityData().get(SBA$SUPER_THROWN);
     }
     @Override
     public boolean hurt(DamageSource $$0, float $$1) {
@@ -227,7 +227,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 // Launch slightly away from whatever directly caused the damage
             if (!getLaunched() && hurter != null && hurter.getId() != getLauncher()) {
                 if (!this.level().isClientSide) {
-                    this.getEntityData().set(ROUNDABOUT$SUPER_THROWN,false);
+                    this.getEntityData().set(SBA$SUPER_THROWN,false);
                     Vec3 launchDirection = this.position()
                             .subtract(hurter.position());
 
@@ -290,11 +290,11 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
 
     @Override
     protected void defineSynchedData() {
-        if (!this.entityData.hasItem(ROUNDABOUT$SUPER_THROWN)) {
+        if (!this.entityData.hasItem(SBA$SUPER_THROWN)) {
             super.defineSynchedData();
-            this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, false);
-            this.getEntityData().define(ROUNDABOUT$LAUNCHED, false);
-            this.getEntityData().define(ROUNDABOUT$LAUNCHER, 0);
+            this.getEntityData().define(SBA$SUPER_THROWN, false);
+            this.getEntityData().define(SBA$LAUNCHED, false);
+            this.getEntityData().define(SBA$LAUNCHER, 0);
         }
     }
 
@@ -341,7 +341,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                 if (!entities.isEmpty()) {
                     for (Entity value : entities) {
                         if (value instanceof LivingEntity) {
-                            ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                            ((StandUser) value).sba$setGasolineTime(((StandUser) value).sba$getMaxGasolineTime());
                         }
                     }
                 }
@@ -390,7 +390,7 @@ public class GasolineCanEntity extends ThrowableItemProjectile {
                         if (!entities.isEmpty()) {
                             for (Entity value : entities) {
                                 if (value instanceof LivingEntity) {
-                                    ((StandUser) value).roundabout$setGasolineTime(((StandUser) value).roundabout$getMaxGasolineTime());
+                                    ((StandUser) value).sba$setGasolineTime(((StandUser) value).sba$getMaxGasolineTime());
                                 }
                             }
                         }

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "sba:wall_street_sign_danger"
+    },
+    "C": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    " # ",
+    " C ",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "item": "sba:street_sign_danger_item"
+  },
+  "show_notification": true
+}

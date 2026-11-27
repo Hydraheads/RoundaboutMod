@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Ravager.class)
 public abstract class HorseMemoryRavagerMixin {
     @Inject(method = "getControllingPassenger", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$usePlayerAsController(CallbackInfoReturnable<LivingEntity> cir) {
+    private void sbaWhitesnake$usePlayerAsController(CallbackInfoReturnable<LivingEntity> cir) {
         Ravager ravager = (Ravager) (Object) this;
         if (!MemoryPersonality.hasHorseMemory(ravager)) return;
         if (ravager.getFirstPassenger() instanceof Player player) cir.setReturnValue(player);

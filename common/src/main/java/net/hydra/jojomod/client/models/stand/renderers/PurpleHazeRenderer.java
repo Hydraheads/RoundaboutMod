@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.layers.StandGlowingLayer;
 import net.hydra.jojomod.client.models.stand.PurpleHazeModel;
@@ -15,21 +15,21 @@ import org.jetbrains.annotations.Nullable;
 
 public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
 
-    public static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/anime.png");
-    public static final ResourceLocation BLAZING_HAZE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/blazing_haze.png");
-    public static final ResourceLocation BLACK = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/black.png");
-    public static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/green.png");
-    public static final ResourceLocation NETHERITE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/netherite.png");
-    public static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/manga.png");
-    public static final ResourceLocation MIRROR_BATTLE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/mirror_battle.png");
-    public static final ResourceLocation ROTT = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/rott_haze.png");
-    public static final ResourceLocation PEPPERMINT = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/peppermint.png");
-    public static final ResourceLocation GREENER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/greener.png");
-    public static final ResourceLocation DISTORTION = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/distortion.png");
-    public static final ResourceLocation GREEN_DSITORTION = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/distorted_green.png");
-    public static final ResourceLocation PLAGUE_RED = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/plague_red.png");
-    public static final ResourceLocation PLAGUE_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/plague_blue.png");
-    public static final ResourceLocation CREAKING = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/purple_haze/creaking.png");
+    public static final ResourceLocation ANIME = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/anime.png");
+    public static final ResourceLocation BLAZING_HAZE = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/blazing_haze.png");
+    public static final ResourceLocation BLACK = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/black.png");
+    public static final ResourceLocation GREEN = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/green.png");
+    public static final ResourceLocation NETHERITE = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/netherite.png");
+    public static final ResourceLocation MANGA = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/manga.png");
+    public static final ResourceLocation MIRROR_BATTLE = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/mirror_battle.png");
+    public static final ResourceLocation ROTT = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/rott_haze.png");
+    public static final ResourceLocation PEPPERMINT = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/peppermint.png");
+    public static final ResourceLocation GREENER = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/greener.png");
+    public static final ResourceLocation DISTORTION = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/distortion.png");
+    public static final ResourceLocation GREEN_DSITORTION = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/distorted_green.png");
+    public static final ResourceLocation PLAGUE_RED = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/plague_red.png");
+    public static final ResourceLocation PLAGUE_BLUE = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/plague_blue.png");
+    public static final ResourceLocation CREAKING = new ResourceLocation(SBA.MOD_ID, "textures/stand/purple_haze/creaking.png");
 
     public PurpleHazeRenderer(EntityRendererProvider.Context context) {
         super(context, new PurpleHazeModel<>(context.bakeLayer(ModEntityRendererClient.PURPLE_HAZE_LAYER)), 0f);
@@ -92,7 +92,7 @@ public class PurpleHazeRenderer extends StandRenderer<PurpleHazeEntity> {
         return super.getRenderType(entity, showBody, true, showOutline);
     }
 
-    private static final RenderType CREAKING_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/purple_haze/creaking_glowing.png"));
+    private static final RenderType CREAKING_GLOW = RenderType.eyes(new ResourceLocation(SBA.MOD_ID,"textures/stand/purple_haze/creaking_glowing.png"));
 
     @Override
     public boolean hasGlowingParts(byte skin, int packedlight) {  return skin == PurpleHazeEntity.CREAKING; }

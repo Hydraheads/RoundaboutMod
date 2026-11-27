@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.stand;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -176,7 +176,7 @@ public class RattEntity extends StandEntity {
     @Override
     public void tick() {
         if (!level().isClientSide()){
-            if (this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
+            if (this.getUser() != null && ((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersRatt PR) {
                 setRatTarget(PR.rattTarget);
             }
         }
@@ -204,7 +204,7 @@ public class RattEntity extends StandEntity {
             if (this.getUser() != null ) {
 
 
-                if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersRatt PR) {
+                if (this.getUserData(this.getUser()).sba$getStandPowers() instanceof PowersRatt PR) {
                     if (!this.onGround()) {
                         return false;
                     }
@@ -230,7 +230,7 @@ public class RattEntity extends StandEntity {
     public @Nullable Entity changeDimension(ServerLevel $$0) {
         if (this.getUser() != null) {
             StandUser SU = (StandUser) this.getUser();
-            if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
+            if (SU.sba$getStandPowers() instanceof PowersRatt PR) {
                 PR.RecallClient(true);
             }
         }

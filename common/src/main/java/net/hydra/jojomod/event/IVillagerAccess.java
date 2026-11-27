@@ -9,24 +9,24 @@ public interface IVillagerAccess {
     byte TENSION_TENSE = 2;
     byte TENSION_UNNERVED = 3;
 
-    int roundabout$getAnubisTicks();
-    void roundabout$setAnubisTicks(int i);
-    void roundabout$clearGossips();
+    int sba$getAnubisTicks();
+    void sba$setAnubisTicks(int i);
+    void sba$clearGossips();
 
     // lyin eyes tension methods
-    byte roundabout$getTensionState();
-    void roundabout$setTensionState(byte state);
-    boolean roundabout$isTense();
-    void roundabout$setTense(boolean tense);
-    int roundabout$getCalloutTicks();
-    boolean roundabout$isUnnerved();
-    void roundabout$setUnnerved();
-    boolean roundabout$hasRolledTension();
-    void roundabout$rollTensionIfUnrolled();
+    byte sba$getTensionState();
+    void sba$setTensionState(byte state);
+    boolean sba$isTense();
+    void sba$setTense(boolean tense);
+    int sba$getCalloutTicks();
+    boolean sba$isUnnerved();
+    void sba$setUnnerved();
+    boolean sba$hasRolledTension();
+    void sba$rollTensionIfUnrolled();
 
     // snake oil salesman
-    boolean roundabout$isSnakeOilLockedOut();
-    void roundabout$setSnakeOilLockout(int ticks);
-    int roundabout$getSnakeOilLockout();
-    void roundabout$applySnakeOilScam(Player player);
+    boolean sba$isSnakeOilLockedOut();
+    void sba$setSnakeOilLockout(int ticks);
+    int sba$getSnakeOilLockout();
+    void sba$applySnakeOilScam(Player player);
 }

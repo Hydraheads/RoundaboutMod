@@ -12,9 +12,9 @@ import java.util.Set;
 public interface AccessBlockEntityType {
 
     @Accessor("validBlocks")
-    Set<Block> roundabout$getValidBlocks();
+    Set<Block> sba$getValidBlocks();
 
     @Mutable
     @Accessor("validBlocks")
-    void roundabout$setValidBlocks(Set<Block> blocks);
+    void sba$setValidBlocks(Set<Block> blocks);
 }

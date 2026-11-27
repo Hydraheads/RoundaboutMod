@@ -21,9 +21,9 @@ public abstract class FateVillagerMixin extends AbstractVillager {
 
     /**Villagers do not alert while hypnotized*/
     @Inject(method = "onReputationEventFrom", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$onReputationEventFrom(ReputationEventType $$0, Entity $$1, CallbackInfo ci) {
+    private void sba$onReputationEventFrom(ReputationEventType $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof LivingEntity PL) {
-            LivingEntity living = ((IMob)this).roundabout$getHypnotizedBy();
+            LivingEntity living = ((IMob)this).sba$getHypnotizedBy();
             if (living != null && PL.is(living)){
                 if (!$$0.equals(ReputationEventType.VILLAGER_KILLED)){
                     ci.cancel();
@@ -40,8 +40,8 @@ public abstract class FateVillagerMixin extends AbstractVillager {
         }
     }
     @Inject(method = "setLastHurtByMob(Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$setLastHurtByMob(LivingEntity $$0, CallbackInfo ci) {
-        LivingEntity living = ((IMob)this).roundabout$getHypnotizedBy();
+    private void sba$setLastHurtByMob(LivingEntity $$0, CallbackInfo ci) {
+        LivingEntity living = ((IMob)this).sba$getHypnotizedBy();
         if (living != null && $$0 != null && $$0.is(living)){
             ci.cancel();
         }

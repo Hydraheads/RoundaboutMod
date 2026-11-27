@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 4.12.
 // Paste this class into your mod and generate all required imports
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;

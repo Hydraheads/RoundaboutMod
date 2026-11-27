@@ -60,7 +60,7 @@ public class ZombieHorseThreadItem extends Item {
                 if (!($$1 instanceof Player && !((TimeStop) $$1.level()).getTimeStoppingEntities().isEmpty() &&
                         ((TimeStop) $$1.level()).isTimeStoppingEntity($$1))) {
                     $$1.startUsingItem($$2);
-                    ((StandUser) $$1).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.ZOMBIEHORSE_STITCHING, 12, false);
+                    ((StandUser) $$1).sba$getStandPowers().playSoundsIfNearby(SoundIndex.ZOMBIEHORSE_STITCHING, 12, false);
                     t = 0;
                     return InteractionResultHolder.consume($$3);
                 }
@@ -77,7 +77,7 @@ public class ZombieHorseThreadItem extends Item {
     public void onUseTick(Level $$0, LivingEntity $$1, ItemStack $$2, int $$3) {
         if (!$$0.isClientSide()) {
             if ($$1.isUsingItem()) {
-                if ($$1 != null && ((StandUser)$$1).roundabout$getEffectiveCombatMode()){
+                if ($$1 != null && ((StandUser)$$1).sba$getEffectiveCombatMode()){
                     $$1.stopUsingItem();
                     return;
                 }
@@ -100,7 +100,7 @@ public class ZombieHorseThreadItem extends Item {
     @Override
     public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
         if ($$2 instanceof Player $$4) {
-            ((StandUser) $$2).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
+            ((StandUser) $$2).sba$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
         }
     }
 

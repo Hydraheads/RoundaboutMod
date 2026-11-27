@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "sba:stand_arrow"
+    },
+    {
+      "item": "sba:meteorite"
+    }
+  ],
+  "result": {
+    "item": "sba:stand_arrow"
+  }
+}

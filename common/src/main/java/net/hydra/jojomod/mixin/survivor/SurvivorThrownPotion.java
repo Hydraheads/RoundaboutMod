@@ -33,16 +33,16 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
      * is not included in here but in its own class*/
 
     @Inject(method = "onHit", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$onHit(HitResult $$0,CallbackInfo ci) {
+    private void sba$onHit(HitResult $$0,CallbackInfo ci) {
         HitResult.Type $$1 = $$0.getType();
         if ($$1 == HitResult.Type.ENTITY) {
             Entity $$2x = ((EntityHitResult)$$0).getEntity();
             if ($$2x instanceof LivingEntity LE){
-                if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
+                if (((StandUser)LE).sba$getStandPowers().dealWithProjectile(this,$$0)){
                     ci.cancel();
                     this.discard();
                     return;
-                } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
+                } else if (((StandUser)LE).sba$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
                     ci.cancel();
                     return;
                 } else if(LE instanceof ManhattanTransferEntity ME) {
@@ -52,7 +52,7 @@ public abstract class SurvivorThrownPotion extends ThrowableItemProjectile imple
                                  ci.cancel();
                                  if(ci.isCancelled()) {
                                      ME.setHeldItemManhattan(ii.copyAndClear());
-                                     if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                                     if(ME.getUser() instanceof Player PL && ((StandUser) PL).sba$getStandPowers() instanceof  PowersManhattanTransfer PM){
                                          if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
                                              PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
                                          } else {

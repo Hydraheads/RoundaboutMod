@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.client.models.substand.LeftSeperatedArmModel;
@@ -20,7 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import java.util.Map;
 
 public class LeftSeperatedArmRenderer extends StandRenderer<LeftSeperatedArmEntity> {
-    private static final ResourceLocation PART_FIVE_GREEN_DAY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
+    private static final ResourceLocation PART_FIVE_GREEN_DAY = new ResourceLocation(SBA.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
 
 
     public LeftSeperatedArmRenderer(EntityRendererProvider.Context context) {

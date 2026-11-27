@@ -78,8 +78,8 @@ public final class HallucinationEffect extends MobEffect {
             int interval = amplifier == 1 ? 60 : 120;
             if (living.tickCount % interval == 0) {
                 IMob mobData = (IMob) mob;
-                mobData.roundabout$setConfusionTicks(Math.max(
-                        mobData.roundabout$getConfusionTicks(), CONFUSION_PULSE_TICKS));
+                mobData.sba$setConfusionTicks(Math.max(
+                        mobData.sba$getConfusionTicks(), CONFUSION_PULSE_TICKS));
             }
         }
         if (amplifier >= 2) {
@@ -107,7 +107,7 @@ public final class HallucinationEffect extends MobEffect {
         if (!(target.level() instanceof ServerLevel serverLevel)) return;
         for (ServerPlayer viewer : serverLevel.players()) {
             if (viewer.distanceToSqr(target) > 400) continue;
-            ItemStack standDisc = ((StandUser) viewer).roundabout$getStandDisc();
+            ItemStack standDisc = ((StandUser) viewer).sba$getStandDisc();
             if (standDisc.is(ModItems.STAND_DISC_WHITESNAKE)
                     || standDisc.is(ModItems.MAX_STAND_DISC_WHITESNAKE)) {
                 S2CPacketUtil.sendGenericIntIntToClientPacket(viewer,

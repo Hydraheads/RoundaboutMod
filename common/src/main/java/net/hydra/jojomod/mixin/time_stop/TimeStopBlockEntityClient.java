@@ -12,21 +12,21 @@ public class TimeStopBlockEntityClient implements IBlockEntityClientAccess {
      * (such as a chest) can freeze without jittering and jumping to an earlier or later state*/
 
     @Unique
-    private float roundabout$PrevTick;
+    private float sba$PrevTick;
 
     @Override
-    public float roundabout$getPreTSTick() {
-        return this.roundabout$PrevTick;
+    public float sba$getPreTSTick() {
+        return this.sba$PrevTick;
     }
 
     @Override
-    public void roundabout$setPreTSTick() {
+    public void sba$setPreTSTick() {
         Minecraft mc = Minecraft.getInstance();
-        roundabout$PrevTick = mc.getFrameTime();
+        sba$PrevTick = mc.getFrameTime();
     }
     @Override
-    public void roundabout$resetPreTSTick() {
-        roundabout$PrevTick = 0;
+    public void sba$resetPreTSTick() {
+        sba$PrevTick = 0;
     }
 
 }

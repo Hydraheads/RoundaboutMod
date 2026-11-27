@@ -1,6 +1,6 @@
 package net.hydra.jojomod.util;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.minecraft.world.ContainerListener;
 import net.minecraft.world.SimpleContainer;
@@ -16,22 +16,22 @@ public class PlayerMaskSlots extends SimpleContainer {
     @Override
     public void setChanged() {
         IPlayerEntity play = ((IPlayerEntity)this.player);
-        if (!this.getItem(0).equals(play.roundabout$getMaskSlot())) {
+        if (!this.getItem(0).equals(play.sba$getMaskSlot())) {
             if (!this.player.level().isClientSide()) {
-                play.roundabout$setMaskSlot(this.getItem(0));
+                play.sba$setMaskSlot(this.getItem(0));
             }
         }
-        if (!this.getItem(1).equals(play.roundabout$getMaskVoiceSlot())){
+        if (!this.getItem(1).equals(play.sba$getMaskVoiceSlot())){
             if (!this.player.level().isClientSide()) {
-                play.roundabout$setMaskVoiceSlot(this.getItem(1));
+                play.sba$setMaskVoiceSlot(this.getItem(1));
             }
         }
         super.setChanged();
     }
     public void update(){
         IPlayerEntity play = ((IPlayerEntity)this.player);
-            play.roundabout$setMaskSlot(this.getItem(0));
-            play.roundabout$setMaskVoiceSlot(this.getItem(1));
+            play.sba$setMaskSlot(this.getItem(0));
+            play.sba$setMaskVoiceSlot(this.getItem(1));
     }
 
 

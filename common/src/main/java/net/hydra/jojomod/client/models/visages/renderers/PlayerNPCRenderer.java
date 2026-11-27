@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.visages.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.HumanoidLikeArmorLayer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.entity.visages.JojoNPC;
@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 public class PlayerNPCRenderer<T extends JojoNPC> extends PlayerLikeRenderer<JojoNPCPlayer> {
-    private static final ResourceLocation STEVE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/visage/steve.png");
+    private static final ResourceLocation STEVE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/entity/visage/steve.png");
     public PlayerNPCRenderer(EntityRendererProvider.Context context) {
         super(context, new PlayerSteveModel<>(context.bakeLayer(ModEntityRendererClient.STEVE_LAYER)),0f);
         if (ConfigManager.getClientConfig().renderArmorOnPlayerCloneAbilities) {

@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
@@ -79,9 +79,9 @@ public class EmperorModel extends PsuedoHierarchicalModel {
 
 	}
 
-	public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation anime = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/emperor/emperor_anime.png");
-	public static ResourceLocation manga = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation manga = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/emperor/emperor_manga.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin){

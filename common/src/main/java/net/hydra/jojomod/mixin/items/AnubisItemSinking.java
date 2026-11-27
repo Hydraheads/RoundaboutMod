@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.items;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.item.ModItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +25,7 @@ public abstract class AnubisItemSinking extends Entity {
     public abstract ItemStack getItem();
 
     @Inject(method = "setUnderwaterMovement",at = @At(value="HEAD"),cancellable = true)
-    public void roundabout$anubisSinksInWater(CallbackInfo ci) {
+    public void sba$anubisSinksInWater(CallbackInfo ci) {
         if (this.getItem().is(ModItems.ANUBIS_ITEM) && !this.level().isClientSide()) {
 
             Vec3 v = this.getDeltaMovement();

@@ -46,7 +46,7 @@ public class FogBlock extends Block {
     public void onPlace(BlockState $$0, Level $$1, BlockPos $$2, BlockState $$3, boolean $$4) {
         super.onPlace($$0, $$1, $$2, $$3, $$4);
         if (!$$1.isClientSide) {
-        if (((IPermaCasting)$$1).roundabout$inPermaCastFogRange($$2)){
+        if (((IPermaCasting)$$1).sba$inPermaCastFogRange($$2)){
             if (!$$0.getValue(IN_FOG)) {
                 $$0 = $$0.setValue(IN_FOG, true);
                 $$1.setBlockAndUpdate($$2, $$0);
@@ -65,7 +65,7 @@ public class FogBlock extends Block {
     @Override
     public void tick(BlockState $$0, ServerLevel $$1, BlockPos $$2, RandomSource $$3) {
         $$1.scheduleTick($$2, this, (int)(5+Math.floor(Math.random()*4)));
-        if (((IPermaCasting)$$1).roundabout$inPermaCastFogRange($$2)){
+        if (((IPermaCasting)$$1).sba$inPermaCastFogRange($$2)){
             if (!$$0.getValue(IN_FOG)) {
                 $$0 = $$0.setValue(IN_FOG, true);
                 $$1.setBlockAndUpdate($$2, $$0);
@@ -80,7 +80,7 @@ public class FogBlock extends Block {
 
     @Override
     public RenderShape getRenderShape(BlockState $$0) {
-        //if (Roundabout.worldInFog == 0) {
+        //if (SBA.worldInFog == 0) {
             //return RenderShape.INVISIBLE;
         //}
         return super.getRenderShape($$0);

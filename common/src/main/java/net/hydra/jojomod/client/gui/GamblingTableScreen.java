@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.gui;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.GamblingTableBlockEntity;
 import net.hydra.jojomod.client.gui.gambling_table.CoinDropScreen;
 import net.hydra.jojomod.menu.GamblingTableMenu;
@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class GamblingTableScreen extends AbstractContainerScreen<GamblingTableMenu> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/gui/gambling_table/gambling_table.png");
+            new ResourceLocation(SBA.MOD_ID, "textures/gui/gambling_table/gambling_table.png");
 
     // Change these if the texture also gets changed
     private static final int GUI_OFFSET_X = -9;

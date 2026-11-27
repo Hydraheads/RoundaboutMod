@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.RipperEyesModel;
@@ -76,7 +76,7 @@ public class RipperEyesRenderer extends EntityRenderer<RipperEyesProjectile> {
 
     @Override
     public ResourceLocation getTextureLocation(RipperEyesProjectile var1) {
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/ripper_eyes.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/ripper_eyes.png");
     }
 
 }

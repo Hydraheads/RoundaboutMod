@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.HeyYaAnimations;
@@ -85,47 +85,47 @@ public class MandomModel extends PsuedoHierarchicalModel {
     public void setupAnim(Entity var1, float pAgeInTicks) {
 
     }
-    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/base.png");
-    public static ResourceLocation purple = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation purple = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/purple.png");
-    public static ResourceLocation sky = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation sky = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/sky.png");
-    public static ResourceLocation squid = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation squid = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/squid.png");
-    public static ResourceLocation glow_squid = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation glow_squid = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/glow_squid.png");
-    public static ResourceLocation rose = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation rose = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/rose.png");
-    public static ResourceLocation nautilus = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation nautilus = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/nautilus.png");
-    public static ResourceLocation alien = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation alien = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/alien.png");
-    public static ResourceLocation dark = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation dark = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/dark.png");
-    public static ResourceLocation jellyfish = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation jellyfish = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/jellyfish.png");
-    public static ResourceLocation happy = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation happy = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/happy.png");
-    public static ResourceLocation melon = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation melon = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/melon.png");
-    public static ResourceLocation eye = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation eye = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/eye.png");
-    public static ResourceLocation esidisi = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation esidisi = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/esidisi.png");
-    public static ResourceLocation caps = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation caps = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/caps.png");
-    public static ResourceLocation command = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation command = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/command.png");
-    public static ResourceLocation command2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation command2 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/emissive/command.png");
-    public static ResourceLocation sculk = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation sculk = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/sculk.png");
-    public static ResourceLocation sculk2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation sculk2 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/emissive/sculk.png");
-    public static ResourceLocation tv = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation tv = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/tv.png");
-    public static ResourceLocation tv2 = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation tv2 = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/mandom/emissive/tv.png");
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         switch (skin)
@@ -155,8 +155,8 @@ public class MandomModel extends PsuedoHierarchicalModel {
     public void rotateHead(Entity context, float partialTicks, StandUser user){
         if (this.root().getChild("stand").getChild("stand2").hasChild("head")) {
             ModelPart head = this.root().getChild("stand").getChild("stand2").getChild("head");
-            /*if ((user.roundabout$getStandPowers() instanceof PowersMandom && user.roundabout$getIdlePos() == 1)
-                    || (user.roundabout$getPreviousStandPowers() instanceof PowersMandom && user.roundabout$getPreviousPose() == 1)) { */
+            /*if ((user.sba$getStandPowers() instanceof PowersMandom && user.sba$getIdlePos() == 1)
+                    || (user.sba$getPreviousStandPowers() instanceof PowersMandom && user.sba$getPreviousPose() == 1)) { */
             if (MainUtil.getWornStandIdleSafe(user, PowersMandom.class) == 1) {
                 head.setRotation((((context.getViewXRot(partialTicks)) * Mth.DEG_TO_RAD)), 0, 0);
             } else {
@@ -180,32 +180,32 @@ public class MandomModel extends PsuedoHierarchicalModel {
             StandUser user = ((StandUser) LE);
             VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
             rotateHead(context,partialTicks,user);
-            /*if ((user.roundabout$getStandPowers() instanceof PowersMandom && user.roundabout$getIdlePos() == 2)
-                    || (user.roundabout$getPreviousStandPowers() instanceof PowersMandom && user.roundabout$getPreviousPose() == 2)) {
+            /*if ((user.sba$getStandPowers() instanceof PowersMandom && user.sba$getIdlePos() == 2)
+                    || (user.sba$getPreviousStandPowers() instanceof PowersMandom && user.sba$getPreviousPose() == 2)) {
                 */
             if (MainUtil.getWornStandIdleSafe(user, PowersMandom.class) == 2) {
-                user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+                user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
             } else {
-                user.roundabout$getWornStandIdleAnimation().stop();
+                user.sba$getWornStandIdleAnimation().stop();
             }
 
-            if (user.roundabout$getStandSkin() == PowersMandom.GLOW_SQUID)
+            if (user.sba$getStandSkin() == PowersMandom.GLOW_SQUID)
                 light = 15728880;
 
 
-            this.animate(user.roundabout$getWornStandIdleAnimation(), MandomAnimations.back, partialTicks, 1f);
-            //this.animate(user.roundabout$getHeyYaAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
+            this.animate(user.sba$getWornStandIdleAnimation(), MandomAnimations.back, partialTicks, 1f);
+            //this.animate(user.sba$getHeyYaAnimation(), HeyYaAnimations.idle_normal, partialTicks, 1f);
             //The number at the end is inversely proportional so 2 is half speed
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
-            if (user.roundabout$getStandSkin() == PowersMandom.COMMAND){
+            if (user.sba$getStandSkin() == PowersMandom.COMMAND){
                 consumer = bufferSource.getBuffer(RenderType.entityTranslucent(command2));
                 root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
             }
-            if (user.roundabout$getStandSkin() == PowersMandom.SCULK){
+            if (user.sba$getStandSkin() == PowersMandom.SCULK){
                 consumer = bufferSource.getBuffer(RenderType.entityTranslucent(sculk2));
                 root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
             }
-            if (user.roundabout$getStandSkin() == PowersMandom.TV){
+            if (user.sba$getStandSkin() == PowersMandom.TV){
                 consumer = bufferSource.getBuffer(RenderType.entityTranslucent(tv2));
                 root().render(poseStack, consumer, 15728880, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
             }

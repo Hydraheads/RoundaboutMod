@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.layers.StandGlowingLayer;
 import net.hydra.jojomod.client.models.stand.KingNothingModel;
@@ -15,15 +15,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class KingNothingRenderer extends StandRenderer<KingNothingEntity> {
 
-    private static final ResourceLocation MANGA = Roundabout.location("textures/stand/king_nothing/manga.png");
-    private static final ResourceLocation SPINE = Roundabout.location("textures/stand/king_nothing/spine.png");
-    private static final ResourceLocation NOTE = Roundabout.location("textures/stand/king_nothing/note_block.png");
-    private static final ResourceLocation BETA = Roundabout.location("textures/stand/king_nothing/beta.png");
-    private static final ResourceLocation WARDEN = Roundabout.location("textures/stand/king_nothing/warden.png");
-    private static final ResourceLocation SNIFFER = Roundabout.location("textures/stand/king_nothing/sniffer.png");
-    private static final ResourceLocation SOMETHING = Roundabout.location("textures/stand/king_nothing/something.png");
-    private static final ResourceLocation RAM = Roundabout.location("textures/stand/king_nothing/ram.png");
-    private static final ResourceLocation CHRISTMAS = Roundabout.location("textures/stand/king_nothing/christmas.png");
+    private static final ResourceLocation MANGA = SBA.location("textures/stand/king_nothing/manga.png");
+    private static final ResourceLocation SPINE = SBA.location("textures/stand/king_nothing/spine.png");
+    private static final ResourceLocation NOTE = SBA.location("textures/stand/king_nothing/note_block.png");
+    private static final ResourceLocation BETA = SBA.location("textures/stand/king_nothing/beta.png");
+    private static final ResourceLocation WARDEN = SBA.location("textures/stand/king_nothing/warden.png");
+    private static final ResourceLocation SNIFFER = SBA.location("textures/stand/king_nothing/sniffer.png");
+    private static final ResourceLocation SOMETHING = SBA.location("textures/stand/king_nothing/something.png");
+    private static final ResourceLocation RAM = SBA.location("textures/stand/king_nothing/ram.png");
+    private static final ResourceLocation CHRISTMAS = SBA.location("textures/stand/king_nothing/christmas.png");
 
     public KingNothingRenderer(EntityRendererProvider.Context context) {
         super(context, new KingNothingModel<>(context.bakeLayer(ModEntityRendererClient.KING_NOTHING_LAYER)), 0f);
@@ -61,7 +61,7 @@ public class KingNothingRenderer extends StandRenderer<KingNothingEntity> {
         return getSkin(entity.getSkin());
     }
 
-    private static final RenderType WARDEN_E = RenderType.eyes(Roundabout.location("textures/stand/king_nothing/warden_e.png"));
+    private static final RenderType WARDEN_E = RenderType.eyes(SBA.location("textures/stand/king_nothing/warden_e.png"));
 
     @Override
     public boolean hasGlowingParts(byte skin, int packedLight) {

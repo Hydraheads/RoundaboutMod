@@ -208,7 +208,7 @@ public class KillerQueenModel<T extends KillerQueenEntity> extends StandModel<T>
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 
 		if (pEntity.getUser() != null
-				&& ((StandUser)pEntity.getUser()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.canUseStrayCat()) {
+				&& ((StandUser)pEntity.getUser()).sba$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.canUseStrayCat()) {
 			Stray_Cat.visible = true;
 		}else {
 			Stray_Cat.visible = false;

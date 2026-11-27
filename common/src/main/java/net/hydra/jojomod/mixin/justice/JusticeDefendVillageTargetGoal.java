@@ -27,15 +27,15 @@ public class JusticeDefendVillageTargetGoal {
     /**Part two of the Iron Golem aggro mixin for justice morphs, helps iron golems detect or get aggro negated */
 
     @Inject(method = "start", at = @At(value = "HEAD"))
-    protected void roundabout$start(CallbackInfo ci) {
+    protected void sba$start(CallbackInfo ci) {
         IIronGolem igolem = ((IIronGolem) golem);
-        if (igolem.roundabout$getNegation()) {
+        if (igolem.sba$getNegation()) {
             potentialTarget = null;
-            igolem.roundabout$setNegation(false);
+            igolem.sba$setNegation(false);
         }
     }
     @Inject(method = "canUse()Z", at = @At(value = "HEAD"))
-    protected void roundabout$canUse(CallbackInfoReturnable<Boolean> cir) {
+    protected void sba$canUse(CallbackInfoReturnable<Boolean> cir) {
 
 
         AABB $$0 = this.golem.getBoundingBox().inflate(10.0, 8.0, 10.0);
@@ -43,7 +43,7 @@ public class JusticeDefendVillageTargetGoal {
         for (Player $$5 : $$2) {
 
             IPlayerEntity ple = ((IPlayerEntity) $$5);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
 
             if (ShapeShifts.isZombie(shift) || ShapeShifts.isSkeleton(shift)) {

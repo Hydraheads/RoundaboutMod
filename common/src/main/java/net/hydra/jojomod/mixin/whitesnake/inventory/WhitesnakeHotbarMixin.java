@@ -24,7 +24,7 @@ public abstract class WhitesnakeHotbarMixin {
     @Shadow private int screenHeight;
 
     @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$renderHotbar(float partialTick, GuiGraphics graphics, CallbackInfo ci) {
+    private void sbaWhitesnake$renderHotbar(float partialTick, GuiGraphics graphics, CallbackInfo ci) {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
         if (player == null) return;

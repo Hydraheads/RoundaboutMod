@@ -20,9 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class SoftAndWetBowItem {
     /**This mixin makes the encasement bubble pop when you fire a bow while in the bubble.*/
     @Inject(method = "releaseUsing", at = @At("HEAD"), cancellable = true)
-    public void roundabout$releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3, CallbackInfo ci) {
+    public void sba$releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3, CallbackInfo ci) {
 
-        if ($$2 != null && ((StandUser) $$2).roundabout$isBubbleEncased()) {
+        if ($$2 != null && ((StandUser) $$2).sba$isBubbleEncased()) {
             StandUser SE = ((StandUser) $$2);
             int $$7 = this.getUseDuration($$0) - $$3;
             float $$8 = getPowerForTime($$7);

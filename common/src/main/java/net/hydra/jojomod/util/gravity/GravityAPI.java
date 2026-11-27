@@ -18,14 +18,14 @@ public class GravityAPI {
             return Direction.DOWN;
         }
 
-        return ((IGravityEntity)entity).roundabout$getGravityDirection();
+        return ((IGravityEntity)entity).sba$getGravityDirection();
     }
     public static double getGravityStrength(Entity entity) {
         if (entity == null) {
             return 1;
         }
 
-        return ((IGravityEntity)entity).roundabout$getGravityStrength();
+        return ((IGravityEntity)entity).sba$getGravityStrength();
     }
     /**
      * Sets the world relative velocity for the given player
@@ -41,7 +41,7 @@ public class GravityAPI {
         return RotationUtil.vecPlayerToWorld(0, (double) entity.getEyeHeight(), 0, getGravityDirection(entity));
     }
     public static RotationAnimation getRotationAnimation(Entity entity) {
-        return ((IClientEntity)entity).roundabout$getGravityAnimation();
+        return ((IClientEntity)entity).sba$getGravityAnimation();
     }
 
 

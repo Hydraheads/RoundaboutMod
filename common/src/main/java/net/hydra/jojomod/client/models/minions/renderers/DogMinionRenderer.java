@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.minions.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.minions.DogMinionModel;
 import net.hydra.jojomod.entity.zombie_minion.BaseMinion;
@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
 
 public class DogMinionRenderer extends MobRenderer<DogMinion, DogMinionModel<DogMinion>> {
-    private static final ResourceLocation VINDICATOR = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/minions/wolf.png");
+    private static final ResourceLocation VINDICATOR = new ResourceLocation(SBA.MOD_ID,"textures/entity/minions/wolf.png");
 
     public DogMinionRenderer(EntityRendererProvider.Context $$0) {
         super($$0, new DogMinionModel($$0.bakeLayer(ModEntityRendererClient.DOG_MINION_LAYER)), 0.5F);

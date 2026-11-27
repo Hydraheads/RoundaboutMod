@@ -1,7 +1,7 @@
 package net.hydra.jojomod.fates.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -18,7 +18,7 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.fates.FatePowers;
 import net.hydra.jojomod.item.ModItems;
-import net.hydra.jojomod.item.RoundaboutArrowItem;
+import net.hydra.jojomod.item.SBAArrowItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -73,7 +73,7 @@ public class ZombieFate extends VampiricFate {
     @Override
     /**The text name of the fate*/
     public Component getFateName(){
-        return Component.translatable("text.roundabout.fate.zombie");
+        return Component.translatable("text.sba.fate.zombie");
     }
     @Override
     public void powerActivate(PowerContext context) {
@@ -151,7 +151,7 @@ public class ZombieFate extends VampiricFate {
     }
 
     public boolean isArrow(ItemStack stack){
-        if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ArrowItem && !(stack.getItem() instanceof RoundaboutArrowItem)){
+        if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ArrowItem && !(stack.getItem() instanceof SBAArrowItem)){
             return true;
         }
         return false;
@@ -248,7 +248,7 @@ public class ZombieFate extends VampiricFate {
             if (self instanceof Player pl) {
                 if (!onCooldown(PowerIndex.FATE_4)) {
                     IPlayerEntity ipe = ((IPlayerEntity) pl);
-                    boolean isMorphed = ipe.roundabout$getShapeShift() != ShapeShifts.PLAYER.ordinal();
+                    boolean isMorphed = ipe.sba$getShapeShift() != ShapeShifts.PLAYER.ordinal();
                     setCooldown(PowerIndex.FATE_4,10);
                     if (!isMorphed) {
                         boolean isDisguised = isDisguised();
@@ -257,11 +257,11 @@ public class ZombieFate extends VampiricFate {
                                 pn.x(), pn.y(), pn.z(),
                                 4, 0.2, 0.2, 0.2, 0.01);
                         if (isDisguised) {
-                            ipe.roundabout$setShapeShiftExtraData((byte) 0);
-                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.zombie_disguise_off").withStyle(ChatFormatting.DARK_PURPLE), true);
+                            ipe.sba$setShapeShiftExtraData((byte) 0);
+                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.zombie_disguise_off").withStyle(ChatFormatting.DARK_PURPLE), true);
                         } else {
-                            ipe.roundabout$setShapeShiftExtraData((byte) 1);
-                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.zombie_disguise_on").withStyle(ChatFormatting.DARK_PURPLE), true);
+                            ipe.sba$setShapeShiftExtraData((byte) 1);
+                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.zombie_disguise_on").withStyle(ChatFormatting.DARK_PURPLE), true);
                         }
                     }
                 }
@@ -395,7 +395,7 @@ public class ZombieFate extends VampiricFate {
 
     @Override
     public float getJumpHeightAddon(){
-        if (getStandUserSelf().roundabout$getStandPowers().bigJumpBlocker() ||
+        if (getStandUserSelf().sba$getStandPowers().bigJumpBlocker() ||
         self instanceof Player pl && (((IPowersPlayer)pl).rdbt$getPowers().bigJumpBlocker()))
             return super.getJumpHeightAddon();
         //if (self.isCrouching() || isFast()){
@@ -424,7 +424,7 @@ public class ZombieFate extends VampiricFate {
         if (slot != 4 && isDisguised()){
             return true;
         }
-        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 3, 15);
+        Entity TE = getUserData(self).sba$getStandPowers().getTargetEntity(this.self, 3, 15);
         if (slot == 1 && !canUseZombieShot() && getZombieFishCount() <= 0)
             return true;
         if (slot == 2 && !MainUtil.canDrinkBloodFair(TE, self) &&
@@ -452,7 +452,7 @@ public class ZombieFate extends VampiricFate {
         if (!self.level().isClientSide()){
             if (self instanceof Player player){
                 IPlayerEntity ple = ((IPlayerEntity) player);
-                byte shape = ple.roundabout$getShapeShift();
+                byte shape = ple.sba$getShapeShift();
                 ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
                 if (shift != ShapeShifts.PLAYER){
 
@@ -469,7 +469,7 @@ public class ZombieFate extends VampiricFate {
                     if(this.attackTimeDuring%4==0) {
                         Vec3 gravVec = this.getSelf().getPosition(1f).add(RotationUtil.vecPlayerToWorld(
                                 new Vec3(0,0.3*self.getEyeHeight(),0),
-                                ((IGravityEntity)self).roundabout$getGravityDirection()));
+                                ((IGravityEntity)self).sba$getGravityDirection()));
                         sendParticlesIfPossible(self.level(),ModParticles.MENACING,
                                 gravVec.x, gravVec.y, gravVec.z,
                                 1, 0.2, 0.2, 0.2, 0.05);
@@ -555,14 +555,14 @@ public class ZombieFate extends VampiricFate {
     }
 
     public Entity getTargetEnter(){
-        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 2, 15);
+        Entity TE = getUserData(self).sba$getStandPowers().getTargetEntity(this.self, 2, 15);
         if (TE instanceof Animal al && al.getPassengers().isEmpty()){
             return al;
         }
         return null;
     }
     public boolean canTargetEnter(){
-        Entity TE = getUserData(self).roundabout$getStandPowers().getTargetEntity(this.self, 2, 15);
+        Entity TE = getUserData(self).sba$getStandPowers().getTargetEntity(this.self, 2, 15);
         if (TE instanceof Animal al && al.getPassengers().isEmpty()){
             return true;
         }
@@ -614,8 +614,8 @@ public class ZombieFate extends VampiricFate {
     }
 
     public boolean isDisguised(){
-        if (self instanceof Player PE && ((IPlayerEntity)PE).roundabout$getShapeShiftExtraData() == (byte)1
-        && ((IPlayerEntity)PE).roundabout$getShapeShift() == ShapeShifts.PLAYER.ordinal()){
+        if (self instanceof Player PE && ((IPlayerEntity)PE).sba$getShapeShiftExtraData() == (byte)1
+        && ((IPlayerEntity)PE).sba$getShapeShift() == ShapeShifts.PLAYER.ordinal()){
             return true;
         }
         return false;
@@ -631,26 +631,26 @@ public class ZombieFate extends VampiricFate {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.vampire_passive",
-                "instruction.roundabout.passive", StandIcons.VAMPIRE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.zombie_worm",
-                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_WORM_5,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.zombie_projectiles",
-                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_PROJECTILES,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.blood_drink_simple",
-                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_DRINK,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.zombie_enter",
-                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_ENTER,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.wall_walk_vamp",
-                "instruction.roundabout.press_skill_air", StandIcons.WALL_WALK_VAMP,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.zombie_disguise",
-                "instruction.roundabout.press_skill", StandIcons.ZOMBIE_DISGUISE_ON,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.zombie_passive",
-                "instruction.roundabout.passive", StandIcons.ZOMBIE_DISGUISE_OFF,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.zombie_passive_2",
-                "instruction.roundabout.passive", StandIcons.VAMPIRE_STRENGTH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.sba.vampire_passive",
+                "instruction.sba.passive", StandIcons.VAMPIRE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.sba.zombie_worm",
+                "instruction.sba.press_skill", StandIcons.ZOMBIE_WORM_5,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.sba.zombie_projectiles",
+                "instruction.sba.press_skill", StandIcons.ZOMBIE_PROJECTILES,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.sba.blood_drink_simple",
+                "instruction.sba.press_skill", StandIcons.ZOMBIE_DRINK,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.sba.zombie_enter",
+                "instruction.sba.press_skill", StandIcons.ZOMBIE_ENTER,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.sba.wall_walk_vamp",
+                "instruction.sba.press_skill_air", StandIcons.WALL_WALK_VAMP,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.sba.zombie_disguise",
+                "instruction.sba.press_skill", StandIcons.ZOMBIE_DISGUISE_ON,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.sba.zombie_passive",
+                "instruction.sba.passive", StandIcons.ZOMBIE_DISGUISE_OFF,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.sba.zombie_passive_2",
+                "instruction.sba.passive", StandIcons.VAMPIRE_STRENGTH,0,level,bypas));
 
 
         return $$1;

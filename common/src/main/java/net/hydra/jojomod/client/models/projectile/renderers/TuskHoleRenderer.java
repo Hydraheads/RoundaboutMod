@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.BladedBowlerHatModel;
@@ -38,6 +38,6 @@ public class TuskHoleRenderer extends EntityRenderer<TuskHoleEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(TuskHoleEntity var1) {
-        return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/projectile/tusk_hole.png");
+        return new ResourceLocation(SBA.MOD_ID,"textures/entity/projectile/tusk_hole.png");
     }
 }

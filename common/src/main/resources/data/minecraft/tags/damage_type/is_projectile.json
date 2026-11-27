@@ -1,12 +1,12 @@
 {
   "replace": false,
   "values": [
-    "roundabout:match",
-    "roundabout:knife",
-    "roundabout:melting",
-    "roundabout:harpoon",
-    "roundabout:corpse_arrow",
-    "roundabout:power_throw",
-    "roundabout:iron_ball"
+    "sba:match",
+    "sba:knife",
+    "sba:melting",
+    "sba:harpoon",
+    "sba:corpse_arrow",
+    "sba:power_throw",
+    "sba:iron_ball"
   ]
 }

@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 4.12.
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.animation.AnimationDefinition;
@@ -66,7 +66,7 @@ public class IceTwisterModel<T extends Entity> extends PsuedoHierarchicalModel {
     }
 
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/stand/white_album/projectiles/ice_twister.png");
     }
     public void animate2(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3){

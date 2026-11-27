@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -77,14 +77,14 @@ public class FallingBannerRenderer extends EntityRenderer<FallingBannerEntity> {
         float scale = 1;
 
         poseStack.translate(0.0D, 0.75D, 0.2D);
-        ModStrayModels.bannerFlag.roundabout$renderInSpot(stack,
+        ModStrayModels.bannerFlag.sba$renderInSpot(stack,
                 entity.position(),entity.level(),partialTicks, poseStack, bufferSource, packedLight,OverlayTexture.NO_OVERLAY,scale);
         ClientUtil.popPoseAndCooperate(poseStack,46);
     }
 
     @Override
     public ResourceLocation getTextureLocation(FallingBannerEntity var1) {
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/stand/white_album/projectiles/ice_twister.png");
     }
 

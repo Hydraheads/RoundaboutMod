@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sba:item/c_moon_disc_face",
+    "layer1": "sba:item/c_moon_disc_rim"
+  }
+}

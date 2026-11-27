@@ -38,8 +38,8 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
 
         switch (selectedType)
         {
-            case COMMON -> this.addEntry(new CommentEntry("§r§6§l"+Component.translatable("config.roundabout.major.common_config").getString()));
-            case CLIENT -> this.addEntry(new CommentEntry("§r§6§l"+Component.translatable("config.roundabout.major.client_config").getString()));
+            case COMMON -> this.addEntry(new CommentEntry("§r§6§l"+Component.translatable("config.sba.major.common_config").getString()));
+            case CLIENT -> this.addEntry(new CommentEntry("§r§6§l"+Component.translatable("config.sba.major.client_config").getString()));
         }
 
         Object instance = null;
@@ -69,7 +69,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 } else if(!field.isAnnotationPresent(Hidden.class)) {
                     Object nestedObject = field.get(instance);
                     this.addEntry(new CommentEntry(
-                            Component.translatable("config.roundabout." + field.getName() + ".name").getString()));
+                            Component.translatable("config.sba." + field.getName() + ".name").getString()));
 
                     if (nestedObject == null) {
                         continue;
@@ -121,7 +121,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         public Path config_path;
         public AdvenceConfigEntry(Path p) {
             config_path = p;
-            button = Button.builder(Component.translatable("config.roundabout.advencedConfigOpen.name"), (button) -> {
+            button = Button.builder(Component.translatable("config.sba.advencedConfigOpen.name"), (button) -> {
                 ConfigManager.markAdvancedConfigAsDirty();
                 Util.getPlatform().openUri(config_path.toUri());
             }).build();
@@ -144,7 +144,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                                 Button editButton){
             if (editButton.isHovered()){
                 List<Component> compList = Lists.newArrayList();
-                String[] strung2 = ClientUtil.splitIntoLine(Component.translatable("config.roundabout.advencedConfigOpen.desc").getString(), 35);
+                String[] strung2 = ClientUtil.splitIntoLine(Component.translatable("config.sba.advencedConfigOpen.desc").getString(), 35);
                 for (String s : strung2) {
                     compList.add(Component.literal(s).withStyle(ChatFormatting.BLUE));
                 }
@@ -158,7 +158,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         public Path config_path;
         public AnubisEntry(Path p) {
             config_path = p;
-            button = Button.builder(Component.translatable("config.roundabout.anubisMemoryOpen.name"), (button) -> {
+            button = Button.builder(Component.translatable("config.sba.anubisMemoryOpen.name"), (button) -> {
                 Util.getPlatform().openUri(config_path.toUri());
             }).build();
         }
@@ -192,7 +192,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                 e.printStackTrace();
             }
 
-            toggleButton = Button.builder(Component.translatable("config.roundabout."+field.getName()+".name").append(getNewValueRender(currentValue)),
+            toggleButton = Button.builder(Component.translatable("config.sba."+field.getName()+".name").append(getNewValueRender(currentValue)),
                     btn -> {
                         try {
                             Boolean newVal = !(Boolean) field.get(instance);
@@ -204,7 +204,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                                 case CLIENT -> ConfigManager.saveClientConfig();
                             }
 
-                            btn.setMessage(Component.translatable("config.roundabout."+field.getName()+".name").append(getNewValueRender(newVal)));
+                            btn.setMessage(Component.translatable("config.sba."+field.getName()+".name").append(getNewValueRender(newVal)));
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         }
@@ -241,7 +241,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
                             Field field, Button editButton){
         if (editButton.isHovered()){
             List<Component> compList = Lists.newArrayList();
-            String[] strung2 = ClientUtil.splitIntoLine(Component.translatable("config.roundabout."+field.getName()+".desc").getString(), 35);
+            String[] strung2 = ClientUtil.splitIntoLine(Component.translatable("config.sba."+field.getName()+".desc").getString(), 35);
             for (String s : strung2) {
                 compList.add(Component.literal(s).withStyle(ChatFormatting.BLUE));
             }
@@ -275,7 +275,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         public void render(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             editButton.setX(x);
             editButton.setY(y);
-            editButton.setMessage(Component.translatable("config.roundabout."+field.getName()+".name"));
+            editButton.setMessage(Component.translatable("config.sba."+field.getName()+".name"));
             editButton.render(drawContext, mouseX, mouseY, partialTick);
             renderHover(drawContext,index,y,x,width,height,mouseX,mouseY,hovering,partialTick,field, editButton);
 
@@ -320,7 +320,7 @@ public class ConfigListWidget extends ContainerObjectSelectionList<ConfigListWid
         public void render(GuiGraphics drawContext, int index, int y, int x, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             editButton.setX(x);
             editButton.setY(y);
-            editButton.setMessage(Component.translatable("config.roundabout."+field.getName()+".name"));
+            editButton.setMessage(Component.translatable("config.sba."+field.getName()+".name"));
             editButton.render(drawContext, mouseX, mouseY, partialTick);
             renderHover(drawContext,index,y,x,width,height,mouseX,mouseY,hovering,partialTick,field, editButton);
 

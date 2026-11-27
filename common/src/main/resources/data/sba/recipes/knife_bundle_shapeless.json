@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "sba:knife"
+    },
+    {
+      "item": "sba:knife"
+    },
+    {
+      "item": "sba:knife"
+    },
+    {
+      "item": "sba:knife"
+    }
+  ],
+  "result": {
+    "item": "sba:knife_bundle"
+  }
+}

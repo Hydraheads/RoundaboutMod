@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.forge;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.index.AnubisMoment;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersAnubis;
@@ -19,16 +19,16 @@ public abstract class AnubisForgeToggleKeyMapping {
 
     ///  forge overrides isDown inside of ToggleKeyMapping so...
     @Inject(method = "isDown",at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$forgeToggleKeyForcePressed(CallbackInfoReturnable<Boolean> cir) {
+    public void sba$forgeToggleKeyForcePressed(CallbackInfoReturnable<Boolean> cir) {
         ToggleKeyMapping This = (ToggleKeyMapping) (Object) this;
 
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         StandUser SU = (StandUser) player;
         if (SU != null) {
-            if (SU.roundabout$getStandPowers() != null) {
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
-                    if (SU.roundabout$getUniqueStandModeToggle()) {
+            if (SU.sba$getStandPowers() != null) {
+                if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
+                    if (SU.sba$getUniqueStandModeToggle()) {
                         int time = PA.getMaxPlayTime() - PA.playTime;
                         for (int i = 0; i < PA.playKeys.size(); i++) {
                             KeyMapping key = PA.playKeys.get(i);

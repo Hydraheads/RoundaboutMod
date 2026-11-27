@@ -4,7 +4,7 @@
 package net.hydra.jojomod.client.models.mobs.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisMobLayer;
 import net.hydra.jojomod.client.models.mobs.AnubisGuardianModel;
@@ -33,8 +33,8 @@ public class AnubisGuardianRenderer<T extends AnubisGuardian>
         poseStack.scale(0.9375f, 0.9375f, 0.9375f);
     }
 
-    public static final ResourceLocation normal = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/wandering_guardian.png");
-    public static final ResourceLocation revealed = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/wandering_guardian_revealed.png");
+    public static final ResourceLocation normal = new ResourceLocation(SBA.MOD_ID,"textures/entity/wandering_guardian.png");
+    public static final ResourceLocation revealed = new ResourceLocation(SBA.MOD_ID,"textures/entity/wandering_guardian_revealed.png");
 
 
     @Override

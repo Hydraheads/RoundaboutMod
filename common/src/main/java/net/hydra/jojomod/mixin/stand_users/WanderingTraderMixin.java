@@ -42,12 +42,12 @@ public abstract class WanderingTraderMixin
 
 
     @Inject(method = "<init>",at = @At(value = "RETURN"))
-    private void roundabout$updateTrades(EntityType $$0, Level $$1, CallbackInfo ci) {
+    private void sba$updateTrades(EntityType $$0, Level $$1, CallbackInfo ci) {
         WanderingTrades.updateTrades(Config.getServerInstance());
     }
 
     @Inject(method = "aiStep",at = @At(value = "HEAD"))
-    public void roundabout$makeTraderStand(CallbackInfo ci) {
+    public void sba$makeTraderStand(CallbackInfo ci) {
 
 
 
@@ -57,25 +57,25 @@ public abstract class WanderingTraderMixin
         WanderingTrader This = (WanderingTrader) (Object) this;
         if (!This.level().isClientSide() && (offers == null) ) {
             float WTS = VillagerTrades.WANDERING_TRADER_TRADES.get(2).length;
-        //    Roundabout.LOGGER.info("WTS: " + WTS);
+        //    SBA.LOGGER.info("WTS: " + WTS);
             float maxChance = WTS;
             for (Pair<Float, MerchantOffer> f : WanderingTrades.TRADES) {maxChance += f.getA();}
-        //    Roundabout.LOGGER.info("maxChance: " + maxChance);
+        //    SBA.LOGGER.info("maxChance: " + maxChance);
             pick = This.getRandom().nextFloat() * maxChance;
-        //    Roundabout.LOGGER.info("pick: " + pick);
+        //    SBA.LOGGER.info("pick: " + pick);
 
 
             float pick = this.pick;
             if (pick > WTS) {
                 pick -= WTS;
-            //    Roundabout.LOGGER.info(""+pick);
+            //    SBA.LOGGER.info(""+pick);
                 for(int i=0;i<WanderingTrades.TRADES.size();i++) {
                     Pair<Float,MerchantOffer> pair = WanderingTrades.TRADES.get(i);
-                 //   Roundabout.LOGGER.info(pick + " - " + pair.getA());
+                 //   SBA.LOGGER.info(pick + " - " + pair.getA());
                     if (pick < pair.getA()) {
                         if (pair.getB().equals(WanderingTrades.BROKEN_ARROW_TRADE) && ConfigManager.getConfig().wanderingTraderSettings.brokenArrowsHaveStands ) {
                             StandArrowItem.grantStand(StandArrowItem.randomizeStand().getDefaultInstance(),This);
-                            ((StandUser)This).roundabout$setActive(false);
+                            ((StandUser)This).sba$setActive(false);
                         }
                         break;
                     } else {
@@ -92,7 +92,7 @@ public abstract class WanderingTraderMixin
 
 
     @Inject(method = "updateTrades",at = @At(value = "TAIL"))
-    public void roundabout$addWanderingTrades(CallbackInfo ci) {
+    public void sba$addWanderingTrades(CallbackInfo ci) {
         WanderingTrader This = (WanderingTrader) (Object) this;
         if (This.level().isClientSide()) {return;}
         MerchantOffers offers = This.getOffers();
@@ -106,7 +106,7 @@ public abstract class WanderingTraderMixin
 
         if (cf != null && !VillagerTrades.TRADES.isEmpty()) {
             float WTS = VillagerTrades.WANDERING_TRADER_TRADES.get(2).length;
-          //  Roundabout.LOGGER.info(pick + " - " + WTS);
+          //  SBA.LOGGER.info(pick + " - " + WTS);
             if (pick > WTS) {
                 MerchantOffer offer = null;
                 pick -= WTS;
@@ -137,18 +137,18 @@ public abstract class WanderingTraderMixin
     }
 
     @Inject(method = "aiStep", at = @At("HEAD"))
-    private void roundabout$traderTickLockout(CallbackInfo ci) {
+    private void sba$traderTickLockout(CallbackInfo ci) {
         if (!this.level().isClientSide()) {
             IVillagerAccess access = (IVillagerAccess) this;
-            int lockout = access.roundabout$getSnakeOilLockout();
+            int lockout = access.sba$getSnakeOilLockout();
             if (lockout > 0) {
-                access.roundabout$setSnakeOilLockout(lockout - 1);
+                access.sba$setSnakeOilLockout(lockout - 1);
             }
         }
     }
 
     @Inject(method = "mobInteract", at = @At("HEAD"))
-    private void roundabout$trackClientTrader(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sba$trackClientTrader(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         WanderingTrader self = (WanderingTrader) (Object) this;
         if (self.level().isClientSide()) {
             TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER = self;

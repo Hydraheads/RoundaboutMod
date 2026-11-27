@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.PlanetWavesCosmicModel;
 import net.hydra.jojomod.client.models.stand.PlanetWavesModel;
@@ -16,18 +16,18 @@ import net.minecraft.util.Mth;
 
 public class PlanetWavesBaseRenderer<M extends StandEntity> extends StandRenderer<PlanetWavesEntity> {
 
-    private static final ResourceLocation PART_6_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/anime.png");
-    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/manga.png");
-    private static final ResourceLocation BLUE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/blue.png");
-    private static final ResourceLocation PURPLE_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/purple.png");
-    private static final ResourceLocation GREEN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/green.png");
-    private static final ResourceLocation OCEAN_WAVES = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/ocean_waves.png");
-    private static final ResourceLocation SYMPHONY_WAVES = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/symphony_waves.png");
-    private static final ResourceLocation SPARTA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/sparta.png");
-    private static final ResourceLocation SPARTA2 = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/sparta2.png");
-    private static final ResourceLocation HALLOWEEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/halloween.png");
-    private static final ResourceLocation COSMIC = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/cosmic_waves.png");
-    private static final ResourceLocation GRAPESODA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/planet_waves/grapesoda.png");
+    private static final ResourceLocation PART_6_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/anime.png");
+    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/manga.png");
+    private static final ResourceLocation BLUE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/blue.png");
+    private static final ResourceLocation PURPLE_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/purple.png");
+    private static final ResourceLocation GREEN_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/green.png");
+    private static final ResourceLocation OCEAN_WAVES = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/ocean_waves.png");
+    private static final ResourceLocation SYMPHONY_WAVES = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/symphony_waves.png");
+    private static final ResourceLocation SPARTA = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/sparta.png");
+    private static final ResourceLocation SPARTA2 = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/sparta2.png");
+    private static final ResourceLocation HALLOWEEN = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/halloween.png");
+    private static final ResourceLocation COSMIC = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/cosmic_waves.png");
+    private static final ResourceLocation GRAPESODA = new ResourceLocation(SBA.MOD_ID,"textures/stand/planet_waves/grapesoda.png");
 
     private final StandModel<PlanetWavesEntity> baseModel;
     private final StandModel<PlanetWavesEntity> spartaModel;

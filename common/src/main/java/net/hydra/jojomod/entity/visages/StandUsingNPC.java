@@ -30,10 +30,10 @@ public class StandUsingNPC extends JojoNPC{
     }
     public void rollStand(){
         if (!isInitialized){
-            ItemStack stack = ((StandUser)this).roundabout$getStandDisc();
+            ItemStack stack = ((StandUser)this).sba$getStandDisc();
             if (stack == null || stack.isEmpty()){
                 if (getDisc() != null){
-                    ((StandUser)this).roundabout$setStandDisc(getDisc().getDefaultInstance().copy());
+                    ((StandUser)this).sba$setStandDisc(getDisc().getDefaultInstance().copy());
                     applySkin();
                 }
             }

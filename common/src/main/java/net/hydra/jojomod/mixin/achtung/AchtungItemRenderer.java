@@ -45,22 +45,22 @@ public abstract class AchtungItemRenderer {
      * Code for Achtung Baby Item Rendering!
      * Intended to make items see through in 1st person, when dropped, etc
      *
-     * roundabout$renderHead -> this code runs the vanilla render function because sodium deletes it,
+     * sba$renderHead -> this code runs the vanilla render function because sodium deletes it,
      * but only if there is a readied up see through moment
      * to update the mod this function may need to be replaced again. The fog bits at the end
      * are for where the other mixin also adds justice's item rendering for the little skull by the item
      * in the hotbar.
      *
-     * roundabout$putBulkData -> replaces the vanilla function with a copy that has alpha blend support
+     * sba$putBulkData -> replaces the vanilla function with a copy that has alpha blend support
      * so that things can appear see through
      *
-     * roundabout$renderQuadList -> follows the same principals as roundabout$putBulkData, enabling
+     * sba$renderQuadList -> follows the same principals as sba$putBulkData, enabling
      * the passing through of alpha
      *
      * */
 
     @Inject(method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$renderHead(ItemStack $$0, ItemDisplayContext $$1, boolean $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, int $$6, BakedModel $$7, CallbackInfo ci) {
+    public void sba$renderHead(ItemStack $$0, ItemDisplayContext $$1, boolean $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, int $$6, BakedModel $$7, CallbackInfo ci) {
 
         float fade = ClientUtil.getThrowFadeToTheEther();
         if (fade <= 0){
@@ -135,13 +135,13 @@ public abstract class AchtungItemRenderer {
 
 
     @Unique
-    public void roundabout$putBulkData(VertexConsumer vc, PoseStack.Pose $$0, BakedQuad $$1, float $$2, float $$3, float $$4, int $$5, int $$6) {
-        this.roundabout$putBulkData(vc, $$0, $$1, new float[]{1.0F, 1.0F, 1.0F, 1.0F}, $$2, $$3, $$4, new int[]{$$5, $$5, $$5, $$5}, $$6, false);
+    public void sba$putBulkData(VertexConsumer vc, PoseStack.Pose $$0, BakedQuad $$1, float $$2, float $$3, float $$4, int $$5, int $$6) {
+        this.sba$putBulkData(vc, $$0, $$1, new float[]{1.0F, 1.0F, 1.0F, 1.0F}, $$2, $$3, $$4, new int[]{$$5, $$5, $$5, $$5}, $$6, false);
     }
 
 
     @Inject(method = "renderModelLists", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$renderModelLists(BakedModel $$0, ItemStack $$1, int $$2, int $$3, PoseStack $$4, VertexConsumer $$5, CallbackInfo ci) {
+    public void sba$renderModelLists(BakedModel $$0, ItemStack $$1, int $$2, int $$3, PoseStack $$4, VertexConsumer $$5, CallbackInfo ci) {
         /**Copy the original because sodium deletes it*/
         float fade = ClientUtil.getThrowFadeToTheEther();
         if (fade <= 0){
@@ -163,7 +163,7 @@ public abstract class AchtungItemRenderer {
         }
     }
     @Inject(method = "renderQuadList", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$renderQuadList(PoseStack $$0, VertexConsumer $$1, List<BakedQuad> $$2, ItemStack $$3, int $$4, int $$5, CallbackInfo ci) {
+    public void sba$renderQuadList(PoseStack $$0, VertexConsumer $$1, List<BakedQuad> $$2, ItemStack $$3, int $$4, int $$5, CallbackInfo ci) {
         float fade = ClientUtil.getThrowFadeToTheEther();
         if (fade <= 0){
             ci.cancel();
@@ -182,14 +182,14 @@ public abstract class AchtungItemRenderer {
                 float $$10 = (float)($$9 >> 16 & 0xFF) / 255.0F;
                 float $$11 = (float)($$9 >> 8 & 0xFF) / 255.0F;
                 float $$12 = (float)($$9 & 0xFF) / 255.0F;
-                roundabout$putBulkData($$1,$$7, $$8, $$10, $$11, $$12, $$4, $$5);
+                sba$putBulkData($$1,$$7, $$8, $$10, $$11, $$12, $$4, $$5);
             }
             ci.cancel();
         }
     }
 
     @Unique
-    public void roundabout$putBulkData(VertexConsumer vc, PoseStack.Pose $$0, BakedQuad $$1, float[] $$2, float $$3, float $$4, float $$5, int[] $$6, int $$7, boolean $$8) {
+    public void sba$putBulkData(VertexConsumer vc, PoseStack.Pose $$0, BakedQuad $$1, float[] $$2, float $$3, float $$4, float $$5, int[] $$6, int $$7, boolean $$8) {
         float[] $$9 = new float[]{$$2[0], $$2[1], $$2[2], $$2[3]};
         int[] $$10 = new int[]{$$6[0], $$6[1], $$6[2], $$6[3]};
         int[] $$11 = $$1.getVertices();

@@ -48,7 +48,7 @@ public class BombPlantedArrow extends Arrow {
         super.tick();
         if (!level().isClientSide()) {
 
-            if (getOwner() == null || !(getOwner().isAlive() && ((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
+            if (getOwner() == null || !(getOwner().isAlive() && ((StandUser)getOwner()).sba$getStandPowers() instanceof PowersKillerQueen PKQ
                 && PKQ.bombEntity == this)) {
                 defuse();
             }
@@ -58,7 +58,7 @@ public class BombPlantedArrow extends Arrow {
     @Override
     protected void doPostHurtEffects(LivingEntity target) {
         super.doPostHurtEffects(target);
-        if (target != getOwner() && getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.bombEntity.getId() == getId()) {
+        if (target != getOwner() && getOwner() instanceof LivingEntity LE && ((StandUser) LE).sba$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.bombEntity.getId() == getId()) {
             PKQ.contactDetonate(target);
         }
     }

@@ -38,8 +38,8 @@ public class ShaderLevelRenderer {
             @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER),
             @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/Lighting;setupNetherLevel(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER)
     })
-    private void roundabout$renderShaders2(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci){
-        roundabout$setDepthbuffer();
+    private void sba$renderShaders2(PoseStack $$0, float partialTick, long $$2, boolean $$3, Camera $$4, GameRenderer $$5, LightTexture $$6, Matrix4f $$7, CallbackInfo ci){
+        sba$setDepthbuffer();
 
         if (Minecraft.getInstance().player == null)
             return;
@@ -47,13 +47,13 @@ public class ShaderLevelRenderer {
         ClientConfig clientConfig = ConfigManager.getClientConfig();
         if (clientConfig != null && clientConfig.timeStopSettings != null) {
             if (ConfigManager.getClientConfig().timeStopSettings.advancedTimeStopShader) {
-                roundabout$drawTSShader(partialTick);
+                sba$drawTSShader(partialTick);
             }
         }
     }
 
     @Unique
-    private void roundabout$drawTSShader(float partialTick){
+    private void sba$drawTSShader(float partialTick){
         ImmutableList<TimeStopInstance> listTs = ImmutableList.copyOf(((TimeStop) Minecraft.getInstance().player.level()).rdbt$getTimeStoppingEntitiesClient());
         if (!listTs.isEmpty()) {
             for (int i = listTs.size() - 1; i >= 0; --i) {
@@ -75,7 +75,7 @@ public class ShaderLevelRenderer {
                     if (level != null) {
                         Entity ent = level.getEntity(tinstance.id);
                         if (ent instanceof LivingEntity LE) {
-                            if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersTheWorld){
+                            if (((StandUser)LE).sba$getStandPowers() instanceof PowersTheWorld){
                                 maxDuration = ClientNetworking.getAppropriateConfig().timeStopSettings.maxTimeStopTicksTheWorld;
                             }
                         }
@@ -109,7 +109,7 @@ public class ShaderLevelRenderer {
                             pos = pos.add(ent.getPosition(partialTick));
                             locationVec = new Vec3(pos.x(),pos.y(),pos.z());
 
-                            if (ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers()
+                            if (ent instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers()
                                     instanceof TWAndSPSharedPowers tp){
                                 color = tp.getTSColor();
                                 if (color.equals(new Vec3(1,1,1))){
@@ -158,7 +158,7 @@ public class ShaderLevelRenderer {
 
     // This must ALWAYS be run at the beginning of every frame, so we don't clutter up the OpenGL State.
     @Unique
-    private void roundabout$setDepthbuffer()
+    private void sba$setDepthbuffer()
     {
         if (TimestopShaderManager.TIMESTOP_DEPTH_BUFFER != null) {
             TimestopShaderManager.TIMESTOP_DEPTH_BUFFER.clear(Minecraft.ON_OSX);

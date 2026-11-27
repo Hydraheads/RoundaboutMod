@@ -59,7 +59,7 @@ public abstract class GravityMoveControlMixin implements Control {
     )
     public void rdbt$strafe(float $$0, float $$1, CallbackInfo ci) {
         if (this.mob != null) {
-            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
             if (dir == Direction.DOWN)
                 return;
             ci.cancel();
@@ -78,7 +78,7 @@ public abstract class GravityMoveControlMixin implements Control {
     )
     public void rdbt$setWantedPosition(double $$0, double $$1, double $$2, double $$3,CallbackInfo ci) {
         if (this.mob != null) {
-            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
             if (dir == Direction.DOWN)
                 return;
 
@@ -101,7 +101,7 @@ public abstract class GravityMoveControlMixin implements Control {
     )
     public void rdbt$tick(CallbackInfo ci) {
         if (this.mob != null) {
-            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
             if (dir == Direction.DOWN)
                 return;
             ci.cancel();
@@ -254,7 +254,7 @@ public abstract class GravityMoveControlMixin implements Control {
     )
     public void rdbt$isWalkable(float $$0, float $$1, CallbackInfoReturnable<Boolean> cir) {
         if (this.mob != null) {
-            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
             if (dir == Direction.DOWN)
                 return;
 

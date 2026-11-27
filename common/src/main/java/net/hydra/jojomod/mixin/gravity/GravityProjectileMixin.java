@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.world.entity.projectile.Projectile;

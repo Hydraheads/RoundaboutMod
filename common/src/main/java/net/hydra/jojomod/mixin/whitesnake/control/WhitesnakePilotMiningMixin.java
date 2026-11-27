@@ -27,10 +27,10 @@ import java.util.Objects;
 @Mixin(value = ServerPlayerGameMode.class, priority = 2000)
 public abstract class WhitesnakePilotMiningMixin {
     @Inject(method = "handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;II)V", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$handleMining(BlockPos pos, ServerboundPlayerActionPacket.Action action,
+    private void sbaWhitesnake$handleMining(BlockPos pos, ServerboundPlayerActionPacket.Action action,
                                                    Direction direction, int buildHeight, int sequence,
                                                    CallbackInfo ci) {
-        if (!(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
+        if (!(((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers)
                 || !powers.isPiloting() || !MainUtil.getIsGamemodeApproriateForGrief(player)) return;
         LivingEntity stand = powers.getPilotingStand();
         if (stand == null || !stand.isAlive() || stand.isRemoved()) return;

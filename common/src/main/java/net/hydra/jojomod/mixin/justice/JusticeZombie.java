@@ -21,10 +21,10 @@ public abstract class JusticeZombie extends Monster {
      * This mixin exists in relation to Justice's fog morph ability, the one where it disguises
      * as select humanoid vanilla mobs, based on the JoJo OVA in which Enya disguises as younger.*/
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$tick(CallbackInfo ci) {
+    protected void sba$tick(CallbackInfo ci) {
         if (this.getTarget() instanceof Player $$0){
             IPlayerEntity ple = ((IPlayerEntity) $$0);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 if (shift == ShapeShifts.ZOMBIE) {

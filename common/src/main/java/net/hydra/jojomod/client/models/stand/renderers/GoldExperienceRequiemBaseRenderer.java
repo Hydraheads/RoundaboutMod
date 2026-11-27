@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.GoldExperienceRequiemModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
@@ -14,16 +14,16 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 public class GoldExperienceRequiemBaseRenderer extends StandRenderer<GoldExperienceRequiemEntity> {
-    public static final ResourceLocation PART_5 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/base.png");
-    public static final ResourceLocation DIAMOND = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/diamond.png");
-    public static final ResourceLocation GUARD = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/guard.png");
-    public static final ResourceLocation PS2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/ps2.png");
-    public static final ResourceLocation DEIMOS = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/deimos.png");
-    public static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/manga.png");
-    public static final ResourceLocation AGOGO = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/agogo.png");
-    public static final ResourceLocation JOJOVELLER = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/jojoveller.png");
-    public static final ResourceLocation TITLE_PAGE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/title_page.png");
-    public static final ResourceLocation CATERPILLAR = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience_requiem/caterpillar.png");
+    public static final ResourceLocation PART_5 = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/base.png");
+    public static final ResourceLocation DIAMOND = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/diamond.png");
+    public static final ResourceLocation GUARD = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/guard.png");
+    public static final ResourceLocation PS2 = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/ps2.png");
+    public static final ResourceLocation DEIMOS = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/deimos.png");
+    public static final ResourceLocation MANGA = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/manga.png");
+    public static final ResourceLocation AGOGO = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/agogo.png");
+    public static final ResourceLocation JOJOVELLER = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/jojoveller.png");
+    public static final ResourceLocation TITLE_PAGE = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/title_page.png");
+    public static final ResourceLocation CATERPILLAR = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience_requiem/caterpillar.png");
 
     public GoldExperienceRequiemBaseRenderer(EntityRendererProvider.Context context, StandModel<GoldExperienceRequiemEntity> entityModel, float f) {
         super(context, entityModel, f);

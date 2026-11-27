@@ -2,7 +2,7 @@ package net.hydra.jojomod.biome_modifiers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.common.world.BiomeModifier;
@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class BiomeCodec {
         public static DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS =
-                DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, Roundabout.MOD_ID);
+                DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, SBA.MOD_ID);
 
         static RegistryObject<Codec<naturalLocacacaModifier>> LOCA_CODEC = BIOME_MODIFIER_SERIALIZERS.register("locacaca_placement", () ->
                 RecordCodecBuilder.create(builder -> builder.group(

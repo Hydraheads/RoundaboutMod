@@ -18,10 +18,10 @@ public class AchtungProjectile {
 
     /**Turn shot projectiles invisible.*/
     @Inject(method = "setOwner", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$SetOwner(@Nullable Entity $$0, CallbackInfo ci) {
+    private void sba$SetOwner(@Nullable Entity $$0, CallbackInfo ci) {
         if ($$0 != null) {
             if (MainUtil.getEntityIsTrulyInvisible($$0) && ClientNetworking.getAppropriateConfig().achtungSettings.hidesShotProjectiles){
-                ((IEntityAndData)this).roundabout$setTrueInvisibility(MainUtil.getEntityTrulyInvisibleTicks($$0));
+                ((IEntityAndData)this).sba$setTrueInvisibility(MainUtil.getEntityTrulyInvisibleTicks($$0));
             }
         }
     }

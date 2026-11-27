@@ -1,6 +1,6 @@
 package net.hydra.jojomod.registry;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -10,7 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ForgeSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS =
-            DeferredRegister.create(Registries.SOUND_EVENT, Roundabout.MOD_ID);
+            DeferredRegister.create(Registries.SOUND_EVENT, SBA.MOD_ID);
     public static final RegistryObject<SoundEvent> SUMMON_SOUND_EVENT =
             register(ModSounds.SUMMON_SOUND, ModSounds.SUMMON_SOUND_ID);
     public static final RegistryObject<SoundEvent> STAND_ARROW_CHARGE_EVENT =

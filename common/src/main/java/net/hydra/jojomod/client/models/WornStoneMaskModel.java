@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models;// Made with Blockbench 4.12.6
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -61,7 +61,7 @@ public class WornStoneMaskModel<T extends Entity> extends PsuedoHierarchicalMode
     public void setupAnim(Entity var1, float pAgeInTicks) {
     }
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/entity/other_layers/stone_mask_worn.png");
     }
 

@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin.fates;
 
 import com.mojang.authlib.GameProfile;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.FateTypes;
@@ -27,10 +27,10 @@ public abstract class FateServerPlayerMixin extends Player {
 
     /**Cancel death animation*/
     @Inject(method = "die", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$die(DamageSource $$0, CallbackInfo ci) {
+    protected void sba$die(DamageSource $$0, CallbackInfo ci) {
         if (FateTypes.takesSunlightDamage(this)) {
             if ($$0.is(ModDamageTypes.SUNLIGHT)){
-                ((IPlayerEntity) this).roundabout$SetPos(PlayerPosIndex.SUNLIGHT);
+                ((IPlayerEntity) this).sba$SetPos(PlayerPosIndex.SUNLIGHT);
                 if (this.level() instanceof ServerLevel SL){
                     Vec3 position = this.getPosition(1);
                     Vec3 position2 = this.getEyePosition();

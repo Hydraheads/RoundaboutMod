@@ -129,7 +129,7 @@ public class TotemOfDoomEntity extends Entity implements ItemSupplier {
                                     || (off.getItem() instanceof TridentItem && EnchantmentHelper.getRiptide(off) > 0);
 
                             if (isRiptideTrident) {
-                                ((StandUser) LV).roundabout$stopAutoSpinAttack();
+                                ((StandUser) LV).sba$stopAutoSpinAttack();
                                 // completely kills momentum so you don't just fling anyways
                                 LV.setDeltaMovement(Vec3.ZERO);
                                 LV.hurtMarked = true;

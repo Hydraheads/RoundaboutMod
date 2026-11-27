@@ -38,11 +38,11 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
                        float var5, float var6, float var7, float var8, float var9, float var10) {
 
         if (var4 instanceof Zombie || var4 instanceof Player) {
-            if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision())
+            if (((IEntityAndData)var4).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision())
                 return;
-            if (((IEntityAndData) var4).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
+            if (((IEntityAndData) var4).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
 
-            byte glow = ((StandUser) var4).roundabout$getGlow();
+            byte glow = ((StandUser) var4).sba$getGlow();
             if (glow == 1) {
                 ResourceLocation rl = StandIcons.NO_FACE_LAYER;
                 renderPart(poseStack, multiBufferSource, integ, livingEntityRenderer.getModel(), 1, 1, 1, null,
@@ -59,11 +59,11 @@ public class FacelessLayer<T extends LivingEntity, M extends HumanoidModel<T>, A
         if (RL != null) {
             VertexConsumer $$10 = multiBufferSource.getBuffer(RenderType.entityTranslucent(RL));
 
-            ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale += 0.04F);
-            ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale += 0.04F);
+            ((IHumanoidModelAccess) $$4).sba$getBodyParts().forEach($$8x -> $$8x.xScale += 0.04F);
+            ((IHumanoidModelAccess) $$4).sba$getBodyParts().forEach($$8x -> $$8x.zScale += 0.04F);
             $$4.renderToBuffer(poseStack, $$10, integ, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
-            ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale -= 0.04F);
-            ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale -= 0.04F);
+            ((IHumanoidModelAccess) $$4).sba$getBodyParts().forEach($$8x -> $$8x.xScale -= 0.04F);
+            ((IHumanoidModelAccess) $$4).sba$getBodyParts().forEach($$8x -> $$8x.zScale -= 0.04F);
         }
     }
 }

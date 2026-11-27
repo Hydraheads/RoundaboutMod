@@ -215,7 +215,7 @@ public class FallenSpider extends FallenMob implements PlayerRideableJumping {
         if (this.getActivated()) {
             if (this.getController() > 0 && this.getControllingPassenger() instanceof
             Player PE && this.getController() == PE.getId() &&
-                    ((StandUser)PE).roundabout$getStandPowers().isPiloting()){
+                    ((StandUser)PE).sba$getStandPowers().isPiloting()){
                 return;
             }
             this.playSound(SoundEvents.SPIDER_STEP, 0.15F, 1.0F);

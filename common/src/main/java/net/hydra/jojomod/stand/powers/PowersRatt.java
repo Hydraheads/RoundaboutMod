@@ -1,7 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -120,7 +120,7 @@ public class PowersRatt extends NewDashPreset {
     }
     @Override
     public StandEntity getNewStandEntity(){
-        byte skin = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skin = ((StandUser)this.getSelf()).sba$getStandSkin();
         if (skin == RattEntity.REDD_SKIN){
             return ModEntities.REDD.create(this.getSelf().level());
         } else if (skin >= RattEntity.CHAIR_RAT_SKIN) {
@@ -177,7 +177,7 @@ public class PowersRatt extends NewDashPreset {
     public void updatePowerInt(byte activePower, int data) {
         if (activePower == PowersRatt.UPDATE_CHARGE) {
             if (data < chargeTime) {
-                ((StandUser) this.getSelf()).roundabout$setCombatMode(false);
+                ((StandUser) this.getSelf()).sba$setCombatMode(false);
                 this.scopeLevel = 0;
                 this.setCooldown(PowersRatt.SCOPE, 35);
                 if (this.getActivePower() == PowersRatt.START_CHARGE) {
@@ -197,8 +197,8 @@ public class PowersRatt extends NewDashPreset {
 
 
     public boolean isPlaced() {return this.getStandEntity(this.getSelf()) != null;}
-    public boolean isAuto() {return this.getStandUserSelf().roundabout$getUniqueStandModeToggle();}
-    public void setAuto(boolean b) {this.getStandUserSelf().roundabout$setUniqueStandModeToggle(b);}
+    public boolean isAuto() {return this.getStandUserSelf().sba$getUniqueStandModeToggle();}
+    public void setAuto(boolean b) {this.getStandUserSelf().sba$setUniqueStandModeToggle(b);}
 
     public boolean isAutoMining() {
         Entity stand = getStandEntity(self);
@@ -352,8 +352,8 @@ public class PowersRatt extends NewDashPreset {
             RE.setMaster(this.self);
             RE.absMoveTo(pos.x(),pos.y(),pos.z());
             PowerTypes.copyPlaneOfExisting(self,RE);
-            RE.setSavedSkin( ((StandUser)this.getSelf()).roundabout$getStandSkin() );
-            this.getStandUserSelf().roundabout$standMount(RE);
+            RE.setSavedSkin( ((StandUser)this.getSelf()).sba$getStandSkin() );
+            this.getStandUserSelf().sba$standMount(RE);
             this.self.level().addFreshEntity(RE);
             playSoundIfPossible(self.level(),null,this.getSelf().blockPosition(),ModSounds.RATT_PLACE_EVENT,SoundSource.PLAYERS,1F,1F);
         }
@@ -475,7 +475,7 @@ public class PowersRatt extends NewDashPreset {
 
 
 
-        if (this.getActivePower() == PowersRatt.START_CHARGE && this.isClient() && this.getStandUserSelf().roundabout$getCombatMode()) {
+        if (this.getActivePower() == PowersRatt.START_CHARGE && this.isClient() && this.getStandUserSelf().sba$getCombatMode()) {
             int amount = ClientNetworking.getAppropriateConfig().rattSettings.rattManualChargeRate;
             updateChargeTime(Mth.clamp(getChargeTime()+(this.getAttackTime()%2 == 0 ? amount : amount+1),0,100));
 
@@ -528,7 +528,7 @@ public class PowersRatt extends NewDashPreset {
 
                     if (getShootTarget() != null) {
                         if (PowerTypes.isInADifferentExistence(getShootTarget(),getStandEntity(self))){
-                            if (((StandUser)getShootTarget()).roundabout$getStandPowers() instanceof
+                            if (((StandUser)getShootTarget()).sba$getStandPowers() instanceof
                             PowersKingCrimson pkc && pkc.timeEraseActive){
                                 setShootTarget(pkc.activeClone);
                             } else {
@@ -743,7 +743,7 @@ public class PowersRatt extends NewDashPreset {
                 this.setCooldown(PowersRatt.SCOPE,5);
                 this.setAttackTime(-1);
                 setScopeLevel(chargeTime);
-                this.getStandUserSelf().roundabout$setCombatMode(scopeLevel > 0);
+                this.getStandUserSelf().sba$setCombatMode(scopeLevel > 0);
             }
             case PowersRatt.UPDATE_CHARGE -> this.chargeTime = chargeTime;
 
@@ -1035,7 +1035,7 @@ public class PowersRatt extends NewDashPreset {
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (this.getActivePower() == PowerIndex.NONE) {
-            if (getChargeTime() != 100 && shotcooldown == 0 && this.getStandUserSelf().roundabout$getCombatMode() && scopeLevel != 0) {
+            if (getChargeTime() != 100 && shotcooldown == 0 && this.getStandUserSelf().sba$getCombatMode() && scopeLevel != 0) {
                 tryPower(PowerIndex.GUARD, true);
                 tryPowerPacket(PowerIndex.GUARD);
             } else if (scopeLevel == 0) {
@@ -1057,7 +1057,7 @@ public class PowersRatt extends NewDashPreset {
 
     @Override
     public boolean setPowerGuard() {
-        if (this.getStandUserSelf().roundabout$getCombatMode()) {
+        if (this.getStandUserSelf().sba$getCombatMode()) {
             this.setActivePower(PowersRatt.START_CHARGE);
         } else {
             this.setPowerNone();
@@ -1087,7 +1087,7 @@ public class PowersRatt extends NewDashPreset {
             if ($$0.getEntity() != null) {
                 if ($$0.getEntity().getPosition(1).distanceTo(this.getSelf().getPosition(1)) < 6.0) {
                     if (this.getSelf() instanceof Player P) {
-                        if (this.getStandUserSelf().roundabout$getCombatMode() && PowerTypes.isUsingStand(this.getSelf())) {
+                        if (this.getStandUserSelf().sba$getCombatMode() && PowerTypes.isUsingStand(this.getSelf())) {
                             int nc = Math.max(this.getChargeTime() - 30, 0);
                             playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
                             this.updatePowerInt(PowersRatt.UPDATE_CHARGE, nc);
@@ -1106,13 +1106,13 @@ public class PowersRatt extends NewDashPreset {
         if (attackTarget != null && attackTarget.isAlive()) {
             desTicks = 10;
             this.setShootTarget(attackTarget);
-            // this.getStandUserSelf().roundabout$setCombatMode(true);
+            // this.getStandUserSelf().sba$setCombatMode(true);
             //    double dist = attackTarget.getPosition(0).distanceTo(this.getSelf().getPosition(0));
             if (isPlaced()) {
                 if (this.shotcooldown == 0) {
                     if (MainUtil.canActuallyHit(self,attackTarget)) {
                         this.shotcooldown = PlaceShootCooldown;
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowersRatt.START_PLACE_BURST, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowersRatt.START_PLACE_BURST, true);
                     }
                 }
             } else {
@@ -1145,9 +1145,9 @@ public class PowersRatt extends NewDashPreset {
                 context.blit(StandIcons.JOJO_ICONS, k, j, 193, 6, 15, 6);
             }
 
-            ItemStack goldDisc = ((StandUser) playerEntity).roundabout$getStandDisc();
+            ItemStack goldDisc = ((StandUser) playerEntity).sba$getStandDisc();
             boolean bypass = playerEntity.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
-            if (getChargeTime() > 10 && (((IPlayerEntity) playerEntity).roundabout$getStandLevel() > 1) || bypass) {
+            if (getChargeTime() > 10 && (((IPlayerEntity) playerEntity).sba$getStandLevel() > 1) || bypass) {
                 float amount = (float) getChargeTime() / 100;
                 int finalAmount = Math.round(amount * 15);
                 int bartexture = 30;
@@ -1207,8 +1207,8 @@ public class PowersRatt extends NewDashPreset {
         list.add(RattEntity.ANIME_SKIN);
         list.add(RattEntity.MANGA_SKIN);
         if (this.getSelf() instanceof Player PE) {
-            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
-            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            byte Level = ((IPlayerEntity)PE).sba$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).sba$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
 
             if (Level >= 2 || bypass) {
@@ -1226,7 +1226,7 @@ public class PowersRatt extends NewDashPreset {
                 list.add(RattEntity.SNOWY_SKIN);
                 list.add(RattEntity.NETHER_SKIN);
             }
-            if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass) {
+            if (((IPlayerEntity)PE).sba$getUnlockedBonusSkin() || bypass) {
                 list.add(RattEntity.CHAIR_RAT_SKIN);
                 list.add(RattEntity.KING_RAT_SKIN);
                 list.add(RattEntity.MECH_RAT_SKIN);
@@ -1242,20 +1242,20 @@ public class PowersRatt extends NewDashPreset {
 
     public static Component getSkinNameT(byte skinId){
         switch (skinId) {
-            case RattEntity.MANGA_SKIN -> {return Component.translatable("skins.roundabout.ratt.manga");}
-            case RattEntity.MELON_SKIN -> {return Component.translatable("skins.roundabout.ratt.melon");}
-            case RattEntity.SAND_SKIN -> {return Component.translatable("skins.roundabout.ratt.sand");}
-            case RattEntity.AZTEC_SKIN -> {return Component.translatable("skins.roundabout.ratt.aztec");}
-            case RattEntity.TOWER_SKIN -> {return Component.translatable("skins.roundabout.ratt.tower");}
-            case RattEntity.REDD_SKIN -> {return Component.translatable("skins.roundabout.ratt.redd");}
-            case RattEntity.SNOWY_SKIN -> {return Component.translatable("skins.roundabout.ratt.snowy");}
-            case RattEntity.NETHER_SKIN -> {return Component.translatable("skins.roundabout.ratt.nether");}
-            case RattEntity.GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.guardian");}
-            case RattEntity.ELDER_GUARDIAN_SKIN -> {return Component.translatable("skins.roundabout.ratt.elder_guardian");}
-            case RattEntity.CHAIR_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.chair_rat");}
-            case RattEntity.KING_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.king_rat");}
-            case RattEntity.MECH_RAT_SKIN -> {return Component.translatable("skins.roundabout.ratt.mech_rat");}
-            default -> {return Component.translatable("skins.roundabout.ratt.anime");}
+            case RattEntity.MANGA_SKIN -> {return Component.translatable("skins.sba.ratt.manga");}
+            case RattEntity.MELON_SKIN -> {return Component.translatable("skins.sba.ratt.melon");}
+            case RattEntity.SAND_SKIN -> {return Component.translatable("skins.sba.ratt.sand");}
+            case RattEntity.AZTEC_SKIN -> {return Component.translatable("skins.sba.ratt.aztec");}
+            case RattEntity.TOWER_SKIN -> {return Component.translatable("skins.sba.ratt.tower");}
+            case RattEntity.REDD_SKIN -> {return Component.translatable("skins.sba.ratt.redd");}
+            case RattEntity.SNOWY_SKIN -> {return Component.translatable("skins.sba.ratt.snowy");}
+            case RattEntity.NETHER_SKIN -> {return Component.translatable("skins.sba.ratt.nether");}
+            case RattEntity.GUARDIAN_SKIN -> {return Component.translatable("skins.sba.ratt.guardian");}
+            case RattEntity.ELDER_GUARDIAN_SKIN -> {return Component.translatable("skins.sba.ratt.elder_guardian");}
+            case RattEntity.CHAIR_RAT_SKIN -> {return Component.translatable("skins.sba.ratt.chair_rat");}
+            case RattEntity.KING_RAT_SKIN -> {return Component.translatable("skins.sba.ratt.king_rat");}
+            case RattEntity.MECH_RAT_SKIN -> {return Component.translatable("skins.sba.ratt.mech_rat");}
+            default -> {return Component.translatable("skins.sba.ratt.anime");}
         }
     }
 
@@ -1297,21 +1297,21 @@ public class PowersRatt extends NewDashPreset {
         Level lv = this.getSelf().level();
         if ((this.getSelf()) instanceof Player PE){
             StandUser user = ((StandUser)PE);
-            ItemStack stack = user.roundabout$getStandDisc();
+            ItemStack stack = user.sba$getStandDisc();
             if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_RATT)){
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
-                if (!ipe.roundabout$getUnlockedBonusSkin()){
+                if (!ipe.sba$getUnlockedBonusSkin()){
                     if (!lv.isClientSide()) {
-                        ipe.roundabout$setUnlockedBonusSkin(true);
+                        ipe.sba$setUnlockedBonusSkin(true);
                         lv.playSound(null, PE.getX(), PE.getY(),
                                 PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                         sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                 PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
-                        user.roundabout$setStandSkin(RattEntity.CHAIR_RAT_SKIN);
-                        user.roundabout$summonStand(this.getSelf().level(), true, false);
+                        user.sba$setStandSkin(RattEntity.CHAIR_RAT_SKIN);
+                        user.sba$summonStand(this.getSelf().level(), true, false);
                         ((ServerPlayer) ipe).displayClientMessage(
-                                Component.translatable("unlock_skin.roundabout.ratt.rat"), true);
+                                Component.translatable("unlock_skin.sba.ratt.rat"), true);
                     }
                 }
             }
@@ -1323,10 +1323,10 @@ public class PowersRatt extends NewDashPreset {
     public void levelUp() {
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
-            byte level = ipe.roundabout$getStandLevel();
-            MutableComponent text = Component.translatable("leveling.roundabout.levelup.both");
+            byte level = ipe.sba$getStandLevel();
+            MutableComponent text = Component.translatable("leveling.sba.levelup.both");
             if (level == 4) {
-                text = Component.translatable("leveling.roundabout.levelup.max.both");
+                text = Component.translatable("leveling.sba.levelup.max.both");
             }
 
             ((ServerPlayer) this.self).displayClientMessage( (text).withStyle(ChatFormatting.AQUA), true);
@@ -1336,9 +1336,9 @@ public class PowersRatt extends NewDashPreset {
 
     public Component getPosName(byte posID) {
         if (posID == 1) {
-            return Component.translatable("idle.roundabout.ratt_1");
+            return Component.translatable("idle.sba.ratt_1");
         } else {
-            return Component.translatable("idle.roundabout.ratt_2");
+            return Component.translatable("idle.sba.ratt_2");
         }
     }
 
@@ -1362,42 +1362,42 @@ public class PowersRatt extends NewDashPreset {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
 
         // manual scope
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.roundabout.ratt_scope",
-                "instruction.roundabout.press_skill", StandIcons.RATT_SCOPE_IN,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,2, "ability.sba.ratt_scope",
+                "instruction.sba.press_skill", StandIcons.RATT_SCOPE_IN,1,level,bypas));
         // charge fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,2, "ability.roundabout.ratt_fire",
-                "instruction.roundabout.hold_block", StandIcons.RATT_BURST,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+118,2, "ability.sba.ratt_fire",
+                "instruction.sba.hold_block", StandIcons.RATT_BURST,0,level,bypas));
         // burst fire
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,3, "ability.roundabout.ratt_mode_change",
-                "instruction.roundabout.press_skill", StandIcons.RATT_SINGLE,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,3, "ability.sba.ratt_mode_change",
+                "instruction.sba.press_skill", StandIcons.RATT_SINGLE,2,level,bypas));
         // place ratt
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.ratt_place",
-                "instruction.roundabout.press_skill", StandIcons.RATT_PLACE,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.sba.ratt_place",
+                "instruction.sba.press_skill", StandIcons.RATT_PLACE,2,level,bypas));
         // place burst
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.ratt_place_burst",
-                "instruction.roundabout.press_skill", StandIcons.RATT_BURST,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.sba.ratt_place_burst",
+                "instruction.sba.press_skill", StandIcons.RATT_BURST,1,level,bypas));
         // place auto
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,1, "ability.roundabout.ratt_auto",
-                "instruction.roundabout.press_skill_crouch", StandIcons.RATT_AUTO,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,1, "ability.sba.ratt_auto",
+                "instruction.sba.press_skill_crouch", StandIcons.RATT_AUTO,1,level,bypas));
         // dodge
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypas));
         // passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.ratt_flesh",
-                "instruction.roundabout.passive", StandIcons.RATT_BLOB,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.sba.ratt_flesh",
+                "instruction.sba.passive", StandIcons.RATT_BLOB,3,level,bypas));
         // bucket passive
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.roundabout.ratt_bucket",
-                "instruction.roundabout.passive", StandIcons.RATT_BUCKET,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,0, "ability.sba.ratt_bucket",
+                "instruction.sba.passive", StandIcons.RATT_BUCKET,3,level,bypas));
         if (canUseMelt()) {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76, topPos + 80, 2, "ability.roundabout.ratt_mining",
-                    "instruction.roundabout.press_skill_crouch", StandIcons.RATT_MINING, 3, level, bypas));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76, topPos + 80, 2, "ability.sba.ratt_mining",
+                    "instruction.sba.press_skill_crouch", StandIcons.RATT_MINING, 3, level, bypas));
             // ratt leap
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76, topPos + 99, 4, "ability.roundabout.ratt_leap",
-                    "instruction.roundabout.press_skill", StandIcons.RATT_LEAP, 4, level, bypas));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76, topPos + 99, 4, "ability.sba.ratt_leap",
+                    "instruction.sba.press_skill", StandIcons.RATT_LEAP, 4, level, bypas));
         } else {
             // ratt leap
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76, topPos + 80, 4, "ability.roundabout.ratt_leap",
-                    "instruction.roundabout.press_skill", StandIcons.RATT_LEAP, 4, level, bypas));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 76, topPos + 80, 4, "ability.sba.ratt_leap",
+                    "instruction.sba.press_skill", StandIcons.RATT_LEAP, 4, level, bypas));
         }
 
         return $$1;

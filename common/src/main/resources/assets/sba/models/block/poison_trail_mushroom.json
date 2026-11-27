@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "sba:block/poison_trail_mushroom"
+  },
+  "render_type": "cutout"
+}

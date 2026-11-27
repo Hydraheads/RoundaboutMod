@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.gravity;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.util.gravity.GravityAPI;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -77,7 +77,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
             ),
             cancellable = true
     )
-    private void roundabout$checkMovementStatistics(double $$0, double $$1, double $$2, CallbackInfo ci) {
+    private void sba$checkMovementStatistics(double $$0, double $$1, double $$2, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
         if (gravityDirection == Direction.DOWN || gravityDirection == Direction.UP)
             return;
@@ -146,7 +146,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
             ),
             cancellable = true
     )
-    private void roundabout$gravityTravel(Vec3 $$0, CallbackInfo ci) {
+    private void sba$gravityTravel(Vec3 $$0, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(rdbt$this());
         if (gravityDirection == Direction.DOWN)
             return;
@@ -195,7 +195,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
             ),
             cancellable = true
     )
-    private void roundabout$dropGravity(
+    private void sba$dropGravity(
             ItemStack $$0, boolean $$1, boolean $$2, CallbackInfoReturnable<ItemEntity> cir
     ) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
@@ -247,7 +247,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void roundabout$inject_adjustMovementForSneaking(Vec3 movement, MoverType type, CallbackInfoReturnable<Vec3> cir) {
+    private void sba$inject_adjustMovementForSneaking(Vec3 movement, MoverType type, CallbackInfoReturnable<Vec3> cir) {
         Entity this_ = (Entity) (Object) this;
         Direction gravityDirection = GravityAPI.getGravityDirection(this_);
         if (gravityDirection == Direction.DOWN) return;
@@ -319,7 +319,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
             ),
             cancellable = true
     )
-    private void roundabout$isAboveGround(CallbackInfoReturnable<Boolean> cir) {
+    private void sba$isAboveGround(CallbackInfoReturnable<Boolean> cir) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
             return;
@@ -330,13 +330,13 @@ public abstract class GravityPlayerMixin extends LivingEntity {
         cir.setReturnValue(this.onGround()
                 || this.fallDistance < this.maxUpStep()
                 && !this.level().noCollision(this, this.getBoundingBox().move(world.x, world.y, world.z)));
-        //Roundabout.LOGGER.info(""+cir.getReturnValue());
+        //SBA.LOGGER.info(""+cir.getReturnValue());
     }
 
     @Unique
-    private float roundabout$tempStoreYRot = 0;
+    private float sba$tempStoreYRot = 0;
     @Unique
-    private boolean roundabout$tempStoreYRotShifted = false;
+    private boolean sba$tempStoreYRotShifted = false;
 
     @Inject(
             method = "attack",
@@ -345,14 +345,14 @@ public abstract class GravityPlayerMixin extends LivingEntity {
                     target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"
             )
     )
-    private void roundabout$attackY1(Entity target, CallbackInfo ci) {
+    private void sba$attackY1(Entity target, CallbackInfo ci) {
         Direction targetGravityDirection = GravityAPI.getGravityDirection(target);
         Direction attackerGravityDirection = GravityAPI.getGravityDirection(this);
         if (targetGravityDirection == attackerGravityDirection)
             return;
 
-        roundabout$tempStoreYRot = getYRot();
-        roundabout$tempStoreYRotShifted = true;
+        sba$tempStoreYRot = getYRot();
+        sba$tempStoreYRotShifted = true;
         setYRot(RotationUtil.rotWorldToPlayer(RotationUtil.rotPlayerToWorld(getYRot(), getXRot(), attackerGravityDirection), targetGravityDirection).x);
     }
     @Inject(
@@ -363,10 +363,10 @@ public abstract class GravityPlayerMixin extends LivingEntity {
                     shift = At.Shift.AFTER
             )
     )
-    private void roundabout$attackY2(Entity target, CallbackInfo ci) {
-        if (roundabout$tempStoreYRotShifted){
-            roundabout$tempStoreYRotShifted = false;
-            setYRot(roundabout$tempStoreYRot);
+    private void sba$attackY2(Entity target, CallbackInfo ci) {
+        if (sba$tempStoreYRotShifted){
+            sba$tempStoreYRotShifted = false;
+            setYRot(sba$tempStoreYRot);
         }
     }
 
@@ -378,13 +378,13 @@ public abstract class GravityPlayerMixin extends LivingEntity {
                     target = "Lnet/minecraft/world/entity/Entity;push(DDD)V"
             )
     )
-    private void roundabout$attackY1push(Entity target, CallbackInfo ci) {
+    private void sba$attackY1push(Entity target, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection(this);
         if (gravityDirection == Direction.DOWN)
             return;
 
-        roundabout$tempStoreYRot = getYRot();
-        roundabout$tempStoreYRotShifted = true;
+        sba$tempStoreYRot = getYRot();
+        sba$tempStoreYRotShifted = true;
         setYRot(RotationUtil.rotPlayerToWorld(getYRot(), getXRot(), gravityDirection).x);
     }
     @Inject(
@@ -395,10 +395,10 @@ public abstract class GravityPlayerMixin extends LivingEntity {
                     shift = At.Shift.AFTER
             )
     )
-    private void roundabout$attackY2push(Entity target, CallbackInfo ci) {
-        if (roundabout$tempStoreYRotShifted){
-            roundabout$tempStoreYRotShifted = false;
-            setYRot(roundabout$tempStoreYRot);
+    private void sba$attackY2push(Entity target, CallbackInfo ci) {
+        if (sba$tempStoreYRotShifted){
+            sba$tempStoreYRotShifted = false;
+            setYRot(sba$tempStoreYRot);
         }
     }
 
@@ -409,7 +409,7 @@ public abstract class GravityPlayerMixin extends LivingEntity {
             ),
             cancellable = true
     )
-    private void roundabout$addParticlesAroundSelf(ParticleOptions $$0, CallbackInfo ci) {
+    private void sba$addParticlesAroundSelf(ParticleOptions $$0, CallbackInfo ci) {
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN) return;
 

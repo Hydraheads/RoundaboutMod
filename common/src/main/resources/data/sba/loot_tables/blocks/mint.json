@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sba:mint_seeds"
+        }
+      ]
+    },
+    {
+      "rolls": 2,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sba:mint",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance",
+              "chance": 0.8
+            },
+            {
+              "block": "sba:mint",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "age": "2"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

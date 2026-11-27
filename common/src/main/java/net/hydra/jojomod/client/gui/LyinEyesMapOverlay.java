@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersLyinEyes;
 import net.hydra.jojomod.util.LyinEyesScanner;
@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 
 public class LyinEyesMapOverlay {
-    private static final ResourceLocation MAP_ICONS = new ResourceLocation(Roundabout.MOD_ID, "textures/gui/nematode_map.png");
+    private static final ResourceLocation MAP_ICONS = new ResourceLocation(SBA.MOD_ID, "textures/gui/nematode_map.png");
 
     private static final int RADIUS = 20;
     private static final int TEX_ICON_SIZE = 8;
@@ -38,7 +38,7 @@ public class LyinEyesMapOverlay {
         Player player = mc.player;
         if (player == null || mc.level == null) return;
 
-        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes) {
+        if (((StandUser) player).sba$getStandPowers() instanceof PowersLyinEyes lyinEyes) {
             float opacity = lyinEyes.getMapOpacity();
             if (opacity <= 0.0F) return;
             opacity *= ConfigManager.getClientConfig().lyinEyesSettings.mapOpacity;

@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -39,7 +39,7 @@ import java.util.List;
 
 public class CorpseBagScreen extends Screen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/corpse_chooser.png");
     private static final int SPRITE_SHEET_WIDTH = 256;
     private static final int SPRITE_SHEET_HEIGHT = 256;
@@ -72,7 +72,7 @@ public class CorpseBagScreen extends Screen {
     private ShapeShifts getDefaultSelected() {
         Player pl = Minecraft.getInstance().player;
         if (pl != null){
-            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).roundabout$getShapeShift());
+            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).sba$getShapeShift());
         }
         return ShapeShifts.PLAYER;
     }
@@ -206,9 +206,9 @@ public class CorpseBagScreen extends Screen {
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     private boolean checkToClose() {
@@ -240,7 +240,7 @@ public class CorpseBagScreen extends Screen {
         SPIDER(Component.translatable("entity.minecraft.spider"), StandIcons.FALLEN_SPIDER,Corpses.SPIDER.id,31,31),
         PHANTOM(Component.translatable("entity.minecraft.phantom"), StandIcons.FALLEN_PHANTOM,Corpses.PHANTOM.id,0,62),
 
-        NONE(Component.translatable("roundabout.corpse.none"), new ResourceLocation(Roundabout.MOD_ID,
+        NONE(Component.translatable("sba.corpse.none"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),Corpses.NONE.id,0,31);
 
         static corpseIcon getByte(Corpses corpse) {

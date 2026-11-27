@@ -56,12 +56,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
         }
 
         @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V",at = @At(value = "HEAD"),cancellable = true)
-        private void roundabout$cancelCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+        private void sba$cancelCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
             StandUser SU = (StandUser) $$3;
             IEntityAndData entityAndData = ((IEntityAndData) $$3);
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
+            if (SU.sba$getStandPowers() instanceof PowersAnubis PA && entityAndData.sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
                 if (!PowerTypes.hasStandActive($$3)) {
-                    if (SU.roundabout$getIdlePos() == (byte)2) {
+                    if (SU.sba$getIdlePos() == (byte)2) {
                         ci.cancel();
                     }
                 }
@@ -71,11 +71,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
         /**Fade out cape*/
         @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V", at = @At(value = "HEAD"),
                 cancellable = true)
-        private void roundabout$renderCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+        private void sba$renderCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
             IEntityAndData entityAndData = ((IEntityAndData) $$3);
             if (ClientUtil.getThrowFadeToTheEther() != 1) {
                 if ($$3.isCapeLoaded() && $$3.isModelPartShown(PlayerModelPart.CAPE)
-                        && $$3.getCloakTextureLocation() != null && entityAndData.roundabout$getTrueInvisibilityManhattan() < 1
+                        && $$3.getCloakTextureLocation() != null && entityAndData.sba$getTrueInvisibilityManhattan() < 1
                         && ClientUtil.checkIfClientCanSeeMobsForWindVision()
                 ) {
                     ItemStack $$10 = $$3.getItemBySlot(EquipmentSlot.CHEST);

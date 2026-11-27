@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.gui;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.whitesnake.disc.DiscItemData;
 import net.hydra.jojomod.event.powers.whitesnake.disc.MemoryDiscConversionService;
 import net.hydra.jojomod.util.C2SPacketUtil;
@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 
 public final class MemoryReadingScreen extends Screen {
     private static final ResourceLocation BACKGROUND = new ResourceLocation(
-            Roundabout.MOD_ID, "textures/gui/memory_reading.png");
+            SBA.MOD_ID, "textures/gui/memory_reading.png");
     private static final int TEXTURE_WIDTH = 512;
     private static final int TEXTURE_HEIGHT = 256;
     private static final int PANEL_WIDTH = 230;
@@ -57,11 +57,11 @@ public final class MemoryReadingScreen extends Screen {
 
         String buttonText;
         if (DiscItemData.isCreeperMemory(disc)) {
-            buttonText = "screen.roundabout.memory_create_explosive";
+            buttonText = "screen.sba.memory_create_explosive";
         } else if (DiscItemData.isSlimeMemory(disc)) {
-            buttonText = "screen.roundabout.memory_create_jump_back";
+            buttonText = "screen.sba.memory_create_jump_back";
         } else if (DiscItemData.isWolfMemory(disc)) {
-            buttonText = "screen.roundabout.memory_create_attack";
+            buttonText = "screen.sba.memory_create_attack";
         } else {
             return;
         }
@@ -86,12 +86,12 @@ public final class MemoryReadingScreen extends Screen {
         int textureU = kind == DiscItemData.READING_PLAYER ? 0 : MOB_PANEL_U;
         graphics.blit(BACKGROUND, left, top, textureU, 0, PANEL_WIDTH, panelHeight,
                 TEXTURE_WIDTH, TEXTURE_HEIGHT);
-        Component title = Component.translatable("screen.roundabout.memory_reading");
+        Component title = Component.translatable("screen.sba.memory_reading");
         graphics.drawString(font, title, width / 2 - font.width(title) / 2,
                 top + 8, 0x404040, false);
 
         String owner = DiscItemData.getOwnerName(disc);
-        graphics.drawString(font, Component.translatable("screen.roundabout.memory_owner",
+        graphics.drawString(font, Component.translatable("screen.sba.memory_owner",
                 owner.isEmpty() ? "Unknown" : owner), left + 10, top + 23, 0x404040, false);
 
         ItemStack hovered = ItemStack.EMPTY;
@@ -101,7 +101,7 @@ public final class MemoryReadingScreen extends Screen {
         } else if (kind == DiscItemData.READING_VILLAGER) {
             renderVillagerDetails(graphics, left, top);
         } else {
-            graphics.drawString(font, Component.translatable("screen.roundabout.memory_unavailable"),
+            graphics.drawString(font, Component.translatable("screen.sba.memory_unavailable"),
                     left + 10, top + 42, 0x555555, false);
         }
         if (!hovered.isEmpty()) graphics.renderTooltip(font, hovered, mouseX, mouseY);
@@ -111,16 +111,16 @@ public final class MemoryReadingScreen extends Screen {
     private void renderPlayerDetails(GuiGraphics graphics, int left, int top) {
         if (reading.contains(DiscItemData.READING_SPAWN_POS, Tag.TAG_LONG)) {
             BlockPos pos = BlockPos.of(reading.getLong(DiscItemData.READING_SPAWN_POS));
-            graphics.drawString(font, Component.translatable("screen.roundabout.memory_spawn",
+            graphics.drawString(font, Component.translatable("screen.sba.memory_spawn",
                     pos.getX(), pos.getY(), pos.getZ()), left + 10, top + 36, 0x3F5F7F, false);
-            graphics.drawString(font, Component.translatable("screen.roundabout.memory_dimension",
+            graphics.drawString(font, Component.translatable("screen.sba.memory_dimension",
                     reading.getString(DiscItemData.READING_SPAWN_DIMENSION)),
                     left + 10, top + 48, 0x596270, false);
         } else {
-            graphics.drawString(font, Component.translatable("screen.roundabout.memory_spawn_unknown"),
+            graphics.drawString(font, Component.translatable("screen.sba.memory_spawn_unknown"),
                     left + 10, top + 36, 0x555555, false);
         }
-        graphics.drawString(font, Component.translatable("screen.roundabout.memory_inventory"),
+        graphics.drawString(font, Component.translatable("screen.sba.memory_inventory"),
                 left + 10, top + 62, 0x404040, false);
     }
 
@@ -143,7 +143,7 @@ public final class MemoryReadingScreen extends Screen {
                     gridX + column * SLOT_SIZE, hotbarY, mouseX, mouseY);
             if (!stack.isEmpty()) hovered = stack;
         }
-        graphics.drawString(font, Component.translatable("screen.roundabout.memory_equipment"),
+        graphics.drawString(font, Component.translatable("screen.sba.memory_equipment"),
                 left + 10, top + 157, 0x404040, false);
         int equipmentX = left + 70;
         int equipmentY = top + 174;
@@ -158,13 +158,13 @@ public final class MemoryReadingScreen extends Screen {
     private void renderVillagerDetails(GuiGraphics graphics, int left, int top) {
         if (reading.contains(DiscItemData.READING_JOB_POS, Tag.TAG_LONG)) {
             BlockPos pos = BlockPos.of(reading.getLong(DiscItemData.READING_JOB_POS));
-            graphics.drawString(font, Component.translatable("screen.roundabout.memory_job_site",
+            graphics.drawString(font, Component.translatable("screen.sba.memory_job_site",
                     pos.getX(), pos.getY(), pos.getZ()), left + 10, top + 42, 0x6A4E80, false);
-            graphics.drawString(font, Component.translatable("screen.roundabout.memory_dimension",
+            graphics.drawString(font, Component.translatable("screen.sba.memory_dimension",
                     reading.getString(DiscItemData.READING_JOB_DIMENSION)),
                     left + 10, top + 55, 0x665B70, false);
         } else {
-            graphics.drawString(font, Component.translatable("screen.roundabout.memory_job_unknown"),
+            graphics.drawString(font, Component.translatable("screen.sba.memory_job_unknown"),
                     left + 10, top + 42, 0x555555, false);
         }
     }

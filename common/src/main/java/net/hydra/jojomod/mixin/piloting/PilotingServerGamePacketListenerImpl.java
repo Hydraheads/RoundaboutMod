@@ -40,18 +40,18 @@ public abstract class PilotingServerGamePacketListenerImpl {
      * rather than from the player*/
 
     @Inject(method = "handleUseItemOn(Lnet/minecraft/network/protocol/game/ServerboundUseItemOnPacket;)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$handleUseItemOn(ServerboundUseItemOnPacket $$0, CallbackInfo ci) {
+    private void sba$handleUseItemOn(ServerboundUseItemOnPacket $$0, CallbackInfo ci) {
         if (this.player != null) {
             StandUser standComp = ((StandUser) player);
-            StandPowers powers = standComp.roundabout$getStandPowers();
+            StandPowers powers = standComp.sba$getStandPowers();
             LivingEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved()
             && MainUtil.getIsGamemodeApproriateForGrief(player)) {
                 InteractionHand $$2 = $$0.getHand();
                 ItemStack $$3 = this.player.getItemInHand($$2);
                 if (powers.canPilotPlaceBlock($$3)) {
-                    ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(powers.getPilotPlaceRange());
-                    roundabout$handleUseItemOn($$0);
+                    SBA$MAX_INTERACTION_DISTANCE = Mth.square(powers.getPilotPlaceRange());
+                    sba$handleUseItemOn($$0);
                 }
                 ci.cancel();
             }
@@ -59,9 +59,9 @@ public abstract class PilotingServerGamePacketListenerImpl {
     }
 
     @Unique
-    public double ROUNDABOUT$MAX_INTERACTION_DISTANCE = Mth.square(100.0);
+    public double SBA$MAX_INTERACTION_DISTANCE = Mth.square(100.0);
     @Unique
-    public void roundabout$handleUseItemOn(ServerboundUseItemOnPacket $$0) {
+    public void sba$handleUseItemOn(ServerboundUseItemOnPacket $$0) {
         PacketUtils.ensureRunningOnSameThread($$0, ((ServerGamePacketListener)(Object)this), this.player.serverLevel());
         this.player.connection.ackBlockChangesUpTo($$0.getSequence());
         ServerLevel $$1 = this.player.serverLevel();
@@ -72,7 +72,7 @@ public abstract class PilotingServerGamePacketListenerImpl {
             Vec3 $$5 = $$4.getLocation();
             BlockPos $$6 = $$4.getBlockPos();
             Vec3 $$7 = Vec3.atCenterOf($$6);
-            if (!(this.player.getEyePosition().distanceToSqr($$7) > ROUNDABOUT$MAX_INTERACTION_DISTANCE)) {
+            if (!(this.player.getEyePosition().distanceToSqr($$7) > SBA$MAX_INTERACTION_DISTANCE)) {
                 Vec3 $$8 = $$5.subtract($$7);
                 double $$9 = 1.0000001;
                 if (Math.abs($$8.x()) < 1.0000001 && Math.abs($$8.y()) < 1.0000001 && Math.abs($$8.z()) < 1.0000001) {
@@ -81,7 +81,7 @@ public abstract class PilotingServerGamePacketListenerImpl {
                     int $$11 = this.player.level().getMaxBuildHeight();
                     if ($$6.getY() < $$11) {
                         if (this.awaitingPositionFromClient == null
-                                && this.player.distanceToSqr((double)$$6.getX() + 0.5, (double)$$6.getY() + 0.5, (double)$$6.getZ() + 0.5) < ROUNDABOUT$MAX_INTERACTION_DISTANCE
+                                && this.player.distanceToSqr((double)$$6.getX() + 0.5, (double)$$6.getY() + 0.5, (double)$$6.getZ() + 0.5) < SBA$MAX_INTERACTION_DISTANCE
                                 && $$1.mayInteract(this.player, $$6)) {
                             InteractionResult $$12 = this.player.gameMode.useItemOn(this.player, $$1, $$3, $$2, $$4);
                             if ($$10 == Direction.UP && !$$12.consumesAction() && $$6.getY() >= $$11 - 1 && wasBlockPlacementAttempt(this.player, $$3)) {

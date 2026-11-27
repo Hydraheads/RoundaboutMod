@@ -89,7 +89,7 @@ public class LyinEyesInventoryMenu extends AbstractContainerMenu {
         viewer.openMenu(new SimpleMenuProvider(
                 (containerId, inventory, player) -> new LyinEyesInventoryMenu(containerId, inventory, target),
                 // purposefully left blank.
-                Component.translatable("container.roundabout.lyin_eyes_inventory", target.getDisplayName())
+                Component.translatable("container.sba.lyin_eyes_inventory", target.getDisplayName())
         ));
     }
 

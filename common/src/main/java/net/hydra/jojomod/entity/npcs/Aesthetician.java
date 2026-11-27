@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.npcs;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.stand.RattEntity;
@@ -153,10 +153,10 @@ public class Aesthetician extends StandUsingNPC {
 
     public InteractionResult mobInteract(Player $$0, InteractionHand $$1) {
         ItemStack $$2 = $$0.getItemInHand($$1);
-        if ($$0.level().isClientSide() && ((StandUser)this).roundabout$getStandPowers() instanceof PowersCinderella) {
+        if ($$0.level().isClientSide() && ((StandUser)this).sba$getStandPowers() instanceof PowersCinderella) {
 
             IPlayerEntity ple = ((IPlayerEntity) $$0);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (ShapeShifts.isZombie(shift) || ShapeShifts.isSkeleton(shift)) {
                 return (InteractionResult.sidedSuccess(this.level().isClientSide));

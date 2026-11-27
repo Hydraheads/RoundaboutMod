@@ -13,7 +13,7 @@ public class TimeStopBoatAccess implements IBoatAccess {
     /**A mixin to make boats freeze properly in stopped time instead of going crazy*/
 
     @Unique
-    public void roundabout$TickLerp(){
+    public void sba$TickLerp(){
         this.oldStatus = this.status;
         this.status = this.getStatus();
         if (this.status != Boat.Status.UNDER_WATER && this.status != Boat.Status.UNDER_FLOWING_WATER) {

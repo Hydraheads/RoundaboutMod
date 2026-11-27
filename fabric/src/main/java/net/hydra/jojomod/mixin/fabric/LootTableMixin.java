@@ -29,15 +29,15 @@ public abstract class LootTableMixin implements ILootTable {
     LootPool[] pools;
 
     @Override
-    public int roundabout$getSize() {
+    public int sba$getSize() {
         int size = 0;
         for (LootPool pool : this.pools) {
-            size += ((ILootPool)pool).roundabout$getSize();
+            size += ((ILootPool)pool).sba$getSize();
         }
         return size;
     }
     @Override
-    public List<LootPool> roundabout$getPools() {
+    public List<LootPool> sba$getPools() {
         return Arrays.asList(this.pools);
     }
 /*  UNUSED FOR NOW BECAUSE FABRIC IS ACTUALLY FUNCTIONAL
@@ -45,14 +45,14 @@ public abstract class LootTableMixin implements ILootTable {
             at = @At(value = "INVOKE",
                 target = "Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;decorate(Ljava/util/function/BiFunction;Ljava/util/function/Consumer;Lnet/minecraft/world/level/storage/loot/LootContext;)Ljava/util/function/Consumer;",shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILHARD)
-    private void roundabout$lockIn(LootContext lootContext, Consumer<ItemStack> consumer2, CallbackInfo ci, LootContext.VisitedEntry visitedEntry) {
-        if (roundabout$isRightLootTable(lootContext.getLevel(), BuiltInLootTables.ABANDONED_MINESHAFT)) {
+    private void sba$lockIn(LootContext lootContext, Consumer<ItemStack> consumer2, CallbackInfo ci, LootContext.VisitedEntry visitedEntry) {
+        if (sba$isRightLootTable(lootContext.getLevel(), BuiltInLootTables.ABANDONED_MINESHAFT)) {
             LootPool.lootPool().add(LootItem.lootTableItem(ModItems.ANUBIS_ITEM)).build().addRandomItems(consumer2, lootContext);
         }
     }
 
     @Unique
-    private boolean roundabout$isRightLootTable(Level level, ResourceLocation source) {
+    private boolean sba$isRightLootTable(Level level, ResourceLocation source) {
         return this.equals(level.getServer().getLootData().getLootTable(source));
     } */
 }

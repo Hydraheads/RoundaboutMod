@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.badCompanyTroops.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
 import net.hydra.jojomod.entity.badCompanyTroops.BCSoldier;
@@ -20,11 +20,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
 
-    private static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/beta.png");
-    private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/anime.png");
-    private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/manga.png");
-    private static final ResourceLocation MARINE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/marine.png");
-    private static final ResourceLocation SAND = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/bad_company/soldier/sand.png");
+    private static final ResourceLocation BETA = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/soldier/beta.png");
+    private static final ResourceLocation ANIME = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/soldier/anime.png");
+    private static final ResourceLocation MANGA = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/soldier/manga.png");
+    private static final ResourceLocation MARINE = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/soldier/marine.png");
+    private static final ResourceLocation SAND = new ResourceLocation(SBA.MOD_ID, "textures/stand/bad_company/soldier/sand.png");
 
     public BCSoldierBaseRenderer(EntityRendererProvider.Context context, StandModel<BCSoldier> entityModel, float f) {
         super(context, entityModel,f);
@@ -34,8 +34,8 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
     @Override
     public ResourceLocation getTextureLocation(BCSoldier entity) {
         LivingEntity user = entity.getUser();
-        if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof PowersBadCompany) {
-            byte skn = ((StandUser)user).roundabout$getStandSkin();
+        if (user != null && ((StandUser)user).sba$getStandPowers() instanceof PowersBadCompany) {
+            byte skn = ((StandUser)user).sba$getStandSkin();
 
             if (skn == PowersBadCompany.ANIME_SKIN) {
                 return ANIME;

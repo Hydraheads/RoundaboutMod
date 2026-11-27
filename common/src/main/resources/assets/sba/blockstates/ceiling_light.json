@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "sba:block/ceiling_light_off"
+    },
+    "lit=true": {
+      "model": "sba:block/ceiling_light"
+    }
+  }
+}

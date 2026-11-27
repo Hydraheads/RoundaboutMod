@@ -20,7 +20,7 @@ public class ZMinecraftClient implements IClientNetworking {
     @Shadow @Nullable private Connection pendingConnection;
 
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
-    private void roundabout$startAttack(CallbackInfoReturnable<Boolean> cir)
+    private void sba$startAttack(CallbackInfoReturnable<Boolean> cir)
     {
         if (player == null)
             return;
@@ -28,7 +28,7 @@ public class ZMinecraftClient implements IClientNetworking {
     }
 
     @Override
-    public @Nullable Connection roundabout$getServer() {
+    public @Nullable Connection sba$getServer() {
         // note: pendingConnection is actually just the connection to the integrated server **only**
         return this.pendingConnection;
     }

@@ -40,7 +40,7 @@ public class CloneEntity extends PathfinderMob {
             CloneEntity.class, EntityDataSerializers.STRING);
     //This is essential for clone "girth" that you semi-permanently acquire from jumping bodies
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$WIDTH_FACTOR = SynchedEntityData.defineId(CloneEntity.class,
+    private static final EntityDataAccessor<Byte> SBA$WIDTH_FACTOR = SynchedEntityData.defineId(CloneEntity.class,
             EntityDataSerializers.BYTE);
 
     public boolean isBackingUp = false;
@@ -81,7 +81,7 @@ public class CloneEntity extends PathfinderMob {
                         if (ClientNetworking.getAppropriateConfig().nameTagSettings.renderActualCharactersNameUsingVisages) {
 
                             if (vd.swapName()){
-                                return Component.translatable("item.roundabout."+vd.getSkinPath() + "_mask.tag");
+                                return Component.translatable("item.sba."+vd.getSkinPath() + "_mask.tag");
                             }
                             return ME.getDisplayNameTag();
                         }
@@ -131,33 +131,33 @@ public class CloneEntity extends PathfinderMob {
             this.entityData.define(PLAYER, Optional.empty());
             this.entityData.define(VISAGE, ItemStack.EMPTY);
             this.entityData.define(DISGUISE_NAME, "Player");
-            this.entityData.define(ROUNDABOUT$WIDTH_FACTOR, (byte)0);
+            this.entityData.define(SBA$WIDTH_FACTOR, (byte)0);
         }
     }
 
-    public void roundabout$setWidthFactor(byte level){
-        this.getEntityData().set(ROUNDABOUT$WIDTH_FACTOR, level);
+    public void sba$setWidthFactor(byte level){
+        this.getEntityData().set(SBA$WIDTH_FACTOR, level);
     }
-    public byte roundabout$getWidthFactor(){
-        return this.getEntityData().get(ROUNDABOUT$WIDTH_FACTOR);
+    public byte sba$getWidthFactor(){
+        return this.getEntityData().get(SBA$WIDTH_FACTOR);
     }
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
 
-        if (!getVisage().isEmpty() || tag.contains("roundabout.Mask", 10)) {
+        if (!getVisage().isEmpty() || tag.contains("sba.Mask", 10)) {
             CompoundTag compoundtag = new CompoundTag();
-            tag.put("roundabout.Mask",getVisage().save(compoundtag));
+            tag.put("sba.Mask",getVisage().save(compoundtag));
         }
-        tag.putByte("widthFactor",roundabout$getWidthFactor());
+        tag.putByte("widthFactor",sba$getWidthFactor());
 
         getPlayerUUID().ifPresent(uuid -> tag.putUUID("PlayerUUID", uuid));
     }
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("roundabout.Mask", 10)) {
-            CompoundTag compoundtag = tag.getCompound("roundabout.Mask");
+        if (tag.contains("sba.Mask", 10)) {
+            CompoundTag compoundtag = tag.getCompound("sba.Mask");
             ItemStack itemstack = ItemStack.of(compoundtag);
             if (!itemstack.isEmpty() && itemstack.getItem() instanceof MaskItem SD) {
                 setVisage(itemstack);
@@ -165,7 +165,7 @@ public class CloneEntity extends PathfinderMob {
         }
 
         if (tag.contains("widthFactor")) {
-            roundabout$setWidthFactor(tag.getByte("widthFactor"));
+            sba$setWidthFactor(tag.getByte("widthFactor"));
         }
         if (tag.hasUUID("PlayerUUID")) {
             UUID uuid = tag.getUUID("PlayerUUID");

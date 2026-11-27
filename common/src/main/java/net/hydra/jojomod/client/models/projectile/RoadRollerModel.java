@@ -18,7 +18,7 @@ import net.hydra.jojomod.client.models.projectile.animations.road_roller_wheels;
 import net.hydra.jojomod.client.models.projectile.animations.road_roller_explosion;
 
 public class RoadRollerModel <T extends LivingEntity> extends HierarchicalModel<T> {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("roundabout", "road_roller_layer"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("sba", "road_roller_layer"), "main");
     private final ModelPart front_wheel;
     private final ModelPart back_wheel;
     private final ModelPart bb_main;

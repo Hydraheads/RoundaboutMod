@@ -21,7 +21,7 @@ public abstract class WhitesnakeDropItemMixin {
     @Shadow public ServerPlayer player;
 
     @Inject(method = "handlePlayerAction", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$dropSelected(ServerboundPlayerActionPacket packet, CallbackInfo ci) {
+    private void sbaWhitesnake$dropSelected(ServerboundPlayerActionPacket packet, CallbackInfo ci) {
         ServerboundPlayerActionPacket.Action action = packet.getAction();
         if (!WhitesnakeControlInventory.isActive(player)
                 || (action != ServerboundPlayerActionPacket.Action.DROP_ITEM
@@ -29,7 +29,7 @@ public abstract class WhitesnakeDropItemMixin {
         int slot = player.getInventory().selected;
         ItemStack selected = WhitesnakeControlInventory.get(player).get(slot);
         if (!selected.isEmpty()
-                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers) {
+                && ((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers) {
             LivingEntity stand = powers.getPilotingStand();
             if (stand != null) {
                 int count = action == ServerboundPlayerActionPacket.Action.DROP_ALL_ITEMS ? selected.getCount() : 1;
@@ -41,7 +41,7 @@ public abstract class WhitesnakeDropItemMixin {
                 item.setPickUpDelay(40);
                 item.setThrower(player.getUUID());
                 player.level().addFreshEntity(item);
-                ((WhitesnakeInventoryAccess) player).roundaboutWhitesnake$syncInventory();
+                ((WhitesnakeInventoryAccess) player).sbaWhitesnake$syncInventory();
             }
         }
         ci.cancel();

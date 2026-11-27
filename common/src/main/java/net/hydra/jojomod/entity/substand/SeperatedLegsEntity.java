@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
@@ -66,8 +66,8 @@ public class SeperatedLegsEntity extends StandEntity {
         LivingEntity user = this.getUser();
         if (!client) {
             if(StartupTicks==0){
-                if((!(this.getUser() == null) && (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay))){
-                   if(!((PowersGreenDay)((StandUser)this.getUser()).roundabout$getStandPowers()).isGuarding()) {
+                if((!(this.getUser() == null) && (((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersGreenDay))){
+                   if(!((PowersGreenDay)((StandUser)this.getUser()).sba$getStandPowers()).isGuarding()) {
                        this.lookAt(EntityAnchorArgument.Anchor.EYES, User.getEyePosition());
                        this.setDeltaMovement(this.getLookAngle().multiply(0.2, 0.2, 0.2));
                    }else{
@@ -83,12 +83,12 @@ public class SeperatedLegsEntity extends StandEntity {
 
             for(int i = 0; i < 4; i = i + 1) {
                 int color = PowersGreenDay.defaultMoldColor();
-                if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                if (User != null && ((StandUser) User).sba$getStandPowers() instanceof PowersGreenDay PGD) {
                     color = PGD.getMoldParticleColor();
                 }
-                double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
-                double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
+                double randX = SBA.RANDOM.nextDouble(-0.2, 0.2);
+                double randY = SBA.RANDOM.nextDouble(-0.1, 0.1);
+                double randZ = SBA.RANDOM.nextDouble(-0.2, 0.2);
                 ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD, color),
                         this.getX()+randX,
                         this.getY() + 1.2 +randY ,

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -22,8 +22,8 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class ModFeatures {
-    public static final ResourceLocation LOCACACA_PLACED = new ResourceLocation(Roundabout.MOD_ID, "placed_locacaca");
-    public static final ResourceLocation AJA_ORE = new ResourceLocation(Roundabout.MOD_ID, "ore_aja");
-    public static final ResourceLocation AJA_ORE_DESERT = new ResourceLocation(Roundabout.MOD_ID, "ore_aja_desert");
-    public static final ResourceLocation GINKGO_TREE_PLACED = new ResourceLocation(Roundabout.MOD_ID, "ginkgo_tree_placed");
+    public static final ResourceLocation LOCACACA_PLACED = new ResourceLocation(SBA.MOD_ID, "placed_locacaca");
+    public static final ResourceLocation AJA_ORE = new ResourceLocation(SBA.MOD_ID, "ore_aja");
+    public static final ResourceLocation AJA_ORE_DESERT = new ResourceLocation(SBA.MOD_ID, "ore_aja_desert");
+    public static final ResourceLocation GINKGO_TREE_PLACED = new ResourceLocation(SBA.MOD_ID, "ginkgo_tree_placed");
 }

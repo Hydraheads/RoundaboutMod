@@ -157,9 +157,9 @@ public class FallenCreeper extends FallenMob implements PowerableMob {
     public void tick() {
 
 
-        if (((StandUser)this).roundabout$isDazed() ||
-                (!((StandUser)this).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this).roundabout$getStandPowers().disableMobAiAttack())) {
+        if (((StandUser)this).sba$isDazed() ||
+                (!((StandUser)this).sba$getStandDisc().isEmpty() &&
+                        ((StandUser)this).sba$getStandPowers().disableMobAiAttack())) {
             if (this.isAlive()) {
                 oldSwell = swell;
             }

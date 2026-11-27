@@ -32,20 +32,20 @@ public abstract class MagiciansRedAbstractFurnaceScreenMixin<T extends AbstractF
      * be clicked on to send the message to the server to activate the furnace*/
 
     @Inject(method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V", at = @At(value = "TAIL"))
-    private void roundabout$render(GuiGraphics context, int mouseX, int mouseY, float delta,CallbackInfo ci) {
+    private void sba$render(GuiGraphics context, int mouseX, int mouseY, float delta,CallbackInfo ci) {
 
         Player pl = Minecraft.getInstance().player;
         int i = this.leftPos;
         int j = this.topPos;
         if (pl != null) {
             StandUser user = ((StandUser) pl);
-            StandPowers powers = user.roundabout$getStandPowers();
+            StandPowers powers = user.sba$getStandPowers();
 
-            if (powers.canLightFurnace() && !user.roundabout$isSealed()){
+            if (powers.canLightFurnace() && !user.sba$isSealed()){
                 context.blit(StandIcons.FURNACE, i-150, j, 0, 0, 0, 0);
                 int leftGearPos = i +80;
                 int topGearPos = j+55;
-                if (roundabout$isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
+                if (sba$isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
                     context.blit(StandIcons.FURNACE, leftGearPos, topGearPos, 20, 0, 19, 18);
                 } else {
                     context.blit(StandIcons.FURNACE, leftGearPos, topGearPos, 0, 0, 19, 18);
@@ -54,20 +54,20 @@ public abstract class MagiciansRedAbstractFurnaceScreenMixin<T extends AbstractF
         }
     }
     @Inject(method = "mouseClicked(DDI)Z", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$mouseClicked(double mouseX, double mouseY, int $$2, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$mouseClicked(double mouseX, double mouseY, int $$2, CallbackInfoReturnable<Boolean> cir) {
         Player pl = Minecraft.getInstance().player;
         int i = this.leftPos;
         int j = this.topPos;
         if (pl != null) {
             StandUser user = ((StandUser) pl);
-            StandPowers powers = user.roundabout$getStandPowers();
+            StandPowers powers = user.sba$getStandPowers();
 
             if (powers.canLightFurnace()){
                 int it = ClientNetworking.getAppropriateConfig().magiciansRedSettings.magiciansRedFurnaceTicks;
                 if (it > 0) {
                     int leftGearPos = i + 80;
                     int topGearPos = j + 55;
-                    if (roundabout$isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
+                    if (sba$isSurelyHovering(leftGearPos, topGearPos, 19, 18, mouseX, mouseY)) {
                         C2SPacketUtil.trySingleBytePacket(PacketDataIndex.SINGLE_BYTE_SMELT);
                         SoundManager soundmanager = Minecraft.getInstance().getSoundManager();
                         soundmanager.play(SimpleSoundInstance.forUI(SoundEvents.FIRECHARGE_USE, 1.0F));
@@ -78,7 +78,7 @@ public abstract class MagiciansRedAbstractFurnaceScreenMixin<T extends AbstractF
         }
     }
     @Unique
-    protected boolean roundabout$isSurelyHovering(int p_97768_, int p_97769_, int p_97770_, int p_97771_, double p_97772_, double p_97773_) {
+    protected boolean sba$isSurelyHovering(int p_97768_, int p_97769_, int p_97770_, int p_97771_, double p_97772_, double p_97773_) {
         return p_97772_ >= (double)(p_97768_) && p_97772_ < (double)(p_97768_ + p_97770_) && p_97773_ >= (double)(p_97769_) && p_97773_ < (double)(p_97769_ + p_97771_);
     }
 

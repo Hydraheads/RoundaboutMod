@@ -21,19 +21,19 @@ public class TeleportStandPassengers {
      * the position when a stand is teleported. Mount code in vanilla does this, so it is a safety
      * measurement. Injects into the Entity Class.*/
     @Inject(method = "teleportPassengers", at = @At("TAIL"))
-    protected void roundabout$teleportPassengers(CallbackInfo ci) {
+    protected void sba$teleportPassengers(CallbackInfo ci) {
         if (((Entity)(Object)this) instanceof LivingEntity le) {
-            ((StandUser) le).roundabout$getFollowers().forEach($$0 -> {
-                for (StandEntity $$1 : ((StandUser) le).roundabout$getFollowers()) {
+            ((StandUser) le).sba$getFollowers().forEach($$0 -> {
+                for (StandEntity $$1 : ((StandUser) le).sba$getFollowers()) {
                     if ($$1.level().dimension() == le.level().dimension()) {
                         $$1.moveTo(this.getX(), this.getY(), this.getZ());
                     }
                 }
             });
             StandUser standUserData = ((StandUser) this);
-            if (standUserData.roundabout$hasStandOut() && standUserData.roundabout$getStand() instanceof FollowingStandEntity fe) {
+            if (standUserData.sba$hasStandOut() && standUserData.sba$getStand() instanceof FollowingStandEntity fe) {
                 if (fe.level().dimension() == le.level().dimension()) {
-                    standUserData.roundabout$updateStandOutPosition(fe, Entity::moveTo);
+                    standUserData.sba$updateStandOutPosition(fe, Entity::moveTo);
                 }
             }
 
@@ -41,11 +41,11 @@ public class TeleportStandPassengers {
     }
 
     @Inject(method = "teleportTo(DDD)V",at = @At(value = "TAIL"))
-    private void roundabout$teleportPossessor(double $$0, double $$1, double $$2, CallbackInfo ci) {
+    private void sba$teleportPossessor(double $$0, double $$1, double $$2, CallbackInfo ci) {
         if ( ((Entity)(Object)this) instanceof LivingEntity LE) {
             StandUser SU = (StandUser) LE;
-            if (SU.roundabout$isPossessed() && SU.roundabout$getPossessor() != null) {
-                SU.roundabout$getPossessor().teleportTo($$0,$$1,$$2);
+            if (SU.sba$isPossessed() && SU.sba$getPossessor() != null) {
+                SU.sba$getPossessor().teleportTo($$0,$$1,$$2);
             }
         }
     }

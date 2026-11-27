@@ -34,7 +34,7 @@ public class ScissorsBeehiveBlock {
      * The code is mostly just a faithful use of vanilla code so if it updates check this out.*/
 
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$Tick(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> cir) {
+    protected void sba$Tick(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack $$6 = $$3.getItemInHand($$4);
         if ($$6.is(ModItems.SCISSORS)) {
             ItemStack itemStack = $$3.getItemInHand($$4);

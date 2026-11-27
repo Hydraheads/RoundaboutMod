@@ -71,7 +71,7 @@ public class ThrownAnubisEntity extends AbstractHurtingProjectile {
             }
         }
 
-        if (ent instanceof Cow C && !((StandUser)C).roundabout$hasAStand() ) {
+        if (ent instanceof Cow C && !((StandUser)C).sba$hasAStand() ) {
 
             if (!this.level().isClientSide()) {
                 this.level().playSound(null,this.blockPosition(), ModSounds.ANUBIS_EXTRA_EVENT, SoundSource.PLAYERS,10F,1F);
@@ -96,7 +96,7 @@ public class ThrownAnubisEntity extends AbstractHurtingProjectile {
                 }
 
 
-                if (this.getOwner() != null && ((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersAnubis PA) {
+                if (this.getOwner() != null && ((StandUser)this.getOwner()).sba$getStandPowers() instanceof PowersAnubis PA) {
                     PA.addEXP(3);
                 }
             } else if (ent instanceof LivingEntity LE && LE.isBlocking()) {

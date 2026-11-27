@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.hud;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -81,10 +81,10 @@ public class StandHudRender {
             Minecraft mc = Minecraft.getInstance();
             float tickDelta = mc.getDeltaFrameTime();
 
-            boolean powerOn = ((StandUser) playerEntity).roundabout$getActive();
+            boolean powerOn = ((StandUser) playerEntity).sba$getActive();
             boolean standOn = PowerTypes.hasStandActive(playerEntity);
             boolean renderIcons = (powerOn || !FateTypes.isHuman(playerEntity)) && !ConfigManager.getClientConfig().dynamicSettings.hideGUI
-                    && !(ConfigManager.getClientConfig().enablePickyIconRendering && !((StandUser) playerEntity).roundabout$getStandPowers().hasCooldowns());
+                    && !(ConfigManager.getClientConfig().enablePickyIconRendering && !((StandUser) playerEntity).sba$getStandPowers().hasCooldowns());
             if (renderIcons || presentX > 0.1){
                 if (!renderIcons){
                     if (ConfigManager.getClientConfig().abilityIconHudIsAnimated){
@@ -108,7 +108,7 @@ public class StandHudRender {
 
 
                 if ((standOn || FateTypes.isHuman(playerEntity)) && PowerTypes.hasStandActivelyEquipped(playerEntity)) {
-                    ((StandUser) playerEntity).roundabout$getStandPowers().renderIcons(context, x, y);
+                    ((StandUser) playerEntity).sba$getStandPowers().renderIcons(context, x, y);
                 }else if ((powerOn || FateTypes.isHuman(playerEntity)) && !PowerTypes.hasStandActivelyEquipped(playerEntity)){
                     ((IPowersPlayer) playerEntity).rdbt$getPowers().renderIcons(context, x, y);
                 } else {
@@ -152,7 +152,7 @@ public class StandHudRender {
             if (
                     !((IFatePlayer) playerEntity).rdbt$getFatePowers().renderAttackHud2(context,playerEntity,
                     scaledWidth,scaledHeight,ticks,vehicleHeartCount, flashAlpha, otherFlashAlpha)) {
-                ((StandUser) playerEntity).roundabout$getStandPowers().renderAttackHud(context, playerEntity,
+                ((StandUser) playerEntity).sba$getStandPowers().renderAttackHud(context, playerEntity,
                         scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
                 ((IPowersPlayer) playerEntity).rdbt$getPowers().renderAttackHud(context, playerEntity,
                         scaledWidth, scaledHeight, ticks, vehicleHeartCount, flashAlpha, otherFlashAlpha);
@@ -312,9 +312,9 @@ public class StandHudRender {
     }
 
     private static int getFinalATimeInt(StandUser standUser) {
-        int barrageWindup = standUser.roundabout$getStandPowers().getBarrageWindup();
-        int barrageLength = standUser.roundabout$getStandPowers().getBarrageLength();
-        float attackTimeDuring = standUser.roundabout$getAttackTimeDuring();
+        int barrageWindup = standUser.sba$getStandPowers().getBarrageWindup();
+        int barrageLength = standUser.sba$getStandPowers().getBarrageLength();
+        float attackTimeDuring = standUser.sba$getAttackTimeDuring();
         int finalATimeInt;
         if (attackTimeDuring <= barrageWindup){
             finalATimeInt = Math.round((attackTimeDuring / barrageWindup)*15);
@@ -332,7 +332,7 @@ public class StandHudRender {
         int v;
         l = scaledHeight - 32 + 3;
         StandUser standUser = ((StandUser) playerEntity);
-        k = (int) Math.floor((182/30F)*standUser.roundabout$getRestrainedTicks());
+        k = (int) Math.floor((182/30F)*standUser.sba$getRestrainedTicks());
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, 70, 182, 5);
         if (k > 0) {
             context.blit(StandIcons.JOJO_ICONS, x, l, 0, 70+5, k, 5);
@@ -352,7 +352,7 @@ public class StandHudRender {
         int v;
         l = scaledHeight - 32 + 3;
         StandUser standUser = ((StandUser) playerEntity);
-        k = (int) Math.floor(((double) 182 /standUser.roundabout$getMaxSealedTicks())*(standUser.roundabout$getMaxSealedTicks()-standUser.roundabout$getSealedTicks()));
+        k = (int) Math.floor(((double) 182 /standUser.sba$getMaxSealedTicks())*(standUser.sba$getMaxSealedTicks()-standUser.sba$getSealedTicks()));
         context.blit(StandIcons.JOJO_ICONS, x, l, 0, 90, 182, 5);
         if (k > 0) {
             context.blit(StandIcons.JOJO_ICONS, x, l, 0, 90+5, k, 5);
@@ -380,7 +380,7 @@ public class StandHudRender {
                                              int scaledWidth, int scaledHeight, int x) {
 
         StandUser standUser = ((StandUser) playerEntity);
-        if (standUser.roundabout$getStandPowers() instanceof PowersWalkingHeart PW) {
+        if (standUser.sba$getStandPowers() instanceof PowersWalkingHeart PW) {
 
             int l;
             int k;
@@ -418,7 +418,7 @@ public class StandHudRender {
                                              int scaledWidth, int scaledHeight, int x) {
 
         StandUser standUser = ((StandUser) playerEntity);
-        if (standUser.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
+        if (standUser.sba$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
 
             int l;
             int k;
@@ -500,7 +500,7 @@ public class StandHudRender {
 
         int l;
         int gb = ClientNetworking.getAppropriateConfig().achtungSettings.invisiBurstDuration;
-        int gc =((IEntityAndData)playerEntity).roundabout$getTrueInvisibility();  gc= Mth.clamp(gc,0,gb);
+        int gc =((IEntityAndData)playerEntity).sba$getTrueInvisibility();  gc= Mth.clamp(gc,0,gb);
         int gc2 = Mth.floor(((float)gc+19)/20);
         l = scaledHeight - 32 + 3;
         StandUser standUser = ((StandUser)playerEntity);
@@ -798,11 +798,11 @@ public class StandHudRender {
         int k;
         int v;
         StandUser standUser = ((StandUser)playerEntity);
-        byte level = ((IPlayerEntity)playerEntity).roundabout$getStandLevel();
-        int exp = ((IPlayerEntity)playerEntity).roundabout$getStandExp();
-        int maxXP = standUser.roundabout$getStandPowers().getExpForLevelUp(level);
-        if (level == standUser.roundabout$getStandPowers().getMaxLevel() ||
-                (!standUser.roundabout$getStandDisc().isEmpty() && standUser.roundabout$getStandDisc().getItem()
+        byte level = ((IPlayerEntity)playerEntity).sba$getStandLevel();
+        int exp = ((IPlayerEntity)playerEntity).sba$getStandExp();
+        int maxXP = standUser.sba$getStandPowers().getExpForLevelUp(level);
+        if (level == standUser.sba$getStandPowers().getMaxLevel() ||
+                (!standUser.sba$getStandDisc().isEmpty() && standUser.sba$getStandDisc().getItem()
                         instanceof MaxStandDiscItem)) {
             exp = maxXP;
         }
@@ -930,7 +930,7 @@ public class StandHudRender {
         int k;
         int v;
         StandUser standUser = ((StandUser)playerEntity);
-        StandPowers powers = standUser.roundabout$getStandPowers();
+        StandPowers powers = standUser.sba$getStandPowers();
         int mode = powers.getPilotMode();
         int maxDistance = powers.getMaxPilotRange();
         int distance = 1;
@@ -969,7 +969,7 @@ public class StandHudRender {
         int k;
         int v;
         StandUser standUser = ((StandUser)playerEntity);
-        StandPowers powers = standUser.roundabout$getStandPowers();
+        StandPowers powers = standUser.sba$getStandPowers();
         int mode = powers.getPilotMode();
         int maxDistance = powers.getMaxPilotRange();
         int distance = 1;
@@ -1132,14 +1132,14 @@ public class StandHudRender {
         int v;
         l = scaledHeight - 32 + 3;
         StandUser standUser = ((StandUser) playerEntity);
-        if (standUser.roundabout$getGuardBroken() || !standUser.roundabout$shieldNotDisabled()){
+        if (standUser.sba$getGuardBroken() || !standUser.sba$shieldNotDisabled()){
             v = 10;
         } else {
             v = 0;
         }
 
-        float maxP = standUser.roundabout$getMaxGuardPoints();
-        float gP = standUser.roundabout$getGuardPoints();
+        float maxP = standUser.sba$getMaxGuardPoints();
+        float gP = standUser.sba$getGuardPoints();
         if (gP > maxP){
             gP = maxP;
         }
@@ -1160,7 +1160,7 @@ public class StandHudRender {
     public static void renderPossessionHud(GuiGraphics context, Minecraft client, Player playerEntity,
                                       int scaledWidth, int scaledHeight, int x) {
         int l = scaledHeight - 32 + 3;
-        AnubisPossessorEntity poss = (AnubisPossessorEntity) ((StandUser)playerEntity).roundabout$getPossessor();
+        AnubisPossessorEntity poss = (AnubisPossessorEntity) ((StandUser)playerEntity).sba$getPossessor();
         if (poss != null && poss.getTarget() != null) {
             int k = (int) ((182.0F / poss.getTarget().getMaxHealth()) * poss.getTarget().getHealth()) ;
 
@@ -1180,12 +1180,12 @@ public class StandHudRender {
                                            int scaledWidth, int scaledHeight, int x) {
         int l = scaledHeight - 32 + 3;
         StandUser SU = (StandUser) playerEntity;
-        StandPowers p = SU.roundabout$getStandPowers();
+        StandPowers p = SU.sba$getStandPowers();
         PowersAnubis PA = (PowersAnubis) p;
         int max = PA.maxPlayTime;
         int inc = PA.playTime;
 
-        if (SU.roundabout$getUniqueStandModeToggle()) {
+        if (SU.sba$getUniqueStandModeToggle()) {
             AnubisMemory memory = PA.getUsedMemory();
             if (memory != null) {
 
@@ -1231,10 +1231,10 @@ public class StandHudRender {
         int z;
         int y;
         StandUser standUser = ((StandUser) playerEntity);
-        if (isTSEntity || standUser.roundabout$getStandPowers().getIsTsCharging()){
+        if (isTSEntity || standUser.sba$getStandPowers().getIsTsCharging()){
             v = 50;
-            k = (int) Math.floor((182 /((double) standUser.roundabout$getStandPowers().getMaxChargeTSTime() /20))*((double) standUser.roundabout$getStandPowers().getChargedTSTicks() /20));
-            z =  (int) Math.min((Math.floor(((double) standUser.roundabout$getStandPowers().getChargedTSTicks()+19)/20)),((double) standUser.roundabout$getStandPowers().getMaxChargeTSTime() /20));
+            k = (int) Math.floor((182 /((double) standUser.sba$getStandPowers().getMaxChargeTSTime() /20))*((double) standUser.sba$getStandPowers().getChargedTSTicks() /20));
+            z =  (int) Math.min((Math.floor(((double) standUser.sba$getStandPowers().getChargedTSTicks()+19)/20)),((double) standUser.sba$getStandPowers().getMaxChargeTSTime() /20));
             y = 7654088;
         } else {
             v = 60;
@@ -1317,7 +1317,7 @@ public class StandHudRender {
         int g = scaledHeight - 31 - 5;
         context.blit(StandIcons.JOJO_ICONS, f, g, 183, 20, 9, 9);
 
-        LivingEntity clashOp = (((StandUser) client.player).roundabout$getStandPowers().getClashOp());
+        LivingEntity clashOp = (((StandUser) client.player).sba$getStandPowers().getClashOp());
         if (clashOp != null) {
             int i = context.guiWidth();
             int j = 12;
@@ -1325,7 +1325,7 @@ public class StandHudRender {
             int l = j;
 
             context.blit(StandIcons.JOJO_ICONS, k, l, 0, 40, 182, 5);
-            float q = (((StandUser) client.player).roundabout$getStandPowers().getClashOpProgress());
+            float q = (((StandUser) client.player).sba$getStandPowers().getClashOpProgress());
             int r = (int) (q * 183.0f);
             context.blit(StandIcons.JOJO_ICONS, k, l, 0, 45, r, 5);
 

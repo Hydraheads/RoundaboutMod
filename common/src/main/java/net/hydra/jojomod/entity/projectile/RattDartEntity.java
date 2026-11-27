@@ -53,74 +53,74 @@ public class RattDartEntity extends AbstractArrow {
         return this.trailPoints;
     }
 
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$BOUNCES = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$TYPE = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$PARTICLES = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$BREAKS_BLOCKS = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> SBA$SUPER_THROWN = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> SBA$BOUNCES = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Byte> SBA$TYPE = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> SBA$PARTICLES = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SBA$BREAKS_BLOCKS = SynchedEntityData.defineId(RattDartEntity.class, EntityDataSerializers.BOOLEAN);
 
     public byte getShotType() {
-        if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
-            return this.getEntityData().get(ROUNDABOUT$TYPE);
+        if (this.getEntityData().hasItem(SBA$TYPE)) {
+            return this.getEntityData().get(SBA$TYPE);
         }
         return BASIC;
     }
 
     public void setShotType(byte b) {
-        if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
-            this.getEntityData().set(ROUNDABOUT$TYPE,b);
+        if (this.getEntityData().hasItem(SBA$TYPE)) {
+            this.getEntityData().set(SBA$TYPE,b);
         }
     }
 
     public int getBounces() {
-        if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
-            return this.getEntityData().get(ROUNDABOUT$BOUNCES);
+        if (this.getEntityData().hasItem(SBA$BOUNCES)) {
+            return this.getEntityData().get(SBA$BOUNCES);
         }
         return 0;
     }
 
     public void setBounces(int i) {
-        if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
-            this.getEntityData().set(ROUNDABOUT$BOUNCES,i);
+        if (this.getEntityData().hasItem(SBA$BOUNCES)) {
+            this.getEntityData().set(SBA$BOUNCES,i);
         }
     }
 
     public int getSuperthrowTicks() {
-        if (this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
-            return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+        if (this.getEntityData().hasItem(SBA$SUPER_THROWN)) {
+            return this.getEntityData().get(SBA$SUPER_THROWN);
         }
         return 0;
     }
 
     public void setSuperthrowTicks(int i) {
-        if (this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
-            this.getEntityData().set(ROUNDABOUT$SUPER_THROWN,i);
+        if (this.getEntityData().hasItem(SBA$SUPER_THROWN)) {
+            this.getEntityData().set(SBA$SUPER_THROWN,i);
         }
     }
 
     public boolean shouldParticle() {
-        if (this.getEntityData().hasItem(ROUNDABOUT$PARTICLES)) {
-            return this.getEntityData().get(ROUNDABOUT$PARTICLES);
+        if (this.getEntityData().hasItem(SBA$PARTICLES)) {
+            return this.getEntityData().get(SBA$PARTICLES);
         }
         return false;
     }
 
     public void setParticle(boolean b) {
-        if (this.getEntityData().hasItem(ROUNDABOUT$PARTICLES)) {
-            this.getEntityData().set(ROUNDABOUT$PARTICLES,b);
+        if (this.getEntityData().hasItem(SBA$PARTICLES)) {
+            this.getEntityData().set(SBA$PARTICLES,b);
         }
     }
 
     public boolean getBlockBreak() {
-        if (this.getEntityData().hasItem(ROUNDABOUT$BREAKS_BLOCKS)) {
-            return this.getEntityData().get(ROUNDABOUT$BREAKS_BLOCKS);
+        if (this.getEntityData().hasItem(SBA$BREAKS_BLOCKS)) {
+            return this.getEntityData().get(SBA$BREAKS_BLOCKS);
         }
         return false;
     }
 
     public void setBlockBreak(boolean b) {
-        if (this.getEntityData().hasItem(ROUNDABOUT$BREAKS_BLOCKS)) {
-            this.getEntityData().set(ROUNDABOUT$BREAKS_BLOCKS,b);
+        if (this.getEntityData().hasItem(SBA$BREAKS_BLOCKS)) {
+            this.getEntityData().set(SBA$BREAKS_BLOCKS,b);
         }
     }
 
@@ -133,12 +133,12 @@ public class RattDartEntity extends AbstractArrow {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        if (!this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
-            this.getEntityData().define(ROUNDABOUT$SUPER_THROWN, 0);
-            this.getEntityData().define(ROUNDABOUT$BOUNCES, 0);
-            this.getEntityData().define(ROUNDABOUT$TYPE, RattDartEntity.BASIC);
-            this.getEntityData().define(ROUNDABOUT$PARTICLES, true);
-            this.getEntityData().define(ROUNDABOUT$BREAKS_BLOCKS, false);
+        if (!this.getEntityData().hasItem(SBA$SUPER_THROWN)) {
+            this.getEntityData().define(SBA$SUPER_THROWN, 0);
+            this.getEntityData().define(SBA$BOUNCES, 0);
+            this.getEntityData().define(SBA$TYPE, RattDartEntity.BASIC);
+            this.getEntityData().define(SBA$PARTICLES, true);
+            this.getEntityData().define(SBA$BREAKS_BLOCKS, false);
         }
     }
 
@@ -147,42 +147,42 @@ public class RattDartEntity extends AbstractArrow {
     public void readAdditionalSaveData(CompoundTag $$0) {
         super.readAdditionalSaveData($$0);
         if ($$0.contains("superthrow_ticks")) {
-            this.entityData.set(ROUNDABOUT$SUPER_THROWN,$$0.getInt("superthrow_ticks"));
+            this.entityData.set(SBA$SUPER_THROWN,$$0.getInt("superthrow_ticks"));
         }
         if ($$0.contains("bounces")) {
-            this.entityData.set(ROUNDABOUT$BOUNCES,$$0.getInt("bounces"));
+            this.entityData.set(SBA$BOUNCES,$$0.getInt("bounces"));
         }
         if ($$0.contains("type")) {
-            this.entityData.set(ROUNDABOUT$TYPE,$$0.getByte("type"));
+            this.entityData.set(SBA$TYPE,$$0.getByte("type"));
         }
         if ($$0.contains("disableMelt")) {
             disableMelt = $$0.getBoolean("disableMelt");
         }
         if ($$0.contains("particles")) {
-            this.entityData.set(ROUNDABOUT$PARTICLES,$$0.getBoolean("particles"));
+            this.entityData.set(SBA$PARTICLES,$$0.getBoolean("particles"));
         }
         if ($$0.contains("breaks")) {
-            this.entityData.set(ROUNDABOUT$BREAKS_BLOCKS,$$0.getBoolean("breaks"));
+            this.entityData.set(SBA$BREAKS_BLOCKS,$$0.getBoolean("breaks"));
         }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
-        if (this.getEntityData().hasItem(ROUNDABOUT$SUPER_THROWN)) {
-            $$0.putInt("superthrow_ticks",this.getEntityData().get(ROUNDABOUT$SUPER_THROWN));
+        if (this.getEntityData().hasItem(SBA$SUPER_THROWN)) {
+            $$0.putInt("superthrow_ticks",this.getEntityData().get(SBA$SUPER_THROWN));
         }
-        if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
-            $$0.putInt("bounces",this.getEntityData().get(ROUNDABOUT$BOUNCES));
+        if (this.getEntityData().hasItem(SBA$BOUNCES)) {
+            $$0.putInt("bounces",this.getEntityData().get(SBA$BOUNCES));
         }
-        if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
-            $$0.putByte("type",this.getEntityData().get(ROUNDABOUT$TYPE));
+        if (this.getEntityData().hasItem(SBA$TYPE)) {
+            $$0.putByte("type",this.getEntityData().get(SBA$TYPE));
         }
-        if (this.getEntityData().hasItem(ROUNDABOUT$PARTICLES)) {
-            $$0.putBoolean("particles",this.getEntityData().get(ROUNDABOUT$PARTICLES));
+        if (this.getEntityData().hasItem(SBA$PARTICLES)) {
+            $$0.putBoolean("particles",this.getEntityData().get(SBA$PARTICLES));
         }
-        if (this.getEntityData().hasItem(ROUNDABOUT$BREAKS_BLOCKS)) {
-            $$0.putBoolean("breaks",this.getEntityData().get(ROUNDABOUT$BREAKS_BLOCKS));
+        if (this.getEntityData().hasItem(SBA$BREAKS_BLOCKS)) {
+            $$0.putBoolean("breaks",this.getEntityData().get(SBA$BREAKS_BLOCKS));
         }
         $$0.putBoolean("disableMelt",disableMelt);
     }
@@ -193,7 +193,7 @@ public class RattDartEntity extends AbstractArrow {
     }
 
     public void alignDart(LivingEntity player) {
-        if ( ((StandUser) player).roundabout$getStandPowers() instanceof PowersRatt PR) {
+        if ( ((StandUser) player).sba$getStandPowers() instanceof PowersRatt PR) {
             if (PR.getStandEntity(player) != null ) {
                 if (PR.getStandEntity(player) instanceof RattEntity RE) {
                     Vec3 rots = PR.getRotations(PR.getShootTarget());
@@ -333,7 +333,7 @@ public class RattDartEntity extends AbstractArrow {
     }
 
     protected void onHitBlock2(BlockHitResult $$0) {
-        ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
+        ((IAbstractArrowAccess)this).sba$setLastState(this.level().getBlockState($$0.getBlockPos()));
         BlockState BSS = this.level().getBlockState($$0.getBlockPos());
         BSS.onProjectileHit(this.level(), BSS, $$0, this);
         Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
@@ -347,7 +347,7 @@ public class RattDartEntity extends AbstractArrow {
         this.setPierceLevel((byte)0);
         this.setSoundEvent(SoundEvents.ARROW_HIT);
         this.setShotFromCrossbow(false);
-        ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
+        ((IAbstractArrowAccess)this).sba$resetPiercedEntities();
     }
     public void applyEffect(LivingEntity $$1) {
         if (MainUtil.isBossMob($$1) || $$1 instanceof RoadRollerEntity) {
@@ -397,7 +397,7 @@ public class RattDartEntity extends AbstractArrow {
         if (!level().isClientSide && $$0.getEntity() instanceof EnderMan em) {
 
             for (int i = 0; i < 64; i++) {
-                if (((IEnderMan) em).roundabout$teleport()) {
+                if (((IEnderMan) em).sba$teleport()) {
                     return;
                 }
             }
@@ -425,7 +425,7 @@ public class RattDartEntity extends AbstractArrow {
 
 
             if (this.getShotType() == BASIC && $$4 != null) {
-                if ( ((StandUser)$$4).roundabout$getStandPowers() instanceof PowersRatt PR ) {
+                if ( ((StandUser)$$4).sba$getStandPowers() instanceof PowersRatt PR ) {
                     if ($$4 instanceof Player P) {
                         S2CPacketUtil.sendIntPowerDataPacket(P, PowersRatt.UPDATE_CHARGE, Math.min(PR.getChargeTime()+ClientNetworking.getAppropriateConfig().rattSettings.rattChargePerHit,100));
                     }
@@ -433,7 +433,7 @@ public class RattDartEntity extends AbstractArrow {
             }
 
             if ($$4 instanceof LivingEntity LE) {
-                if ( ((StandUser)$$4).roundabout$getStandPowers() instanceof PowersRatt PR ) {
+                if ( ((StandUser)$$4).sba$getStandPowers() instanceof PowersRatt PR ) {
                     if ($$1 instanceof LivingEntity l) {
                         PR.addEXP(2 + ((!PR.isPlaced() && PR.isAuto()) ? 2 : 0) ,l);
                     }
@@ -473,7 +473,7 @@ public class RattDartEntity extends AbstractArrow {
                 }
             }
 
-            if ($$1 instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof
+            if ($$1 instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers() instanceof
                     NewPunchingStand nps && nps.isGuarding()){
                 if (nps.meltIFrames <= 0){
                     nps.meltIFrames = 3;

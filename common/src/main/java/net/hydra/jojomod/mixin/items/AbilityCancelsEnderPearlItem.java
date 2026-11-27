@@ -19,12 +19,12 @@ public class AbilityCancelsEnderPearlItem {
     /**While in the middle of a stand ability, cannot throw an ender pearl*/
 
     @Inject(method = "use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;", at = @At(value = "HEAD"), cancellable = true)
-    protected <E extends Entity> void roundabout$use(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
-        if (((StandUser)$$1).roundabout$getStandPowers().getAttackTimeDuring() > -1){
+    protected <E extends Entity> void sba$use(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+        if (((StandUser)$$1).sba$getStandPowers().getAttackTimeDuring() > -1){
             ItemStack $$3 = $$1.getItemInHand($$2);
             cir.setReturnValue(InteractionResultHolder.sidedSuccess($$3, $$0.isClientSide()));
         } else {
-            ((StandUser)$$1).roundabout$getStandPowers().onEnderPearlThrow();
+            ((StandUser)$$1).sba$getStandPowers().onEnderPearlThrow();
         }
     }
 }

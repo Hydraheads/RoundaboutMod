@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.corpses.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.corpses.FallenSkeleton;
 import net.hydra.jojomod.entity.corpses.FallenVillager;
 import net.hydra.jojomod.client.models.corpses.FallenVillagerModel;
@@ -14,15 +14,15 @@ import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
 import net.minecraft.resources.ResourceLocation;
 
 public class FallenVillagerRenderer extends MobRenderer<FallenVillager, FallenVillagerModel<FallenVillager>> {
-    private static final ResourceLocation FALLEN_VILLAGER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_villager.png");
-    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_2 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_villager_holes.png");
-    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_B = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_villager_blue.png");
-    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_R = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_villager_red.png");
-    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_VILLAGER_LOCATION_G = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_villager_green.png");
 
     private static final ResourceLocation VILLAGER_BASE_SKIN = new ResourceLocation("textures/entity/villager/villager.png");

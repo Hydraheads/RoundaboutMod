@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -35,8 +35,8 @@ public class StandGlowingLayer<T extends StandEntity, M extends StandModel<T>> e
     public void render(PoseStack $$0, MultiBufferSource $$1, int i, T mobEntity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9) {
         LivingEntity User = mobEntity.getUser();
 
-        if (!standRenderer.hasGlowingParts(mobEntity.getSkin(), i) || ((User != null && ((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
-                ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1)){
+        if (!standRenderer.hasGlowingParts(mobEntity.getSkin(), i) || ((User != null && ((IEntityAndData)User).sba$getTrueInvisibility() > -1) ||
+                ((IEntityAndData)mobEntity).sba$getTrueInvisibility() > -1)){
             return;
         }
 
@@ -49,12 +49,12 @@ public class StandGlowingLayer<T extends StandEntity, M extends StandModel<T>> e
 
             LocalPlayer lp = Minecraft.getInstance().player;
 
-            if ((User != null && ((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
-                    ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1){
+            if ((User != null && ((IEntityAndData)User).sba$getTrueInvisibility() > -1) ||
+                    ((IEntityAndData)mobEntity).sba$getTrueInvisibility() > -1){
                 return;
             }
 
-            if (User != null && !mobEntity.getUser().is(lp) && ((IEntityAndData)User).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            if (User != null && !mobEntity.getUser().is(lp) && ((IEntityAndData)User).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
                 return;
             }
 
@@ -63,7 +63,7 @@ public class StandGlowingLayer<T extends StandEntity, M extends StandModel<T>> e
                 IPlayerEntity ipe = ((IPlayerEntity) lp);
                 if (User != null && mobEntity.getUser().is(lp)) {
                     StandUser standUser = ((StandUser)mobEntity.getUser());
-                    if (standUser.roundabout$getStandPowers().getActivePower() == PowerIndex.NONE){
+                    if (standUser.sba$getStandPowers().getActivePower() == PowerIndex.NONE){
                         maxfade = ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
                         if (ConfigManager.getClientConfig().opacitySettings.opacityOfStand <= 0.1F){
                             return;

@@ -84,8 +84,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 ItemStack visage = null;
                 if (entity instanceof Player play) {
                     IPlayerEntity pl = ((IPlayerEntity) play);
-                    visage = pl.roundabout$getMaskSlot();
-                    ShapeShifts shift = ShapeShifts.getShiftFromByte(pl.roundabout$getShapeShift());
+                    visage = pl.sba$getMaskSlot();
+                    ShapeShifts shift = ShapeShifts.getShiftFromByte(pl.sba$getShapeShift());
                     if (shift == ShapeShifts.OVA) {
                         visage = ModItems.ENYA_OVA_MASK.getDefaultInstance();
                     } else if (shift == ShapeShifts.EERIE) {
@@ -101,7 +101,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 }
 
                 // specifically to fix visage parts like hat trims and stuff appearing when disguised
-                if (entity instanceof StandUser su && su.roundabout$isDisguised()) {
+                if (entity instanceof StandUser su && su.sba$isDisguised()) {
                     visage = null;
                 }
 
@@ -111,7 +111,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 float b = isHurt ? 0.6F : 1.0F;
                 StandUser user = ((StandUser) entity);
 
-                if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart PW && (PW.rendersInCombatMode() || PW.hasExtendedHeelsForWalking())){
+                if (user.sba$getStandPowers() instanceof PowersWalkingHeart PW && (PW.rendersInCombatMode() || PW.hasExtendedHeelsForWalking())){
                     if (user instanceof AbstractClientPlayer PE) {
                         renderRightHeelPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, PE.getSkinTextureLocation(),
                                 r, g, b);
@@ -120,8 +120,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
 
-                byte curse = user.roundabout$getLocacacaCurse();
-                int muscle = user.roundabout$getZappedToID();
+                byte curse = user.sba$getLocacacaCurse();
+                int muscle = user.sba$getZappedToID();
                 //muscle = 100;
                 if (muscle > -1) {
                     float scale = 1.055F;
@@ -130,7 +130,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     alpha += oscillation;
                     if (entity.getMainArm() == HumanoidArm.RIGHT) {
                         if (curse != LocacacaCurseIndex.RIGHT_HAND && !HeatUtil.isArmsFrozen(entity)) {
-                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).sba$getSlim()) {
                                 renderRightArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
                                         r, g, b, StandIcons.MUSCLE_SLIM, 0.01F, 0, 0, alpha);
                             } else {
@@ -144,7 +144,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         }
                     } else {
                         if (curse != LocacacaCurseIndex.LEFT_HAND && !HeatUtil.isArmsFrozen(entity)) {
-                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).sba$getSlim()) {
                                 renderLeftArmSlim(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
                                         r, g, b, StandIcons.MUSCLE_SLIM, -0.01F, 0, 0, alpha);
                             } else {
@@ -160,22 +160,22 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 }
 
 
-                boolean hasWhiteAlbumOut =user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
-                //int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+                boolean hasWhiteAlbumOut =user.sba$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
+                //int whiteAlbumTicks = user.sba$getWhiteAlbumVanishTicks();
                 int whiteAlbumTicks = MainUtil.getWornStandVanishticksSafe(user, PowersWhiteAlbum.class);
                 boolean hideExtraPartsWithSuit = false;
                 float heyFull = 0;
-                byte skin = user.roundabout$getStandSkin();
+                byte skin = user.sba$getStandSkin();
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
-                    if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum) {
-                        if (user.roundabout$getLastStandSkin() != skin){
-                            user.roundabout$setLastStandSkin(skin);
+                    if (user.sba$getStandPowers() instanceof PowersWhiteAlbum) {
+                        if (user.sba$getLastStandSkin() != skin){
+                            user.sba$setLastStandSkin(skin);
                             whiteAlbumTicks = 0;
-                            //user.roundabout$setWhiteAlbumVanishTicks(0);
-                            user.roundabout$setCurrentStandVanishTicks(0);
+                            //user.sba$setWhiteAlbumVanishTicks(0);
+                            user.sba$setCurrentStandVanishTicks(0);
                         }
                     }else {
-                        skin = user.roundabout$getPreviousSkin();
+                        skin = user.sba$getPreviousSkin();
                     }
 
                     float partialTicks2 = partialTicks % 1;
@@ -192,15 +192,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     }
                 }
 
-                boolean hasOasisOut = user.roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit();
-                int oasisTicks = user.roundabout$getOasisVanishTicks();
+                boolean hasOasisOut = user.sba$getStandPowers() instanceof PowersOasis po && po.renderSuit();
+                int oasisTicks = user.sba$getOasisVanishTicks();
                 float fadeAmt = 0;
-                byte oasisSkin = user.roundabout$getStandSkin();
+                byte oasisSkin = user.sba$getStandSkin();
                 if (hasOasisOut || oasisTicks > 0){
-                    if (user.roundabout$getLastStandSkin() != oasisSkin){
-                        user.roundabout$setLastStandSkin(oasisSkin);
+                    if (user.sba$getLastStandSkin() != oasisSkin){
+                        user.sba$setLastStandSkin(oasisSkin);
                         oasisTicks = 0;
-                        user.roundabout$setOasisVanishTicks(0);
+                        user.sba$setOasisVanishTicks(0);
                     }
 
                     float partialTicks2 = partialTicks % 1;
@@ -218,7 +218,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 }
 
 
-                if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity) && user.roundabout$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
+                if (user.sba$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity) && user.sba$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
 
                 ItemStack hand = entity.getMainHandItem();
                 ItemStack offHand = entity.getOffhandItem();
@@ -231,7 +231,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                         boolean hasCTRactive = false;
 
-                        if (((StandUser) entity).roundabout$getStandPowers() instanceof PowersCatchTheRainbow pctr){
+                        if (((StandUser) entity).sba$getStandPowers() instanceof PowersCatchTheRainbow pctr){
                            if (pctr.hasStandActive(entity)){
                                hasCTRactive = true;
                            }else{
@@ -419,7 +419,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     r, g, b);
                             if (user instanceof AbstractClientPlayer PE) {
                                 renderHead(poseStack, bufferSource, packedLight, entity, scale, scale, scale, partialTicks,
-                                        r, g, b, ((IPlayerEntityAbstractClient)PE).roundabout$getTextureLocation2(), -0.01F, 0, 0, 1f);
+                                        r, g, b, ((IPlayerEntityAbstractClient)PE).sba$getTextureLocation2(), -0.01F, 0, 0, 1f);
                             }
                         }
                         if (vd.rendersTasselHat() && !isBodyFrozen && !isHoldingBowlerHat
@@ -470,7 +470,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
 
-                    if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw) {
+                    if (user.sba$getStandPowers() instanceof PowersWhiteAlbum pw) {
 
                         String path = PowersWhiteAlbum.getSkinString(skin);
                         String path2 = path;
@@ -497,7 +497,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         renderWhiteAlbumLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                 partialTicks, path, r, g, b, heyFull);
 
-                        if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                        if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).sba$getSlim()) {
                             renderWhiteAlbumSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                     partialTicks, path, r, g, b, heyFull);
                             renderWhiteAlbumSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
@@ -510,7 +510,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         }
 
                         if (entity instanceof Player player &&
-                                ((IPlayerEntity)player).roundabout$GetPos2() == PlayerPosIndex.CHARGE_SHOT){
+                                ((IPlayerEntity)player).sba$GetPos2() == PlayerPosIndex.CHARGE_SHOT){
                             renderWhiteAlbumColdBlast(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                     partialTicks, path, r, g, b);
                         }
@@ -534,7 +534,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                 if (hasOasisOut || oasisTicks > 0){
 
-                    if (user.roundabout$getStandPowers() instanceof PowersOasis po) {
+                    if (user.sba$getStandPowers() instanceof PowersOasis po) {
 
                         String path = PowersOasis.getSkinString(oasisSkin);
 
@@ -549,7 +549,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         renderOasisLeftLegPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                 partialTicks, path, r, g, b, fadeAmt);
 
-                        if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                        if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).sba$getSlim()) {
                             renderOasisSlimRightArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
                                     partialTicks, path, r, g, b, fadeAmt);
                             renderOasisSlimLeftArmPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz,
@@ -576,7 +576,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 if (entity instanceof Player play) {
                     ClientUtil.pushPoseAndCooperate(poseStack, 46);
                     IPlayerEntity pl = ((IPlayerEntity) play);
-                    byte pos2 = pl.roundabout$GetPos2();
+                    byte pos2 = pl.sba$GetPos2();
                     if (pos2 == PlayerPosIndex.BARRAGE) {
                         renderBarrageArmsPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                 r, g, b);
@@ -714,8 +714,8 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                     net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.render(
                             ogEnt, getParentModel(), poseStack, bufferSource, packedLight);
                 }
-                if (((StandUser)ogEnt).roundabout$getArmVanishTicks() > 0 ||
-                        (((StandUser)ogEnt).roundabout$getStandPowers().hasHandsOut() && ClientUtil.inPowerInventory)){
+                if (((StandUser)ogEnt).sba$getArmVanishTicks() > 0 ||
+                        (((StandUser)ogEnt).sba$getStandPowers().hasHandsOut() && ClientUtil.inPowerInventory)){
                     renderKingCrimsonArms(poseStack, bufferSource, packedLight, (T) ogEnt, xx, yy, zz, partialTicks,
                             1,1,1);
                 }
@@ -1503,7 +1503,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             finish = Mth.clamp(finish,0,5) / 5F;
                 scale = finish;
         }
-        ModStrayModels.bannerFlag.roundabout$renderInSpot(stack,
+        ModStrayModels.bannerFlag.sba$renderInSpot(stack,
                 entity.position(),entity.level(),partialTicks, poseStack, bufferSource, packedLight,OverlayTexture.NO_OVERLAY,scale);
         ClientUtil.popPoseAndCooperate(poseStack,46);
     }

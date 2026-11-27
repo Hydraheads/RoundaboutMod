@@ -72,7 +72,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     public boolean hurt(DamageSource $$0, float $$1) {
         if ($$0.is(ModDamageTypes.GO_BEYOND)){
             if (this.getPlayer() != null){
-                if ((((StandUser) this.getPlayer()).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&
+                if ((((StandUser) this.getPlayer()).sba$getStandPowers() instanceof PowersKingCrimson pkc &&
                         pkc.timeEraseActive)
                 ){
                     pkc.timeErase();
@@ -108,7 +108,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     @Override
     public void die(DamageSource source) {
         if (!this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getPlayer() instanceof ServerPlayer sp
-        && ((StandUser)sp).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+        && ((StandUser)sp).sba$getStandPowers() instanceof PowersKingCrimson pkc) {
 
             if (ClientNetworking.getAppropriateConfig().kingCrimsonSettings.skipPastDeath
             && !source.is(ModDamageTypes.GO_BEYOND)) {
@@ -179,7 +179,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
     }
 
     public void discardStand(){
-        StandEntity SE = ((StandUser)this).roundabout$getStand();
+        StandEntity SE = ((StandUser)this).sba$getStand();
         if (SE != null){
             SE.discard();
         }
@@ -268,7 +268,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
                 discard();
 
             } else if (
-                    !(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&
+                    !(((StandUser) player).sba$getStandPowers() instanceof PowersKingCrimson pkc &&
                             pkc.timeEraseActive)
             ){
                 discardStand();
@@ -304,7 +304,7 @@ public class KingCrimsonCloneEntity extends CloneEntity {
             if (mob.getTarget() == this || (mob.getTarget() != null && mob.getTarget().getId() == this.getId())) {
                 if (mob.distanceTo(this.getPlayer()) < 25 && (!(mob instanceof Monster) || mob instanceof EnderMan) &&
                 mob.hasLineOfSight(this.getPlayer())){
-                    ((StandUser) mob).roundabout$aggressivelyEnforceAggro(player);
+                    ((StandUser) mob).sba$aggressivelyEnforceAggro(player);
                 }
             }
         }

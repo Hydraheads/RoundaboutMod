@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.substand.zsabbathsouls.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.layers.visages.VisagePartLayer;
@@ -38,7 +38,7 @@ public class GrabbedMobSoulRendererPlayerLarge<T extends GrabbedMobSoulPlayerLar
         super(context, new GrabbedPlayerSoulSteveModel<>(context.bakeLayer(ModEntityRendererClient.GRABBED_MOB_SOUL_PLAYER_LAYER)), 0f);
     }
 
-    private static final ResourceLocation NULL = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/achtung_baby/very_badass_texture.png");
+    private static final ResourceLocation NULL = new ResourceLocation(SBA.MOD_ID, "textures/stand/achtung_baby/very_badass_texture.png");
     @Override
     public ResourceLocation getTextureLocation(GrabbedMobSoulPlayerLarge entity) {
         Player P =((Player)entity.getUser());

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.datafixers.util.Pair;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -291,7 +291,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
         int totalWidth = 3 * buttonWidth + 2 * spacing;
         int startX = (this.width - totalWidth) / 2;
         int y = this.height - buttonHeight - padding;
-        this.doneButton = Button.builder(Component.translatable("config.roundabout.major.close"), btn -> {
+        this.doneButton = Button.builder(Component.translatable("config.sba.major.close"), btn -> {
                     forceClose();
                 }).size(buttonWidth, buttonHeight)
                 .pos(startX + buttonWidth + spacing, y)
@@ -665,7 +665,7 @@ public class FogInventoryScreen extends EffectRenderingInventoryScreen<FogInvent
     protected void renderBg(GuiGraphics drawContext, float partialTick, int mouseX, int mouseY) {
 
         drawContext.blit(
-                new ResourceLocation(Roundabout.MOD_ID,"textures/gui/tab_inventory.png"),
+                new ResourceLocation(SBA.MOD_ID,"textures/gui/tab_inventory.png"),
                 this.leftPos,
                 this.topPos,
                 0,

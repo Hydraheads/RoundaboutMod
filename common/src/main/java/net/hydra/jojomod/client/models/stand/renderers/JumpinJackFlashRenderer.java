@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.JumpinJackFlashModel;
@@ -14,15 +14,15 @@ public class JumpinJackFlashRenderer
 
     public static final ResourceLocation TEXTURE =
             new ResourceLocation(
-                    Roundabout.MOD_ID,
+                    SBA.MOD_ID,
                     "textures/stand/jjf/jumpin_jack_flash.png"
             );
 
     private static final ResourceLocation BLACK_FLASH =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/stand/jjf/black_flash.png");
+            new ResourceLocation(SBA.MOD_ID, "textures/stand/jjf/black_flash.png");
 
     private static final ResourceLocation ASTRONAUT =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/stand/jjf/astronaut.png");
+            new ResourceLocation(SBA.MOD_ID, "textures/stand/jjf/astronaut.png");
 
     public static ResourceLocation textureForSkin(byte skin) {
         return switch (skin) {

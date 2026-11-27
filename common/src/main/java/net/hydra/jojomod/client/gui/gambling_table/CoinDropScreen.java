@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.gui.gambling_table;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.menu.GamblingTableMenu;
 import net.hydra.jojomod.menu.gambling_games.CoinDropGame;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,9 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 
 public class CoinDropScreen extends Screen {
     private static final ResourceLocation TEXTURE_1 =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/gui/gambling_table/coin_drop/coin_drop_1.png");
+            new ResourceLocation(SBA.MOD_ID, "textures/gui/gambling_table/coin_drop/coin_drop_1.png");
     private static final ResourceLocation TEXTURE_2 =
-            new ResourceLocation(Roundabout.MOD_ID, "textures/gui/gambling_table/coin_drop/coin_drop_2.png");
+            new ResourceLocation(SBA.MOD_ID, "textures/gui/gambling_table/coin_drop/coin_drop_2.png");
 
     private static final int MAIN_SCREEN_U = 4, MAIN_SCREEN_V = 2;
     private static final int MAIN_SCREEN_WIDTH = 194, MAIN_SCREEN_HEIGHT = 181;

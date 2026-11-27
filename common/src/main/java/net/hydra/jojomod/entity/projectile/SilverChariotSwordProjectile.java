@@ -34,8 +34,8 @@ import net.minecraft.world.phys.*;
 import java.util.UUID;
 
 public class SilverChariotSwordProjectile extends AbstractArrow implements UnburnableProjectile {
-    // private static final EntityDataAccessor<Integer> ROUNDABOUT$BOUNCES = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
-    // private static final EntityDataAccessor<Byte> ROUNDABOUT$TYPE = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
+    // private static final EntityDataAccessor<Integer> SBA$BOUNCES = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
+    // private static final EntityDataAccessor<Byte> SBA$TYPE = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
     // private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
     // private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
 
@@ -186,28 +186,28 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
     }
 
     public int getBounces() {
-        if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
-            this.getEntityData().get(ROUNDABOUT$BOUNCES);
+        if (this.getEntityData().hasItem(SBA$BOUNCES)) {
+            this.getEntityData().get(SBA$BOUNCES);
         }
         return 0;
     }
 
     public void setBounces(int bounces) {
-        if (this.getEntityData().hasItem(ROUNDABOUT$BOUNCES)) {
-            this.getEntityData().set(ROUNDABOUT$BOUNCES, bounces);
+        if (this.getEntityData().hasItem(SBA$BOUNCES)) {
+            this.getEntityData().set(SBA$BOUNCES, bounces);
         }
     }
 
     public byte getRapierShotType() {
-        if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
-            return this.getEntityData().get(ROUNDABOUT$TYPE);
+        if (this.getEntityData().hasItem(SBA$TYPE)) {
+            return this.getEntityData().get(SBA$TYPE);
         }
         return BASE;
     }
 
     public void setRapierShotType(byte type) {
-        if (this.getEntityData().hasItem(ROUNDABOUT$TYPE)) {
-            this.getEntityData().set(ROUNDABOUT$TYPE, type);
+        if (this.getEntityData().hasItem(SBA$TYPE)) {
+            this.getEntityData().set(SBA$TYPE, type);
         }
     }
 
@@ -261,7 +261,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
 
                 this.setBounces(this.getBounces() - 1);
             } else {
-                ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
+                ((IAbstractArrowAccess)this).sba$setLastState(this.level().getBlockState($$0.getBlockPos()));
                 BlockState BSS = this.level().getBlockState($$0.getBlockPos());
                 BSS.onProjectileHit(this.level(), BSS, $$0, this);
                 Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
@@ -280,8 +280,8 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
     private boolean inGroundCheck = false;
 
     private void createPlatform(BlockHitResult $$0) {
-        // byte skin = ((StandUser) this.getUser()).roundabout$getStandSkin();
-        byte bt = this.getUser() != null ? ((StandUser) this.getUser()).roundabout$getStandSkin() : 0;
+        // byte skin = ((StandUser) this.getUser()).sba$getStandSkin();
+        byte bt = this.getUser() != null ? ((StandUser) this.getUser()).sba$getStandSkin() : 0;
         SilverChariotRapierPlatformEntity platform = new SilverChariotRapierPlatformEntity(
                 this.level(),
                 bt
@@ -301,7 +301,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
     }
 
     private void createPlatformBlock(BlockHitResult $$0) {
-        byte bt = this.getUser() != null ? ((StandUser) this.getUser()).roundabout$getStandSkin() : 0;
+        byte bt = this.getUser() != null ? ((StandUser) this.getUser()).sba$getStandSkin() : 0;
         BlockPos targetPos = $$0.getBlockPos().relative($$0.getDirection());
         Level level = this.level();
         if (level.getBlockState(targetPos).canBeReplaced() && !level.getBlockState(targetPos).is(ModBlocks.SC_RAPIER_PLATFORM)) {
@@ -314,7 +314,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
                 if (level.getBlockEntity(targetPos) instanceof SilverChariotRapierPlatformBlockEntity be) {
                     be.ownerUUID = this.getUser().getUUID();
                     be.facing = facing;
-                    be.standSkin = this.getUser() != null ? ((StandUser) this.getUser()).roundabout$getStandSkin() : 0;
+                    be.standSkin = this.getUser() != null ? ((StandUser) this.getUser()).sba$getStandSkin() : 0;
                     be.setChanged();
                     BlockState currentState = level.getBlockState(targetPos);
                     level.sendBlockUpdated(targetPos, currentState, currentState, 3);
@@ -392,7 +392,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
     public void rapierHit(LivingEntity livingEntity) {
         if (!this.level().isClientSide()) {
             Entity user = this.getOwner();
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
+            if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersSilverChariot PSC) {
                 PSC.addEXP(2);
                 this.level().playSound(null, this.blockPosition(), ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_EVENT,
                         SoundSource.PLAYERS, 2F, 1F);
@@ -488,8 +488,8 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
         /*
         if (!this.getEntityData().hasItem(USER_ID)) {
             this.getEntityData().define(USER_ID, -1);
-            this.getEntityData().define(ROUNDABOUT$TYPE, BASE);
-            this.getEntityData().define(ROUNDABOUT$BOUNCES, 0);
+            this.getEntityData().define(SBA$TYPE, BASE);
+            this.getEntityData().define(SBA$BOUNCES, 0);
         }
 
          */
@@ -504,10 +504,10 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
 
         /*
         if ($$0.contains("bounces")) {
-            this.entityData.set(ROUNDABOUT$BOUNCES, $$0.getInt("bounces"));
+            this.entityData.set(SBA$BOUNCES, $$0.getInt("bounces"));
         }
         if ($$0.contains("type")) {
-            this.entityData.set(ROUNDABOUT$TYPE, $$0.getByte("type"));
+            this.entityData.set(SBA$TYPE, $$0.getByte("type"));
         }
 
          */
@@ -524,10 +524,10 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
 
         /*
         if ($$0.contains("bounces")) {
-            $$0.putInt("bounces", this.entityData.get(ROUNDABOUT$BOUNCES));
+            $$0.putInt("bounces", this.entityData.get(SBA$BOUNCES));
         }
         if ($$0.contains("type")) {
-            $$0.putByte("type", this.entityData.get(ROUNDABOUT$TYPE));
+            $$0.putByte("type", this.entityData.get(SBA$TYPE));
         }
 
          */
@@ -587,7 +587,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
 
         LivingEntity le = this.getStandUser();
         if (le != null) {
-            if (((StandUser) this.getStandUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
+            if (((StandUser) this.getStandUser()).sba$getStandPowers() instanceof PowersSilverChariot PSC) {
                 this.setDeltaMovement(Vec3.ZERO);
             } else {
                 if (!client) {

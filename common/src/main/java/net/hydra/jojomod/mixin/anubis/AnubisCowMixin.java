@@ -21,7 +21,7 @@ public abstract class AnubisCowMixin extends Animal {
     }
 
     @Inject(method = "registerGoals",at = @At(value = "HEAD"))
-    private void roundabout$anubisCowPanic(CallbackInfo ci) {
+    private void sba$anubisCowPanic(CallbackInfo ci) {
         this.goalSelector.addGoal(0,new AnubisPanicGoal( ((Cow)(Object)this),2 ));
     }
 }

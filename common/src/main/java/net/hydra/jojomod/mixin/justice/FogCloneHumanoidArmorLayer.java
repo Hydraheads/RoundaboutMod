@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin.justice;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IHumanoidArmorLayer;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.minecraft.client.Minecraft;
@@ -44,17 +44,17 @@ public abstract class FogCloneHumanoidArmorLayer<T extends LivingEntity, M exten
     }
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at = @At(value = "HEAD"),cancellable = true)
-    protected void roundabout$tick(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+    protected void sba$tick(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         if (rdbt$killSwitch > 0 && $$3 != null) {
             EntityRenderDispatcher dispatch = Minecraft.getInstance().getEntityRenderDispatcher();
             EntityRenderer<?> ER = dispatch.getRenderer($$3);
             if (ER instanceof LivingEntityRenderer PR && PR.getModel() instanceof PlayerModel<?> pm) {
                 if (rdbt$killSwitch == 1) {
-                    if (!((IPlayerModel)pm).roundabout$getSlim()){
+                    if (!((IPlayerModel)pm).sba$getSlim()){
                         ci.cancel();
                     }
                 } else {
-                    if (((IPlayerModel)pm).roundabout$getSlim()){
+                    if (((IPlayerModel)pm).sba$getSlim()){
                         ci.cancel();
                     }
                 }

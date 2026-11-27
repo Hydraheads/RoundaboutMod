@@ -31,7 +31,7 @@ public abstract class FishingLootMixin extends Entity {
     }
 
     @Inject(method = "retrieve",at = @At("HEAD"))
-    private void roundabout$fuckYouCase(ItemStack $$0, CallbackInfoReturnable<Integer> cir) {
+    private void sba$fuckYouCase(ItemStack $$0, CallbackInfoReturnable<Integer> cir) {
         LootTable table = this.level().getServer().getLootData().getLootTable(BuiltInLootTables.FISHING);
     }
 
@@ -41,9 +41,9 @@ public abstract class FishingLootMixin extends Entity {
                     target = "Lnet/minecraft/advancements/critereon/FishingRodHookedTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/projectile/FishingHook;Ljava/util/Collection;)V",
                     ordinal = 1
             ))
-    private void roundabout$HOWRUDE(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+    private void sba$HOWRUDE(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         if (this.getPlayerOwner() instanceof ServerPlayer player
-                && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+                && ((StandUser) player).sba$getStandPowers() instanceof PowersGoldExperience ge) {
             ge.onFishCaught();
         }
     }

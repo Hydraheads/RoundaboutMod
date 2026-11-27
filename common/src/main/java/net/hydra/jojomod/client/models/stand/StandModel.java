@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.animations.StandAnimations;
 import net.hydra.jojomod.client.models.stand.animations.StandIdles;
 import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;

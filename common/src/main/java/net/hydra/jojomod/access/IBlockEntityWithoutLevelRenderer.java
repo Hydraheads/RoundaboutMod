@@ -2,5 +2,5 @@ package net.hydra.jojomod.access;
 
 public interface IBlockEntityWithoutLevelRenderer {
 
-    void roundabout$bakeHarpoonModel();
+    void sba$bakeHarpoonModel();
 }

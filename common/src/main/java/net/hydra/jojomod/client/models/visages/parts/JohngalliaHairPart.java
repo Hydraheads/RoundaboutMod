@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages.parts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.powers.TimeStop;
@@ -54,7 +54,7 @@ public class JohngalliaHairPart extends PsuedoHierarchicalModel {
 
     }
     public ResourceLocation getTextureLocation(String path){
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_hair/"+path+".png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/player_hair/"+path+".png");
     }
 
     public void render(Entity context, PoseStack poseStack, MultiBufferSource bufferSource, int light, String path) {

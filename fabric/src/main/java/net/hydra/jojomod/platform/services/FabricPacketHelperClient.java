@@ -1,7 +1,7 @@
 package net.hydra.jojomod.platform.services;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityServer;
 import net.hydra.jojomod.client.gui.BlackSabbathPlayerInventoryMenu;

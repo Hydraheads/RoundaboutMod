@@ -2,7 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.item.LuckyLipstickItem;
 import net.hydra.jojomod.item.MemoryChessPieceItem;
-import net.hydra.jojomod.item.RoundaboutArrowItem;
+import net.hydra.jojomod.item.SBAArrowItem;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.EnchantedBookItem;
@@ -21,12 +21,12 @@ public abstract class UnenchantAnvilMenu extends ItemCombinerMenu {
     private final DataSlot cost = DataSlot.standalone();
 
     @Inject(method = "createResult()V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$spawnChildFromBreeding(CallbackInfo ci) {
+    private void sba$spawnChildFromBreeding(CallbackInfo ci) {
         ItemStack itemstack = this.inputSlots.getItem(0);
         if (!itemstack.isEmpty()) {
             ItemStack itemstack2 = this.inputSlots.getItem(1);
             if (!itemstack2.isEmpty()) {
-                if (itemstack.getItem() instanceof RoundaboutArrowItem && itemstack2.getItem() instanceof EnchantedBookItem) {
+                if (itemstack.getItem() instanceof SBAArrowItem && itemstack2.getItem() instanceof EnchantedBookItem) {
                     this.resultSlots.setItem(0, ItemStack.EMPTY);
                     this.cost.set(0);
                     ci.cancel();

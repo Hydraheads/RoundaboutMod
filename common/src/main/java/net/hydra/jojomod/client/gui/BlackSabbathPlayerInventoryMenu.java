@@ -25,7 +25,7 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
         super(null, cid);
         this.owner = $$2;
         IPlayerEntity play = ((IPlayerEntity)this.owner);
-        BlackSabbathPlayerInventory bsinv = play.roundabout$getBlckSabbathPlayerInventory();
+        BlackSabbathPlayerInventory bsinv = play.sba$getBlckSabbathPlayerInventory();
         this.addSlot(new Slot(bsinv, 0, 70, 36) {
             @Override
             public int getMaxStackSize() {
@@ -34,7 +34,7 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
 
             @Override
             public boolean mayPlace(ItemStack $$0) {
-                    StandPowers pbs = ((StandUser)owner).roundabout$getStandPowers();
+                    StandPowers pbs = ((StandUser)owner).sba$getStandPowers();
                     if(pbs instanceof PowersBlackSabbath bs && bs.moveMode == 3){
                         return false;
                     }
@@ -78,16 +78,16 @@ public class BlackSabbathPlayerInventoryMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player $$0) {
-        if(((StandUser)$$0).roundabout$getStand() instanceof BlackSabbathEntity be){
-            if(be != null && !be.isRemoved() && be.isAlive() && be.distanceTo($$0) < 2 && ((StandUser)$$0).roundabout$getStandPowers() instanceof PowersBlackSabbath p && p.moveMode == 1){
+        if(((StandUser)$$0).sba$getStand() instanceof BlackSabbathEntity be){
+            if(be != null && !be.isRemoved() && be.isAlive() && be.distanceTo($$0) < 2 && ((StandUser)$$0).sba$getStandPowers() instanceof PowersBlackSabbath p && p.moveMode == 1){
                 StandUser user = ((StandUser) $$0);
-                StandPowers powers = user.roundabout$getStandPowers();
+                StandPowers powers = user.sba$getStandPowers();
                 if(powers instanceof PowersBlackSabbath pb && pb.checkIfBposIsInDark(pb.self.position())) {
                     return true;
                 }
             } else {
                 StandUser user = ((StandUser) $$0);
-                StandPowers powers = user.roundabout$getStandPowers();
+                StandPowers powers = user.sba$getStandPowers();
                 if(powers instanceof PowersBlackSabbath pb){
                     pb.syncClose();
                     return false;

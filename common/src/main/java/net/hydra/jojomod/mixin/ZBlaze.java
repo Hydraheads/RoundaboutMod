@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Blaze.class)
 public abstract class ZBlaze extends Monster {
     @Inject(method = "aiStep", at = @At("HEAD"), cancellable = true)
-    private void roundabout$aiStepBlaze(CallbackInfo ci) {
+    private void sba$aiStepBlaze(CallbackInfo ci) {
         //Blazes only emit sounds and particles in the same dimensional layer
         if (PowerTypes.isExistentiallyElsewhere(this) ||
                 (this.level().isClientSide() && PowerTypes.isInADifferentExistenceNoTE(this, ClientUtil.getPlayer()))){

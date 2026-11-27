@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class WorthyArrowItem extends RoundaboutArrowItem {
+public class WorthyArrowItem extends SBAArrowItem {
     public WorthyArrowItem(Properties $$0) {
         super($$0);
     }
@@ -19,10 +19,10 @@ public class WorthyArrowItem extends RoundaboutArrowItem {
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
         if (ConfigManager.getClientConfig().showCreativeTextOnWorthinessArrow) {
             $$2.add(
-                    Component.translatable("item.roundabout.worthy_arrow.info").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.ITALIC)
+                    Component.translatable("item.sba.worthy_arrow.info").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.ITALIC)
             );
             $$2.add(
-                    Component.translatable("item.roundabout.worthy_arrow.info_2").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.ITALIC)
+                    Component.translatable("item.sba.worthy_arrow.info_2").withStyle(ChatFormatting.AQUA).withStyle(ChatFormatting.ITALIC)
             );
         }
     }

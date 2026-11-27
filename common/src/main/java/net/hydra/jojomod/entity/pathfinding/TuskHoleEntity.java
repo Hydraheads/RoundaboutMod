@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.pathfinding;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -94,7 +94,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     @Override
     public boolean doHurtTarget(Entity target) {
         LivingEntity user = this.getUser();
-        if (user != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT) {
+        if (user != null && ((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersTusk PT) {
 
             if (target.hurt(ModDamageTypes.of(this.level(),ModDamageTypes.PENETRATING_STAND,this,this.getUser()),PT.getHoleDamage(target) ) ){
                 this.level().playSound(null,this.blockPosition(),ModSounds.TUSK_HOLE_IMPACT_EVENT,SoundSource.PLAYERS,1F,0.9F+((float) Math.random()*0.2F));
@@ -154,7 +154,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
             soundDelay = 0;
         }
         super.setTarget($$0);
-        if ($$0 != null && this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT && PT.getAct() == 2) {
+        if ($$0 != null && this.getUser() != null && ((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersTusk PT && PT.getAct() == 2) {
             if (isClinging()) {
                 this.setClinging(Direction.DOWN);
             }
@@ -189,12 +189,12 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                 }
                 if (!this.isPiloted()) {
                     this.setDeltaMovement(Vec3.ZERO);
-                    ((IGravityEntity) this).roundabout$setGravityDirection(getClingDirection().getOpposite());
+                    ((IGravityEntity) this).sba$setGravityDirection(getClingDirection().getOpposite());
                 } else {
-                    ((IGravityEntity) this).roundabout$setGravityDirection(Direction.DOWN);
+                    ((IGravityEntity) this).sba$setGravityDirection(Direction.DOWN);
                 }
             } else {
-                ((IGravityEntity) this).roundabout$setGravityDirection(Direction.DOWN);
+                ((IGravityEntity) this).sba$setGravityDirection(Direction.DOWN);
             }
 
             if (isPiloted()) {
@@ -219,7 +219,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
         }
 
         if (this.getUser() != null) { // doubles lifespan during act 3
-            if (((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (((StandUser)this.getUser()).sba$getStandPowers() instanceof PowersTusk PT) {
                 if (PT.getAct() == 3 && !this.isVortex()) {
                     if (!this.level().isClientSide() && this.tickCount % 2 == 0) {
                         this.lifeSpan ++;
@@ -307,7 +307,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                 }
             }
         } else {
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersTusk) {
+            if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersTusk) {
                 Vec3 vec3 = this.getDeltaMovement();
                 double x = this.getX() + vec3.x;
                 double y = this.getY();
@@ -332,7 +332,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
                     d = Direction.UP;
                 } */
                 Direction d = this.getClingDirection();
-             //   Roundabout.LOGGER.info("d: "+ d);
+             //   SBA.LOGGER.info("d: "+ d);
                 int dir = switch (d) {
                     case DOWN -> 0;
                     case UP -> 1;
@@ -366,7 +366,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     public boolean isControlledByLocalInstance() {
         LivingEntity user = this.getUser();
         if (user != null) {
-            Entity ent = ((StandUser)user).roundabout$getStandPowers().getPilotingStand();
+            Entity ent = ((StandUser)user).sba$getStandPowers().getPilotingStand();
             if (ent != null && ent.is(this)) {
                 return (user instanceof Player $$0 && $$0.isLocalPlayer());
             }
@@ -387,7 +387,7 @@ public class TuskHoleEntity extends GroundPathfindingStandAttackEntity {
     private boolean isPiloted() {
         if (this.getUser() instanceof Player P) {
             StandUser SU = (StandUser) this.getUser();
-            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT && PT.isPiloting() && PT.getPilotingStand().equals(this)) {
+            if (SU.sba$getStandPowers() instanceof PowersTusk PT && PT.isPiloting() && PT.getPilotingStand().equals(this)) {
                 return true;
             }
         }
@@ -443,7 +443,7 @@ class TuskHoleAttackGoal extends MeleeAttackGoal {
         if (this.mob instanceof GroundPathfindingStandAttackEntity GPSA) {
             if (GPSA.getUser() != null) {
                 StandUser standUser = (StandUser) GPSA.getUser();
-                if (standUser.roundabout$getStandPowers() instanceof PowersTusk PT) {
+                if (standUser.sba$getStandPowers() instanceof PowersTusk PT) {
                     if (PT.getAct() == 3) {
                         return true;
                     }

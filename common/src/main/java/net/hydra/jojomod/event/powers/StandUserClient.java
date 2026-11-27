@@ -8,27 +8,27 @@ import org.jetbrains.annotations.Nullable;
 public interface StandUserClient {
     /**This is for EVERY client to individually save sounds and other client variables on entities clientside.
      * It's how we cancel out barrage sounds on a per entity basis.*/
-    void roundabout$clientQueSound(byte soundChoice, boolean isVoice);
-    void roundabout$clientPlaySound();
-    void roundabout$clientPlaySoundIfNoneActive(byte soundChoice);
+    void sba$clientQueSound(byte soundChoice, boolean isVoice);
+    void sba$clientPlaySound();
+    void sba$clientPlaySoundIfNoneActive(byte soundChoice);
 
-    void roundabout$clientQueSoundCanceling(byte soundChoice);
+    void sba$clientQueSoundCanceling(byte soundChoice);
 
-    void roundabout$clientSoundCancel();
+    void sba$clientSoundCancel();
 
 
-    void roundabout$setRoundaboutRenderChest(@Nullable ItemStack chest);
-    void roundabout$setRoundaboutRenderLegs(@Nullable ItemStack legs);
+    void sba$setSBARenderChest(@Nullable ItemStack chest);
+    void sba$setSBARenderLegs(@Nullable ItemStack legs);
 
-    void roundabout$setRoundaboutRenderBoots(@Nullable ItemStack boots);
-    void roundabout$setRoundaboutRenderHead(@Nullable ItemStack head);
-    void roundabout$setRoundaboutRenderMainHand(@Nullable ItemStack main);
-    void roundabout$setRoundaboutRenderOffHand(@Nullable ItemStack main);
+    void sba$setSBARenderBoots(@Nullable ItemStack boots);
+    void sba$setSBARenderHead(@Nullable ItemStack head);
+    void sba$setSBARenderMainHand(@Nullable ItemStack main);
+    void sba$setSBARenderOffHand(@Nullable ItemStack main);
 
-    @Nullable ItemStack roundabout$getRoundaboutRenderChest();
-    @Nullable ItemStack roundabout$getRoundaboutRenderLegs();
-    @Nullable ItemStack roundabout$getRoundaboutRenderBoots();
-    @Nullable ItemStack roundabout$getRoundaboutRenderHead();
-    @Nullable ItemStack roundabout$getRoundaboutRenderMainHand();
-    @Nullable ItemStack roundabout$getRoundaboutRenderOffHand();
+    @Nullable ItemStack sba$getSBARenderChest();
+    @Nullable ItemStack sba$getSBARenderLegs();
+    @Nullable ItemStack sba$getSBARenderBoots();
+    @Nullable ItemStack sba$getSBARenderHead();
+    @Nullable ItemStack sba$getSBARenderMainHand();
+    @Nullable ItemStack sba$getSBARenderOffHand();
 }

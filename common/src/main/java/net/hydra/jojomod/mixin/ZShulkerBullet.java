@@ -36,7 +36,7 @@ public abstract class ZShulkerBullet extends Entity {
         if (finalTarget != null){
             if (PowerTypes.isInADifferentExistenceNoTE(finalTarget,this)){
                 if (finalTarget instanceof LivingEntity LE &&
-                        ((StandUser)LE).roundabout$getStandPowers() instanceof
+                        ((StandUser)LE).sba$getStandPowers() instanceof
                         PowersKingCrimson pkc && pkc.timeEraseActive
                 && pkc.activeClone != null){
                     this.finalTarget = pkc.activeClone;

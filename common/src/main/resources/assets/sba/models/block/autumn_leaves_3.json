@@ -1,0 +1,6 @@
+{
+  "parent": "sba:block/autumn_leaves_base",
+  "textures": {
+    "texture": "sba:block/autumn_leaves_3"
+  }
+}

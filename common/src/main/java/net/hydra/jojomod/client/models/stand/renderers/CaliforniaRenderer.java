@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.CaliforniaKingBedModel;
 import net.hydra.jojomod.client.models.stand.CinderellaModel;
@@ -16,17 +16,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class CaliforniaRenderer extends StandRenderer<CaliforniaKingBedEntity> {
 
-    private static final ResourceLocation PART_8_SKIN = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/california_king_bed/base.png");
-    private static final ResourceLocation SUNSHINE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/sunshine.png");
-    private static final ResourceLocation EGYPT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/egypt.png");
-    private static final ResourceLocation SPOOKY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/spooky.png");
-    private static final ResourceLocation EXPERIENCE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/experience.png");
-    private static final ResourceLocation BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/blue.png");
-    private static final ResourceLocation SPINE_ART = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/spine_art.png");
-    private static final ResourceLocation HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/heaven.png");
-    private static final ResourceLocation COVER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/cover.png");
-    private static final ResourceLocation CARD_SUIT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/card_suit.png");
-    private static final ResourceLocation SLEEPY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/sleepy.png");
+    private static final ResourceLocation PART_8_SKIN = new ResourceLocation(SBA.MOD_ID, "textures/stand/california_king_bed/base.png");
+    private static final ResourceLocation SUNSHINE = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/sunshine.png");
+    private static final ResourceLocation EGYPT = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/egypt.png");
+    private static final ResourceLocation SPOOKY = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/spooky.png");
+    private static final ResourceLocation EXPERIENCE = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/experience.png");
+    private static final ResourceLocation BLUE = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/blue.png");
+    private static final ResourceLocation SPINE_ART = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/spine_art.png");
+    private static final ResourceLocation HEAVEN = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/heaven.png");
+    private static final ResourceLocation COVER = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/cover.png");
+    private static final ResourceLocation CARD_SUIT = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/card_suit.png");
+    private static final ResourceLocation SLEEPY = new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/sleepy.png");
 
     public CaliforniaRenderer(EntityRendererProvider.Context context) {
         super(context, new CaliforniaKingBedModel<>(context.bakeLayer(ModEntityRendererClient.CALIFORNIA_LAYER)), 0f);

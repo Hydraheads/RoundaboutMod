@@ -54,7 +54,7 @@ public class PlayerModifiedModel<T extends JojoNPCPlayer> extends PlayerLikeMode
             EntityRenderDispatcher $$7 = Minecraft.getInstance().getEntityRenderDispatcher();
             EntityRenderer<? super AbstractClientPlayer> ER = $$7.getRenderer(host);
             if (ER instanceof PlayerRenderer PR) {
-                return ((IPlayerModel)PR.getModel()).roundabout$getSlim();
+                return ((IPlayerModel)PR.getModel()).sba$getSlim();
             }
         }
         return true;

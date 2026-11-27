@@ -22,12 +22,12 @@ public class WorthyVillagerMakeLove {
 
     /**Stand User reproduction*/
     @Inject(method = "breed", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$spawnChildFromBreeding(ServerLevel $$0, Villager $$1, Villager $$2, CallbackInfoReturnable<Optional<Villager>> cir) {
+    private void sba$spawnChildFromBreeding(ServerLevel $$0, Villager $$1, Villager $$2, CallbackInfoReturnable<Optional<Villager>> cir) {
         if ($$1 != null && $$2 != null) {
-            boolean partnerUser = (!((StandUser) $$1).roundabout$getStandDisc().isEmpty());
-            boolean partnerWorthy = ((IMob) $$1).roundabout$isWorthy();
-            boolean thisUser = (!((StandUser) $$2).roundabout$getStandDisc().isEmpty());
-            boolean thisWorthy = ((IMob) $$2).roundabout$isWorthy();
+            boolean partnerUser = (!((StandUser) $$1).sba$getStandDisc().isEmpty());
+            boolean partnerWorthy = ((IMob) $$1).sba$isWorthy();
+            boolean thisUser = (!((StandUser) $$2).sba$getStandDisc().isEmpty());
+            boolean thisWorthy = ((IMob) $$2).sba$isWorthy();
             if (partnerWorthy || partnerUser || thisUser || thisWorthy) {
                 Villager villager = $$1.getBreedOffspring($$0, $$2);
                 if (villager == null) {
@@ -47,14 +47,14 @@ public class WorthyVillagerMakeLove {
                     }
                     RandomSource $$5 = $$0.getRandom();
                     if ($$5.nextFloat() < UserOdds && !ModItems.getPoolForMob(villager).isEmpty()) {
-                        ((IMob) villager).roundabout$setWorthy(true);
-                        ((IMob) villager).roundabout$setIsNaturalStandUser(true);
-                        ((IMob)$$2).roundabout$setIsBred(true);
+                        ((IMob) villager).sba$setWorthy(true);
+                        ((IMob) villager).sba$setIsNaturalStandUser(true);
+                        ((IMob)$$2).sba$setIsBred(true);
                         int index = (int) (Math.floor(Math.random() * ModItems.getPoolForMob(villager).size()));
                         ItemStack stack = ModItems.getPoolForMob(villager).get(index).getDefaultInstance();
                         if (!stack.isEmpty() && stack.getItem() instanceof StandDiscItem SD) {
-                            ((StandUser) villager).roundabout$setStandDisc(stack);
-                            ((StandUser)villager).roundabout$getStandPowers().rollSkin();
+                            ((StandUser) villager).sba$setStandDisc(stack);
+                            ((StandUser)villager).sba$getStandPowers().rollSkin();
                         }
                     } else {
                         double WorthyOdds = MainUtil.getWorthyOdds(villager);
@@ -65,10 +65,10 @@ public class WorthyVillagerMakeLove {
                             WorthyOdds += MainUtil.getWorthyBreedBonus(villager);
                         }
                         if ($$5.nextFloat() < WorthyOdds) {
-                            ((IMob) villager).roundabout$setWorthy(true);
+                            ((IMob) villager).sba$setWorthy(true);
                         }
-                        ((IMob) villager).roundabout$setIsNaturalStandUser(false);
-                        ((StandUser) villager).roundabout$setStandDisc(ItemStack.EMPTY);
+                        ((IMob) villager).sba$setIsNaturalStandUser(false);
+                        ((StandUser) villager).sba$setStandDisc(ItemStack.EMPTY);
                     }
 
 

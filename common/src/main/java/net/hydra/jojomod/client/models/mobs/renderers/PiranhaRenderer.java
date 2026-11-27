@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.mobs.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.mobs.PiranhaModel;
 import net.hydra.jojomod.client.models.mobs.layers.PiranhaEyesLayer;
@@ -23,7 +23,7 @@ public class PiranhaRenderer<T extends Piranha> extends MobRenderer<T, PiranhaMo
 
     @Override
     public  ResourceLocation getTextureLocation(T Piranha) {
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/entity/piranha/piranha.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/entity/piranha/piranha.png");
     }
 
     @Override

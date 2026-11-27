@@ -76,9 +76,9 @@ public abstract class DimensionResourceKeyD4CForge {
 
     @Shadow @Nullable protected abstract ServerLevel getServerLevel();
     @Inject(method = "getGameInformation", at= @At(value = "HEAD"), cancellable = true)
-    private void roundabout$spoofDimensionName(CallbackInfoReturnable<List<String>> cir)
+    private void sba$spoofDimensionName(CallbackInfoReturnable<List<String>> cir)
     {
-        if (this.minecraft.level != null && this.minecraft.level.dimension().location().toString().startsWith("roundabout:d4c-")) {
+        if (this.minecraft.level != null && this.minecraft.level.dimension().location().toString().startsWith("sba:d4c-")) {
             IntegratedServer integratedserver = this.minecraft.getSingleplayerServer();
             Connection connection = this.minecraft.getConnection().getConnection();
             float f = connection.getAverageSentPackets();

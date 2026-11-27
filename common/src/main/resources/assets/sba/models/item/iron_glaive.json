@@ -1,0 +1,6 @@
+{
+  "parent": "sba:item/glaive_item",
+  "textures": {
+    "layer0": "sba:item/iron_glaive"
+  }
+}

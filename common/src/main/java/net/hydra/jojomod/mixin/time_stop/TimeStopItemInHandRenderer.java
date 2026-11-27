@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ItemInHandRenderer.class, priority = 100)
 public class TimeStopItemInHandRenderer {
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$HeldItems2(CallbackInfo ci) {
+    public void sba$HeldItems2(CallbackInfo ci) {
         LocalPlayer clientPlayerEntity2 = this.minecraft.player;
         if (clientPlayerEntity2 != null && ((TimeStop) clientPlayerEntity2.level()).CanTimeStopEntity(clientPlayerEntity2)) {
             mainHandHeight = oMainHandHeight;

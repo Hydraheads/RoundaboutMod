@@ -3,7 +3,7 @@ package net.hydra.jojomod.mixin.achtung;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -42,17 +42,17 @@ public abstract class AchtungCapeLayer extends RenderLayer<AbstractClientPlayer,
 
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V",at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$cancelCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+    private void sba$cancelCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
         StandUser SU = (StandUser) $$3;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
             if (!PowerTypes.hasStandActive($$3)) {
-                if (SU.roundabout$getIdlePos() == (byte)2) {
+                if (SU.sba$getIdlePos() == (byte)2) {
                     ci.cancel();
                     return;
                 }
             }
         }
-        if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
+        if (SU.sba$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
             if (PCB.invincibleState) {
                     ci.cancel();
                     return;
@@ -60,7 +60,7 @@ public abstract class AchtungCapeLayer extends RenderLayer<AbstractClientPlayer,
         }
         ItemStack visage;
         IPlayerEntity pl = ((IPlayerEntity) $$3);
-        visage = pl.roundabout$getMaskSlot();
+        visage = pl.sba$getMaskSlot();
         if (visage != null && !visage.isEmpty()) {
             if (visage.getItem() instanceof MaskItem MI) {
                 VisageData vd = MI.visageData.generateVisageData($$3);
@@ -97,7 +97,7 @@ public abstract class AchtungCapeLayer extends RenderLayer<AbstractClientPlayer,
                             $$0.mulPose(Axis.ZP.rotationDegrees($$19 / 2.0F));
                             $$0.mulPose(Axis.YP.rotationDegrees(180.0F - $$19 / 2.0F));
                             VertexConsumer $$21 = $$1.getBuffer(RenderType.entityTranslucent(
-                                    new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_capes/"+vd.getSkinPath()+".png")
+                                    new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/player_capes/"+vd.getSkinPath()+".png")
                             ));
                             this.getParentModel().renderCloak($$0, $$21, $$2, OverlayTexture.NO_OVERLAY);
                             $$0.popPose();
@@ -111,7 +111,7 @@ public abstract class AchtungCapeLayer extends RenderLayer<AbstractClientPlayer,
     /**Fade out cape*/
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V", at = @At(value = "HEAD"),
             cancellable = true)
-    private void roundabout$renderCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
+    private void sba$renderCape(PoseStack $$0, MultiBufferSource $$1, int $$2, AbstractClientPlayer $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci) {
 
         if ($$3 != null) {
             ClientUtil.setThrowFadeToTheEther(ClientUtil.getThrowFadePercent($$3, $$4));

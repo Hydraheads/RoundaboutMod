@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.data_and_structures;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.ILootPool;
 import net.hydra.jojomod.access.ILootTable;
 import net.hydra.jojomod.block.ModBlocks;
@@ -37,29 +37,29 @@ public abstract class LootPoolMixin implements ILootPool {
     public LootPoolEntryContainer[] entries;
 
     @Override
-    public int roundabout$getSize() {
+    public int sba$getSize() {
         return this.entries.length;
     }
 
 
     @Inject(method = "addRandomItem", at = @At(value = "INVOKE", target = "Ljava/util/List;size()I"),locals = LocalCapture.CAPTURE_FAILHARD)
-    private void roundabout$addLootEntry(Consumer<ItemStack> consumer, LootContext context, CallbackInfo ci, RandomSource randomSource, List<LootPoolEntry> list) {
+    private void sba$addLootEntry(Consumer<ItemStack> consumer, LootContext context, CallbackInfo ci, RandomSource randomSource, List<LootPoolEntry> list) {
 
-        if (roundabout$doesLootTableContain(context.getLevel(),BuiltInLootTables.FISHING_TREASURE)) {
+        if (sba$doesLootTableContain(context.getLevel(),BuiltInLootTables.FISHING_TREASURE)) {
             LootItem.lootTableItem(ModBlocks.EQUIPPABLE_STONE_MASK_BLOCK).setWeight(1).build().expand(context, list::add);
         }
     }
 
     @Inject(method = "addRandomItem",at= @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I",shift = At.Shift.BEFORE),locals = LocalCapture.CAPTURE_FAILHARD)
-    private void roundabout$addLootEntryToInt(Consumer<ItemStack> $$0, LootContext $$1, CallbackInfo ci, RandomSource $$2, List<LootPoolEntry> $$3, MutableInt $$4) {
-        if (roundabout$doesLootTableContain($$1.getLevel(),BuiltInLootTables.FISHING_TREASURE)) {
+    private void sba$addLootEntryToInt(Consumer<ItemStack> $$0, LootContext $$1, CallbackInfo ci, RandomSource $$2, List<LootPoolEntry> $$3, MutableInt $$4) {
+        if (sba$doesLootTableContain($$1.getLevel(),BuiltInLootTables.FISHING_TREASURE)) {
             $$4.add(1); // this must be the same value as above
         }
     }
 
 
     @Unique
-    private boolean roundabout$doesLootTableContain(Level level, ResourceLocation location) {
-        return ((ILootTable)level.getServer().getLootData().getLootTable(location)).roundabout$getPools().contains(this);
+    private boolean sba$doesLootTableContain(Level level, ResourceLocation location) {
+        return ((ILootTable)level.getServer().getLootData().getLootTable(location)).sba$getPools().contains(this);
     }
 }

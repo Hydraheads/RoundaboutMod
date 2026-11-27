@@ -18,16 +18,16 @@ public final class DiverDownDisguiseRenderer extends AbstractDisguiseRenderer {
     @Override
     protected boolean shouldShowArmor(LivingEntity entity) {
         if (entity instanceof StandUser su) {
-            StandPowers sp = su.roundabout$getStandPowers();
+            StandPowers sp = su.sba$getStandPowers();
             if (sp instanceof PowersDiverDown dd) {
                 return dd.shouldShowDisguiseArmor();
             }
-            if (su.roundabout$getDiverUser() != null) {
-                return su.roundabout$getDiverUser().shouldShowDisguiseArmor();
+            if (su.sba$getDiverUser() != null) {
+                return su.sba$getDiverUser().shouldShowDisguiseArmor();
             }
         }
         if (Minecraft.getInstance().player instanceof StandUser su) {
-            StandPowers sp = su.roundabout$getStandPowers();
+            StandPowers sp = su.sba$getStandPowers();
             if (sp instanceof PowersDiverDown dd) {
                 return dd.shouldShowDisguiseArmor();
             }

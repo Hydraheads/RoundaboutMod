@@ -1,0 +1,33 @@
+{
+  "variants": {
+    "in_fog=false": {
+      "model": "sba:block/fog_block_invisible"
+    },
+    "in_fog=true,facing=down": {
+      "model": "sba:block/fog_diorite_coating",
+      "x": 180
+    },
+    "in_fog=true,facing=east": {
+      "model": "sba:block/fog_diorite_coating",
+      "x": 270,
+      "y": 270
+    },
+    "in_fog=true,facing=north": {
+      "model": "sba:block/fog_diorite_coating",
+      "x": 270,
+      "y": 180
+    },
+    "in_fog=true,facing=south": {
+      "model": "sba:block/fog_diorite_coating",
+      "x": 270
+    },
+    "in_fog=true,facing=up": {
+      "model": "sba:block/fog_diorite_coating"
+    },
+    "in_fog=true,facing=west": {
+      "model": "sba:block/fog_diorite_coating",
+      "x": 270,
+      "y": 90
+    }
+  }
+}

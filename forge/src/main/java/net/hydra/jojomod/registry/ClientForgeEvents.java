@@ -1,6 +1,6 @@
 package net.hydra.jojomod.registry;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.*;
 import net.hydra.jojomod.client.*;
 import net.hydra.jojomod.client.gui.LyinEyesInventoryScreen;
@@ -59,7 +59,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-@Mod.EventBusSubscriber(modid = Roundabout.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = SBA.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientForgeEvents {
 
     @SubscribeEvent
@@ -179,7 +179,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.SC_MOUNT.get(), NoRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_HARPOON.get(), HarpoonRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLADED_BOWLER_HAT.get(), BladedBowlerHatRenderer::new);
-        event.registerEntityRenderer(ForgeEntities.ROUNDABOUT_BULLET_ENTITY.get(), RoundaboutBulletEntityRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.SBA_BULLET_ENTITY.get(), SBABulletEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BAD_COMPANY_BULLET_ENTITY.get(), BadCompanyBulletEntityRenderer::new);
         event.registerEntityRenderer(ForgeEntities.THROWN_KNIFE.get(), KnifeRenderer::new);
         event.registerEntityRenderer(ForgeEntities.BLOCK_WALL.get(), BlockWallEntityRenderer::new);
@@ -418,7 +418,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.HAND_SLIM_BLOCK_LAYER, HandRenderer::createHandSlimLayer);
         event.registerLayerDefinition(ModEntityRendererClient.BLADED_BOWLER_HAT_LAYER, BladedBowlerHatModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.TUSK_HOLE_LAYER, TuskHoleModel::createBodyLayer);
-        event.registerLayerDefinition(ModEntityRendererClient.ROUNDABOUT_BULLET_LAYER, RoundaboutBulletModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.SBA_BULLET_LAYER, SBABulletModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.CROSSFIRE_LAYER, CrossfireHurricaneModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.CROSSFIRE_FIRESTORM_LAYER, CrossfireFirestormModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.LIFE_DETECTOR, LifeTrackerModel::createBodyLayer);
@@ -747,7 +747,7 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void modifyWhitesnakeBakedModels(ModelEvent.ModifyBakingResult event) {
         event.getModels().replaceAll((id, model) -> {
-            if (!id.getNamespace().equals(Roundabout.MOD_ID)) return model;
+            if (!id.getNamespace().equals(SBA.MOD_ID)) return model;
             String path = id.getPath();
             return path.equals("hallucinatory_acid") || path.equals("hallucinatory_acid_wall")
                     ? new HallucinationAcidBakedModel(model) : model;

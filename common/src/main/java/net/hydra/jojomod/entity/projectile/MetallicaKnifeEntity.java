@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.stand.powers.PowersMetallica;
 import net.hydra.jojomod.util.MainUtil;
@@ -179,7 +179,7 @@ public class MetallicaKnifeEntity extends KnifeEntity {
         Entity owner = this.getOwner();
 
         if (target instanceof LivingEntity livingTarget && owner instanceof LivingEntity) {
-            ResourceLocation bleedLoc = new ResourceLocation(Roundabout.MOD_ID, "bleed");
+            ResourceLocation bleedLoc = new ResourceLocation(SBA.MOD_ID, "bleed");
             if (BuiltInRegistries.MOB_EFFECT.containsKey(bleedLoc)) {
                 livingTarget.addEffect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.get(bleedLoc), 100, 0), owner);
             }

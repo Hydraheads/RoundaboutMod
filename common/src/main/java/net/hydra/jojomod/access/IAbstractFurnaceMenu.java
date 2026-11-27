@@ -4,5 +4,5 @@ import net.minecraft.world.Container;
 
 
 public interface IAbstractFurnaceMenu {
-    Container roundabout$getContainer();
+    Container sba$getContainer();
 }

@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.stand.FollowingStandEntity;
 import net.hydra.jojomod.entity.stand.MagiciansRedEntity;
 import net.hydra.jojomod.client.models.stand.StandModel;
@@ -26,12 +26,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 public class MagiciansRedSpinEffectLayer<T extends FollowingStandEntity> extends RenderLayer<T, StandModel<T>> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/orange_flame_spin.png");
-    public static final ResourceLocation TEXTURE_BLUE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/blue_flame_spin.png");
-    public static final ResourceLocation TEXTURE_PURPLE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/purple_flame_spin.png");
-    public static final ResourceLocation TEXTURE_GREEN = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/green_flame_spin.png");
-    public static final ResourceLocation TEXTURE_DREAD = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/dread_flame_spin.png");
-    public static final ResourceLocation TEXTURE_CREAM = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/cream_flame_spin.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/orange_flame_spin.png");
+    public static final ResourceLocation TEXTURE_BLUE = new ResourceLocation(SBA.MOD_ID, "textures/entity/blue_flame_spin.png");
+    public static final ResourceLocation TEXTURE_PURPLE = new ResourceLocation(SBA.MOD_ID, "textures/entity/purple_flame_spin.png");
+    public static final ResourceLocation TEXTURE_GREEN = new ResourceLocation(SBA.MOD_ID, "textures/entity/green_flame_spin.png");
+    public static final ResourceLocation TEXTURE_DREAD = new ResourceLocation(SBA.MOD_ID, "textures/entity/dread_flame_spin.png");
+    public static final ResourceLocation TEXTURE_CREAM = new ResourceLocation(SBA.MOD_ID, "textures/entity/cream_flame_spin.png");
     public static final String BOX = "box";
     private final ModelPart box;
 
@@ -68,7 +68,7 @@ public class MagiciansRedSpinEffectLayer<T extends FollowingStandEntity> extends
         LivingEntity user = $$3.getUser();
         if (user != null) {
             StandUser standUser = (StandUser) user;
-            if (standUser.roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            if (standUser.sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 if ($$3.getOffsetType() == OffsetIndex.LOOSE && !$$3.getDisplay()) {
                     VertexConsumer $$10 = $$1.getBuffer(RenderType.entityCutoutNoCull(getMRTextureLocation((MagiciansRedEntity) $$3)));
 

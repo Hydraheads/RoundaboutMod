@@ -115,21 +115,21 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
     @Override
     @Unique
-    public ViewArea roundabout$getViewArea(){
+    public ViewArea sba$getViewArea(){
         return viewArea;
     }
     @Unique
-    public boolean roundabout$recurse = false;
+    public boolean sba$recurse = false;
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
             at = @At(value = "HEAD"),
             cancellable = true)
-    private void roundabout$renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
+    private void sba$renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float partialTick, PoseStack stack, MultiBufferSource buffer, CallbackInfo ci) {
 
 
 
         if (entity != null){
             IEntityAndData entityAndData = ((IEntityAndData)entity);
-            entityAndData.roundabout$setExclusiveLayers(true);
+            entityAndData.sba$setExclusiveLayers(true);
 
             if (ClientUtil.timeSkipTicker > -1){
                 Player cli = ClientUtil.getPlayer();
@@ -146,9 +146,9 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                         ConfigManager.getClientConfig().generalSettings.timeEraseRedProjections){
                     if (entity instanceof LivingEntity lv){
                     Player pl = ClientUtil.getPlayer();
-                        if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                        if (pl != null && ((StandUser) pl).sba$getStandPowers()
                                 instanceof PowersKingCrimson pkc && pl.getId() != entity.getId() &&
-                                !(((StandUser)pl).roundabout$getStand() instanceof KingCrimsonEntity kce &&
+                                !(((StandUser)pl).sba$getStand() instanceof KingCrimsonEntity kce &&
                                 kce.getId() == entity.getId()) &&
                                 !(entity instanceof KingCrimsonEntity kce2 &&
                                         kce2.getUser() instanceof KingCrimsonCloneEntity kcce2 && kcce2.getPlayer() != null &&
@@ -189,7 +189,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                 }
                 if (MainUtil.isGravityNormal(entity)) {
                     Player pl = ClientUtil.getPlayer();
-                    if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                    if (pl != null && ((StandUser) pl).sba$getStandPowers()
                             instanceof PowersKingCrimson pkc && pl.getId() != entity.getId()) {
                         TimeSkipSnapshot skip = pkc.epitaph.get(entity.getId());
                         TimeSkipSnapshot renderSkip = skip;
@@ -286,7 +286,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                             }
 
                         }
-                        ((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
+                        ((IEntityAndData) entity).sba$setExclusiveLayers(false);
                         if (!ClientUtil.isPlayer(entity) && !(entity instanceof StandEntity SE &&
                                 SE.getUser() != null && SE.getUser().getId() == pl.getId())) {
                             if (!(entity.getPassengers() != null && entity.hasPassenger(ClientUtil.getPlayer()))) {
@@ -317,7 +317,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                     }
                 }
             }
-            if (!roundabout$recurse) {
+            if (!sba$recurse) {
 
                 if (entity.level().isClientSide()) {
                     if (entity instanceof CinderellaVisageDisplayEntity pre) {
@@ -340,22 +340,22 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                             }
                         }
                     } else if(entity instanceof Allay || entity instanceof Vex){
-                        Entity e = this.level.getEntity(((StandUser)entity).roundabout$getGrabberSabbath());
+                        Entity e = this.level.getEntity(((StandUser)entity).sba$getGrabberSabbath());
                         if(e instanceof BlackSabbathEntity bs) {
                             ClientUtil.preRenderGrabbedSoul(bs, null,entity, cameraX, cameraY, cameraZ, partialTick, stack, buffer);
                         }
                     }
                 }
                 //ci.cancel();
-                //((IEntityAndData) entity).roundabout$setExclusiveLayers(false);
+                //((IEntityAndData) entity).sba$setExclusiveLayers(false);
             }
         }
     }
     @Inject(method = "renderEntity(Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V",
             at = @At(value = "TAIL"))
-    private void roundabout$renderEntityEnd(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
+    private void sba$renderEntityEnd(Entity $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6, CallbackInfo ci) {
         if ($$0 != null){
-            ((IEntityAndData)$$0).roundabout$setExclusiveLayers(false);
+            ((IEntityAndData)$$0).sba$setExclusiveLayers(false);
         }
     }
 
@@ -481,7 +481,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
     @Inject(method = "renderClouds",
             at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
+    private void sba$renderClouds(PoseStack $$0, Matrix4f $$1, float $$2, double $$3, double $$4, double $$5, CallbackInfo ci) {
         if (ClientUtil.isUsingTimeErase || ClientUtil.isUnderRTZ()
                 || GERNetherIllusionHelper.active || GERNetherIllusionHelper.endActive) {
             ci.cancel();
@@ -489,7 +489,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     }
     @Inject(method = "renderEndSky",
             at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$renderEndSky(PoseStack $$0, CallbackInfo ci) {
+    private void sba$renderEndSky(PoseStack $$0, CallbackInfo ci) {
         if (ClientUtil.renderTimeErase() || ClientUtil.isUnderRTZ()) {
             ci.cancel();
         }
@@ -498,7 +498,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
         @Inject(method = "renderSky",
             at = @At(value = "RETURN"),cancellable = true)
-    private void roundabout$renderSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
+    private void sba$renderSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
 
 
         if (ClientUtil.renderTimeErase()) {
@@ -704,13 +704,13 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V", ordinal = 1, shift = At.Shift.BEFORE),
             cancellable = true)
-    private void roundabout$shouldOutline(PoseStack poseStack, float $$1, long $$2, boolean $$3,
+    private void sba$shouldOutline(PoseStack poseStack, float $$1, long $$2, boolean $$3,
                                           Camera camera, GameRenderer gameRenderer, LightTexture $$6,
                                           Matrix4f matrix4f, CallbackInfo ci) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null) {
             StandUser sus = ((StandUser) player);
-            StandPowers powers = sus.roundabout$getStandPowers();
+            StandPowers powers = sus.sba$getStandPowers();
             if (powers.isPiloting()) {
                 LivingEntity piloting = powers.getPilotingStand();
                 if (piloting != null && piloting.isAlive() && !piloting.isRemoved()) {
@@ -740,7 +740,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "INVOKE",target="Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal=0,shift = At.Shift.BEFORE))
-    private void roundabout$renderLevelGhostEntities(PoseStack $$0, float $$1, long $$2, boolean $$3,
+    private void sba$renderLevelGhostEntities(PoseStack $$0, float $$1, long $$2, boolean $$3,
                                             Camera $$4, GameRenderer $$5, LightTexture $$6,
                                             Matrix4f $$7, CallbackInfo ci) {
 
@@ -778,7 +778,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                             $$24 = $$20;
 
                         if (entity != null) {
-                            ArrayDeque<SavedSecond> secondQue = ((IEntityAndData) entity).roundabout$getSecondQue();
+                            ArrayDeque<SavedSecond> secondQue = ((IEntityAndData) entity).sba$getSecondQue();
                             if (secondQue != null && !secondQue.isEmpty()) {
                                 SavedSecond sec = secondQue.getLast();
 
@@ -803,7 +803,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                                 entity.setYRot(sec.rotationVec.y);
                                 entity.setYHeadRot(sec.headYRotation);
                                 entity.setPose(Pose.STANDING);
-                                ((IEntityAndData)entity).roundabout$setDeltaMovementRaw(Vec3.ZERO);
+                                ((IEntityAndData)entity).sba$setDeltaMovementRaw(Vec3.ZERO);
                                 entity.walkDist = 0;
 
                                 float bodyRot = 0;
@@ -826,7 +826,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                                 entity.setYRot(yrot);
                                 entity.setXRot(xrot);
                                 entity.setYHeadRot(headrot);
-                                ((IEntityAndData)entity).roundabout$setDeltaMovementRaw(deltamov);
+                                ((IEntityAndData)entity).sba$setDeltaMovementRaw(deltamov);
                                 entity.walkDist = walkdistance;
                                 if (entity instanceof LivingEntity LE){
                                     entity.setYBodyRot(bodyRot);
@@ -842,24 +842,24 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "HEAD"))
-    private void roundabout$renderLevelHead(PoseStack $$0, float $$1, long $$2, boolean $$3,
+    private void sba$renderLevelHead(PoseStack $$0, float $$1, long $$2, boolean $$3,
                                             Camera $$4, GameRenderer $$5, LightTexture $$6,
                                             Matrix4f $$7, CallbackInfo ci) {
 
         ClientUtil.mirrorCycles = 0;
 
-        roundabout$renderAnubisMemory($$1);
+        sba$renderAnubisMemory($$1);
     }
 
 
     @Unique
-    private void roundabout$renderAnubisMemory(float partial) {
+    private void sba$renderAnubisMemory(float partial) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             Player P = mc.player;
             StandUser SU = (StandUser) P;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA && P.getUUID().equals(PA.getSelf().getUUID()) ) {
-                if (SU.roundabout$getUniqueStandModeToggle() && PA.lastPartialTick != partial) {
+            if (SU.sba$getStandPowers() instanceof PowersAnubis PA && P.getUUID().equals(PA.getSelf().getUUID()) ) {
+                if (SU.sba$getUniqueStandModeToggle() && PA.lastPartialTick != partial) {
 
                     AnubisMemory memory = PA.getUsedMemory();
                     if (memory != null) {
@@ -901,7 +901,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endLastBatch()V",ordinal = 0,shift = At.Shift.BEFORE))
-    private void roundabout$renderLevelLead(PoseStack $$0, float partialTick, long $$2, boolean $$3,
+    private void sba$renderLevelLead(PoseStack $$0, float partialTick, long $$2, boolean $$3,
                                         Camera $$4, GameRenderer $$5, LightTexture $$6,
                                         Matrix4f matrix, CallbackInfo ci) {
 
@@ -909,7 +909,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
 
         if (player != null){
             if (ClientUtil.isUsingEpitaph()){
-                if (((StandUser)player).roundabout$getStandPowers()
+                if (((StandUser)player).sba$getStandPowers()
                         instanceof PowersKingCrimson pkc && pkc.isGuarding()){
                     TimeSkipSnapshot skip = pkc.epitaph.get(player.getId());
                     if (skip != null && !player.isPassenger()){
@@ -967,7 +967,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
                         player.yRotO = oldYawO;
 
                     }
-                    ((IEntityAndData)player).roundabout$setExclusiveLayers(false);
+                    ((IEntityAndData)player).sba$setExclusiveLayers(false);
                 }
             }
             if (player instanceof LocalPlayer lp && !ClientUtil.rtzAfterimages.isEmpty()) {
@@ -1039,16 +1039,16 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             double $$12 = $$9.z();
             MultiBufferSource.BufferSource $$20 = this.renderBuffers.bufferSource();
             //ClientUtil.renderFirstPersonModelParts($$4.getEntity(), $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20, rdbt$getPackedLightCoords(player,partialTick));
-            this.roundabout$renderStringOnPlayer(player, $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20);
+            this.sba$renderStringOnPlayer(player, $$10, $$11, $$12, partialTick, $$0, (MultiBufferSource) $$20);
         }
     }
 
     @Inject(method = "renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
             at = @At(value = "TAIL"))
-    private void roundabout$renderLevel(PoseStack $$0, float partialTick, long $$2, boolean $$3,
+    private void sba$renderLevel(PoseStack $$0, float partialTick, long $$2, boolean $$3,
                                         Camera $$4, GameRenderer $$5, LightTexture $$6,
                                         Matrix4f $$7, CallbackInfo ci) {
-        RenderCallbackRegistry.roundabout$LEVEL_RENDER_FINISH(partialTick);
+        RenderCallbackRegistry.sba$LEVEL_RENDER_FINISH(partialTick);
 
     }
     public final int rdbt$getPackedLightCoords(LivingEntity $$0, float $$1) {
@@ -1064,25 +1064,25 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     }
 
     @Unique
-    public void roundabout$renderStringOnPlayer(Player $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6) {
+    public void sba$renderStringOnPlayer(Player $$0, double $$1, double $$2, double $$3, float $$4, PoseStack $$5, MultiBufferSource $$6) {
 
-        Entity entity = ((StandUser) $$0).roundabout$getBoundTo();
+        Entity entity = ((StandUser) $$0).sba$getBoundTo();
         if (entity != null) {
-            ClientUtil.roundabout$renderBound($$0, $$4, $$5, $$6, entity, 1.93F);
+            ClientUtil.sba$renderBound($$0, $$4, $$5, $$6, entity, 1.93F);
         }
 
     }
     /**This is also where  red bind and other string-like moves will be rendered*/
 
     @Inject(method = "addParticleInternal(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)Lnet/minecraft/client/particle/Particle;", at=@At("HEAD"), cancellable = true)
-    private void roundabout$addParticle(ParticleOptions $$0, boolean $$1, boolean $$2, double $$3, double $$4, double $$5, double $$6, double $$7, double $$8, CallbackInfoReturnable<Particle> cir)
+    private void sba$addParticle(ParticleOptions $$0, boolean $$1, boolean $$2, double $$3, double $$4, double $$5, double $$6, double $$7, double $$8, CallbackInfoReturnable<Particle> cir)
     {
         if (Minecraft.getInstance().player == null)
             return;
     }
 
     @Inject(method = "renderChunkLayer", at = @At("HEAD"), cancellable = true)
-    private void roundabout$renderChunkLayer(RenderType renderType, PoseStack matrices, double cameraX, double cameraY, double cameraZ, Matrix4f positionMatrix, CallbackInfo ci)
+    private void sba$renderChunkLayer(RenderType renderType, PoseStack matrices, double cameraX, double cameraY, double cameraZ, Matrix4f positionMatrix, CallbackInfo ci)
     {
         if (renderType == RenderType.solid())
         {
@@ -1097,7 +1097,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
     }
 
     @Inject(method = "renderSky", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$cancelNetherIllusionSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
+    private void sba$cancelNetherIllusionSky(PoseStack $$0, Matrix4f $$1, float $$2, Camera $$3, boolean $$4, Runnable $$5, CallbackInfo ci) {
         if (GERNetherIllusionHelper.endActive) {
             this.renderEndSky($$0);
             ci.cancel();

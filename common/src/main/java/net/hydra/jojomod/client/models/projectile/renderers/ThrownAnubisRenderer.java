@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.CrossfireFirestormModel;
@@ -40,8 +40,8 @@ public class ThrownAnubisRenderer extends EntityRenderer<ThrownAnubisEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(ThrownAnubisEntity thrownAnubisEntity) {
-        if (thrownAnubisEntity.getOwner() != null && ((StandUser)thrownAnubisEntity.getOwner()).roundabout$getStandPowers() instanceof PowersAnubis PA) {
-            return model.getTextureLocation(thrownAnubisEntity.getOwner(),((StandUser)thrownAnubisEntity.getOwner()).roundabout$getStandSkin());
+        if (thrownAnubisEntity.getOwner() != null && ((StandUser)thrownAnubisEntity.getOwner()).sba$getStandPowers() instanceof PowersAnubis PA) {
+            return model.getTextureLocation(thrownAnubisEntity.getOwner(),((StandUser)thrownAnubisEntity.getOwner()).sba$getStandSkin());
         }
         return AnubisModel.anime;
     }

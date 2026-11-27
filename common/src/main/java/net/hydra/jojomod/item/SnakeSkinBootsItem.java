@@ -57,7 +57,7 @@ public enum SnakeSkinBootsItem implements ArmorMaterial {
     public Ingredient getRepairIngredient() { return this.repairIngredient.get(); }
 
     @Override
-    public String getName() { return "roundabout:" + this.name; }
+    public String getName() { return "sba:" + this.name; }
 
     @Override
     public float getToughness() { return this.toughness; }

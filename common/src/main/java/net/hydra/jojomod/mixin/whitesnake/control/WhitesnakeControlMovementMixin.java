@@ -17,7 +17,7 @@ public abstract class WhitesnakeControlMovementMixin {
     @Shadow private Vec3 ap;
 
     @Inject(method = "sendChanges", at = @At("HEAD"))
-    private void roundaboutWhitesnake$skipMovementEcho(CallbackInfo ci) {
+    private void sbaWhitesnake$skipMovementEcho(CallbackInfo ci) {
         if (entity instanceof WhitesnakeEntity whitesnake && whitesnake.isControlModeActive()
                 && !entity.hasImpulse && !entity.hurtMarked) {
             ap = entity.getDeltaMovement();

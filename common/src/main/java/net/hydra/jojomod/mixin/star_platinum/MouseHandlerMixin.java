@@ -32,7 +32,7 @@ public abstract class MouseHandlerMixin {
 
 
     @Inject(method = "onMove",at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$anubisRecordMouse(long $$0, double $$1, double $$2, CallbackInfo ci) {
+    public void sba$anubisRecordMouse(long $$0, double $$1, double $$2, CallbackInfo ci) {
         Player p = this.minecraft.player;
         if (p != null) {
             if (HeatUtil.isBodyFrozen(p)){
@@ -43,7 +43,7 @@ public abstract class MouseHandlerMixin {
                 }
             }
             StandUser SU = (StandUser) p;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
                 if (PA.isRecording()) {
                     AnubisMemory AM = PA.getUsedMemory();
                     Vec3 rot = new Vec3(ConfigManager.getConfig().anubisSettings.anubisMaxMemory -PA.playTime,PA.getSelf().getXRot(),PA.getSelf().getYRot());
@@ -68,11 +68,11 @@ public abstract class MouseHandlerMixin {
 
     /** anubis saves mouse scroll movements */
     @Inject(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;swapPaint(D)V",shift = At.Shift.AFTER))
-    public void roundabout$anubisSaveScroll(long $$0, double $$1, double $$2, CallbackInfo ci) {
+    public void sba$anubisSaveScroll(long $$0, double $$1, double $$2, CallbackInfo ci) {
         Player p = this.minecraft.player;
         StandUser SU = (StandUser) p;
         int s = this.minecraft.player.getInventory().selected;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+        if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
             if (PA.isRecording() &&  PA.getUsedMemory().memory_type != AnubisMemory.INPUTS) {
                 List<AnubisMoment> moments = PA.getUsedMemory().moments;
 
@@ -101,7 +101,7 @@ public abstract class MouseHandlerMixin {
 
     @Inject(method = "turnPlayer()V",
             at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$turnPlayer(CallbackInfo ci) {
+    private void sba$turnPlayer(CallbackInfo ci) {
         Player player = Minecraft.getInstance().player;
         if (player != null){
             //You cannot look around while totally frozen
@@ -111,19 +111,19 @@ public abstract class MouseHandlerMixin {
             }
 
             //You cannot look around while you are opening your Black Sabbath inventory (unskippable cutscene)
-            if(((StandUser)player).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs && pbs.active){
+            if(((StandUser)player).sba$getStandPowers() instanceof PowersBlackSabbath pbs && pbs.active){
                 ci.cancel();
                 return;
             }
 
-            if(((StandUser)player).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.isCameraMovementLocked()){
+            if(((StandUser)player).sba$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.isCameraMovementLocked()){
                 ci.cancel();
                 return;
             }
 
 
             if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-                int scopelvl = ((StandUser)player).roundabout$getStandPowers().scopeLevel;
+                int scopelvl = ((StandUser)player).sba$getStandPowers().scopeLevel;
                 boolean isUsingRifle = Minecraft.getInstance().player.getUseItem().getItem() instanceof JackalRifleItem;
                 if (scopelvl > 0 || isUsingRifle) {
                     ci.cancel();

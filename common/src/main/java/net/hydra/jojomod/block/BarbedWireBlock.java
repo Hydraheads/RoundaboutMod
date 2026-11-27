@@ -1,6 +1,6 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.index.PacketDataIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;

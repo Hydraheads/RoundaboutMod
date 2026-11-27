@@ -17,7 +17,7 @@ public class GinkgoBoatRenderer extends BoatRenderer {
         super(context, chest);
 
         ResourceLocation texture = new ResourceLocation(
-                "roundabout",
+                "sba",
                 chest ? "textures/entity/chest_boat/ginkgo.png"
                         : "textures/entity/boat/ginkgo.png"
         );
@@ -25,11 +25,11 @@ public class GinkgoBoatRenderer extends BoatRenderer {
         AccessBoatRenderer accessor = (AccessBoatRenderer) this;
 
         Map<Boat.Type, Pair<ResourceLocation, ListModel<Boat>>> resources =
-                new HashMap<>(accessor.roundabout$getBoatResources());
+                new HashMap<>(accessor.sba$getBoatResources());
 
         resources.replaceAll((type, pair) ->
                 Pair.of(texture, pair.getSecond()));
 
-        accessor.roundabout$setBoatResources(resources);
+        accessor.sba$setBoatResources(resources);
     }
 }

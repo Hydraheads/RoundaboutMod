@@ -21,6 +21,6 @@ public class ParallelDiegoNPC extends DiegoNPC {
 
     @Override
     public void applySkin(){
-        ((StandUser)this).roundabout$setStandSkin(TheWorldEntity.PART_7_SKIN);
+        ((StandUser)this).sba$setStandSkin(TheWorldEntity.PART_7_SKIN);
     }
 }

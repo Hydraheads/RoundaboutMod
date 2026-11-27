@@ -16,7 +16,7 @@ public class FrozenLookControl {
 
     //When frozen, mob does not look around
     @Inject(method = "tick()V", at = @At("HEAD"), cancellable = true)
-    public void roundabout$lookTick(CallbackInfo ci) {
+    public void sba$lookTick(CallbackInfo ci) {
         if (this.mob != null && (HeatUtil.isBodyFrozen(this.mob))){
             ci.cancel();
         }

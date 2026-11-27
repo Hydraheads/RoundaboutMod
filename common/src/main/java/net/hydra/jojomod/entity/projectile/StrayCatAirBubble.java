@@ -93,7 +93,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
         Entity target = this.level().getEntity(id);
 
         if (PowerTypes.isInADifferentExistence(target,this)){
-            if (((StandUser)target).roundabout$getStandPowers() instanceof
+            if (((StandUser)target).sba$getStandPowers() instanceof
                     PowersKingCrimson pkc && pkc.timeEraseActive){
                 target = pkc.activeClone;
             } else {
@@ -226,7 +226,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             }
 
             if ((this.lifeSpan <= 0 || this.getOwner().distanceTo(this) > getDistanceUntilPopping() && distancePops())){
-                if (((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && isPlanted) {
+                if (((StandUser)this.getOwner()).sba$getStandPowers() instanceof PowersKillerQueen KQ && isPlanted) {
                     KQ.bubbleFailed();
                 }
                 popBubble();
@@ -265,7 +265,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                             && !(MainUtil.getEntityIsTrulyInvisible(target) || (target instanceof LivingEntity LE && LE.getEffect(MobEffects.INVISIBILITY) != null))) {
                         this.bubbleRedirect();
                         this.redirectCooldown = redirectCooldownMax;
-                        if (((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.getBombSize() == 0) {
+                        if (((StandUser)getOwner()).sba$getStandPowers() instanceof PowersKillerQueen PKQ && PKQ.getBombSize() == 0) {
                             this.redirectCooldown = redirectCooldownMax-10;
                         }
                     }
@@ -274,7 +274,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                 }
             }else {
                 this.redirectCooldown = 0;
-                if (this.followOwnerView && !(((StandUser)this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
+                if (this.followOwnerView && !(((StandUser)this.getOwner()).sba$getStandPowers() instanceof PowersKillerQueen PKQ
                         && this.isKillerQueenBubble && PKQ.isPiloting())) {
 
                     Entity owner = this.getOwner();
@@ -358,7 +358,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     protected void doPostHurtEffects(LivingEntity $$0) {
         Entity user = this.getOwner();
         if (this.isKillerQueenBubble) {
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ
+            if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersKillerQueen KQ
             && KQ.isContactModeEnabled()) {
                 return;
             }
@@ -380,7 +380,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         if (!this.level().isClientSide()) {
-            if (this.getOwner() != null && ((StandUser) this.getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isPlanted) {
+            if (this.getOwner() != null && ((StandUser) this.getOwner()).sba$getStandPowers() instanceof PowersKillerQueen KQ && this.isPlanted) {
                 if (KQ.detonateTimer > -1) {
                     KQ.explode();
                     return;
@@ -404,14 +404,14 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             Entity user = this.getOwner();
 
             if (hitTarget instanceof EnderMan em) {
-                ((IEnderMan) em).roundabout$teleport();
+                ((IEnderMan) em).sba$teleport();
                 return;
             }
 
             if ((user != null && hitTarget.is(user)) || (user != null && hitTarget instanceof StandEntity SE && user.is(SE.getUser()))) {
                 return;
             }
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && this.target != null) {
+            if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble && this.target != null) {
                 if (!this.target.is(hitTarget) && !KQ.isContactModeEnabled()) {
                     return;
                 }
@@ -423,7 +423,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             if (user != null) {
                 dmg = ModDamageTypes.of(hitTarget.level(), ModDamageTypes.STAND, this, user);
 
-                if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                if (((StandUser) user).sba$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
                     damage = KQ.getAirBubbleDamage(hitTarget);
                 }
             }
@@ -433,7 +433,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
             if (hitTarget.hurt(dmg, damage)) {
 
                 if (user instanceof LivingEntity LE) {
-                    if (((StandUser) user).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                    if (((StandUser) user).sba$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
                         if (hitTarget instanceof LivingEntity l) {
                             KQ.addEXP(4, l);
                         }
@@ -467,7 +467,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
                         EnchantmentHelper.doPostDamageEffects((LivingEntity) user, $$7);
                     }
                     if (user instanceof LivingEntity LE && this.isPlanted) {
-                        if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
+                        if (((StandUser) LE).sba$getStandPowers() instanceof PowersKillerQueen KQ && this.isKillerQueenBubble) {
                             KQ.contactExplode(hitTarget);
                         }
                     }
@@ -515,7 +515,7 @@ public class StrayCatAirBubble extends AbstractHurtingProjectile implements Unbu
 
         Vec3 pos = currentTarget.getPosition(0);
         Vec3 addToPosition = new Vec3(0, currentTarget.getBbHeight() * 0.5f, 0);
-        Direction direction = ((IGravityEntity) currentTarget).roundabout$getGravityDirection();
+        Direction direction = ((IGravityEntity) currentTarget).sba$getGravityDirection();
         if (direction != Direction.DOWN) {
             addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
         }

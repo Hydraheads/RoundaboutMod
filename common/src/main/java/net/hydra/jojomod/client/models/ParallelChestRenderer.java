@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
@@ -101,7 +101,7 @@ public class ParallelChestRenderer extends EntityRenderer<ParallelChestEntity> {
         }
 
     }
-    private static final ResourceLocation CHEST = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/chest.png");
+    private static final ResourceLocation CHEST = new ResourceLocation(SBA.MOD_ID, "textures/entity/chest.png");
     protected boolean getRenderT(boolean $$1, boolean $$2, boolean $$3) {
         if ($$2 || $$1) {
             return true;

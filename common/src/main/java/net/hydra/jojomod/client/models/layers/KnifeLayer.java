@@ -27,7 +27,7 @@ public class KnifeLayer<T extends LivingEntity, M extends PlayerModel<T>>
 
     @Override
     protected int numStuck(T livingEntity) {
-        return ((IPlayerEntity) livingEntity).roundabout$getKnifeCount();
+        return ((IPlayerEntity) livingEntity).sba$getKnifeCount();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class KnifeLayer<T extends LivingEntity, M extends PlayerModel<T>>
         if (FateTypes.isHidden(entity)){
             return;
         }
-        if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+        if (((IEntityAndData)entity).sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
             return;
         float k = Mth.sqrt(f * f + h * h);
         KnifeEntity knife = new KnifeEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ());

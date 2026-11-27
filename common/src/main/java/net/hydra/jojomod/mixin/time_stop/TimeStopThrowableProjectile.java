@@ -24,8 +24,8 @@ public abstract class TimeStopThrowableProjectile extends Entity {
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$SetPosForTS(CallbackInfo ci) {
-        if (((TimeStop)this.level()).inTimeStopRange(((ThrowableProjectile)(Object)this)) && ((IProjectileAccess) this).roundabout$getRoundaboutIsTimeStopCreated()) {
+    private void sba$SetPosForTS(CallbackInfo ci) {
+        if (((TimeStop)this.level()).inTimeStopRange(((ThrowableProjectile)(Object)this)) && ((IProjectileAccess) this).sba$getSBAIsTimeStopCreated()) {
             super.tick();
             TimeMovingProjectile.tick((ThrowableProjectile) (Object) this);
             this.checkInsideBlocks();

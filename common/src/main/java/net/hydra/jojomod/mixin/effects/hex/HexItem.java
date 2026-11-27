@@ -19,7 +19,7 @@ public class HexItem {
 
     /**Hex prevents eating golden apples while full. At level 4, no foods can be eaten while full*/
     @Inject(method = "use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder;", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$addEatEffect(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
+    protected void sba$addEatEffect(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         if (this.isEdible()) {
             if ($$1.hasEffect(ModEffects.HEX)) {
                 ItemStack stack = $$1.getItemInHand($$2);

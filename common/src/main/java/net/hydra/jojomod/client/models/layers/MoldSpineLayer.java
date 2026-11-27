@@ -34,17 +34,17 @@ public class MoldSpineLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
 
         if (entity != null && entity instanceof Player) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            if (((IEntityAndData)entity).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             StandUser user = ((StandUser) entity);
             boolean ExposedSpine = false;
-            boolean HasGreenDay = (user.roundabout$getStandPowers() instanceof PowersGreenDay);
+            boolean HasGreenDay = (user.sba$getStandPowers() instanceof PowersGreenDay);
             if (HasGreenDay){
-                ExposedSpine = ((PowersGreenDay)user.roundabout$getStandPowers()).legGoneTicks > 0;
+                ExposedSpine = ((PowersGreenDay)user.sba$getStandPowers()).legGoneTicks > 0;
             }
             if (!entity.isInvisible()) {
                 if (ExposedSpine) {
-                    int color = ((PowersGreenDay) user.roundabout$getStandPowers()).getMoldParticleColor();
+                    int color = ((PowersGreenDay) user.sba$getStandPowers()).getMoldParticleColor();
                     float r = ((color >> 16) & 0xFF) / 255.0F;
                     float g = ((color >> 8) & 0xFF) / 255.0F;
                     float b = (color & 0xFF) / 255.0F;

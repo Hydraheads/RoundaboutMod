@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.entity.projectile.StandArrowEntity;
-import net.hydra.jojomod.item.RoundaboutArrowItem;
+import net.hydra.jojomod.item.SBAArrowItem;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -25,10 +25,10 @@ public class StandArrowBowItem {
     /**This mixin makes bows shoot stand arrows, also is paired with another mixin which actually lets stand
      * arrows be detected as arrows*/
     @Inject(method = "releaseUsing", at = @At("HEAD"), cancellable = true)
-    public void roundabout$releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3, CallbackInfo ci) {
+    public void sba$releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3, CallbackInfo ci) {
         if ($$2 instanceof Player $$4) {
             ItemStack $$6 = $$4.getProjectile($$0);
-            if ($$6.getItem() instanceof RoundaboutArrowItem SI){
+            if ($$6.getItem() instanceof SBAArrowItem SI){
                 ci.cancel();
                 if (!$$6.isEmpty()){
 

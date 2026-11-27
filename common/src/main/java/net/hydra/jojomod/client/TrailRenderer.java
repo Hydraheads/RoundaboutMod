@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TrailRenderer {
     // in order to use this, you'll need to keep track of the projectile's position and send it with the renderer. look
-    // at RoundaboutBulletEntityRenderer and RoundaboutBulletEntity for examples
+    // at SBABulletEntityRenderer and SBABulletEntity for examples
     public record Settings(
             // the end and start were swapped and i am NOT figuring out all the math to fix this.
             float length,

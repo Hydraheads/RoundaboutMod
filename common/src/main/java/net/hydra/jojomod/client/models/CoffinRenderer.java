@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.CoffinBlock;
 import net.hydra.jojomod.block.CoffinBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -88,7 +88,7 @@ public class CoffinRenderer <T extends BlockEntity> implements BlockEntityRender
 
         return LayerDefinition.create(meshdefinition, 160, 160);
     }
-    public static final ResourceLocation COFFIN = new ResourceLocation(Roundabout.MOD_ID, "textures/block/coffin1.png");
+    public static final ResourceLocation COFFIN = new ResourceLocation(SBA.MOD_ID, "textures/block/coffin1.png");
 
     @Override
     public void render(T $$0, float $$1, PoseStack $$2, MultiBufferSource $$3, int $$4, int $$5) {

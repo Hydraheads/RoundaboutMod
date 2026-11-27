@@ -1,7 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.StandIcons;
@@ -64,7 +64,7 @@ public class PowersCream extends NewPunchingStand {
     }
     @Override
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "sba.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
     @Override
     public Component ifWipListDev(){
@@ -86,7 +86,7 @@ public class PowersCream extends NewPunchingStand {
     }
 
     public SoundEvent getSoundFromByte(byte soundChoice){
-        byte bt = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte bt = ((StandUser)this.getSelf()).sba$getStandSkin();
         if (soundChoice == SoundIndex.SUMMON_SOUND) {
             return ModSounds.CREAM_SUMMON_EVENT;
         }
@@ -100,7 +100,7 @@ public class PowersCream extends NewPunchingStand {
 
     public void playVoidAttackEnterSound(){
         if (!this.self.level().isClientSide()) {
-            byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+            byte skn = ((StandUser)this.getSelf()).sba$getStandSkin();
             playStandUserOnlySoundsIfNearby(CREAM_VOID_ATTACK, 27, false,true);
         }
     }
@@ -234,7 +234,7 @@ public class PowersCream extends NewPunchingStand {
                         ((Player) self).getAbilities().mayfly = true;
                         ((Player) self).getAbilities().invulnerable = true;
                     }
-                    Roundabout.LOGGER.info("Previous may fly:"+previousMayFly);
+                    SBA.LOGGER.info("Previous may fly:"+previousMayFly);
                     ((Player) self).onUpdateAbilities();
                 }
                 this.animateStand(CreamEntity.CREAM_EAT_VOID);
@@ -426,8 +426,8 @@ public class PowersCream extends NewPunchingStand {
         List<Byte> $$1 = Lists.newArrayList();
         $$1.add(CreamEntity.PART_3_SKIN);
         if (this.getSelf() instanceof Player PE){
-            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
-            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            byte Level = ((IPlayerEntity)PE).sba$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).sba$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
 
@@ -441,7 +441,7 @@ public class PowersCream extends NewPunchingStand {
 
             } if (Level > 6 || bypass){
 
-            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+            } if (((IPlayerEntity)PE).sba$getUnlockedBonusSkin() || bypass){
 
             }
         }
@@ -450,18 +450,18 @@ public class PowersCream extends NewPunchingStand {
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.void_attack",
-                "instruction.roundabout.press_skill", StandIcons.CREAM_VOID_ATTACK, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.heel_plant",
-                "instruction.roundabout.press_skill", StandIcons.GROUND_IMPLANT, 2, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.wall_walk_move",
-                "instruction.roundabout.press_skill", StandIcons.WALL_WALK, 3, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.firm_swing",
-                "instruction.roundabout.passive", StandIcons.FIRM_SWING, 0, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.fall_disperse",
-                "instruction.roundabout.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.void_attack",
+                "instruction.sba.press_skill", StandIcons.CREAM_VOID_ATTACK, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.heel_plant",
+                "instruction.sba.press_skill", StandIcons.GROUND_IMPLANT, 2, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE, 3, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.wall_walk_move",
+                "instruction.sba.press_skill", StandIcons.WALL_WALK, 3, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.sba.firm_swing",
+                "instruction.sba.passive", StandIcons.FIRM_SWING, 0, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.sba.fall_disperse",
+                "instruction.sba.passive", StandIcons.FALL_ABSORB, 0, level, bypass));
         return $$1;
     }
 
@@ -471,21 +471,21 @@ public class PowersCream extends NewPunchingStand {
     }
     public static Component getSkinNameT(byte skinId){
         if (skinId == CreamEntity.PART_3_SKIN){
-            return Component.translatable(  "skins.roundabout.the_world.base");
+            return Component.translatable(  "skins.sba.the_world.base");
         }
-        return Component.translatable(  "skins.roundabout.the_world.base");
+        return Component.translatable(  "skins.sba.the_world.base");
     }
 
     @Override
     public void levelUp(){
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
-            byte level = ipe.roundabout$getStandLevel();
+            byte level = ipe.sba$getStandLevel();
             if (level == 7){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.skins").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.max.skins").
                         withStyle(ChatFormatting.AQUA), true);
             } else if (level == 2 || level == 3 || level == 4 || level == 6 || level == 5){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.both").
                         withStyle(ChatFormatting.AQUA), true);
             }
         }

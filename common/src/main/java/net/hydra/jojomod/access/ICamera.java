@@ -3,6 +3,6 @@ package net.hydra.jojomod.access;
 import net.minecraft.world.entity.Entity;
 
 public interface ICamera {
-    void roundabout$setEntity(Entity entity);
-    Entity roundabout$getPovSwitch();
+    void sba$setEntity(Entity entity);
+    Entity sba$getPovSwitch();
 }

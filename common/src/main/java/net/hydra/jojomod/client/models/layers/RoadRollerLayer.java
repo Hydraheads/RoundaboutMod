@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.layers;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -51,7 +51,7 @@ public class RoadRollerLayer<T extends LivingEntity, A extends HumanoidModel<T>>
             boolean isHoldingRoadRoller = (held.getItem() instanceof RoadRollerItem) || (offHeld.getItem() instanceof RoadRollerItem);
 
             if (!isHoldingRoadRoller || !(ConfigManager.getClientConfig() != null && ConfigManager.getClientConfig().enableRoadRollerRender) ||
-                    !((IEntityAndData) entity).roundabout$getExclusiveLayers()) {
+                    !((IEntityAndData) entity).sba$getExclusiveLayers()) {
                 return;
             }
 

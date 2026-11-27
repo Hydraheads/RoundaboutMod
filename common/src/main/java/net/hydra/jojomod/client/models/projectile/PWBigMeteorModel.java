@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.projectile.PWBigMeteorEntity;
 import net.hydra.jojomod.entity.projectile.PWMeteorEntity;
 import net.minecraft.client.model.HierarchicalModel;
@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class PWBigMeteorModel <T extends PWBigMeteorEntity> extends HierarchicalModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "pw_big_meteor"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(SBA.MOD_ID, "pw_big_meteor"), "main");
     private final ModelPart Fireball;
     private final ModelPart Root;
 

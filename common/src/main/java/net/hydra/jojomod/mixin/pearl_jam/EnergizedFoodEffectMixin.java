@@ -105,7 +105,7 @@ public class EnergizedFoodEffectMixin {
                             }
                             if (condition.equals("gasoline")) {
                                 StandUser standUser = (StandUser) $$2;
-                                standUser.roundabout$setGasolineTime(0);
+                                standUser.sba$setGasolineTime(0);
                             }
                         }
                     }

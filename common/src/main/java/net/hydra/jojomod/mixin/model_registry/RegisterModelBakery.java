@@ -23,7 +23,7 @@ public abstract class RegisterModelBakery {
      * making a book have a new texture if it has a certain name
      * */
     @Inject(method = "<init>", at = @At(value = "TAIL"))
-    public void roundabout$addITEMNAME(BlockColors $$0, ProfilerFiller $$1, Map $$2, Map $$3, CallbackInfo ci) {
+    public void sba$addITEMNAME(BlockColors $$0, ProfilerFiller $$1, Map $$2, Map $$3, CallbackInfo ci) {
         this.loadTopLevel(ModItemModels.HARPOON_IN_HAND);
         this.loadTopLevel(ModItemModels.SNUBNOSE_REVOLVER_IN_HAND);
         this.loadTopLevel(ModItemModels.MISTA_REVOLVER_IN_HAND);
@@ -132,10 +132,10 @@ public abstract class RegisterModelBakery {
 
     /**
     @ModifyVariable(method="getModel", at=@At("HEAD"),ordinal = 0)
-    private ResourceLocation roundabout$fogModelResourceKey(ResourceLocation key)
+    private ResourceLocation sba$fogModelResourceKey(ResourceLocation key)
     {
-        if (key.getPath().startsWith("fog_") && key.getNamespace().equals(Roundabout.MOD_ID))
-            return Roundabout.location("block/fog_block");
+        if (key.getPath().startsWith("fog_") && key.getNamespace().equals(SBA.MOD_ID))
+            return SBA.location("block/fog_block");
         return key;
     }
     **/

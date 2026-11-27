@@ -19,8 +19,8 @@ public abstract class CenturyBoyRangedAttack extends Goal {
 
 
     @Inject(method = "tick", at=@At(value = "HEAD"), cancellable = true)
-    public void roundabout$tick(CallbackInfo ci) {
-        if (((StandUser)mob).roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
+    public void sba$tick(CallbackInfo ci) {
+        if (((StandUser)mob).sba$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState) {
             ci.cancel();
             return;
         }

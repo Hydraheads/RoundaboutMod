@@ -3,7 +3,7 @@ package net.hydra.jojomod.mixin.magicians_red;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.StandFireType;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -27,16 +27,16 @@ public abstract class StandFireScreenEffectRendererMixin {
      * */
 
     @Inject(method = "renderScreenEffect(Lnet/minecraft/client/Minecraft;Lcom/mojang/blaze3d/vertex/PoseStack;)V", at = @At(value = "HEAD"),cancellable = true)
-    private static void roundabout$renderScreenEffect(Minecraft $$0, PoseStack $$1, CallbackInfo ci) {
+    private static void sba$renderScreenEffect(Minecraft $$0, PoseStack $$1, CallbackInfo ci) {
         Player $$2 = $$0.player;
         if ($$2 != null) {
-            roundabout$renderFire($$0,$$1,$$2);
+            sba$renderFire($$0,$$1,$$2);
         }
     }
 
     @Unique
-    private static void roundabout$renderFire(Minecraft mc, PoseStack pose, Player pl) {
-        byte bt = ((StandUser) pl).roundabout$getOnStandFire();
+    private static void sba$renderFire(Minecraft mc, PoseStack pose, Player pl) {
+        byte bt = ((StandUser) pl).sba$getOnStandFire();
         if (bt > 0 && ConfigManager.getClientConfig().magiciansRedRenderOnFireInFirstPerson) {
             BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
             RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
@@ -45,17 +45,17 @@ public abstract class StandFireScreenEffectRendererMixin {
             RenderSystem.enableBlend();
 
             if (bt == StandFireType.BLUE.id){
-                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_blue_0.png"));
+                RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_blue_0.png"));
             } else if (bt == StandFireType.PURPLE.id){
-                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_purple_0.png"));
+                RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_purple_0.png"));
             } else if (bt == StandFireType.GREEN.id){
-                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_green_0.png"));
+                RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_green_0.png"));
             } else if (bt == StandFireType.DREAD.id){
-                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_dread_0.png"));
+                RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_dread_0.png"));
             } else if (bt == StandFireType.CREAM.id){
-                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_cream_0.png"));
+                RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_cream_0.png"));
             } else {
-                RenderSystem.setShaderTexture(0, Roundabout.location("textures/block/stand_fire_0.png"));
+                RenderSystem.setShaderTexture(0, SBA.location("textures/block/stand_fire_0.png"));
             }
 
             // Rotates every 2 ticks through the 32 frames

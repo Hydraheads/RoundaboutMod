@@ -33,7 +33,7 @@ public abstract class AchtungModelPart {
     @Inject(
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V",
             at = @At("HEAD"), cancellable = true)
-    public void roundabout$modifyAlpha(PoseStack $$0, VertexConsumer $$1, int $$2, int $$3, float $$4, float $$5, float $$6, float originalAlpha, CallbackInfo ci) {
+    public void sba$modifyAlpha(PoseStack $$0, VertexConsumer $$1, int $$2, int $$3, float $$4, float $$5, float $$6, float originalAlpha, CallbackInfo ci) {
         float ether = ClientUtil.getThrowFadeToTheEther();
         int frozenLevel =  ClientUtil.frozenLevel;
         if (ether <= 0){

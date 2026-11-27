@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.visages.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.FacelessLayer;
 import net.hydra.jojomod.client.models.layers.CenturyBoyLayer;
 import net.hydra.jojomod.client.models.layers.*;
@@ -182,7 +182,7 @@ public class VisageBasisRenderer extends LivingEntityRenderer<JojoNPC, PlayerMod
                 if (visage.getItem() instanceof MaskItem MI) {
                     VisageData vd = MI.visageData.generateVisageData(var1);
                     if (vd.isCharacterVisage()) {
-                        return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/"+vd.getSkinPath()+".png"));
+                        return (new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/player_skins/"+vd.getSkinPath()+".png"));
                     }
                 }
             }

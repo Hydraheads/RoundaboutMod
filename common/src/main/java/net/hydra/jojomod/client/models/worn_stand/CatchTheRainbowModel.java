@@ -4,7 +4,7 @@ package net.hydra.jojomod.client.models.worn_stand;// Made with Blockbench 5.1.6
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.CatchTheRainbowAnimations;
@@ -64,37 +64,37 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 	@Override
 	public ModelPart root() {return Root;}
 
-	public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/base.png");
-	public static ResourceLocation ghast_dry = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation ghast_dry = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/ghast_dry.png");
-	public static ResourceLocation ghast_happy = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation ghast_happy = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/ghast_happy.png");
-	public static ResourceLocation lali_ho = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation lali_ho = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/lali_ho.png");
-	public static ResourceLocation eye_white = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation eye_white = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/eye_white.png");
-	public static ResourceLocation eye_red = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation eye_red = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/eye_red.png");
-	public static ResourceLocation skeletonctr = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation skeletonctr = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/skeleton.png");
-	public static ResourceLocation neon_on = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation neon_on = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/neon_on.png");
-	public static ResourceLocation neon_off = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation neon_off = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/neon_off.png");
-	public static ResourceLocation strider_healthy = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation strider_healthy = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/strider_healthy.png");
-	public static ResourceLocation strider_sick = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation strider_sick = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/strider_sick.png");
-	public static ResourceLocation cmy = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation cmy = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/cmy.png");
-	public static ResourceLocation magma = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation magma = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/magma.png");
-	public static ResourceLocation knight = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation knight = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/knight.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin) {
-		if ( ((StandUser) context).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && !PCR.isInRain()) {
+		if ( ((StandUser) context).sba$getStandPowers() instanceof PowersCatchTheRainbow PCR && !PCR.isInRain()) {
 			switch (skin) {
 				case PowersCatchTheRainbow.GHAST -> {
 					return ghast_dry;
@@ -177,30 +177,30 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 			}
 			StandUser user = ((StandUser) LE);
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
-			user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+			user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 
 
 			byte idle = MainUtil.getWornStandIdleSafe(user, PowersCatchTheRainbow.class);
 			/*byte idle = (byte)0;
-			if (user.roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
-				idle = user.roundabout$getIdlePos();
-			}else if (user.roundabout$getPreviousStandPowers() instanceof PowersCatchTheRainbow) {
-				idle = user.roundabout$getPreviousPose();
+			if (user.sba$getStandPowers() instanceof PowersCatchTheRainbow) {
+				idle = user.sba$getIdlePos();
+			}else if (user.sba$getPreviousStandPowers() instanceof PowersCatchTheRainbow) {
+				idle = user.sba$getPreviousPose();
 			}*/
 
 
 			if (idle != 0) {
-				user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+				user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 			}
 			else {
-				user.roundabout$getWornStandIdleAnimation().stop();
+				user.sba$getWornStandIdleAnimation().stop();
 			}
 
 			if (idle == 1) {
-				this.animate(user.roundabout$getWornStandIdleAnimation(), CatchTheRainbowAnimations.openright, partialTicks, 1f);
+				this.animate(user.sba$getWornStandIdleAnimation(), CatchTheRainbowAnimations.openright, partialTicks, 1f);
 			}
 			if (idle == 2) {
-				this.animate(user.roundabout$getWornStandIdleAnimation(), CatchTheRainbowAnimations.openleft, partialTicks, 1f);
+				this.animate(user.sba$getWornStandIdleAnimation(), CatchTheRainbowAnimations.openleft, partialTicks, 1f);
 			}
 
 			root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);

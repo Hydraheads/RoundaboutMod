@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.substand.StepRuleModel;
@@ -20,9 +20,9 @@ import net.minecraft.world.entity.player.Player;
 
 public class StepRuleRenderer extends EntityRenderer<StepRuleEntity> {
     private static final ResourceLocation STEP_RULE =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/no_walk/no_walk.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/no_walk/no_walk.png");
     private static final ResourceLocation STEP_RULE_ACTIVE =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/stand/california_king_bed/no_walk/no_walk_active.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/stand/california_king_bed/no_walk/no_walk_active.png");
 
     protected StepRuleModel model;
 

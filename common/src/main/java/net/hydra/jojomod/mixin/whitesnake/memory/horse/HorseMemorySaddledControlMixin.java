@@ -17,26 +17,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin({Pig.class, Strider.class})
 public abstract class HorseMemorySaddledControlMixin {
     @Inject(method = "getControllingPassenger", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$allowSaddledHorseMemoryControl(
+    private void sbaWhitesnake$allowSaddledHorseMemoryControl(
             CallbackInfoReturnable<LivingEntity> cir) {
         Mob mob = (Mob) (Object) this;
         Entity passenger = mob.getFirstPassenger();
-        if (roundaboutWhitesnake$isControllable(mob) && passenger instanceof Player player) {
+        if (sbaWhitesnake$isControllable(mob) && passenger instanceof Player player) {
             cir.setReturnValue(player);
         }
     }
 
     @Inject(method = "getRiddenInput", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$useHorseMovementInput(Player player, Vec3 travelVector,
+    private void sbaWhitesnake$useHorseMovementInput(Player player, Vec3 travelVector,
                                                              CallbackInfoReturnable<Vec3> cir) {
         Mob mob = (Mob) (Object) this;
-        if (!roundaboutWhitesnake$isControllable(mob)) return;
+        if (!sbaWhitesnake$isControllable(mob)) return;
         float forward = player.zza;
         if (forward <= 0.0F) forward *= 0.25F;
         cir.setReturnValue(new Vec3(player.xxa * 0.5F, 0.0D, forward));
     }
 
-    private static boolean roundaboutWhitesnake$isControllable(Mob mob) {
+    private static boolean sbaWhitesnake$isControllable(Mob mob) {
         return MemoryPersonality.hasHorseMemory(mob)
                 && mob instanceof Saddleable saddleable && saddleable.isSaddled();
     }

@@ -4,5 +4,5 @@ import net.minecraft.network.Connection;
 import org.jetbrains.annotations.Nullable;
 
 public interface IClientNetworking {
-    @Nullable Connection roundabout$getServer();
+    @Nullable Connection sba$getServer();
 }

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "sba:block/wool_slab_red"
+    },
+    "type=double": {
+      "model": "minecraft:block/red_wool"
+    },
+    "type=top": {
+      "model": "sba:block/wool_slab_red_top"
+    }
+  }
+}

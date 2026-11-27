@@ -228,9 +228,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public boolean surpassesFire(){
-        if (((StandUser)self).roundabout$getStandPowers() instanceof
+        if (((StandUser)self).sba$getStandPowers() instanceof
                 PowersWhiteAlbum PWA &&
-                !(((StandUser)self).roundabout$getGuardBroken())
+                !(((StandUser)self).sba$getGuardBroken())
                 && (hasStandActive(self) || self instanceof Mob)
         ){
             return true;
@@ -256,7 +256,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.STALL);
                     if (isChargingCold()){
                         S2CPacketUtil.sendSimpleByteToClientPacket(player,PacketDataIndex.STAND_HIT);
-                        ((StandUser)self).roundabout$tryPower(PowerIndex.NONE,true);
+                        ((StandUser)self).sba$tryPower(PowerIndex.NONE,true);
                     }
                 }
 //            if (self.getUseItem() != null && self.getUseItem().is(ModItems.NEW_LOCACACA)){
@@ -279,18 +279,18 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
 
             StandUser user = getStandUserSelf();
-            if (!user.roundabout$getGuardBroken()) {
+            if (!user.sba$getGuardBroken()) {
                 if ($$0.is(DamageTypes.FALL)) {
                     if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
-                        user.roundabout$breakGuard();
+                        user.sba$breakGuard();
                         playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                 SoundSource.PLAYERS, 1F, 1.5F);
                         if (self instanceof Player player){
                             player.getCooldowns().addCooldown(Items.SHIELD, 100);
                         }
                     } else {
-                        user.roundabout$damageGuard($$1);
-                        if (!user.roundabout$getGuardBroken()) {
+                        user.sba$damageGuard($$1);
+                        if (!user.sba$getGuardBroken()) {
                             playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.STAND_GUARD_SOUND_EVENT,
                                     SoundSource.PLAYERS, 0.8F, 1.6F + self.level().random.nextFloat() * 0.3f);
                         } else {
@@ -314,15 +314,15 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     ){
                         $$1*=0.05F;
                         if ($$1 > ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumGuardPoints) {
-                            user.roundabout$breakGuard();
+                            user.sba$breakGuard();
                             playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                     SoundSource.PLAYERS, 1F, 1.5F);
                             if (self instanceof Player player){
                                 player.getCooldowns().addCooldown(Items.SHIELD, 100);
                             }
                         } else {
-                            user.roundabout$damageGuard($$1);
-                            if (user.roundabout$getGuardBroken()) {
+                            user.sba$damageGuard($$1);
+                            if (user.sba$getGuardBroken()) {
                                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), SoundEvents.SHIELD_BREAK,
                                         SoundSource.PLAYERS, 1F, 1.5F);
                                 if (self instanceof Player player){
@@ -396,7 +396,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (!this.isGuarding() && canGuard() && !isChargingCold() && canAttack()) {
-            ((StandUser)this.getSelf()).roundabout$tryPowerP(PowerIndex.EXTRA,true);
+            ((StandUser)this.getSelf()).sba$tryPowerP(PowerIndex.EXTRA,true);
             tryPowerPacket(PowerIndex.EXTRA);
             return true;
         }
@@ -430,11 +430,11 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public float regenBrokenGuard(){
-        return getStandUserSelf().roundabout$getMaxGuardPoints() / 200;
+        return getStandUserSelf().sba$getMaxGuardPoints() / 200;
     }
     @Override
     public float regenGuard(){
-        return getStandUserSelf().roundabout$getMaxGuardPoints() / 440;
+        return getStandUserSelf().sba$getMaxGuardPoints() / 440;
     }
 
     @Override
@@ -463,7 +463,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
 
             ticklIceEntities();
-            boolean broken = !getStandUserSelf().roundabout$shieldNotDisabled() || getStandUserSelf().roundabout$getGuardBroken();
+            boolean broken = !getStandUserSelf().sba$shieldNotDisabled() || getStandUserSelf().sba$getGuardBroken();
             if (cracked){
                 if (!broken) {
                     cracked = false;
@@ -477,7 +477,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
                 if (PowerTypes.hasStandActive(self)){
                 if (self.level() instanceof ServerLevel sl) {
-                    if ((self instanceof Mob mb && !MainUtil.isHumanoid2(mb)) ||  getStandUserSelf().roundabout$getStandSkin() == YUKI){
+                    if ((self instanceof Mob mb && !MainUtil.isHumanoid2(mb)) ||  getStandUserSelf().sba$getStandSkin() == YUKI){
                         if (self.tickCount % 10 == 0) {
                             sendParticlesIfPossible(sl,
                                     ParticleTypes.SNOWFLAKE,
@@ -704,7 +704,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void toggleBlockFreezeClient(){
         if (!this.onCooldown(PowerIndex.SKILL_4_SNEAK) && !self.isInWater()
         && canExecuteMoveWithLevel(getBlockFreezeLevel())) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_4_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_4_SNEAK);
         }
     }
@@ -725,7 +725,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     @Override
 
     public void tickPowerEnd() {
-        //Roundabout.LOGGER.info("skates: "+skatesActive);
+        //SBA.LOGGER.info("skates: "+skatesActive);
     }
 
     public boolean cracked = false;
@@ -750,7 +750,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (!this.onCooldown(PowerIndex.SKILL_3) && canExecuteMoveWithLevel(getIceWallLevel())) {
             if (canUseIceWall()) {
                 tryPowerPacket(PowerIndex.POWER_3);
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_3, true);
             }
         }
     }
@@ -758,7 +758,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public void toggleSkatesClient(){
         if (!this.onCooldown(PowerIndex.SKILL_1) && canExecuteMoveWithLevel(getSkatesLevel())) {
-           ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+           ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1, true);
            tryPowerPacket(PowerIndex.POWER_1);
         }
     }
@@ -884,7 +884,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (hasSkatesActivated()){
             if (!this.onCooldown(PowerIndex.SKILL_3) && canExecuteMoveWithLevel(getIceWallLevel())) {
                 if (canUseIceWall()) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BLOCK, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_3_BLOCK, true);
                     tryPowerPacket(PowerIndex.POWER_3_BLOCK);
                 }
             }
@@ -1161,10 +1161,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void onReleaseGuard(){
         boolean shoot = isChargingCold() && hasColdCharged();
         StandUser standComp = ((StandUser) self);
-        standComp.roundabout$tryPower(PowerIndex.NONE,true);
+        standComp.sba$tryPower(PowerIndex.NONE,true);
         stallTicks = 3;
-        if (standComp.roundabout$getActivePowerPhase() > 0 ) {
-            standComp.roundabout$setInterruptCD(3);
+        if (standComp.sba$getActivePowerPhase() > 0 ) {
+            standComp.sba$setInterruptCD(3);
         }
         if (shoot){
             this.setAttackTime(0);
@@ -1214,16 +1214,16 @@ public class PowersWhiteAlbum extends NewDashPreset {
         float heyFull = 0;
         if (entity instanceof LivingEntity LE) {
             StandUser user = ((StandUser) LE);
-            boolean hasWhiteAlbumOut = user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
-            //int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+            boolean hasWhiteAlbumOut = user.sba$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
+            //int whiteAlbumTicks = user.sba$getWhiteAlbumVanishTicks();
             int whiteAlbumTicks = MainUtil.getWornStandVanishticksSafe(user, PowersWhiteAlbum.class);
             if (hasWhiteAlbumOut || whiteAlbumTicks > 0) {
-                byte skin = user.roundabout$getStandSkin();
-                if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum) {
-                    if (user.roundabout$getLastStandSkin() != skin) {
-                        user.roundabout$setLastStandSkin(skin);
+                byte skin = user.sba$getStandSkin();
+                if (user.sba$getStandPowers() instanceof PowersWhiteAlbum) {
+                    if (user.sba$getLastStandSkin() != skin) {
+                        user.sba$setLastStandSkin(skin);
                         whiteAlbumTicks = 0;
-                        user.roundabout$setCurrentStandVanishTicks(0);
+                        user.sba$setCurrentStandVanishTicks(0);
                     }
                 }
 
@@ -1340,8 +1340,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
         }
 
-        if (((StandUser) self).roundabout$isGuardInput()) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+        if (((StandUser) self).sba$isGuardInput()) {
+            ((StandUser) self).sba$tryPower(PowerIndex.NONE, true);
         }
     }
     public void setPowerColdBlastShot2() {
@@ -1367,8 +1367,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
             }
         }
 
-        if (((StandUser) self).roundabout$isGuardInput()) {
-            ((StandUser) self).roundabout$tryPower(PowerIndex.NONE, true);
+        if (((StandUser) self).sba$isGuardInput()) {
+            ((StandUser) self).sba$tryPower(PowerIndex.NONE, true);
         }
     }
 
@@ -1622,8 +1622,8 @@ public class PowersWhiteAlbum extends NewDashPreset {
         $$1.add(MANGA);
         $$1.add(ICE);
         if (this.getSelf() instanceof Player PE){
-            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
-            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            byte Level = ((IPlayerEntity)PE).sba$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).sba$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
                 $$1.add(FIERCE);
@@ -1639,7 +1639,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
                 $$1.add(BOXER);
                 $$1.add(FRIGID);
                 $$1.add(BETA);
-            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+            } if (((IPlayerEntity)PE).sba$getUnlockedBonusSkin() || bypass){
                 $$1.add(YUKI);
             }
         }
@@ -1648,10 +1648,10 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
 
     @Override public Component getSkinName(byte skinId) {
-        return Component.translatable("skins.roundabout.white_album."+getSkinString(skinId));
+        return Component.translatable("skins.sba.white_album."+getSkinString(skinId));
     }
     public static Component getSkinNameStatic(byte skinId) {
-        return Component.translatable("skins.roundabout.white_album."+getSkinString(skinId));
+        return Component.translatable("skins.sba.white_album."+getSkinString(skinId));
     }
     public static String getSkinString(byte skinId) {
         return switch (skinId)
@@ -1700,36 +1700,36 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.toggle_brawl",
-                "instruction.roundabout.press_skill", StandIcons.SUIT_COMBAT_2,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.roundabout.cold_punch",
-                "instruction.roundabout.press_attack", StandIcons.WHITE_PUNCH,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.cold_blast",
-                "instruction.roundabout.hold_block", StandIcons.COLD_BLAST,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.cold_guard",
-                "instruction.roundabout.passive", StandIcons.COLD_GUARD,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.freeze_cancel",
-                "instruction.roundabout.press_skill_crouch", StandIcons.FREEZE_CANCEL,1,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,getTwisterLevel(), "ability.roundabout.ice_twister",
-                "instruction.roundabout.press_skill", StandIcons.TWISTER,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,getGentlyWeepsLevel(), "ability.roundabout.gently_weeps",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GENTLY_WEEPS,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,getIceWallLevel(), "ability.roundabout.ice_wall",
-                "instruction.roundabout.press_skill_crouch", StandIcons.ICE_WALL,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,getIceWallLevel(), "ability.roundabout.ice_wall_behind",
-                "instruction.roundabout.press_skill", StandIcons.ICE_WALL_BEHIND,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,getSkatesLevel(), "ability.roundabout.skate_activate",
-                "instruction.roundabout.press_skill", StandIcons.SKATE_ACTIVE,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,getBlockFreezeLevel(), "ability.roundabout.block_freeze",
-                "instruction.roundabout.press_skill_crouch", StandIcons.FREEZE_BLOCKS,4,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.roundabout.suit_power",
-                "instruction.roundabout.passive", StandIcons.SUIT_POWER,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.full_accel",
-                "instruction.roundabout.passive", StandIcons.FULL_ACCEL,0,level,bypass));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,getGentlyWeepsLevel(), "ability.roundabout.gently_weeps_attach",
-                "instruction.roundabout.press_skill_crouch", StandIcons.GENTLY_WEEPS_ATTACH,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.sba.toggle_brawl",
+                "instruction.sba.press_skill", StandIcons.SUIT_COMBAT_2,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+99,0, "ability.sba.cold_punch",
+                "instruction.sba.press_attack", StandIcons.WHITE_PUNCH,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.sba.cold_blast",
+                "instruction.sba.hold_block", StandIcons.COLD_BLAST,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.sba.cold_guard",
+                "instruction.sba.passive", StandIcons.COLD_GUARD,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.sba.freeze_cancel",
+                "instruction.sba.press_skill_crouch", StandIcons.FREEZE_CANCEL,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,getTwisterLevel(), "ability.sba.ice_twister",
+                "instruction.sba.press_skill", StandIcons.TWISTER,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,getGentlyWeepsLevel(), "ability.sba.gently_weeps",
+                "instruction.sba.press_skill_crouch", StandIcons.GENTLY_WEEPS,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,getIceWallLevel(), "ability.sba.ice_wall",
+                "instruction.sba.press_skill_crouch", StandIcons.ICE_WALL,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,getIceWallLevel(), "ability.sba.ice_wall_behind",
+                "instruction.sba.press_skill", StandIcons.ICE_WALL_BEHIND,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,getSkatesLevel(), "ability.sba.skate_activate",
+                "instruction.sba.press_skill", StandIcons.SKATE_ACTIVE,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,getBlockFreezeLevel(), "ability.sba.block_freeze",
+                "instruction.sba.press_skill_crouch", StandIcons.FREEZE_BLOCKS,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,0, "ability.sba.suit_power",
+                "instruction.sba.passive", StandIcons.SUIT_POWER,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.sba.full_accel",
+                "instruction.sba.passive", StandIcons.FULL_ACCEL,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,getGentlyWeepsLevel(), "ability.sba.gently_weeps_attach",
+                "instruction.sba.press_skill_crouch", StandIcons.GENTLY_WEEPS_ATTACH,2,level,bypass));
 
         return $$1;
     }
@@ -1790,7 +1790,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
     @Override
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
+        if (self instanceof Player pl &&  ((IPlayerEntity)pl).sba$getAttackStrengthTicker() < 5) {
             return;
         }
         if (keyIsDown) {
@@ -1949,20 +1949,20 @@ public class PowersWhiteAlbum extends NewDashPreset {
                     )
             ){
                 StandUser user = ((StandUser)PE);
-                ItemStack stack = user.roundabout$getStandDisc();
+                ItemStack stack = user.sba$getStandDisc();
                 if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_WHITE_ALBUM)){
                     IPlayerEntity ipe = ((IPlayerEntity) PE);
-                    if (!ipe.roundabout$getUnlockedBonusSkin()){
+                    if (!ipe.sba$getUnlockedBonusSkin()){
                         if (!lv.isClientSide()) {
-                            ipe.roundabout$setUnlockedBonusSkin(true);
+                            ipe.sba$setUnlockedBonusSkin(true);
                             playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                     PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                             sendParticlesIfPossible(self.level(),ParticleTypes.END_ROD, PE.getX(),
                                     PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                     10, 0.5, 0.5, 0.5, 0.2);
-                            user.roundabout$setStandSkin(YUKI);
+                            user.sba$setStandSkin(YUKI);
                             ((ServerPlayer) ipe).displayClientMessage(
-                                    Component.translatable("unlock_skin.roundabout.white_album.yuki"), true);
+                                    Component.translatable("unlock_skin.sba.white_album.yuki"), true);
                         }
                     }
                 }
@@ -2035,7 +2035,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     @Override
     public Component ifWipListDevStatus() {
-        return Component.translatable("roundabout.dev_status.active");
+        return Component.translatable("sba.dev_status.active");
     }
 
     //2- Ice Wall
@@ -2077,12 +2077,12 @@ public class PowersWhiteAlbum extends NewDashPreset {
     public void levelUp(){
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
-            byte level = ipe.roundabout$getStandLevel();
+            byte level = ipe.sba$getStandLevel();
             if (level == 5){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
             } else {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.both").
                         withStyle(ChatFormatting.AQUA), true);
             }
         }

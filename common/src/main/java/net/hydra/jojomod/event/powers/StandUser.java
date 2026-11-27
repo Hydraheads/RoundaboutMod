@@ -26,137 +26,137 @@ import java.util.function.Predicate;
 public interface StandUser {
     /**This is in a LivingEntity Mixin, granting every living entity stand related functions and ddta.
      * Minimize the amount of synced data to just things you really need.*/
-    boolean roundabout$hasStandOut();
-    void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
-    void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
-    void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
-    Vec3 roundabout$frictionSave();
-    void roundabout$deeplyRemoveAttackTarget();
-    boolean roundabout$getQueForTargetDeletion();
+    boolean sba$hasStandOut();
+    void sba$tryBlockPosPower(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
+    void sba$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
+    void sba$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos, BlockHitResult blockHit);
+    Vec3 sba$frictionSave();
+    void sba$deeplyRemoveAttackTarget();
+    boolean sba$getQueForTargetDeletion();
     boolean rdbt$getJumping();
     boolean rdbt$isServerControlledCooldown(CooldownInstance ci, byte num);
-    void roundabout$removeQueForTargetDeletion();
-    void roundabout$onStandOutLookAround(StandEntity passenger);
-    boolean roundabout$getUniqueStandModeToggle();
-    void roundabout$setStuckSpeedMulti(Vec3 vec);
-    void roundabout$setUniqueStandModeToggle(boolean mode);
-    boolean roundabout$skipFriction();
+    void sba$removeQueForTargetDeletion();
+    void sba$onStandOutLookAround(StandEntity passenger);
+    boolean sba$getUniqueStandModeToggle();
+    void sba$setStuckSpeedMulti(Vec3 vec);
+    void sba$setUniqueStandModeToggle(boolean mode);
+    boolean sba$skipFriction();
     void rdbt$onSyncedDataUpdated2(EntityDataAccessor<?> $$0);
     void rdbt$refreshStand();
-    void roundabout$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble);
-    SoftAndWetPlunderBubbleEntity roundabout$getEyeSightTaken();
-    LivingEntity roundabout$getEmulator();
-    void roundabout$setEmulator(LivingEntity le);
+    void sba$setEyeSightTaken(SoftAndWetPlunderBubbleEntity bubble);
+    SoftAndWetPlunderBubbleEntity sba$getEyeSightTaken();
+    LivingEntity sba$getEmulator();
+    void sba$setEmulator(LivingEntity le);
     boolean rdbt$tickEffectsBleedEdition(boolean grav);
     void rdbt$setRemoveLoveSafety(boolean yup);
-    void roundabout$setGlow(byte glow);
-    byte roundabout$getGlow();
-    void roundabout$updateStandOutPosition(FollowingStandEntity passenger);
-    void roundabout$setHeat(int e);
-    int roundabout$getHeat();
-    void roundabout$setExplosionInflation(int e);
-    int roundabout$getExplosionInflation();
+    void sba$setGlow(byte glow);
+    byte sba$getGlow();
+    void sba$updateStandOutPosition(FollowingStandEntity passenger);
+    void sba$setHeat(int e);
+    int sba$getHeat();
+    void sba$setExplosionInflation(int e);
+    int sba$getExplosionInflation();
 
     
-    int roundabout$increaseAirSupply(int $$0);
-    int roundabout$getZappedTicks();
+    int sba$increaseAirSupply(int $$0);
+    int sba$getZappedTicks();
 
-    float roundabout$mutualGetSpeed(float basis);
+    float sba$mutualGetSpeed(float basis);
 
-    int roundabout$getDetectTicks();
-    void roundabout$setDetectTicks(int life);
-    Entity roundabout$getBoundTo();
-    void roundabout$setBoundTo(Entity $$0);
-    int roundabout$getBoundToID();
+    int sba$getDetectTicks();
+    void sba$setDetectTicks(int life);
+    Entity sba$getBoundTo();
+    void sba$setBoundTo(Entity $$0);
+    int sba$getBoundToID();
     int rdbt$getBoundType(Entity holder);
 
-    void roundabout$setJumpImunityTicks(int value);
-    void roundabout$setGoingDown(boolean value);
-    void roundabout$setStartingYpos(float value);
+    void sba$setJumpImunityTicks(int value);
+    void sba$setGoingDown(boolean value);
+    void sba$setStartingYpos(float value);
 
     void rdbt$setFleshBud(UUID bud);
     UUID rdbt$getFleshBud();
 
-    void roundabout$setBoundToID(int bound);
-    boolean roundabout$isStringBound();
-    void roundabout$dropString();
-    void roundabout$tickString();
+    void sba$setBoundToID(int bound);
+    boolean sba$isStringBound();
+    void sba$dropString();
+    void sba$tickString();
 
-    void roundabout$updateStandOutPosition(FollowingStandEntity passenger, Entity.MoveFunction positionUpdater);
-    void roundabout$removeStandOut();
-    void roundabout$setDI(byte forward, byte strafe);
-    void roundabout$standMount(StandEntity StandSet);
-    void roundabout$setStand(StandEntity StandSet);
-    float roundabout$getGuardPoints();
-    void roundabout$setGuardPointsLoad(float GuardPoints);
-    float roundabout$getMaxGuardPoints();
-    void roundabout$setGuardPoints(float GuardPoints);
-    boolean roundabout$getGuardBroken();
-    void roundabout$syncGuard();
-    void roundabout$setGuardBroken(boolean guardBroken);
-    void roundabout$fixGuard();
-    void roundabout$regenGuard(float regen);
-    void roundabout$damageGuard(float damage);
-    void roundabout$breakGuard();
-    ItemStack roundabout$getStandDisc();
-    void roundabout$setStandDisc(ItemStack stack);
-    void roundabout$updateStandDisc(ItemStack stack);
-    void roundabout$setStandSkinLight(byte skin);
-    void roundabout$setIdlePosLight(byte pos);
-    //void roundabout$setMetallicaInvisibility(int fade);
-    int roundabout$getMetallicaInvisibility();
-    void roundabout$setMetalMeter(float amount);
-    float roundabout$getMetalMeter();
-    int roundabout$getAttackTimeMax();
-    int roundabout$getAttackTime();
-    DamageSource roundabout$getLogSource();
-    int roundabout$getAttackTimeDuring();
-    void roundabout$setBleedLevel(int bleedLevel);
-    int roundabout$getBleedLevel();
-    boolean roundabout$getOnlyBleeding();
-    void roundabout$setOnlyBleeding(boolean only);
-    byte roundabout$getActivePowerPhase();
-    byte roundabout$getActivePowerPhaseMax();
-    byte roundabout$getActivePower();
-    public boolean roundabout$getInterruptCD();
-    void roundabout$setActive(boolean active);
+    void sba$updateStandOutPosition(FollowingStandEntity passenger, Entity.MoveFunction positionUpdater);
+    void sba$removeStandOut();
+    void sba$setDI(byte forward, byte strafe);
+    void sba$standMount(StandEntity StandSet);
+    void sba$setStand(StandEntity StandSet);
+    float sba$getGuardPoints();
+    void sba$setGuardPointsLoad(float GuardPoints);
+    float sba$getMaxGuardPoints();
+    void sba$setGuardPoints(float GuardPoints);
+    boolean sba$getGuardBroken();
+    void sba$syncGuard();
+    void sba$setGuardBroken(boolean guardBroken);
+    void sba$fixGuard();
+    void sba$regenGuard(float regen);
+    void sba$damageGuard(float damage);
+    void sba$breakGuard();
+    ItemStack sba$getStandDisc();
+    void sba$setStandDisc(ItemStack stack);
+    void sba$updateStandDisc(ItemStack stack);
+    void sba$setStandSkinLight(byte skin);
+    void sba$setIdlePosLight(byte pos);
+    //void sba$setMetallicaInvisibility(int fade);
+    int sba$getMetallicaInvisibility();
+    void sba$setMetalMeter(float amount);
+    float sba$getMetalMeter();
+    int sba$getAttackTimeMax();
+    int sba$getAttackTime();
+    DamageSource sba$getLogSource();
+    int sba$getAttackTimeDuring();
+    void sba$setBleedLevel(int bleedLevel);
+    int sba$getBleedLevel();
+    boolean sba$getOnlyBleeding();
+    void sba$setOnlyBleeding(boolean only);
+    byte sba$getActivePowerPhase();
+    byte sba$getActivePowerPhaseMax();
+    byte sba$getActivePower();
+    public boolean sba$getInterruptCD();
+    void sba$setActive(boolean active);
 
-    void roundabout$summonStand(Level theWorld, boolean forced, boolean sound);
-    AnimationState roundabout$getHandLayerAnimation();
-    void roundabout$setHandLayerAnimation(AnimationState layer);
-    AnimationState roundabout$getWornStandActiveAnimation();
-    AnimationState roundabout$getWornStandIdleAnimation();
-    void roundabout$setWornStandIdleAnimation(AnimationState layer);
+    void sba$summonStand(Level theWorld, boolean forced, boolean sound);
+    AnimationState sba$getHandLayerAnimation();
+    void sba$setHandLayerAnimation(AnimationState layer);
+    AnimationState sba$getWornStandActiveAnimation();
+    AnimationState sba$getWornStandIdleAnimation();
+    void sba$setWornStandIdleAnimation(AnimationState layer);
 
-    AnimationState roundabout$getWornStandAnimation();
+    AnimationState sba$getWornStandAnimation();
 
     // TODO: fix this shit below, make it so that we don't add a new vanishticks every stand :/
     // TODO: transfer these vanish ticks to the new fade system if possible.
 
-    int roundabout$getArmVanishTicks();
-    void roundabout$setArmVanishTicks(int set);
-    int roundabout$getRattShoulderVanishTicks();
-    void roundabout$setRattShoulderVanishTicks(int set);
-    int roundabout$getWhiteAlbumVanishTicks();
-    void roundabout$setWhiteAlbumVanishTicks(int set);
-    int roundabout$getOasisVanishTicks();
-    void roundabout$setOasisVanishTicks(int set);
-    int roundabout$getDiverDownVanishTicks();
-    void roundabout$setDiverDownVanishTicks(int set);
-    int roundabout$getAnubisVanishTicks();
-    void roundabout$setAnubisVanishTicks(int set);
+    int sba$getArmVanishTicks();
+    void sba$setArmVanishTicks(int set);
+    int sba$getRattShoulderVanishTicks();
+    void sba$setRattShoulderVanishTicks(int set);
+    int sba$getWhiteAlbumVanishTicks();
+    void sba$setWhiteAlbumVanishTicks(int set);
+    int sba$getOasisVanishTicks();
+    void sba$setOasisVanishTicks(int set);
+    int sba$getDiverDownVanishTicks();
+    void sba$setDiverDownVanishTicks(int set);
+    int sba$getAnubisVanishTicks();
+    void sba$setAnubisVanishTicks(int set);
 
     /// Worn stand vanishticks system
-    int roundabout$getCurrentStandVanishTicks();
-    void roundabout$setCurrentStandVanishTicks(int set);
-    int roundabout$getPreviousStandVanishTicks();
-    void roundabout$setPreviousStandVanishTicks(int set);
-    StandPowers roundabout$getPreviousStandPowers();
-    void roundabout$setPreviousStandPowers(StandPowers SP);
-    void roundabout$setPreviousSkin(byte skin);
-    byte roundabout$getPreviousSkin();
-    void roundabout$setPreviousPose(byte pose);
-    byte roundabout$getPreviousPose();
+    int sba$getCurrentStandVanishTicks();
+    void sba$setCurrentStandVanishTicks(int set);
+    int sba$getPreviousStandVanishTicks();
+    void sba$setPreviousStandVanishTicks(int set);
+    StandPowers sba$getPreviousStandPowers();
+    void sba$setPreviousStandPowers(StandPowers SP);
+    void sba$setPreviousSkin(byte skin);
+    byte sba$getPreviousSkin();
+    void sba$setPreviousPose(byte pose);
+    byte sba$getPreviousPose();
 
 
     int getJumpImmunityTicks();
@@ -170,228 +170,228 @@ public interface StandUser {
     boolean rdbt$hasRightHandGone();
 
 
-    boolean roundabout$getActive();
-    boolean roundabout$getMainhandOverride();
+    boolean sba$getActive();
+    boolean sba$getMainhandOverride();
     boolean canAttack();
-    float roundabout$getRayDistance(Entity entity, float range);
-    float roundabout$getDistanceOut(LivingEntity entity, float range, boolean offset);
-    float roundabout$getStandReach();
-    void roundabout$setSafeToRemoveLove(boolean safe);
+    float sba$getRayDistance(Entity entity, float range);
+    float sba$getDistanceOut(LivingEntity entity, float range, boolean offset);
+    float sba$getStandReach();
+    void sba$setSafeToRemoveLove(boolean safe);
 
-    StandPowers roundabout$getStandPowers();
+    StandPowers sba$getStandPowers();
     boolean rdbt$getExperienceTaken();
     void rdbt$setExperienceTaken(boolean taken);
 
 
-    void roundabout$sealStand(int ticks);
+    void sba$sealStand(int ticks);
 
-    void roundabout$setSealedTicksAgnostic(int ticks);
-    void roundabout$setSealedTicks(int ticks);
-    void roundabout$setSealedTicks(int ticks, int maxticks);
-    int roundabout$getSealedTicks();
-    void roundabout$updateSealedTicks(int ticks);
+    void sba$setSealedTicksAgnostic(int ticks);
+    void sba$setSealedTicks(int ticks);
+    void sba$setSealedTicks(int ticks, int maxticks);
+    int sba$getSealedTicks();
+    void sba$updateSealedTicks(int ticks);
 
-    boolean roundabout$isSealed();
-    int roundabout$getMaxSealedTicks();
-    void roundabout$setMaxSealedTicks(int ticks);
+    boolean sba$isSealed();
+    int sba$getMaxSealedTicks();
+    void sba$setMaxSealedTicks(int ticks);
 
-    StandPowers roundabout$getRejectionStandPowers();
-    void roundabout$setRejectionStandPowers(StandPowers powers);
-    ItemStack roundabout$getRejectionStandDisc();
-    void roundabout$setRejectionStandDisc(ItemStack disc);
+    StandPowers sba$getRejectionStandPowers();
+    void sba$setRejectionStandPowers(StandPowers powers);
+    ItemStack sba$getRejectionStandDisc();
+    void sba$setRejectionStandDisc(ItemStack disc);
 
-    boolean roundabout$getInteractedWithDisc();
-    void roundabout$setInteractedWithDisc(boolean discInteract);
+    boolean sba$getInteractedWithDisc();
+    void sba$setInteractedWithDisc(boolean discInteract);
 
-    void roundabout$setStandPowers(StandPowers standPowers);
-    void roundabout$setAttackTimeDuring(int attackTimeDuring);
-    void roundabout$setInterruptCD(int interruptCD);
-    boolean roundabout$isGuarding();
-    boolean roundabout$isGuardInput();
-    boolean roundabout$isBarraging();
-    boolean roundabout$isClashing();
-    float roundabout$getGuardCooldown();
-    boolean roundabout$isGuardingEffectively();
-    boolean roundabout$isGuardingEffectively2();
-    boolean roundabout$shieldNotDisabled();
-    boolean roundabout$isDazed();
-    byte roundabout$getDazeTime();
-    boolean roundabout$isRestrained();
-    int roundabout$getRestrainedTicks();
-    void roundabout$setRestrainedTicks(int restrain);
-    void roundabout$setDazed(byte dazeTime);
-    void roundabout$setRedBound(boolean roundabout$isRedBound);
-    void roundabout$setDazeTime(byte dazeTime);
+    void sba$setStandPowers(StandPowers standPowers);
+    void sba$setAttackTimeDuring(int attackTimeDuring);
+    void sba$setInterruptCD(int interruptCD);
+    boolean sba$isGuarding();
+    boolean sba$isGuardInput();
+    boolean sba$isBarraging();
+    boolean sba$isClashing();
+    float sba$getGuardCooldown();
+    boolean sba$isGuardingEffectively();
+    boolean sba$isGuardingEffectively2();
+    boolean sba$shieldNotDisabled();
+    boolean sba$isDazed();
+    byte sba$getDazeTime();
+    boolean sba$isRestrained();
+    int sba$getRestrainedTicks();
+    void sba$setRestrainedTicks(int restrain);
+    void sba$setDazed(byte dazeTime);
+    void sba$setRedBound(boolean sba$isRedBound);
+    void sba$setDazeTime(byte dazeTime);
 
-    void roundabout$tryPower(int move, boolean forced);
-    void roundabout$tryIntPower(int move, boolean forced, int chargeTime);
-    void roundabout$tryIntPower(int move,boolean forced, int chargeTime, int move2, int move3);
-    void roundabout$tryBlockPosPower(int move, boolean forced, BlockPos blockPos);
-    void roundabout$tryPosPower(int move, boolean forced, Vec3 blockPos);
-    void roundabout$tryPowerF(int move, boolean forced);
-    void roundabout$tryIntPowerF(int move, boolean forced, int chargeTime);
-    void roundabout$tryIntPowerF(int move,boolean forced, int chargeTime, int move2, int move3);
-    void roundabout$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos);
-    void roundabout$tryPosPowerF(int move, boolean forced, Vec3 blockPos);
-    void roundabout$tryPowerP(int move, boolean forced);
-    void roundabout$tryIntPowerP(int move, boolean forced, int chargeTime);
-    void roundabout$tryIntPowerP(int move,boolean forced, int chargeTime, int move2, int move3);
-    void roundabout$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos);
-    void roundabout$tryPosPowerP(int move, boolean forced, Vec3 blockPos);
-    void roundabout$addFollower(FollowingStandEntity $$0);
-    void roundabout$removeFollower(FollowingStandEntity $$0);
+    void sba$tryPower(int move, boolean forced);
+    void sba$tryIntPower(int move, boolean forced, int chargeTime);
+    void sba$tryIntPower(int move,boolean forced, int chargeTime, int move2, int move3);
+    void sba$tryBlockPosPower(int move, boolean forced, BlockPos blockPos);
+    void sba$tryPosPower(int move, boolean forced, Vec3 blockPos);
+    void sba$tryPowerF(int move, boolean forced);
+    void sba$tryIntPowerF(int move, boolean forced, int chargeTime);
+    void sba$tryIntPowerF(int move,boolean forced, int chargeTime, int move2, int move3);
+    void sba$tryBlockPosPowerF(int move, boolean forced, BlockPos blockPos);
+    void sba$tryPosPowerF(int move, boolean forced, Vec3 blockPos);
+    void sba$tryPowerP(int move, boolean forced);
+    void sba$tryIntPowerP(int move, boolean forced, int chargeTime);
+    void sba$tryIntPowerP(int move,boolean forced, int chargeTime, int move2, int move3);
+    void sba$tryBlockPosPowerP(int move, boolean forced, BlockPos blockPos);
+    void sba$tryPosPowerP(int move, boolean forced, Vec3 blockPos);
+    void sba$addFollower(FollowingStandEntity $$0);
+    void sba$removeFollower(FollowingStandEntity $$0);
 
-    List<FollowingStandEntity> roundabout$getFollowers();
-    boolean roundabout$hasFollower(FollowingStandEntity $$0);
-    boolean roundabout$hasFollower(Predicate<Entity> $$0);
+    List<FollowingStandEntity> sba$getFollowers();
+    boolean sba$hasFollower(FollowingStandEntity $$0);
+    boolean sba$hasFollower(Predicate<Entity> $$0);
 
-    int roundaboutGetTSHurtSound();
+    int sbaGetTSHurtSound();
 
-    void roundaboutSetTSHurtSound(int roundaboutTSHurtSound);
+    void sbaSetTSHurtSound(int sbaTSHurtSound);
 
-    void roundabout$setSummonCD(int summonCD);
-    boolean roundabout$getSummonCD();
-    int roundabout$getSummonCD2();
-    byte roundabout$getOnStandFire();
-    boolean roundabout$isOnStandFire();
-    LivingEntity roundabout$getFireStarter();
-    void roundabout$setFireStarter(LivingEntity le);
-    void roundabout$setFireStarterID(int le);
-    int roundabout$getFireStarterID();
-    void roundabout$setOnStandFire(byte onStandFire);
-    void roundabout$setOnStandFire(byte onStandFire, LivingEntity LE);
-    void roundabout$setSecondsOnStandFire(int $$0);
-    void roundabout$setRemainingStandFireTicks(int $$0);
-    int roundabout$getRemainingFireTicks();
-    void roundabout$clearFire();
-    Entity roundabout$getTargetEntity(LivingEntity User, float distMax);
+    void sba$setSummonCD(int summonCD);
+    boolean sba$getSummonCD();
+    int sba$getSummonCD2();
+    byte sba$getOnStandFire();
+    boolean sba$isOnStandFire();
+    LivingEntity sba$getFireStarter();
+    void sba$setFireStarter(LivingEntity le);
+    void sba$setFireStarterID(int le);
+    int sba$getFireStarterID();
+    void sba$setOnStandFire(byte onStandFire);
+    void sba$setOnStandFire(byte onStandFire, LivingEntity LE);
+    void sba$setSecondsOnStandFire(int $$0);
+    void sba$setRemainingStandFireTicks(int $$0);
+    int sba$getRemainingFireTicks();
+    void sba$clearFire();
+    Entity sba$getTargetEntity(LivingEntity User, float distMax);
 
-    LivingEntity roundabout$getPowerUser();
-    float roundabout$getBonusJumpHeight();
+    LivingEntity sba$getPowerUser();
+    float sba$getBonusJumpHeight();
 
-    void roundabout$setTSJump(boolean roundaboutTSJump);
+    void sba$setTSJump(boolean sbaTSJump);
 
-    boolean roundabout$getTSJump();
-    boolean roundabout$getBigJump();
-    void roundabout$setBigJump(boolean bigJump);
-    float roundabout$getBigJumpCurrentProgress();
-    void roundabout$setBigJumpCurrentProgress(float bigJump);
-    void roundabout$setBlip(Vector3f vec);
-    void roundabout$tryBlip();
+    boolean sba$getTSJump();
+    boolean sba$getBigJump();
+    void sba$setBigJump(boolean bigJump);
+    float sba$getBigJumpCurrentProgress();
+    void sba$setBigJumpCurrentProgress(float bigJump);
+    void sba$setBlip(Vector3f vec);
+    void sba$tryBlip();
 
     @Nullable
-    StandEntity roundabout$getStand();
+    StandEntity sba$getStand();
 
-    float roundabout$getStoredDamage();
-    Entity roundaboutGetStoredAttacker();
-    void roundaboutSetStoredAttacker(Entity attacker);
-    void roundabout$setStoredDamage(float roundaboutStoredDamage);
+    float sba$getStoredDamage();
+    Entity sbaGetStoredAttacker();
+    void sbaSetStoredAttacker(Entity attacker);
+    void sba$setStoredDamage(float sbaStoredDamage);
 
-    float roundaboutGetMaxStoredDamage();
+    float sbaGetMaxStoredDamage();
 
-    byte roundabout$getStoredDamageByte();
+    byte sba$getStoredDamageByte();
     void rdbt$setHideDeath(Boolean hide);
     boolean rdbt$getHideDeath();
 
-    void roundabout$UniversalTick();
-    void roundabout$startAutoSpinAttack(int p_204080_);
-    void roundabout$stopAutoSpinAttack();
+    void sba$UniversalTick();
+    void sba$startAutoSpinAttack(int p_204080_);
+    void sba$stopAutoSpinAttack();
 
-    void roundabout$setThrower(LivingEntity thrower);
-    void roundabout$setZappedToID(int bound);
-    int roundabout$getZappedToID();
-    void  roundabout$aggressivelyEnforceZapAggro();
-    void roundabout$aggressivelyEnforceAggro(Entity theory);
-    LivingEntity roundabout$getThrower();
+    void sba$setThrower(LivingEntity thrower);
+    void sba$setZappedToID(int bound);
+    int sba$getZappedToID();
+    void  sba$aggressivelyEnforceZapAggro();
+    void sba$aggressivelyEnforceAggro(Entity theory);
+    LivingEntity sba$getThrower();
 
-    int roundabout$getIdleTime();
+    int sba$getIdleTime();
 
 
-    int roundabout$getMaxLeapTicks();
+    int sba$getMaxLeapTicks();
 
-    int roundabout$getDestructionTrailTicks();
-    void roundabout$setDestructionTrailTicks(int destructTicks);
-    void roundabout$explode(double $$0);
-    void roundabout$explodePublic(double $$1, double x, double y, double z);
-    int roundabout$getLeapTicks();
-    void roundabout$setLeapTicks(int leapTicks);
-    void roundabout$setLeapIntentionally(boolean intentional);
+    int sba$getDestructionTrailTicks();
+    void sba$setDestructionTrailTicks(int destructTicks);
+    void sba$explode(double $$0);
+    void sba$explodePublic(double $$1, double x, double y, double z);
+    int sba$getLeapTicks();
+    void sba$setLeapTicks(int leapTicks);
+    void sba$setLeapIntentionally(boolean intentional);
 
-    int roundabout$getGasolineTime();
-    int roundabout$getGasolineRenderTime();
-    void roundabout$setGasolineTime(int gasTicks);
+    int sba$getGasolineTime();
+    int sba$getGasolineRenderTime();
+    void sba$setGasolineTime(int gasTicks);
 
-    int roundabout$getMaxGasolineTime();
-    int roundabout$getMaxBucketGasolineTime();
+    int sba$getMaxGasolineTime();
+    int sba$getMaxBucketGasolineTime();
 
-    void roundabout$setIdleTime(int roundaboutIdleTime);
-    void roundabout$setLocacacaCurse(byte locacacaCurse);
-    byte roundabout$getLocacacaCurse();
+    void sba$setIdleTime(int sbaIdleTime);
+    void sba$setLocacacaCurse(byte locacacaCurse);
+    byte sba$getLocacacaCurse();
 
     /**Slack Babbath*/
-    void roundabout$setGrabbedSoul(boolean grabbedSoul);
-    boolean roundabout$getGrabbedSoul();
+    void sba$setGrabbedSoul(boolean grabbedSoul);
+    boolean sba$getGrabbedSoul();
 
-    void roundabout$setGrabberSabbath(int grabbedSoul);
-    int roundabout$getGrabberSabbath();
+    void sba$setGrabberSabbath(int grabbedSoul);
+    int sba$getGrabberSabbath();
 
-    byte roundabout$getStandSkin();
-    byte roundabout$getLastStandSkin();
-    void roundabout$setLastStandSkin(byte lastStandSkin);
-    byte roundabout$getStandAnimation();
+    byte sba$getStandSkin();
+    byte sba$getLastStandSkin();
+    void sba$setLastStandSkin(byte lastStandSkin);
+    byte sba$getStandAnimation();
     void rdbt$synchedData(EntityDataAccessor<?> $$0);
-    void roundabout$setStandAnimation(byte anim);
-    byte roundabout$getIdlePos();
-    void roundabout$setIdlePosX(byte pos);
-    void roundabout$setStandSkin(byte skin);
-    void roundabout$setDrowning(boolean drown);
-    boolean roundabout$getDrowning();
-    boolean roundabout$mutualActuallyHurt(DamageSource $$0, float $$1);
-    boolean roundabout$hasAStand();
-    boolean roundabout$rotateArmToShoot(HumanoidArm arm);
+    void sba$setStandAnimation(byte anim);
+    byte sba$getIdlePos();
+    void sba$setIdlePosX(byte pos);
+    void sba$setStandSkin(byte skin);
+    void sba$setDrowning(boolean drown);
+    boolean sba$getDrowning();
+    boolean sba$mutualActuallyHurt(DamageSource $$0, float $$1);
+    boolean sba$hasAStand();
+    boolean sba$rotateArmToShoot(HumanoidArm arm);
 
     /**Achtuah*/
-    void roundabout$setTrueInvis(int bound);
-    int roundabout$getTrueInvis();
+    void sba$setTrueInvis(int bound);
+    int sba$getTrueInvis();
 
-    void roundabout$setLifePunchClone(LifePunchCloneEntity clone);
-    LifePunchCloneEntity roundabout$getLifePunchClone();
+    void sba$setLifePunchClone(LifePunchCloneEntity clone);
+    LifePunchCloneEntity sba$getLifePunchClone();
 
     /**Metallica*/
-    void roundabout$setMetallicaInvis(int invis);
-    int roundabout$getMetallicaInvis();
+    void sba$setMetallicaInvis(int invis);
+    int sba$getMetallicaInvis();
 
-    Vec3 roundabout$calculateViewVectorButICanUseIt(float $$0, float $$1);
+    Vec3 sba$calculateViewVectorButICanUseIt(float $$0, float $$1);
 
     /**Gravity Direction*/
 
     /**Soft and Wet Bubble Encasing**/
-    void roundabout$setBubbleEncased(byte adj);
-    byte roundabout$getBubbleEncased();
-    boolean roundabout$getCombatMode();
-    boolean roundabout$getEffectiveCombatMode();
-    void roundabout$setCombatMode(boolean only);
-    boolean roundabout$isBubbleEncased();
-    void roundabout$setStoredVelocity(Vec3 store);
-    Vec3 roundabout$getStoredVelocity();
-    boolean roundabout$isLaunchBubbleEncased();
-    void roundabout$setBubbleLaunchEncased();
+    void sba$setBubbleEncased(byte adj);
+    byte sba$getBubbleEncased();
+    boolean sba$getCombatMode();
+    boolean sba$getEffectiveCombatMode();
+    void sba$setCombatMode(boolean only);
+    boolean sba$isBubbleEncased();
+    void sba$setStoredVelocity(Vec3 store);
+    Vec3 sba$getStoredVelocity();
+    boolean sba$isLaunchBubbleEncased();
+    void sba$setBubbleLaunchEncased();
     void rdbt$completeUsingItem();
 
-    SoundEvent roundabout$getHurtSound(DamageSource sauce);
+    SoundEvent sba$getHurtSound(DamageSource sauce);
 
     /**Anubis Possesion */
-    boolean roundabout$isPossessed();
-    PathfinderMob roundabout$getPossessor();
-    void roundabout$setPossessor(PathfinderMob e);
-    void roundabout$onPossessionFinish();
+    boolean sba$isPossessed();
+    PathfinderMob sba$getPossessor();
+    void sba$setPossessor(PathfinderMob e);
+    void sba$onPossessionFinish();
     /**Play around with falling gravity*/
-    void roundabout$setAdjustedGravity(int adj);
-    int roundabout$getAdjustedGravity();
-    double roundabout$getGravity(double baseGrav);
+    void sba$setAdjustedGravity(int adj);
+    int sba$getAdjustedGravity();
+    double sba$getGravity(double baseGrav);
     double rdbt$modelTravel(double $$1);
     void rdbt$adjGravTrav();
-    void roundabout$adjustGravity();
+    void sba$adjustGravity();
 
     boolean GoingDown();
 
@@ -430,31 +430,31 @@ public interface StandUser {
     void rdbt$setPowerCooldowns(List<CooldownInstance> cdi);
 
     /* diver down diving down */
-    void roundabout$SetDiverUser(PowersDiverDown powers);
-    PowersDiverDown roundabout$getDiverUser();
-    boolean roundabout$isDisguised();
-    @Nullable GameProfile roundabout$getDisguiseProfile();
-    void roundabout$setDisguise(GameProfile profile);
-    void roundabout$clearDisguise();
-    boolean roundabout$hasDiverLegs();
-    void roundabout$setDiverLegs(boolean legs);
-    boolean roundabout$hasDiverArms();
-    void roundabout$setDiverArms(boolean arms);
-    boolean roundabout$hasRibcageTrap();
-    void roundabout$setRibcageTrap(boolean trap);
-    boolean roundabout$hasSpringLegs();
-    void roundabout$setSpringLegs(boolean legs);
+    void sba$SetDiverUser(PowersDiverDown powers);
+    PowersDiverDown sba$getDiverUser();
+    boolean sba$isDisguised();
+    @Nullable GameProfile sba$getDisguiseProfile();
+    void sba$setDisguise(GameProfile profile);
+    void sba$clearDisguise();
+    boolean sba$hasDiverLegs();
+    void sba$setDiverLegs(boolean legs);
+    boolean sba$hasDiverArms();
+    void sba$setDiverArms(boolean arms);
+    boolean sba$hasRibcageTrap();
+    void sba$setRibcageTrap(boolean trap);
+    boolean sba$hasSpringLegs();
+    void sba$setSpringLegs(boolean legs);
 
-    boolean roundabout$hasGERooted();
-    void roundabout$setGERooted(boolean tree);
-    ItemStack roundabout$getGERootedItem();
-    void roundabout$setGERootedItem(ItemStack stack);
-    AnimationState roundabout$getGERootsAnimation();
-    int roundabout$getGERootsShrinkTicks();
+    boolean sba$hasGERooted();
+    void sba$setGERooted(boolean tree);
+    ItemStack sba$getGERootedItem();
+    void sba$setGERootedItem(ItemStack stack);
+    AnimationState sba$getGERootsAnimation();
+    int sba$getGERootsShrinkTicks();
 
     /** catch the rainbow **/
-    boolean roundabout$getIsRainWalking();
-    void roundabout$setIsRainWalking(boolean bool);
+    boolean sba$getIsRainWalking();
+    void sba$setIsRainWalking(boolean bool);
 
-    void roundabout$setInfiniteSpinPoint(Vec3 v);
+    void sba$setInfiniteSpinPoint(Vec3 v);
 }

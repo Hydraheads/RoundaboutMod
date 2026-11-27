@@ -22,10 +22,10 @@ public class DazeGameRenderer {
 
     /**The amount of screen shakes has to be negligable for a 20 hits per sec move*/
     @Inject(method = "bobHurt", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$tiltViewWhenHurt(PoseStack $$0, float $$1, CallbackInfo ci) {
+    private void sba$tiltViewWhenHurt(PoseStack $$0, float $$1, CallbackInfo ci) {
         //$$0 is matrcices, $$1 is tickdelta
-            if (minecraft.player != null && (((StandUser) minecraft.player).roundabout$isDazed() ||
-                    (((IPlayerEntity) minecraft.player).roundabout$getCameraHits() > -1))) {
+            if (minecraft.player != null && (((StandUser) minecraft.player).sba$isDazed() ||
+                    (((IPlayerEntity) minecraft.player).sba$getCameraHits() > -1))) {
                 assert minecraft.level != null;
                 if (minecraft.level.getGameTime() % 5 != 0) {
                     LivingEntity livingEntity = (LivingEntity) minecraft.getCameraEntity();

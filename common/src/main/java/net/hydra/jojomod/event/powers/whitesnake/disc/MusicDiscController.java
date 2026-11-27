@@ -31,10 +31,10 @@ public final class MusicDiscController {
                 || WhitesnakeDiscUtil.isDiscBlacklisted(target)) return false;
         if (target.level().isClientSide()) return true;
         DiscBearer bearer = (DiscBearer) target;
-        if (!bearer.roundabout$getMusicDisc().isEmpty()) return false;
+        if (!bearer.sba$getMusicDisc().isEmpty()) return false;
         ItemStack implanted = stack.copy();
         implanted.setCount(1);
-        bearer.roundabout$setMusicDisc(implanted);
+        bearer.sba$setMusicDisc(implanted);
         target.level().playSound(null, target.blockPosition(), ModSounds.WHITESNAKE_DISC_INSERT_EVENT,
                 SoundSource.PLAYERS, 1.0F, 1.0F);
         start(target, implanted);
@@ -43,7 +43,7 @@ public final class MusicDiscController {
 
     public static void tick(LivingEntity bearerEntity) {
         if (bearerEntity.level().isClientSide()) return;
-        ItemStack stack = ((DiscBearer) bearerEntity).roundabout$getMusicDisc();
+        ItemStack stack = ((DiscBearer) bearerEntity).sba$getMusicDisc();
         if (stack.isEmpty() || !(stack.getItem() instanceof RecordItem)) {
             if (PLAYING.containsKey(bearerEntity)) stop(bearerEntity);
             return;
@@ -56,16 +56,16 @@ public final class MusicDiscController {
     public static void startTracking(LivingEntity entity, ServerPlayer player) {
         Set<ServerPlayer> listeners = LISTENERS.get(entity);
         if (listeners != null) listeners.remove(player);
-        start(entity, ((DiscBearer) entity).roundabout$getMusicDisc());
+        start(entity, ((DiscBearer) entity).sba$getMusicDisc());
     }
 
     public static void ejectOnDamage(LivingEntity bearerEntity) {
         if (bearerEntity.level().isClientSide()) return;
         DiscBearer bearer = (DiscBearer) bearerEntity;
-        ItemStack stack = bearer.roundabout$getMusicDisc();
+        ItemStack stack = bearer.sba$getMusicDisc();
         if (stack.isEmpty()) return;
         stop(bearerEntity);
-        bearer.roundabout$setMusicDisc(ItemStack.EMPTY);
+        bearer.sba$setMusicDisc(ItemStack.EMPTY);
         bearerEntity.spawnAtLocation(stack.copy());
         bearerEntity.level().playSound(null, bearerEntity.blockPosition(), ModSounds.WHITESNAKE_DISC_EJECT_EVENT,
                 SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -84,7 +84,7 @@ public final class MusicDiscController {
         for (ServerPlayer player : server.players()) {
             if (listeners.contains(player)) continue;
             if (player.distanceToSqr(entity) > range * range) {
-                if (!(((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers)
+                if (!(((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers)
                         || !powers.isPiloting()) continue;
                 LivingEntity stand = powers.getPilotingStand();
                 if (stand == null || !stand.isAlive() || stand.isRemoved()

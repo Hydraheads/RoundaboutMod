@@ -8,20 +8,20 @@ public class KeyInputRegistry {
     /**This is where all keybinds in the mod are registered.
      * Note that forge and fabric also register the keys so they can be
      * remapped ingame.*/
-    public static final String KEY_CATEGORY_JOJO = "key.category.roundabout.jojo";
-    public static final String KEY_ABILITY_1 = "key.roundabout.ability.one";
-    public static final String KEY_ABILITY_2 = "key.roundabout.ability.two";
-    public static final String KEY_ABILITY_3 = "key.roundabout.ability.three";
-    public static final String KEY_ABILITY_4 = "key.roundabout.ability.four";
-    public static final String KEY_SUMMON_STAND = "key.roundabout.summon.stand";
-    public static final String KEY_JOJO_MENU = "key.roundabout.menu";
-    public static final String KEY_GUARD = "key.roundabout.bonus_guard";
-    public static final String KEY_SWITCH_ROWS = "key.roundabout.switch_rows";
-    public static final String KEY_SHOW_EXP = "key.roundabout.show_exp";
-    public static final String KEY_POSE = "key.roundabout.pose";
-    public static final String KEY_HIDE_ICONS = "key.roundabout.hide_icons";
-    public static final String KEY_FIRE_FIREARMS = "key.roundabout.fire_firearms";
-    public static final String POWER_SWITCH = "key.roundabout.power_switch";
+    public static final String KEY_CATEGORY_JOJO = "key.category.sba.jojo";
+    public static final String KEY_ABILITY_1 = "key.sba.ability.one";
+    public static final String KEY_ABILITY_2 = "key.sba.ability.two";
+    public static final String KEY_ABILITY_3 = "key.sba.ability.three";
+    public static final String KEY_ABILITY_4 = "key.sba.ability.four";
+    public static final String KEY_SUMMON_STAND = "key.sba.summon.stand";
+    public static final String KEY_JOJO_MENU = "key.sba.menu";
+    public static final String KEY_GUARD = "key.sba.bonus_guard";
+    public static final String KEY_SWITCH_ROWS = "key.sba.switch_rows";
+    public static final String KEY_SHOW_EXP = "key.sba.show_exp";
+    public static final String KEY_POSE = "key.sba.pose";
+    public static final String KEY_HIDE_ICONS = "key.sba.hide_icons";
+    public static final String KEY_FIRE_FIREARMS = "key.sba.fire_firearms";
+    public static final String POWER_SWITCH = "key.sba.power_switch";
 
     public static final KeyMapping summonKey = new KeyMapping(
             KeyInputRegistry.KEY_SUMMON_STAND,

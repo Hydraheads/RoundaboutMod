@@ -62,7 +62,7 @@ public class PowersSurvivor extends NewDashPreset {
     }
 
     public boolean angerSelectionMode(){
-        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+        return getStandUserSelf().sba$getUniqueStandModeToggle();
     }
     public boolean canSummonStandAsEntity(){
         return false;
@@ -106,9 +106,9 @@ public class PowersSurvivor extends NewDashPreset {
         if (displayStand == null){
             displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
         }
-            if (this.self instanceof Player PL && ((IPlayerEntity) PL).roundabout$getStandSkin() != displayStand.getSkin()) {
+            if (this.self instanceof Player PL && ((IPlayerEntity) PL).sba$getStandSkin() != displayStand.getSkin()) {
                 displayStand = ModEntities.SURVIVOR.create(this.getSelf().level());
-                displayStand.setSkin(((IPlayerEntity) PL).roundabout$getStandSkin());
+                displayStand.setSkin(((IPlayerEntity) PL).sba$getStandSkin());
             }
         return displayStand;
     }
@@ -199,7 +199,7 @@ public class PowersSurvivor extends NewDashPreset {
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
             SurvivorTarget = null;
             EntityTargetOne = null;
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_4, true);
             tryPowerPacket(PowerIndex.POWER_4);
         }
     }
@@ -207,7 +207,7 @@ public class PowersSurvivor extends NewDashPreset {
     public void throwBottleClient(){
         if (!this.onCooldown(PowerIndex.SKILL_1)) {
             if (canUseWaterBottleThrow()) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1, true);
                 tryPowerPacket(PowerIndex.POWER_1);
             }
         }
@@ -485,8 +485,8 @@ public class PowersSurvivor extends NewDashPreset {
         if (stand instanceof SurvivorEntity SE) {
             StandUser user = getStandUserSelf();
             stand.absMoveTo(pos.x(), pos.y(), pos.z());
-            stand.setSkin(user.roundabout$getStandSkin());
-            stand.setIdleAnimation(user.roundabout$getIdlePos());
+            stand.setSkin(user.sba$getStandSkin());
+            stand.setIdleAnimation(user.sba$getIdlePos());
             stand.setMaster(this.self);
             PowerTypes.copyPlaneOfExisting(self,stand);
             addSurvivorToList(SE);
@@ -621,21 +621,21 @@ public class PowersSurvivor extends NewDashPreset {
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
-            case GREEN -> Component.translatable("skins.roundabout.survivor.green");
-            case RED -> Component.translatable("skins.roundabout.survivor.red");
-            case PURPLE -> Component.translatable("skins.roundabout.survivor.purple");
-            case BLUE -> Component.translatable("skins.roundabout.survivor.blue");
-            case SILVER -> Component.translatable("skins.roundabout.survivor.silver");
-            case GHAST -> Component.translatable("skins.roundabout.survivor.ghast");
-            case ENDER -> Component.translatable("skins.roundabout.survivor.ender");
-            case CONDUIT -> Component.translatable("skins.roundabout.survivor.conduit");
-            case CAKE -> Component.translatable("skins.roundabout.survivor.cake");
-            case SPONGE -> Component.translatable("skins.roundabout.survivor.sponge");
-            case SCULK -> Component.translatable("skins.roundabout.survivor.sculk");
-            case REDSTONE -> Component.translatable("skins.roundabout.survivor.redstone");
-            case CENTURIAN -> Component.translatable("skins.roundabout.survivor.centurian");
-            case BLOB -> Component.translatable("skins.roundabout.survivor.blob");
-            default -> Component.translatable("skins.roundabout.survivor.base");
+            case GREEN -> Component.translatable("skins.sba.survivor.green");
+            case RED -> Component.translatable("skins.sba.survivor.red");
+            case PURPLE -> Component.translatable("skins.sba.survivor.purple");
+            case BLUE -> Component.translatable("skins.sba.survivor.blue");
+            case SILVER -> Component.translatable("skins.sba.survivor.silver");
+            case GHAST -> Component.translatable("skins.sba.survivor.ghast");
+            case ENDER -> Component.translatable("skins.sba.survivor.ender");
+            case CONDUIT -> Component.translatable("skins.sba.survivor.conduit");
+            case CAKE -> Component.translatable("skins.sba.survivor.cake");
+            case SPONGE -> Component.translatable("skins.sba.survivor.sponge");
+            case SCULK -> Component.translatable("skins.sba.survivor.sculk");
+            case REDSTONE -> Component.translatable("skins.sba.survivor.redstone");
+            case CENTURIAN -> Component.translatable("skins.sba.survivor.centurian");
+            case BLOB -> Component.translatable("skins.sba.survivor.blob");
+            default -> Component.translatable("skins.sba.survivor.base");
         };
     }
 
@@ -689,17 +689,17 @@ public class PowersSurvivor extends NewDashPreset {
             SHOCK = 73;
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.throw_bottle",
-                "instruction.roundabout.press_skill", StandIcons.BOTTLE, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.summon_survivor",
-                "instruction.roundabout.press_skill", StandIcons.SPAWN,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.desummon_survivor",
-                "instruction.roundabout.press_skill_crouch", StandIcons.DESPAWN,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.throw_bottle",
+                "instruction.sba.press_skill", StandIcons.BOTTLE, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.summon_survivor",
+                "instruction.sba.press_skill", StandIcons.SPAWN,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.desummon_survivor",
+                "instruction.sba.press_skill_crouch", StandIcons.DESPAWN,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.target_zap",
-                    "instruction.roundabout.press_skill", StandIcons.RAGE_SELECTION, 4, level, bypass));
+            $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.sba.target_zap",
+                    "instruction.sba.press_skill", StandIcons.RAGE_SELECTION, 4, level, bypass));
         }
         return $$1;
     }
@@ -709,7 +709,7 @@ public class PowersSurvivor extends NewDashPreset {
         return true;
     }
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "sba.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);
@@ -719,12 +719,12 @@ public class PowersSurvivor extends NewDashPreset {
 
     public boolean switchAngerSelectionMode(){
         if (getCreative() || !ClientNetworking.getAppropriateConfig().survivorSettings.canonSurvivorHasNoRageCupid) {
-            getStandUserSelf().roundabout$setUniqueStandModeToggle(!angerSelectionMode());
+            getStandUserSelf().sba$setUniqueStandModeToggle(!angerSelectionMode());
             if (!isClient() && this.self instanceof ServerPlayer PE) {
                 if (angerSelectionMode()) {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection").withStyle(ChatFormatting.RED), true);
+                    PE.displayClientMessage(Component.translatable("text.sba.survivor.anger_selection").withStyle(ChatFormatting.RED), true);
                 } else {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.survivor.anger_selection_off").withStyle(ChatFormatting.RED), true);
+                    PE.displayClientMessage(Component.translatable("text.sba.survivor.anger_selection_off").withStyle(ChatFormatting.RED), true);
                 }
             }
         }

@@ -1,7 +1,7 @@
 package net.hydra.jojomod.Utils.commands;
 
-import net.hydra.jojomod.event.commands.RoundaboutCom;
-import net.hydra.jojomod.event.commands.RoundaboutDiscCommand;
+import net.hydra.jojomod.event.commands.SBACom;
+import net.hydra.jojomod.event.commands.SBADiscCommand;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeCommandRegistry{
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent e) {
-        RoundaboutCom.register(e.getDispatcher());
-        RoundaboutDiscCommand.register(e.getDispatcher());
+        SBACom.register(e.getDispatcher());
+        SBADiscCommand.register(e.getDispatcher());
     }
 }

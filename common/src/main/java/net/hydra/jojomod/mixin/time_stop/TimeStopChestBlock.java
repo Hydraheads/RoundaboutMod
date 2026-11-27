@@ -27,25 +27,25 @@ public class TimeStopChestBlock {
      * it was decided that we would be super elaborate as to make the ability feel bugless**/
 
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$OpenChest(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> ci) {
+    protected void sba$OpenChest(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> ci) {
         if (!$$1.isClientSide) {
             if (((TimeStop)$$1).inTimeStopRange($$2)) {
                 ((TimeStop) $$1).streamTileEntityTSToCLient($$2);
                 BlockEntity blk = $$1.getBlockEntity($$2);
                 if (blk != null) {
-                    ((IBlockEntityAccess) blk).roundabout$setRoundaboutTimeInteracted(true);
+                    ((IBlockEntityAccess) blk).sba$setSBATimeInteracted(true);
                 }
             }
         }
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$TickChest(BlockState $$0, ServerLevel $$1, BlockPos $$2, RandomSource $$3, CallbackInfo ci) {
+    protected void sba$TickChest(BlockState $$0, ServerLevel $$1, BlockPos $$2, RandomSource $$3, CallbackInfo ci) {
 
             if (!((TimeStop)$$1).inTimeStopRange($$2)){
                 BlockEntity blk = $$1.getBlockEntity($$2);
                 if (blk != null) {
-                    ((IBlockEntityAccess) blk).roundabout$setRoundaboutTimeInteracted(false);
+                    ((IBlockEntityAccess) blk).sba$setSBATimeInteracted(false);
                     ((TimeStop) $$1).streamTileEntityTSToCLient($$2);
                 }
             }

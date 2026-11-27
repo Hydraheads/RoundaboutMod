@@ -30,7 +30,7 @@ public class BombPlantedSpectralArrow extends SpectralArrow {
     public void tick() {
         super.tick();
         if (!level().isClientSide()) {
-            if (getOwner() == null || !(getOwner().isAlive() && ((StandUser)getOwner()).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
+            if (getOwner() == null || !(getOwner().isAlive() && ((StandUser)getOwner()).sba$getStandPowers() instanceof PowersKillerQueen PKQ
                 && PKQ.bombEntity == this)) {
                 defuse();
             }
@@ -40,7 +40,7 @@ public class BombPlantedSpectralArrow extends SpectralArrow {
     @Override
     protected void doPostHurtEffects(LivingEntity target) {
         super.doPostHurtEffects(target);
-        if (target != getOwner() && getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
+        if (target != getOwner() && getOwner() instanceof LivingEntity LE && ((StandUser) LE).sba$getStandPowers() instanceof PowersKillerQueen PKQ
                 && PKQ.bombEntity.getId() == getId()) {
             PKQ.contactDetonate(target);
         }

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "minecraft:chain"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "ICI"
+  ],
+  "result": {
+    "count": 1,
+    "item": "sba:barbed_wire"
+  },
+  "show_notification": true
+}

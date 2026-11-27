@@ -116,8 +116,8 @@ public class FakeItemEntity extends Entity implements TraceableEntity {
                 this.age++;
             }
         }
-        if (((IEntityAndData)this).roundabout$getNoGravTicks() > 0){
-            ((IEntityAndData)this).roundabout$setNoGravTicks(((IEntityAndData)this).roundabout$getNoGravTicks()-1);
+        if (((IEntityAndData)this).sba$getNoGravTicks() > 0){
+            ((IEntityAndData)this).sba$setNoGravTicks(((IEntityAndData)this).sba$getNoGravTicks()-1);
             if (!this.isNoGravity()) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.04, 0.0));
             }
@@ -405,7 +405,7 @@ public class FakeItemEntity extends Entity implements TraceableEntity {
             Player pl =  this.level().getPlayerByUUID($$0);
             if (pl != null){
                 if (MainUtil.getEntityIsTrulyInvisible(pl) && ClientNetworking.getAppropriateConfig().achtungSettings.hidesShotProjectiles){
-                    ((IEntityAndData)this).roundabout$setTrueInvisibility(MainUtil.getEntityTrulyInvisibleTicks(pl));
+                    ((IEntityAndData)this).sba$setTrueInvisibility(MainUtil.getEntityTrulyInvisibleTicks(pl));
                 }
             }
         }

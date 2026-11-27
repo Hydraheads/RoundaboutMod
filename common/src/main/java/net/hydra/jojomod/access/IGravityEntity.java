@@ -8,22 +8,22 @@ import net.minecraft.world.phys.Vec3;
 public interface IGravityEntity {
 
     /**Gravity*/
-    Direction roundabout$getGravityDirection();
-    void roundabout$setGravityDirection(Direction direction);
-    void roundabout$setBaseGravityDirection(Direction gravityDirection);
-    void roundabout$updateGravityStatus();
-    boolean roundabout$canChangeGravity();
-    void roundabout$applyGravityChange();
-    double roundabout$getGravityStrength();
-    void roundabout$setGravityStrength(double str);
+    Direction sba$getGravityDirection();
+    void sba$setGravityDirection(Direction direction);
+    void sba$setBaseGravityDirection(Direction gravityDirection);
+    void sba$updateGravityStatus();
+    boolean sba$canChangeGravity();
+    void sba$applyGravityChange();
+    double sba$getGravityStrength();
+    void sba$setGravityStrength(double str);
     void rdbdt$setTaggedForFlip(boolean flip);
-    int roundabout$getSuffocationTicks();
+    int sba$getSuffocationTicks();
 
-    void roundabout$setExistVec(byte adj, Vec3 exist);
+    void sba$setExistVec(byte adj, Vec3 exist);
     Vec3 rdbt$getExistPlaneStartPoint();
     ResourceKey<Level> rdbt$getExistPlaneLevel();
     void rdbt$setExistPlaneLevel(ResourceKey<Level> keyLev);
-    void roundabout$setExistPlane(byte adj);
-    byte roundabout$getExistPlane();
+    void sba$setExistPlane(byte adj);
+    byte sba$getExistPlane();
 
 }

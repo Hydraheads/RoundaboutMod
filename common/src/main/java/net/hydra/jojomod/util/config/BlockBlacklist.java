@@ -1,7 +1,7 @@
 package net.hydra.jojomod.util.config;
 
 import com.google.gson.Gson;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -50,12 +50,12 @@ public class BlockBlacklist {
         }
         catch (IOException e)
         {
-            Roundabout.LOGGER.warn("Failed to load blacklist \"{}.json\" (error: [\"{}\"])", filename, e.toString());
+            SBA.LOGGER.warn("Failed to load blacklist \"{}.json\" (error: [\"{}\"])", filename, e.toString());
             e.printStackTrace();
             return false;
         }
 
-        Roundabout.LOGGER.debug("Loaded blacklist \"{}.json\" successfully.", filename);
+        SBA.LOGGER.debug("Loaded blacklist \"{}.json\" successfully.", filename);
         return true;
     }
 

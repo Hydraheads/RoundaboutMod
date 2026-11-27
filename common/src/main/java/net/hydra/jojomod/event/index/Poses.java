@@ -158,7 +158,7 @@ public enum Poses {
     public static AnimationDefinition getAnimation(Player player) {
 
         IPlayerEntity ipe = (IPlayerEntity) player;
-        byte poseEmote = ipe.roundabout$GetPoseEmote();
+        byte poseEmote = ipe.sba$GetPoseEmote();
 
         AnimationDefinition emote = null;
         if (Poses.WRY.id == poseEmote) {

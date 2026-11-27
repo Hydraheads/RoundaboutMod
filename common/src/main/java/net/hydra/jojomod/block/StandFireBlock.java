@@ -190,11 +190,11 @@ public class StandFireBlock extends BaseEntityBlock {
     }
 
     private int getBurnOdds(BlockState $$0) {
-        return ((IFireBlock)Blocks.FIRE).roundabout$getBurnOdds($$0);
+        return ((IFireBlock)Blocks.FIRE).sba$getBurnOdds($$0);
     }
 
     private int getIgniteOdds(BlockState $$0) {
-        return ((IFireBlock)Blocks.FIRE).roundabout$getIgniteOdds($$0);
+        return ((IFireBlock)Blocks.FIRE).sba$getIgniteOdds($$0);
     }
 
     public void checkBurnOut(Level $$0, BlockPos $$1, int $$2, RandomSource $$3, int $$4, StandFireBlockEntity sfb) {
@@ -202,7 +202,7 @@ public class StandFireBlock extends BaseEntityBlock {
         if ($$3.nextInt($$2) < $$5) {
             BlockState $$6 = $$0.getBlockState($$1);
             if ($$3.nextInt($$4 + 10) < 5 && !$$0.isRainingAt($$1)) {
-                if (sfb.standUser != null && ((StandUser)sfb.standUser).roundabout$getStandPowers() instanceof PowersMagiciansRed PM) {
+                if (sfb.standUser != null && ((StandUser)sfb.standUser).sba$getStandPowers() instanceof PowersMagiciansRed PM) {
                     int $$7 = Math.min($$4 + $$3.nextInt(5) / 4, 15);
                     if (sfb.getBlockState().is(ModBlocks.STAND_FIRE)) {
                         int color = sfb.getBlockState().getValue(COLOR);
@@ -315,19 +315,19 @@ public class StandFireBlock extends BaseEntityBlock {
             } else {
                 if ($$3 instanceof LivingEntity LE && !($$3 instanceof LifeTrackerEntity)) {
                     StandUser user = ((StandUser) $$3);
-                    user.roundabout$setRemainingStandFireTicks(user.roundabout$getRemainingFireTicks() + 1);
-                    if (user.roundabout$getRemainingFireTicks() == 0) {
+                    user.sba$setRemainingStandFireTicks(user.sba$getRemainingFireTicks() + 1);
+                    if (user.sba$getRemainingFireTicks() == 0) {
                         if ($$1.getBlockEntity($$2) instanceof StandFireBlockEntity $$5) {
-                            user.roundabout$setSecondsOnStandFire(3);
+                            user.sba$setSecondsOnStandFire(3);
                             if (fb.standUser != null){
-                                user.roundabout$setOnStandFire($$5.fireColorType,fb.standUser);
+                                user.sba$setOnStandFire($$5.fireColorType,fb.standUser);
                             } else {
-                                user.roundabout$setOnStandFire($$5.fireColorType);
+                                user.sba$setOnStandFire($$5.fireColorType);
                             }
                         }
                     }
                     float fd = 1;
-                    if (user.roundabout$getStandPowers().getReducedDamage(LE)){
+                    if (user.sba$getStandPowers().getReducedDamage(LE)){
                         fd = (float) (fd*(ClientNetworking.getAppropriateConfig().
                                 magiciansRedSettings.standFireOnPlayersMult*0.01));
                     } else {

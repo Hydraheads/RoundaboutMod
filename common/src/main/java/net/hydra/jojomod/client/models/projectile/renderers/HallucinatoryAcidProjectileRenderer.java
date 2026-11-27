@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.HallucinatoryAcidColors;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.HallucinatoryAcidProjectileModel;
@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 public class HallucinatoryAcidProjectileRenderer extends EntityRenderer<HallucinatoryAcidProjectile> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation TEXTURE = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/projectile/acid_projectile.png");
     private final HallucinatoryAcidProjectileModel model;
 

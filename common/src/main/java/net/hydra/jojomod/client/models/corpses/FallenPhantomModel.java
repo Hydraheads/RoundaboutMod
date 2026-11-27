@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.models.corpses;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;

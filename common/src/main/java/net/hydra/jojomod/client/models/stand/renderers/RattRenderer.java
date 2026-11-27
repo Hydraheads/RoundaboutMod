@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.layers.RattShoulderLayer;
 import net.hydra.jojomod.client.models.stand.CinderellaModel;
@@ -21,16 +21,16 @@ import org.joml.Vector3f;
 
 public class RattRenderer extends StandRenderer<RattEntity> {
 
-    private static final ResourceLocation ANIME_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/anime.png");
-    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/manga.png");
-    private static final ResourceLocation MELON_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/melon.png");
-    private static final ResourceLocation SAND_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/sand.png");
-    private static final ResourceLocation AZTEC_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/aztec.png");
-    private static final ResourceLocation TOWER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/tower.png");
-    private static final ResourceLocation SNOWY_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/snowy.png");
-    private static final ResourceLocation NETHER_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/nether.png");
-    private static final ResourceLocation GUARDIAN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/guardian.png");
-    private static final ResourceLocation ELDER_GUARDIAN_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/ratt/elder_guardian.png");
+    private static final ResourceLocation ANIME_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/anime.png");
+    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/manga.png");
+    private static final ResourceLocation MELON_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/melon.png");
+    private static final ResourceLocation SAND_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/sand.png");
+    private static final ResourceLocation AZTEC_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/aztec.png");
+    private static final ResourceLocation TOWER_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/tower.png");
+    private static final ResourceLocation SNOWY_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/snowy.png");
+    private static final ResourceLocation NETHER_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/nether.png");
+    private static final ResourceLocation GUARDIAN_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/guardian.png");
+    private static final ResourceLocation ELDER_GUARDIAN_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/ratt/elder_guardian.png");
 
 
 

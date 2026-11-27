@@ -1,18 +1,18 @@
 package net.hydra.jojomod.access;
 
 public interface IDayInterpolationClientLevelData {
-    long roundabout$getRoundaboutDayTimeActual();
-    long roundabout$getRoundaboutDayTimeTarget();
-    void roundabout$setRoundaboutDayTimeActual(long roundaboutDayTimeActual);
-    void roundabout$setRoundaboutDayTimeTarget(long roundaboutDayTimeTarget);
-    boolean roundabout$getRoundaboutInterpolatingDaytime();
-    void roundabout$setRoundaboutInterpolatingDaytime(boolean roundaboutTimeStopInitialized);
-    long roundabout$getRoundaboutDayTimeMinecraft();
-    void roundabout$setRoundaboutTimeStopInitialized(boolean roundaboutTimeStopInitialized);
-    boolean roundabout$getRoundaboutTimeStopInitialized();
+    long sba$getSBADayTimeActual();
+    long sba$getSBADayTimeTarget();
+    void sba$setSBADayTimeActual(long sbaDayTimeActual);
+    void sba$setSBADayTimeTarget(long sbaDayTimeTarget);
+    boolean sba$getSBAInterpolatingDaytime();
+    void sba$setSBAInterpolatingDaytime(boolean sbaTimeStopInitialized);
+    long sba$getSBADayTimeMinecraft();
+    void sba$setSBATimeStopInitialized(boolean sbaTimeStopInitialized);
+    boolean sba$getSBATimeStopInitialized();
 
-    void roundabout$roundaboutInitializeTS();
-    void roundabout$setInterpolationMaxStep(long value);
-    long roundabout$getInterpolationMaxStep();
+    void sba$sbaInitializeTS();
+    void sba$setInterpolationMaxStep(long value);
+    long sba$getInterpolationMaxStep();
 
 }

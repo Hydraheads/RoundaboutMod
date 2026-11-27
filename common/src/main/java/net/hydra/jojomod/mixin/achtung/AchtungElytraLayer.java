@@ -23,7 +23,7 @@ public abstract class AchtungElytraLayer<T extends LivingEntity, M extends Entit
     private void unrenderelytra(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
       if ($$3 != null) {
           IEntityAndData entityAndData = ((IEntityAndData) $$3);
-          if(entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision() ||entityAndData.roundabout$getTrueInvisibility() > -1 && (!ClientUtil.checkIfClientCanSeeInvisAchtung())
+          if(entityAndData.sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision() ||entityAndData.sba$getTrueInvisibility() > -1 && (!ClientUtil.checkIfClientCanSeeInvisAchtung())
                   && ClientNetworking.getAppropriateConfig() != null &&
                   ClientNetworking.getAppropriateConfig().achtungSettings != null &&
                   ClientNetworking.getAppropriateConfig().achtungSettings.hidesElytra && !ClientUtil.checkIfClientCanSeeMobsForWindVision() ) {
@@ -31,7 +31,7 @@ public abstract class AchtungElytraLayer<T extends LivingEntity, M extends Entit
           }
 
           StandUser SU = (StandUser) $$3;
-          if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){
+          if (SU.sba$getStandPowers() instanceof Powers20thCenturyBoy PCB && PCB.invincibleState){
               ci.cancel();
           }
       }

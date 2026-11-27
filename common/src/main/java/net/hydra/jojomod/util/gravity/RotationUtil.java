@@ -32,7 +32,7 @@ public abstract class RotationUtil {
 
     public static Vec3 distanceBetween(Entity target, Entity entity) {
         Direction gravD =
-                ((IGravityEntity) target).roundabout$getGravityDirection();
+                ((IGravityEntity) target).sba$getGravityDirection();
 
         double x = target.getX() - entity.getX();
         double y = target.getY() - entity.getY();
@@ -49,7 +49,7 @@ public abstract class RotationUtil {
     }
     public static Vec3 distanceBetween(Vec3 target, Entity entity) {
         Direction gravD =
-                ((IGravityEntity) entity).roundabout$getGravityDirection();
+                ((IGravityEntity) entity).sba$getGravityDirection();
 
         double x = entity.getX() -target.x;
         double y = entity.getY() - target.y;
@@ -86,7 +86,7 @@ public abstract class RotationUtil {
     public static Direction getGravityDirection(Entity entity){
         if (entity == null)
             return Direction.DOWN;
-        return ((IGravityEntity)entity).roundabout$getGravityDirection();
+        return ((IGravityEntity)entity).sba$getGravityDirection();
     }
     public static Direction getRealFacingDirection(LivingEntity entity){
         Vec2 adjustedDir = new Vec2(entity.getYHeadRot(),entity.getXRot());

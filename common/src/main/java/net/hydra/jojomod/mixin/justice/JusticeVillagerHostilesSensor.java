@@ -16,10 +16,10 @@ public class JusticeVillagerHostilesSensor {
 
     /**Villages/Golems consider zombie morphs hostile*/
     @Inject(method = "isHostile", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$customServerAiStep(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$customServerAiStep(LivingEntity $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0 instanceof Player PE){
             IPlayerEntity ple = ((IPlayerEntity) PE);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 if (ShapeShifts.isZombie(shift)) {
@@ -30,7 +30,7 @@ public class JusticeVillagerHostilesSensor {
         }
     }
     @Inject(method = "isClose", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$customServerAiStep(LivingEntity $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$customServerAiStep(LivingEntity $$0, LivingEntity $$1, CallbackInfoReturnable<Boolean> cir) {
         if ($$1 instanceof Player PE){
             cir.setReturnValue($$1.distanceToSqr($$0) <= (double)(64));
             return;

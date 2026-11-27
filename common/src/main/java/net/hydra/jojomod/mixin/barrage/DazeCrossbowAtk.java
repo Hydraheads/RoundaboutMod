@@ -16,10 +16,10 @@ public class DazeCrossbowAtk<T extends Monster & CrossbowAttackMob> {
     /**Minor code preventing crossbow charging on barrage*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$Tick(CallbackInfo ci) {
-        if (((StandUser)this.mob).roundabout$isDazed() ||
-                (!((StandUser)this.mob).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this.mob).roundabout$getStandPowers().disableMobAiAttack())){
+    protected void sba$Tick(CallbackInfo ci) {
+        if (((StandUser)this.mob).sba$isDazed() ||
+                (!((StandUser)this.mob).sba$getStandDisc().isEmpty() &&
+                        ((StandUser)this.mob).sba$getStandPowers().disableMobAiAttack())){
             ci.cancel();
         }
     }

@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.*;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,31 +13,31 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlackSabbathBaseRenderer extends StandRenderer<BlackSabbathEntity> {
 
-    private static final ResourceLocation ANIME = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/black_sabbath/anime.png");
-    private static final ResourceLocation MANGA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/manga.png");
-    private static final ResourceLocation BURNING = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/burning.png");
-    private static final ResourceLocation GIO_GIO = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/giogio.png");
-    private static final ResourceLocation VERDANT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/green.png");
-    private static final ResourceLocation NIGHT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/night.png");
-    private static final ResourceLocation DEPARTURE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/shadow_departure.png");
-    private static final ResourceLocation CHERRY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/cherry.png");
-    private static final ResourceLocation GRAPE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/grape.png");
-    private static final ResourceLocation MINT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/mint.png");
-    private static final ResourceLocation TACO = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/taco.png");
-    private static final ResourceLocation WOOL = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/woven.png");
-    private static final ResourceLocation WOODEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/wooden_doll.png");
-    private static final ResourceLocation PHANTOM = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/phantom.png");
-    private static final ResourceLocation SWEET = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sweet.png");
-    private static final ResourceLocation SACTHOTH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/sacthoth_sabbath.png");
-    private static final ResourceLocation OCULUS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/oculus.png");
-    private static final ResourceLocation BEACH = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/beach_sabbath.png");
-    private static final ResourceLocation MAGMA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/magma_sabbath.png");
-    private static final ResourceLocation DAPPER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/dapper_sabbath.png");
-    private static final ResourceLocation COPPER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/copper_sabbath.png");
-    private static final ResourceLocation SANTA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/santabbath.png");
-    private static final ResourceLocation COWBOY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/western.png");
-    private static final ResourceLocation CRIMSON = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/crimsoncrimson.png");
-    private static final ResourceLocation FUNGUS = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/black_sabbath/mushroom_skin.png");
+    private static final ResourceLocation ANIME = new ResourceLocation(SBA.MOD_ID, "textures/stand/black_sabbath/anime.png");
+    private static final ResourceLocation MANGA = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/manga.png");
+    private static final ResourceLocation BURNING = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/burning.png");
+    private static final ResourceLocation GIO_GIO = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/giogio.png");
+    private static final ResourceLocation VERDANT = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/green.png");
+    private static final ResourceLocation NIGHT = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/night.png");
+    private static final ResourceLocation DEPARTURE = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/shadow_departure.png");
+    private static final ResourceLocation CHERRY = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/cherry.png");
+    private static final ResourceLocation GRAPE = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/grape.png");
+    private static final ResourceLocation MINT = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/mint.png");
+    private static final ResourceLocation TACO = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/taco.png");
+    private static final ResourceLocation WOOL = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/woven.png");
+    private static final ResourceLocation WOODEN = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/wooden_doll.png");
+    private static final ResourceLocation PHANTOM = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/phantom.png");
+    private static final ResourceLocation SWEET = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/sweet.png");
+    private static final ResourceLocation SACTHOTH = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/sacthoth_sabbath.png");
+    private static final ResourceLocation OCULUS = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/oculus.png");
+    private static final ResourceLocation BEACH = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/beach_sabbath.png");
+    private static final ResourceLocation MAGMA = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/magma_sabbath.png");
+    private static final ResourceLocation DAPPER = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/dapper_sabbath.png");
+    private static final ResourceLocation COPPER = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/copper_sabbath.png");
+    private static final ResourceLocation SANTA = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/santabbath.png");
+    private static final ResourceLocation COWBOY = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/western.png");
+    private static final ResourceLocation CRIMSON = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/crimsoncrimson.png");
+    private static final ResourceLocation FUNGUS = new ResourceLocation(SBA.MOD_ID,"textures/stand/black_sabbath/mushroom_skin.png");
 
     public BlackSabbathBaseRenderer(EntityRendererProvider.Context context, StandModel<BlackSabbathEntity> entityModel, float f) {
         super(context, entityModel,f);

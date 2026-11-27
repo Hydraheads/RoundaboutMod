@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.projectile;// Made with Blockbench 4.12.
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -72,7 +72,7 @@ public class GentlyWeepsModel<T extends Entity> extends PsuedoHierarchicalModel 
     }
 
     public ResourceLocation getTextureLocation(Entity context){
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/stand/white_album/projectiles/gently_weeps.png");
     }
     public void animate2(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3){

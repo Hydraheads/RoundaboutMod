@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(SnowballItem.class)
 public class GESnowballItemMixin {
     @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void roundabout$transferTreeImbueToSnowball(Level level, Player player, InteractionHand hand,
+    private void sba$transferTreeImbueToSnowball(Level level, Player player, InteractionHand hand,
                                                         CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir, ItemStack itemStack, Snowball snowball) {
         PowersGoldExperience.transferTreeImbueToProjectile(level, itemStack, snowball);
     }

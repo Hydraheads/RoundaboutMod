@@ -18,13 +18,13 @@ public class AccessBoatItem implements IBoatItemAccess {
 
     @Unique
     @Override
-    public Boat.Type roundabout$getType(){
+    public Boat.Type sba$getType(){
         return type;
     }
 
     @Unique
     @Override
-    public Boat roundabout$getBoat(Level $$0, Vec3 $$1){
+    public Boat sba$getBoat(Level $$0, Vec3 $$1){
 
         return (Boat)(this.hasChest
                 ? new ChestBoat($$0, $$1.x, $$1.y, $$1.z)

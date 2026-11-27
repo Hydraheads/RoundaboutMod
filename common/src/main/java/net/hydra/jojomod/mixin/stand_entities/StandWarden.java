@@ -19,7 +19,7 @@ public abstract class StandWarden extends Monster {
     /**Stand Entities are not targeted, their users are*/
 
     @Inject(method = "canTargetEntity", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$canTargetEntity(Entity $$0x, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$canTargetEntity(Entity $$0x, CallbackInfoReturnable<Boolean> cir) {
         if ($$0x instanceof StandEntity || PowerTypes.isInADifferentExistence($$0x,this)) {
             cir.setReturnValue(false);
         }

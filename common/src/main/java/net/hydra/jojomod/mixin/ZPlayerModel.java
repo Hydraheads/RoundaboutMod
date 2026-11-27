@@ -3,7 +3,7 @@ package net.hydra.jojomod.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
 import net.hydra.jojomod.access.IPowersPlayer;
@@ -80,31 +80,31 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
     @Override
     @Unique
-    public boolean roundabout$getSlim(){
+    public boolean sba$getSlim(){
         return this.slim;
     }
     @Override
     @Unique
-    public ModelPart roundabout$getEar(){
+    public ModelPart sba$getEar(){
         return this.ear;
     }
     @Override
     @Unique
-    public ModelPart roundabout$getCloak(){
+    public ModelPart sba$getCloak(){
         return this.cloak;
     }
 
 
     @Override
     @Unique
-    public boolean roundabout$getRealSlim(){
+    public boolean sba$getRealSlim(){
         return this.slim;
     }
-    PartDefinition roundabout$partDef;
+    PartDefinition sba$partDef;
     @Unique
-    private static final Vector3f roundabout$ANIMATION_VECTOR_CACHE = new Vector3f();
+    private static final Vector3f sba$ANIMATION_VECTOR_CACHE = new Vector3f();
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "HEAD"))
-    public void roundabout$SetupAnim4(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+    public void sba$SetupAnim4(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         this.head.resetPose();
         this.body.resetPose();
         this.rightLeg.resetPose();
@@ -116,7 +116,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
     @Unique
     @Override
-    public boolean roundabout$setupFirstPersonAnimations(AbstractClientPlayer $$0, float $$1, float $$2, float $$3, float $$4, float $$5,
+    public boolean sba$setupFirstPersonAnimations(AbstractClientPlayer $$0, float $$1, float $$2, float $$3, float $$4, float $$5,
                                                          ModelPart one, ModelPart two, MultiBufferSource mb,
                                                          int packedLight, PoseStack ps) {
         if ($$0 != null) {
@@ -131,25 +131,25 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             }
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             StandUser SE = ((StandUser) $$0);
-            if (SE.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && SE.roundabout$getEffectiveCombatMode() && PowerTypes.hasStandActivelyEquipped($$0)) {
-                if (ipe.roundabout$getBubbleShotAimPoints() > 0){
-                    ipe.roundabout$getBubbleShotAim().startIfStopped($$0.tickCount); change = true;
-                    this.roundabout$animate(ipe.roundabout$getBubbleShotAim(), FirstPersonLayerAnimations.bubble_aim_recoil, yes, 1f);
-                    ipe.roundabout$getBubbleAim().stop();
+            if (SE.sba$getStandPowers() instanceof PowersSoftAndWet PW && SE.sba$getEffectiveCombatMode() && PowerTypes.hasStandActivelyEquipped($$0)) {
+                if (ipe.sba$getBubbleShotAimPoints() > 0){
+                    ipe.sba$getBubbleShotAim().startIfStopped($$0.tickCount); change = true;
+                    this.sba$animate(ipe.sba$getBubbleShotAim(), FirstPersonLayerAnimations.bubble_aim_recoil, yes, 1f);
+                    ipe.sba$getBubbleAim().stop();
                 } else {
-                    ipe.roundabout$getBubbleAim().startIfStopped($$0.tickCount); change = true;
-                    this.roundabout$animate(ipe.roundabout$getBubbleAim(), FirstPersonLayerAnimations.bubble_aim, yes, 1f);
-                    ipe.roundabout$getBubbleShotAim().stop();
+                    ipe.sba$getBubbleAim().startIfStopped($$0.tickCount); change = true;
+                    this.sba$animate(ipe.sba$getBubbleAim(), FirstPersonLayerAnimations.bubble_aim, yes, 1f);
+                    ipe.sba$getBubbleShotAim().stop();
                 }
             } else {
-                ipe.roundabout$getBubbleAim().stop();
-                ipe.roundabout$getBubbleShotAim().stop();
+                ipe.sba$getBubbleAim().stop();
+                ipe.sba$getBubbleShotAim().stop();
 
             }
 
 
-            byte posByte = ((IPlayerEntity) $$0).roundabout$GetPos2();
-            byte posByte2 = ((IPlayerEntity) $$0).roundabout$GetPoseEmote();
+            byte posByte = ((IPlayerEntity) $$0).sba$GetPos2();
+            byte posByte2 = ((IPlayerEntity) $$0).sba$GetPoseEmote();
             if (posByte == PlayerPosIndex.GUARD || posByte2 == 35) {
                 this.rightArm.yRot = 0.1F;
                 this.leftArm.yRot = -0.1F;
@@ -183,7 +183,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
             } else if (posByte == PlayerPosIndex.OASIS_KICK) {
                 boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
-                StandPowers gp = ((StandUser)$$0).roundabout$getStandPowers();
+                StandPowers gp = ((StandUser)$$0).sba$getStandPowers();
                 int amt = Mth.clamp(gp.attackTimeDuring,0,10);
                 if ($$9){
                     this.rightLeg.copyFrom(one);
@@ -205,8 +205,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     rightPants.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
 
 
-                    byte bt = ((StandUser) $$0).roundabout$getLocacacaCurse();
-                    int muscle = ((StandUser) $$0).roundabout$getZappedToID();
+                    byte bt = ((StandUser) $$0).sba$getLocacacaCurse();
+                    int muscle = ((StandUser) $$0).sba$getZappedToID();
                     if (bt == LocacacaCurseIndex.RIGHT_LEG) {
                         VertexConsumer consumerX = mb.getBuffer
                                 (RenderType.entityTranslucent(StandIcons.STONE_RIGHT_LEG));
@@ -231,7 +231,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                                 rightPants.xScale += 0.04f;
                                 rightPants.zScale += 0.04f;
                                 VertexConsumer consumerX;
-                                if (roundabout$getSlim()) {
+                                if (sba$getSlim()) {
                                     consumerX = mb.getBuffer
                                             (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
                                 } else {
@@ -279,8 +279,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     rightPants.render(ps, mb.getBuffer(tl), packedLight, OverlayTexture.NO_OVERLAY);
 
 
-                    byte bt = ((StandUser) $$0).roundabout$getLocacacaCurse();
-                    int muscle = ((StandUser) $$0).roundabout$getZappedToID();
+                    byte bt = ((StandUser) $$0).sba$getLocacacaCurse();
+                    int muscle = ((StandUser) $$0).sba$getZappedToID();
                     if (bt == LocacacaCurseIndex.RIGHT_LEG) {
                         VertexConsumer consumerX = mb.getBuffer
                                 (RenderType.entityTranslucent(StandIcons.STONE_RIGHT_LEG));
@@ -305,7 +305,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                                 rightPants.xScale += 0.04f;
                                 rightPants.zScale += 0.04f;
                                 VertexConsumer consumerX;
-                                if (roundabout$getSlim()) {
+                                if (sba$getSlim()) {
                                     consumerX = mb.getBuffer
                                             (RenderType.entityTranslucent(StandIcons.MUSCLE_SLIM));
                                 } else {
@@ -332,10 +332,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
             if (change){
                 if (offsetCorrect) {
-                    ipe.roundabout$getOffsetCorrect().startIfStopped($$0.tickCount);
-                    this.roundabout$animate(ipe.roundabout$getOffsetCorrect(), FirstPersonLayerAnimations.offsetCorrect, yes, 1f);
+                    ipe.sba$getOffsetCorrect().startIfStopped($$0.tickCount);
+                    this.sba$animate(ipe.sba$getOffsetCorrect(), FirstPersonLayerAnimations.offsetCorrect, yes, 1f);
                 } else {
-                    ipe.roundabout$getOffsetCorrect().stop();
+                    ipe.sba$getOffsetCorrect().stop();
                 }
                 this.rightSleeve.copyFrom(this.rightArm);
                 this.leftSleeve.copyFrom(this.leftArm);
@@ -359,19 +359,19 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     public boolean rdbt$isNotPosing(LivingEntity player){
         if (player instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) player);
-            Poses pose = Poses.getPosFromByte(ipe.roundabout$GetPoseEmote());
+            Poses pose = Poses.getPosFromByte(ipe.sba$GetPoseEmote());
             return pose == Poses.NONE;
         }
         return true;
     }
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE, ordinal = 0))
-    public void roundabout$SetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+    public void sba$SetupAnim2(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
 
         if ($$0 instanceof Player P) {
             StandUser SU = (StandUser) P;
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
-            byte poseEmote = ipe.roundabout$GetPoseEmote();
+            byte poseEmote = ipe.sba$GetPoseEmote();
             boolean pose = poseEmote != Poses.NONE.id;
             if (pose && !P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
                 if (poseEmote != Poses.SITTING.id && poseEmote != Poses.FULLBODYDODGE.id) {
@@ -385,12 +385,12 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             }
 
 
-            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT){
-                byte animByte = SU.roundabout$getStandAnimation();
+            if (SU.sba$getStandPowers() instanceof PowersTusk PT){
+                byte animByte = SU.sba$getStandAnimation();
                 AnimationDefinition anim = PowersTusk.getAnimation(SU);
                 if (anim != null){
-                    if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
-                        ipe.roundabout$SetPoseEmote(Poses.NONE.id);
+                    if (ipe.sba$GetPoseEmote() != Poses.NONE.id) {
+                        ipe.sba$SetPoseEmote(Poses.NONE.id);
                     }
 
                     if (PT.isShooting(HumanoidArm.LEFT) || animByte == PowersTusk.DRILL) {
@@ -405,8 +405,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftLeg.resetPose();
                         this.rightLeg.resetPose();
                     }
-                    SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
-                    this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
+                    SU.sba$getWornStandAnimation().startIfStopped($$0.tickCount);
+                    this.sba$animate(SU.sba$getWornStandAnimation(),anim,$$3,1F);
 
                     if (PT.isShooting(HumanoidArm.RIGHT)) {
                         this.rightArm.yRot += -0.1F + this.head.yRot;
@@ -418,7 +418,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     }
 
                 } else {
-                    SU.roundabout$getWornStandAnimation().stop();
+                    SU.sba$getWornStandAnimation().stop();
                 }
             }
 
@@ -427,27 +427,27 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             if (!firstPerson || !(mainP != null && $$0.is(mainP))){
                 if (!P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
                     if (Poses.getAnimation(P) != null) {
-                        this.roundabout$animate(ipe.getStyleAnimation(),Poses.getAnimation(P),$$3,1f);
+                        this.sba$animate(ipe.getStyleAnimation(),Poses.getAnimation(P),$$3,1f);
                     }
                 }
 
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
-                    ipe.roundabout$getItemAnimation().startIfStopped($$0.tickCount);
+                    ipe.sba$getItemAnimation().startIfStopped($$0.tickCount);
                     this.leftArm.xRot = 0;
                     this.leftArm.yRot = 0;
                     this.rightArm.xRot = 0;
                     this.rightArm.yRot = 0;
-                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), $$0.getMainArm() == HumanoidArm.LEFT ? AnubisAnimations.L_Unsheathe : AnubisAnimations.Unsheathe, $$3, 1F);
+                    this.sba$animate(ipe.sba$getItemAnimation(), $$0.getMainArm() == HumanoidArm.LEFT ? AnubisAnimations.L_Unsheathe : AnubisAnimations.Unsheathe, $$3, 1F);
                 } else {
-                    ipe.roundabout$getItemAnimation().stop();
+                    ipe.sba$getItemAnimation().stop();
                 }
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)
-                        || (SU.roundabout$getStandPowers() instanceof PowersAnubis
+                        || (SU.sba$getStandPowers() instanceof PowersAnubis
                         && PowerTypes.hasStandActive(P)
-                        && SU.roundabout$getStandAnimation() != PowerIndex.NONE) ) {
+                        && SU.sba$getStandAnimation() != PowerIndex.NONE) ) {
 
-                    if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-                        if (SU.roundabout$getStandAnimation() == PowersAnubis.POGO || SU.roundabout$getStandAnimation() == PowersAnubis.STAB) {
+                    if (SU.sba$getStandPowers() instanceof PowersAnubis) {
+                        if (SU.sba$getStandAnimation() == PowersAnubis.POGO || SU.sba$getStandAnimation() == PowersAnubis.STAB) {
                             this.leftLeg.resetPose();
                             this.rightLeg.resetPose();
                             this.head.resetPose();
@@ -457,29 +457,29 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
                 }
 
-                if (SU.roundabout$getStandPowers() instanceof PowersAnubis && (PowerTypes.hasStandActive(P) || SU.roundabout$getStandAnimation() == PowerIndex.POWER_4_SNEAK ) ) {
+                if (SU.sba$getStandPowers() instanceof PowersAnubis && (PowerTypes.hasStandActive(P) || SU.sba$getStandAnimation() == PowerIndex.POWER_4_SNEAK ) ) {
                     AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                     if (anim != null) {
-                        if ($$0.getMainArm() == HumanoidArm.LEFT || SU.roundabout$getStandAnimation() != PowerIndex.ATTACK) {
+                        if ($$0.getMainArm() == HumanoidArm.LEFT || SU.sba$getStandAnimation() != PowerIndex.ATTACK) {
                             this.leftArm.xRot = 0;
                             this.leftArm.yRot = 0;
                         }
-                        if ($$0.getMainArm() == HumanoidArm.RIGHT || SU.roundabout$getStandAnimation() != PowerIndex.ATTACK) {
+                        if ($$0.getMainArm() == HumanoidArm.RIGHT || SU.sba$getStandAnimation() != PowerIndex.ATTACK) {
                             this.rightArm.xRot = 0;
                             this.rightArm.yRot = 0;
                         }
-                        SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
-                        this.roundabout$animate(SU.roundabout$getWornStandAnimation(), anim, $$3, 1F);
+                        SU.sba$getWornStandAnimation().startIfStopped($$0.tickCount);
+                        this.sba$animate(SU.sba$getWornStandAnimation(), anim, $$3, 1F);
                     } else {
-                        SU.roundabout$getWornStandAnimation().stop();
+                        SU.sba$getWornStandAnimation().stop();
                     }
 
                 }
-                if (SU.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(P)){
+                if (SU.sba$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(P)){
                     AnimationDefinition anim = Powers20thCenturyBoy.getAnimation(SU, false);
                     if (anim != null){
-                        if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
-                            ipe.roundabout$SetPoseEmote(Poses.NONE.id);
+                        if (ipe.sba$GetPoseEmote() != Poses.NONE.id) {
+                            ipe.sba$SetPoseEmote(Poses.NONE.id);
                         }
                         this.leftArm.resetPose();
                         this.rightArm.resetPose();
@@ -487,25 +487,25 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.rightLeg.resetPose();
                         this.body.resetPose();
                         this.cloak.resetPose();
-                        SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
-                        this.roundabout$animate(SU.roundabout$getWornStandAnimation(),anim,$$3,1F);
+                        SU.sba$getWornStandAnimation().startIfStopped($$0.tickCount);
+                        this.sba$animate(SU.sba$getWornStandAnimation(),anim,$$3,1F);
                     } else {
-                        SU.roundabout$getWornStandAnimation().stop();
+                        SU.sba$getWornStandAnimation().stop();
                     }
                 }
-                if (SU.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(P) && PSC.hasHandsOut()) {
+                if (SU.sba$getStandPowers() instanceof PowersSilverChariot PSC && PowerTypes.hasStandActive(P) && PSC.hasHandsOut()) {
 
                 }
-                if (SU.roundabout$hasSpringLegs() && !P.isPassenger() && !P.isSleeping()) {
+                if (SU.sba$hasSpringLegs() && !P.isPassenger() && !P.isSleeping()) {
                     this.leftLeg.resetPose();
                     this.rightLeg.resetPose();
                     if ($$0.onGround()) {
-                        SU.roundabout$getWornStandAnimation().stop();
-                        SU.roundabout$getWornStandAnimation().start($$0.tickCount);
+                        SU.sba$getWornStandAnimation().stop();
+                        SU.sba$getWornStandAnimation().start($$0.tickCount);
                     }
-                    if (SU.roundabout$getWornStandAnimation().isStarted()) {
-                        this.roundabout$animate(
-                                SU.roundabout$getWornStandAnimation(), DiverDownAnimations.spring_legs, $$3, 1.0F);
+                    if (SU.sba$getWornStandAnimation().isStarted()) {
+                        this.sba$animate(
+                                SU.sba$getWornStandAnimation(), DiverDownAnimations.spring_legs, $$3, 1.0F);
                     }
                 }
 
@@ -515,17 +515,17 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             /**Shoot mode aiming*/
             StandUser user = ((StandUser)$$0);
             if (rdbt$isNotPosing($$0)) {
-                if (user.roundabout$getEffectiveCombatMode() && !$$0.isUsingItem()) {
-                    if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT) || user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
-                        if (user.roundabout$rotateArmToShoot(HumanoidArm.RIGHT)) {
+                if (user.sba$getEffectiveCombatMode() && !$$0.isUsingItem()) {
+                    if (user.sba$rotateArmToShoot(HumanoidArm.LEFT) || user.sba$rotateArmToShoot(HumanoidArm.RIGHT)) {
+                        if (user.sba$rotateArmToShoot(HumanoidArm.RIGHT)) {
                             this.rightArm.yRot = -0.1F + this.head.yRot;
                             this.rightArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
                         }
-                        if (user.roundabout$rotateArmToShoot(HumanoidArm.LEFT)) {
+                        if (user.sba$rotateArmToShoot(HumanoidArm.LEFT)) {
                             this.leftArm.yRot = 0.1F + this.head.yRot;
                             this.leftArm.xRot = (float) (-Math.PI / 2) + this.head.xRot;
                         }
-                    } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart && PowerTypes.hasStandActivelyEquipped($$0)) {
+                    } else if (user.sba$getStandPowers() instanceof PowersWalkingHeart && PowerTypes.hasStandActivelyEquipped($$0)) {
                         boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                         if ($$9) {
                             this.rightLeg.yRot = -0.1F + this.head.yRot;
@@ -555,20 +555,20 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftArm.xRot = 0F;
                         this.rightArm.yRot = 0F;
                         this.leftArm.yRot = 0F;
-                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.GUARD) {
+                    } else if (((IPlayerEntity) $$0).sba$GetPos2() == PlayerPosIndex.GUARD) {
                         float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
                         this.rightArm.yRot = -0.9F;
                         this.rightArm.xRot = -1.1F + curve;
                         this.leftArm.yRot = 0.9F;
                         this.leftArm.xRot = -1.4F + curve;
-                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.CHARGE_SHOT) {
+                    } else if (((IPlayerEntity) $$0).sba$GetPos2() == PlayerPosIndex.CHARGE_SHOT) {
                         if ($$0.isCrouching()) {
                             float curve = -0.5F;
                             this.rightArm.yRot = -0.45F;
                             this.rightArm.xRot = -0.65F + curve;
                             this.leftArm.yRot = 0.45F;
                             this.leftArm.xRot = -0.55F + curve;
-                        } else if (((IPlayerEntity) $$0).roundabout$GetPos() == PlayerPosIndex.SKATE_GENERAL) {
+                        } else if (((IPlayerEntity) $$0).sba$GetPos() == PlayerPosIndex.SKATE_GENERAL) {
                             float curve = -0.5F;
                             this.rightArm.yRot = -0.45F;
                             this.rightArm.xRot = -0.8F + curve;
@@ -581,13 +581,13 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                             this.leftArm.yRot = 0.45F;
                             this.leftArm.xRot = -1.0F + curve;
                         }
-                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
+                    } else if (((IPlayerEntity) $$0).sba$GetPos2() == PlayerPosIndex.BARRAGE_CHARGE) {
                         float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
                         this.rightArm.yRot = 0.4F;
                         this.rightArm.xRot = -0F + curve;
                         this.leftArm.yRot = -0.4F;
                         this.leftArm.xRot = -0F + curve;
-                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.OASIS_KICK) {
+                    } else if (((IPlayerEntity) $$0).sba$GetPos2() == PlayerPosIndex.OASIS_KICK) {
                         this.rightLeg.yRot = -0.1F + this.head.yRot;
                         this.rightLeg.xRot = (float) (-Math.PI / 2) + this.head.xRot;
 
@@ -598,7 +598,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftLeg.yRot = 0;
                         this.leftLeg.xRot = 0;
                         this.leftLeg.zRot = 0;
-                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.SWEEP_KICK) {
+                    } else if (((IPlayerEntity) $$0).sba$GetPos2() == PlayerPosIndex.SWEEP_KICK) {
                         this.rightLeg.yRot = -0.1F + this.head.yRot;
                         this.rightLeg.xRot = (float) (-Math.toRadians(110)) + this.head.xRot;
 
@@ -609,20 +609,20 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                         this.leftLeg.yRot = 0;
                         this.leftLeg.xRot = 0;
                         this.leftLeg.zRot = 0;
-                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.CLUTCH_WINDUP) {
+                    } else if (((IPlayerEntity) $$0).sba$GetPos2() == PlayerPosIndex.CLUTCH_WINDUP) {
                         float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
                         this.rightArm.yRot = 0.6F;
                         this.rightArm.xRot = -0F + curve;
                         this.leftArm.yRot = -0.6F;
                         this.leftArm.xRot = -0F + curve;
-                    } else if (((IPlayerEntity) $$0).roundabout$GetPos2() == PlayerPosIndex.CLUTCH_DASH) {
+                    } else if (((IPlayerEntity) $$0).sba$GetPos2() == PlayerPosIndex.CLUTCH_DASH) {
                         float curve = ((float) (-Math.PI / 2) + this.head.xRot) / 3;
                         this.rightArm.yRot = -0.2F;
                         this.rightArm.xRot = -1.1F + curve;
                         this.leftArm.yRot = 0.2F;
                         this.leftArm.xRot = -1.4F + curve;
                     }
-                } else if (user.roundabout$getStandPowers() instanceof PowersWalkingHeart pw && pw.rendersInCombatMode()){
+                } else if (user.sba$getStandPowers() instanceof PowersWalkingHeart pw && pw.rendersInCombatMode()){
                     if (!$$0.isUsingItem()){
                         boolean $$9 = $$0.getMainArm() == HumanoidArm.RIGHT;
                         if ($$9) {
@@ -687,30 +687,30 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
         }
     }
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At(value = "TAIL"))
-    public void roundabout$SetupAnim3(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+    public void sba$SetupAnim3(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         if ($$0 instanceof Player P) {
             IPlayerEntity ipe = ((IPlayerEntity) $$0);
             StandUser SU = (StandUser) P;
 
 
-            if (ipe.roundabout$GetPoseEmote() != Poses.NONE.id) {
+            if (ipe.sba$GetPoseEmote() != Poses.NONE.id) {
 
                 this.cloak.resetPose();
                 if (!P.isPassenger() && !P.isVisuallySwimming() && !P.isFallFlying()) {
                     if (Poses.getAnimation(P) != null) {
-                        this.roundabout$animate2(ipe.getStyleAnimation(), Poses.getAnimation(P), $$3, 1f);
+                        this.sba$animate2(ipe.getStyleAnimation(), Poses.getAnimation(P), $$3, 1f);
                     }
                 }
 
                 if ($$0.getUseItem().is(ModItems.ANUBIS_ITEM)) {
-                    ipe.roundabout$getItemAnimation().startIfStopped($$0.tickCount);
+                    ipe.sba$getItemAnimation().startIfStopped($$0.tickCount);
                     this.leftArm.xRot = 0;
                     this.leftArm.yRot = 0;
                     this.rightArm.xRot = 0;
                     this.rightArm.yRot = 0;
-                    this.roundabout$animate(ipe.roundabout$getItemAnimation(), $$0.getMainArm() == HumanoidArm.LEFT ? AnubisAnimations.L_Unsheathe : AnubisAnimations.Unsheathe, $$3, 1F);
+                    this.sba$animate(ipe.sba$getItemAnimation(), $$0.getMainArm() == HumanoidArm.LEFT ? AnubisAnimations.L_Unsheathe : AnubisAnimations.Unsheathe, $$3, 1F);
                 } else {
-                    ipe.roundabout$getItemAnimation().stop();
+                    ipe.sba$getItemAnimation().stop();
                 }
                 AnimationDefinition anim = PowersAnubis.getAnimation(SU);
                 if (anim != null) {
@@ -718,10 +718,10 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.leftArm.yRot = 0;
                     this.rightArm.xRot = 0;
                     this.rightArm.yRot = 0;
-                    SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
-                    this.roundabout$animate(SU.roundabout$getWornStandIdleAnimation(),anim,$$3,1F);
+                    SU.sba$getWornStandAnimation().startIfStopped($$0.tickCount);
+                    this.sba$animate(SU.sba$getWornStandIdleAnimation(),anim,$$3,1F);
                 } else {
-                    SU.roundabout$getWornStandAnimation().stop();
+                    SU.sba$getWornStandAnimation().stop();
                 }
                 anim = PowersTusk.getAnimation(SU);
                 if (anim != null) {
@@ -729,8 +729,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                     this.leftArm.yRot = 0;
                     this.rightArm.xRot = 0;
                     this.rightArm.yRot = 0;
-                    SU.roundabout$getWornStandAnimation().startIfStopped($$0.tickCount);
-                    this.roundabout$animate(SU.roundabout$getWornStandIdleAnimation(),anim,$$3,1F);
+                    SU.sba$getWornStandAnimation().startIfStopped($$0.tickCount);
+                    this.sba$animate(SU.sba$getWornStandIdleAnimation(),anim,$$3,1F);
 
                 }
 
@@ -748,7 +748,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
             }
 
             IPlayerEntity ple = ((IPlayerEntity) $$0);
-            ItemStack visage = ple.roundabout$getMaskSlot();
+            ItemStack visage = ple.sba$getMaskSlot();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     if (MI instanceof ModificationMaskItem MD){
@@ -777,8 +777,8 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
                 }
             }
 
-            if ( SU.roundabout$isPossessed()  ) {
-                PathfinderMob poss = SU.roundabout$getPossessor();
+            if ( SU.sba$isPossessed()  ) {
+                PathfinderMob poss = SU.sba$getPossessor();
                 if (poss != null && poss.getTarget() != null) {
                     float xRot = (float) Math.toRadians(MainUtil.getLookAtEntityPitch(P,poss.getTarget()));
                     this.head.xRot = xRot;
@@ -825,7 +825,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     }
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",at = @At(value = "HEAD"))
-    private void roundabout$modelRidingCancel(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+    private void sba$modelRidingCancel(T $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         if ($$0.isPassenger()) {
             Entity mount = $$0.getVehicle();
             if (mount instanceof AnubisPossessorEntity || mount instanceof CommandDiscPossession) {
@@ -835,18 +835,18 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     }
 
     @Unique
-    protected void roundabout$animate(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3) {
+    protected void sba$animate(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3) {
         $$0.updateTime($$2, $$3);
-        $$0.ifStarted($$1x -> roundabout$animate($$1, $$1x.getAccumulatedTime(), 1.0F,
-                roundabout$ANIMATION_VECTOR_CACHE));
+        $$0.ifStarted($$1x -> sba$animate($$1, $$1x.getAccumulatedTime(), 1.0F,
+                sba$ANIMATION_VECTOR_CACHE));
     }
 
     @Unique
-    public void roundabout$animate(AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
-        float f = roundabout$getElapsedSeconds(p_232321_, p_232322_);
+    public void sba$animate(AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
+        float f = sba$getElapsedSeconds(p_232321_, p_232322_);
 
         for(Map.Entry<String, List<AnimationChannel>> entry : p_232321_.boneAnimations().entrySet()) {
-            Optional<ModelPart> optional = roundabout$getAnyDescendantWithName(entry.getKey());
+            Optional<ModelPart> optional = sba$getAnyDescendantWithName(entry.getKey());
             List<AnimationChannel> list = entry.getValue();
             optional.ifPresent((p_232330_) -> {
                 list.forEach((p_288241_) -> {
@@ -874,18 +874,18 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
     }
 
     @Unique
-    protected void roundabout$animate2(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3) {
+    protected void sba$animate2(AnimationState $$0, AnimationDefinition $$1, float $$2, float $$3) {
         $$0.updateTime($$2, $$3);
-        $$0.ifStarted($$1x -> roundabout$animate2($$1, $$1x.getAccumulatedTime(), 1.0F,
-                roundabout$ANIMATION_VECTOR_CACHE));
+        $$0.ifStarted($$1x -> sba$animate2($$1, $$1x.getAccumulatedTime(), 1.0F,
+                sba$ANIMATION_VECTOR_CACHE));
     }
 
     @Unique
-    public void roundabout$animate2(AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
-        float f = roundabout$getElapsedSeconds(p_232321_, p_232322_);
+    public void sba$animate2(AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
+        float f = sba$getElapsedSeconds(p_232321_, p_232322_);
 
         for(Map.Entry<String, List<AnimationChannel>> entry : p_232321_.boneAnimations().entrySet()) {
-            Optional<ModelPart> optional = roundabout$getAnyDescendantWithName2(entry.getKey());
+            Optional<ModelPart> optional = sba$getAnyDescendantWithName2(entry.getKey());
             List<AnimationChannel> list = entry.getValue();
             optional.ifPresent((p_232330_) -> {
                 list.forEach((p_288241_) -> {
@@ -915,11 +915,11 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
 
     @Unique
-    public void roundabout$animate3(AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
-        float f = roundabout$getElapsedSeconds(p_232321_, p_232322_);
+    public void sba$animate3(AnimationDefinition p_232321_, long p_232322_, float p_232323_, Vector3f p_253861_) {
+        float f = sba$getElapsedSeconds(p_232321_, p_232322_);
 
         for(Map.Entry<String, List<AnimationChannel>> entry : p_232321_.boneAnimations().entrySet()) {
-            Optional<ModelPart> optional = roundabout$getAnyDescendantWithName2(entry.getKey());
+            Optional<ModelPart> optional = sba$getAnyDescendantWithName2(entry.getKey());
             List<AnimationChannel> list = entry.getValue();
             optional.ifPresent((p_232330_) -> {
                 list.forEach((p_288241_) -> {
@@ -953,13 +953,13 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
 
     }
     @Unique
-    private static float roundabout$getElapsedSeconds(AnimationDefinition p_232317_, long p_232318_) {
+    private static float sba$getElapsedSeconds(AnimationDefinition p_232317_, long p_232318_) {
         float f = (float)p_232318_ / 1000.0F;
         return p_232317_.looping() ? f % p_232317_.lengthInSeconds() : f;
     }
 
     @Unique
-    public Optional<ModelPart> roundabout$getAnyDescendantWithName(String $$0) {
+    public Optional<ModelPart> sba$getAnyDescendantWithName(String $$0) {
         if (Objects.equals($$0, "body")) {
             return Optional.of(this.body);
         } else if (Objects.equals($$0, "head")) {
@@ -976,7 +976,7 @@ public abstract class ZPlayerModel<T extends LivingEntity> extends HumanoidModel
         return Optional.empty();
     }
     @Unique
-    public Optional<ModelPart> roundabout$getAnyDescendantWithName2(String $$0) {
+    public Optional<ModelPart> sba$getAnyDescendantWithName2(String $$0) {
         if (Objects.equals($$0, "body")){
             return Optional.of(this.cloak);
         }

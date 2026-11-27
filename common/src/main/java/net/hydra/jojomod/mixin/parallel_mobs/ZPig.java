@@ -20,35 +20,35 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ZPig extends Animal implements IPig {
     /**This is a value used in the mob renderer to make mob look like alternate version (rare chance).*/
     @Unique
-    private static final EntityDataAccessor<Byte> roundabout$ALT_LOOK = SynchedEntityData.defineId(Pig.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> sba$ALT_LOOK = SynchedEntityData.defineId(Pig.class, EntityDataSerializers.BYTE);
 
 
     @Inject(method = "defineSynchedData", at = @At(value = "HEAD"))
-    protected void roundabout$pigDefineSyncedData(CallbackInfo ci) {
-        if (!(this.getEntityData().hasItem(roundabout$ALT_LOOK))) {
-            this.entityData.define(roundabout$ALT_LOOK, (byte)0);
+    protected void sba$pigDefineSyncedData(CallbackInfo ci) {
+        if (!(this.getEntityData().hasItem(sba$ALT_LOOK))) {
+            this.entityData.define(sba$ALT_LOOK, (byte)0);
         }
     }
     @Inject(method = "addAdditionalSaveData", at = @At(value = "HEAD"))
-    protected void roundabout$pigaddAdditionalSaveData(CompoundTag $$0,CallbackInfo ci) {
-        byte altLook = roundabout$isAlt();
+    protected void sba$pigaddAdditionalSaveData(CompoundTag $$0,CallbackInfo ci) {
+        byte altLook = sba$isAlt();
         if (altLook > 0){
             $$0.putByte("rdbtAlt", altLook);
         }
     }
     @Inject(method = "readAdditionalSaveData", at = @At(value = "HEAD"))
-    protected void roundabout$readAdditionalSaveData(CompoundTag $$0,CallbackInfo ci) {
+    protected void sba$readAdditionalSaveData(CompoundTag $$0,CallbackInfo ci) {
         if ($$0.contains("rdbtAlt")){
-            roundabout$setAlt($$0.getByte("rdbtAlt"));
+            sba$setAlt($$0.getByte("rdbtAlt"));
         }
     }
     @Unique
-    public byte roundabout$isAlt(){
-        return this.getEntityData().get(roundabout$ALT_LOOK);
+    public byte sba$isAlt(){
+        return this.getEntityData().get(sba$ALT_LOOK);
     }
     @Unique
-    public void roundabout$setAlt(byte look){
-        this.getEntityData().set(roundabout$ALT_LOOK, look);
+    public void sba$setAlt(byte look){
+        this.getEntityData().set(sba$ALT_LOOK, look);
     }
 
 

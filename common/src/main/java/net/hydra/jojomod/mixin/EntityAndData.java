@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -70,40 +70,40 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     private AABB bb;
     @Unique
-    private float roundabout$PrevTick = 0;
+    private float sba$PrevTick = 0;
 
     @Unique
-    private double roundabout$PrevX = 0;
+    private double sba$PrevX = 0;
     @Unique
-    private double roundabout$PrevY = 0;
+    private double sba$PrevY = 0;
     @Unique
-    private double roundabout$PrevZ = 0;
+    private double sba$PrevZ = 0;
 
     @Unique
-    public int roundabout$noGravityTicks = 0;
+    public int sba$noGravityTicks = 0;
     @Unique
-    public boolean roundabout$renderingExclusiveLayers = false;
+    public boolean sba$renderingExclusiveLayers = false;
 
     /***
      * Invisiblity functions for Achtung Baby. Note that only Living Entities use tracked/synched entitydata,
      * so regular entities use a function in IEntityAndData instead.
      */
     @Unique
-    public int roundabout$trueInvisibility = -1;
+    public int sba$trueInvisibility = -1;
     @Unique
     @Override
-    public int roundabout$getTrueInvisibility(){
+    public int sba$getTrueInvisibility(){
         if (((Entity)(Object)this) instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getTrueInvis();
+            return ((StandUser)LE).sba$getTrueInvis();
         }
-        return roundabout$trueInvisibility;
+        return sba$trueInvisibility;
     }
 
     @Unique
-    public void roundabout$tickTrueInvisibility(){
+    public void sba$tickTrueInvisibility(){
         if (!this.level().isClientSide()){
-            if (roundabout$getTrueInvisibility() > -1){
-                roundabout$setTrueInvisibility(roundabout$getTrueInvisibility()-1);
+            if (sba$getTrueInvisibility() > -1){
+                sba$setTrueInvisibility(sba$getTrueInvisibility()-1);
             }
         }
     }
@@ -113,7 +113,7 @@ public abstract class EntityAndData implements IEntityAndData {
     public boolean rdbt$canBePickedUp=true;
 
     @Unique
-    private float roundabout$lastDirectDamage = 0;
+    private float sba$lastDirectDamage = 0;
 
     @Override
     public Vec3 rdbt$getStuckSpeedMultiplier(){
@@ -122,17 +122,17 @@ public abstract class EntityAndData implements IEntityAndData {
 
 
     @Override
-    public void roundabout$setLastDamageTaken(float amount) {
-        this.roundabout$lastDirectDamage = amount;
+    public void sba$setLastDamageTaken(float amount) {
+        this.sba$lastDirectDamage = amount;
     }
     @Override
-    public void roundabout$refreshBoardingCooldown() {
+    public void sba$refreshBoardingCooldown() {
         this.boardingCooldown = 0;
     }
 
     @Override
-    public float roundabout$getLastDamageTaken() {
-        return this.roundabout$lastDirectDamage;
+    public float sba$getLastDamageTaken() {
+        return this.sba$lastDirectDamage;
     }
 
     @Override
@@ -147,7 +147,7 @@ public abstract class EntityAndData implements IEntityAndData {
             method = "spawnAtLocation(Lnet/minecraft/world/item/ItemStack;F)Lnet/minecraft/world/entity/item/ItemEntity;",
             at = @At("RETURN")
     )
-    private void roundabout$copyPlaneToDroppedItem(
+    private void sba$copyPlaneToDroppedItem(
             ItemStack stack,
             float yOffset,
             CallbackInfoReturnable<ItemEntity> cir
@@ -172,28 +172,28 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
     @Inject(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
-    public void roundabout$addAdditionalSaveDataX(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
+    public void sba$addAdditionalSaveDataX(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir){
         MainUtil.saveEntityData($$0,this);
     }
 
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V",
             at = @At(value = "INVOKE",target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",shift = At.Shift.AFTER))
-    public void roundabout$readAdditionalSaveDataX(CompoundTag $$0, CallbackInfo ci){
+    public void sba$readAdditionalSaveDataX(CompoundTag $$0, CallbackInfo ci){
        MainUtil.loadEntityData($$0,this);
     }
 
 
     @Unique
-    public Entity roundabout$castEntity(){
+    public Entity sba$castEntity(){
         return ((Entity)(Object)this);
     }
 
 
     @Unique
     @Override
-    public void roundabout$setTrueInvisibility(int invis){
+    public void sba$setTrueInvisibility(int invis){
         if (((Entity)(Object)this) instanceof LivingEntity LE){
-            ((StandUser)LE).roundabout$setTrueInvis(invis);
+            ((StandUser)LE).sba$setTrueInvis(invis);
 
             if (!this.level().isClientSide()) {
                 if (ClientNetworking.getAppropriateConfig().achtungSettings.invisibilityPotionAsWell) {
@@ -205,7 +205,7 @@ public abstract class EntityAndData implements IEntityAndData {
                 }
             }
         } else {
-            roundabout$trueInvisibility = invis;
+            sba$trueInvisibility = invis;
             if (!this.level().isClientSide()) {
                 MainUtil.spreadRadialClientPacket(((Entity) (Object) this), 120, false,
                         ServerToClientPackets.S2CPackets.MESSAGES.TRUE_INVISIBILITY.value,
@@ -218,24 +218,24 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Unique
     @Override
-    public int roundabout$getTrueInvisibilityManhattan(){
-        return roundabout$trueInvisibilityManhattan;
+    public int sba$getTrueInvisibilityManhattan(){
+        return sba$trueInvisibilityManhattan;
     }
 
     @Unique
     public Vec3 rdbt$lastPos = Vec3.ZERO;
     @Unique
-    public int roundabout$trueInvisibilityManhattan = -1;
+    public int sba$trueInvisibilityManhattan = -1;
     @Unique
-    public void roundabout$tickTrueInvisibilityManhattan(){
+    public void sba$tickTrueInvisibilityManhattan(){
         Vec3 position =  getPosition(1);
         if (rdbt$lastPos != null && rdbt$lastPos.distanceToSqr(position) > 0.001F){
-            roundabout$trueInvisibilityManhattan = 80;
+            sba$trueInvisibilityManhattan = 80;
         } else {
-            roundabout$trueInvisibilityManhattan--;
+            sba$trueInvisibilityManhattan--;
         }
         if (((Entity) (Object) this).isEyeInFluid(FluidTags.WATER) || ((Entity)(Object) this).isEyeInFluid(FluidTags.LAVA)) {
-            roundabout$trueInvisibilityManhattan = 0;
+            sba$trueInvisibilityManhattan = 0;
         }
         rdbt$lastPos = position;
     }
@@ -251,27 +251,27 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Unique
     @Override
-    public void roundabout$setInitialDaySec() {
+    public void sba$setInitialDaySec() {
         initialDaySecond = SavedSecond.saveEntitySecond((Entity) (Object) this);
     }
 
     @Unique
-    public SavedSecond roundabout$getInitialDaySec() { return initialDaySecond; }
+    public SavedSecond sba$getInitialDaySec() { return initialDaySecond; }
 
     /**Mandom Time Queue, not sure if it will have any other use*/
     @Unique
-    public ArrayDeque<SavedSecond> roundabout$secondQue = new ArrayDeque<>();
+    public ArrayDeque<SavedSecond> sba$secondQue = new ArrayDeque<>();
     @Unique
-    public void roundabout$addSecondToQueue(SavedSecond newSecond) {
-        roundabout$secondQue.addFirst(newSecond);
-        if (roundabout$secondQue.size() > 6) {
-            roundabout$secondQue.removeLast();
+    public void sba$addSecondToQueue(SavedSecond newSecond) {
+        sba$secondQue.addFirst(newSecond);
+        if (sba$secondQue.size() > 6) {
+            sba$secondQue.removeLast();
         } else {
-            roundabout$secondQue.getLast().hasHadParticle = false;
+            sba$secondQue.getLast().hasHadParticle = false;
         }
     }
     @Unique
-    public void roundabout$addSecondToQueue() {
+    public void sba$addSecondToQueue() {
         if (!level.isClientSide()) {
             /**Setting for performance (just in case)*/
             if (ClientNetworking.getAppropriateConfig().mandomSettings.timeRewindOnlySavesAndLoadsOnPlayers &&
@@ -279,9 +279,9 @@ public abstract class EntityAndData implements IEntityAndData {
                 return;
 
             /**Every 20 ticks save a second on the entity for mandom rewinding*/
-            if (roundabout$secondQue.isEmpty() || this.tickCount % 20 == 0) {
+            if (sba$secondQue.isEmpty() || this.tickCount % 20 == 0) {
                 if (!((TimeStop)level()).inTimeStopRange(((Entity) (Object)this))) {
-                    roundabout$addSecondToQueue(SavedSecond.saveEntitySecond((Entity) (Object) this));
+                    sba$addSecondToQueue(SavedSecond.saveEntitySecond((Entity) (Object) this));
                 }
             }
         }
@@ -289,76 +289,76 @@ public abstract class EntityAndData implements IEntityAndData {
 
 
     @Unique
-    public ArrayDeque<SavedSecond> roundabout$getSecondQue(){
-        return roundabout$secondQue;
+    public ArrayDeque<SavedSecond> sba$getSecondQue(){
+        return sba$secondQue;
     }
 
     @Unique
-    public SavedSecond roundabout$getLastSavedSecond(){
-        if (!roundabout$secondQue.isEmpty()){
-            return roundabout$secondQue.getLast();
+    public SavedSecond sba$getLastSavedSecond(){
+        if (!sba$secondQue.isEmpty()){
+            return sba$secondQue.getLast();
         }
         return null;
     }
 
 
     @Unique
-    public void roundabout$resetSecondQueue(){
-        roundabout$secondQue = new ArrayDeque<>();
+    public void sba$resetSecondQueue(){
+        sba$secondQue = new ArrayDeque<>();
     }
 
 
     @Unique
-    public void roundabout$setExclusiveLayers(boolean exclusive){
-        this.roundabout$renderingExclusiveLayers = exclusive;
+    public void sba$setExclusiveLayers(boolean exclusive){
+        this.sba$renderingExclusiveLayers = exclusive;
     }
     @Unique
-    public boolean roundabout$getExclusiveLayers(){
-        return this.roundabout$renderingExclusiveLayers;
+    public boolean sba$getExclusiveLayers(){
+        return this.sba$renderingExclusiveLayers;
     }
 
     @Override
     @Unique
-    public void roundabout$setNoAAB(){
+    public void sba$setNoAAB(){
         bb = new AABB(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     }
-    public void roundabout$setRoundaboutPrevX(double roundaboutPrevX){
-        this.roundabout$PrevX = roundaboutPrevX;
+    public void sba$setSBAPrevX(double sbaPrevX){
+        this.sba$PrevX = sbaPrevX;
     }
-    public void roundabout$setRoundaboutPrevY(double roundaboutPrevY){
-        this.roundabout$PrevY = roundaboutPrevY;
+    public void sba$setSBAPrevY(double sbaPrevY){
+        this.sba$PrevY = sbaPrevY;
     }
-    public void roundabout$setRoundaboutPrevZ(double roundaboutPrevZ){
-        this.roundabout$PrevZ = roundaboutPrevZ;
+    public void sba$setSBAPrevZ(double sbaPrevZ){
+        this.sba$PrevZ = sbaPrevZ;
     }
-    public double roundabout$getRoundaboutPrevX(){
-        return this.roundabout$PrevX;
+    public double sba$getSBAPrevX(){
+        return this.sba$PrevX;
     }
-    public double roundabout$getRoundaboutPrevY(){
-        return this.roundabout$PrevY;
+    public double sba$getSBAPrevY(){
+        return this.sba$PrevY;
     }
-    public double roundabout$getRoundaboutPrevZ(){
-        return this.roundabout$PrevZ;
-    }
-    @Override
-    @Unique
-    public int roundabout$getNoGravTicks(){
-        return this.roundabout$noGravityTicks;
+    public double sba$getSBAPrevZ(){
+        return this.sba$PrevZ;
     }
     @Override
     @Unique
-    public void roundabout$setNoGravTicks(int ticks){
-        this.roundabout$noGravityTicks = ticks;
+    public int sba$getNoGravTicks(){
+        return this.sba$noGravityTicks;
+    }
+    @Override
+    @Unique
+    public void sba$setNoGravTicks(int ticks){
+        this.sba$noGravityTicks = ticks;
     }
 
     @Override
     @Unique
-    public Entity roundabout$getVehicle(){
+    public Entity sba$getVehicle(){
         return this.vehicle;
     }
     @Override
     @Unique
-    public void roundabout$setVehicle(Entity ride){
+    public void sba$setVehicle(Entity ride){
         this.vehicle = ride;
     }
     @Shadow
@@ -382,22 +382,22 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
     @Unique
-    public boolean roundabout$shadow = true;
+    public boolean sba$shadow = true;
     @Unique
     @Override
-    public boolean roundabout$getShadow(){
-        return roundabout$shadow;
+    public boolean sba$getShadow(){
+        return sba$shadow;
     }
     @Unique
     @Override
-    public void roundabout$setShadow(boolean shadow){
-        roundabout$shadow = shadow;
+    public void sba$setShadow(boolean shadow){
+        sba$shadow = shadow;
     }
 
     /**Highlight color with Justice piloting*/
     /**See inputevents for allowing the mob to glow*/
     @Inject(method = "getTeamColor()I", at = @At("HEAD"), cancellable = true)
-    public void roundabout$getTeamColor(CallbackInfoReturnable<Integer> cir){
+    public void sba$getTeamColor(CallbackInfoReturnable<Integer> cir){
         if (this.level.isClientSide()){
             int raga = ClientUtil.getOutlineColor(((Entity)(Object)this));
             if (raga != -1){
@@ -407,13 +407,13 @@ public abstract class EntityAndData implements IEntityAndData {
 
     }
     @Inject(method = "canCollideWith", at = @At("HEAD"), cancellable = true)
-    public void roundabout$isInvisible(Entity ent, CallbackInfoReturnable<Boolean> cir){
+    public void sba$isInvisible(Entity ent, CallbackInfoReturnable<Boolean> cir){
         if (PowerTypes.isInADifferentExistence(((Entity)(Object) this),ent)){
             cir.setReturnValue(false);
         }
     }
     @Inject(method = "lavaHurt", at = @At("HEAD"), cancellable = true)
-    public void roundabout$lavaHurt(CallbackInfo ci) {
+    public void sba$lavaHurt(CallbackInfo ci) {
         if (PowerTypes.isErasingTime(((Entity)(Object) this))){
             ci.cancel();
         }
@@ -422,7 +422,7 @@ public abstract class EntityAndData implements IEntityAndData {
         return getSharedFlag(flag);
     }
         @Inject(method = "isInvisible", at = @At("HEAD"), cancellable = true)
-    public void roundabout$isInvisible(CallbackInfoReturnable<Boolean> cir){
+    public void sba$isInvisible(CallbackInfoReturnable<Boolean> cir){
         Entity ent = (Entity) (Object) this;
         if (PowerTypes.isExistentiallyElsewhere(ent)){
             if ((this.level().isClientSide() || PowerTypes.isErasingTime(ent)) && !(this.level().isClientSide() &&
@@ -441,7 +441,7 @@ public abstract class EntityAndData implements IEntityAndData {
             }
         }
 
-        if (roundabout$getTrueInvisibility() > -1 && !(level().isClientSide() && ClientUtil.checkIfClientCanSeeMobsForWindVision())){
+        if (sba$getTrueInvisibility() > -1 && !(level().isClientSide() && ClientUtil.checkIfClientCanSeeMobsForWindVision())){
             if (this.level().isClientSide()){
                 if (ClientUtil.isPlayer((Entity)(Object)this)){
                     if (ClientUtil.getFirstPerson()){
@@ -461,7 +461,7 @@ public abstract class EntityAndData implements IEntityAndData {
 
         if (((Entity)(Object)this) instanceof Player pl){
             if (!this.level().isClientSide()){
-                byte posX = ((IPlayerEntity)pl).roundabout$GetPos2();
+                byte posX = ((IPlayerEntity)pl).sba$GetPos2();
                 if (posX == PlayerPosIndex.VANISH_PERSIST || posX == PlayerPosIndex.VANISH_START) {
                     cir.setReturnValue(true);
                     return;
@@ -471,7 +471,7 @@ public abstract class EntityAndData implements IEntityAndData {
 
 
         if (((Entity)(Object)this) instanceof LivingEntity LE
-                && ((StandUser)LE).roundabout$getMetallicaInvisibility() > -1) {
+                && ((StandUser)LE).sba$getMetallicaInvisibility() > -1) {
             if (this.level().isClientSide()){
 
                 if (ClientUtil.isPlayer((Entity)(Object)this)){
@@ -493,7 +493,7 @@ public abstract class EntityAndData implements IEntityAndData {
         }
 
         if ((level().isClientSide() && ClientUtil.checkIfClientCanSeeMobsForWindVision())){
-            if(roundabout$getTrueInvisibilityManhattan() > 0){
+            if(sba$getTrueInvisibilityManhattan() > 0){
                 if (this.level().isClientSide()) {
                     cir.setReturnValue(false);
                     return;
@@ -509,50 +509,50 @@ public abstract class EntityAndData implements IEntityAndData {
 
 
     @Inject(method = "isInvisibleTo", at = @At("HEAD"), cancellable = true)
-    public void roundabout$isInvisibleTo(Player pl, CallbackInfoReturnable<Boolean> cir){
-        if (roundabout$getTrueInvisibility() > -1){
-            if (pl != null && ((StandUser)pl).roundabout$getStandPowers() instanceof PowersAchtungBaby PA
+    public void sba$isInvisibleTo(Player pl, CallbackInfoReturnable<Boolean> cir){
+        if (sba$getTrueInvisibility() > -1){
+            if (pl != null && ((StandUser)pl).sba$getStandPowers() instanceof PowersAchtungBaby PA
                     && PA.invisibleVisionOn()){
                 cir.setReturnValue(false);
             }
             return;
         }
         if (((Entity)(Object)this) instanceof LivingEntity LE
-                && ((StandUser)LE).roundabout$getMetallicaInvisibility() > -1) {
+                && ((StandUser)LE).sba$getMetallicaInvisibility() > -1) {
             return;
         }
     }
 
 
     @Inject(method = "moveRelative", at = @At("HEAD"), cancellable = true)
-    private void roundabout$moveRelative(float $$0, Vec3 $$1, CallbackInfo ci){
+    private void sba$moveRelative(float $$0, Vec3 $$1, CallbackInfo ci){
 
-        if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered(this.blockPosition()) ||
-                ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(((Entity)(Object)this))
+        if(((ILevelAccess)this.level()).sba$isFrictionPlundered(this.blockPosition()) ||
+                ((ILevelAccess)this.level()).sba$isFrictionPlunderedEntity(((Entity)(Object)this))
         ){
             if (this.onGround() && ((Entity)(Object)this) instanceof LivingEntity LE) {
-                if (!((StandUser)LE).roundabout$frictionSave().equals(Vec3.ZERO)) {
+                if (!((StandUser)LE).sba$frictionSave().equals(Vec3.ZERO)) {
                     ci.cancel();
                 }
             }
         }
     }
     @Inject(method = "walkingStepSound(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", at = @At("HEAD"), cancellable = true)
-    public void roundabout$walkingStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci){
-        if(((ILevelAccess)this.level()).roundabout$isFrictionPlundered($$0) ||
-                ((ILevelAccess)this.level()).roundabout$isFrictionPlunderedEntity(((Entity)(Object)this))){
+    public void sba$walkingStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci){
+        if(((ILevelAccess)this.level()).sba$isFrictionPlundered($$0) ||
+                ((ILevelAccess)this.level()).sba$isFrictionPlunderedEntity(((Entity)(Object)this))){
             ci.cancel();
         } else if (((Entity)(Object)this) instanceof LivingEntity LE &&
-                ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+                ((StandUser)LE).sba$getStandPowers() instanceof PowersWhiteAlbum PW
                 && PW.hasSkatesActivated()){
             ci.cancel();
         }
     }
 
     @Inject(method = "getNameTagOffsetY", at = @At("HEAD"), cancellable = true)
-    public void roundabout$getNameTagOffsetY(CallbackInfoReturnable<Float> cir){
+    public void sba$getNameTagOffsetY(CallbackInfoReturnable<Float> cir){
         if (((Entity)(Object)this) instanceof Player PE){
-            ItemStack stack = ((IPlayerEntity) PE).roundabout$getMaskSlot();
+            ItemStack stack = ((IPlayerEntity) PE).sba$getMaskSlot();
             if (stack !=null && !stack.isEmpty() && stack.getItem() instanceof MaskItem ME){
 
                 VisageData vd = ME.visageData.generateVisageData(PE);
@@ -561,13 +561,13 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
     @Inject(method = "turn", at = @At("HEAD"), cancellable = true)
-    public void roundabout$Turn(double $$0, double $$1, CallbackInfo ci){
+    public void sba$Turn(double $$0, double $$1, CallbackInfo ci){
         Entity thisEnt = ((Entity) (Object) this);
         if (((TimeStop) thisEnt.level()).CanTimeStopEntity(((Entity) (Object) this))){
             ci.cancel();
         } else if (thisEnt instanceof Player PE){
             StandUser sus = ((StandUser)PE);
-            StandPowers powers = sus.roundabout$getStandPowers();
+            StandPowers powers = sus.sba$getStandPowers();
             if (powers.isPiloting()){
                 Entity pilot = powers.getPilotingStand();
                 if (pilot != null){
@@ -589,11 +589,11 @@ public abstract class EntityAndData implements IEntityAndData {
         return false;
     }
     @Inject(method = "changeDimension", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$changeDim(ServerLevel $$0, CallbackInfoReturnable<Boolean> ci) {
+    private void sba$changeDim(ServerLevel $$0, CallbackInfoReturnable<Boolean> ci) {
         if (((Entity)(Object)this) instanceof LivingEntity LE){
             if (this.level() instanceof ServerLevel && !this.isRemoved()) {
-                if (((StandUser)this).roundabout$getStand() != null){
-                    StandEntity stand = ((StandUser)this).roundabout$getStand();
+                if (((StandUser)this).sba$getStand() != null){
+                    StandEntity stand = ((StandUser)this).sba$getStand();
                     if (!stand.getHeldItem().isEmpty()) {
 
                         if (stand.canAcquireHeldItem) {
@@ -620,26 +620,26 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
     @Inject(method = "restoreFrom", at = @At(value = "TAIL"), cancellable = true)
-    private void roundabout$restoreFrom (Entity $$0, CallbackInfo ci){
+    private void sba$restoreFrom (Entity $$0, CallbackInfo ci){
         if (((Entity) (Object) this) instanceof LivingEntity LE && $$0 instanceof LivingEntity LE2) {
         }
     }
     @Override
-    public float roundabout$getPreTSTick() {
-        return this.roundabout$PrevTick;
+    public float sba$getPreTSTick() {
+        return this.sba$PrevTick;
     }
 
     @Override
-    public void roundabout$setPreTSTick(float frameTime) {
-        roundabout$PrevTick = frameTime;
+    public void sba$setPreTSTick(float frameTime) {
+        sba$PrevTick = frameTime;
     }
     @Override
-    public void roundabout$resetPreTSTick() {
-        roundabout$PrevTick = 0;
+    public void sba$resetPreTSTick() {
+        sba$PrevTick = 0;
     }
 
     @Override
-    public float roundabout$getStepHeight() {
+    public float sba$getStepHeight() {
         return this.maxUpStep;
     }
 
@@ -648,7 +648,7 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     /**In a timestop, fire doesn't tick*/
     @Inject(method = "setRemainingFireTicks", at = @At("HEAD"), cancellable = true)
-    protected void roundabout$SetFireTicks(int $$0, CallbackInfo ci){
+    protected void sba$SetFireTicks(int $$0, CallbackInfo ci){
         Entity entity = ((Entity)(Object) this);
         if (entity instanceof LivingEntity && !((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
                 && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity)){
@@ -656,7 +656,7 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
     @Inject(method = "clearFire", at = @At("HEAD"), cancellable = true)
-    protected void roundabout$ClearFire(CallbackInfo ci){
+    protected void sba$ClearFire(CallbackInfo ci){
         Entity entity = ((Entity)(Object) this);
         if (entity instanceof LivingEntity && !((TimeStop)entity.level()).getTimeStoppingEntities().isEmpty()
                 && ((TimeStop)entity.level()).getTimeStoppingEntities().contains(entity)){
@@ -664,7 +664,7 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
     @Inject(method = "isControlledByLocalInstance", at = @At("HEAD"), cancellable = true)
-    protected void roundabout$IsControlledByLocalInstance(CallbackInfoReturnable<Boolean> cir){
+    protected void sba$IsControlledByLocalInstance(CallbackInfoReturnable<Boolean> cir){
         Entity entity = ((Entity)(Object) this);
         if (entity instanceof LivingEntity LE && ((TimeStop)entity.level()).CanTimeStopEntity(entity)){
             cir.setReturnValue(this.isEffectiveAi());
@@ -678,24 +678,24 @@ public abstract class EntityAndData implements IEntityAndData {
     @Shadow
     public abstract void setShiftKeyDown(boolean bl);
     @Inject(method = "canRide", at = @At("HEAD"), cancellable = true)
-    protected void roundabout$canRide(Entity $$0, CallbackInfoReturnable<Boolean> cir){
+    protected void sba$canRide(Entity $$0, CallbackInfoReturnable<Boolean> cir){
         if ($$0 instanceof StandEntity && (!(((Entity)(Object)this) instanceof LivingEntity) || ((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this)))){
             cir.setReturnValue(!this.isShiftKeyDown());
         }
     }
     @Inject(method = "startRiding(Lnet/minecraft/world/entity/Entity;Z)Z", at = @At("HEAD"), cancellable = true)
-    protected void roundabout$startRiding(Entity $$0, boolean $$1, CallbackInfoReturnable<Boolean> cir){
+    protected void sba$startRiding(Entity $$0, boolean $$1, CallbackInfoReturnable<Boolean> cir){
         if (
                 ((Entity)(Object)this) instanceof LivingEntity LE
-                        && ((StandUser)LE).roundabout$getStand() != null
-                        && ((StandUser)LE).roundabout$getStand() instanceof SilverChariotEntity silverChariotEntity
+                        && ((StandUser)LE).sba$getStand() != null
+                        && ((StandUser)LE).sba$getStand() instanceof SilverChariotEntity silverChariotEntity
                         && silverChariotEntity.isSelfCarryModeActive()
                         && $$0 instanceof SilverChariotMountEntity scme
         ) {
             // cir.setReturnValue(true);
         } else if (((Entity)(Object)this) instanceof LivingEntity LE
-                && ((StandUser)LE).roundabout$getStand() != null
-                && ($$0.getRootVehicle().is(((StandUser)LE).roundabout$getStand()) || $$0.getRootVehicle().hasPassenger(((StandUser)LE).roundabout$getStand()))
+                && ((StandUser)LE).sba$getStand() != null
+                && ($$0.getRootVehicle().is(((StandUser)LE).sba$getStand()) || $$0.getRootVehicle().hasPassenger(((StandUser)LE).sba$getStand()))
                 // && !($$0 instanceof SilverChariotMountEntity sc)
         ){
             cir.setReturnValue(false);
@@ -705,7 +705,7 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @SuppressWarnings("deprecation")
     @Inject(method = "spawnSprintParticle()V", at = @At("HEAD"), cancellable = true)
-    protected void roundabout$spawnSprintParticle(CallbackInfo ci){
+    protected void sba$spawnSprintParticle(CallbackInfo ci){
         Entity thirs = ((Entity)(Object)this);
         if (PowerTypes.isExistentiallyElsewhere(thirs) &&
                 !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
@@ -714,11 +714,11 @@ public abstract class EntityAndData implements IEntityAndData {
             return;
         }
         if (thirs instanceof LivingEntity LE) {
-            if (((StandUser) this).roundabout$getStandPowers().cancelSprintParticles()) {
+            if (((StandUser) this).sba$getStandPowers().cancelSprintParticles()) {
                 ci.cancel();
                 return;
             }
-            if(((StandUser)this).roundabout$getGrabberSabbath() != 0){
+            if(((StandUser)this).sba$getGrabberSabbath() != 0){
                 ci.cancel();
                 return;
             }
@@ -757,7 +757,7 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
     @Inject(method = "doWaterSplashEffect", at = @At(value = "HEAD"), cancellable = true, require = 0)
-    protected void roundabout$doWaterSplashEffect(CallbackInfo ci) {
+    protected void sba$doWaterSplashEffect(CallbackInfo ci) {
         Entity thirs = ((Entity)(Object)this);
         if (PowerTypes.isExistentiallyElsewhere(thirs) &&
                 !(level().isClientSide() && !PowerTypes.isErasingTime(thirs) &&
@@ -766,7 +766,7 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
     @Inject(method = "checkFallDamage", at = @At(value = "HEAD"), cancellable = true, require = 0)
-    protected void roundabout$checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
+    protected void sba$checkFallDamage(double $$0, boolean $$1, BlockState $$2, BlockPos $$3, CallbackInfo ci) {
         Entity thisEnt = ((Entity) (Object) this);
         if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
             if (!PowerTypes.isErasingTime(thisEnt)) {
@@ -793,7 +793,7 @@ public abstract class EntityAndData implements IEntityAndData {
     }
 
         @Inject(method = "isIgnoringBlockTriggers", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$isIgnoringBlockTriggers(CallbackInfoReturnable<Boolean> cir) {
+    protected void sba$isIgnoringBlockTriggers(CallbackInfoReturnable<Boolean> cir) {
         Entity thisEnt = ((Entity) (Object) this);
         if (PowerTypes.isExistentiallyElsewhere(thisEnt)){
             if (!PowerTypes.canInteractInExistence((Entity) (Object) this)) {
@@ -802,24 +802,24 @@ public abstract class EntityAndData implements IEntityAndData {
         }
     }
     @Inject(method = "push(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"),cancellable = true)
-    protected void roundabout$push(Entity entity, CallbackInfo ci) {
+    protected void sba$push(Entity entity, CallbackInfo ci) {
         if (PowerTypes.isInADifferentExistence(entity,(((Entity) (Object)this)))){
             ci.cancel();
             return;
         }
         Entity thisEnt = ((Entity) (Object) this);
         if (thisEnt instanceof LivingEntity lv){
-            if (((StandUser)lv).roundabout$getStandPowers().onCollide(entity)){
+            if (((StandUser)lv).sba$getStandPowers().onCollide(entity)){
                 ci.cancel();
                 return;
             }
         } if (entity instanceof LivingEntity lv){
-            if (((StandUser)lv).roundabout$getStandPowers().onCollide(entity)){
+            if (((StandUser)lv).sba$getStandPowers().onCollide(entity)){
                 ci.cancel();
                 return;
             }
         }
-        if (entity instanceof LivingEntity le && ((StandUser) le).roundabout$getStandPowers().cancelCollision(((Entity)(Object)this))) {
+        if (entity instanceof LivingEntity le && ((StandUser) le).sba$getStandPowers().cancelCollision(((Entity)(Object)this))) {
             ci.cancel();
         }
     }
@@ -835,43 +835,43 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Shadow private Level level;
     @Unique
-    private Vec3 roundabout$DeltaBuildupTS = new Vec3(0,0,0);
+    private Vec3 sba$DeltaBuildupTS = new Vec3(0,0,0);
 
     @Unique
-    public Vec3 roundabout$getRoundaboutDeltaBuildupTS(){
-        return this.roundabout$DeltaBuildupTS;
+    public Vec3 sba$getSBADeltaBuildupTS(){
+        return this.sba$DeltaBuildupTS;
     }
 
     @Unique
-    public void roundabout$setRoundaboutDeltaBuildupTS(Vec3 vec3){
+    public void sba$setSBADeltaBuildupTS(Vec3 vec3){
         if (vec3 != null) {
-            this.roundabout$DeltaBuildupTS = vec3;
+            this.sba$DeltaBuildupTS = vec3;
         }
     }
     @Inject(method = "setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V", at = @At("HEAD"), cancellable = true)
-    protected void roundabout$SetDeltaMovement(Vec3 vec3, CallbackInfo ci){
+    protected void sba$SetDeltaMovement(Vec3 vec3, CallbackInfo ci){
         if (((TimeStop) ((Entity) (Object) this).level()).CanTimeStopEntity(((Entity) (Object) this))){
-            if (vec3.distanceTo(new Vec3(0,0,0)) > (roundabout$DeltaBuildupTS.distanceTo(new Vec3(0,0,0)) - 0.35)) {
-                this.roundabout$DeltaBuildupTS = vec3;
+            if (vec3.distanceTo(new Vec3(0,0,0)) > (sba$DeltaBuildupTS.distanceTo(new Vec3(0,0,0)) - 0.35)) {
+                this.sba$DeltaBuildupTS = vec3;
             }
             ci.cancel();
         }
     }
 
     @Unique
-    public boolean roundabout$jamBreath = false;
+    public boolean sba$jamBreath = false;
     @Unique
-    public void roundabout$setRoundaboutJamBreath(boolean roundaboutJamBreath){
-        this.roundabout$jamBreath = roundaboutJamBreath;
+    public void sba$setSBAJamBreath(boolean sbaJamBreath){
+        this.sba$jamBreath = sbaJamBreath;
     }
     @Unique
-    public boolean roundabout$getRoundaboutJamBreath(){
-        return this.roundabout$jamBreath;
+    public boolean sba$getSBAJamBreath(){
+        return this.sba$jamBreath;
     }
 
     @Inject(method = "setAirSupply", at = @At("HEAD"), cancellable = true)
-    public void roundabout$SetAirSupply(int $$0, CallbackInfo ci) {
-        if (roundabout$jamBreath){
+    public void sba$SetAirSupply(int $$0, CallbackInfo ci) {
+        if (sba$jamBreath){
             ci.cancel();
         }
     }
@@ -1060,7 +1060,7 @@ public abstract class EntityAndData implements IEntityAndData {
                     || alt.level() != self.level()
                     || !MainUtil.canActuallyHitInvolved2(self,alt)
                     || PowerTypes.isInADifferentExistenceNoTE(self,alt)
-                    || (alt instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
+                    || (alt instanceof LivingEntity lv && ((StandUser)lv).sba$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
                     || self.distanceTo(alt) >= 9) {
 
                 rdbt$nearAlt = null;
@@ -1111,10 +1111,10 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Override
     @Unique
-    public void roundabout$universalTick(){
-        roundabout$addSecondToQueue();
-        roundabout$tickTrueInvisibility();
-        roundabout$tickTrueInvisibilityManhattan();
+    public void sba$universalTick(){
+        sba$addSecondToQueue();
+        sba$tickTrueInvisibility();
+        sba$tickTrueInvisibilityManhattan();
 
         rdbt$tickAltProximity();
 
@@ -1168,27 +1168,27 @@ public abstract class EntityAndData implements IEntityAndData {
 
     @Unique
     @Override
-    public void roundabout$initialDayCheck(int day) {
+    public void sba$initialDayCheck(int day) {
         Entity self = (Entity)(Object)this;
         if (lastDay != day && SavedSecond.canTeleportTo(self.level(), self.getPosition(1), self)) {
-            roundabout$setInitialDaySec();
+            sba$setInitialDaySec();
             lastDay = day;
         }
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$tickH(CallbackInfo ci) {
-        roundabout$universalTick();
+    protected void sba$tickH(CallbackInfo ci) {
+        sba$universalTick();
     }
     @Inject(method = "tick", at = @At(value = "TAIL"))
-    protected void roundabout$tick(CallbackInfo ci) {
-        roundabout$tickQVec();
+    protected void sba$tick(CallbackInfo ci) {
+        sba$tickQVec();
     }
     @Inject(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playSoundEnt(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
+    protected void sba$playSoundEnt(SoundEvent soundEvent, float f, float g,CallbackInfo ci) {
         Entity thrs = ((Entity) (Object)this);
-        if(((ILevelAccess)this.level()).roundabout$isSoundPlunderedEntity(thrs)){
-            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).roundabout$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
+        if(((ILevelAccess)this.level()).sba$isSoundPlunderedEntity(thrs)){
+            SoftAndWetPlunderBubbleEntity sbpe = ((ILevelAccess)this.level()).sba$getSoundPlunderedBubbleEntity(((Entity) (Object)this));
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds(soundEvent, this.getSoundSource(), f, g);
             }
@@ -1256,25 +1256,25 @@ public abstract class EntityAndData implements IEntityAndData {
 
 
     @Inject(method = "thunderHit", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$thunderHit(CallbackInfo ci) {
+    protected void sba$thunderHit(CallbackInfo ci) {
         if (((Entity)(Object)this) instanceof Player PE){
             StandUser user = ((StandUser)PE);
-            ItemStack stack = user.roundabout$getStandDisc();
+            ItemStack stack = user.sba$getStandDisc();
             if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_THE_WORLD)){
                 IPlayerEntity ipe = ((IPlayerEntity) PE);
-                if (!ipe.roundabout$getUnlockedBonusSkin()){
+                if (!ipe.sba$getUnlockedBonusSkin()){
                     ci.cancel();
                     if (!level.isClientSide()) {
-                        ipe.roundabout$setUnlockedBonusSkin(true);
+                        ipe.sba$setUnlockedBonusSkin(true);
                         level().playSound(null, getX(), getY(),
                                 getZ(), ModSounds.UNLOCK_SKIN_EVENT, this.getSoundSource(), 2.0F, 1.0F);
                         ((ServerLevel) this.level()).sendParticles(ParticleTypes.END_ROD, this.getX(),
                                 this.getY()+this.getEyeHeight(), this.getZ(),
                                 10, 0.5, 0.5, 0.5, 0.2);
-                        user.roundabout$setStandSkin(TheWorldEntity.OVER_HEAVEN);
+                        user.sba$setStandSkin(TheWorldEntity.OVER_HEAVEN);
                         ((ServerPlayer) ipe).displayClientMessage(
-                                Component.translatable("unlock_skin.roundabout.the_world.over_heaven"), true);
-                        user.roundabout$summonStand(level, true, false);
+                                Component.translatable("unlock_skin.sba.the_world.over_heaven"), true);
+                        user.sba$summonStand(level, true, false);
                     }
                 }
             }
@@ -1282,9 +1282,9 @@ public abstract class EntityAndData implements IEntityAndData {
     }
     @Unique
     @Override
-    public void roundabout$tickQVec(){
+    public void sba$tickQVec(){
         if (!this.level.isClientSide()) {
-            Vec3 vec = new Vec3(roundabout$qknockback2params.x, roundabout$qknockback2params.y, roundabout$qknockback2params.z);
+            Vec3 vec = new Vec3(sba$qknockback2params.x, sba$qknockback2params.y, sba$qknockback2params.z);
             if (!vec.equals(Vec3.ZERO) && vec.distanceTo(Vec3.ZERO) > 5) {
                 if (vec.distanceTo(this.getPosition(1)) < 50) {
                     if (((Entity) (Object) this) instanceof LivingEntity le) {
@@ -1292,46 +1292,46 @@ public abstract class EntityAndData implements IEntityAndData {
                     } else {
                         this.moveTo(vec.x, vec.y, vec.z);
                     }
-                    roundabout$qknockback2params = Vec3.ZERO;
+                    sba$qknockback2params = Vec3.ZERO;
                 }
             }
-            Vec3 vecx = new Vec3(roundabout$qknockback.x, roundabout$qknockback.y, roundabout$qknockback.z);
+            Vec3 vecx = new Vec3(sba$qknockback.x, sba$qknockback.y, sba$qknockback.z);
             if (!vecx.equals(Vec3.ZERO)) {
-                MainUtil.takeUnresistableKnockbackWithYBias2(((Entity) (Object) this), roundabout$qknockbackparams.x,
+                MainUtil.takeUnresistableKnockbackWithYBias2(((Entity) (Object) this), sba$qknockbackparams.x,
                         vecx.x,
                         vecx.y,
                         vecx.z,
-                        (float) roundabout$qknockbackparams.y,
-                        (float) roundabout$qknockbackparams.z
+                        (float) sba$qknockbackparams.y,
+                        (float) sba$qknockbackparams.z
                         );
-                roundabout$setQVec(Vec3.ZERO);
+                sba$setQVec(Vec3.ZERO);
             }
         }
     }
     @Unique
-    private Vec3 roundabout$qknockback = Vec3.ZERO;
+    private Vec3 sba$qknockback = Vec3.ZERO;
     @Unique
-    private Vec3 roundabout$qknockbackparams = Vec3.ZERO;
+    private Vec3 sba$qknockbackparams = Vec3.ZERO;
     @Unique
-    private Vec3 roundabout$qknockback2params = Vec3.ZERO;
+    private Vec3 sba$qknockback2params = Vec3.ZERO;
     @Unique
     @Override
-    public void roundabout$setQVec(Vec3 ec){
-        roundabout$qknockback = ec;
+    public void sba$setQVec(Vec3 ec){
+        sba$qknockback = ec;
     }
     @Unique
     @Override
-    public void roundabout$setQVecParams(Vec3 ec){
-        roundabout$qknockbackparams = ec;
+    public void sba$setQVecParams(Vec3 ec){
+        sba$qknockbackparams = ec;
     }
     @Unique
     @Override
-    public void roundabout$setQVec2Params(Vec3 ec){
-        roundabout$qknockback2params = ec;
+    public void sba$setQVec2Params(Vec3 ec){
+        sba$qknockback2params = ec;
     }
     @Unique
     @Override
-    public void roundabout$setDeltaMovementRaw(Vec3 ec){
+    public void sba$setDeltaMovementRaw(Vec3 ec){
         this.deltaMovement = ec;
     }
 

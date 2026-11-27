@@ -1,6 +1,6 @@
 package net.hydra.jojomod.event.index;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
@@ -74,18 +74,18 @@ public enum PowerTypes {
 
     public static byte getPowerType(Entity ent){
         if (ent instanceof Player pl){
-            return ((IPlayerEntity)pl).roundabout$getPower();
+            return ((IPlayerEntity)pl).sba$getPower();
         }
         return 0;
     }
     public static void setPowerType(Entity ent, byte type){
         if (ent instanceof Player pl){
-            ((IPlayerEntity)pl).roundabout$setPower(type);
+            ((IPlayerEntity)pl).sba$setPower(type);
         }
     }
     public static void setPowerTypeWithPenalty(Entity ent, byte type){
         if (ent instanceof Player pl){
-            ((IPlayerEntity)pl).roundabout$setPowerWithPenalty(type);
+            ((IPlayerEntity)pl).sba$setPowerWithPenalty(type);
         }
     }
 
@@ -93,13 +93,13 @@ public enum PowerTypes {
     public static void initializeStandPower(Entity ent){
         if (ent instanceof Player pl){
             if (getPowerType(pl) == NONE.ordinal())
-                ((IPlayerEntity)pl).roundabout$setPower((byte) STAND.ordinal());
+                ((IPlayerEntity)pl).sba$setPower((byte) STAND.ordinal());
         }
     }
     public static void forceInitializeStandPower(Entity ent){
         if (ent instanceof Player pl){
             if (getPowerType(pl) == NONE.ordinal())
-                ((IPlayerEntity)pl).roundabout$setPower((byte) STAND.ordinal());
+                ((IPlayerEntity)pl).sba$setPower((byte) STAND.ordinal());
         }
     }
 
@@ -108,7 +108,7 @@ public enum PowerTypes {
             if (isUsingPower(ent)){
                 return ((IPowersPlayer)pl).rdbt$getPowers().activePower == PowerIndex.GUARD;
             }  else if (isUsingStand(ent)){
-                return ((StandUser)pl).roundabout$getStandPowers().activePower  == PowerIndex.GUARD;
+                return ((StandUser)pl).sba$getStandPowers().activePower  == PowerIndex.GUARD;
             }
         }
         return false;
@@ -118,7 +118,7 @@ public enum PowerTypes {
             if (isUsingPower(ent)){
                 return ((IPowersPlayer)pl).rdbt$getPowers().activePower == PowerIndex.BARRAGE_CHARGE;
             }  else if (isUsingStand(ent)){
-                return ((StandUser)pl).roundabout$getStandPowers().activePower  == PowerIndex.BARRAGE_CHARGE;
+                return ((StandUser)pl).sba$getStandPowers().activePower  == PowerIndex.BARRAGE_CHARGE;
             }
         }
         return false;
@@ -128,7 +128,7 @@ public enum PowerTypes {
             if (isUsingPower(ent)){
                 return ((IPowersPlayer)pl).rdbt$getPowers().activePower == PowerIndex.BARRAGE;
             }  else if (isUsingStand(ent)){
-                return ((StandUser)pl).roundabout$getStandPowers().activePower  == PowerIndex.BARRAGE;
+                return ((StandUser)pl).sba$getStandPowers().activePower  == PowerIndex.BARRAGE;
             }
         }
         return false;
@@ -136,7 +136,7 @@ public enum PowerTypes {
     public static boolean canChargeShotPos(Entity ent){
         if (ent instanceof Player pl){
             if (isUsingStand(ent)){
-                return ((StandUser)pl).roundabout$getStandPowers().activePower  == PowerIndex.EXTRA;
+                return ((StandUser)pl).sba$getStandPowers().activePower  == PowerIndex.EXTRA;
             }
         }
         return false;
@@ -146,7 +146,7 @@ public enum PowerTypes {
         //specifically stand arms
         if (ent instanceof LivingEntity livingEntity) {
             if (isUsingStand(livingEntity)) {
-                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
+                return ((StandUser)livingEntity).sba$getStandPowers().hasHandsOut();
             }
         }
         return false;
@@ -155,7 +155,7 @@ public enum PowerTypes {
     public static boolean hasHandsForVisage(Entity ent){
         //specifically stand arms
         if (ent instanceof LivingEntity livingEntity) {
-                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOut();
+                return ((StandUser)livingEntity).sba$getStandPowers().hasHandsOut();
         }
         return false;
     }
@@ -163,7 +163,7 @@ public enum PowerTypes {
         //specifically stand arms
         if (ent instanceof LivingEntity livingEntity) {
             if (isUsingStand(livingEntity)) {
-                return ((StandUser)livingEntity).roundabout$getStandPowers().hasHandsOutRendering();
+                return ((StandUser)livingEntity).sba$getStandPowers().hasHandsOutRendering();
             }
         }
         return true;
@@ -173,7 +173,7 @@ public enum PowerTypes {
             if (isUsingPower(ent)){
                 return ((IPowersPlayer)pl).rdbt$getPowers().isBrawling();
             }  else if (isUsingStand(ent)){
-                return ((StandUser)pl).roundabout$getStandPowers().isBrawling();
+                return ((StandUser)pl).sba$getStandPowers().isBrawling();
             }
         }
         return false;
@@ -194,9 +194,9 @@ public enum PowerTypes {
                         (((IPowersPlayer)pl).rdbt$getPowers().getActivePower() == PowerIndex.NONE ||
                         ((IPowersPlayer)pl).rdbt$getPowers().getActivePower() == PowerIndex.BRAWL_ATTACK);
             } if (isUsingStand(ent)){
-                return ((StandUser)pl).roundabout$getStandPowers().isBrawling() &&
-                        (((StandUser)pl).roundabout$getStandPowers().getActivePower() == PowerIndex.NONE ||
-                                ((StandUser)pl).roundabout$getStandPowers().getActivePower() == PowerIndex.BRAWL_ATTACK);
+                return ((StandUser)pl).sba$getStandPowers().isBrawling() &&
+                        (((StandUser)pl).sba$getStandPowers().getActivePower() == PowerIndex.NONE ||
+                                ((StandUser)pl).sba$getStandPowers().getActivePower() == PowerIndex.BRAWL_ATTACK);
             }
         }
         return false;
@@ -205,7 +205,7 @@ public enum PowerTypes {
 
     public static boolean isUsingPower(Entity ent){
         if (ent instanceof Player pl){
-            if (((StandUser)pl).roundabout$getActive()){
+            if (((StandUser)pl).sba$getActive()){
                 return (getPowerFromByte(getPowerType(ent)) != PowerTypes.STAND
                 && getPowerFromByte(getPowerType(ent)) != PowerTypes.NONE);
             }
@@ -215,11 +215,11 @@ public enum PowerTypes {
 
     public static boolean isUsingStand(Entity ent){
         if (ent instanceof Player pl){
-            if (((StandUser)pl).roundabout$getActive()){
+            if (((StandUser)pl).sba$getActive()){
                 return (getPowerFromByte(getPowerType(ent)) == PowerTypes.STAND);
             }
         } else if (ent instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getActive();
+            return ((StandUser)LE).sba$getActive();
         }
         return false;
     }
@@ -231,7 +231,7 @@ public enum PowerTypes {
                 powerList.add(VAMPIRE);
             }
             StandUser user = ((StandUser) pl);
-            boolean hasStand = user.roundabout$hasAStand();
+            boolean hasStand = user.sba$hasAStand();
             if (hasStand){
                 powerList.add(STAND);
             }
@@ -244,7 +244,7 @@ public enum PowerTypes {
             if (entity instanceof Player PL){
                 return getPowerType(PL) == STAND.ordinal();
             }
-            return ((StandUser)LE).roundabout$hasAStand();
+            return ((StandUser)LE).sba$hasAStand();
         }
         return false;
     }
@@ -265,7 +265,7 @@ public enum PowerTypes {
                 if (getPowerType(PL) != STAND.ordinal())
                     return false;
             }
-            return ((StandUser)LE).roundabout$getActive();
+            return ((StandUser)LE).sba$getActive();
         }
         return false;
     }
@@ -273,8 +273,8 @@ public enum PowerTypes {
     public static boolean isMiningStand(Entity entity) {
         if (entity instanceof LivingEntity LE) {
             StandUser user = (StandUser) LE;
-            if (user.roundabout$getStandPowers() != null) {
-                return user.roundabout$getStandPowers().isMiningStand();
+            if (user.sba$getStandPowers() != null) {
+                return user.sba$getStandPowers().isMiningStand();
             }
         }
         return false;
@@ -293,7 +293,7 @@ public enum PowerTypes {
             if (entity instanceof FollowingStandEntity fse && fse.getFollowing() != null){
                 return getPlaneOfExisting(fse.getFollowing());
             }
-            return ((IGravityEntity)entity).roundabout$getExistPlane();
+            return ((IGravityEntity)entity).sba$getExistPlane();
         }
         return 0;
     }
@@ -302,7 +302,7 @@ public enum PowerTypes {
             if (entity instanceof FollowingStandEntity fse && fse.getFollowing() != null){
                 return getPlaneOfExisting2(fse.getFollowing());
             }
-            return ((IGravityEntity)entity).roundabout$getExistPlane();
+            return ((IGravityEntity)entity).sba$getExistPlane();
         }
         return 0;
     }
@@ -315,23 +315,23 @@ public enum PowerTypes {
     }
     public static void setPlaneOfExisting(Entity entity, byte plane){
         if (entity != null){
-            ((IGravityEntity)entity).roundabout$setExistPlane(plane);
+            ((IGravityEntity)entity).sba$setExistPlane(plane);
         }
     }
     public static void forcePlaneOfExisting(Entity entity, byte plane){
         if (entity instanceof LivingEntity LE){
             StandUser user = ((StandUser) LE);
-            if (user.roundabout$isClashing()){
-                user.roundabout$getStandPowers().endClash();
+            if (user.sba$isClashing()){
+                user.sba$getStandPowers().endClash();
             }
-            user.roundabout$tryPower(PowerIndex.NONE,true);
+            user.sba$tryPower(PowerIndex.NONE,true);
         }
-        ((IGravityEntity)entity).roundabout$setExistPlane(plane);
+        ((IGravityEntity)entity).sba$setExistPlane(plane);
     }
     public static void copyPlaneOfExisting(Entity from, Entity to){
         if (from != null && to != null){
-            ((IGravityEntity)to).roundabout$setExistPlane(
-                    ((IGravityEntity)from).roundabout$getExistPlane());
+            ((IGravityEntity)to).sba$setExistPlane(
+                    ((IGravityEntity)from).sba$getExistPlane());
             ((IEntityAndData)to).rdbt$setForeignWorldTicks(
                     ((IEntityAndData)from).rdbt$getForeignWorldTicks());
             ((IEntityAndData)to).rdbt$setTicksUntilGone(
@@ -435,7 +435,7 @@ public enum PowerTypes {
     @Nullable
     public static Entity findNearbyParallelCopy(Entity entity) {
         if (!(entity.level() instanceof ServerLevel sl) ||
-                (entity instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
+                (entity instanceof LivingEntity lv && ((StandUser)lv).sba$getStandPowers() instanceof PowersD4C && !PowersD4C.debugCollision)
                 || (entity instanceof D4CCloneEntity dce && dce.getSafeCopy() && !PowersD4C.debugCollision)
         ) {
             return null;
@@ -461,7 +461,7 @@ public enum PowerTypes {
                                         ((IEntityAndData) other).rdbt$getNativeCopy().equals(parallelUUID)))
                                 && other.distanceTo(entity) <= 7
                                 && !(other instanceof D4CCloneEntity dce && dce.getSafeCopy() && !PowersD4C.debugCollision)
-                                && !(other instanceof LivingEntity lv && ((StandUser)lv).roundabout$getStandPowers() instanceof PowersD4C)
+                                && !(other instanceof LivingEntity lv && ((StandUser)lv).sba$getStandPowers() instanceof PowersD4C)
         );
 
         if (!nearby.isEmpty()) {
@@ -579,7 +579,7 @@ public enum PowerTypes {
     }
     public static boolean isErasingTime(Entity entity){
         if (entity instanceof Player pl){
-            return ((StandUser)pl).roundabout$getStandPowers() instanceof PowersKingCrimson pkc &&
+            return ((StandUser)pl).sba$getStandPowers() instanceof PowersKingCrimson pkc &&
                     pkc.timeEraseActive;
         }
         return false;
@@ -599,7 +599,7 @@ public enum PowerTypes {
                 if (getPowerType(PL) == STAND.ordinal() || getPowerType(PL) == NONE.ordinal())
                     return false;
             }
-            return ((StandUser)LE).roundabout$getActive();
+            return ((StandUser)LE).sba$getActive();
         }
         return false;
     }
@@ -607,7 +607,7 @@ public enum PowerTypes {
     public static boolean canHavePower(Entity entity, byte bt){
         if (entity instanceof Player pl) {
             if (bt == STAND.ordinal()) {
-                if (((StandUser) entity).roundabout$hasAStand()) {
+                if (((StandUser) entity).sba$hasAStand()) {
                     return true;
                 }
             } else if (bt == VAMPIRE.ordinal()) {
@@ -624,19 +624,19 @@ public enum PowerTypes {
         if (entity instanceof Player pl) {
             byte bt = getPowerType(pl);
             if (bt == STAND.ordinal()){
-                if (!((StandUser)entity).roundabout$hasAStand()){
-                    ((StandUser)entity).roundabout$setActive(false);
+                if (!((StandUser)entity).sba$hasAStand()){
+                    ((StandUser)entity).sba$setActive(false);
                     setPowerType(entity, (byte) NONE.ordinal());
                 }
             } else if (bt == VAMPIRE.ordinal()){
                 if (!FateTypes.isVampire(pl)){
-                    ((StandUser)entity).roundabout$setActive(false);
+                    ((StandUser)entity).sba$setActive(false);
                     setPowerType(entity, (byte) NONE.ordinal());
                 }
             }
 
             if (bt == NONE.ordinal()){
-                if (((StandUser)entity).roundabout$hasAStand()){
+                if (((StandUser)entity).sba$hasAStand()){
                     setPowerType(entity, (byte) STAND.ordinal());
                 } else if (FateTypes.isVampire(pl)){
                     setPowerType(entity, (byte) VAMPIRE.ordinal());

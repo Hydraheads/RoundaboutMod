@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.layers.anubis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
@@ -50,11 +50,11 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         StandUser user = ((StandUser)entity);
         if (entity.isUsingItem() && !(entity.getUseItem().getItem() instanceof AnubisItem) )  {return null;}
 
-        if ((entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode())
-                || user.roundabout$getPossessor() instanceof AnubisPossessorEntity
-                || (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity))
+        if ((entity.getMainHandItem().getItem() instanceof AnubisItem && !user.sba$getEffectiveCombatMode())
+                || user.sba$getPossessor() instanceof AnubisPossessorEntity
+                || (user.sba$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity))
                 || MainUtil.getWornStandVanishticksSafe(user, PowersAnubis.class) > 0) {
-                //|| (user.roundabout$getAnubisVanishTicks() > 0) ) {
+                //|| (user.sba$getAnubisVanishTicks() > 0) ) {
 
             return entity.getMainArm();
         }
@@ -64,9 +64,9 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public static boolean isSheathed(LivingEntity entity) {
         StandUser user = ((StandUser)entity);
         if (entity.getMainHandItem().getItem() instanceof AnubisItem) {
-            if (!(user.roundabout$getPossessor() instanceof AnubisPossessorEntity)) {
-                return (user.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity))
-                        || !(user.roundabout$getStandPowers() instanceof PowersAnubis);
+            if (!(user.sba$getPossessor() instanceof AnubisPossessorEntity)) {
+                return (user.sba$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity))
+                        || !(user.sba$getStandPowers() instanceof PowersAnubis);
             }
         }
         return false;
@@ -79,7 +79,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                     && ClientUtil.getUseAnimation((AbstractClientPlayer) P, InteractionHand.MAIN_HAND) != HumanoidModel.ArmPose.EMPTY)
                     || (ClientUtil.getUseAnimation((AbstractClientPlayer) P, InteractionHand.OFF_HAND) != HumanoidModel.ArmPose.ITEM
                     && ClientUtil.getUseAnimation((AbstractClientPlayer) P, InteractionHand.OFF_HAND) != HumanoidModel.ArmPose.EMPTY);
-            isArmed = isArmed &&  ((StandUser)P).roundabout$getStandAnimation() == PowerIndex.NONE;
+            isArmed = isArmed &&  ((StandUser)P).sba$getStandAnimation() == PowerIndex.NONE;
         }
         return isArmed;
     }
@@ -87,9 +87,9 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
 
-        if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
+        if (((IEntityAndData) entity).sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
 
-        if (((IEntityAndData) entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
+        if (((IEntityAndData) entity).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
 
         if (entity.isBaby()) {return;}
 
@@ -125,7 +125,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
             byte idle = MainUtil.getWornStandIdleSafe(SU, PowersAnubis.class);
 
             // unsummoned, sheathed anubis
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity) && idle != 3 ) {
+            if (SU.sba$getStandPowers() instanceof PowersAnubis && !PowerTypes.hasStandActive(entity) && idle != 3 ) {
                 ClientUtil.pushPoseAndCooperate(poseStack, 60);
 
                 getParentModel().body.translateAndRotate(poseStack);
@@ -153,8 +153,8 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
     public static void renderSheathedAnubis(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, float scale) {
 
         StandUser user = ((StandUser)entity );
-        boolean hasAnubisOut = (PowerTypes.hasStandActive(entity) && user.roundabout$getStandPowers() instanceof PowersAnubis);
-        //int heyTicks = user.roundabout$getAnubisVanishTicks();
+        boolean hasAnubisOut = (PowerTypes.hasStandActive(entity) && user.sba$getStandPowers() instanceof PowersAnubis);
+        //int heyTicks = user.sba$getAnubisVanishTicks();
         int heyTicks = MainUtil.getWornStandVanishticksSafe(user, PowersAnubis.class);
 
         float heyFull = 0;
@@ -174,12 +174,12 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
         poseStack.scale(scale,scale,scale);
         ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                1, 1, 1, 1-heyFull, user.roundabout$getStandSkin(),false);
+                1, 1, 1, 1-heyFull, user.sba$getStandSkin(),false);
     }
 
     public static float getTicks(LivingEntity livingEntity, float partialTicks) {
         StandUser SU = (StandUser) livingEntity;
-        boolean active = (PowerTypes.hasStandActive(livingEntity) && SU.roundabout$getStandPowers() instanceof PowersAnubis);
+        boolean active = (PowerTypes.hasStandActive(livingEntity) && SU.sba$getStandPowers() instanceof PowersAnubis);
 
         int heyTicks = MainUtil.getWornStandVanishticksSafe(SU, PowersAnubis.class);
 
@@ -215,14 +215,14 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
         boolean hasVanishTicks = MainUtil.getWornStandVanishticksSafe(user, PowersAnubis.class) != 0;
 
         byte skin = 0;
-        if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
+        if (user.sba$getPossessor() instanceof AnubisPossessorEntity) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, 1F, (byte) 1);
-        } else if ( (user.roundabout$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (hasVanishTicks && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
+        } else if ( (user.sba$getStandPowers() instanceof PowersAnubis && PowerTypes.hasStandActive(entity) ) || (hasVanishTicks && !entity.getMainHandItem().is(ModItems.ANUBIS_ITEM)   ) ) {
             ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                     1, 1, 1, heyFull, MainUtil.getWornStandSkinSafe(user, PowersAnubis.class));
-            if (user.roundabout$getStandAnimation() == PowersAnubis.FLURRY) {
-                float time = user.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
+            if (user.sba$getStandAnimation() == PowersAnubis.FLURRY) {
+                float time = user.sba$getWornStandAnimation().getAccumulatedTime()/1000F;
                 time -= (15/20.0F);
                 if (time > 0 && time < (15/20.0F)) {
                     float scaler = 0.75F * Math.min(time * 0.7F, 1);
@@ -230,12 +230,12 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                         poseStack.pushPose();
                         poseStack.translate(translation.x * scaler * Math.cos(partialTicks * 0.5),(time * 8) % 1, translation.y * scaler * Math.sin(partialTicks * 0.5));
                         ModStrayModels.ANUBIS.render(entity, partialTicks, poseStack, bufferSource, packedLight,
-                                1, 1, 1, heyFull * (0.7F * (1 - time / 300)), user.roundabout$getStandSkin() );
+                                1, 1, 1, heyFull * (0.7F * (1 - time / 300)), user.sba$getStandSkin() );
                         poseStack.popPose();
                     }
                 }
             }
-        } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.roundabout$getEffectiveCombatMode()) {
+        } else if (entity.getMainHandItem().getItem() instanceof AnubisItem && !user.sba$getEffectiveCombatMode()) {
             CompoundTag tag = entity.getMainHandItem().getTag();
             if (tag != null) {
                 if (tag.getFloat("CustomModelData") == 2F) {
@@ -254,14 +254,14 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
 
     ///  used for in-hand rendering, this means swinging your arm would also swing anubis
     public static void renderOutOfContext(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, LivingEntity entity, float partialTicks, ModelPart handarm) {
-        if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
+        if (((IEntityAndData) entity).sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung()) return;
 
-        if (((IEntityAndData) entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
+        if (((IEntityAndData) entity).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) return;
 
         if (AnubisLayer.shouldRender(entity) != null
                 && entity.getMainHandItem().getItem().equals(ModItems.ANUBIS_ITEM) && !entity.getUseItem().getItem().equals(ModItems.ANUBIS_ITEM)
-                && !(PowerTypes.isUsingStand(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis )
-                && !(((StandUser)entity).roundabout$getPossessor() instanceof AnubisPossessorEntity) ) {
+                && !(PowerTypes.isUsingStand(entity) && ((StandUser)entity).sba$getStandPowers() instanceof PowersAnubis )
+                && !(((StandUser)entity).sba$getPossessor() instanceof AnubisPossessorEntity) ) {
 
 
             ClientUtil.pushPoseAndCooperate(poseStack, 48);
@@ -280,7 +280,7 @@ public class AnubisLayer<T extends LivingEntity, A extends HumanoidModel<T>> ext
                 poseStack.translate(0,-0.2,0); // +right, +down?
             }
 
-            if (entity.getMainHandItem().is(ModItems.ANUBIS_ITEM) && !(PowerTypes.isUsingStand(entity) && ((StandUser)entity).roundabout$getStandPowers() instanceof PowersAnubis )) {
+            if (entity.getMainHandItem().is(ModItems.ANUBIS_ITEM) && !(PowerTypes.isUsingStand(entity) && ((StandUser)entity).sba$getStandPowers() instanceof PowersAnubis )) {
                 LivingEntity target = MainUtil.findClosestEntity(entity.level(),entity.position(),5F, livingEntity -> (livingEntity instanceof AbstractIllager &&  !(livingEntity instanceof AnubisGuardian))  || (livingEntity instanceof Villager V && V.getVillagerData().getProfession().equals(VillagerProfession.CLERIC)) );
                 if (target != null) {
                     float shakeMod = (5F-Math.min(5F,target.distanceTo(entity)))/5F;

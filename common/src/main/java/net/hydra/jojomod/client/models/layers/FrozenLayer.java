@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.layers;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
@@ -37,7 +37,7 @@ public class FrozenLayer<T extends LivingEntity, A extends EntityModel<T>> exten
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
-        if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)entity).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision() )
+        if (((IEntityAndData)entity).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)entity).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision() )
             return;
 
         if (ClientUtil.cancelWithSuitStand(entity)){
@@ -82,15 +82,15 @@ public class FrozenLayer<T extends LivingEntity, A extends EntityModel<T>> exten
                 } else if (entity.getType() == EntityType.CREEPER) {
                     if (getParentModel() instanceof CreeperModel<?> sm) {
                         VertexConsumer consumer = buffer.getBuffer(RenderType.entityTranslucent(StandIcons.ICE_CREEPER_LAYER));
-                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getRightFrontLeg(), consumer, packedLight);
-                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getLeftFrontLeg(), consumer, packedLight);
-                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getRightHindLeg(), consumer, packedLight);
-                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getLeftHindLeg(), consumer, packedLight);
+                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).sba$getRightFrontLeg(), consumer, packedLight);
+                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).sba$getLeftFrontLeg(), consumer, packedLight);
+                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).sba$getRightHindLeg(), consumer, packedLight);
+                        renderPartCreeper(poseStack, ((AccessCreeperModel)sm).sba$getLeftHindLeg(), consumer, packedLight);
                         if (legsFrozen) {
-                            renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getRoot().getChild("body"), consumer, packedLight);
+                            renderPartCreeper(poseStack, ((AccessCreeperModel)sm).sba$getRoot().getChild("body"), consumer, packedLight);
                         }
                         if (bodyFrozen) {
-                            renderPartCreeper(poseStack, ((AccessCreeperModel)sm).roundabout$getHead(), consumer, packedLight);
+                            renderPartCreeper(poseStack, ((AccessCreeperModel)sm).sba$getHead(), consumer, packedLight);
                         }
                     }
                 }

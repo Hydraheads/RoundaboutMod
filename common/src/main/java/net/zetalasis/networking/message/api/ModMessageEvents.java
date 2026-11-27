@@ -1,6 +1,6 @@
 package net.zetalasis.networking.message.api;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.networking.ClientToServerPackets;
 import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.minecraft.server.MinecraftServer;
@@ -13,7 +13,7 @@ import net.zetalasis.networking.packet.impl.packet.MessageS2C;
 
 import java.util.HashSet;
 
-/** Message Events API for Roundabout */
+/** Message Events API for SBA */
 public class ModMessageEvents {
     public static HashSet<IMessageEvent> REGISTRAR = new HashSet<>();
 
@@ -26,7 +26,7 @@ public class ModMessageEvents {
     private static <T extends IMessageEvent> void register(T event)
     {
         if (REGISTRAR.contains(event)) {
-            Roundabout.LOGGER.warn("Attempted to register a duplicate IMessageEvent!");
+            SBA.LOGGER.warn("Attempted to register a duplicate IMessageEvent!");
             return;
         }
 

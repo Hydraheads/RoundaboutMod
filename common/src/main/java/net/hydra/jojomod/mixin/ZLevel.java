@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.ILevelAccess;
 import net.hydra.jojomod.entity.projectile.SoftAndWetPlunderBubbleEntity;
 import net.hydra.jojomod.event.index.PlunderTypes;
@@ -50,14 +50,14 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
     public abstract boolean shouldTickBlocksAt(BlockPos blockPos);
 
     @Unique
-    public List<SoftAndWetPlunderBubbleEntity> roundabout$plunderBubbles = new ArrayList<>();
+    public List<SoftAndWetPlunderBubbleEntity> sba$plunderBubbles = new ArrayList<>();
     @Unique
-    public List<SoftAndWetPlunderBubbleEntity> roundabout$entityPlunderBubbles = new ArrayList<>();
+    public List<SoftAndWetPlunderBubbleEntity> sba$entityPlunderBubbles = new ArrayList<>();
 
     @Unique
-    public List<SoftAndWetPlunderBubbleEntity> roundabout$frictionBubbles = new ArrayList<>();
+    public List<SoftAndWetPlunderBubbleEntity> sba$frictionBubbles = new ArrayList<>();
     @Unique
-    public List<SoftAndWetPlunderBubbleEntity> roundabout$entityFrictionBubbles = new ArrayList<>();
+    public List<SoftAndWetPlunderBubbleEntity> sba$entityFrictionBubbles = new ArrayList<>();
 
     @Unique
     public void rdbt$skipTime(LivingEntity self,int ticks, int maxRange){
@@ -122,111 +122,111 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
     }
 
     @Unique
-    public void roundabout$addPlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
-        roundabout$bubbleInit();
+    public void sba$addPlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
+        sba$bubbleInit();
 
         if (!plunder.getFinished() && plunder.getPlunderType() == PlunderTypes.FRICTION.id) {
-            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$frictionBubbles) {
+            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$frictionBubbles) {
             };
             if (!(!bubbleIteration.isEmpty() && bubbleIteration.contains(plunder))) {
-                roundabout$frictionBubbles.add(plunder);
+                sba$frictionBubbles.add(plunder);
             }
         } else if (!plunder.getFinished() && plunder.getPlunderType() == PlunderTypes.SOUND.id) {
-            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$plunderBubbles) {
+            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$plunderBubbles) {
             };
             if (!(!bubbleIteration.isEmpty() && bubbleIteration.contains(plunder))) {
-                roundabout$plunderBubbles.add(plunder);
+                sba$plunderBubbles.add(plunder);
             }
         }
     }
     @Unique
-    public void roundabout$addPlunderBubbleEntity(SoftAndWetPlunderBubbleEntity plunder){
-        roundabout$bubbleInit();
+    public void sba$addPlunderBubbleEntity(SoftAndWetPlunderBubbleEntity plunder){
+        sba$bubbleInit();
 
         if (!plunder.getFinished() && plunder.getPlunderType() == PlunderTypes.FRICTION.id) {
-            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityFrictionBubbles) {
+            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$entityFrictionBubbles) {
             };
             if (!(!bubbleIteration.isEmpty() && bubbleIteration.contains(plunder))) {
-                roundabout$entityFrictionBubbles.add(plunder);
+                sba$entityFrictionBubbles.add(plunder);
             }
         } else if (!plunder.getFinished() && plunder.getPlunderType() == PlunderTypes.SOUND.id) {
-            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityPlunderBubbles) {
+            List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$entityPlunderBubbles) {
             };
             if (!(!bubbleIteration.isEmpty() && bubbleIteration.contains(plunder))) {
-                roundabout$entityPlunderBubbles.add(plunder);
+                sba$entityPlunderBubbles.add(plunder);
             }
         }
     }
     @Unique
-    public void roundabout$removePlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$plunderBubbles) {
+    public void sba$removePlunderBubble(SoftAndWetPlunderBubbleEntity plunder){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$plunderBubbles) {
         };
         if (!bubbleIteration.isEmpty() && bubbleIteration.contains(plunder)) {
-            roundabout$plunderBubbles.remove(plunder);
+            sba$plunderBubbles.remove(plunder);
         }
     }
 
 
     @Unique
-    public void roundabout$bubbleInit(){
-        if (roundabout$plunderBubbles == null) {
-            roundabout$plunderBubbles = new ArrayList<>();
-        } if (roundabout$entityPlunderBubbles == null) {
-            roundabout$entityPlunderBubbles = new ArrayList<>();
-        }if (roundabout$frictionBubbles == null) {
-            roundabout$plunderBubbles = new ArrayList<>();
-        } if (roundabout$entityFrictionBubbles == null) {
-            roundabout$entityPlunderBubbles = new ArrayList<>();
+    public void sba$bubbleInit(){
+        if (sba$plunderBubbles == null) {
+            sba$plunderBubbles = new ArrayList<>();
+        } if (sba$entityPlunderBubbles == null) {
+            sba$entityPlunderBubbles = new ArrayList<>();
+        }if (sba$frictionBubbles == null) {
+            sba$plunderBubbles = new ArrayList<>();
+        } if (sba$entityFrictionBubbles == null) {
+            sba$entityPlunderBubbles = new ArrayList<>();
         }
     }
 
     /**Offload Bubbles that are done*/
     @Unique
-    public void roundabout$tickPlunderBubbleRemoval(){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$plunderBubbles) {
+    public void sba$tickPlunderBubbleRemoval(){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$plunderBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
                 if (value.isRemoved() || !value.isAlive()) {
-                    roundabout$plunderBubbles.remove(value);
+                    sba$plunderBubbles.remove(value);
                 }
             }
         }
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration2 = new ArrayList<>(roundabout$entityPlunderBubbles) {
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration2 = new ArrayList<>(sba$entityPlunderBubbles) {
         };
         if (!bubbleIteration2.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration2) {
                 if (value.isRemoved() || !value.isAlive()) {
-                    roundabout$entityPlunderBubbles.remove(value);
+                    sba$entityPlunderBubbles.remove(value);
                 }
             }
         }
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration3 = new ArrayList<>(roundabout$entityFrictionBubbles) {
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration3 = new ArrayList<>(sba$entityFrictionBubbles) {
         };
         if (!bubbleIteration3.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration3) {
                 if (value.isRemoved() || !value.isAlive()) {
-                    roundabout$entityFrictionBubbles.remove(value);
+                    sba$entityFrictionBubbles.remove(value);
                 }
             }
         }
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration4 = new ArrayList<>(roundabout$frictionBubbles) {
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration4 = new ArrayList<>(sba$frictionBubbles) {
         };
         if (!bubbleIteration4.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration4) {
                 if (value.isRemoved() || !value.isAlive()) {
-                    roundabout$frictionBubbles.remove(value);
+                    sba$frictionBubbles.remove(value);
                 }
             }
         }
     }
 
     @Unique
-    public boolean roundabout$isFrictionPlundered(BlockPos blockPos){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$frictionBubbles) {
+    public boolean sba$isFrictionPlundered(BlockPos blockPos){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$frictionBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
@@ -245,9 +245,9 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
     }
 
     @Unique
-    public SoftAndWetPlunderBubbleEntity roundabout$getSoundPlunderedBubble(BlockPos blockPos){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$plunderBubbles) {
+    public SoftAndWetPlunderBubbleEntity sba$getSoundPlunderedBubble(BlockPos blockPos){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$plunderBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
@@ -265,9 +265,9 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
         return null;
     }
     @Unique
-    public boolean roundabout$isSoundPlundered(BlockPos blockPos){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$plunderBubbles) {
+    public boolean sba$isSoundPlundered(BlockPos blockPos){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$plunderBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
@@ -287,9 +287,9 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
 
 
     @Unique
-    public SoftAndWetPlunderBubbleEntity roundabout$getSoundPlunderedBubbleEntity(Entity entity){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityPlunderBubbles) {
+    public SoftAndWetPlunderBubbleEntity sba$getSoundPlunderedBubbleEntity(Entity entity){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$entityPlunderBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
@@ -305,9 +305,9 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
 
 
     @Unique
-    public void roundabout$raptureBubbles(BlockPos pos){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityPlunderBubbles) {
+    public void sba$raptureBubbles(BlockPos pos){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$entityPlunderBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
@@ -323,7 +323,7 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
             }
         }
 
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration2 = new ArrayList<>(roundabout$plunderBubbles) {
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration2 = new ArrayList<>(sba$plunderBubbles) {
         };
         if (!bubbleIteration2.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration2) {
@@ -341,9 +341,9 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
     }
 
     @Unique
-    public boolean roundabout$isSoundPlunderedEntity(Entity entity){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityPlunderBubbles) {
+    public boolean sba$isSoundPlunderedEntity(Entity entity){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$entityPlunderBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
@@ -357,9 +357,9 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
         return false;
     }
     @Unique
-    public boolean roundabout$isFrictionPlunderedEntity(Entity entity){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityFrictionBubbles) {
+    public boolean sba$isFrictionPlunderedEntity(Entity entity){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$entityFrictionBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
@@ -374,9 +374,9 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
     }
 
     @Unique
-    public boolean roundabout$isFrictionPlunderedEntity2(Entity entity){
-        roundabout$bubbleInit();
-        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(roundabout$entityFrictionBubbles) {
+    public boolean sba$isFrictionPlunderedEntity2(Entity entity){
+        sba$bubbleInit();
+        List<SoftAndWetPlunderBubbleEntity> bubbleIteration = new ArrayList<>(sba$entityFrictionBubbles) {
         };
         if (!bubbleIteration.isEmpty()) {
             for (SoftAndWetPlunderBubbleEntity value : bubbleIteration) {
@@ -391,15 +391,15 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
     }
 
     @Inject(method = "playSound(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$playSeededSound(Entity $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5, CallbackInfo ci) {
-        if(this.roundabout$isSoundPlundered($$1)){
-            SoftAndWetPlunderBubbleEntity sbpe = this.roundabout$getSoundPlunderedBubble($$1);
+    private void sba$playSeededSound(Entity $$0, BlockPos $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5, CallbackInfo ci) {
+        if(this.sba$isSoundPlundered($$1)){
+            SoftAndWetPlunderBubbleEntity sbpe = this.sba$getSoundPlunderedBubble($$1);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$2, $$3, $$4, $$5);
             }
             ci.cancel();
-        } else if(this.roundabout$isSoundPlunderedEntity($$0)){
-            SoftAndWetPlunderBubbleEntity sbpe = this.roundabout$getSoundPlunderedBubbleEntity($$0);
+        } else if(this.sba$isSoundPlunderedEntity($$0)){
+            SoftAndWetPlunderBubbleEntity sbpe = this.sba$getSoundPlunderedBubbleEntity($$0);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$2, $$3, $$4, $$5);
             }
@@ -407,9 +407,9 @@ public abstract class ZLevel implements ILevelAccess, LevelAccessor {
         }
     }
     @Inject(method = "playSound(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$playSeededSound(Player $$0, Entity $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5, CallbackInfo ci) {
-        if(this.roundabout$isSoundPlunderedEntity($$1)){
-            SoftAndWetPlunderBubbleEntity sbpe = this.roundabout$getSoundPlunderedBubbleEntity($$1);
+    private void sba$playSeededSound(Player $$0, Entity $$1, SoundEvent $$2, SoundSource $$3, float $$4, float $$5, CallbackInfo ci) {
+        if(this.sba$isSoundPlunderedEntity($$1)){
+            SoftAndWetPlunderBubbleEntity sbpe = this.sba$getSoundPlunderedBubbleEntity($$1);
             if (sbpe !=null) {
                 sbpe.addPlunderBubbleSounds($$2, $$3, $$4, $$5);
             }

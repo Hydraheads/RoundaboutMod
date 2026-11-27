@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ZTameAnimalTriggerMixin {
 
     @Inject(method = "trigger", at = @At("HEAD"))
-    private void roundabout$onAnimalTamed(ServerPlayer player, Animal entity, CallbackInfo ci) {
-        if (((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+    private void sba$onAnimalTamed(ServerPlayer player, Animal entity, CallbackInfo ci) {
+        if (((StandUser) player).sba$getStandPowers() instanceof PowersGoldExperience ge) {
             ge.onAnimalTamed();
         }
     }

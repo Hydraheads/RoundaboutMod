@@ -3,7 +3,7 @@ package net.hydra.jojomod.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.SoftAndWetBubbleEntity;
@@ -32,8 +32,8 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 
 public class BubbleScaffoldBlockEntityRenderer implements BlockEntityRenderer<BubbleScaffoldBlockEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder.png");
-    private static final ResourceLocation HEART_ATTACK_MINI = new ResourceLocation(Roundabout.MOD_ID, "textures/particle/heart_attack_mini.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/stand/soft_and_wet/projectiles/bubble_plunder.png");
+    private static final ResourceLocation HEART_ATTACK_MINI = new ResourceLocation(SBA.MOD_ID, "textures/particle/heart_attack_mini.png");
     public BubbleScaffoldBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         super();
         this.scale = 0.55f;

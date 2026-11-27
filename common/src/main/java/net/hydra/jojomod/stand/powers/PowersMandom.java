@@ -143,7 +143,7 @@ public class PowersMandom extends NewDashPreset {
         saveDiscAndSync();
     }
     public boolean activatedPastVision(){
-        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+        return getStandUserSelf().sba$getUniqueStandModeToggle();
     }
 
     @Override
@@ -176,13 +176,13 @@ public class PowersMandom extends NewDashPreset {
             switch (getWatchStyle())
             {
                 case WATCHLESS -> {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.mandom.watch_off").withStyle(ChatFormatting.GOLD), true);
+                    PE.displayClientMessage(Component.translatable("text.sba.mandom.watch_off").withStyle(ChatFormatting.GOLD), true);
                 }
                 case MAIN -> {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.mandom.watch_on").withStyle(ChatFormatting.GOLD), true);
+                    PE.displayClientMessage(Component.translatable("text.sba.mandom.watch_on").withStyle(ChatFormatting.GOLD), true);
                 }
                 case ROLEX -> {
-                    PE.displayClientMessage(Component.translatable("text.roundabout.mandom.watch_on_rolex").withStyle(ChatFormatting.GOLD), true);
+                    PE.displayClientMessage(Component.translatable("text.sba.mandom.watch_on_rolex").withStyle(ChatFormatting.GOLD), true);
                 }
             }
         }
@@ -219,12 +219,12 @@ public class PowersMandom extends NewDashPreset {
             ROTATE = 1;
 
     public boolean toggleVision(){
-        getStandUserSelf().roundabout$setUniqueStandModeToggle(!activatedPastVision());
+        getStandUserSelf().sba$setUniqueStandModeToggle(!activatedPastVision());
         if (!isClient()) {
             if (activatedPastVision()) {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.vision_on").withStyle(ChatFormatting.DARK_PURPLE), true);
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.mandom.vision_on").withStyle(ChatFormatting.DARK_PURPLE), true);
             } else {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.mandom.vision_off").withStyle(ChatFormatting.DARK_PURPLE), true);
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.mandom.vision_off").withStyle(ChatFormatting.DARK_PURPLE), true);
             }
         }
         return true;
@@ -363,7 +363,7 @@ public class PowersMandom extends NewDashPreset {
                     }
 
                     IEntityAndData iData = (IEntityAndData) ent;
-                    SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
+                    SavedSecond lastSecond = iData.sba$getLastSavedSecond();
                     if (lastSecond != null) {
                         lastSecond.loadTime(ent);
                     }
@@ -373,14 +373,14 @@ public class PowersMandom extends NewDashPreset {
                     if (ent instanceof Mob mb && !MainUtil.isBossMob(mb)){
                         mb.getNavigation().stop();
                         if (!MainUtil.blockConfusionTicks(mb)) {
-                            ((IMob) mb).roundabout$setConfusionTicks(7);
+                            ((IMob) mb).sba$setConfusionTicks(7);
                         }
                     }
 
                     if (!ent.is(this.self)){
                         if (ent instanceof LivingEntity LE){
                             StandUser user = ((StandUser)LE);
-                            StandPowers powers = user.roundabout$getStandPowers();
+                            StandPowers powers = user.sba$getStandPowers();
                             if (powers instanceof PowersMandom PM && !(PM.onCooldown(PowerIndex.SKILL_2) && PM.getCooldown(PowerIndex.SKILL_2).time > rewindCooldown)){
                                 PM.setCooldown(PowerIndex.SKILL_2,rewindCooldown);
                             }
@@ -395,8 +395,8 @@ public class PowersMandom extends NewDashPreset {
         }
         if (this.self instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
-            if (ipe.roundabout$getWatchStyle() > WATCHLESS){
-                ipe.roundabout$SetPoseEmote((byte) 10);
+            if (ipe.sba$getWatchStyle() > WATCHLESS){
+                ipe.sba$SetPoseEmote((byte) 10);
             }
         }
     }
@@ -430,7 +430,7 @@ public class PowersMandom extends NewDashPreset {
                     for (Entity ent : mobsInRange) {
                         if (MainUtil.canRewindInTime(ent,this.self)) {
                             IEntityAndData iData = (IEntityAndData) ent;
-                            SavedSecond lastSecond = iData.roundabout$getLastSavedSecond();
+                            SavedSecond lastSecond = iData.sba$getLastSavedSecond();
                             if (lastSecond != null){
                                 if (!lastSecond.hasHadParticle){
                                     lastSecond.hasHadParticle = true;
@@ -525,24 +525,24 @@ public class PowersMandom extends NewDashPreset {
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
-            case PowersMandom.PURPLE -> Component.translatable("skins.roundabout.mandom.purple");
-            case PowersMandom.SKY -> Component.translatable("skins.roundabout.mandom.sky");
-            case PowersMandom.SQUID -> Component.translatable("skins.roundabout.mandom.squid");
-            case PowersMandom.ALIEN -> Component.translatable("skins.roundabout.mandom.alien");
-            case PowersMandom.DARK -> Component.translatable("skins.roundabout.mandom.dark");
-            case PowersMandom.GLOW_SQUID -> Component.translatable("skins.roundabout.mandom.glow_squid");
-            case PowersMandom.ROSE -> Component.translatable("skins.roundabout.mandom.rose");
-            case PowersMandom.NAUTILUS -> Component.translatable("skins.roundabout.mandom.nautilus");
-            case PowersMandom.JELLYFISH -> Component.translatable("skins.roundabout.mandom.jellyfish");
-            case PowersMandom.HAPPY -> Component.translatable("skins.roundabout.mandom.happy");
-            case PowersMandom.EYE -> Component.translatable("skins.roundabout.mandom.eye");
-            case PowersMandom.MELON -> Component.translatable("skins.roundabout.mandom.melon");
-            case PowersMandom.ESIDISI -> Component.translatable("skins.roundabout.mandom.esidisi");
-            case PowersMandom.COMMAND -> Component.translatable("skins.roundabout.mandom.command");
-            case PowersMandom.SCULK -> Component.translatable("skins.roundabout.mandom.sculk");
-            case PowersMandom.TV -> Component.translatable("skins.roundabout.mandom.tv");
-            case PowersMandom.CAPS -> Component.translatable("skins.roundabout.mandom.caps");
-            default -> Component.translatable("skins.roundabout.mandom.manga");
+            case PowersMandom.PURPLE -> Component.translatable("skins.sba.mandom.purple");
+            case PowersMandom.SKY -> Component.translatable("skins.sba.mandom.sky");
+            case PowersMandom.SQUID -> Component.translatable("skins.sba.mandom.squid");
+            case PowersMandom.ALIEN -> Component.translatable("skins.sba.mandom.alien");
+            case PowersMandom.DARK -> Component.translatable("skins.sba.mandom.dark");
+            case PowersMandom.GLOW_SQUID -> Component.translatable("skins.sba.mandom.glow_squid");
+            case PowersMandom.ROSE -> Component.translatable("skins.sba.mandom.rose");
+            case PowersMandom.NAUTILUS -> Component.translatable("skins.sba.mandom.nautilus");
+            case PowersMandom.JELLYFISH -> Component.translatable("skins.sba.mandom.jellyfish");
+            case PowersMandom.HAPPY -> Component.translatable("skins.sba.mandom.happy");
+            case PowersMandom.EYE -> Component.translatable("skins.sba.mandom.eye");
+            case PowersMandom.MELON -> Component.translatable("skins.sba.mandom.melon");
+            case PowersMandom.ESIDISI -> Component.translatable("skins.sba.mandom.esidisi");
+            case PowersMandom.COMMAND -> Component.translatable("skins.sba.mandom.command");
+            case PowersMandom.SCULK -> Component.translatable("skins.sba.mandom.sculk");
+            case PowersMandom.TV -> Component.translatable("skins.sba.mandom.tv");
+            case PowersMandom.CAPS -> Component.translatable("skins.sba.mandom.caps");
+            default -> Component.translatable("skins.sba.mandom.manga");
         };
     }
 
@@ -583,8 +583,8 @@ public class PowersMandom extends NewDashPreset {
         if (this.self.getHealth() < lastRewindHealth && !onCooldown(PowerIndex.SKILL_2)){
             itsRewindTime();
             if (!hasStandActive(this.self)){
-                ((IMob)this.self).roundabout$setRetractTicks(500);
-                getStandUserSelf().roundabout$summonStand(this.self.level(),true,false);
+                ((IMob)this.self).sba$setRetractTicks(500);
+                getStandUserSelf().sba$summonStand(this.self.level(),true,false);
             }
         }
         lastRewindHealth = this.self.getHealth();
@@ -595,11 +595,11 @@ public class PowersMandom extends NewDashPreset {
     }
     public Component getPosName(byte posID) {
         if (posID == 1) {
-            return Component.translatable("idle.roundabout.hey_ya_2");
+            return Component.translatable("idle.sba.hey_ya_2");
         } else if (posID == 2) {
-                return Component.translatable("idle.roundabout.mandom_back");
+                return Component.translatable("idle.sba.mandom_back");
         } else {
-            return Component.translatable("idle.roundabout.hey_ya_1");
+            return Component.translatable("idle.sba.hey_ya_1");
         }
     }
 
@@ -613,16 +613,16 @@ public class PowersMandom extends NewDashPreset {
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.chrono_vision",
-                "instruction.roundabout.press_skill", StandIcons.MANDOM_VISION_ON, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.rewind_time",
-                "instruction.roundabout.press_skill", StandIcons.REWIND,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.watch_switch",
-                "instruction.roundabout.press_skill_crouch", StandIcons.WATCH,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.clock",
-                "instruction.roundabout.passive", StandIcons.CLOCK,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.chrono_vision",
+                "instruction.sba.press_skill", StandIcons.MANDOM_VISION_ON, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.rewind_time",
+                "instruction.sba.press_skill", StandIcons.REWIND,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.watch_switch",
+                "instruction.sba.press_skill_crouch", StandIcons.WATCH,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.sba.clock",
+                "instruction.sba.passive", StandIcons.CLOCK,4,level,bypass));
         return $$1;
     }
 
@@ -639,7 +639,7 @@ public class PowersMandom extends NewDashPreset {
         return true;
     }
     public Component ifWipListDevStatus(){
-        return Component.translatable(  "roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable(  "sba.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
     public Component ifWipListDev(){
         return Component.literal(  "Hydra").withStyle(ChatFormatting.YELLOW);

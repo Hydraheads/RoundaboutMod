@@ -76,10 +76,10 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
 
     @Unique
-    private static int roundabout$PackRed(int $$0, int $$1) { return $$0 | $$1 << 16; }
+    private static int sba$PackRed(int $$0, int $$1) { return $$0 | $$1 << 16; }
 
     @Inject(method = "isBodyVisible", at = @At("HEAD"), cancellable = true)
-    private void roundabout$forceBodyVisible(T entity, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$forceBodyVisible(T entity, CallbackInfoReturnable<Boolean> cir) {
         if (PowersMetallica.hasAnyFadeActive(entity)) {
             cir.setReturnValue(true);
         }
@@ -88,7 +88,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
 
     @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
-    private void roundabout$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {
+    private void sba$forceTranslucent(T entity, boolean bodyVisible, boolean translucent, boolean glowing, CallbackInfoReturnable<RenderType> cir) {
         if (PowersMetallica.hasAnyFadeActive(entity) || (ClientUtil.getThrowFadePercent(entity,ClientUtil.getDelta()) != 1
         && !entity.isInvisible())) {
             ResourceLocation texture = this.getTextureLocation(entity);
@@ -97,9 +97,9 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"))
-    private void roundabout$applyInvisibilityFade(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
+    private void sba$applyInvisibilityFade(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
 
-        byte sam = ((StandUser)entity).roundabout$getStandAnimation();
+        byte sam = ((StandUser)entity).sba$getStandAnimation();
         boolean stopTime = ((TimeStop) entity.level()).CanTimeStopEntity(entity);
         if (sam == StandPowers.MELT_DODGE_ANIM
         && !stopTime){
@@ -116,7 +116,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             );
         } else if (sam == StandPowers.SWITCH_INTO_BODY
                 && !stopTime){
-            if (((StandUser)entity).roundabout$getStandPowers() instanceof PowersD4C pd4c){
+            if (((StandUser)entity).sba$getStandPowers() instanceof PowersD4C pd4c){
                 float ticksSince = ((pd4c.ticksSinceSwitch+ partialTicks)*0.1F)+0.01F;
                 ticksSince = Math.min(ticksSince,1F);
                 poseStack.scale(
@@ -144,7 +144,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "TAIL"))
-    private void roundabout$renderTail(T entity, float $$1, float $$2, PoseStack matrixStack, MultiBufferSource buffer, int $$5, CallbackInfo ci) {
+    private void sba$renderTail(T entity, float $$1, float $$2, PoseStack matrixStack, MultiBufferSource buffer, int $$5, CallbackInfo ci) {
         if (PowersMetallica.hasAnyFadeActive(entity)) {
             if (buffer instanceof MultiBufferSource.BufferSource bs) {
                 bs.endBatch();
@@ -160,9 +160,9 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         LocalPlayer player = Minecraft.getInstance().player;
 
 
-        if (player != null && ((StandUser)player).roundabout$getStandPowers() != null
-                && ((StandUser)player).roundabout$getStandPowers().shouldRenderIconEntity(entity)) {
-            ((StandUser)player).roundabout$getStandPowers().renderIconEntity(entity, matrixStack, buffer);
+        if (player != null && ((StandUser)player).sba$getStandPowers() != null
+                && ((StandUser)player).sba$getStandPowers().shouldRenderIconEntity(entity)) {
+            ((StandUser)player).sba$getStandPowers().renderIconEntity(entity, matrixStack, buffer);
         }
 
         HallucinationIndicatorRenderer.render(entity, matrixStack, buffer);
@@ -195,7 +195,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         /*
         //DiverDownPointerRenderer.render(entity, matrixStack, buffer);
         // lyin eyes highlighter
-        if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+        if (player != null && ((StandUser)player).sba$getStandPowers() instanceof PowersLyinEyes LE
                 && LE.getVisionModeClient() && LE.isActive()) {
             float maxDetectionRange = ClientNetworking.getAppropriateConfig().lyinEyesSettings.maxDetectionRange;
             if (entity != player && entity.isAlive() && player.distanceToSqr(entity) <= (maxDetectionRange * maxDetectionRange)
@@ -207,7 +207,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                     LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 0, 0, 200, 0.7F);
                 }
                 // neutral mobs
-                else if (entity instanceof NeutralMob || entity instanceof Player || ((StandUser) entity).roundabout$hasAStand()) {
+                else if (entity instanceof NeutralMob || entity instanceof Player || ((StandUser) entity).sba$hasAStand()) {
                     LyinEyesHighlighterRenderer.render(entity, matrixStack, buffer, 255, 255, 0, 200, 0.7F);
                 }
                 // passive mobs
@@ -219,7 +219,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
 
     @Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;)Z", at=@At("HEAD"), cancellable = true)
-    private void roundabout$shouldShowName(T entity, CallbackInfoReturnable<Boolean> cir)
+    private void sba$shouldShowName(T entity, CallbackInfoReturnable<Boolean> cir)
     {
 
         if (ClientUtil.shouldHideName(entity)){
@@ -237,13 +237,13 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$renderX(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
-//        if (roundabout$isRenderingYellowLines)
+    private void sba$renderX(T entity, float $$1, float $$2, PoseStack $$3, MultiBufferSource $$4, int $$5, CallbackInfo ci) {
+//        if (sba$isRenderingYellowLines)
 //            return;
 
         StandUser SU = (StandUser) entity;
-        if ( SU.roundabout$isPossessed()  ) {
-            PathfinderMob poss = SU.roundabout$getPossessor();
+        if ( SU.sba$isPossessed()  ) {
+            PathfinderMob poss = SU.sba$getPossessor();
             if (poss != null && poss.getTarget() != null) {
                 float yRot = MainUtil.getLookAtEntityYaw(entity,poss.getTarget());
                 entity.setYBodyRot(yRot);
@@ -254,14 +254,14 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
 
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/EntityModel;F)V", at = @At(value = "RETURN"))
-    private void roundabout$init(EntityRendererProvider.Context $$0, EntityModel $$1, float $$2, CallbackInfo ci) {
+    private void sba$init(EntityRendererProvider.Context $$0, EntityModel $$1, float $$2, CallbackInfo ci) {
         this.addLayer(new BigBubbleLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
         this.addLayer(new FrozenLayer<>($$0, ((LivingEntityRenderer)(Object)this)));
     }
 
     @Nullable
-    public RenderType roundabout$getRenderType(LivingEntity $$0, boolean $$1, boolean $$2, boolean $$3) {
-//        if (roundabout$isRenderingYellowLines)
+    public RenderType sba$getRenderType(LivingEntity $$0, boolean $$1, boolean $$2, boolean $$3) {
+//        if (sba$isRenderingYellowLines)
 //        {
 //            return RenderType.translucent();
 //        }
@@ -277,15 +277,15 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
 
     @Inject(method = "setupRotations(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;FFF)V", at = @At(value = "TAIL"), cancellable = true)
-    private void roundabout$rotations(T $$0, PoseStack poseStack, float $$2, float $$3, float $$4, CallbackInfo ci) {
+    private void sba$rotations(T $$0, PoseStack poseStack, float $$2, float $$3, float $$4, CallbackInfo ci) {
         if ($$0 instanceof Player P) {
             StandUser SU = (StandUser) P;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            if (SU.sba$getStandPowers() instanceof PowersAnubis PA) {
                 float leftHand = $$0.getMainArm() == HumanoidArm.LEFT ? -1 : 1;
 
                 float deltaTime = PA.getAttackTimeDuring()+$$4;
-                float realTime = SU.roundabout$getWornStandAnimation().getAccumulatedTime()/1000F;
-                switch (SU.roundabout$getStandAnimation()) {
+                float realTime = SU.sba$getWornStandAnimation().getAccumulatedTime()/1000F;
+                switch (SU.sba$getStandAnimation()) {
                     case PowerIndex.SNEAK_MOVEMENT -> {
                         if (deltaTime < 16) {
                             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,360 * ((deltaTime)/15F)), 0, P.getEyeHeight()*0.6F, 0 );
@@ -327,11 +327,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                         }
                     }
                 }
-            } else if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
-               if (SU.roundabout$getStandAnimation() != PowersTusk.NONE) {
+            } else if (SU.sba$getStandPowers() instanceof PowersTusk PT) {
+               if (SU.sba$getStandAnimation() != PowersTusk.NONE) {
                     float scale = Math.min(1,PT.getAttackTime()/7.0F+$$4);
 
-                    if (SU.roundabout$getStandAnimation() == PowersTusk.WARP) {
+                    if (SU.sba$getStandAnimation() == PowersTusk.WARP) {
                         if (scale < 1) {
                             poseStack.scale(scale, scale, scale);
                             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, scale * 360), 0, 0, 0);
@@ -341,11 +341,11 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
                 }
             }
 
-            byte playerP = ((IPlayerEntity)$$0).roundabout$GetPos();
+            byte playerP = ((IPlayerEntity)$$0).sba$GetPos();
 
             /*Dodge makes you lean forward visually*/
             if (playerP == PlayerPosIndex.DODGE_FORWARD || playerP == PlayerPosIndex.DODGE_BACKWARD) {
-                int dodgeTime = ((IPlayerEntity)$$0).roundabout$getDodgeTime();
+                int dodgeTime = ((IPlayerEntity)$$0).sba$getDodgeTime();
                 float $$5;
                 if (dodgeTime > -1) {
                     if (dodgeTime > 5) {
@@ -371,7 +371,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
     }
 
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = At.Shift.AFTER))
-    private void roundabout$renderLivingEntity(T entity, float $$1, float $$2, PoseStack matrices, MultiBufferSource $$4, int $$5, CallbackInfo ci)
+    private void sba$renderLivingEntity(T entity, float $$1, float $$2, PoseStack matrices, MultiBufferSource $$4, int $$5, CallbackInfo ci)
     {
         if (entity instanceof PlayerAlexNPC || entity instanceof PlayerSteveNPC)
         {
@@ -383,16 +383,16 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
             );
         }
         if (entity instanceof Player pl && pl.isSleeping()){
-            ItemStack stack = ((IPlayerEntity) pl).roundabout$getMaskSlot();
+            ItemStack stack = ((IPlayerEntity) pl).sba$getMaskSlot();
             if (stack !=null && !stack.isEmpty() && stack.is(ModItems.JOSUKE_PART_EIGHT_MASK)){
                 matrices.translate(0,-0.4,0);
             }
         } else if (entity instanceof JosukePartEightNPC jp && jp.isSleeping()){
             matrices.translate(0,-0.4,0);
         }
-        if (((StandUser)entity).roundabout$getExplosionInflation() > 4) {
+        if (((StandUser)entity).sba$getExplosionInflation() > 4) {
 
-            float value = ((((StandUser)entity).roundabout$getExplosionInflation() - 4) /14.0f);
+            float value = ((((StandUser)entity).sba$getExplosionInflation() - 4) /14.0f);
 
             float tween = 0.14f * (value * value * value);
 
@@ -403,25 +403,25 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
 
     @Inject(method = "getOverlayCoords", at = @At(value = "HEAD"), cancellable = true)
-    private static void roundabout$GetOverlayCoords(LivingEntity $$0, float $$1, CallbackInfoReturnable<Integer> ci) {
-        if (((StandUser)$$0).roundabout$getStoredDamageByte() > 0) {
-            ci.setReturnValue(roundabout$PackRed(
-                    ((StandUser)$$0).roundabout$getStoredDamageByte(),
+    private static void sba$GetOverlayCoords(LivingEntity $$0, float $$1, CallbackInfoReturnable<Integer> ci) {
+        if (((StandUser)$$0).sba$getStoredDamageByte() > 0) {
+            ci.setReturnValue(sba$PackRed(
+                    ((StandUser)$$0).sba$getStoredDamageByte(),
                     10));
         } else if (ClientUtil.getFrozenLevel() > 1 && !ClientUtil.isHiddenIceEntity($$0)){
             int flevel = ClientUtil.getFrozenLevel();
             if (flevel == 2){
-                ci.setReturnValue(roundabout$PackRed(
+                ci.setReturnValue(sba$PackRed(
                         2,
                         10));
             } else {
-                ci.setReturnValue(roundabout$PackRed(
+                ci.setReturnValue(sba$PackRed(
                         6,
                         10));
             }
         }
         else if(ClientUtil.checkIfClientCanSeeMobsForWindVision()){
-            ci.setReturnValue(roundabout$PackRed(
+            ci.setReturnValue(sba$PackRed(
                     15,
                     10));
         }
@@ -429,15 +429,15 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     // for shaking stuff
     @Inject(method = "isShaking", at = @At("HEAD"), cancellable = true)
-    private void roundabout$shakeWhenCalledOut(T entity, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof Villager villager && ((IVillagerAccess) villager).roundabout$getCalloutTicks() > 0) {
+    private void sba$shakeWhenCalledOut(T entity, CallbackInfoReturnable<Boolean> cir) {
+        if (entity instanceof Villager villager && ((IVillagerAccess) villager).sba$getCalloutTicks() > 0) {
             cir.setReturnValue(true);
         }
     }
 
     // risky because it's brittle, but it honestly might just work
    @Redirect(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isPassenger()Z"))
-    private boolean roundabout$allowWalkingAnimation(LivingEntity instance) {
+    private boolean sba$allowWalkingAnimation(LivingEntity instance) {
        return instance.isPassenger()
                && !(instance.getVehicle() instanceof AnubisPossessorEntity)
                && !(instance.getVehicle() instanceof CommandDiscPossession);
@@ -445,7 +445,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     // diver down disguise
     @Inject(method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("HEAD"), cancellable = true)
-    private void roundabout$renderDiverDownDisguise(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
+    private void sba$renderDiverDownDisguise(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, CallbackInfo ci) {
         if ((Object) this instanceof AbstractDisguiseRenderer) {
             return;
         }
@@ -455,8 +455,8 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
         }
 
         StandUser su = (StandUser) entity;
-        if (su.roundabout$isDisguised()) {
-            GameProfile profile = su.roundabout$getDisguiseProfile();
+        if (su.sba$isDisguised()) {
+            GameProfile profile = su.sba$getDisguiseProfile();
             if (profile != null) {
                 //disguises with skin
                 if (DiverDownDisguiseRenderer.INSTANCE != null) {
@@ -482,7 +482,7 @@ public abstract class ZLivingEntityRenderer<T extends LivingEntity, M extends En
 
     // gold experience mobs scale growing
     @Inject(method = "scale", at = @At("TAIL"))
-    private void roundabout$scaleGELifeformGrowth(T entity, PoseStack poseStack, float partialTicks, CallbackInfo ci) {
+    private void sba$scaleGELifeformGrowth(T entity, PoseStack poseStack, float partialTicks, CallbackInfo ci) {
         if (entity instanceof GELifeform lifeform && lifeform.isGrowing(entity)) {
             float scale = lifeform.getGrowthScale(entity, partialTicks);
             poseStack.scale(scale, scale, scale);

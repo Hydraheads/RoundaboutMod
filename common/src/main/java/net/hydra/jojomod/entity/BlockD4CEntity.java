@@ -278,7 +278,7 @@ public class BlockD4CEntity extends Entity {
                             // Damage
                             if (entity instanceof LivingEntity living) {
                                 float dmg = 1;
-                                if (user != null && ((StandUser)user).roundabout$getStandPowers() instanceof
+                                if (user != null && ((StandUser)user).sba$getStandPowers() instanceof
                                         PowersD4C pd4){
                                     dmg = pd4.getMergeBlastStrength(entity);
                                     living.hurt(
@@ -391,7 +391,7 @@ public class BlockD4CEntity extends Entity {
             if (!alreadyHitEntity($$0.getEntity())) {
                 if ($$0.getEntity() instanceof LivingEntity living) {
                     float dmg = 1;
-                    if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof
+                    if (user != null && ((StandUser) user).sba$getStandPowers() instanceof
                             PowersD4C pd4) {
                         dmg = pd4.getMergeHitStrength($$0.getEntity());
                         living.hurt(
@@ -489,7 +489,7 @@ public class BlockD4CEntity extends Entity {
             return false;
         } else {
             if (PowerTypes.isInADifferentExistence($$0,this) ||
-                    ($$0 instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers().phaseThroughProjectile(this))){
+                    ($$0 instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers().phaseThroughProjectile(this))){
                 return false;
             }
 

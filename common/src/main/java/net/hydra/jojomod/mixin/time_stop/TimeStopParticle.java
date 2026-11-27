@@ -12,29 +12,29 @@ public class TimeStopParticle implements IParticleAccess {
     /**Particles Created during a timestop are not frozen, but the others are*/
 
     @Unique
-    public boolean roundabout$IsTimeStopCreated = false;
+    public boolean sba$IsTimeStopCreated = false;
     @Unique
-    private float roundabout$PrevTick;
-    public boolean roundabout$getRoundaboutIsTimeStopCreated(){
-        return roundabout$IsTimeStopCreated;
+    private float sba$PrevTick;
+    public boolean sba$getSBAIsTimeStopCreated(){
+        return sba$IsTimeStopCreated;
     }
-    public void roundabout$setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated){
-        this.roundabout$IsTimeStopCreated = roundaboutIsTimeStopCreated;
-    }
-
-    @Override
-    public float roundabout$getPreTSTick() {
-        return this.roundabout$PrevTick;
+    public void sba$setSBAIsTimeStopCreated(boolean sbaIsTimeStopCreated){
+        this.sba$IsTimeStopCreated = sbaIsTimeStopCreated;
     }
 
     @Override
-    public void roundabout$setPreTSTick() {
+    public float sba$getPreTSTick() {
+        return this.sba$PrevTick;
+    }
+
+    @Override
+    public void sba$setPreTSTick() {
         Minecraft mc = Minecraft.getInstance();
-        roundabout$PrevTick = mc.getFrameTime();
+        sba$PrevTick = mc.getFrameTime();
     }
     @Override
-    public void roundabout$resetPreTSTick() {
-        roundabout$PrevTick = 0;
+    public void sba$resetPreTSTick() {
+        sba$PrevTick = 0;
     }
 
 

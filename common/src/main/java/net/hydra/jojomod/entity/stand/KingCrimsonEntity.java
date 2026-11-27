@@ -166,7 +166,7 @@ public class KingCrimsonEntity extends FollowingStandEntity {
     public void tryHardTimeEraseRendering(){
         if (getUser() != null && getUser() instanceof KingCrimsonCloneEntity kc){
             if (!turned){
-                if (kc.getPlayer() != null && ((StandUser)kc.getPlayer()).roundabout$getStand() instanceof
+                if (kc.getPlayer() != null && ((StandUser)kc.getPlayer()).sba$getStand() instanceof
                         KingCrimsonEntity pl) {
                     turned = true;
                     // Position
@@ -195,12 +195,12 @@ public class KingCrimsonEntity extends FollowingStandEntity {
                     ILivingEntityAccess entityAndData = ((ILivingEntityAccess) this);
                     ILivingEntityAccess playerAndData = ((ILivingEntityAccess) pl);
 
-                    entityAndData.roundabout$setLerpXRot(playerAndData.roundabout$getLerpXRot());
-                    entityAndData.roundabout$setLerpYRot(playerAndData.roundabout$getLerpYRot());
-                    entityAndData.roundabout$setLerp(new Vector3f(
-                            (float) playerAndData.roundabout$getLerpX(),
-                            (float) playerAndData.roundabout$getLerpY(),
-                            (float) playerAndData.roundabout$getLerpZ()
+                    entityAndData.sba$setLerpXRot(playerAndData.sba$getLerpXRot());
+                    entityAndData.sba$setLerpYRot(playerAndData.sba$getLerpYRot());
+                    entityAndData.sba$setLerp(new Vector3f(
+                            (float) playerAndData.sba$getLerpX(),
+                            (float) playerAndData.sba$getLerpY(),
+                            (float) playerAndData.sba$getLerpZ()
                     ));
                 }
             }

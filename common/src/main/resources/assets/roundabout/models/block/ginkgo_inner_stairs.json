@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "roundabout:block/ginkgo_planks",
-    "top": "roundabout:block/ginkgo_planks",
-    "side": "roundabout:block/ginkgo_planks"
-  }
-}

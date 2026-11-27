@@ -32,76 +32,76 @@ public class PermaCastWorld implements IPermaCasting {
     /**Uses a list of entities casting an unexpiring field with a stand, such as Justice's fog.
      * Use that list to determine if a block or entity SHOULD be ticked.*/
     @Unique
-    private ImmutableList<LivingEntity> roundabout$PermaCastingEntities = ImmutableList.of();
+    private ImmutableList<LivingEntity> sba$PermaCastingEntities = ImmutableList.of();
     @Unique
-    private ImmutableList<PermanentZoneCastInstance> roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+    private ImmutableList<PermanentZoneCastInstance> sba$PermaCastingEntitiesClient = ImmutableList.of();
 
 
     /**Adds an entity to the list of perma casting entities*/
     @Override
-    public void roundabout$addPermaCaster(LivingEntity $$0) {
+    public void sba$addPermaCaster(LivingEntity $$0) {
         if (!((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            if (roundabout$PermaCastingEntities.isEmpty()) {
-                roundabout$PermaCastingEntities = ImmutableList.of($$0);
+            if (sba$PermaCastingEntities.isEmpty()) {
+                sba$PermaCastingEntities = ImmutableList.of($$0);
             } else {
-                if (!roundabout$PermaCastingEntities.contains($$0)) {
-                    List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+                if (!sba$PermaCastingEntities.contains($$0)) {
+                    List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                     $$1.add($$0);
-                    roundabout$PermaCastingEntities = ImmutableList.copyOf($$1);
+                    sba$PermaCastingEntities = ImmutableList.copyOf($$1);
 
                 }
             }
-            roundabout$streamPermaCastToClients();
+            sba$streamPermaCastToClients();
         }
     }
 
     @Override
-    public void roundabout$addPermaCastingEntityClient(int id, double x, double y, double z, double range, byte context) {
+    public void sba$addPermaCastingEntityClient(int id, double x, double y, double z, double range, byte context) {
         if (((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntitiesClient == null){
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            if (sba$PermaCastingEntitiesClient == null){
+                sba$PermaCastingEntitiesClient = ImmutableList.of();
             }
-            if (roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of(new PermanentZoneCastInstance(id,x,y,z,range, context));
+            if (sba$PermaCastingEntitiesClient.isEmpty()) {
+                sba$PermaCastingEntitiesClient = ImmutableList.of(new PermanentZoneCastInstance(id,x,y,z,range, context));
             } else {
-                List<PermanentZoneCastInstance> $$0 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
-                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+                List<PermanentZoneCastInstance> $$0 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
                 for (int i = $$0.size() - 1; i >= 0; --i) {
                     if ($$0.get(i).id == id) {
                         $$1.remove($$0.get(i));
                     }
                 }
                 $$1.add(new PermanentZoneCastInstance(id, x, y, z, range, context));
-                roundabout$PermaCastingEntitiesClient = ImmutableList.copyOf($$1);
+                sba$PermaCastingEntitiesClient = ImmutableList.copyOf($$1);
             }
         }
     }
 
     /**Adds an entity to the list of perma casting entities*/
     @Override
-    public void roundabout$removePermaCastingEntity(LivingEntity entity) {
+    public void sba$removePermaCastingEntity(LivingEntity entity) {
         if (((Level) (Object) this).isClientSide) {
             return;
         }
 
-        if (roundabout$PermaCastingEntities == null) {
-            roundabout$PermaCastingEntities = ImmutableList.of();
+        if (sba$PermaCastingEntities == null) {
+            sba$PermaCastingEntities = ImmutableList.of();
             return;
         }
 
-        if (roundabout$PermaCastingEntities.isEmpty()) {
+        if (sba$PermaCastingEntities.isEmpty()) {
             return;
         }
 
         List<LivingEntity> updatedEntities =
-                Lists.newArrayList(roundabout$PermaCastingEntities);
+                Lists.newArrayList(sba$PermaCastingEntities);
 
         boolean removed = updatedEntities.removeIf(existingEntity -> {
             if (existingEntity.getId() == entity.getId()) {
-                roundabout$permaCastRemovalToClients(existingEntity);
+                sba$permaCastRemovalToClients(existingEntity);
                 return true;
             }
 
@@ -109,25 +109,25 @@ public class PermaCastWorld implements IPermaCasting {
         });
 
         if (removed) {
-            roundabout$PermaCastingEntities =
+            sba$PermaCastingEntities =
                     ImmutableList.copyOf(updatedEntities);
         }
     }
 
     @Override
-    public void roundabout$removePermaCastingEntityClient(int id){
+    public void sba$removePermaCastingEntityClient(int id){
         if (((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntitiesClient == null){
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            if (sba$PermaCastingEntitiesClient == null){
+                sba$PermaCastingEntitiesClient = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
-                for (int i = roundabout$PermaCastingEntitiesClient.size() - 1; i >= 0; --i) {
-                    if (roundabout$PermaCastingEntitiesClient.get(i).id == id) {
+            if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
+                for (int i = sba$PermaCastingEntitiesClient.size() - 1; i >= 0; --i) {
+                    if (sba$PermaCastingEntitiesClient.get(i).id == id) {
                         $$1.remove(i);
                     }
                 }
-                roundabout$PermaCastingEntitiesClient = ImmutableList.copyOf($$1);
+                sba$PermaCastingEntitiesClient = ImmutableList.copyOf($$1);
             }
         }
     }
@@ -135,37 +135,37 @@ public class PermaCastWorld implements IPermaCasting {
 
     /**Sends an array of packets to the client, of every perma casting entity*/
     @Override
-    public void roundabout$streamPermaCastToClients() {
+    public void sba$streamPermaCastToClients() {
         if (!((Level) (Object) this).isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) (Object) this);
             for (int j = 0; j < serverWorld.players().size(); ++j) {
-                if (roundabout$PermaCastingEntities == null){
-                    roundabout$PermaCastingEntities = ImmutableList.of();
+                if (sba$PermaCastingEntities == null){
+                    sba$PermaCastingEntities = ImmutableList.of();
                 }
-                if (!roundabout$PermaCastingEntities.isEmpty()) {
+                if (!sba$PermaCastingEntities.isEmpty()) {
                     ServerPlayer serverPlayer = serverWorld.players().get(j);
-                    List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+                    List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                     for (int i = $$1.size() - 1; i >= 0; --i) {
                         Entity TSI = $$1.get(i);
                         /*You only need data of perma casting mobs that are relatively close by*/
                         if (MainUtil.cheapDistanceTo2(TSI.getX(),TSI.getZ(),serverPlayer.getX(),serverPlayer.getZ()) < 250){
                             S2CPacketUtil.addPCEntity(serverPlayer, TSI.getId(), TSI.getX(),
-                                    TSI.getY(),TSI.getZ(),((StandUser) TSI).roundabout$getStandPowers().getPermaCastRange(),
-                                    ((StandUser) TSI).roundabout$getStandPowers().getPermaCastContext());
+                                    TSI.getY(),TSI.getZ(),((StandUser) TSI).sba$getStandPowers().getPermaCastRange(),
+                                    ((StandUser) TSI).sba$getStandPowers().getPermaCastContext());
                         }
                     }
                 }
             }
         }
     }
-    public void roundabout$permaCastRemovalToClients(LivingEntity removedCastingEntity) {
+    public void sba$permaCastRemovalToClients(LivingEntity removedCastingEntity) {
         if (!((Level) (Object) this).isClientSide) {
             ServerLevel serverWorld = ((ServerLevel) (Object) this);
             for (int j = 0; j < serverWorld.players().size(); ++j) {
-                if (roundabout$PermaCastingEntities == null){
-                    roundabout$PermaCastingEntities = ImmutableList.of();
+                if (sba$PermaCastingEntities == null){
+                    sba$PermaCastingEntities = ImmutableList.of();
                 }
-                if (!roundabout$PermaCastingEntities.isEmpty()) {
+                if (!sba$PermaCastingEntities.isEmpty()) {
                     ServerPlayer serverPlayer = serverWorld.players().get(j);
                     S2CPacketUtil.removePCEntity(serverPlayer, removedCastingEntity.getId());
                 }
@@ -175,54 +175,54 @@ public class PermaCastWorld implements IPermaCasting {
 
     /**On the client side, takes streamed packets and adds/removes entities from them to the liste*/
     @Override
-    public void roundabout$processPermaCastPacket(int permaCastingEntity, double x, double y, double z, double range, byte context){
+    public void sba$processPermaCastPacket(int permaCastingEntity, double x, double y, double z, double range, byte context){
         if (((Level) (Object) this).isClientSide) {
-            roundabout$addPermaCastingEntityClient(permaCastingEntity, x,y,z, range, context);
+            sba$addPermaCastingEntityClient(permaCastingEntity, x,y,z, range, context);
         }
     }
     @Override
-    public void roundabout$processPermaCastRemovePacket(int permaCastingEntity){
+    public void sba$processPermaCastRemovePacket(int permaCastingEntity){
         if (((Level) (Object) this).isClientSide) {
-            roundabout$removePermaCastingEntityClient(permaCastingEntity);
+            sba$removePermaCastingEntityClient(permaCastingEntity);
         }
     }
     @Override
     public void roundabut$tickPermaCastingEntity() {
         if (!((Level) (Object) this).isClientSide) {
-            roundabout$streamPermaCastToClients();
+            sba$streamPermaCastToClients();
         }
     }
 
     /**Ticks through perma casting entities list, and then removes them from the list if they are dead or gone*/
     @Override
-    public void roundabout$tickAllPermaCasts() {
-        if (roundabout$PermaCastingEntities == null){
-            roundabout$PermaCastingEntities = ImmutableList.of();
+    public void sba$tickAllPermaCasts() {
+        if (sba$PermaCastingEntities == null){
+            sba$PermaCastingEntities = ImmutableList.of();
         }
-        if (!roundabout$PermaCastingEntities.isEmpty()) {
-            List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+        if (!sba$PermaCastingEntities.isEmpty()) {
+            List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 if ($$1.get(i).isRemoved() || !$$1.get(i).isAlive() || $$1.get(i).level().dimensionTypeId() != this.dimensionTypeId){
-                    roundabout$removePermaCastingEntity($$1.get(i));
+                    sba$removePermaCastingEntity($$1.get(i));
                 } else if (!((Level) (Object) this).isClientSide) {
-                    ((StandUser)$$1.get(i)).roundabout$getStandPowers().tickPermaCast();
+                    ((StandUser)$$1.get(i)).sba$getStandPowers().tickPermaCast();
                 }
             }
         }
 
     }
-    public ImmutableList<LivingEntity> roundabout$getPermaCastingEntities() {
+    public ImmutableList<LivingEntity> sba$getPermaCastingEntities() {
         if (!((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            return roundabout$PermaCastingEntities;
+            return sba$PermaCastingEntities;
         } else {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            List<LivingEntity> $$0 = Lists.newArrayList(roundabout$PermaCastingEntities);
-            List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+            List<LivingEntity> $$0 = Lists.newArrayList(sba$PermaCastingEntities);
+            List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 Entity ent = ((Level) (Object) this).getEntity($$1.get(i).id);
                 if (ent instanceof LivingEntity) {
@@ -234,26 +234,26 @@ public class PermaCastWorld implements IPermaCasting {
     }
 
     @Override
-    public boolean roundabout$inPermaCastRange(Vec3i pos){
+    public boolean sba$inPermaCastRange(Vec3i pos){
         if (!((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+            if (!sba$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                    if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).sba$getStandPowers().getPermaCastRange()) {
                         return true;
                     }
                 }
             }
         } else {
-            if (roundabout$PermaCastingEntitiesClient == null){
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            if (sba$PermaCastingEntitiesClient == null){
+                sba$PermaCastingEntitiesClient = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+            if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     PermanentZoneCastInstance it = $$1.get(i);
                     if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
@@ -266,34 +266,34 @@ public class PermaCastWorld implements IPermaCasting {
     }
 
     @Override
-    public boolean roundabout$inPermaCastRange(Entity entity){
-        return roundabout$inPermaCastRange(new Vec3i((int) entity.getX(),
+    public boolean sba$inPermaCastRange(Entity entity){
+        return sba$inPermaCastRange(new Vec3i((int) entity.getX(),
                 (int) entity.getY(),
                 (int) entity.getZ()));
     }
 
     @Override
-    public LivingEntity roundabout$inPermaCastRangeEntity(Vec3i pos, byte permacast){
+    public LivingEntity sba$inPermaCastRangeEntity(Vec3i pos, byte permacast){
         if (!((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+            if (!sba$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if (((StandUser) it).roundabout$getStandPowers().getPermaCastContext() == permacast &&
-                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                    if (((StandUser) it).sba$getStandPowers().getPermaCastContext() == permacast &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).sba$getStandPowers().getPermaCastRange()) {
                         return it;
                     }
                 }
             }
         } else {
-            if (roundabout$PermaCastingEntitiesClient == null){
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            if (sba$PermaCastingEntitiesClient == null){
+                sba$PermaCastingEntitiesClient = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+            if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     PermanentZoneCastInstance it = $$1.get(i);
                     if (it.context == permacast &&
@@ -309,27 +309,27 @@ public class PermaCastWorld implements IPermaCasting {
         return null;
     }
     @Override
-    public LivingEntity roundabout$inPermaCastFogRangeEntity(Vec3i pos){
+    public LivingEntity sba$inPermaCastFogRangeEntity(Vec3i pos){
         if (!((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+            if (!sba$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if (((StandUser) it).roundabout$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD &&
-                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                    if (((StandUser) it).sba$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).sba$getStandPowers().getPermaCastRange()) {
                         return it;
                     }
                 }
             }
         } else {
-            if (roundabout$PermaCastingEntitiesClient == null){
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            if (sba$PermaCastingEntitiesClient == null){
+                sba$PermaCastingEntitiesClient = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+            if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     PermanentZoneCastInstance it = $$1.get(i);
                     if (it.context == PermanentZoneCastInstance.FOG_FIELD &&
@@ -346,33 +346,33 @@ public class PermaCastWorld implements IPermaCasting {
     }
 
     @Override
-    public LivingEntity roundabout$inPermaCastFogRangeEntity(Entity entity){
-        return roundabout$inPermaCastFogRangeEntity(new Vec3i((int) entity.getX(),
+    public LivingEntity sba$inPermaCastFogRangeEntity(Entity entity){
+        return sba$inPermaCastFogRangeEntity(new Vec3i((int) entity.getX(),
                 (int) entity.getY(),
                 (int) entity.getZ()));
     }
     @Override
-    public boolean roundabout$inPermaCastRange(Vec3i pos, byte type){
+    public boolean sba$inPermaCastRange(Vec3i pos, byte type){
         if (!((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+            if (!sba$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if (((StandUser) it).roundabout$getStandPowers().getPermaCastContext() == type &&
-                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                    if (((StandUser) it).sba$getStandPowers().getPermaCastContext() == type &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).sba$getStandPowers().getPermaCastRange()) {
                         return true;
                     }
                 }
             }
         } else {
-            if (roundabout$PermaCastingEntitiesClient == null){
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            if (sba$PermaCastingEntitiesClient == null){
+                sba$PermaCastingEntitiesClient = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+            if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     PermanentZoneCastInstance it = $$1.get(i);
                     if (it.context == type &&
@@ -385,27 +385,27 @@ public class PermaCastWorld implements IPermaCasting {
         return false;
     }
     @Override
-    public boolean roundabout$inPermaCastFogRange(Vec3i pos){
+    public boolean sba$inPermaCastFogRange(Vec3i pos){
         if (!((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+            if (!sba$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if (((StandUser) it).roundabout$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD &&
-                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                    if (((StandUser) it).sba$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD &&
+                            MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).sba$getStandPowers().getPermaCastRange()) {
                         return true;
                     }
                 }
             }
         } else {
-            if (roundabout$PermaCastingEntitiesClient == null){
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            if (sba$PermaCastingEntitiesClient == null){
+                sba$PermaCastingEntitiesClient = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+            if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     PermanentZoneCastInstance it = $$1.get(i);
                     if (it.context == PermanentZoneCastInstance.FOG_FIELD &&
@@ -419,20 +419,20 @@ public class PermaCastWorld implements IPermaCasting {
     }
 
     @Override
-    public boolean roundabout$inPermaCastFogRange(Entity entity){
-        return roundabout$inPermaCastFogRange(new Vec3i((int) entity.getX(),
+    public boolean sba$inPermaCastFogRange(Entity entity){
+        return sba$inPermaCastFogRange(new Vec3i((int) entity.getX(),
                 (int) entity.getY(),
                 (int) entity.getZ()));
     }
     /**This is how the HUD finds who is perma casting upon you clientside*/
     @Override
-    public PermanentZoneCastInstance roundabout$getPermaCastingInstanceClient(Vec3 pos){
+    public PermanentZoneCastInstance sba$getPermaCastingInstanceClient(Vec3 pos){
 
-        if (roundabout$PermaCastingEntitiesClient == null){
-            roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+        if (sba$PermaCastingEntitiesClient == null){
+            sba$PermaCastingEntitiesClient = ImmutableList.of();
         }
-        if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-            List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+        if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+            List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
             for (int i = $$1.size() - 1; i >= 0; --i) {
                 PermanentZoneCastInstance it = $$1.get(i);
                 if (MainUtil.cheapDistanceTo2(pos.x(), pos.z(), it.x, it.z) <= it.range) {
@@ -444,21 +444,21 @@ public class PermaCastWorld implements IPermaCasting {
     }
 
     @Override
-    public LivingEntity roundabout$inPermaCastRangeEntityJustice(FallenMob fm, Vec3i pos){
+    public LivingEntity sba$inPermaCastRangeEntityJustice(FallenMob fm, Vec3i pos){
         if (!fm.getActivated() && fm.getPhasesFull()) {
             if (!((Level) (Object) this).isClientSide) {
 
-                if (roundabout$PermaCastingEntities == null) {
-                    roundabout$PermaCastingEntities = ImmutableList.of();
+                if (sba$PermaCastingEntities == null) {
+                    sba$PermaCastingEntities = ImmutableList.of();
                 }
-                if (!roundabout$PermaCastingEntities.isEmpty()) {
-                    List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+                if (!sba$PermaCastingEntities.isEmpty()) {
+                    List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                     for (int i = $$1.size() - 1; i >= 0; --i) {
                         LivingEntity it = $$1.get(i);
-                        if (((StandUser) it).roundabout$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD &&
-                                MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                        if (((StandUser) it).sba$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD &&
+                                MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).sba$getStandPowers().getPermaCastRange()) {
                             if (!fm.getTicksThroughPlacer() || it.is(fm.placer)){
-                                if (((StandUser)it).roundabout$getStandPowers() instanceof PowersJustice PJ){
+                                if (((StandUser)it).sba$getStandPowers() instanceof PowersJustice PJ){
                                     if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceSettings.maxCorpses){
                                         return it;
                                     }
@@ -469,18 +469,18 @@ public class PermaCastWorld implements IPermaCasting {
                 }
             } else {
 
-                if (roundabout$PermaCastingEntitiesClient == null) {
-                    roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+                if (sba$PermaCastingEntitiesClient == null) {
+                    sba$PermaCastingEntitiesClient = ImmutableList.of();
                 }
-                if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                    List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+                if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+                    List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
                     for (int i = $$1.size() - 1; i >= 0; --i) {
                         PermanentZoneCastInstance it = $$1.get(i);
                         if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
                             Entity it2 = ((Level) (Object) this).getEntity(it.id);
-                            if (it2 instanceof LivingEntity && ((StandUser) it2).roundabout$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD) {
+                            if (it2 instanceof LivingEntity && ((StandUser) it2).sba$getStandPowers().getPermaCastContext() == PermanentZoneCastInstance.FOG_FIELD) {
                                 if (!fm.getTicksThroughPlacer() || it2.getId() == fm.getPlacer()) {
-                                    if (((StandUser)it2).roundabout$getStandPowers() instanceof PowersJustice PJ) {
+                                    if (((StandUser)it2).sba$getStandPowers() instanceof PowersJustice PJ) {
                                         if (PJ.queryJusticeEntities().size() < ClientNetworking.getAppropriateConfig().justiceSettings.maxCorpses) {
                                             return (LivingEntity) it2;
                                         }
@@ -495,28 +495,28 @@ public class PermaCastWorld implements IPermaCasting {
         return null;
     }
     @Override
-    public LivingEntity roundabout$inPermaCastRangeEntity(Vec3i pos){
+    public LivingEntity sba$inPermaCastRangeEntity(Vec3i pos){
         if (!((Level) (Object) this).isClientSide) {
 
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+            if (!sba$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     LivingEntity it = $$1.get(i);
-                    if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).roundabout$getStandPowers().getPermaCastRange()) {
+                    if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.getX(), it.getZ()) <= ((StandUser) it).sba$getStandPowers().getPermaCastRange()) {
                         return it;
                     }
                 }
             }
         } else {
 
-            if (roundabout$PermaCastingEntitiesClient == null){
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            if (sba$PermaCastingEntitiesClient == null){
+                sba$PermaCastingEntitiesClient = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+            if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     PermanentZoneCastInstance it = $$1.get(i);
                     if (MainUtil.cheapDistanceTo2(pos.getX(), pos.getZ(), it.x, it.z) <= it.range) {
@@ -531,8 +531,8 @@ public class PermaCastWorld implements IPermaCasting {
         return null;
     }
     @Override
-    public LivingEntity roundabout$inPermaCastRangeEntity(Entity entity){
-        return roundabout$inPermaCastRangeEntity(new Vec3i((int) entity.getX(),
+    public LivingEntity sba$inPermaCastRangeEntity(Entity entity){
+        return sba$inPermaCastRangeEntity(new Vec3i((int) entity.getX(),
                 (int) entity.getY(),
                 (int) entity.getZ()));
     }
@@ -540,13 +540,13 @@ public class PermaCastWorld implements IPermaCasting {
 
 
     /**Code this to check if they are in the list*/
-    public boolean roundabout$isPermaCastingEntity(LivingEntity entity){
+    public boolean sba$isPermaCastingEntity(LivingEntity entity){
         if (!((Level) (Object) this).isClientSide) {
-            if (roundabout$PermaCastingEntities == null){
-                roundabout$PermaCastingEntities = ImmutableList.of();
+            if (sba$PermaCastingEntities == null){
+                sba$PermaCastingEntities = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntities.isEmpty()) {
-                List<LivingEntity> $$1 = Lists.newArrayList(roundabout$PermaCastingEntities);
+            if (!sba$PermaCastingEntities.isEmpty()) {
+                List<LivingEntity> $$1 = Lists.newArrayList(sba$PermaCastingEntities);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     if ($$1.get(i).getId() == entity.getId()) {
                         return true;
@@ -554,11 +554,11 @@ public class PermaCastWorld implements IPermaCasting {
                 }
             }
         } else {
-            if (roundabout$PermaCastingEntitiesClient == null){
-                roundabout$PermaCastingEntitiesClient = ImmutableList.of();
+            if (sba$PermaCastingEntitiesClient == null){
+                sba$PermaCastingEntitiesClient = ImmutableList.of();
             }
-            if (!roundabout$PermaCastingEntitiesClient.isEmpty()) {
-                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(roundabout$PermaCastingEntitiesClient);
+            if (!sba$PermaCastingEntitiesClient.isEmpty()) {
+                List<PermanentZoneCastInstance> $$1 = Lists.newArrayList(sba$PermaCastingEntitiesClient);
                 for (int i = $$1.size() - 1; i >= 0; --i) {
                     if ($$1.get(i).id == entity.getId()) {
                         return true;
@@ -570,16 +570,16 @@ public class PermaCastWorld implements IPermaCasting {
         return false;
     }
     @Override
-    public boolean roundabout$inPurpleHazeRange(Vec3i pos) {
-        return roundabout$inPermaCastRange(
+    public boolean sba$inPurpleHazeRange(Vec3i pos) {
+        return sba$inPermaCastRange(
                 pos,
                 PermanentZoneCastInstance.PURPLE_SMOKE
         );
     }
 
     @Override
-    public boolean roundabout$inPurpleHazeRange(Entity entity) {
-        return roundabout$inPurpleHazeRange(
+    public boolean sba$inPurpleHazeRange(Entity entity) {
+        return sba$inPurpleHazeRange(
                 new Vec3i(
                         (int) entity.getX(),
                         (int) entity.getY(),
@@ -589,16 +589,16 @@ public class PermaCastWorld implements IPermaCasting {
     }
 
     @Override
-    public LivingEntity roundabout$inPurpleHazeRangeEntity(Vec3i pos) {
-        return roundabout$inPermaCastRangeEntity(
+    public LivingEntity sba$inPurpleHazeRangeEntity(Vec3i pos) {
+        return sba$inPermaCastRangeEntity(
                 pos,
                 PermanentZoneCastInstance.PURPLE_SMOKE
         );
     }
 
     @Override
-    public LivingEntity roundabout$inPurpleHazeRangeEntity(Entity entity) {
-        return roundabout$inPurpleHazeRangeEntity(
+    public LivingEntity sba$inPurpleHazeRangeEntity(Entity entity) {
+        return sba$inPurpleHazeRangeEntity(
                 new Vec3i(
                         (int) entity.getX(),
                         (int) entity.getY(),

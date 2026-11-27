@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.visages.parts;// Made with Blockbench 5.
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.event.index.Poses;
@@ -77,15 +77,15 @@ public class FirstPersonSnubnoseModel<T extends Entity> extends PsuedoHierarchic
 
     public ResourceLocation getTextureLocation(Entity ct){
         if (ct instanceof Player plent){
-            if (((IPlayerEntity) plent).roundabout$getMaskSlot() != null &&
-                    !((IPlayerEntity) plent).roundabout$getMaskSlot().isEmpty() &&
-                    ((IPlayerEntity) plent).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
+            if (((IPlayerEntity) plent).sba$getMaskSlot() != null &&
+                    !((IPlayerEntity) plent).sba$getMaskSlot().isEmpty() &&
+                    ((IPlayerEntity) plent).sba$getMaskSlot().getItem() instanceof MaskItem ME &&
                     ME.visageData instanceof MistaVisage){
-                return new ResourceLocation(Roundabout.MOD_ID,
+                return new ResourceLocation(SBA.MOD_ID,
                         "textures/item/mista_gun.png");
             }
         }
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/item/snubnose_revolver.png");
     }
 
@@ -104,11 +104,11 @@ public class FirstPersonSnubnoseModel<T extends Entity> extends PsuedoHierarchic
 
                 if (LE.getUseItem().getItem() instanceof SnubnoseRevolverItem) {;
                     if (mainHandRight) {
-                        this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_MODEL_AIM.ad, partialTicks, 1f);
-                        this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_MODEL_RECOIL.ad, partialTicks, 1f);
+                        this.animate(ipe.sba$getItemAnimation(), Poses.SNUBNOSE_MODEL_AIM.ad, partialTicks, 1f);
+                        this.animate(ipe.sba$getItemAnimationActive(), Poses.SNUBNOSE_MODEL_RECOIL.ad, partialTicks, 1f);
                     } else {
-                        this.animate(ipe.roundabout$getItemAnimation(), Poses.SNUBNOSE_MODEL_AIM_LEFT.ad, partialTicks, 1f);
-                        this.animate(ipe.roundabout$getItemAnimationActive(), Poses.SNUBNOSE_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
+                        this.animate(ipe.sba$getItemAnimation(), Poses.SNUBNOSE_MODEL_AIM_LEFT.ad, partialTicks, 1f);
+                        this.animate(ipe.sba$getItemAnimationActive(), Poses.SNUBNOSE_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
                     }
                 }
 

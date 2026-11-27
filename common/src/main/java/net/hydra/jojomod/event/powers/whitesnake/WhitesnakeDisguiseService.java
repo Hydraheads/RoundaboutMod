@@ -35,7 +35,7 @@ public final class WhitesnakeDisguiseService {
     public static void request(ServerPlayer player, String requestedName) {
         String name = requestedName == null ? "" : requestedName.trim();
         if (!USERNAME.matcher(name).matches()) {
-            player.sendSystemMessage(Component.translatable("roundabout.whitesnake.disguise.invalid"));
+            player.sendSystemMessage(Component.translatable("sba.whitesnake.disguise.invalid"));
             return;
         }
         if (!canDisguise(player)) return;
@@ -50,10 +50,10 @@ public final class WhitesnakeDisguiseService {
     }
 
     private static boolean canDisguise(ServerPlayer player) {
-        return ((StandUser) player).roundabout$getStandPowers() instanceof PowersWhitesnake powers
+        return ((StandUser) player).sba$getStandPowers() instanceof PowersWhitesnake powers
                 && powers.isPiloting() && powers.canExecuteMoveWithLevel(powers.getHallucinatoryDisguiseLevel())
                 && !powers.onCooldown(PowerIndex.SKILL_4)
-                && ((StandUser) player).roundabout$getStand() instanceof WhitesnakeEntity;
+                && ((StandUser) player).sba$getStand() instanceof WhitesnakeEntity;
     }
 
     private static Optional<GameProfile> findProfile(MinecraftServer server, String name) {
@@ -75,15 +75,15 @@ public final class WhitesnakeDisguiseService {
     private static void apply(ServerPlayer player, Optional<GameProfile> result) {
         if (!player.isAlive() || !canDisguise(player)) return;
         if (result.isEmpty()) {
-            player.sendSystemMessage(Component.translatable("roundabout.whitesnake.disguise.not_found"));
+            player.sendSystemMessage(Component.translatable("sba.whitesnake.disguise.not_found"));
             return;
         }
-        StandEntity stand = ((StandUser) player).roundabout$getStand();
+        StandEntity stand = ((StandUser) player).sba$getStand();
         if (!(stand instanceof WhitesnakeEntity whitesnake)) return;
         whitesnake.setDisguise(result.get());
         player.level().playSound(null, whitesnake.blockPosition(), ModSounds.WHITESNAKE_HALLUCINATION_DISGUISE_EVENT,
                 SoundSource.PLAYERS, 1.0F, 1.0F);
-        PowersWhitesnake powers = (PowersWhitesnake) ((StandUser) player).roundabout$getStandPowers();
+        PowersWhitesnake powers = (PowersWhitesnake) ((StandUser) player).sba$getStandPowers();
         powers.setCooldown(PowerIndex.SKILL_4, DISGUISE_COOLDOWN);
         S2CPacketUtil.sendCooldownSyncPacket(player, PowerIndex.SKILL_4, DISGUISE_COOLDOWN);
     }

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:redstone"
+    },
+    "D": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "B": {
+      "item": "minecraft:glass_pane"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "#D#",
+    "NBN"
+  ],
+  "result": {
+    "count": 1,
+    "item": "sba:ceiling_light"
+  },
+  "show_notification": true
+}

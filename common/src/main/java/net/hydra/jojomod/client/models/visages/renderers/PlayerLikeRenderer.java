@@ -186,11 +186,11 @@ public class PlayerLikeRenderer<T extends JojoNPC> extends MobRenderer<T, Player
 
 
 
-        byte playerP = $$0.roundabout$GetPos();
+        byte playerP = $$0.sba$GetPos();
 
         /*Dodge makes you lean forward visually*/
         if (playerP == PlayerPosIndex.DODGE_FORWARD || playerP == PlayerPosIndex.DODGE_BACKWARD) {
-            int dodgeTime = $$0.roundabout$getDodgeTime();
+            int dodgeTime = $$0.sba$getDodgeTime();
             float FL;
             if (dodgeTime > -1) {
                 if (dodgeTime > 5) {

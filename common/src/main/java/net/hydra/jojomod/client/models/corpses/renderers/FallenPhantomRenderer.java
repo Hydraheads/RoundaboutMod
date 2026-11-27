@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.corpses.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.corpses.FallenPhantomModel;
 import net.hydra.jojomod.entity.corpses.FallenPhantom;
 import net.hydra.jojomod.entity.corpses.FallenSpider;
@@ -17,15 +17,15 @@ import net.minecraft.world.phys.Vec3;
 
 public class FallenPhantomRenderer<T extends Phantom> extends MobRenderer<FallenPhantom, FallenPhantomModel<FallenPhantom>> {
     private static final ResourceLocation PHANTOM_LOCATION = new ResourceLocation("textures/entity/phantom.png");
-    private static final ResourceLocation FALLEN_PHANTOM_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_PHANTOM_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_phantom.png");
-    private static final ResourceLocation FALLEN_PHANTOM_LOCATION_R = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_PHANTOM_LOCATION_R = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_phantom_red.png");
-    private static final ResourceLocation FALLEN_PHANTOM_LOCATION_G = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_PHANTOM_LOCATION_G = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_phantom_green.png");
-    private static final ResourceLocation FALLEN_PHANTOM_LOCATION_B = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_PHANTOM_LOCATION_B = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_phantom_blue.png");
-    private static final ResourceLocation FALLEN_PHANTOM_LOCATION_2 = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation FALLEN_PHANTOM_LOCATION_2 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/justice_corpses/justice_phantom_holes.png");
 
 

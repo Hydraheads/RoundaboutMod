@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityWhitesnakeInventoryMixin {
     @Inject(method = "playerTouch", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$keepBodyInventorySeparate(Player player, CallbackInfo ci) {
+    private void sbaWhitesnake$keepBodyInventorySeparate(Player player, CallbackInfo ci) {
         if (WhitesnakeControlInventory.isActive(player)
                 && WhitesnakeControlInventory.getPickupItem() != (Object) this) {
             ci.cancel();

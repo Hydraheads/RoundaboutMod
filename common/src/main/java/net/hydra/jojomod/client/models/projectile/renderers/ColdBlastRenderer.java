@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.UVModel;
@@ -44,7 +44,7 @@ public class ColdBlastRenderer extends EntityRenderer<ColdBlastProjectile> {
 
     @Override
     public ResourceLocation getTextureLocation(ColdBlastProjectile var1) {
-        return new ResourceLocation(Roundabout.MOD_ID, "textures/stand/white_album/projectiles/shooting_mode.png");
+        return new ResourceLocation(SBA.MOD_ID, "textures/stand/white_album/projectiles/shooting_mode.png");
     }
 
 }

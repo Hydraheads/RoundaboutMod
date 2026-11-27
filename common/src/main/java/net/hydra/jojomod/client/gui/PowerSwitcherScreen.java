@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class PowerSwitcherScreen extends Screen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation MOB_SWITCHER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation MOB_SWITCHER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/pose_switcher.png");
    private posIcon currentlyHovered;
     private int firstMouseX;
@@ -43,7 +43,7 @@ public class PowerSwitcherScreen extends Screen {
     private ShapeShifts getDefaultSelected() {
         Player pl = Minecraft.getInstance().player;
         if (pl != null){
-            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).roundabout$getShapeShift());
+            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).sba$getShapeShift());
         }
         return ShapeShifts.PLAYER;
     }
@@ -122,9 +122,9 @@ public class PowerSwitcherScreen extends Screen {
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     private boolean checkToClose() {
@@ -149,12 +149,12 @@ public class PowerSwitcherScreen extends Screen {
     }
 
     public enum posIcon {
-        STAND(Component.translatable("text.roundabout.powers.stand_select"), new ResourceLocation(Roundabout.MOD_ID,
+        STAND(Component.translatable("text.sba.powers.stand_select"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/icons/powers/stand/stand_summon.png"),(byte) PowerTypes.STAND.ordinal(),0,0),
-        VAMPIRE(Component.translatable("text.roundabout.powers.vampire_select"), new ResourceLocation(Roundabout.MOD_ID,
+        VAMPIRE(Component.translatable("text.sba.powers.vampire_select"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/icons/powers/vampire/blood_clutch.png"),(byte) PowerTypes.VAMPIRE.ordinal(),0,62),
 
-        NONE(Component.translatable("text.roundabout.powers.none"), new ResourceLocation(Roundabout.MOD_ID,
+        NONE(Component.translatable("text.sba.powers.none"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),(byte) PowerTypes.NONE.ordinal(),0,31);
 
         static PowerSwitcherScreen.posIcon getByte(PowerTypes pose) {

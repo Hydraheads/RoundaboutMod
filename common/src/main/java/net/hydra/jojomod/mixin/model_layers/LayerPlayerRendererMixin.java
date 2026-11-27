@@ -24,7 +24,7 @@ public abstract class LayerPlayerRendererMixin<T extends LivingEntity, M extends
     /**All player model related layers, even if it is registered in humanoid it also needs to be registered here,
      * because of the way vanilla has it set up, this is not a humanoid renderer so to speak*/
     @Inject(method="<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Z)V", at = @At(value = "RETURN"))
-    private void roundaboutRenderKnives(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
+    private void sbaRenderKnives(EntityRendererProvider.Context $$0, boolean $$1, CallbackInfo ci) {
         this.addLayer(new KnifeLayer<>($$0, this));
         this.addLayer(new FalconShoulderLayer<>($$0, this));
         //this.addLayer(new LocacacaBeamLayer<>($$0, this));

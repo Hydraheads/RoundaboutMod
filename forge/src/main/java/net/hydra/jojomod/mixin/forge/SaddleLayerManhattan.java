@@ -21,7 +21,7 @@ public abstract class SaddleLayerManhattan<T extends Entity, M extends EntityMod
     private void rdbt$unrendersaddle(PoseStack $$0, MultiBufferSource $$1, int $$2, T $$3, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
         if ($$3 != null) {
             IEntityAndData entityAndData = ((IEntityAndData) $$3);
-            if(entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
+            if(entityAndData.sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
                 ci.cancel();
             }
         }

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.registry;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.powers.visagedata.*;
 import net.hydra.jojomod.event.powers.visagedata.aesthetician.*;
@@ -27,8 +27,8 @@ import java.util.function.Consumer;
 import static net.hydra.jojomod.registry.ForgeCreativeTab.*;
 
 public class ForgeItems {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Roundabout.MOD_ID);
-    public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, Roundabout.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SBA.MOD_ID);
+    public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, SBA.MOD_ID);
 
     public static final RegistryObject<Item> COFFEE_GUM = addToTab(ITEMS.register("coffee_gum",
             () -> new Item(new Item.Properties()
@@ -844,12 +844,12 @@ public class ForgeItems {
     public static final RegistryObject<ForgeSpawnEggItem> BUTTERFLY_SPAWN_EGG = addToTab(ITEMS.register("butterfly_spawn_egg",
             () -> new ForgeSpawnEggItem(ForgeEntities.BUTTERFLY,
                     0x95caff, 0xe880c6, new Item.Properties())));
-    public static final RegistryObject<Potion> HEX_POTION = POTIONS.register("roundabout.hex",
+    public static final RegistryObject<Potion> HEX_POTION = POTIONS.register("sba.hex",
             () -> new Potion(new MobEffectInstance(ForgeEffects.HEX.get(), 9600, 0)));
-    public static final RegistryObject<Potion> HEX_POTION_EXTENDED = POTIONS.register("roundabout.long_hex",
-            () -> new Potion("roundabout.hex", new MobEffectInstance(ForgeEffects.HEX.get(), 19200, 0)));
-    public static final RegistryObject<Potion> HEX_POTION_STRONG = POTIONS.register("roundabout.strong_hex",
-            () -> new Potion("roundabout.hex", new MobEffectInstance(ForgeEffects.HEX.get(), 4800, 1)));
+    public static final RegistryObject<Potion> HEX_POTION_EXTENDED = POTIONS.register("sba.long_hex",
+            () -> new Potion("sba.hex", new MobEffectInstance(ForgeEffects.HEX.get(), 19200, 0)));
+    public static final RegistryObject<Potion> HEX_POTION_STRONG = POTIONS.register("sba.strong_hex",
+            () -> new Potion("sba.hex", new MobEffectInstance(ForgeEffects.HEX.get(), 4800, 1)));
     public static final RegistryObject<Item> STAND_DISC_STAR_PLATINUM = addToDiscTab(ITEMS.register("star_platinum_disc",
             () -> new StandDiscItem(new Item.Properties().stacksTo(1), new PowersStarPlatinum(null))));
     public static final RegistryObject<Item> MAX_STAND_DISC_STAR_PLATINUM = addToDiscTab(ITEMS.register("max_star_platinum_disc",

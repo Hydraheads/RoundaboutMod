@@ -55,10 +55,10 @@ public class MatchEntity extends ThrowableItemProjectile {
         super(ModEntities.THROWN_MATCH, living, $$1);
     }
 
-    private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(MatchEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SBA$SUPER_THROWN = SynchedEntityData.defineId(MatchEntity.class, EntityDataSerializers.BOOLEAN);
     private int superThrowTicks = -1;
     public void starThrowInit(){
-        this.entityData.set(ROUNDABOUT$SUPER_THROWN, true);
+        this.entityData.set(SBA$SUPER_THROWN, true);
         superThrowTicks = 50;
     }
 
@@ -88,7 +88,7 @@ public class MatchEntity extends ThrowableItemProjectile {
         Vec3 delta = this.getDeltaMovement();
         super.tick();
 
-        if (this.getEntityData().get(ROUNDABOUT$SUPER_THROWN)) {
+        if (this.getEntityData().get(SBA$SUPER_THROWN)) {
             this.setDeltaMovement(delta);
         }
         if (!this.level().isClientSide) {
@@ -96,7 +96,7 @@ public class MatchEntity extends ThrowableItemProjectile {
                 superThrowTicks--;
                 if (superThrowTicks <= -1) {
                     superThrowTicks = -1;
-                    this.entityData.set(ROUNDABOUT$SUPER_THROWN, false);
+                    this.entityData.set(SBA$SUPER_THROWN, false);
                 } else {
                     if ((this.tickCount+2) % 4 == 0){
                         ((ServerLevel) this.level()).sendParticles(ModParticles.AIR_CRACKLE,
@@ -116,7 +116,7 @@ public class MatchEntity extends ThrowableItemProjectile {
 
         if (block instanceof GasolineBlock) {
             this.discard();
-        } else if(((IFireBlock)Blocks.FIRE).roundabout$canBurn(state)){
+        } else if(((IFireBlock)Blocks.FIRE).sba$canBurn(state)){
             if (block instanceof TntBlock) {
                 this.level().removeBlock($$0.getBlockPos(), false);
                 TntBlock.explode(this.level(), $$0.getBlockPos());
@@ -150,7 +150,7 @@ public class MatchEntity extends ThrowableItemProjectile {
                     if(!ME.hasItem){
                         ItemStack ii = this.getItem();
                         if (!ii.isEmpty()) {
-                            if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                            if(ME.getUser() instanceof Player PL && ((StandUser) PL).sba$getStandPowers() instanceof  PowersManhattanTransfer PM){
                                 if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
                                     PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
                                 } else {
@@ -183,7 +183,7 @@ public class MatchEntity extends ThrowableItemProjectile {
                 }
                 if ($$1.getType() == EntityType.TNT_MINECART) {
                     DamageSource DS = $$1.damageSources().explosion($$1, $$0.getEntity());
-                    ((IMinecartTNT) $$1).roundabout$explode(DS, this.getDeltaMovement().lengthSqr());
+                    ((IMinecartTNT) $$1).sba$explode(DS, this.getDeltaMovement().lengthSqr());
                     this.discard();
                 } else if ($$1.hurt($$5, $$2)) {
                     if ($$1.getType() == EntityType.ENDERMAN) {
@@ -207,20 +207,20 @@ public class MatchEntity extends ThrowableItemProjectile {
 
     @Override
     protected void defineSynchedData() {
-        if (!this.entityData.hasItem(ROUNDABOUT$SUPER_THROWN)) {
+        if (!this.entityData.hasItem(SBA$SUPER_THROWN)) {
             super.defineSynchedData();
-            this.entityData.define(ROUNDABOUT$SUPER_THROWN, false);
+            this.entityData.define(SBA$SUPER_THROWN, false);
         }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
-        $$0.putBoolean("roundabout.IsBundle",isBundle);
+        $$0.putBoolean("sba.IsBundle",isBundle);
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
-        this.isBundle = $$0.getBoolean("roundabout.IsBundle");
+        this.isBundle = $$0.getBoolean("sba.IsBundle");
         super.readAdditionalSaveData($$0);
     }
 
@@ -242,7 +242,7 @@ public class MatchEntity extends ThrowableItemProjectile {
     }
 
     public boolean getSuperThrow() {
-        return this.getEntityData().get(ROUNDABOUT$SUPER_THROWN);
+        return this.getEntityData().get(SBA$SUPER_THROWN);
     }
     protected float getGravity() {
         if (getSuperThrow()){

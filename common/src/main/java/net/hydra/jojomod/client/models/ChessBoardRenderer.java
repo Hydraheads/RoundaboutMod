@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.ChessBoardBlock;
 import net.hydra.jojomod.block.ChessBoardBlockEntity;
 import net.hydra.jojomod.block.ModBlocks;
@@ -34,7 +34,7 @@ import java.util.Calendar;
 
 public class ChessBoardRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	private static final ResourceLocation CHESSBOARD = new ResourceLocation(Roundabout.MOD_ID, "textures/block/chessboard.png");
+	private static final ResourceLocation CHESSBOARD = new ResourceLocation(SBA.MOD_ID, "textures/block/chessboard.png");
 	private final ModelPart block;
 	/*
 	public ChessBoardRenderer(ModelPart root) {
@@ -49,7 +49,7 @@ public class ChessBoardRenderer<T extends BlockEntity> implements BlockEntityRen
 		//this.block = root.getChild("block");
 		*/
 		this.block = null;
-		Roundabout.LOGGER.info("whats went wrong? " + (this.block == null));
+		SBA.LOGGER.info("whats went wrong? " + (this.block == null));
 		}
 	
 	public static LayerDefinition createBodyLayer() {
@@ -68,7 +68,7 @@ public class ChessBoardRenderer<T extends BlockEntity> implements BlockEntityRen
         //boolean $$7 = $$6 != null;
         //BlockState $$8 = $$7 ? $$0.getBlockState() : ModBlocks.CHESSBOARD_BLOCK.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH);
        // if ($$8.getBlock() instanceof ChessBoardBlock && $$0 instanceof ChessBoardBlockEntity) {
-		Roundabout.LOGGER.info("did the model initializes?" + (this.block == null));
+		SBA.LOGGER.info("did the model initializes?" + (this.block == null));
             
         //VertexConsumer vertexConsumer = $$3.getBuffer(RenderType.entityCutout(CHESSBOARD));
 

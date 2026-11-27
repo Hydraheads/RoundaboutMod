@@ -23,16 +23,16 @@ public class VisageRenderContext {
 
         float heyFull = 0;
 
-        boolean hasWhiteAlbumOut =user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
-        //int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
+        boolean hasWhiteAlbumOut =user.sba$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet();
+        //int whiteAlbumTicks = user.sba$getWhiteAlbumVanishTicks();
         int whiteAlbumTicks = MainUtil.getWornStandVanishticksSafe(user, PowersWhiteAlbum.class);
-        byte skin = user.roundabout$getStandSkin();
+        byte skin = user.sba$getStandSkin();
         if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
-            if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum) {
-                if (user.roundabout$getLastStandSkin() != skin){
-                    user.roundabout$setLastStandSkin(skin);
+            if (user.sba$getStandPowers() instanceof PowersWhiteAlbum) {
+                if (user.sba$getLastStandSkin() != skin){
+                    user.sba$setLastStandSkin(skin);
                     whiteAlbumTicks = 0;
-                    user.roundabout$setCurrentStandVanishTicks(0);
+                    user.sba$setCurrentStandVanishTicks(0);
                 }
             }
 
@@ -50,15 +50,15 @@ public class VisageRenderContext {
             }
         }
 
-        boolean hasOasisOut = user.roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit();
-        int oasisTicks = user.roundabout$getOasisVanishTicks();
+        boolean hasOasisOut = user.sba$getStandPowers() instanceof PowersOasis po && po.renderSuit();
+        int oasisTicks = user.sba$getOasisVanishTicks();
         float fadeAmt = 0;
-        byte oasisSkin = user.roundabout$getStandSkin();
+        byte oasisSkin = user.sba$getStandSkin();
         if (hasOasisOut || oasisTicks > 0){
-            if (user.roundabout$getLastStandSkin() != oasisSkin){
-                user.roundabout$setLastStandSkin(oasisSkin);
+            if (user.sba$getLastStandSkin() != oasisSkin){
+                user.sba$setLastStandSkin(oasisSkin);
                 oasisTicks = 0;
-                user.roundabout$setOasisVanishTicks(0);
+                user.sba$setOasisVanishTicks(0);
             }
 
             float partialTicks2 = partialTicks % 1;
@@ -76,7 +76,7 @@ public class VisageRenderContext {
         }
 
 
-        if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity) && user.roundabout$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
+        if (user.sba$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity) && user.sba$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
 
         ItemStack hand = entity.getMainHandItem();
         ItemStack offHand = entity.getOffhandItem();

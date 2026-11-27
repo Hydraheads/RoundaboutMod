@@ -1,4 +1,4 @@
-/* Shader by NotSoGreeeen for Roundabout */
+/* Shader by NotSoGreeeen for SBA */
 
 /*
 This is free and unencumbered software released into the public domain.

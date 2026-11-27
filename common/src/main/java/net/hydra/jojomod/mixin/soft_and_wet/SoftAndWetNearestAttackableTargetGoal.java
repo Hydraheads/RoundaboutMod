@@ -28,10 +28,10 @@ public abstract class SoftAndWetNearestAttackableTargetGoal<T extends LivingEnti
     /**Soft and Wet blindness bubble functionality*/
 
     @Inject(method = "findTarget", at = @At(value = "TAIL"))
-    protected void roundabout$findTarget(CallbackInfo ci) {
+    protected void sba$findTarget(CallbackInfo ci) {
         if (!(this.target instanceof StandEntity)) {
             IMob imob = ((IMob)this.mob);
-            if (imob.roundabout$getConfusionTicks() > 0){
+            if (imob.sba$getConfusionTicks() > 0){
                 this.target = null;
                 return;
             } else if (this.mob instanceof AbstractIllager && !(this.mob instanceof AnubisGuardian)){
@@ -40,7 +40,7 @@ public abstract class SoftAndWetNearestAttackableTargetGoal<T extends LivingEnti
                     return;
                 }
             }
-            if (((StandUser)this.mob).roundabout$getEyeSightTaken() != null && mob.getLastHurtByMob() == null){
+            if (((StandUser)this.mob).sba$getEyeSightTaken() != null && mob.getLastHurtByMob() == null){
                 this.target = this.mob.level().getNearestEntity(this.mob.level().getEntitiesOfClass(this.targetType, this.getTargetSearchArea(this.getFollowDistance()), (p_148152_) -> {
                     return true;
                 }), this.targetConditions, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());

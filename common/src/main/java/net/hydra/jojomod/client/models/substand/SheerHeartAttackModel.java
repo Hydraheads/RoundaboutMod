@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.substand;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.substand.renderers.animations.SheerHeartAttackAnimations;
 import net.hydra.jojomod.entity.substand.SheerHeartAttackEntity;

@@ -190,10 +190,10 @@ public class ParallelChestEntity extends Entity {
             }
             if (getAmmo()){
                 refillAGun(sp);
-                sp.displayClientMessage(Component.translatable("text.roundabout.parallel_chest.gun_restore"), true);
+                sp.displayClientMessage(Component.translatable("text.sba.parallel_chest.gun_restore"), true);
             } else {
                 addItemToPlayer(player,MainUtil.getRandomD4CLoot(player.level()));
-                sp.displayClientMessage(Component.translatable("text.roundabout.parallel_chest.goody"), true);
+                sp.displayClientMessage(Component.translatable("text.sba.parallel_chest.goody"), true);
             }
         }
         return InteractionResult.SUCCESS;

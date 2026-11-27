@@ -62,7 +62,7 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
 
     public InteractionResult interact(Player $$0, InteractionHand $$1) {
         if (!$$0.level().isClientSide()){
-            ((StandUser)$$0).roundabout$setBubbleEncased((byte)1);
+            ((StandUser)$$0).sba$setBubbleEncased((byte)1);
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_HOVERED_OVER_EVENT, SoundSource.PLAYERS, 2F, (float) (1.38 + (Math.random() * 0.04)));
             this.discard();
         }
@@ -72,7 +72,7 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
 
     public boolean collideBubbleFinally(Entity collision){
         if (collision instanceof LivingEntity LE){
-            ((StandUser) LE).roundabout$setBubbleEncased((byte) 1);
+            ((StandUser) LE).sba$setBubbleEncased((byte) 1);
             this.level().playSound(null, this.blockPosition(), ModSounds.BUBBLE_HOVERED_OVER_EVENT, SoundSource.PLAYERS, 2F, (float) (1.38 + (Math.random() * 0.04)));
             this.discard();
             return true;
@@ -120,8 +120,8 @@ public class EncasementBubbleEntity extends Entity implements PenetratableWithPr
 
         if (!this.level().isClientSide()) {
             lifeSpan--;
-            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet) ||
-                    (((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet PW && PW.bubbleNumber != bubbleNo)
+            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).sba$getStandPowers() instanceof PowersSoftAndWet) ||
+                    (((StandUser) this.standUser).sba$getStandPowers() instanceof PowersSoftAndWet PW && PW.bubbleNumber != bubbleNo)
                     )) {
                 popBubble();
                 return;

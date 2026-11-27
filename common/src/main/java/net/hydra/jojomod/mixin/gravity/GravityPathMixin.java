@@ -29,7 +29,7 @@ public class GravityPathMixin {
 //            cancellable = true
 //    )
 //    public void rdbt$tickTrue(Entity $$0, int $$1, CallbackInfoReturnable<Vec3> cir) {
-//        Direction dir = ((IGravityEntity)$$0).roundabout$getGravityDirection();
+//        Direction dir = ((IGravityEntity)$$0).sba$getGravityDirection();
 //        if (dir == Direction.DOWN)
 //            return;
 //

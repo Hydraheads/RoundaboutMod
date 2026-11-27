@@ -778,7 +778,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
     }
 
     public Vec3 threatMovement(Vec3 vec3) {
-        if ((getUser() != null) && (((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC)) {
+        if ((getUser() != null) && (((StandUser) getUser()).sba$getStandPowers() instanceof PowersSilverChariot PSC)) {
             double nextX = getX() + vec3.x;
             double nextY = getY() + vec3.y;
             double nextZ = getZ() + vec3.z;
@@ -1080,7 +1080,7 @@ public class SilverChariotEntity extends FollowingStandEntity {
     @Override
     public boolean canBeHitByProjectile() {
         // if (this.getUserData(this.getUser()) != null) {
-        // if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersSilverChariot PSC) {
+        // if (this.getUserData(this.getUser()).sba$getStandPowers() instanceof PowersSilverChariot PSC) {
         // if (isDesummoning) {
         //    return false;
         // }
@@ -1093,8 +1093,8 @@ public class SilverChariotEntity extends FollowingStandEntity {
     public boolean isControlledByLocalInstance() {
         LivingEntity user = getUser();
         if (user instanceof Player player) {
-            if (((StandUser) player).roundabout$getStandPowers().isPiloting()) {
-                LivingEntity controlled = ((StandUser) player).roundabout$getStandPowers().getPilotingStand();
+            if (((StandUser) player).sba$getStandPowers().isPiloting()) {
+                LivingEntity controlled = ((StandUser) player).sba$getStandPowers().getPilotingStand();
                 if (controlled != null && controlled.is(this)) {
                     return player.isLocalPlayer();
                 }

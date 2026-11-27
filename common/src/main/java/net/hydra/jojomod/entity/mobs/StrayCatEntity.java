@@ -608,7 +608,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
             this.level().addFreshEntity(bubble);
 
             Vec3 addToPosition = new Vec3(0, this.getEyeHeight() * 0.85f, 0);
-            Direction direction = ((IGravityEntity) this).roundabout$getGravityDirection();
+            Direction direction = ((IGravityEntity) this).sba$getGravityDirection();
             if (direction != Direction.DOWN) {
                 addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
             }
@@ -618,7 +618,7 @@ public class StrayCatEntity extends TamableAnimal implements RangedAttackMob {
 
             Vec3 targetpos = livingEntity.getPosition(0);
             Vec3 targetaddToPosition = new Vec3(0, livingEntity.getBbHeight() * 0.5f, 0);
-            Direction targetdirection = ((IGravityEntity) livingEntity).roundabout$getGravityDirection();
+            Direction targetdirection = ((IGravityEntity) livingEntity).sba$getGravityDirection();
             if (direction != Direction.DOWN) {
                 targetaddToPosition = RotationUtil.vecPlayerToWorld(targetaddToPosition, targetdirection);
             }

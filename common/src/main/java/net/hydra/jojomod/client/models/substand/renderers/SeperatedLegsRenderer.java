@@ -5,7 +5,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.SafePlaceContext;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SeperatedLegsRenderer extends StandRenderer<SeperatedLegsEntity> {
-    private static final ResourceLocation PART_FIVE_GREEN_DAY = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
+    private static final ResourceLocation PART_FIVE_GREEN_DAY = new ResourceLocation(SBA.MOD_ID,"textures/stand/green_day/part_four_green_day.png");
 
     public SeperatedLegsRenderer(EntityRendererProvider.Context context) {
         super(context,new SeperatedLegsModel<>(context.bakeLayer(ModEntityRendererClient.SEPERATED_LEGS_LAYER)), 0f);
@@ -79,7 +79,7 @@ public class SeperatedLegsRenderer extends StandRenderer<SeperatedLegsEntity> {
     public void render(SeperatedLegsEntity mobEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         if (mobEntity.getUser() instanceof Player P) {
             IPlayerEntity pl = ((IPlayerEntity) P);
-            ItemStack visage = pl.roundabout$getMaskSlot();
+            ItemStack visage = pl.sba$getMaskSlot();
             if (Objects.nonNull(visage)) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     if (MI instanceof ModificationMaskItem MD){

@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -28,7 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import java.util.List;
 
 public class TuskActScreen extends Screen implements NoCancelInputScreen {
-    static final ResourceLocation MEMORY_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation MEMORY_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/tusk_acts.png");
 
     public int currentlyHovered;
@@ -65,7 +65,7 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
         StandUser SU = (StandUser) pl;
 
         this.currentlyHovered = 0;
-        if (SU.roundabout$getStandPowers() instanceof PowersTusk PT ) {
+        if (SU.sba$getStandPowers() instanceof PowersTusk PT ) {
             this.currentlyHovered = PT.getAct();
             for (int i = 0; i < 5; ++i) {
                 int id = i == 0 ? PT.getAct() : i;
@@ -106,11 +106,11 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
 
 
         Component str = switch(this.currentlyHovered) {
-            case 1 -> Component.translatable("roundabout.tusk.act_1");
-            case 2 -> Component.translatable("roundabout.tusk.act_2");
-            case 3 -> Component.translatable("roundabout.tusk.act_3");
-            case 4 -> Component.translatable("roundabout.tusk.act_4");
-            default -> Component.translatable("roundabout.tusk.change_acts");
+            case 1 -> Component.translatable("sba.tusk.act_1");
+            case 2 -> Component.translatable("sba.tusk.act_2");
+            case 3 -> Component.translatable("sba.tusk.act_3");
+            case 4 -> Component.translatable("sba.tusk.act_4");
+            default -> Component.translatable("sba.tusk.change_acts");
         };
         guiGraphics.drawCenteredString(this.font, str , this.width / 2, this.height / 2 - 31 - 32, -1);
 
@@ -144,7 +144,7 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
         }
         Player pl = Minecraft.getInstance().player;
         StandUser SU = (StandUser) pl;
-        if (SU.roundabout$getStandPowers() instanceof PowersTusk PT) {
+        if (SU.sba$getStandPowers() instanceof PowersTusk PT) {
             PT.tryIntPower(PowerIndex.POWER_4,true,pIcon.id);
             PT.tryIntPowerPacket(PowerIndex.POWER_4,pIcon.id);
         }
@@ -157,9 +157,9 @@ public class TuskActScreen extends Screen implements NoCancelInputScreen {
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     private boolean checkToClose() {

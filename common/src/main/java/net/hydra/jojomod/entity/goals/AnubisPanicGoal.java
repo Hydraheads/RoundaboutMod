@@ -12,6 +12,6 @@ public class AnubisPanicGoal extends PanicGoal {
 
     @Override
     protected boolean shouldPanic() {
-        return ((StandUser)this.mob).roundabout$getStandPowers() instanceof PowersAnubis;
+        return ((StandUser)this.mob).sba$getStandPowers() instanceof PowersAnubis;
     }
 }

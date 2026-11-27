@@ -17,7 +17,7 @@ public abstract class AnubisWolfRendererMixin extends MobRenderer<Wolf, WolfMode
     public AnubisWolfRendererMixin(EntityRendererProvider.Context $$0, WolfModel<Wolf> $$1, float $$2) {super($$0, $$1, $$2);}
 
     @Inject(method = "<init>",at = @At(value = "RETURN"))
-    private void roundabout$anubisWolfLayer(EntityRendererProvider.Context $$0, CallbackInfo ci) {
+    private void sba$anubisWolfLayer(EntityRendererProvider.Context $$0, CallbackInfo ci) {
         this.addLayer(new AnubisMobLayer(this));
     }
 }

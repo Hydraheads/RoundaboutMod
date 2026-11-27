@@ -26,7 +26,7 @@ public class SavedSecondAbstractArrow extends SavedSecond {
         super.loadTime(ent);
 
         if (ent instanceof AbstractArrow LE) {
-            ((IAbstractArrowAccess)LE).roundabout$SetInGround(stuckInGround);
+            ((IAbstractArrowAccess)LE).sba$SetInGround(stuckInGround);
         }
     }
 }

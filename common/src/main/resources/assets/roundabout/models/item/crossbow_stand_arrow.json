@@ -1,6 +1,0 @@
-{
-  "parent": "item/crossbow",
-  "textures": {
-    "layer0": "roundabout:item/crossbow_stand_arrow"
-  }
-}

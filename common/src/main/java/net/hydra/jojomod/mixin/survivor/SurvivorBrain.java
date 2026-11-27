@@ -22,12 +22,12 @@ public class SurvivorBrain<E extends LivingEntity> {
      * fighting instead of doing other random ai tasks. Does not apply to enemy mobs, mostly just designed for
      * things that are not normally aggressive*/
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    public void roundabout$Render(ServerLevel $$0, E $$1, CallbackInfo ci) {
+    public void sba$Render(ServerLevel $$0, E $$1, CallbackInfo ci) {
         if (MainUtil.forceAggression($$1)) {
             if ($$1 instanceof Mob mb && mb.getTarget() != null
                     && !(mb instanceof Enemy) && (mb instanceof AbstractVillager || mb instanceof Animal)
                     && !mb.isInWater()
-            && !((IMob)mb).roundabout$getFightOrFlight()){
+            && !((IMob)mb).sba$getFightOrFlight()){
                 ci.cancel();
             }
         }

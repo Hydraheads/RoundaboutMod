@@ -18,10 +18,10 @@ public abstract class SoftAndWetCreeper extends Monster {
      * cant register immediately so they have to not play noise in general too.*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$Tick(CallbackInfo ci) {
+    protected void sba$Tick(CallbackInfo ci) {
         StandUser user = ((StandUser) this);
 
-        if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+        if (user.sba$getStandPowers() instanceof PowersSoftAndWet PW) {
             /**Soft and Wet creepers don't make a sound*/
             ci.cancel();
             if (this.isAlive()) {

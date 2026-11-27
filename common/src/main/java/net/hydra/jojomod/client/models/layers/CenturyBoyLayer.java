@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerModel;
@@ -40,37 +40,37 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         /// basic checks to make sure that the player can see stands and the user of 20thcb isn't invisible
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
             if (entity != null) {
-                if (((IEntityAndData) entity).roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+                if (((IEntityAndData) entity).sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                     return;
 
 
                 /// check to see if 20thCB is activated
                 StandUser user = ((StandUser) entity);
-                boolean hasCB = (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy);
+                boolean hasCB = (user.sba$getStandPowers() instanceof Powers20thCenturyBoy);
                 boolean standOut = (PowerTypes.hasStandActive(entity) && hasCB);
                 if (!entity.isInvisible()) {
                     int CBticks = MainUtil.getWornStandVanishticksSafe(user, Powers20thCenturyBoy.class);
 
                     /*
                     int CBticks = 0;
-                    if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
-                        CBticks = user.roundabout$getCurrentStandVanishTicks();
-                    }else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
-                        CBticks = user.roundabout$getPreviousStandVanishTicks();
+                    if (user.sba$getStandPowers() instanceof Powers20thCenturyBoy) {
+                        CBticks = user.sba$getCurrentStandVanishTicks();
+                    }else if (user.sba$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
+                        CBticks = user.sba$getPreviousStandVanishTicks();
                     }*/
 
                     /// skin definition
                     if (CBticks > 0 || standOut) {
-                        byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
-                            if (user.roundabout$getLastStandSkin() != skin) {
-                                user.roundabout$setLastStandSkin(skin);
+                        byte skin = user.sba$getStandSkin();
+                        if (user.sba$getStandPowers() instanceof Powers20thCenturyBoy) {
+                            if (user.sba$getLastStandSkin() != skin) {
+                                user.sba$setLastStandSkin(skin);
                                 CBticks = 0;
 
-                                user.roundabout$setCurrentStandVanishTicks(0);
+                                user.sba$setCurrentStandVanishTicks(0);
                             }
                         }else {
-                            skin = user.roundabout$getPreviousSkin();
+                            skin = user.sba$getPreviousSkin();
                         }
 
                         /// from my understanding these are the ticks that 20thcb are able to render basically
@@ -116,10 +116,10 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                         byte idle = MainUtil.getWornStandIdleSafe(user, Powers20thCenturyBoy.class);
                         /* (byte)0;
-                        if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
-                            idle = user.roundabout$getIdlePos();
-                        }else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
-                            idle = user.roundabout$getPreviousPose();
+                        if (user.sba$getStandPowers() instanceof Powers20thCenturyBoy) {
+                            idle = user.sba$getIdlePos();
+                        }else if (user.sba$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
+                            idle = user.sba$getPreviousPose();
                         }*/
 
                         /// for unlatch...
@@ -144,7 +144,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                             getParentModel().head.translateAndRotate(poseStack);
 
-                            if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
+                            if (entity instanceof  IPlayerEntity IPL && IPL.sba$getMaskSlot().getItem() instanceof
                                     MaskItem MI) {
                                 poseStack.scale(1F,1F,1.1F);
                             }
@@ -168,7 +168,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                             poseStack.translate(-.3, -0.2, 0.52);
 
-                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).sba$getSlim()) {
                                 ModStrayModels.CENTURY_BOY.renderLeftArmSlim(entity, partialTicks, poseStack, bufferSource,
                                         packedLight, r, g, b, heyfull, skin);
                             } else {
@@ -190,7 +190,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                             poseStack.translate(.3, -0.2, 0.52);
 
-                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).roundabout$getSlim()) {
+                            if (getParentModel() instanceof PlayerModel<?> PM && ((IPlayerModel) PM).sba$getSlim()) {
                             ModStrayModels.CENTURY_BOY.renderRightArmSlim(entity, partialTicks, poseStack, bufferSource,
                                     packedLight, r, g, b, heyfull, skin);
                             } else {
@@ -201,7 +201,7 @@ public class CenturyBoyLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             ClientUtil.popPoseAndCooperate(poseStack, 26);
 
                             /// breast
-                            if (entity instanceof  IPlayerEntity IPL && IPL.roundabout$getMaskSlot().getItem() instanceof
+                            if (entity instanceof  IPlayerEntity IPL && IPL.sba$getMaskSlot().getItem() instanceof
                                     MaskItem MI) {
                                 if (MI.visageData.generateVisageData(entity).rendersBreast() || MI.visageData.generateVisageData(entity).rendersPlayerBreastPart() ||
                                         (MI.visageData.generateVisageData(entity).rendersSmallBreast() && idle != 0)){

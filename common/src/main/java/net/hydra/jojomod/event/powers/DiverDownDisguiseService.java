@@ -30,7 +30,7 @@ public final class DiverDownDisguiseService {
     public static void request(ServerPlayer player, String requestedName) {
         String name = requestedName == null ? "" : requestedName.trim();
         if (!USERNAME.matcher(name).matches()) {
-            player.sendSystemMessage(Component.translatable("roundabout.whitesnake.disguise.invalid"));
+            player.sendSystemMessage(Component.translatable("sba.whitesnake.disguise.invalid"));
             return;
         }
         if (!canDisguise(player)) return;
@@ -44,7 +44,7 @@ public final class DiverDownDisguiseService {
     }
 
     private static boolean canDisguise(ServerPlayer player) {
-        return ((StandUser) player).roundabout$getStandPowers() instanceof PowersDiverDown powers
+        return ((StandUser) player).sba$getStandPowers() instanceof PowersDiverDown powers
                 && powers.isDiveActive() && powers.submergedTarget != null;
     }
 
@@ -67,16 +67,16 @@ public final class DiverDownDisguiseService {
     private static void apply(ServerPlayer player, GameProfile profile) {
         if (!player.isAlive() || !canDisguise(player)) return;
         if (profile == null) {
-            player.sendSystemMessage(Component.translatable("roundabout.whitesnake.disguise.not_found"));
+            player.sendSystemMessage(Component.translatable("sba.whitesnake.disguise.not_found"));
             return;
         }
 
-        PowersDiverDown powers = (PowersDiverDown) ((StandUser) player).roundabout$getStandPowers();
+        PowersDiverDown powers = (PowersDiverDown) ((StandUser) player).sba$getStandPowers();
         Entity target = powers.submergedTarget;
         if (target == null || !target.isAlive()) return;
 
         // it's disguising time
-        ((StandUser) target).roundabout$setDisguise(profile);
+        ((StandUser) target).sba$setDisguise(profile);
         powers.applyDisguiseToTarget(target, profile);
     }
 }

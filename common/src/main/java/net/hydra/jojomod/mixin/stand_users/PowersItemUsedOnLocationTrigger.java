@@ -16,9 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class PowersItemUsedOnLocationTrigger {
     /**Mandom code to incur placement penalty. Design to be flexibly hooked into other stands.*/
     @Inject(method = "trigger", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$trigger(ServerPlayer $$0, BlockPos $$1, ItemStack $$2, CallbackInfo ci) {
+    private void sba$trigger(ServerPlayer $$0, BlockPos $$1, ItemStack $$2, CallbackInfo ci) {
         if ($$1 != null && getId().getPath().equals("placed_block")){
-            ((StandUser)$$0).roundabout$getStandPowers().onPlaceBlock($$0,$$1,$$2);
+            ((StandUser)$$0).sba$getStandPowers().onPlaceBlock($$0,$$1,$$2);
         }
     }
 

@@ -295,7 +295,7 @@ public class BaseMinion extends PathfinderMob {
 
         if ((getController() <= 0 && controller2 == null) || convertedByZombie) {
             if (player instanceof ServerPlayer sp && FateTypes.isVampire(sp)) {
-                sp.displayClientMessage(Component.translatable("text.roundabout.stole_minion"), true);
+                sp.displayClientMessage(Component.translatable("text.sba.stole_minion"), true);
                 setController(sp);
                 convertedByZombie = false;
                 this.level().playSound(null, this.blockPosition(), ModSounds.LEVELUP_EVENT, SoundSource.PLAYERS, 1F, 1);
@@ -819,7 +819,7 @@ public class BaseMinion extends PathfinderMob {
                 this.setLastHurtByPlayer(null);
                 this.setAggressive(false);
                 //Perform a lobotomy because mobs can't follow their aggro rules
-                ((StandUser)this).roundabout$deeplyRemoveAttackTarget();
+                ((StandUser)this).sba$deeplyRemoveAttackTarget();
             }
 
             if (controller == null || controller.isRemoved() || !controller.isAlive()){

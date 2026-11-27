@@ -50,10 +50,10 @@ public class EmperorBulletEntity extends AbstractArrow {
     }
 
     public EmperorBulletEntity(Level level, LivingEntity livingEntity) {
-        super(ModEntities.ROUNDABOUT_BULLET_ENTITY, livingEntity, level);
+        super(ModEntities.SBA_BULLET_ENTITY, livingEntity, level);
     }
     public EmperorBulletEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
-        super(ModEntities.ROUNDABOUT_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
+        super(ModEntities.SBA_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
     }
     private double baseSpeed;
     public LivingEntity standUser;
@@ -64,7 +64,7 @@ public class EmperorBulletEntity extends AbstractArrow {
         LivingEntity owner = (LivingEntity) this.getOwner();
 
         if (owner instanceof StandUser su) {
-            StandPowers powers = su.roundabout$getStandPowers();
+            StandPowers powers = su.sba$getStandPowers();
             if (powers instanceof PowersEmperor emperor) {
                 return emperor.getEmperorBulletStrength(owner);
             }
@@ -133,13 +133,13 @@ public class EmperorBulletEntity extends AbstractArrow {
         Entity entity = result.getEntity();
 
         if (!level().isClientSide && entity instanceof EnderMan em) {
-            if (((IEnderMan) em).roundabout$teleport()) {
+            if (((IEnderMan) em).sba$teleport()) {
                 return;
             }
         }
 
         if (entity instanceof LivingEntity $$3) {
-            StandPowers entityPowers = ((StandUser) $$3).roundabout$getStandPowers();
+            StandPowers entityPowers = ((StandUser) $$3).sba$getStandPowers();
             if (entityPowers != null ) {
                 if (entityPowers.dealWithProjectile(this, result)) {
                     return;

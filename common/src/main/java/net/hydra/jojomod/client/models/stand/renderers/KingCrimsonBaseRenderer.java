@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.stand.KingCrimsonModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
@@ -15,26 +15,26 @@ import org.jetbrains.annotations.Nullable;
 
 public class KingCrimsonBaseRenderer<M extends StandEntity> extends StandRenderer<KingCrimsonEntity>{
 
-    private static final ResourceLocation PART_5_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/anime.png");
-    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/manga.png");
-    private static final ResourceLocation END_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/end.png");
-    private static final ResourceLocation END_2_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/end_2.png");
-    private static final ResourceLocation STARLESS_SKIN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/starless.png");
-    private static final ResourceLocation AGOGO = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/agogo.png");
-    private static final ResourceLocation DARK = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/dark.png");
-    private static final ResourceLocation BLACK = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/black.png");
-    private static final ResourceLocation SPINE_ART = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/spine_art.png");
-    private static final ResourceLocation GREEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/green.png");
-    private static final ResourceLocation YELLOW = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/yellow.png");
-    private static final ResourceLocation AQUA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/aqua.png");
-    private static final ResourceLocation HEAVEN = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/heaven.png");
-    private static final ResourceLocation BETA = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/beta.png");
-    private static final ResourceLocation CONCEPT = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/concept_art.png");
-    private static final ResourceLocation RED = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/red.png");
-    private static final ResourceLocation BLUE = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/blue.png");
-    private static final ResourceLocation VISION = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/vision.png");
-    private static final ResourceLocation REAPER = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/reaper.png");
-    private static final ResourceLocation NUCLEAR = new ResourceLocation(Roundabout.MOD_ID,"textures/stand/king_crimson/nuclear.png");
+    private static final ResourceLocation PART_5_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/anime.png");
+    private static final ResourceLocation MANGA_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/manga.png");
+    private static final ResourceLocation END_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/end.png");
+    private static final ResourceLocation END_2_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/end_2.png");
+    private static final ResourceLocation STARLESS_SKIN = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/starless.png");
+    private static final ResourceLocation AGOGO = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/agogo.png");
+    private static final ResourceLocation DARK = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/dark.png");
+    private static final ResourceLocation BLACK = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/black.png");
+    private static final ResourceLocation SPINE_ART = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/spine_art.png");
+    private static final ResourceLocation GREEN = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/green.png");
+    private static final ResourceLocation YELLOW = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/yellow.png");
+    private static final ResourceLocation AQUA = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/aqua.png");
+    private static final ResourceLocation HEAVEN = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/heaven.png");
+    private static final ResourceLocation BETA = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/beta.png");
+    private static final ResourceLocation CONCEPT = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/concept_art.png");
+    private static final ResourceLocation RED = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/red.png");
+    private static final ResourceLocation BLUE = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/blue.png");
+    private static final ResourceLocation VISION = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/vision.png");
+    private static final ResourceLocation REAPER = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/reaper.png");
+    private static final ResourceLocation NUCLEAR = new ResourceLocation(SBA.MOD_ID,"textures/stand/king_crimson/nuclear.png");
 
     public KingCrimsonBaseRenderer(EntityRendererProvider.Context context, StandModel root) {
         super(context, root,0f);

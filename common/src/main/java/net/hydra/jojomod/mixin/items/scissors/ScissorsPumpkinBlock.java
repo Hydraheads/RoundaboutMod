@@ -30,7 +30,7 @@ public class ScissorsPumpkinBlock {
     /**This mixin allows you to use scissors to shear a pumpkin block*/
 
     @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$tick(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> cir) {
+    protected void sba$tick(BlockState $$0, Level $$1, BlockPos $$2, Player $$3, InteractionHand $$4, BlockHitResult $$5, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack $$6 = $$3.getItemInHand($$4);
         if ($$6.is(ModItems.SCISSORS)) {
             if (!$$1.isClientSide) {

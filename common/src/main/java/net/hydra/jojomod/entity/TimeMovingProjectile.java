@@ -40,8 +40,8 @@ public class TimeMovingProjectile
                 for (AABB $$7 : $$5.toAabbs()) {
                     if ($$7.move($$3).contains($$6)) {
                         if (projectile instanceof AbstractArrow) {
-                            ((IAbstractArrowAccess)projectile).roundabout$SetInGround(true);
-                            ((IProjectileAccess)projectile).roundabout$setRoundaboutIsTimeStopCreated(false);
+                            ((IAbstractArrowAccess)projectile).sba$SetInGround(true);
+                            ((IProjectileAccess)projectile).sba$setSBAIsTimeStopCreated(false);
                         }
                         break;
                     }
@@ -49,7 +49,7 @@ public class TimeMovingProjectile
             }
         }
         if (projectile instanceof ThrowableProjectile) {
-            ((IProjectileAccess)projectile).roundabout$CheckInsideBlocks();
+            ((IProjectileAccess)projectile).sba$CheckInsideBlocks();
         }
 
         if (projectile instanceof AbstractArrow) {
@@ -62,13 +62,13 @@ public class TimeMovingProjectile
             projectile.clearFire();
         }
 
-        if (projectile instanceof AbstractArrow && ((IAbstractArrowAccess)projectile).roundabout$GetInGround()){
+        if (projectile instanceof AbstractArrow && ((IAbstractArrowAccess)projectile).sba$GetInGround()){
             return;
         }
 
 
 
-        float speedMod = ((IProjectileAccess) projectile).roundabout$getRoundaboutSpeedMultiplier();
+        float speedMod = ((IProjectileAccess) projectile).sba$getSBASpeedMultiplier();
         Vec3 position = new Vec3(projectile.getX(),projectile.getY(),projectile.getZ());
 
 
@@ -87,7 +87,7 @@ public class TimeMovingProjectile
             Vec3 pos2 = position.add(projectile.getDeltaMovement()).add(projectile.getDeltaMovement()).add(reducedDelta);
             float inflateDist = (float) Math.max(Math.max(reducedDelta.x, reducedDelta.y), reducedDelta.z) * 2;
             HitResult mobHit = ProjectileUtil.getEntityHitResult(
-                    projectile.level(), projectile, pos, pos2, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1 + inflateDist), ((IProjectileAccess) projectile)::roundabout$CanHitEntity
+                    projectile.level(), projectile, pos, pos2, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1 + inflateDist), ((IProjectileAccess) projectile)::sba$CanHitEntity
             );
             if (mobHit != null) {
                 speedMod *= 0.7F;
@@ -96,7 +96,7 @@ public class TimeMovingProjectile
             reducedDelta = projectile.getDeltaMovement().multiply(speedMod, speedMod, speedMod);
             pos2 = position.add(projectile.getDeltaMovement()).add(reducedDelta);
             HitResult mobHit2 = ProjectileUtil.getEntityHitResult(
-                    projectile.level(), projectile, pos, pos2, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1), ((IProjectileAccess) projectile)::roundabout$CanHitEntity
+                    projectile.level(), projectile, pos, pos2, projectile.getBoundingBox().expandTowards(projectile.getDeltaMovement()).inflate(1), ((IProjectileAccess) projectile)::sba$CanHitEntity
             );
             if (mobHit2 != null) {
                 speedMod *= 0.6F;
@@ -106,7 +106,7 @@ public class TimeMovingProjectile
                 if (speedMod <= 0.1) {
                     speedMod = 0.11F;
                 }
-                ((IProjectileAccess) projectile).setRoundaboutSpeedMultiplier(speedMod);
+                ((IProjectileAccess) projectile).setSBASpeedMultiplier(speedMod);
             }
         }
 
@@ -134,23 +134,23 @@ public class TimeMovingProjectile
                 }
 
                 if ($$10 != null && $$10.getType() == HitResult.Type.BLOCK) {
-                    ((IProjectileAccess) projectile).setRoundaboutSpeedMultiplier(0);
-                    ((IProjectileAccess)projectile).roundabout$setRoundaboutIsTimeStopCreated(false);
+                    ((IProjectileAccess) projectile).setSBASpeedMultiplier(0);
+                    ((IProjectileAccess)projectile).sba$setSBAIsTimeStopCreated(false);
                 } else if ($$10 != null && $$10.getType() == HitResult.Type.ENTITY) {
-                    ((IProjectileAccess) projectile).setRoundaboutSpeedMultiplier(0);
-                    ((IProjectileAccess)projectile).roundabout$setRoundaboutIsTimeStopCreated(false);
+                    ((IProjectileAccess) projectile).setSBASpeedMultiplier(0);
+                    ((IProjectileAccess)projectile).sba$setSBAIsTimeStopCreated(false);
 
                 }
 
                 $$10 = null;
 
-        speedMod = ((IProjectileAccess) projectile).roundabout$getRoundaboutSpeedMultiplier();
+        speedMod = ((IProjectileAccess) projectile).sba$getSBASpeedMultiplier();
         reducedDelta = projectile.getDeltaMovement().multiply(speedMod,speedMod,speedMod);
         if (speedMod > 0.01) {
-            ((IProjectileAccess) projectile).setRoundaboutSpeedMultiplier(speedMod* 0.87F);
+            ((IProjectileAccess) projectile).setSBASpeedMultiplier(speedMod* 0.87F);
             projectile.setPos(position.x + reducedDelta.x, position.y + reducedDelta.y, position.z + reducedDelta.z);
         } else {
-            ((IProjectileAccess) projectile).roundabout$setRoundaboutIsTimeStopCreated(false);
+            ((IProjectileAccess) projectile).sba$setSBAIsTimeStopCreated(false);
         }
     }
 
@@ -170,7 +170,7 @@ public class TimeMovingProjectile
     @Nullable
     protected static EntityHitResult findHitEntity2(Projectile projectile, Vec3 $$0, Vec3 $$1, Vec3 delta) {
         return ProjectileUtil.getEntityHitResult(
-                projectile.level(), projectile, $$0, $$1, projectile.getBoundingBox().expandTowards(delta).inflate(1.0), ((IProjectileAccess) projectile)::roundabout$CanHitEntity
+                projectile.level(), projectile, $$0, $$1, projectile.getBoundingBox().expandTowards(delta).inflate(1.0), ((IProjectileAccess) projectile)::sba$CanHitEntity
         );
     }
 }

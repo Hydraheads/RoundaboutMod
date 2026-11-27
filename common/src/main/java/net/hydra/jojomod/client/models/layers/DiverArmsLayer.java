@@ -68,17 +68,17 @@ public class DiverArmsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
         if (entity == null || entity.isInvisible() || !MainUtil.isHumanoid2(entity)) return;
         if (ModStrayModels.diverArmsLayer == null) return;
 
-        if (entity instanceof StandUser su && su.roundabout$hasDiverArms()) {
+        if (entity instanceof StandUser su && su.sba$hasDiverArms()) {
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;
 
             StandUser diverOwner = null;
-            if (su.roundabout$getStandPowers() instanceof PowersDiverDown) {
+            if (su.sba$getStandPowers() instanceof PowersDiverDown) {
                 diverOwner = su;
-            } else if (su.roundabout$getDiverUser() != null && su.roundabout$getDiverUser().getSelf() instanceof StandUser ownerSu) {
+            } else if (su.sba$getDiverUser() != null && su.sba$getDiverUser().getSelf() instanceof StandUser ownerSu) {
                 diverOwner = ownerSu;
             }
 
-            byte skin = (diverOwner != null) ? diverOwner.roundabout$getStandSkin() : (byte) 0;
+            byte skin = (diverOwner != null) ? diverOwner.sba$getStandSkin() : (byte) 0;
             ResourceLocation texture = DiverDownBaseRenderer.getSkin(skin);
             ArmPair arms = (ArmPair) ModStrayModels.diverArmsLayer.skinArmModels.getOrDefault(skin, ModStrayModels.diverArmsLayer.defaultArms);
 
@@ -114,13 +114,13 @@ public class DiverArmsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
 
         StandUser su = (StandUser) player;
         StandUser diverOwner = null;
-        if (su.roundabout$getStandPowers() instanceof PowersDiverDown) {
+        if (su.sba$getStandPowers() instanceof PowersDiverDown) {
             diverOwner = su;
-        } else if (su.roundabout$getDiverUser() != null && su.roundabout$getDiverUser().getSelf() instanceof StandUser ownerSu) {
+        } else if (su.sba$getDiverUser() != null && su.sba$getDiverUser().getSelf() instanceof StandUser ownerSu) {
             diverOwner = ownerSu;
         }
 
-        byte skin = (diverOwner != null) ? diverOwner.roundabout$getStandSkin() : (byte) 0;
+        byte skin = (diverOwner != null) ? diverOwner.sba$getStandSkin() : (byte) 0;
         ResourceLocation texture = DiverDownBaseRenderer.getSkin(skin);
         ArmPair arms = (ArmPair) ModStrayModels.diverArmsLayer.skinArmModels.getOrDefault(skin, ModStrayModels.diverArmsLayer.defaultArms);
 

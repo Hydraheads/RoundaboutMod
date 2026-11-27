@@ -98,7 +98,7 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
     public ResourceLocation getTextureLocation(Entity context){
         byte bt = 0;
         if (context instanceof LivingEntity LE){
-            bt = ((StandUser)LE).roundabout$getStandSkin();
+            bt = ((StandUser)LE).sba$getStandSkin();
         }
         return KillerQueenRenderer.getSkin(bt);
     }
@@ -115,22 +115,22 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
             return;
         if (context instanceof LivingEntity LE) {
             StandUser user = ((StandUser) LE);
-            if (user.roundabout$getStandPowers() instanceof PowersKillerQueen pkc) {
+            if (user.sba$getStandPowers() instanceof PowersKillerQueen pkc) {
                 this.root().getAllParts().forEach(ModelPart::resetPose);
                 if (((TimeStop) context.level()).CanTimeStopEntity(context) || ClientUtil.checkIfGamePaused()) {
                     partialTicks = 0;
                 }
-                int heyTicks = user.roundabout$getArmVanishTicks();
+                int heyTicks = user.sba$getArmVanishTicks();
                 boolean hasHeyYaOut = (PowerTypes.hasStandActive(LE) && PowerTypes.hasHandsActive(LE) &&
                         (PowerTypes.hasHandsActiveRendering(LE) || ClientUtil.inPowerInventory));
 
-                ClientUtil.skinTicker(ClientUtil.lastSkin,((StandUser)LE).roundabout$getStandSkin());
+                ClientUtil.skinTicker(ClientUtil.lastSkin,((StandUser)LE).sba$getStandSkin());
 
 
                 float heyFull = 0;
                 float fixedPartial = partialTicks % 1;
                 if (ClientUtil.inPowerInventory && PowerTypes.hasStandActivelyEquipped(LE)
-                        && ((StandUser)LE).roundabout$getStandPowers().hasHandsOut()){
+                        && ((StandUser)LE).sba$getStandPowers().hasHandsOut()){
                     heyFull = ClientUtil.skinTicker + fixedPartial;
                     heyFull = Math.min(heyFull / 10, 1f);
                 } else {
@@ -146,52 +146,52 @@ public class KillerQueenArmsPart extends PsuedoHierarchicalModel {
                 if (heyFull <= 0) {
                     return;
                 }
-                byte animation = user.roundabout$getStandAnimation();
+                byte animation = user.sba$getStandAnimation();
                 VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(LE)));
                 //The number at the end is inversely proportional so 2 is half speed
-                user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+                user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
                 if (animation == StandPowers.GUARD) {
-                    this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.block, context.tickCount+fixedPartial, 1f);
+                    this.animate(user.sba$getWornStandActiveAnimation(), KingCrimsonAnimations.block, context.tickCount+fixedPartial, 1f);
                 } else {
                     if (animation == KillerQueenEntity.SHA_SEND || animation == KillerQueenEntity.SHA_SHOOT || animation == StandPowers.VAULT) {
                         if (lastWasOnlyRight) {
                             lastWasOnlyRight = false;
-                            user.roundabout$getWornStandIdleAnimation().stop();
+                            user.sba$getWornStandIdleAnimation().stop();
                         }
                         
-                        this.animate(user.roundabout$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
+                        this.animate(user.sba$getWornStandIdleAnimation(), StandAnimations.STAND_IDLE_FLOAT, partialTicks, 1f);
                     }else {
                         if (!lastWasOnlyRight) {
                             lastWasOnlyRight = true;
-                            user.roundabout$getWornStandIdleAnimation().stop();
+                            user.sba$getWornStandIdleAnimation().stop();
                         }
 
-                        this.animate(user.roundabout$getWornStandIdleAnimation(), KillerQueenAnimations.hideLeftArm, partialTicks, 1f);
+                        this.animate(user.sba$getWornStandIdleAnimation(), KillerQueenAnimations.hideLeftArm, partialTicks, 1f);
                     }
 
                     if (animation == KillerQueenEntity.MOB_PLANT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArmsMode, partialTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
+                        this.animate(user.sba$getWornStandActiveAnimation(), KillerQueenAnimations.mobPlantArmsMode, partialTicks, (1/(Math.max(0.1f, (float) (PowersKillerQueen.getMobPlantWindup()) / 60))));
                     } else if (animation == KillerQueenEntity.BLOCK_PLANT || animation == KillerQueenEntity.ITEM_THROW) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
+                        this.animate(user.sba$getWornStandActiveAnimation(), KingCrimsonAnimations.right_punch, partialTicks, speed);
                     } else if (animation == KillerQueenEntity.DETONATE) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.detonate, partialTicks, speed);
+                        this.animate(user.sba$getWornStandActiveAnimation(), KillerQueenAnimations.detonate, partialTicks, speed);
                     } else if (animation == StandPowers.VAULT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.BLOCKBREAK, partialTicks, 1);
+                        this.animate(user.sba$getWornStandActiveAnimation(), StandAnimations.BLOCKBREAK, partialTicks, 1);
                     } else if (animation == StandPowers.MINING) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), StandAnimations.MINING_BARRAGE, partialTicks, 1);
+                        this.animate(user.sba$getWornStandActiveAnimation(), StandAnimations.MINING_BARRAGE, partialTicks, 1);
                     } else if (animation == KillerQueenEntity.SHA_SEND) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsSend, partialTicks, 0.8f);
+                        this.animate(user.sba$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsSend, partialTicks, 0.8f);
                     } else if (animation == KillerQueenEntity.SHA_SHOOT) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsShoot, partialTicks, 1.5f);
+                        this.animate(user.sba$getWornStandActiveAnimation(), KillerQueenAnimations.shaArmsShoot, partialTicks, 1.5f);
                     } else if (animation == KillerQueenEntity.BTD_DETONATION) {
-                        this.animate(user.roundabout$getWornStandActiveAnimation(), KillerQueenAnimations.btdDetonation, partialTicks, 1.01f);
+                        this.animate(user.sba$getWornStandActiveAnimation(), KillerQueenAnimations.btdDetonation, partialTicks, 1.01f);
                     } else {
-                        user.roundabout$getWornStandActiveAnimation().stop();
+                        user.sba$getWornStandActiveAnimation().stop();
                     }
 
                 }
 
-                //this.animate(user.roundabout$getWornStandIdleAnimation(), KingCrimsonAnimations.block, partialTicks, 1f);
+                //this.animate(user.sba$getWornStandIdleAnimation(), KingCrimsonAnimations.block, partialTicks, 1f);
                 root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, heyFull);
             }
         }

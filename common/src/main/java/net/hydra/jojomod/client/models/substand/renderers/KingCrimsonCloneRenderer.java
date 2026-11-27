@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.substand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.ILivingEntityAccess;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -60,8 +60,8 @@ public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends 
         if (!entity.turned){
             Player pl = entity.getPlayer();
             if (pl != null) {
-                entity.roundabout$setWidthFactor(((IPlayerEntity)pl).roundabout$getWidthFactor());
-                ((StandUser)entity).roundabout$setArmVanishTicks(((StandUser)pl).roundabout$getArmVanishTicks());
+                entity.sba$setWidthFactor(((IPlayerEntity)pl).sba$getWidthFactor());
+                ((StandUser)entity).sba$setArmVanishTicks(((StandUser)pl).sba$getArmVanishTicks());
                 if (pl.isCrouching()){
                     entity.setShiftKeyDown(true);
                     entity.setPose(Pose.CROUCHING);
@@ -92,12 +92,12 @@ public class KingCrimsonCloneRenderer<T extends KingCrimsonCloneEntity> extends 
                 ILivingEntityAccess entityAndData = ((ILivingEntityAccess) entity);
                 ILivingEntityAccess playerAndData = ((ILivingEntityAccess) pl);
 
-                entityAndData.roundabout$setLerpXRot(playerAndData.roundabout$getLerpXRot());
-                entityAndData.roundabout$setLerpYRot(playerAndData.roundabout$getLerpYRot());
-                entityAndData.roundabout$setLerp(new Vector3f(
-                        (float) playerAndData.roundabout$getLerpX(),
-                        (float) playerAndData.roundabout$getLerpY(),
-                        (float) playerAndData.roundabout$getLerpZ()
+                entityAndData.sba$setLerpXRot(playerAndData.sba$getLerpXRot());
+                entityAndData.sba$setLerpYRot(playerAndData.sba$getLerpYRot());
+                entityAndData.sba$setLerp(new Vector3f(
+                        (float) playerAndData.sba$getLerpX(),
+                        (float) playerAndData.sba$getLerpY(),
+                        (float) playerAndData.sba$getLerpZ()
                 ));
                 entity.turned = true;
             }

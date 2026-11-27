@@ -1,6 +1,6 @@
 package net.zetalasis.client.shader;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -31,7 +31,7 @@ public class RPostShaderRegistry {
 
     public static void bootstrap()
     {
-        Roundabout.LOGGER.info("Registering post effects");
+        SBA.LOGGER.info("Registering post effects");
 
         D4C_DIMENSION_TRANSITION = register("d4cdimtransition");
         D4C_ALT_DIMENSION = register("d4caltdim");
@@ -60,12 +60,12 @@ public class RPostShaderRegistry {
 
             shaders.put(name, shader);
 
-            Roundabout.LOGGER.info("Registered post shader \"{}\" successfully", name);
+            SBA.LOGGER.info("Registered post shader \"{}\" successfully", name);
             return shader;
         }
         catch (IOException e)
         {
-            Roundabout.LOGGER.warn("Failed to register shader \"{}\"!\n\"{}\"", name, e.toString());
+            SBA.LOGGER.warn("Failed to register shader \"{}\"!\n\"{}\"", name, e.toString());
         }
         return null;
     }

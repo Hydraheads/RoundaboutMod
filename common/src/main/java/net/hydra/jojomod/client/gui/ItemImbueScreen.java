@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.index.AnimalTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersGoldExperience;
@@ -27,7 +27,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 public class ItemImbueScreen extends Screen {
-    private static final ResourceLocation MENU_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/gui/ge_item_imbue.png");
+    private static final ResourceLocation MENU_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/gui/ge_item_imbue.png");
 
     private final int imageWidth = 195;
     private final int imageHeight = 136;
@@ -71,14 +71,14 @@ public class ItemImbueScreen extends Screen {
         // Animal imbue for slot 0
         this.allOptions.add(new ImbueOption(
                 195, 30,
-                Component.translatable("roundabout.gold_experience_item_imbue.animal"),
-                Component.translatable("roundabout.gold_experience_item_imbue.animal.desc"),
+                Component.translatable("sba.gold_experience_item_imbue.animal"),
+                Component.translatable("sba.gold_experience_item_imbue.animal.desc"),
                 () -> selectImbue(PowersGoldExperience.IMBUE_ANIMAL)
         ));
         this.allOptions.add(new ImbueOption(
                 195, 46,
-                Component.translatable("roundabout.gold_experience_item_imbue.tree"),
-                Component.translatable("roundabout.gold_experience_item_imbue.tree.desc"),
+                Component.translatable("sba.gold_experience_item_imbue.tree"),
+                Component.translatable("sba.gold_experience_item_imbue.tree.desc"),
                 () -> selectImbue(PowersGoldExperience.IMBUE_TREE)
         ));
         for (int i = 0; i < PowersGoldExperience.getDisguiseOptions().size(); i++) {
@@ -88,8 +88,8 @@ public class ItemImbueScreen extends Screen {
 
             this.allOptions.add(new ImbueOption(
                     preview,
-                    Component.translatable("roundabout.gold_experience_item_imbue.disguise", preview.getHoverName()),
-                    Component.translatable("roundabout.gold_experience_item_imbue.disguise.desc"),
+                    Component.translatable("sba.gold_experience_item_imbue.disguise", preview.getHoverName()),
+                    Component.translatable("sba.gold_experience_item_imbue.disguise.desc"),
                     () -> selectDisguise(disguiseIndex)
             ));
         }
@@ -126,7 +126,7 @@ public class ItemImbueScreen extends Screen {
     private void selectImbue(byte imbueType) {
         if (this.minecraft == null || this.minecraft.player == null) return;
 
-        if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersGoldExperience powers) {
+        if (((StandUser) this.minecraft.player).sba$getStandPowers() instanceof PowersGoldExperience powers) {
             byte animalId = AnimalTypes.FROG.id;
             ClientConfig clientConfig = ConfigManager.getClientConfig();
             if (clientConfig != null && clientConfig.dynamicSettings != null) {
@@ -142,7 +142,7 @@ public class ItemImbueScreen extends Screen {
     private void selectDisguise(byte disguiseIndex) {
         if (this.minecraft == null || this.minecraft.player == null) return;
 
-        if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersGoldExperience powers) {
+        if (((StandUser) this.minecraft.player).sba$getStandPowers() instanceof PowersGoldExperience powers) {
             int packedData = PowersGoldExperience.packImbueData(PowersGoldExperience.IMBUE_DISGUISE, disguiseIndex);
             powers.tryIntPower(PowersGoldExperience.ITEM_IMBUE, true, packedData);
             powers.tryIntPowerPacket(PowersGoldExperience.ITEM_IMBUE, packedData);

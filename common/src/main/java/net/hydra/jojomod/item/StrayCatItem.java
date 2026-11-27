@@ -142,7 +142,7 @@ public class StrayCatItem extends Item {
                         bubble.setLifeSpan(LIFE_SPAN);
 
                         Vec3 addToPosition = new Vec3(0, P.getEyeHeight() * 0.85f, 0);
-                        Direction direction = ((IGravityEntity) P).roundabout$getGravityDirection();
+                        Direction direction = ((IGravityEntity) P).sba$getGravityDirection();
                         if (direction != Direction.DOWN) {
                             addToPosition = RotationUtil.vecPlayerToWorld(addToPosition, direction);
                         }

@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -44,7 +44,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer()) && !entity.isBaby()) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            if (((IEntityAndData)entity).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
@@ -53,15 +53,15 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                         livent = jnp.host;
                     }
                     StandUser user = ((StandUser) livent);
-                    int heyTicks = user.roundabout$getRattShoulderVanishTicks();
-                    boolean hasHeyYaOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersRatt);
+                    int heyTicks = user.sba$getRattShoulderVanishTicks();
+                    boolean hasHeyYaOut = (PowerTypes.hasStandActive(livent) && user.sba$getStandPowers() instanceof PowersRatt);
                     /* all of this code is copied from hey ya! */
                     if (heyTicks > 0 || hasHeyYaOut) {
-                        byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getLastStandSkin() != skin){
-                            user.roundabout$setLastStandSkin(skin);
+                        byte skin = user.sba$getStandSkin();
+                        if (user.sba$getLastStandSkin() != skin){
+                            user.sba$setLastStandSkin(skin);
                             heyTicks = 0;
-                            user.roundabout$setRattShoulderVanishTicks(0);
+                            user.sba$setRattShoulderVanishTicks(0);
                         }
 
                         float heyFull = 0;
@@ -80,7 +80,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
 
                         if (hasHeyYaOut) {
                             /* idlePos == 0 is shoulder, 1 is head */
-                            if (user.roundabout$getCombatMode()) {
+                            if (user.sba$getCombatMode()) {
                                 if (entity.getMainArm().equals(HumanoidArm.LEFT)) {
                                     getParentModel().leftArm.translateAndRotate(poseStack);
                                 } else {
@@ -96,7 +96,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                                 poseStack.translate( entity.getMainArm().equals(HumanoidArm.LEFT) ? -0.35 : 0.35F, -1.3F, 0.6F);
                                 //  poseStack.translate(0.3F, 0F, -3F);
                             } else {
-                                if (user.roundabout$getIdlePos() == 0) {
+                                if (user.sba$getIdlePos() == 0) {
                                     getParentModel().body.translateAndRotate(poseStack);
                                     poseStack.translate(0.35F* (entity.getMainArm().equals(HumanoidArm.LEFT) ? -1 : 1), -0.4F, 0F);
                                     /* additional check for armor, cancels the check if you have a visage */
@@ -129,7 +129,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
 
                                 if (user instanceof Player P) {
                                     IPlayerEntity IPE = ((IPlayerEntity) user);
-                                    float y = IPE.roundabout$getIdleYOffset();
+                                    float y = IPE.sba$getIdleYOffset();
                                     poseStack.translate(0,-y,0);
                                 }
                             }
@@ -142,7 +142,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
                             float r = isHurt ? 1.0F : 1.0F;
                             float g = isHurt ? 0.0F : 1.0F;
                             float b = isHurt ? 0.0F : 1.0F;
-                            if (user.roundabout$getRattShoulderVanishTicks() != 0) {
+                            if (user.sba$getRattShoulderVanishTicks() != 0) {
                                 if (skin == RattEntity.REDD_SKIN) {
                                     ModStrayModels.REDD_SHOULDER.render(livent,partialTicks,poseStack,bufferSource,packedLight,
                                             r, g, b, heyFull, skin);
@@ -168,7 +168,7 @@ public class RattShoulderLayer<T extends LivingEntity, A extends HumanoidModel<T
     public boolean getUserVisage(Entity entity) {
         if (entity instanceof Player play) {
             IPlayerEntity pl = ((IPlayerEntity) play);
-            ItemStack visage = pl.roundabout$getMaskSlot();
+            ItemStack visage = pl.sba$getMaskSlot();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
                     return true;

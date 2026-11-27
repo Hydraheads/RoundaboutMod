@@ -9,15 +9,15 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(value= Entity.class)
 public class GravityClientEntityMixin implements IClientEntity {
     @Unique
-    public RotationAnimation roundabout$gravityRotationAnim =new RotationAnimation();
+    public RotationAnimation sba$gravityRotationAnim =new RotationAnimation();
     @Unique
     @Override
-    public void roundabout$setGravityAnimation(RotationAnimation ra){
-        roundabout$gravityRotationAnim = ra;
+    public void sba$setGravityAnimation(RotationAnimation ra){
+        sba$gravityRotationAnim = ra;
     }
     @Unique
     @Override
-    public RotationAnimation roundabout$getGravityAnimation(){
-        return roundabout$gravityRotationAnim;
+    public RotationAnimation sba$getGravityAnimation(){
+        return sba$gravityRotationAnim;
     }
 }

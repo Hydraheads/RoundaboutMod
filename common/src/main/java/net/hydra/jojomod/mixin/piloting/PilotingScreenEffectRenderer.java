@@ -37,12 +37,12 @@ public class PilotingScreenEffectRenderer {
     /**Anti xrayx-ray measures for justice pilot mode block clipping*/
 
     @Inject(method = "renderScreenEffect(Lnet/minecraft/client/Minecraft;Lcom/mojang/blaze3d/vertex/PoseStack;)V", at = @At(value = "HEAD"),cancellable = true)
-    private static void roundabout$renderScreenEffect(Minecraft $$0, PoseStack $$1, CallbackInfo ci) {
+    private static void sba$renderScreenEffect(Minecraft $$0, PoseStack $$1, CallbackInfo ci) {
 
         Player $$2 = $$0.player;
         if ($$2 != null) {
             StandUser standComp = ((StandUser) $$2);
-            StandPowers powers = standComp.roundabout$getStandPowers();
+            StandPowers powers = standComp.sba$getStandPowers();
             LivingEntity piloting = powers.getPilotingStand();
             if (powers.isPiloting() && piloting != null && piloting.isAlive() && !piloting.isRemoved() ) {
 
@@ -63,7 +63,7 @@ public class PilotingScreenEffectRenderer {
                 boolean insideCollision = !level.noCollision(cameraBox);
 
                 if (!$$2.noPhysics) {
-                    BlockState $$3 = roundabout$getViewBlockingState(piloting);
+                    BlockState $$3 = sba$getViewBlockingState(piloting);
                     if ($$3 != null) {
                         //renderTex($$0.getBlockRenderer().getBlockModelShaper().getParticleIcon($$3), $$1);
                     } else {
@@ -91,7 +91,7 @@ public class PilotingScreenEffectRenderer {
     /**The base function only takes in players because it's cringe
      */
     @Unique
-    private static BlockState roundabout$getViewBlockingState(LivingEntity $$0) {
+    private static BlockState sba$getViewBlockingState(LivingEntity $$0) {
 
         Direction gravityDirection = GravityAPI.getGravityDirection($$0);
         if (gravityDirection != Direction.DOWN) {

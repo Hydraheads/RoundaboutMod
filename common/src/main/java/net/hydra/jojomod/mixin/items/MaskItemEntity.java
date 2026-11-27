@@ -34,7 +34,7 @@ public abstract class MaskItemEntity extends Entity {
     /**This mixin makes stone maskss convert to regular masks in water if they are thrown
      * like an entity*/
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$tick(CallbackInfo ci) {
+    protected void sba$tick(CallbackInfo ci) {
         if (!this.level().isClientSide()) {
             ItemStack stack = getItem();
             if (stack != null && !stack.isEmpty() && stack.is(ModBlocks.BLOODY_STONE_MASK_BLOCK.asItem())

@@ -72,8 +72,8 @@ public class PowersEmperor extends NewDashPreset {
 
                             if (this.self instanceof Player PE) {
                                 IPlayerEntity ipe = ((IPlayerEntity) PE);
-                                ipe.roundabout$getBubbleShotAim().stop();
-                                ipe.roundabout$setBubbleShotAimPoints(10);
+                                ipe.sba$getBubbleShotAim().stop();
+                                ipe.sba$setBubbleShotAimPoints(10);
                             }
 
                             if (self.level().isClientSide) {
@@ -145,8 +145,8 @@ public class PowersEmperor extends NewDashPreset {
 
             holdingRightClick =
                     mc.options.keyUse.isDown() &&
-                            ((StandUser) self).roundabout$getActive() &&
-                            ((StandUser) self).roundabout$getStandPowers() instanceof PowersEmperor;
+                            ((StandUser) self).sba$getActive() &&
+                            ((StandUser) self).sba$getStandPowers() instanceof PowersEmperor;
 
             if (holdingRightClick) {
                 self.setDeltaMovement(
@@ -262,7 +262,7 @@ public class PowersEmperor extends NewDashPreset {
 
     private void tripleShotToggle() {
         if (getSelf() instanceof StandUser su) {
-            su.roundabout$setUniqueStandModeToggle(!su.roundabout$getUniqueStandModeToggle());
+            su.sba$setUniqueStandModeToggle(!su.sba$getUniqueStandModeToggle());
         }
     }
 
@@ -351,7 +351,7 @@ public class PowersEmperor extends NewDashPreset {
     @Override
 
     public Component ifWipListDevStatus() {
-        return Component.translatable("roundabout.dev_status.active").withStyle(ChatFormatting.AQUA);
+        return Component.translatable("sba.dev_status.active").withStyle(ChatFormatting.AQUA);
     }
 
     @Override
@@ -669,44 +669,44 @@ public class PowersEmperor extends NewDashPreset {
     public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
-            case PowersEmperor.MANGA -> Component.translatable("skins.roundabout.emperor.manga");
+            case PowersEmperor.MANGA -> Component.translatable("skins.sba.emperor.manga");
 
-            default -> Component.translatable("skins.roundabout.emperor.anime");
+            default -> Component.translatable("skins.sba.emperor.anime");
         };
     }
 
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,1, "ability.roundabout.emperor_shoot",
-                "instruction.roundabout.press_attack", StandIcons.EMPEROR_SHOOT,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,1, "ability.sba.emperor_shoot",
+                "instruction.sba.press_attack", StandIcons.EMPEROR_SHOOT,0,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,1, "ability.roundabout.emperor_heat",
-                "instruction.roundabout.passive", StandIcons.EMPEROR_HEAT,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,1, "ability.sba.emperor_heat",
+                "instruction.sba.passive", StandIcons.EMPEROR_HEAT,0,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,2, "ability.roundabout.emperor_squint",
-                "instruction.roundabout.hold_block", StandIcons.EMPEROR_SQUINT,0,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,2, "ability.sba.emperor_squint",
+                "instruction.sba.hold_block", StandIcons.EMPEROR_SQUINT,0,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,4, "ability.roundabout.emperor_single",
-                "instruction.roundabout.press_skill", StandIcons.EMPEROR_SINGLE,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,4, "ability.sba.emperor_single",
+                "instruction.sba.press_skill", StandIcons.EMPEROR_SINGLE,1,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99, 4, "ability.roundabout.emperor_triple",
-                "instruction.roundabout.press_skill_crouch", StandIcons.EMPEROR_TRIPLE,1,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99, 4, "ability.sba.emperor_triple",
+                "instruction.sba.press_skill_crouch", StandIcons.EMPEROR_TRIPLE,1,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,1, "ability.roundabout.emperor_control_mode_on",
-                "instruction.roundabout.press_skill", StandIcons.EMPEROR_CONTROL_MODE_ON,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,1, "ability.sba.emperor_control_mode_on",
+                "instruction.sba.press_skill", StandIcons.EMPEROR_CONTROL_MODE_ON,2,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,5, "ability.roundabout.emperor_auto_mode_on",
-                "instruction.roundabout.press_skill_crouch", StandIcons.EMPEROR_AUTO_MODE_ON,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80,5, "ability.sba.emperor_auto_mode_on",
+                "instruction.sba.press_skill_crouch", StandIcons.EMPEROR_AUTO_MODE_ON,2,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,1, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99,1, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,3, "ability.roundabout.emperor_speed_up",
-                "instruction.roundabout.press_skill", StandIcons.EMPEROR_SPEED_UP,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,3, "ability.sba.emperor_speed_up",
+                "instruction.sba.press_skill", StandIcons.EMPEROR_SPEED_UP,4,level,bypass));
 
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,2, "ability.roundabout.emperor_speed_down",
-                "instruction.roundabout.press_skill_crouch", StandIcons.EMPEROR_SPEED_DOWN,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,2, "ability.sba.emperor_speed_down",
+                "instruction.sba.press_skill_crouch", StandIcons.EMPEROR_SPEED_DOWN,4,level,bypass));
         return $$1;
     }
 }

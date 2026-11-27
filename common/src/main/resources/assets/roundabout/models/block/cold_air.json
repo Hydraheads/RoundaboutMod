@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "roundabout:block/cold_air"
-  },
-  "render_type": "translucent"
-}

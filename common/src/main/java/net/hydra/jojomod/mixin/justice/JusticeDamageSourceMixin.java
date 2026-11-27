@@ -20,7 +20,7 @@ public class JusticeDamageSourceMixin {
     @Shadow @Final @Nullable private Entity directEntity;
 
     @Inject(method = "scalesWithDifficulty()Z", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$scalesWithDifficulty(CallbackInfoReturnable<Boolean> cir) {
+    protected void sba$scalesWithDifficulty(CallbackInfoReturnable<Boolean> cir) {
         if (this.causingEntity instanceof FallenMob || this.directEntity instanceof FallenMob){
             cir.setReturnValue(false);
         }

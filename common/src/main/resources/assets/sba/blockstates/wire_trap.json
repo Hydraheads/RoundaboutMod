@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "sba:block/wire_trap",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "sba:block/wire_trap"
+    },
+    "axis=z": {
+      "model": "sba:block/wire_trap",
+      "x": 90
+    }
+  }
+}

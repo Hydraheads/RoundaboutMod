@@ -40,7 +40,7 @@ public final class SilverChariotItemLayer<T extends SilverChariotEntity, M exten
         if (user == null
                 || silverChariot.getSilverChariotOffhandItem().isEmpty()
                 || silverChariot.getSilverChariotOffhandItem() == null
-                || !(((StandUser) user).roundabout$getStandPowers() instanceof PowersSilverChariot PSC
+                || !(((StandUser) user).sba$getStandPowers() instanceof PowersSilverChariot PSC
                 && (PSC.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE || PSC.getActivePower() == PowerIndex.SNEAK_ATTACK))
         ) {
             return;

@@ -389,6 +389,6 @@ public class GamblingTableBlockEntity extends BlockEntity implements Container, 
     }
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.translatable("container.roundabout.gambling_table");
+        return Component.translatable("container.sba.gambling_table");
     }
 }

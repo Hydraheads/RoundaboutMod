@@ -1,17 +1,17 @@
 {
   "replace": false,
   "values": [
-    "roundabout:time",
-    "roundabout:go_beyond",
-    "roundabout:dagger",
-    "roundabout:ice_shatter",
-    "roundabout:chess_strike",
-    "roundabout:sunlight",
-    "roundabout:blood_drain",
-    "roundabout:melting",
-    "roundabout:pod_bite",
-    "roundabout:infinite_spin",
-    "roundabout:brain_dead",
-    "roundabout:kq_explosion"
+    "sba:time",
+    "sba:go_beyond",
+    "sba:dagger",
+    "sba:ice_shatter",
+    "sba:chess_strike",
+    "sba:sunlight",
+    "sba:blood_drain",
+    "sba:melting",
+    "sba:pod_bite",
+    "sba:infinite_spin",
+    "sba:brain_dead",
+    "sba:kq_explosion"
   ]
 }

@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Mob.class)
 public abstract class MobMemoryMixin {
     @Inject(method = "serverAiStep", at = @At("HEAD"), cancellable = true)
-    private void roundabout$runBlankMemoryAi(CallbackInfo ci) {
+    private void sba$runBlankMemoryAi(CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
         if (DiscItemData.isLobotomized(mob)) {
             mob.setTarget(null);
@@ -39,7 +39,7 @@ public abstract class MobMemoryMixin {
     }
 
     @Inject(method = "setTarget", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$memoryControlsTarget(LivingEntity target, CallbackInfo ci) {
+    private void sbaWhitesnake$memoryControlsTarget(LivingEntity target, CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
         if (target == null) return;
         if (DiscItemData.isBlankMemoryMob(mob)) {
@@ -50,7 +50,7 @@ public abstract class MobMemoryMixin {
         if ((personality == MemoryPersonality.HOSTILE || personality == MemoryPersonality.ZOMBIE
                 || personality == MemoryPersonality.CREEPER)
                 && WhitesnakeDiscUtil.canCarrySightDisc(mob)
-                && !((DiscBearer) mob).roundabout$hasSightDisc()
+                && !((DiscBearer) mob).sba$hasSightDisc()
                 && mob.getLastHurtByMob() == null) {
             double range = mob.getAttributeValue(Attributes.FOLLOW_RANGE) * 0.07D;
             if (mob.distanceToSqr(target) <= range * range) return;
@@ -66,7 +66,7 @@ public abstract class MobMemoryMixin {
             if (!(mob instanceof Creeper) || !(target instanceof Player)) ci.cancel();
             return;
         }
-        if (!((DiscBearer) mob).roundabout$getMemoryTameOwnerId().isEmpty()) {
+        if (!((DiscBearer) mob).sba$getMemoryTameOwnerId().isEmpty()) {
             if (!MemoryAiController.isTameMemoryTarget(mob, target)) ci.cancel();
             return;
         }
@@ -77,7 +77,7 @@ public abstract class MobMemoryMixin {
     }
 
     @Inject(method = "interact", at = @At("RETURN"), cancellable = true)
-    private void roundaboutWhitesnake$mountHorseMemoryMob(Player player, InteractionHand hand,
+    private void sbaWhitesnake$mountHorseMemoryMob(Player player, InteractionHand hand,
                                                            CallbackInfoReturnable<InteractionResult> cir) {
         Mob mob = (Mob) (Object) this;
         if (cir.getReturnValue() != InteractionResult.PASS

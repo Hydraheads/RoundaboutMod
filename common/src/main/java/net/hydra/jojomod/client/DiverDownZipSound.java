@@ -36,7 +36,7 @@ public class DiverDownZipSound extends AbstractTickableSoundInstance {
             return;
         }
 
-        if (user instanceof StandUser su && su.roundabout$getStandPowers() instanceof PowersDiverDown pdd) {
+        if (user instanceof StandUser su && su.sba$getStandPowers() instanceof PowersDiverDown pdd) {
             if (!pdd.inZipMode()) {
                 this.stop();
                 return;

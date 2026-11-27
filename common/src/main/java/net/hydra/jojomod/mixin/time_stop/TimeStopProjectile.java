@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.time_stop;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -45,17 +45,17 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
 
 
     @Inject(method = "setOwner", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$SetOwner(@Nullable Entity $$0, CallbackInfo ci) {
+    private void sba$SetOwner(@Nullable Entity $$0, CallbackInfo ci) {
         if ($$0 != null) {
             if ($$0 instanceof LivingEntity le) {
-                if (((StandUser)le).roundabout$getStandPowers().onCreateProjectile(((Projectile)(Object)this))){
+                if (((StandUser)le).sba$getStandPowers().onCreateProjectile(((Projectile)(Object)this))){
                     ci.cancel();
                     return;
                 }
                 if (((TimeStop) $$0.level()).inTimeStopRange($$0) && !(((TimeStop) $$0.level()).CanTimeStopEntity($$0))) {
-                    this.roundabout$setRoundaboutIsTimeStopCreated(true);
+                    this.sba$setSBAIsTimeStopCreated(true);
                     if (!$$0.level().isClientSide) {
-                        ((StandUser) $$0).roundabout$getStandPowers().hasActedInTS = true;
+                        ((StandUser) $$0).sba$getStandPowers().hasActedInTS = true;
                     }
                 }
             }
@@ -64,8 +64,8 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
     }
 
     @Inject(method = "shootFromRotation", at = @At(value = "HEAD"), cancellable = true)
-    public void roundaboutShootFromRotation(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
-        if ((((Projectile) (Object) this) instanceof ThrowableProjectile) && ((TimeStop) $$0.level()).inTimeStopRange($$0) && this.roundabout$getRoundaboutIsTimeStopCreated()) {
+    public void sbaShootFromRotation(Entity $$0, float $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+        if ((((Projectile) (Object) this) instanceof ThrowableProjectile) && ((TimeStop) $$0.level()).inTimeStopRange($$0) && this.sba$getSBAIsTimeStopCreated()) {
             Direction gravityDirection = GravityAPI.getGravityDirection($$0);
             if (gravityDirection != Direction.DOWN) {
                 Vec2 vecMagic = RotationUtil.rotPlayerToWorld($$0.getYRot(), $$0.getXRot(), gravityDirection);
@@ -84,7 +84,7 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
     /*new things regarding manhattan transfer don't work atm, it's for later :)*/
 
     @Inject(method = "onHitEntity", at = @At(value = "TAIL"),cancellable = true)
-    private void roundabout$onHitEntityHattanExtra(EntityHitResult $$0, CallbackInfo ci) {
+    private void sba$onHitEntityHattanExtra(EntityHitResult $$0, CallbackInfo ci) {
         Entity entity = $$0.getEntity();
         Projectile PRJ = (Projectile) (Object) this;
         float balanceDamage = entity instanceof Player || MainUtil.isBossMob(entity) ? 0.5F : 0.75F;
@@ -95,60 +95,60 @@ public abstract class TimeStopProjectile extends Entity implements IProjectileAc
 
 
     @Unique
-    private boolean roundabout$IsTimeStopCreated = false;
+    private boolean sba$IsTimeStopCreated = false;
     @Unique
-    private boolean roundabout$IsDeflected = false;
+    private boolean sba$IsDeflected = false;
     @Unique
-    private float roundaboutSpeedMultiplier = 0.75F;
+    private float sbaSpeedMultiplier = 0.75F;
 
-    public float roundabout$getRoundaboutSpeedMultiplier(){
-        return this.roundaboutSpeedMultiplier;
+    public float sba$getSBASpeedMultiplier(){
+        return this.sbaSpeedMultiplier;
     }
-    public float setRoundaboutSpeedMultiplier(float roundaboutSpeedMultiplier){
-        return this.roundaboutSpeedMultiplier = roundaboutSpeedMultiplier;
-    }
-
-    public boolean roundabout$getRoundaboutIsTimeStopCreated(){
-        return roundabout$IsTimeStopCreated;
-    }
-    public void roundabout$setRoundaboutIsTimeStopCreated(boolean roundaboutIsTimeStopCreated){
-        this.roundabout$IsTimeStopCreated = roundaboutIsTimeStopCreated;
+    public float setSBASpeedMultiplier(float sbaSpeedMultiplier){
+        return this.sbaSpeedMultiplier = sbaSpeedMultiplier;
     }
 
-    @Unique
-    @Override
-    public boolean roundabout$getIsDeflected(){
-        return roundabout$IsDeflected;
+    public boolean sba$getSBAIsTimeStopCreated(){
+        return sba$IsTimeStopCreated;
     }
+    public void sba$setSBAIsTimeStopCreated(boolean sbaIsTimeStopCreated){
+        this.sba$IsTimeStopCreated = sbaIsTimeStopCreated;
+    }
+
     @Unique
     @Override
-    public void roundabout$setIsDeflected(boolean defl){
-        roundabout$IsDeflected = defl;
+    public boolean sba$getIsDeflected(){
+        return sba$IsDeflected;
+    }
+    @Unique
+    @Override
+    public void sba$setIsDeflected(boolean defl){
+        sba$IsDeflected = defl;
     }
 
     @Override
-    public void roundaboutOnHit(HitResult $$0){
+    public void sbaOnHit(HitResult $$0){
         onHit($$0);
     }
 
     @Override
-    public boolean roundabout$CanHitEntity(Entity $$0x) {
+    public boolean sba$CanHitEntity(Entity $$0x) {
         return canHitEntity($$0x);
     }
 
     @Override
-    public void roundabout$CheckInsideBlocks() {
+    public void sba$CheckInsideBlocks() {
         this.checkInsideBlocks();
     }
 
     @Unique
     @Override
-    public boolean roundabout$getManhattanProjectile(){
+    public boolean sba$getManhattanProjectile(){
         return isManhattanProjectile;
     }
     @Unique
     @Override
-    public void roundabout$setManhattanProjectile(boolean manhattanProjectile){
+    public void sba$setManhattanProjectile(boolean manhattanProjectile){
         isManhattanProjectile = manhattanProjectile;
     }
 

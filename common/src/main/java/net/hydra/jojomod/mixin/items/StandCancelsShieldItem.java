@@ -19,10 +19,10 @@ public class StandCancelsShieldItem {
     /**Minor code that stops offhand shielding while stand is active.*/
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
-    public void roundabout$useRoundabout(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> ci) {
+    public void sba$useSBA(Level $$0, Player $$1, InteractionHand $$2, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> ci) {
         StandUser user = ((StandUser) $$1);
 
-        if (PowerTypes.hasStandActive($$1) && user.roundabout$getStandPowers().interceptGuard() && $$2 == InteractionHand.OFF_HAND){
+        if (PowerTypes.hasStandActive($$1) && user.sba$getStandPowers().interceptGuard() && $$2 == InteractionHand.OFF_HAND){
             ci.setReturnValue(InteractionResultHolder.fail($$1.getItemInHand($$2)));
         } else {
             ItemStack itemStack = $$1.getItemInHand($$2);

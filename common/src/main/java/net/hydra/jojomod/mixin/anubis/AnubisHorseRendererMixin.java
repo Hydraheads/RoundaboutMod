@@ -17,7 +17,7 @@ public abstract class AnubisHorseRendererMixin<T extends AbstractHorse, M extend
     public AnubisHorseRendererMixin(EntityRendererProvider.Context $$0, M $$1, float $$2) {super($$0, $$1, $$2);}
 
     @Inject(method = "<init>",at = @At(value = "RETURN"))
-    private void roundabout$anubisHorseLayer(EntityRendererProvider.Context $$0, HorseModel $$1, float $$2, CallbackInfo ci) {
+    private void sba$anubisHorseLayer(EntityRendererProvider.Context $$0, HorseModel $$1, float $$2, CallbackInfo ci) {
         this.addLayer(new AnubisMobLayer<>(this));
     }
 }

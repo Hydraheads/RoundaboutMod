@@ -48,7 +48,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
         return true;
     }
     public void buttonInputAttack(boolean keyIsDown, Options options) {
-        if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
+        if (self instanceof Player pl &&  ((IPlayerEntity)pl).sba$getAttackStrengthTicker() < 5) {
             return;
         }
         if (keyIsDown) {
@@ -113,7 +113,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
         if (!this.isGuarding() && canGuard()) {
-            ((StandUser)this.getSelf()).roundabout$tryPowerP(PowerIndex.GUARD,true);
+            ((StandUser)this.getSelf()).sba$tryPowerP(PowerIndex.GUARD,true);
             tryPowerPacket(PowerIndex.GUARD);
             return true;
         }
@@ -157,7 +157,7 @@ public class PunchingGeneralPowers extends GeneralPowers {
                     this.updateBarrage();
                 }
             } else {
-                ((StandUser) this.self).roundabout$tryPowerP(PowerIndex.NONE, true);
+                ((StandUser) this.self).sba$tryPowerP(PowerIndex.NONE, true);
             }
         }
         super.updateUniqueMoves();

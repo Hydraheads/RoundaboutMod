@@ -15,12 +15,12 @@ public class SoftAndWetPowderSnowBlock {
 
     /**With the encasement bubble, you are able to walk on powder snow.*/
     @Inject(method = "canEntityWalkOnPowderSnow(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "HEAD"), cancellable = true)
-    private static void roundabout$isEmpty(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
+    private static void sba$isEmpty(Entity $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0 instanceof LivingEntity LE){
             StandUser user = ((StandUser)LE);
-            if (user.roundabout$isBubbleEncased()){
+            if (user.sba$isBubbleEncased()){
                 cir.setReturnValue(true);
-            } else if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated()){
+            } else if (user.sba$getStandPowers() instanceof PowersWhiteAlbum PW && PW.hasSkatesActivated()){
                 cir.setReturnValue(true);
             }
         }

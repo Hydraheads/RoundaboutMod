@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/cube_all",
+    "textures": {
+        "particle": "sba:block/flesh_block",
+        "down": "sba:block/flesh_block",
+        "east": "sba:block/flesh_block_side",
+        "north": "sba:block/flesh_block_side",
+        "south": "sba:block/flesh_block_side",
+        "up": "sba:block/flesh_block",
+        "west": "sba:block/flesh_block_side"
+    }
+}

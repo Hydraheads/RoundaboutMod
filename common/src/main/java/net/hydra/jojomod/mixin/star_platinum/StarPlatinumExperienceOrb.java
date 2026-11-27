@@ -22,9 +22,9 @@ public abstract class StarPlatinumExperienceOrb extends Entity {
     /**Inhaled EXP orbs lose gravity to get sucked in easily*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$tick(CallbackInfo ci) {
-        if (((IEntityAndData)this).roundabout$getNoGravTicks() > 0){
-            ((IEntityAndData)this).roundabout$setNoGravTicks(((IEntityAndData)this).roundabout$getNoGravTicks()-1);
+    protected void sba$tick(CallbackInfo ci) {
+        if (((IEntityAndData)this).sba$getNoGravTicks() > 0){
+            ((IEntityAndData)this).sba$setNoGravTicks(((IEntityAndData)this).sba$getNoGravTicks()-1);
             if (!this.isNoGravity()) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.03, 0.0));
             }
@@ -33,7 +33,7 @@ public abstract class StarPlatinumExperienceOrb extends Entity {
 
     //Jank mixin for hard to access exp orb making it spawn in other d4c plane
     @Inject(method = "<init>(Lnet/minecraft/world/level/Level;DDDI)V", at = @At(value = "RETURN"))
-    protected void roundabout$initinit(CallbackInfo ci) {
+    protected void sba$initinit(CallbackInfo ci) {
         if (PowerTypes.expStore != null) {
             if (PowerTypes.isInADifferentExistenceNoTE(PowerTypes.expStore,this)){
                 PowerTypes.copyPlaneOfExisting(PowerTypes.expStore,this);
@@ -42,7 +42,7 @@ public abstract class StarPlatinumExperienceOrb extends Entity {
     }
 
     @Inject(method = "scanForEntities", at = @At(value = "TAIL"))
-    protected void roundabout$scanForEntities(CallbackInfo ci) {
+    protected void sba$scanForEntities(CallbackInfo ci) {
         if (PowerTypes.isInADifferentExistence(followingPlayer,this)){
             followingPlayer = null;
         }

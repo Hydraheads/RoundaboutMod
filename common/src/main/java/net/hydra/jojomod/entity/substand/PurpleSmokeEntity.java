@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.mobs.StrayCatEntity;
 import net.hydra.jojomod.entity.stand.PurpleHazeEntity;
@@ -88,9 +88,9 @@ public class PurpleSmokeEntity extends StandEntity {
         LivingEntity user = this.getUser();
         StandUser StandUU = (StandUser) user;
         if (StandUU != null) {
-            if (!(StandUU.roundabout$getStandPowers() instanceof PowersPurpleHaze)) {
+            if (!(StandUU.sba$getStandPowers() instanceof PowersPurpleHaze)) {
                 this.discard();
-            } else if (((PowersPurpleHaze) StandUU.roundabout$getStandPowers()).purpleHazeFieldGone) {
+            } else if (((PowersPurpleHaze) StandUU.sba$getStandPowers()).purpleHazeFieldGone) {
                 this.discard();
             }
         }
@@ -131,7 +131,7 @@ public class PurpleSmokeEntity extends StandEntity {
         List<Entity> damages = getEntitiesInField();
 
         /*if (client) {
-            Roundabout.LOGGER.info(
+            SBA.LOGGER.info(
                     "[PURPLE DEBUG] CLIENT smoke tick | range=" + range
                             + " | entities found=" + damages.size()
                             + " | user=" + this.getUser()
@@ -142,7 +142,7 @@ public class PurpleSmokeEntity extends StandEntity {
                 if (Objects.nonNull(this.getUser())) {
                     Entity entity = damages.get(j);
                     if (entity instanceof ServerPlayer LE) {
-                        if (/*!((StandUser) LE).roundabout$isBubbleEncased() && !(LE instanceof StrayCatEntity c && c.getBubbleShield()) && */PowerTypes.isExistentiallyElsewhereTogether(this, LE)) {
+                        if (/*!((StandUser) LE).sba$isBubbleEncased() && !(LE instanceof StrayCatEntity c && c.getBubbleShield()) && */PowerTypes.isExistentiallyElsewhereTogether(this, LE)) {
                             if (isDistortionMode()) {
                                 S2CPacketUtil.sendGenericIntToClientPacket(LE, PacketDataIndex.S2C_IN_DISTORTION_HAZE_TICKS, 5);
                             } else {
@@ -159,7 +159,7 @@ public class PurpleSmokeEntity extends StandEntity {
             tickBlockDecay();
 
             byte skin = 0;
-            if (user != null && StandUU.roundabout$getStandPowers() instanceof PowersPurpleHaze ph) {
+            if (user != null && StandUU.sba$getStandPowers() instanceof PowersPurpleHaze ph) {
                 skin = ph.getStandSkin();
             }
             if (isDistortionMode()) {
@@ -176,9 +176,9 @@ public class PurpleSmokeEntity extends StandEntity {
         }
 
         /*if(client){
-            Roundabout.LOGGER.info("ClientRange= " + range);
+            SBA.LOGGER.info("ClientRange= " + range);
         }else{
-            Roundabout.LOGGER.info("ServerRange= " + range);
+            SBA.LOGGER.info("ServerRange= " + range);
         }*/
         super.tick();
     }
@@ -210,7 +210,7 @@ public class PurpleSmokeEntity extends StandEntity {
     private BlockState getDecayedState(BlockState state) {
         Block block = state.getBlock();
         if (MainUtil.PURPLE_HAZE_DECAY_BLOCKS.containsKey(block) && MainUtil.PURPLE_HAZE_DECAY_RATE.containsKey(block)) {
-            if (Roundabout.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
+            if (SBA.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
                 BlockState replacement = MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
                 if (state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED)
                         && replacement.getBlock() == Blocks.AIR) {
@@ -235,7 +235,7 @@ public class PurpleSmokeEntity extends StandEntity {
 
         boolean canGrief =
                 !ClientNetworking.getAppropriateConfig().griefSettings.doExtraGriefChecksForClaims
-                        && sl.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+                        && sl.getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)
                         && user instanceof Player
                         && MainUtil.getIsGamemodeApproriateForGrief(user);
 
@@ -248,9 +248,9 @@ public class PurpleSmokeEntity extends StandEntity {
         int attempts = Mth.clamp((int) (range * 8F), 15, 120);
 
         for (int i = 0; i < attempts; i++) {
-            int dx = Roundabout.RANDOM.nextInt(r * 2 + 1) - r;
-            int dy = Roundabout.RANDOM.nextInt(r * 2 + 1) - r;
-            int dz = Roundabout.RANDOM.nextInt(r * 2 + 1) - r;
+            int dx = SBA.RANDOM.nextInt(r * 2 + 1) - r;
+            int dy = SBA.RANDOM.nextInt(r * 2 + 1) - r;
+            int dz = SBA.RANDOM.nextInt(r * 2 + 1) - r;
 
             BlockPos pos = center.offset(dx, dy, dz);
 
@@ -312,7 +312,7 @@ public class PurpleSmokeEntity extends StandEntity {
 
         LivingEntity user = this.getUser();
         if (user != null) {
-            ((StandUser) user).roundabout$getStandPowers().playSoundIfPossible(
+            ((StandUser) user).sba$getStandPowers().playSoundIfPossible(
                     sl, null, this.blockPosition(), tierSound, SoundSource.HOSTILE, volume, pitch);
         } else {
             sl.playSound(null, this.blockPosition(), tierSound, SoundSource.HOSTILE, volume, pitch);
@@ -393,7 +393,7 @@ public class PurpleSmokeEntity extends StandEntity {
         for (Entity entity : damages) {
             if (!(entity instanceof LivingEntity living)) continue;
 
-            if (!((StandUser) living).roundabout$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
+            if (!((StandUser) living).sba$isBubbleEncased() && !(living instanceof StrayCatEntity c && c.getBubbleShield()) && PowerTypes.isExistentiallyElsewhereTogether(this, living)) {
 
                 int effectDuration = living instanceof Player ? 80 : 80; //for when it was less duration to you. It was 100 : 150
                 boolean isSelf = living == user;
@@ -405,7 +405,7 @@ public class PurpleSmokeEntity extends StandEntity {
                     ((StandUser) living).SetInDistortionHazeTicks(5);
 
                     if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
-                        ((StandUser) user).roundabout$getStandPowers().addEXP(2);
+                        ((StandUser) user).sba$getStandPowers().addEXP(2);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
                         living.addEffect(new MobEffectInstance(ModEffects.MELTING, 80, 2));
@@ -417,7 +417,7 @@ public class PurpleSmokeEntity extends StandEntity {
                     living.addEffect(new MobEffectInstance(ModEffects.HAZE_VIRUS, 75));
 
                     if (!isSelf && !alreadyHasVirus && expGrantedTo.add(living.getId())) {
-                        ((StandUser) user).roundabout$getStandPowers().addEXP(3);
+                        ((StandUser) user).sba$getStandPowers().addEXP(3);
                     }
                     if (ClientNetworking.getAppropriateConfig().PurpleHazeSettings.HazeMelts) {
                         living.addEffect(new MobEffectInstance(ModEffects.MELTING, 75, 1));

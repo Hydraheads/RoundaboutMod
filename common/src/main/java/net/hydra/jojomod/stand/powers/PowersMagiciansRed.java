@@ -138,53 +138,53 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
     public static Component getSkinNameT(byte skinId){
         if (skinId == MagiciansRedEntity.PART_3_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.base");
+            return Component.translatable(  "skins.sba.magicians_red.base");
         } else if (skinId == MagiciansRedEntity.BLUE_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.blue");
+            return Component.translatable(  "skins.sba.magicians_red.blue");
         } else if (skinId == MagiciansRedEntity.PURPLE_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.purple");
+            return Component.translatable(  "skins.sba.magicians_red.purple");
         } else if (skinId == MagiciansRedEntity.GREEN_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.green");
+            return Component.translatable(  "skins.sba.magicians_red.green");
         } else if (skinId == MagiciansRedEntity.DREAD_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.dread");
+            return Component.translatable(  "skins.sba.magicians_red.dread");
         } else if (skinId == MagiciansRedEntity.BLUE_ACE_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.blue_ace");
+            return Component.translatable(  "skins.sba.magicians_red.blue_ace");
         } else if (skinId == MagiciansRedEntity.DREAD_BEAST_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.chagaroth");
+            return Component.translatable(  "skins.sba.magicians_red.chagaroth");
         } else if (skinId == MagiciansRedEntity.MAGMA_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.magma");
+            return Component.translatable(  "skins.sba.magicians_red.magma");
         } else if (skinId == MagiciansRedEntity.LIGHTER_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.lighter");
+            return Component.translatable(  "skins.sba.magicians_red.lighter");
         } else if (skinId == MagiciansRedEntity.MANGA_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.manga");
+            return Component.translatable(  "skins.sba.magicians_red.manga");
         } else if (skinId == MagiciansRedEntity.OVA_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.ova");
+            return Component.translatable(  "skins.sba.magicians_red.ova");
         } else if (skinId == MagiciansRedEntity.ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.ablaze");
+            return Component.translatable(  "skins.sba.magicians_red.ablaze");
         } else if (skinId == MagiciansRedEntity.LIGHTER_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.lighter_ablaze");
+            return Component.translatable(  "skins.sba.magicians_red.lighter_ablaze");
         } else if (skinId == MagiciansRedEntity.BLUE_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.blue_ablaze");
+            return Component.translatable(  "skins.sba.magicians_red.blue_ablaze");
         } else if (skinId == MagiciansRedEntity.PURPLE_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.purple_ablaze");
+            return Component.translatable(  "skins.sba.magicians_red.purple_ablaze");
         } else if (skinId == MagiciansRedEntity.GREEN_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.green_ablaze");
+            return Component.translatable(  "skins.sba.magicians_red.green_ablaze");
         } else if (skinId == MagiciansRedEntity.DREAD_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.dread_ablaze");
+            return Component.translatable(  "skins.sba.magicians_red.dread_ablaze");
         } else if (skinId == MagiciansRedEntity.SIDEKICK){
-            return Component.translatable(  "skins.roundabout.magicians_red.sidekick");
+            return Component.translatable(  "skins.sba.magicians_red.sidekick");
         } else if (skinId == MagiciansRedEntity.BETA){
-            return Component.translatable(  "skins.roundabout.magicians_red.beta");
+            return Component.translatable(  "skins.sba.magicians_red.beta");
         } else if (skinId == MagiciansRedEntity.JOJONIUM){
-            return Component.translatable(  "skins.roundabout.magicians_red.jojonium");
+            return Component.translatable(  "skins.sba.magicians_red.jojonium");
         } else if (skinId == MagiciansRedEntity.JOJONIUM_ABLAZE){
-            return Component.translatable(  "skins.roundabout.magicians_red.jojonium_ablaze");
+            return Component.translatable(  "skins.sba.magicians_red.jojonium_ablaze");
         } else if (skinId == MagiciansRedEntity.DEBUT_SKIN){
-            return Component.translatable(  "skins.roundabout.magicians_red.debut");
+            return Component.translatable(  "skins.sba.magicians_red.debut");
         } else if (skinId == MagiciansRedEntity.SKELETAL){
-            return Component.translatable(  "skins.roundabout.magicians_red.skeletal");
+            return Component.translatable(  "skins.sba.magicians_red.skeletal");
         }
-        return Component.translatable(  "skins.roundabout.magicians_red.base");
+        return Component.translatable(  "skins.sba.magicians_red.base");
     }
 
 
@@ -207,10 +207,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void tickPower() {
         if (!this.self.level().isClientSide()) {
             if (leaded != null) {
-                if (((StandUser) leaded).roundabout$getStandPowers() instanceof PowersKingCrimson pkc) {
+                if (((StandUser) leaded).sba$getStandPowers() instanceof PowersKingCrimson pkc) {
                     if (pkc.timeEraseActive){
                         clearLeaded();
-                        ((StandUser)pkc.activeClone).roundabout$setBoundTo(self);
+                        ((StandUser)pkc.activeClone).sba$setBoundTo(self);
                         leaded = pkc.activeClone;
                     }
                 }
@@ -233,10 +233,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 if (((leaded instanceof Enemy) ||
                         (leaded instanceof Mob mb && mb.getTarget() != null && mb.getTarget().is(this.self))) ||
                         (leaded instanceof Player) ||
-                        !((StandUser)leaded).roundabout$getStandDisc().isEmpty()){
+                        !((StandUser)leaded).sba$getStandDisc().isEmpty()){
                     lassoTime--;
                     if (lassoTime <= -1){
-                        ((StandUser)leaded).roundabout$dropString();
+                        ((StandUser)leaded).sba$dropString();
                         leaded = null;
                         if (this.self instanceof ServerPlayer SP) {
                             S2CPacketUtil.sendCooldownSyncPacket(SP, PowerIndex.SKILL_1,
@@ -290,7 +290,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     clearAllHurricanes();
 
                     if (this.isChargingCrossfireSingle()){
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE,true);
                     }
                 }
             }
@@ -298,12 +298,12 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (isLockedByWater() || (hasHurricaneSpecial() && isLockedByWater2())){
                 clearAllHurricanes();
                 if (isChargingCrossfire()){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE,true);
                 }
             }
             if ((isChargingCrossfireSingle() && (hurricane == null || hurricane.isRemoved()))
             || isChargingCrossfireSpecial() && (hurricaneSpecial == null || hurricaneSpecial.isEmpty())){
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE,true);
             }
         }
     }
@@ -529,7 +529,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     -(distanceOut * (Math.cos(offset / 180)))
             );
 
-            Direction dir = ((IGravityEntity)self).roundabout$getGravityDirection();
+            Direction dir = ((IGravityEntity)self).sba$getGravityDirection();
             if (dir != Direction.DOWN){
                 finalOffset = RotationUtil.vecPlayerToWorld(finalOffset,dir);
             }
@@ -682,7 +682,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public boolean isUsingFirestorm(){
-        return ((IPermaCasting) this.getSelf().level()).roundabout$isPermaCastingEntity(this.self);
+        return ((IPermaCasting) this.getSelf().level()).sba$isPermaCastingEntity(this.self);
     }
 
     public boolean canShootConcealedCrossfire(){
@@ -708,7 +708,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             barrageCrySound = FLAMETHROWER_NOISE;
 
             if (this.getSelf() instanceof Player PE &&
-                    ((IPlayerEntity)PE).roundabout$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
+                    ((IPlayerEntity)PE).sba$getMaskInventory().getItem(1).is(ModItems.BLANK_MASK)){
                 playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                         PE.getZ(), SoundEvents.FIREWORK_ROCKET_BLAST, PE.getSoundSource(), 2.0F, 1.0F);
             } else {
@@ -749,7 +749,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
-        StandPowers powers = standUser.roundabout$getStandPowers();
+        StandPowers powers = standUser.sba$getStandPowers();
         boolean standOn = PowerTypes.hasStandActive(playerEntity);
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8;
@@ -787,7 +787,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
     @Override
     public StandEntity getNewStandEntity(){
-        if (((StandUser)this.getSelf()).roundabout$getStandSkin() == MagiciansRedEntity.OVA_SKIN){
+        if (((StandUser)this.getSelf()).sba$getStandSkin() == MagiciansRedEntity.OVA_SKIN){
             return ModEntities.MAGICIANS_RED_OVA.create(this.getSelf().level());
         }
         return ModEntities.MAGICIANS_RED.create(this.getSelf().level());
@@ -798,8 +798,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
         $$1.add(MagiciansRedEntity.PART_3_SKIN);
         $$1.add(MagiciansRedEntity.ABLAZE);
         if (this.getSelf() instanceof Player PE){
-            byte Level = ((IPlayerEntity)PE).roundabout$getStandLevel();
-            ItemStack goldDisc = ((StandUser)PE).roundabout$getStandDisc();
+            byte Level = ((IPlayerEntity)PE).sba$getStandLevel();
+            ItemStack goldDisc = ((StandUser)PE).sba$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass){
                 $$1.add(MagiciansRedEntity.MANGA_SKIN);
@@ -825,7 +825,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 $$1.add(MagiciansRedEntity.MAGMA_SKIN);
                 $$1.add(MagiciansRedEntity.DEBUT_SKIN);
                 $$1.add(MagiciansRedEntity.BETA);
-            } if (((IPlayerEntity)PE).roundabout$getUnlockedBonusSkin() || bypass){
+            } if (((IPlayerEntity)PE).sba$getUnlockedBonusSkin() || bypass){
                 $$1.add(MagiciansRedEntity.DREAD_BEAST_SKIN);
                 $$1.add(MagiciansRedEntity.DREAD_SKIN);
                 $$1.add(MagiciansRedEntity.DREAD_ABLAZE);
@@ -1002,7 +1002,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (!isChargingCrossfire()) {
                 if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
                     this.setCooldown(PowerIndex.SKILL_EXTRA_2, 8);
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2_BONUS, true);
                     tryPowerPacket(PowerIndex.POWER_2_BONUS);
                     return true;
                 }
@@ -1013,7 +1013,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public boolean ankhShootClient(){
         if (hasHurricaneSingle() || isChargingCrossfireSingle()) {
             this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhSuccessCooldown));
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2_BONUS, true);
             tryPowerPacket(PowerIndex.POWER_2_BONUS);
             return true;
         }
@@ -1032,7 +1032,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
         if (!this.onCooldown(PowerIndex.SKILL_2_SNEAK) && canExecuteMoveWithLevel(4)) {
             this.setCooldown(PowerIndex.SKILL_2_SNEAK, ClientNetworking.getAppropriateConfig().magiciansRedSettings.hurricaneSpecialCooldown);
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_2_SNEAK);
         }
     }
@@ -1050,7 +1050,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             return;
         }
         if (!this.onCooldown(PowerIndex.SKILL_2) && !hasHurricaneSpecial()) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2, true);
             tryPowerPacket(PowerIndex.POWER_2);
         }
     }
@@ -1059,7 +1059,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (canShootConcealedCrossfire() && !isLockedByWater()) {
             if (!onCooldown(PowerIndex.SKILL_2)) {
                 this.setCooldown(PowerIndex.SKILL_2, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhConcealedCooldown));
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BONUS, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1_BONUS, true);
                 tryPowerPacket(PowerIndex.POWER_1_BONUS);
             }
             return true;
@@ -1079,7 +1079,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (!isChargingCrossfire() && !hasHurricaneSingle()) {
             if (!this.onCooldown(PowerIndex.SKILL_1) && this.getActivePower() != PowerIndex.POWER_1) {
                 if (leaded == null) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1, true);
                 } else {
                     this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().magiciansRedSettings.redBindManualReleaseCooldown);
                 }
@@ -1106,7 +1106,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     this.setCooldown(PowerIndex.SKILL_1_SNEAK,
                             multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.igniteFireCooldown)
                     );
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1_SNEAK, true);
                     tryBlockPosPowerPacket(PowerIndex.EXTRA, grabBlock2);
                     tryBlockPosPowerPacket(PowerIndex.POWER_1_SNEAK, HR);
                 }
@@ -1128,7 +1128,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (!isChargingCrossfire() && !hasHurricaneSingle()) {
             if (canExecuteMoveWithLevel(5)) {
                 this.setCooldown(PowerIndex.SKILL_1, 20);
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_BLOCK, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1_BLOCK, true);
                 tryPowerPacket(PowerIndex.POWER_1_BLOCK);
             }
         }
@@ -1157,7 +1157,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 if (canExecuteMoveWithLevel(3)) {
                     this.setCooldown(PowerIndex.SKILL_4_SNEAK, multiplyCooldown(ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhHiddenCooldown));
                     this.setCooldown(PowerIndex.SKILL_2, ClientNetworking.getAppropriateConfig().magiciansRedSettings.ankhSuccessCooldown);
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_3_BONUS, true);
                     tryPowerPacket(PowerIndex.POWER_3_BONUS);
                 }
             }
@@ -1222,7 +1222,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (isBusy())
             return;
         if (canExecuteMoveWithLevel(7) && !hasHurricaneSpecial()) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_4_SNEAK, true);
             tryPowerPacket(PowerIndex.POWER_4_SNEAK);
         }
     }
@@ -1236,7 +1236,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             return;
         if (!this.onCooldown(PowerIndex.SKILL_4) && canExecuteMoveWithLevel(6)) {
             hold4 = true;
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_4_BONUS, true);
             tryPowerPacket(PowerIndex.POWER_4_BONUS);
             this.setCooldown(PowerIndex.SKILL_4, ClientNetworking.getAppropriateConfig().magiciansRedSettings.flameCrashCooldown);
         }
@@ -1372,8 +1372,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public void selfBurn(){
-        getStandUserSelf().roundabout$setOnStandFire(this.getFireColor(), this.self);
-        getStandUserSelf().roundabout$setRemainingStandFireTicks(80);
+        getStandUserSelf().sba$setOnStandFire(this.getFireColor(), this.self);
+        getStandUserSelf().sba$setRemainingStandFireTicks(80);
     }
 
     public void offloadLead(){
@@ -1382,7 +1382,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 leaded = null;
             }
         } else {
-            if (leaded != null && (!leaded.isAlive() || !(((StandUser)leaded).roundabout$isStringBound()) || !(((StandUser)leaded).roundabout$getBoundTo().is(this.self)))){
+            if (leaded != null && (!leaded.isAlive() || !(((StandUser)leaded).sba$isStringBound()) || !(((StandUser)leaded).sba$getBoundTo().is(this.self)))){
                 leaded = null;
             }
         }
@@ -1391,7 +1391,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public boolean redBindCharge() {
         offloadLead();
         if (leaded != null){
-            ((StandUser)leaded).roundabout$dropString();
+            ((StandUser)leaded).sba$dropString();
             leaded = null;
         } else {
             this.animateStand(MagiciansRedEntity.RED_BIND);
@@ -1410,12 +1410,12 @@ public class PowersMagiciansRed extends NewPunchingStand {
             Level lv = this.getSelf().level();
             if ((this.getSelf()) instanceof Player PE){
                 StandUser user = ((StandUser)PE);
-                ItemStack stack = user.roundabout$getStandDisc();
+                ItemStack stack = user.sba$getStandDisc();
                 if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_MAGICIANS_RED)){
                     IPlayerEntity ipe = ((IPlayerEntity) PE);
-                    if (!ipe.roundabout$getUnlockedBonusSkin() && MainUtil.isDreadBook(PE.getMainHandItem())){
+                    if (!ipe.sba$getUnlockedBonusSkin() && MainUtil.isDreadBook(PE.getMainHandItem())){
                         if (!lv.isClientSide()) {
-                            ipe.roundabout$setUnlockedBonusSkin(true);
+                            ipe.sba$setUnlockedBonusSkin(true);
                             playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
                                     PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
                             playSoundIfPossible(self.level(),null, PE.getX(), PE.getY(),
@@ -1423,9 +1423,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
                             sendParticlesIfPossible(self.level(),ModParticles.DREAD_FLAME, PE.getX(),
                                     PE.getY()+PE.getEyeHeight(), PE.getZ(),
                                     10, 0.5, 0.5, 0.5, 0.2);
-                            user.roundabout$setStandSkin(MagiciansRedEntity.DREAD_BEAST_SKIN);
+                            user.sba$setStandSkin(MagiciansRedEntity.DREAD_BEAST_SKIN);
                             ((ServerPlayer) ipe).displayClientMessage(
-                                    Component.translatable("unlock_skin.roundabout.magicians_red.chagaroth"), true);
+                                    Component.translatable("unlock_skin.sba.magicians_red.chagaroth"), true);
                         }
                     }
                 }
@@ -1447,7 +1447,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     Vec3 bam = new Vec3(0,
                             (this.self.getBbHeight()/2),
                             0);
-                    Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                    Direction gravD = ((IGravityEntity)this.self).sba$getGravityDirection();
                     if (gravD != Direction.DOWN){
                         bam = RotationUtil.vecPlayerToWorld(bam,gravD);
                     }
@@ -1472,9 +1472,9 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
 
         if (!this.self.level().isClientSide()){
-            user.roundabout$sealStand(sealTime);
+            user.sba$sealStand(sealTime);
         }
-        user.roundabout$setActive(false);
+        user.sba$setActive(false);
     }
 
     public LivingEntity leaded;
@@ -1541,8 +1541,8 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public boolean toggleBigAnkh() {
         if (!this.getSelf().level().isClientSide()) {
             IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
-            if (!icast.roundabout$isPermaCastingEntity(this.getSelf())) {
-                icast.roundabout$addPermaCaster(this.getSelf());
+            if (!icast.sba$isPermaCastingEntity(this.getSelf())) {
+                icast.sba$addPermaCaster(this.getSelf());
                 if (bigAnkh == null || bigAnkh.isRemoved()){
                     CrossfireHurricaneEntity cross = new CrossfireHurricaneEntity(this.self,this.self.level());;
                     playSoundsIfNearby(FIRESTORM, 27, false);
@@ -1566,7 +1566,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void removeFirestorm(){
         IPermaCasting icast = ((IPermaCasting) this.getSelf().level());
         this.stopSoundsIfNearby(FIRESTORM, 100,false);
-        icast.roundabout$removePermaCastingEntity(this.getSelf());
+        icast.sba$removePermaCastingEntity(this.getSelf());
     }
     @Override
     public void updateMovesFromPacket(byte activePower){
@@ -1605,7 +1605,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void updateRangedBarrageCharge(){
             if (this.attackTimeDuring >= this.getRangedBarrageWindup()) {
                 if (!self.level().isClientSide() && !(self instanceof Player)) {
-                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE, true);
+                    ((StandUser) this.self).sba$tryPower(PowerIndex.RANGED_BARRAGE, true);
                 } else if (self.level().isClientSide() && isPacketPlayer()){
                     tryPowerPacket(PowerIndex.RANGED_BARRAGE);
                 }
@@ -1615,7 +1615,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void updateRangedBarrageCharge2(){
             if (this.attackTimeDuring >= this.getRangedBarrageWindup2()) {
                 if (!self.level().isClientSide() && !(self instanceof Player)) {
-                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_2, true);
+                    ((StandUser) this.self).sba$tryPower(PowerIndex.RANGED_BARRAGE_2, true);
                 } else if (self.level().isClientSide() && isPacketPlayer()){
                     tryPowerPacket(PowerIndex.RANGED_BARRAGE_2);
                 }
@@ -1645,7 +1645,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (this.attackTimeDuring >= getMaxSuperHitTime() &&
                     (!(this.getSelf() instanceof Player) || (this.self.level().isClientSide() && isPacketPlayer()))){
                 int atd = this.getAttackTimeDuring();
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,getMaxSuperHitTime());
+                ((StandUser) this.getSelf()).sba$tryIntPower(PowerIndex.SNEAK_ATTACK, true,getMaxSuperHitTime());
                 if (this.self.level().isClientSide()){
                     tryIntPowerPacket(PowerIndex.SNEAK_ATTACK, atd);
                 }
@@ -1676,11 +1676,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (this.attackTimeDuring >= 16) {
                 if (this.self instanceof Player) {
                     if (isPacketPlayer()) {
-                        ((StandUser) this.self).roundabout$tryPower(PowerIndex.POWER_4, true);
+                        ((StandUser) this.self).sba$tryPower(PowerIndex.POWER_4, true);
                         tryPowerPacket(PowerIndex.POWER_4);
                     }
                 } else {
-                    ((StandUser) this.self).roundabout$tryPower(PowerIndex.POWER_4, true);
+                    ((StandUser) this.self).sba$tryPower(PowerIndex.POWER_4, true);
                 }
             }
         } else if (this.getActivePower() == PowerIndex.POWER_1){
@@ -1752,7 +1752,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (entity != null) {
                 if (entity instanceof LivingEntity LE) {
                     if (!isClient()) {
-                        ((StandUser) LE).roundabout$setBoundTo(this.self);
+                        ((StandUser) LE).sba$setBoundTo(this.self);
                         landedLead = true;
                     }
                     leaded = LE;
@@ -1784,7 +1784,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void updateRangedBarrage(){
 
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+            ((StandUser) this.self).sba$tryPower(PowerIndex.GUARD, true);
         } else {
             if (this.attackTimeDuring > this.getRangedBarrageLength()) {
                 this.attackTimeDuring = -20;
@@ -1830,7 +1830,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 Vec3 bam = new Vec3(0,
                         this.self.getEyeHeight()*0.25,
                         0);
-                Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                Direction gravD = ((IGravityEntity)this.self).sba$getGravityDirection();
                 if (gravD != Direction.DOWN){
                     bam = RotationUtil.vecPlayerToWorld(bam,gravD);
                 }
@@ -1902,7 +1902,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void updateRangedBarrage2(){
 
         if (this.attackTimeDuring == -2 && this.getSelf() instanceof Player) {
-            ((StandUser) this.self).roundabout$tryPower(PowerIndex.GUARD, true);
+            ((StandUser) this.self).sba$tryPower(PowerIndex.GUARD, true);
         } else {
             if (this.attackTimeDuring > this.getRangedBarrage2Length()) {
                 this.attackTimeDuring = -20;
@@ -1990,7 +1990,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                             0.01);
                 }
                 if (!(this.self instanceof Player)){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN,true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.LEAD_IN,true);
                 }
             } else if (this.attackTimeDuring == getChargingCrossfireSpecialSize()){
 
@@ -2079,14 +2079,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 createStandFire2(blockPosForSpecial.south().south().west());
             } else if (this.attackTimeDuring >= getChargingCrossfireSpecial()){
                 if (!(this.self instanceof Player)){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN,true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.LEAD_IN,true);
                 }
             }
         } else {
             if (this.attackTimeDuring >= getChargingCrossfireSpecial()) {
                 if (this.self instanceof Player) {
                     if (isPacketPlayer()) {
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.LEAD_IN, true);
                         tryPowerPacket(PowerIndex.LEAD_IN);
                     }
                 }
@@ -2094,7 +2094,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
         }
     }
     public SimpleParticleType getFlameParticle(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skn = ((StandUser)this.getSelf()).sba$getStandSkin();
 
         return switch (skn) {
             case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE, MagiciansRedEntity.SKELETAL -> ModParticles.BLUE_FLAME;
@@ -2428,18 +2428,18 @@ public class PowersMagiciansRed extends NewPunchingStand {
 
                     if (entity instanceof LivingEntity LE) {
                         if (entity instanceof Player PE){
-                            ((IPlayerEntity) PE).roundabout$setCameraHits(2);
+                            ((IPlayerEntity) PE).sba$setCameraHits(2);
                         }
                         int ticks = 0;
                         StandUser su = (StandUser) LE;
-                        if (su.roundabout$getRemainingFireTicks() > -1){
-                            ticks+=su.roundabout$getRemainingFireTicks();
+                        if (su.sba$getRemainingFireTicks() > -1){
+                            ticks+=su.sba$getRemainingFireTicks();
                             ticks+=2;
                         } else {
                             ticks+=40;
                         }
-                        su.roundabout$setOnStandFire(this.getFireColor(), this.self);
-                        su.roundabout$setRemainingStandFireTicks(ticks);
+                        su.sba$setOnStandFire(this.getFireColor(), this.self);
+                        su.sba$setRemainingStandFireTicks(ticks);
                     }
                     entity.setDeltaMovement(prevVelocity);
                     if (Math.abs(this.lastHurtTick-this.self.tickCount) > 6) {
@@ -2606,7 +2606,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     playSoundIfPossible(self.level(),null, this.self.blockPosition(),  ModSounds.CROSSFIRE_SHOOT_EVENT,
                             SoundSource.PLAYERS, 2F, 1F);
                 }
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE,true);
             }
         }
         return true;
@@ -2728,11 +2728,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public List<Entity> burnProjectiles(LivingEntity User, List<Entity> entities, float maxDistance, float angle){
         List<Entity> hitEntities = new ArrayList<>(entities) {
         };
-        Direction gravD = ((IGravityEntity)User).roundabout$getGravityDirection();
+        Direction gravD = ((IGravityEntity)User).sba$getGravityDirection();
         for (Entity value : entities) {
             if (!value.isRemoved() && value instanceof Projectile && !(value instanceof Fireball) && !(value instanceof UnburnableProjectile)
-                    && !(value instanceof AbstractArrow aa && ((IAbstractArrowAccess)aa).roundabout$GetPickupItem() != null &&
-                    ((IAbstractArrowAccess)aa).roundabout$GetPickupItem().getItem().canBeDepleted()
+                    && !(value instanceof AbstractArrow aa && ((IAbstractArrowAccess)aa).sba$GetPickupItem() != null &&
+                    ((IAbstractArrowAccess)aa).sba$GetPickupItem().getItem().canBeDepleted()
                     )
             ){
                 Vec2 lookVec = new Vec2(getLookAtEntityYaw(User, value), getLookAtEntityPitch(User, value));
@@ -2827,7 +2827,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void clearLeaded(){
         if (leaded != null){
             this.setCooldown(PowerIndex.SKILL_1, ClientNetworking.getAppropriateConfig().magiciansRedSettings.redBindManualReleaseCooldown);
-            ((StandUser)leaded).roundabout$dropString();
+            ((StandUser)leaded).sba$dropString();
             leaded = null;
         }
     }
@@ -2843,11 +2843,11 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (grabBlock != null){
             BlockState state = this.self.level().getBlockState(grabBlock);
             if (state.is(Blocks.CAMPFIRE)) {
-                if (!state.getValue(CampfireBlock.LIT) && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
+                if (!state.getValue(CampfireBlock.LIT) && this.getSelf().level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)) {
                     this.getSelf().level().setBlockAndUpdate(grabBlock, state.setValue(CampfireBlock.LIT, true));
                 }
             } else if (state.getBlock() instanceof CandleBlock){
-                if (!state.getValue(CandleBlock.LIT) && this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){
+                if (!state.getValue(CandleBlock.LIT) && this.getSelf().level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){
                     this.getSelf().level().setBlockAndUpdate(grabBlock, state.setValue(CandleBlock.LIT,true));
                 }
             } else if (state.getBlock() instanceof WhiteAlbumCoatingBlock fb){
@@ -2905,7 +2905,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     }
                 }
             } else if (state.getBlock() instanceof TntBlock){
-                if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){
+                if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING) && !(this.self instanceof ServerPlayer SP && SP.gameMode.getGameModeForPlayer() == GameType.ADVENTURE)){
                     this.getSelf().level().setBlockAndUpdate(grabBlock, Blocks.AIR.defaultBlockState());
                     explode(this.self.level(),grabBlock,this.self);
                 }
@@ -2981,7 +2981,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public byte getFireColor(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skn = ((StandUser)this.getSelf()).sba$getStandSkin();
 
         return switch (skn) {
             case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE, MagiciansRedEntity.SKELETAL -> StandFireType.BLUE.id;
@@ -2994,7 +2994,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
     }
 
     public Block getFireColorBlock(){
-        byte skn = ((StandUser)this.getSelf()).roundabout$getStandSkin();
+        byte skn = ((StandUser)this.getSelf()).sba$getStandSkin();
         return switch (skn) {
             case MagiciansRedEntity.BLUE_SKIN, MagiciansRedEntity.BLUE_ACE_SKIN, MagiciansRedEntity.BLUE_ABLAZE, MagiciansRedEntity.SKELETAL -> ModBlocks.BLUE_FIRE;
             case MagiciansRedEntity.PURPLE_SKIN, MagiciansRedEntity.PURPLE_ABLAZE -> ModBlocks.PURPLE_FIRE;
@@ -3023,10 +3023,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
         if (!this.getSelf().level().isClientSide()) {
             if (effect.getDuration() == 15) {
                 StandUser user = ((StandUser) this.self);
-                user.roundabout$setSecondsOnStandFire(20);
+                user.sba$setSecondsOnStandFire(20);
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.MAGICIANS_RED_CRY_3_EVENT,
                         SoundSource.PLAYERS, 1F, 1F);
-                user.roundabout$setOnStandFire((byte) 1, this.self);
+                user.sba$setOnStandFire((byte) 1, this.self);
                 sendParticlesIfPossible(self.level(),getFlameParticle(), this.self.getX(),
                         this.self.getY()+(this.self.getBbHeight()*0.5), this.self.getZ(),
                         10,
@@ -3040,12 +3040,12 @@ public class PowersMagiciansRed extends NewPunchingStand {
     public void levelUp(){
         if (!this.getSelf().level().isClientSide() && this.getSelf() instanceof Player PE){
             IPlayerEntity ipe = ((IPlayerEntity) PE);
-            byte level = ipe.roundabout$getStandLevel();
+            byte level = ipe.sba$getStandLevel();
             if (level == 7) {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.max.both").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.max.both").
                         withStyle(ChatFormatting.AQUA), true);
             } else {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.levelup.both").
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.sba.levelup.both").
                         withStyle(ChatFormatting.AQUA), true);
             }
         }
@@ -3103,7 +3103,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
             if (this.attackTimeDuring > this.attackTimeMax) {
                 this.attackTime = -1;
                 this.attackTimeMax = 0;
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE,true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE,true);
             } else {
                 int meltLevel = getMeltLevel();
                 if ((this.attackTimeDuring == (7+meltLevel) && this.activePowerPhase == 1)
@@ -3181,7 +3181,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.FIRE_BLAST_EVENT, SoundSource.PLAYERS, 1F, 1F);
                 drillTime = 80;
                 addEXP(6, leaded);
-                ((StandUser) leaded).roundabout$setRedBound(true);
+                ((StandUser) leaded).sba$setRedBound(true);
                 sendParticlesIfPossible(self.level(),getFlameParticle(), leaded.getX(),
                         leaded.getY() + (leaded.getBbHeight() * 0.5), leaded.getZ(),
                         10,
@@ -3287,7 +3287,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 if (isCreeper) {
                     if (leaded != null) {
                         if (anticipationticks == 0){
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.EXTRA_2, true);
+                            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.EXTRA_2, true);
                             anticipationticks = -1;
                         } else {
                             anticipationticks--;
@@ -3295,7 +3295,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     } else if (dist <= 5 && !this.onCooldown(PowerIndex.SKILL_1)) {
                         if (this.activePower == PowerIndex.NONE) {
                             anticipationticks = 4;
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
+                            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1, true);
                         }
                     }
                 } else {
@@ -3303,7 +3303,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                     if ((this.self instanceof Ravager || this.self instanceof Hoglin || this.self instanceof WitherBoss ||
                             this.self instanceof EnderDragon || this.self instanceof Warden) && !isUsingFirestorm() &&
                             !this.self.isUnderWater()){
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_4_SNEAK, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_4_SNEAK, true);
                     }
 
                     if (this.getActivePower() != PowerIndex.NONE
@@ -3322,17 +3322,17 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                     && !this.onCooldown(PowerIndex.SKILL_2_SNEAK)
                             ) {
                                 if (!isLockedByWater2()) {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2_SNEAK, true);
                                 }
                             } else if (dist > 7 && !this.onCooldown(PowerIndex.SKILL_2) && !isLockedByWater()) {
                                 double RNG = Math.random();
                                 if (RNG < 0.3) {
                                     if (!isLockedByWater2()) {
                                         wentForCharge = true;
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE, true);
+                                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE, true);
                                     }
                                 } else {
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2, true);
+                                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2, true);
                                 }
                             }
                         }
@@ -3346,7 +3346,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                 double RNG = Math.random();
                                 if (RNG < 0.35 && targetEntity instanceof Player && this.activePowerPhase <= 0 && !wentForCharge && !isLockedByWater2() && !(isBasicMob)){
                                     wentForCharge = true;
-                                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE_2, true);
+                                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.RANGED_BARRAGE_CHARGE_2, true);
                                 } else if ((this.activePowerPhase < this.activePowerPhaseMax || this.attackTime >= this.attackTimeMax) &&
                                         (this.activePower == PowerIndex.NONE || this.activePower == PowerIndex.ATTACK)) {
                                     if (RNG < 0.5 && (this.self instanceof IronGolem ||
@@ -3354,10 +3354,10 @@ public class PowersMagiciansRed extends NewPunchingStand {
                                             this.self instanceof ZombifiedPiglin ||this.self instanceof Hoglin ||
                                             this.self instanceof PiglinBrute)){
                                         wentForCharge = false;
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
+                                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.SNEAK_ATTACK_CHARGE, true);
                                     } else {
                                         wentForCharge = false;
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.ATTACK, true);
+                                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.ATTACK, true);
                                     }
                                 }
                             }
@@ -3368,14 +3368,14 @@ public class PowersMagiciansRed extends NewPunchingStand {
                         if (hurricane.getSize() >= hurricane.getMaxSize()){
                             double RNG = Math.random();
                             if (RNG < 0.5 && (groundHurricane == null || groundHurricane.isRemoved())){
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_3_BONUS, true);
+                                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_3_BONUS, true);
                             } else {
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2_BONUS, true);
                             }
                         }
                     } else if (hasHurricaneSpecial() && activePower == PowerIndex.NONE){
                         if (!this.onCooldown(PowerIndex.SKILL_EXTRA_2)) {
-                            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BONUS, true);
+                            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2_BONUS, true);
                         }
                     }
 
@@ -3383,7 +3383,7 @@ public class PowersMagiciansRed extends NewPunchingStand {
                 }
                 /**
                  if (dist <= 8 && (hurricaneSpecial == null || hurricaneSpecial.isEmpty())) {
-                 ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_SNEAK, true);
+                 ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2_SNEAK, true);
                  }
                  **/
         } else {
@@ -3552,48 +3552,48 @@ public class PowersMagiciansRed extends NewPunchingStand {
     @Override
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypas){
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.roundabout.red_lash",
-                "instruction.roundabout.press_attack", StandIcons.RED_LASH,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.roundabout.guard",
-                "instruction.roundabout.hold_block", StandIcons.MAGICIANS_RED_GUARD,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.roundabout.flame_kick",
-                "instruction.roundabout.hold_attack_crouch", StandIcons.MAGICIANS_FLAME_KICK,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.roundabout.fireball_barrage",
-                "instruction.roundabout.barrage", StandIcons.FIREBALL_BARRAGE,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.roundabout.flamethrower",
-                "instruction.roundabout.kick_barrage", StandIcons.FLAMETHROWER,0,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.roundabout.furnace",
-                "instruction.roundabout.passive", StandIcons.FURNACE_ABILITY,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.roundabout.red_bind",
-                "instruction.roundabout.press_skill", StandIcons.RED_BIND,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.roundabout.flame_creation",
-                "instruction.roundabout.press_skill_crouch", StandIcons.LIGHT_FIRE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,5, "ability.roundabout.life_detector",
-                "instruction.roundabout.press_skill_block", StandIcons.LIFE_TRACKER,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.roundabout.crossfire",
-                "instruction.roundabout.press_skill", StandIcons.CROSSFIRE_HURRICANE,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.roundabout.crossfire_block",
-                "instruction.roundabout.press_skill", StandIcons.CONCEALED_HURRICANE,1,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,3, "ability.roundabout.crossfire_ground",
-                "instruction.roundabout.press_skill", StandIcons.HIDDEN_HURRICANE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,4, "ability.roundabout.crossfire_special",
-                "instruction.roundabout.press_skill_crouch", StandIcons.CROSSFIRE_HURRICANE_SPECIAL,2,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.roundabout.vault",
-                "instruction.roundabout.press_skill_air", StandIcons.MAGICIANS_RED_LEDGE_GRAB,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.roundabout.flame_extinguish",
-                "instruction.roundabout.press_skill_crouch", StandIcons.SNAP_ICON,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,2, "ability.roundabout.projectile_burn",
-                "instruction.roundabout.press_skill_block", StandIcons.PROJECTILE_BURN,3,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,7, "ability.roundabout.crossfire_firestorm",
-                "instruction.roundabout.press_skill", StandIcons.CROSSFIRE_FIRESTORM,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,6, "ability.roundabout.fire_slam",
-                "instruction.roundabout.press_skill_crouch", StandIcons.FIRE_SLAM,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,6, "ability.roundabout.self_burn",
-                "instruction.roundabout.press_skill_block", StandIcons.SELF_BURN,4,level,bypas));
-        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,0, "ability.roundabout.mining",
-                "instruction.roundabout.hold_attack", StandIcons.RED_MINING,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+80,0, "ability.sba.red_lash",
+                "instruction.sba.press_attack", StandIcons.RED_LASH,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20, topPos+99,0, "ability.sba.guard",
+                "instruction.sba.hold_block", StandIcons.MAGICIANS_RED_GUARD,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+20,topPos+118,0, "ability.sba.flame_kick",
+                "instruction.sba.hold_attack_crouch", StandIcons.MAGICIANS_FLAME_KICK,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+80,0, "ability.sba.fireball_barrage",
+                "instruction.sba.barrage", StandIcons.FIREBALL_BARRAGE,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+99,0, "ability.sba.flamethrower",
+                "instruction.sba.kick_barrage", StandIcons.FLAMETHROWER,0,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+39,topPos+118,0, "ability.sba.furnace",
+                "instruction.sba.passive", StandIcons.FURNACE_ABILITY,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+80, 0, "ability.sba.red_bind",
+                "instruction.sba.press_skill", StandIcons.RED_BIND,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+99, 0, "ability.sba.flame_creation",
+                "instruction.sba.press_skill_crouch", StandIcons.LIGHT_FIRE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+58,topPos+118,5, "ability.sba.life_detector",
+                "instruction.sba.press_skill_block", StandIcons.LIFE_TRACKER,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+80,0, "ability.sba.crossfire",
+                "instruction.sba.press_skill", StandIcons.CROSSFIRE_HURRICANE,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+99,0, "ability.sba.crossfire_block",
+                "instruction.sba.press_skill", StandIcons.CONCEALED_HURRICANE,1,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+77,topPos+118,3, "ability.sba.crossfire_ground",
+                "instruction.sba.press_skill", StandIcons.HIDDEN_HURRICANE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+80,4, "ability.sba.crossfire_special",
+                "instruction.sba.press_skill_crouch", StandIcons.CROSSFIRE_HURRICANE_SPECIAL,2,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+99,0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+96,topPos+118,0, "ability.sba.vault",
+                "instruction.sba.press_skill_air", StandIcons.MAGICIANS_RED_LEDGE_GRAB,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+80,0, "ability.sba.flame_extinguish",
+                "instruction.sba.press_skill_crouch", StandIcons.SNAP_ICON,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+99,2, "ability.sba.projectile_burn",
+                "instruction.sba.press_skill_block", StandIcons.PROJECTILE_BURN,3,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+115,topPos+118,7, "ability.sba.crossfire_firestorm",
+                "instruction.sba.press_skill", StandIcons.CROSSFIRE_FIRESTORM,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+80,6, "ability.sba.fire_slam",
+                "instruction.sba.press_skill_crouch", StandIcons.FIRE_SLAM,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+99,6, "ability.sba.self_burn",
+                "instruction.sba.press_skill_block", StandIcons.SELF_BURN,4,level,bypas));
+        $$1.add(drawSingleGUIIcon(context,18,leftPos+134,topPos+118,0, "ability.sba.mining",
+                "instruction.sba.hold_attack", StandIcons.RED_MINING,0,level,bypas));
         return $$1;
     }
     //Level 7 = Firestorm

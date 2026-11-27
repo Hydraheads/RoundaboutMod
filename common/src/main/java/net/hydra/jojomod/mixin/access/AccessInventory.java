@@ -11,5 +11,5 @@ import java.util.List;
 @Mixin(Inventory.class)
 public interface AccessInventory {
     @Accessor("compartments")
-    List<NonNullList<ItemStack>> roundabout$GetCompartments();
+    List<NonNullList<ItemStack>> sba$GetCompartments();
 }

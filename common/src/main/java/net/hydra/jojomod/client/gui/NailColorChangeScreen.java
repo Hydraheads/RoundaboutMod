@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PlayerPosIndex;
@@ -27,10 +27,10 @@ import javax.annotation.Nullable;
 
 public class NailColorChangeScreen extends Screen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/cinderella_gui.png");
 
-    public static final ResourceLocation POWER_INVENTORY_GEAR_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    public static final ResourceLocation POWER_INVENTORY_GEAR_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/stand_user_settings.png");
     private int firstMouseX;
     private int firstMouseY;
@@ -58,7 +58,7 @@ public class NailColorChangeScreen extends Screen {
         super.init();
         zHeld = true;
         pl = Minecraft.getInstance().player;
-        if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersTusk PT){
+        if (((StandUser)pl).sba$getStandPowers() instanceof PowersTusk PT){
             baseNailColorX = nailColorX = PT.getNailColor().x;
             baseNailColorY = nailColorY = PT.getNailColor().y;
             baseNailColorZ = nailColorZ = PT.getNailColor().z;
@@ -85,7 +85,7 @@ public class NailColorChangeScreen extends Screen {
 
             this.minecraft.setScreen(null);
 
-            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (((StandUser)pl).sba$getStandPowers() instanceof PowersTusk PT) {
                 PT.setNailColor(nailColorX,nailColorY,nailColorZ);
                 ModMessageEvents.sendToServer(
                         ClientToServerPackets.StandPowerPackets.MESSAGES.NailColor.value,
@@ -103,7 +103,7 @@ public class NailColorChangeScreen extends Screen {
             nailColorX = 110/255F;
             nailColorY = 230/255F;
             nailColorZ = 255/255F;
-            if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersTusk PT) {
+            if (((StandUser)pl).sba$getStandPowers() instanceof PowersTusk PT) {
                 PT.setNailColor(nailColorX,nailColorY,nailColorZ);
                 ModMessageEvents.sendToServer(
                         ClientToServerPackets.StandPowerPackets.MESSAGES.NailColor.value,
@@ -220,13 +220,13 @@ public class NailColorChangeScreen extends Screen {
         guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 0.0f, 113, 26, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, mouseX, mouseY, delta);
-        guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.nail"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
+        guiGraphics.drawCenteredString(this.font, Component.translatable("sba.nail"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
 
 
 
         int i = this.width / 2 - 30;
         int j = this.height / 2 - 70;
-        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.red").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(nailColorX * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j - 9, 4210752, false);
+        guiGraphics.drawString(this.font, Component.translatable("sba.hairspray.red").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(nailColorX * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j - 9, 4210752, false);
         guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j, 11, 173, 118, 11);
         int renderSpot1 = (int) Math.floor(((double) 114 / maxRed) * (nailColorX));
         if (isSurelyHovering(i, j, 118, 11, mouseX, mouseY) || sliderHeld == 1) {
@@ -235,7 +235,7 @@ public class NailColorChangeScreen extends Screen {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i + renderSpot1, j, 5, 173, 5, 11);
         }
 
-        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.green").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(nailColorY * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i+1, j + 13, 4210752, false);
+        guiGraphics.drawString(this.font, Component.translatable("sba.hairspray.green").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(nailColorY * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i+1, j + 13, 4210752, false);
         guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j + 22, 11, 173, 118, 11);
 
         int renderSpot2 =(int) Math.floor(((double) 114 / maxGreen) * (nailColorY));
@@ -245,7 +245,7 @@ public class NailColorChangeScreen extends Screen {
             guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i+ renderSpot2, j + 22, 5, 173, 5, 11);
         }
 
-        guiGraphics.drawString(this.font, Component.translatable("roundabout.hairspray.blue").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(nailColorZ * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j + 35, 4210752, false);
+        guiGraphics.drawString(this.font, Component.translatable("sba.hairspray.blue").withStyle(ChatFormatting.GRAY).append(Component.literal(" "+Math.round(nailColorZ * 100.0) / 100.0).withStyle(ChatFormatting.DARK_GRAY)), i +1, j + 35, 4210752, false);
         guiGraphics.blit(POWER_INVENTORY_GEAR_LOCATION, i, j + 44, 11, 173, 118, 11);
         int renderSpot3 = (int) Math.floor(((double) 114 / maxBlue) * (nailColorZ));
         if (isSurelyHovering(i , j + 44, 118, 11, mouseX, mouseY) || sliderHeld == 3) {
@@ -257,7 +257,7 @@ public class NailColorChangeScreen extends Screen {
 
         k = this.width / 2 - 75;
         l = this.height / 2 +17;
-        if (((StandUser)pl).roundabout$getStandPowers() instanceof PowersTusk PT) {
+        if (((StandUser)pl).sba$getStandPowers() instanceof PowersTusk PT) {
             PT.setNailColor(nailColorX,nailColorY,nailColorZ);
             renderEntityInInventoryFollowsMouse(guiGraphics, k, l, 30,
                     (float) k - mouseX, (float) l - 50 - mouseY, pl);
@@ -270,29 +270,29 @@ public class NailColorChangeScreen extends Screen {
 
 
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 40, 60, 8, mouseX, mouseY)) {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.save").
+            guiGraphics.drawCenteredString(this.font, Component.translatable("sba.cinderella.gui.save").
                             withStyle(ChatFormatting.GREEN),
                     this.width / 2, this.height / 2 + 40, -1);
         } else {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.save"),
+            guiGraphics.drawCenteredString(this.font, Component.translatable("sba.cinderella.gui.save"),
                     this.width / 2, this.height / 2 + 40, -1);
         }
 
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 55, 60, 8, mouseX, mouseY)) {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit").
+            guiGraphics.drawCenteredString(this.font, Component.translatable("sba.cinderella.gui.exit").
                             withStyle(ChatFormatting.GREEN),
                     this.width / 2, this.height / 2 + 55, -1);
         } else {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit"),
+            guiGraphics.drawCenteredString(this.font, Component.translatable("sba.cinderella.gui.exit"),
                     this.width / 2, this.height / 2 + 55, -1);
         }
 
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 70, 70, 8, mouseX, mouseY)) {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.reset").
+            guiGraphics.drawCenteredString(this.font, Component.translatable("sba.cinderella.gui.reset").
                             withStyle(ChatFormatting.GREEN),
                     this.width / 2, this.height / 2 + 70, -1);
         } else {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.reset"),
+            guiGraphics.drawCenteredString(this.font, Component.translatable("sba.cinderella.gui.reset"),
                     this.width / 2, this.height / 2 + 70, -1);
         }
 
@@ -368,9 +368,9 @@ public class NailColorChangeScreen extends Screen {
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     @Override

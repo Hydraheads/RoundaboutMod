@@ -29,30 +29,30 @@ public class StandGeneralPowers extends GeneralPowers {
 
     /**The text name of the fate*/
     public Component getPowerName(){
-        return Component.translatable("text.roundabout.powers.stand");
+        return Component.translatable("text.sba.powers.stand");
     }
     public Component getPowerTagName(){
-        return Component.translatable("text.roundabout.powers.stand_select");
+        return Component.translatable("text.sba.powers.stand_select");
     }
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.stand_summon",
-                "instruction.roundabout.passive", StandIcons.STAND_SUMMON, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.stand_vision",
-                "instruction.roundabout.passive", StandIcons.STAND_VISION,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.stand_passives",
-                "instruction.roundabout.passive", StandIcons.STAND_PASSIVES,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.disc_imprint",
-                "instruction.roundabout.use_item", StandIcons.DISC_IMPRINT,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.disc_swap",
-                "instruction.roundabout.use_item", StandIcons.DISC_SWAP,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.stand_summon",
+                "instruction.sba.passive", StandIcons.STAND_SUMMON, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.stand_vision",
+                "instruction.sba.passive", StandIcons.STAND_VISION,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.stand_passives",
+                "instruction.sba.passive", StandIcons.STAND_PASSIVES,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.disc_imprint",
+                "instruction.sba.use_item", StandIcons.DISC_IMPRINT,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.sba.disc_swap",
+                "instruction.sba.use_item", StandIcons.DISC_SWAP,2,level,bypass));
         return $$1;
     }
 
     @Override
 
     public void drawOtherGUIElements(Font font, GuiGraphics context, float delta, int mouseX, int mouseY, int i, int j, ResourceLocation rl){
-        ItemStack disc = ((StandUser)self).roundabout$getStandDisc();
+        ItemStack disc = ((StandUser)self).sba$getStandDisc();
         if (disc != null && !disc.isEmpty()) {
             RenderSystem.enableBlend();
             context.renderItem(disc, i +82, j +40);

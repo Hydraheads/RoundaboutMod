@@ -17,6 +17,6 @@ public class SnubnoseAmmoItem extends AmmoItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("text.roundabout.bullets.revolver").withStyle(ChatFormatting.YELLOW));
+        tooltip.add(Component.translatable("text.sba.bullets.revolver").withStyle(ChatFormatting.YELLOW));
     }
 }

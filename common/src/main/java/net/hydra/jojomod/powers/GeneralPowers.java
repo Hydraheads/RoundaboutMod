@@ -1,6 +1,6 @@
 package net.hydra.jojomod.powers;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -130,8 +130,8 @@ public class GeneralPowers extends AbilityScapeBasis {
     @Override
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (hasActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().sba$isPossessed()  ) {
+                ((StandUser) this.getSelf()).sba$setIdleTime(0);
                 buttonInput4(keyIsDown, options);
             }
         }
@@ -139,8 +139,8 @@ public class GeneralPowers extends AbilityScapeBasis {
     @Override
     public void preButtonInput3(boolean keyIsDown, Options options){
         if (hasActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()  ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().sba$isPossessed()  ) {
+                ((StandUser) this.getSelf()).sba$setIdleTime(0);
                 buttonInput3(keyIsDown, options);
             }
         }
@@ -149,8 +149,8 @@ public class GeneralPowers extends AbilityScapeBasis {
     @Override
     public void preButtonInput2(boolean keyIsDown, Options options){
         if (hasActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().sba$isPossessed()   ) {
+                ((StandUser) this.getSelf()).sba$setIdleTime(0);
                 buttonInput2(keyIsDown, options);
             }
         }
@@ -159,8 +159,8 @@ public class GeneralPowers extends AbilityScapeBasis {
     @Override
     public void preButtonInput1(boolean keyIsDown, Options options){
         if (hasActive(this.getSelf())) {
-            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().roundabout$isPossessed()   ) {
-                ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+            if (!((TimeStop)this.getSelf().level()).CanTimeStopEntity(this.getSelf()) && !this.getStandUserSelf().sba$isPossessed()   ) {
+                ((StandUser) this.getSelf()).sba$setIdleTime(0);
                 buttonInput1(keyIsDown, options);
             }
         }
@@ -217,7 +217,7 @@ public class GeneralPowers extends AbilityScapeBasis {
             }
 
             if (this.self instanceof Player PE && PE.isSpectator()) {
-                ((StandUser) this.getSelf()).roundabout$setActive(false);
+                ((StandUser) this.getSelf()).sba$setActive(false);
             }
         }
         super.tickPower();

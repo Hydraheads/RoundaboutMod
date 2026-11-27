@@ -1,6 +1,6 @@
 package net.hydra.jojomod.util.config;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.util.config.annotation.*;
 
 @Groups({
@@ -161,7 +161,7 @@ public class ClientConfig implements Cloneable {
         @IntOption(group = "inherit", value = 0, min = -1024, max = 1024)
         public Integer configButtonOffsetY;
 
-        @CommentedOption(comment = "Should Roundabout render the Config Button (stand arrow button) on the main menu?")
+        @CommentedOption(comment = "Should SBA render the Config Button (stand arrow button) on the main menu?")
         @BooleanOption(group = "inherit", value = true)
         public Boolean shouldShowConfigButton;
     }
@@ -350,7 +350,7 @@ public class ClientConfig implements Cloneable {
                 case 6 -> mem6 = id;
                 case 7 -> mem7 = id;
                 case 8 -> mem8 = id;
-                default -> Roundabout.LOGGER.warn("Invalid Memory Save Id " + index);
+                default -> SBA.LOGGER.warn("Invalid Memory Save Id " + index);
             }
         }
         public String getFromMemory(int index) {
@@ -367,7 +367,7 @@ public class ClientConfig implements Cloneable {
                     default -> mem1;
                 };
             } else {
-                Roundabout.LOGGER.warn("Invalid Memory Load Id " + index);
+                SBA.LOGGER.warn("Invalid Memory Load Id " + index);
                 return "";
             }
         }

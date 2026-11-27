@@ -1,7 +1,7 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.block.RoundaboutDoor;
+import net.hydra.jojomod.SBA;
+import net.hydra.jojomod.block.SBADoor;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.GoBeyondEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -71,7 +71,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static net.hydra.jojomod.util.MainUtil.roundaboutGetUsedItem;
+import static net.hydra.jojomod.util.MainUtil.sbaGetUsedItem;
 import static net.hydra.jojomod.util.MainUtil.sendParticlesIfPossible;
 
 public class SeperatedArmEntity extends StandEntity {
@@ -115,7 +115,7 @@ public class SeperatedArmEntity extends StandEntity {
 
     public void jump(Vec3 jumpT0Pos){
         Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+        if (((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersGreenDay PGD) {
             ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, PGD.getMoldDustParticleColor()), location.x,
                     location.y, location.z,
                     24,
@@ -145,7 +145,7 @@ public class SeperatedArmEntity extends StandEntity {
 
     public void jump2(Vec3 jumpT0Pos){
         Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+        if (((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersGreenDay PGD) {
             ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, PGD.getMoldDustParticleColor()), location.x,
                     location.y, location.z,
                     24,
@@ -274,7 +274,7 @@ public class SeperatedArmEntity extends StandEntity {
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
         tickeffects();
         if(this.getUser() != null) {
-            if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
+            if (((((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersCatchTheRainbow))) {
                 if (!this.level().isClientSide) {
                     if (grabbedEntity != null) {
                         List<Entity> getNearEntity = MainUtil.getEntitiesInRange(this.level(), this.blockPosition(), 5F, this);
@@ -297,7 +297,7 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     } else {
                         if (StartupTicks == 0) {
-                            if (User != null && ((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))) {
+                            if (User != null && ((((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersCatchTheRainbow))) {
                                 this.lookAt(EntityAnchorArgument.Anchor.EYES, User.getEyePosition());
                                 this.setDeltaMovement(this.getLookAngle().multiply(0.4, 0.4, 0.4));
                             } else {
@@ -317,7 +317,7 @@ public class SeperatedArmEntity extends StandEntity {
                         }
                     }
                 }
-            } else if (!((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay))){
+            } else if (!((((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersGreenDay))){
                 if (!this.level().isClientSide) {
                     this.setUser(null);
                     removearm();
@@ -340,11 +340,11 @@ public class SeperatedArmEntity extends StandEntity {
             LivingEntity user = this.getUser();
             if (!client) {
 
-                if ((!(((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay)) && (!(((StandUser) user).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)) || (!user.isAlive())) {
+                if ((!(((StandUser) user).sba$getStandPowers() instanceof PowersGreenDay)) && (!(((StandUser) user).sba$getStandPowers() instanceof PowersCatchTheRainbow)) || (!user.isAlive())) {
                     removearm();
                 } else if (user != null) {
 
-                    if (((StandUser) user).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                    if (((StandUser) user).sba$getStandPowers() instanceof PowersGreenDay PGD) {
                         if (((PGD.Off_hand_entity != null) && (PGD.Main_arm != null))) {
                             if (!((PGD.Main_arm.equals(this)) || PGD.Off_hand_entity.equals(this))) {
                                 removearm();
@@ -359,7 +359,7 @@ public class SeperatedArmEntity extends StandEntity {
                             }
                         }
                     }
-                    if ((((StandUser) user).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR)) {
+                    if ((((StandUser) user).sba$getStandPowers() instanceof PowersCatchTheRainbow PCR)) {
                         if (PCR.Off_hand_entity != null) {
                             if (!((PCR.Off_hand_entity.equals(this)))) {
                                 removearm();
@@ -380,7 +380,7 @@ public class SeperatedArmEntity extends StandEntity {
                     if ((MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), MiningPos.getX(), MiningPos.getY(), MiningPos.getZ()) < 2)) {
                         boolean mine = true;
                         if (user instanceof ServerPlayer PE) {
-                            mine = !((!this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) ||
+                            mine = !((!this.level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)) ||
                                     (PE.blockActionRestricted(PE.serverLevel(), MiningPos, PE.gameMode.getGameModeForPlayer())) ||
                                     (!this.level().mayInteract(PE, MiningPos)));
                         }
@@ -495,16 +495,16 @@ public class SeperatedArmEntity extends StandEntity {
 
                 }
                 for (int i = 0; i < 2; i = i + 1) {
-                    double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                    double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
-                    double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                    double randX = SBA.RANDOM.nextDouble(-0.2, 0.2);
+                    double randY = SBA.RANDOM.nextDouble(-0.1, 0.1);
+                    double randZ = SBA.RANDOM.nextDouble(-0.2, 0.2);
+                    if (((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersGreenDay PGD) {
                         ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD, PGD.getMoldParticleColor()),
                                 this.getX() + randX,
                                 this.getY() + randY + 0.15,
                                 this.getZ() + randZ,
                                 1, 0, 0, 0, 0);
-                    } else if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
+                    } else if (((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersCatchTheRainbow) {
                         ((ServerLevel) this.level()).sendParticles(ParticleTypes.SPLASH,
                                 this.getX(),
                                 this.getY() + 0.15,
@@ -513,13 +513,13 @@ public class SeperatedArmEntity extends StandEntity {
                     }
                 }
                 if (Can_activate && !onGround()) {
-                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                    if (((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersGreenDay PGD) {
                         ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, PGD.getMoldDustParticleColor()),
                                 this.getX(),
                                 this.getY() + 0.15,
                                 this.getZ(),
                                 1, 0, 0, 0, 0);
-                    } else if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow) {
+                    } else if (((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersCatchTheRainbow) {
                         ((ServerLevel) this.level()).sendParticles(ParticleTypes.SPLASH,
                                 this.getX(),
                                 this.getY() + 0.15,
@@ -572,12 +572,12 @@ public class SeperatedArmEntity extends StandEntity {
                 }
                 for (int i = 0; i < 1; i = i + 1) {
                     Vector3f dustColor = PowersGreenDay.defaultFloatDustColor();
-                    if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                    if (User != null && ((StandUser) User).sba$getStandPowers() instanceof PowersGreenDay PGD) {
                         dustColor = PGD.getFloatDustParticleColor();
                     }
-                    double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-                    double randY = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-                    double randZ = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
+                    double randX = SBA.RANDOM.nextDouble(-0.3, 0.3);
+                    double randY = SBA.RANDOM.nextDouble(-0.3, 0.3);
+                    double randZ = SBA.RANDOM.nextDouble(-0.3, 0.3);
                     ((ServerLevel) level()).sendParticles(new DustParticleOptions(dustColor, 2f),
                             this.getX() + randX,
                             this.getY() + randY,
@@ -608,8 +608,8 @@ public class SeperatedArmEntity extends StandEntity {
                 }
                 if (getMainHandItem().getItem() instanceof EnderpearlItem EPI && !hasUsedItem) {
                     for (int i = 1; i < 44; i++) {
-                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.PORTAL, this.getX() + Roundabout.RANDOM.nextDouble(-1, 1),
-                                this.getY() + Roundabout.RANDOM.nextDouble(-1, 1), this.getZ() + Roundabout.RANDOM.nextDouble(-1, 1),
+                        ((ServerLevel) this.level()).sendParticles(ParticleTypes.PORTAL, this.getX() + SBA.RANDOM.nextDouble(-1, 1),
+                                this.getY() + SBA.RANDOM.nextDouble(-1, 1), this.getZ() + SBA.RANDOM.nextDouble(-1, 1),
                                 1,
                                 0, 0, 0,
                                 3);
@@ -712,7 +712,7 @@ public class SeperatedArmEntity extends StandEntity {
             if ((entity instanceof LivingEntity) && !((entity.equals(this) || entity.equals(user)) || entity instanceof StandEntity || entity instanceof ItemEntity)) {
                 if (!(SpinTicks > 0)) {
                     if(user != null) {
-                        ((StandUser) user).roundabout$getStandPowers().addEXP(1);
+                        ((StandUser) user).sba$getStandPowers().addEXP(1);
                     }
                 }
                 if ( SpinTicks > 0) {
@@ -808,13 +808,13 @@ public class SeperatedArmEntity extends StandEntity {
                     }
                 } else {
                     if(entity instanceof LivingEntity LE) {
-                        if (breakShield && ((StandUser) LE).roundabout$getStandPowers().interceptGuard()
-                                && LE.isBlocking() && !((StandUser) LE).roundabout$isGuarding()) {
+                        if (breakShield && ((StandUser) LE).sba$getStandPowers().interceptGuard()
+                                && LE.isBlocking() && !((StandUser) LE).sba$isGuarding()) {
                             knockShield2(entity, 60);
                         } else {
                             knockShield2(entity, 40);
                         }
-                        if (!((StandUser) LE).roundabout$isGuarding() || LE.isBlocking()) {
+                        if (!((StandUser) LE).sba$isGuarding() || LE.isBlocking()) {
                             Can_activate = false;
                             this.setDeltaMovement(0, 0, 0);
                             Vec3 location = new Vec3(this.getX(), this.getY(), this.getZ());
@@ -830,7 +830,7 @@ public class SeperatedArmEntity extends StandEntity {
                                 entity.hurt(ModDamageTypes.of(level(), DamageTypes.PLAYER_ATTACK, this.getUser(), user), (Double.valueOf(this.getAttributeValue(Attributes.ATTACK_DAMAGE)).floatValue()) * 1f);
                             }
 
-                            if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))){
+                            if (((((StandUser) this.getUser()).sba$getStandPowers() instanceof PowersCatchTheRainbow))){
                                 if (grabbedEntity == null) {
                                     grabbedEntity = entity;
                                     chokeTimer = 80;

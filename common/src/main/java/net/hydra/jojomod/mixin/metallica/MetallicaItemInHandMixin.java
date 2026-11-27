@@ -27,7 +27,7 @@ public class MetallicaItemInHandMixin {
 
         if (localPlayer != null) {
             if (MainUtil.isUsingMetallica(localPlayer)) {
-                if (((StandUser)localPlayer).roundabout$getMetallicaInvisibility() > -1) {
+                if (((StandUser)localPlayer).sba$getMetallicaInvisibility() > -1) {
 
                     float alpha = PowersMetallica.getMetallicaInvisibilityAlpha(localPlayer, 0, partialTick);
                     ClientUtil.setThrowFadeToTheEther(alpha);

@@ -38,7 +38,7 @@ public abstract class AccessFireworkRocket implements IFireworkRocketAccess {
     }
 
     @Inject(method = "onHitEntity", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
+    private void sba$onHitEntity(EntityHitResult $$0, CallbackInfo ci) {
         Entity Hattan = ((EntityHitResult) $$0).getEntity();
         FireworkRocketEntity fwork = (FireworkRocketEntity) (Object) (this);
         if(Hattan instanceof ManhattanTransferEntity ME){
@@ -50,7 +50,7 @@ public abstract class AccessFireworkRocket implements IFireworkRocketAccess {
                     ci.cancel();
                     if (ci.isCancelled()) {
                         ME.setHeldItemManhattan(ii.copyAndClear());
-                        if (ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+                        if (ME.getUser() instanceof Player PL && ((StandUser) PL).sba$getStandPowers() instanceof PowersManhattanTransfer PM) {
                             if (ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
                                 PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
                             } else {
@@ -77,7 +77,7 @@ public abstract class AccessFireworkRocket implements IFireworkRocketAccess {
                 }
                 $$4.setOwner(ME.getUser());
                 $$4.shootFromRotation(ME, ME.shootRotationXHattan, ME.shootRotationYHattan, 0.0F, 1.4F, 0.0F);
-                ((IFireworkRocketAccess) $$4).roundabout$SetFireworkRemainingLifeTicks(this.roundabout$GetFireworkRemainingLifeTicks());
+                ((IFireworkRocketAccess) $$4).sba$SetFireworkRemainingLifeTicks(this.sba$GetFireworkRemainingLifeTicks());
                 ((IFireworkRocketAccess) $$4).setIsHattanProj(true);
                 ME.level().addFreshEntity($$4);
             }
@@ -90,7 +90,7 @@ public abstract class AccessFireworkRocket implements IFireworkRocketAccess {
     }
 
     @Inject(method = "onHitEntity", at = @At(value = "TAIL"),cancellable = true)
-    private void roundabout$onHitEntityBonusHattanDamage(EntityHitResult $$0, CallbackInfo ci) {
+    private void sba$onHitEntityBonusHattanDamage(EntityHitResult $$0, CallbackInfo ci) {
         Entity Hattan = ((EntityHitResult) $$0).getEntity();
         FireworkRocketEntity fwork = (FireworkRocketEntity) (Object) (this);
         if(isHat){
@@ -98,11 +98,11 @@ public abstract class AccessFireworkRocket implements IFireworkRocketAccess {
         }
     }
     @Override
-    public int roundabout$GetFireworkRemainingLifeTicks(){
+    public int sba$GetFireworkRemainingLifeTicks(){
         return life;
     }
     @Override
-    public void roundabout$SetFireworkRemainingLifeTicks(int life2){
+    public void sba$SetFireworkRemainingLifeTicks(int life2){
         this.life = life2;
     }
     @Shadow

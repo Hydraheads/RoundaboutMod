@@ -17,12 +17,12 @@ public abstract class BonusExperienceMixin {
 
     @ModifyVariable(method = "playerTouch",
             at = @At(value = "STORE"))
-    private int roundabout$addBonusXp(int value, Player instance) {
+    private int sba$addBonusXp(int value, Player instance) {
         StandUser SU = (StandUser) instance;
         float extra = 1F;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis PA ) {
-            boolean bypass = (SU.roundabout$getStandDisc().getItem() instanceof MaxStandDiscItem) || instance.isCreative();
-            extra = 1 + (bypass ? 5F : 0.5F * ((IPlayerEntity) instance).roundabout$getStandLevel() / PA.getMaxLevel()  ) ;
+        if (SU.sba$getStandPowers() instanceof PowersAnubis PA ) {
+            boolean bypass = (SU.sba$getStandDisc().getItem() instanceof MaxStandDiscItem) || instance.isCreative();
+            extra = 1 + (bypass ? 5F : 0.5F * ((IPlayerEntity) instance).sba$getStandLevel() / PA.getMaxLevel()  ) ;
 
             return (int)(value*extra);
         }

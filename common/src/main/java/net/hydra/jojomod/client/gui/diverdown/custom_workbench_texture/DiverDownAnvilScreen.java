@@ -1,6 +1,6 @@
 package net.hydra.jojomod.client.gui.diverdown.custom_workbench_texture;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class DiverDownAnvilScreen extends AnvilScreen {
     private static final ResourceLocation TEXTURE =
-        new ResourceLocation(Roundabout.MOD_ID, "textures/gui/diver_down/workbench_ui/anvil.png");
+        new ResourceLocation(SBA.MOD_ID, "textures/gui/diver_down/workbench_ui/anvil.png");
 
     public DiverDownAnvilScreen(AnvilMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

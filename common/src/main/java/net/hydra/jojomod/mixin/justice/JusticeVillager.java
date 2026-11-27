@@ -25,9 +25,9 @@ public abstract class JusticeVillager extends AbstractVillager implements Reputa
 
     /**Villagers trade well with villager morphs*/
     @Inject(method = "getPlayerReputation", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$getPlayerRep(Player $$0, CallbackInfoReturnable<Integer> cir) {
+    private void sba$getPlayerRep(Player $$0, CallbackInfoReturnable<Integer> cir) {
         IPlayerEntity ple = ((IPlayerEntity) $$0);
-        byte shape = ple.roundabout$getShapeShift();
+        byte shape = ple.sba$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
             if (ShapeShifts.isVillager(shift)) {
@@ -39,10 +39,10 @@ public abstract class JusticeVillager extends AbstractVillager implements Reputa
 
     /**Reputation of the player will NOT change at all if they are shapeshifted in general*/
     @Inject(method = "onReputationEventFrom", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$onReputationEventFrom(ReputationEventType $$0, Entity $$1, CallbackInfo ci) {
+    private void sba$onReputationEventFrom(ReputationEventType $$0, Entity $$1, CallbackInfo ci) {
         if ($$1 instanceof Player PL) {
             IPlayerEntity ple = ((IPlayerEntity) PL);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 ci.cancel();
@@ -50,10 +50,10 @@ public abstract class JusticeVillager extends AbstractVillager implements Reputa
         }
     }    /**Reputation of the player will NOT change at all if they are shapeshifted in general*/
     @Inject(method = "setLastHurtByMob(Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$setLastHurtByMobX(LivingEntity $$0, CallbackInfo ci) {
+    private void sba$setLastHurtByMobX(LivingEntity $$0, CallbackInfo ci) {
         if ($$0 instanceof Player PL) {
             IPlayerEntity ple = ((IPlayerEntity) PL);
-            byte shape = ple.roundabout$getShapeShift();
+            byte shape = ple.sba$getShapeShift();
             ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
             if (shift != ShapeShifts.PLAYER) {
                 ci.cancel();
@@ -64,10 +64,10 @@ public abstract class JusticeVillager extends AbstractVillager implements Reputa
 
     /**Villagers do not trade with zombie or skeleton morphs in general*/
     @Inject(method = "mobInteract(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", at = @At(value = "HEAD"),cancellable = true)
-    private void roundabout$mobInteract(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
+    private void sba$mobInteract(Player $$0, InteractionHand $$1, CallbackInfoReturnable<InteractionResult> cir) {
 
         IPlayerEntity ple = ((IPlayerEntity) $$0);
-        byte shape = ple.roundabout$getShapeShift();
+        byte shape = ple.sba$getShapeShift();
         ShapeShifts shift = ShapeShifts.getShiftFromByte(shape);
         if (shift != ShapeShifts.PLAYER) {
             if (ShapeShifts.isZombie(shift) || ShapeShifts.isSkeleton(shift)) {

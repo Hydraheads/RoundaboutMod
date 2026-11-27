@@ -12,22 +12,22 @@ public class AccessWalkAnimationState implements IWalkAnimationState {
     /**There is no reason for these to be private or protected, we should be able to tap into them.*/
     @Unique
     @Override
-    public float roundabout$getPosition(){
+    public float sba$getPosition(){
         return position;
     }
     @Unique
     @Override
-    public float roundabout$getSpeedOld(){
+    public float sba$getSpeedOld(){
         return speedOld;
     }
     @Unique
     @Override
-    public void roundabout$setPosition(float position){
+    public void sba$setPosition(float position){
         this.position = position;
     }
     @Unique
     @Override
-    public void roundabout$setSpeedOld(float speedOld){
+    public void sba$setSpeedOld(float speedOld){
         this.speedOld = speedOld;
     }
 

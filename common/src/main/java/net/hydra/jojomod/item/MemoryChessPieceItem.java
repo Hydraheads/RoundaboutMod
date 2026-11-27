@@ -1,6 +1,6 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.ChessPieceBlockEntity;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.IVillagerAccess;
@@ -134,7 +134,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
 
         player.displayClientMessage(
                 Component.translatable(
-                        "text.roundabout.memory." + tag.getInt("stealType")
+                        "text.sba.memory." + tag.getInt("stealType")
                 ).withStyle(ChatFormatting.AQUA),
                 true
         );
@@ -256,7 +256,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
                     GossipContainer gossips = vg.getGossips();
                     Tag gossipTag = gossips.store(NbtOps.INSTANCE);
                     tag.put("StoredGossip", gossipTag);
-                    ((IVillagerAccess)vg).roundabout$clearGossips();
+                    ((IVillagerAccess)vg).sba$clearGossips();
                 } else if (stealType == 12 && victim instanceof Villager vg){
                     Brain<Villager> brain = vg.getBrain();
                     if (brain.hasMemoryValue(MemoryModuleType.JOB_SITE)) {
@@ -302,10 +302,10 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
         if (comp != null && !comp.isBlank()){
             ChatFormatting formatting = ChatFormatting.LIGHT_PURPLE;
              $$2.add(Component.literal(comp).withStyle(formatting));
-            //$$2.add(Component.translatable("text.roundabout.memory."+
+            //$$2.add(Component.translatable("text.sba.memory."+
             //        $$0.getOrCreateTag().getInt("stealType")).withStyle(ChatFormatting.BLUE));
             if (!$$0.getOrCreateTag().getBoolean("activated")){
-                $$2.add(Component.translatable("text.roundabout.inactive_piece").withStyle(ChatFormatting.AQUA));
+                $$2.add(Component.translatable("text.sba.inactive_piece").withStyle(ChatFormatting.AQUA));
             }
         }
     }
@@ -349,7 +349,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
         Entity entity = serverLevel.getEntity(uuid);
 
         if (entity != null) {
-            if (entity instanceof LivingEntity living && ((StandUser)living).roundabout$getStandPowers()
+            if (entity instanceof LivingEntity living && ((StandUser)living).sba$getStandPowers()
             instanceof PowersKingCrimson pkc && pkc.timeEraseActive){
                 if (pkc.activeClone != null) {
                     entity = pkc.activeClone;
@@ -368,7 +368,7 @@ public class MemoryChessPieceItem extends BlockItem implements Vanishable {
                 }
             } else if (entity instanceof LivingEntity living && living.hurtTime <= 7) {
                 float dmg;
-                if (((StandUser)living).roundabout$getStandPowers().getReducedDamage(living)){
+                if (((StandUser)living).sba$getStandPowers().getReducedDamage(living)){
                     dmg = multiplyPowerByStandConfigPlayers(1.85F);
                 } else {
                     dmg = multiplyPowerByStandConfigMobs(3);

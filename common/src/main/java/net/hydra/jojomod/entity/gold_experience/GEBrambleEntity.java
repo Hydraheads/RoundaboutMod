@@ -144,7 +144,7 @@ public class GEBrambleEntity extends Entity {
                 }
             }
             float damage = 2.2F;
-            if (caster != null && ((StandUser) caster).roundabout$getStandPowers() instanceof PowersGoldExperience gePowers) {
+            if (caster != null && ((StandUser) caster).sba$getStandPowers() instanceof PowersGoldExperience gePowers) {
                 damage = gePowers.getBrambleDamage(actualVictim);
             }
             if (!damagedVictims.contains(actualVictim)) {

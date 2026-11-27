@@ -1,6 +1,6 @@
 package net.hydra.jojomod.registry;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IFireBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.hydra.jojomod.event.ModEffects;
@@ -83,7 +83,7 @@ public class FabricEffects extends MobEffect{
     }
 
     private static MobEffect register(String $$1, MobEffect $$2) {
-        return Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(Roundabout.MOD_ID, $$1), $$2);
+        return Registry.register(BuiltInRegistries.MOB_EFFECT, new ResourceLocation(SBA.MOD_ID, $$1), $$2);
     }
 
 

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinLocalPlayer {
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void roundabout$metallicaTick(CallbackInfo ci) {
+    private void sba$metallicaTick(CallbackInfo ci) {
         MetallicaClientRenderer.tickMetallicaEffects((LocalPlayer)(Object)this);
     }
     }

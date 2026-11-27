@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -65,12 +65,12 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         float maxfade = 100;
         LivingEntity User = mobEntity.getUser();
 
-        if ((User != null && ((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
-                ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1){
+        if ((User != null && ((IEntityAndData)User).sba$getTrueInvisibility() > -1) ||
+                ((IEntityAndData)mobEntity).sba$getTrueInvisibility() > -1){
             return;
         }
 
-        if (User != null && !mobEntity.getUser().is(lp) && ((IEntityAndData)User).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+        if (User != null && !mobEntity.getUser().is(lp) && ((IEntityAndData)User).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
             return;
         }
 
@@ -79,7 +79,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
             if (User != null && mobEntity.getUser().is(lp)) {
 
                 StandUser standUser = ((StandUser)mobEntity.getUser());
-                StandPowers powers = standUser.roundabout$getStandPowers();
+                StandPowers powers = standUser.sba$getStandPowers();
 
                 /**
                  if (powers.isPiloting()){
@@ -92,7 +92,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
                  }
                  **/
 
-                if (standUser.roundabout$getStandPowers().getActivePower() == PowerIndex.NONE){
+                if (standUser.sba$getStandPowers().getActivePower() == PowerIndex.NONE){
                     maxfade = ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
                     if (ConfigManager.getClientConfig().opacitySettings.opacityOfStand <= 0.1F){
                         return;
@@ -123,7 +123,7 @@ public class StandRenderer<T extends StandEntity> extends MobRenderer<T, StandMo
         }
 
         if (User instanceof Player PE){
-            ItemStack stack = ((IPlayerEntity)PE).roundabout$getMaskSlot();
+            ItemStack stack = ((IPlayerEntity)PE).sba$getMaskSlot();
             if (!stack.isEmpty() && stack.getItem() instanceof MaskItem mi){
                 VisageData vd = mi.visageData.generateVisageData(mobEntity);
                 Vec3 vec = mi.visageData.generateVisageData(PE).sizeModifier();

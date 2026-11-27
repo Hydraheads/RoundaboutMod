@@ -21,34 +21,34 @@ import static org.apache.commons.lang3.StringUtils.substring;
 
 public class LyinEyesHighlighterRenderer {
     private static final ResourceLocation[] PASSIVE_ICONS = {
-        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_1.png"),
-        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_2.png"),
-        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_3.png"),
-        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_highlight_4.png")
+        new ResourceLocation("sba", "textures/particle/lyin_eyes_highlight_1.png"),
+        new ResourceLocation("sba", "textures/particle/lyin_eyes_highlight_2.png"),
+        new ResourceLocation("sba", "textures/particle/lyin_eyes_highlight_3.png"),
+        new ResourceLocation("sba", "textures/particle/lyin_eyes_highlight_4.png")
     };
     private static final ResourceLocation[] PASSIVE_ICONS_THICK = {
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_1.png"),
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_2.png"),
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_3.png"),
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_thick_4.png")
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_thick_1.png"),
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_thick_2.png"),
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_thick_3.png"),
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_thick_4.png")
     };
     private static final ResourceLocation[] ICONS_NEUTRAL = {
-        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_1.png"),
-        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_2.png"),
-        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_3.png"),
-        new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_4.png")
+        new ResourceLocation("sba", "textures/particle/lyin_eyes_neutral_1.png"),
+        new ResourceLocation("sba", "textures/particle/lyin_eyes_neutral_2.png"),
+        new ResourceLocation("sba", "textures/particle/lyin_eyes_neutral_3.png"),
+        new ResourceLocation("sba", "textures/particle/lyin_eyes_neutral_4.png")
     };
     private static final ResourceLocation[] ICONS_NEUTRAL_THICK = {
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_thick_1.png"),
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_thick_2.png"),
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_thick_3.png"),
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_neutral_thick_4.png")
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_neutral_thick_1.png"),
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_neutral_thick_2.png"),
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_neutral_thick_3.png"),
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_neutral_thick_4.png")
     };
     private static final ResourceLocation[] ICONS_HOSTILE = {
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_hostile_1.png"),
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_hostile_2.png"),
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_hostile_3.png"),
-            new ResourceLocation("roundabout", "textures/particle/lyin_eyes_hostile_4.png")
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_hostile_1.png"),
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_hostile_2.png"),
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_hostile_3.png"),
+            new ResourceLocation("sba", "textures/particle/lyin_eyes_hostile_4.png")
     };
 
     /**
@@ -111,7 +111,7 @@ public class LyinEyesHighlighterRenderer {
         }
 
         // tense villager check
-        if(entity instanceof Villager V && (((IVillagerAccess) V).roundabout$isTense() || ((IVillagerAccess) V).roundabout$isUnnerved()))
+        if(entity instanceof Villager V && (((IVillagerAccess) V).sba$isTense() || ((IVillagerAccess) V).sba$isUnnerved()))
         {
             if (ConfigManager.getClientConfig().lyinEyesSettings.liyingEyesColorBlindMode && type == NEUTRAL) {
                 return ICONS_NEUTRAL_THICK[order[stepInRound]];

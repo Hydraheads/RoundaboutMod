@@ -92,8 +92,8 @@ public class GamblingTableMenu extends AbstractContainerMenu {
     public Component getGameName() {
         int game = this.data.get(0);
         return switch (game) {
-            case 1 -> Component.translatable("gui.roundabout.gambling_table.game.coin_drop");
-            default -> Component.translatable("gui.roundabout.gambling_table.game.waiting");
+            case 1 -> Component.translatable("gui.sba.gambling_table.game.coin_drop");
+            default -> Component.translatable("gui.sba.gambling_table.game.waiting");
         };
     }
 

@@ -1,0 +1,6 @@
+{
+  "parent": "sba:block/fog_coating_source",
+  "textures": {
+    "texture": "minecraft:block/black_wool"
+  }
+}

@@ -43,12 +43,12 @@ public class TimeStopParticleEngine {
     /**When a particle is created, mark it as created in a TS or not, particles made in a TS tick*/
     @ModifyVariable(
             method = "add(Lnet/minecraft/client/particle/Particle;)V", at = @At(value = "HEAD"))
-    private Particle roundaboutMarkParticleTS(Particle $$0) {
+    private Particle sbaMarkParticleTS(Particle $$0) {
         if ($$0 != null && level != null) {
-            if (((TimeStop) level).inTimeStopRange(new Vec3i((int) ((AccessParticle) $$0).roundabout$getX(),
-                    (int) ((AccessParticle) $$0).roundabout$getY(),
-                    (int) ((AccessParticle) $$0).roundabout$getZ()))) {
-                ((IParticleAccess) $$0).roundabout$setRoundaboutIsTimeStopCreated(true);
+            if (((TimeStop) level).inTimeStopRange(new Vec3i((int) ((AccessParticle) $$0).sba$getX(),
+                    (int) ((AccessParticle) $$0).sba$getY(),
+                    (int) ((AccessParticle) $$0).sba$getZ()))) {
+                ((IParticleAccess) $$0).sba$setSBAIsTimeStopCreated(true);
             }
         }
         return $$0;
@@ -58,12 +58,12 @@ public class TimeStopParticleEngine {
     void doNotTickParticleWhenTimeStopped(Particle particle, CallbackInfo ci) {
         AccessParticle particle1 = (AccessParticle) particle;
         if (!(particle instanceof ItemPickupParticle) && particle1 != null) {
-            if (!((IParticleAccess) particle1).roundabout$getRoundaboutIsTimeStopCreated() && ((TimeStop) level).inTimeStopRange(new Vec3i((int) particle1.roundabout$getX(),
-                    (int) particle1.roundabout$getY(),
-                    (int) particle1.roundabout$getZ()))) {
-                particle1.roundabout$setPrevX(particle1.roundabout$getX());
-                particle1.roundabout$setPrevY(particle1.roundabout$getY());
-                particle1.roundabout$setPrevZ(particle1.roundabout$getZ());
+            if (!((IParticleAccess) particle1).sba$getSBAIsTimeStopCreated() && ((TimeStop) level).inTimeStopRange(new Vec3i((int) particle1.sba$getX(),
+                    (int) particle1.sba$getY(),
+                    (int) particle1.sba$getZ()))) {
+                particle1.sba$setPrevX(particle1.sba$getX());
+                particle1.sba$setPrevY(particle1.sba$getY());
+                particle1.sba$setPrevZ(particle1.sba$getZ());
                 ci.cancel();
             }
         }
@@ -108,14 +108,14 @@ public class TimeStopParticleEngine {
 
                             AccessParticle particle1 = ((AccessParticle) $$10);
                             float tickDeltaFixed = $$4;
-                            if (particle1 != null && !((IParticleAccess) particle1).roundabout$getRoundaboutIsTimeStopCreated() && !($$10 instanceof ItemPickupParticle)) {
-                                Vec3i range = new Vec3i((int) particle1.roundabout$getX(),
-                                        (int) particle1.roundabout$getY(),
-                                        (int) particle1.roundabout$getZ());
+                            if (particle1 != null && !((IParticleAccess) particle1).sba$getSBAIsTimeStopCreated() && !($$10 instanceof ItemPickupParticle)) {
+                                Vec3i range = new Vec3i((int) particle1.sba$getX(),
+                                        (int) particle1.sba$getY(),
+                                        (int) particle1.sba$getZ());
                                 if (((TimeStop) level).inTimeStopRange(range)) {
-                                    tickDeltaFixed = ((IParticleAccess) particle1).roundabout$getPreTSTick();
+                                    tickDeltaFixed = ((IParticleAccess) particle1).sba$getPreTSTick();
                                 } else {
-                                    ((IParticleAccess) particle1).roundabout$setPreTSTick();
+                                    ((IParticleAccess) particle1).sba$setPreTSTick();
                                 }
                             }
                             $$10.render($$9, $$3, tickDeltaFixed);

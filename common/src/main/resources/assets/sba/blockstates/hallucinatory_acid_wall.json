@@ -1,0 +1,8 @@
+{
+  "multipart": [
+    { "when": { "facing": "north" }, "apply": { "model": "sba:block/hallucinatory_acid_wall" } },
+    { "when": { "facing": "east" }, "apply": { "model": "sba:block/hallucinatory_acid_wall", "y": 90, "uvlock": true } },
+    { "when": { "facing": "south" }, "apply": { "model": "sba:block/hallucinatory_acid_wall", "y": 180, "uvlock": true } },
+    { "when": { "facing": "west" }, "apply": { "model": "sba:block/hallucinatory_acid_wall", "y": 270, "uvlock": true } }
+  ]
+}

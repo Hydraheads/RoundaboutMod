@@ -24,18 +24,18 @@ public abstract class TimeStopWarden extends Monster {
     /**Wardens can move in stopped time and emit clock particles as they do so*/
 
     @Unique
-    private boolean roundabout$hasSentTSMessage = false;
+    private boolean sba$hasSentTSMessage = false;
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    private void roundabout$tick(CallbackInfo ci) {
+    private void sba$tick(CallbackInfo ci) {
         if (ClientNetworking.getAppropriateConfig().timeStopSettings.wardenMovesInStoppedTime) {
             if (this.level() instanceof ServerLevel $$0) {
                 if (((TimeStop) this.level()).inTimeStopRange(this)) {
-                    if (!roundabout$hasSentTSMessage) {
-                        roundabout$hasSentTSMessage = true;
+                    if (!sba$hasSentTSMessage) {
+                        sba$hasSentTSMessage = true;
                         for (int j = 0; j < $$0.players().size(); ++j) {
                             ServerPlayer serverPlayerEntity = ((ServerLevel) this.level()).players().get(j);
                             if (serverPlayerEntity.distanceTo(this) < 120) {
-                                serverPlayerEntity.displayClientMessage(Component.translatable("roundabout.warden_ts_movement").withStyle(ChatFormatting.RED), true);
+                                serverPlayerEntity.displayClientMessage(Component.translatable("sba.warden_ts_movement").withStyle(ChatFormatting.RED), true);
                             }
                         }
                     }

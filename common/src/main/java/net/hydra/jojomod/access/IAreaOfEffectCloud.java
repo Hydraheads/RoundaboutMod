@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface IAreaOfEffectCloud {
     /**Seriously Mojang why do you make all of your variables private access?*/
-    List<MobEffectInstance> roundabout$getEffects();
-    Potion roundabout$getPotions();
+    List<MobEffectInstance> sba$getEffects();
+    Potion sba$getPotions();
 }

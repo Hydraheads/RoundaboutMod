@@ -18,7 +18,7 @@ public abstract class WhitesnakeControlMobTargetingMixin {
     @Shadow @Final protected GoalSelector targetSelector;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void roundaboutWhitesnake$addControlTargetGoal(CallbackInfo ci) {
+    private void sbaWhitesnake$addControlTargetGoal(CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
         if (mob instanceof Enemy && !(mob instanceof NeutralMob)
                 && !targetSelector.getAvailableGoals().isEmpty()) {
@@ -27,7 +27,7 @@ public abstract class WhitesnakeControlMobTargetingMixin {
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void roundaboutWhitesnake$targetControlledStand(CallbackInfo ci) {
+    private void sbaWhitesnake$targetControlledStand(CallbackInfo ci) {
         Mob mob = (Mob) (Object) this;
         if (mob.level().isClientSide() || !mob.isAlive() || (mob.tickCount & 3) != 0) return;
         if (mob.getTarget() instanceof WhitesnakeEntity stand && !stand.isControlModeActive()) {

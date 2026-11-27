@@ -36,7 +36,7 @@ public class SilverChariotEntityRenderDispatcherMixin {
         Camera camera = minecraft.gameRenderer.getMainCamera();
         ICamera cameraAccess = (ICamera) camera;
 
-        Entity controlEntity = cameraAccess.roundabout$getPovSwitch();
+        Entity controlEntity = cameraAccess.sba$getPovSwitch();
 
         if (!(controlEntity instanceof SilverChariotEntity SCE)) {
             return;

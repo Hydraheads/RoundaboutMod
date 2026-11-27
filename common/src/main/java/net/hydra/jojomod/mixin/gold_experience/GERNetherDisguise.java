@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class GERNetherDisguise {
 
     @Inject(method = "getBlockState", at = @At("RETURN"), cancellable = true)
-    private void roundabout$netherIllusionBlockState(BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
+    private void sba$netherIllusionBlockState(BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
         if (!GERNetherIllusionHelper.active && !GERNetherIllusionHelper.endActive) return;
 
         BlockState real = cir.getReturnValue();

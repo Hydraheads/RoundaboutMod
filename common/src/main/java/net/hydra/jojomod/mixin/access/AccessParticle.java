@@ -7,16 +7,16 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(Particle.class)
 public interface AccessParticle {
     @Accessor("xo")
-    void roundabout$setPrevX(double value);
+    void sba$setPrevX(double value);
     @Accessor("yo")
-    void roundabout$setPrevY(double value);
+    void sba$setPrevY(double value);
     @Accessor("zo")
-    void roundabout$setPrevZ(double value);
+    void sba$setPrevZ(double value);
 
     @Accessor("x")
-    double roundabout$getX();
+    double sba$getX();
     @Accessor("y")
-    double roundabout$getY();
+    double sba$getY();
     @Accessor("z")
-    double roundabout$getZ();
+    double sba$getZ();
 }

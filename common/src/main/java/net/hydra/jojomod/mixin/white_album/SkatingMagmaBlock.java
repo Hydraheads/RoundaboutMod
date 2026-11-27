@@ -22,9 +22,9 @@ public abstract class SkatingMagmaBlock extends Block {
     //White Album can safely skate over magma
     @Inject(method = "stepOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/Entity;)V",
             at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$stepOn(Level $$0, BlockPos $$1, BlockState $$2, Entity $$3, CallbackInfo ci){
+    public void sba$stepOn(Level $$0, BlockPos $$1, BlockState $$2, Entity $$3, CallbackInfo ci){
         if ($$3 instanceof LivingEntity LE &&
-                ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()){
+                ((StandUser)LE).sba$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()){
             ci.cancel();
             super.stepOn($$0, $$1, $$2, $$3);
         }

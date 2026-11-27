@@ -62,7 +62,7 @@ public final class HallucinationIndicatorRenderer {
             return;
         }
 
-        ItemStack standDisc = ((StandUser) viewer).roundabout$getStandDisc();
+        ItemStack standDisc = ((StandUser) viewer).sba$getStandDisc();
         if (!standDisc.is(ModItems.STAND_DISC_WHITESNAKE)
                 && !standDisc.is(ModItems.MAX_STAND_DISC_WHITESNAKE)) {
             return;

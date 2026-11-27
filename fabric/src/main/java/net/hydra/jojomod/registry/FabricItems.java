@@ -3,7 +3,7 @@ package net.hydra.jojomod.registry;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.handBlock.AbstractHandBlock;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.block.FancyLighterBlock;
@@ -394,11 +394,11 @@ public class FabricItems {
     public static Item SNAKE_SKIN = registerItem("snake_skin", new Item(new Item.Properties()));
     public static Item SNAKE_OIL = registerItem("snake_oil", new DrinkableItem(new Item.Properties().stacksTo(1)));
     public static Item SNAKE_SKIN_BOOTS = registerItem("snake_skin_boots", new ArmorItem(SnakeSkinBootsItem.SNAKE_ARMOR, ArmorItem.Type.BOOTS, new Item.Properties()));
-    public static final Item PIRANHA_BUCKET = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha_bucket"),
+    public static final Item PIRANHA_BUCKET = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(SBA.MOD_ID, "piranha_bucket"),
             new MobBucketItem(FabricEntities.PIRANHA, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
-    public static final Item PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "piranha"),
+    public static final Item PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(SBA.MOD_ID, "piranha"),
             new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.1F).build())));
-    public static final Item COOKED_PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Roundabout.MOD_ID, "cooked_piranha"),
+    public static final Item COOKED_PIRANHA = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(SBA.MOD_ID, "cooked_piranha"),
             new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(1.2F).build())));
 
     public static Item MEMORY_PAWN = registerItem("memory_pawn", new MemoryChessPieceItem(ModBlocks.CHESS_PIECE, new Item.Properties().stacksTo(1)));
@@ -553,14 +553,14 @@ public class FabricItems {
             0x95caff, 0xe880c6, new Item.Properties()));
 
     public static final Potion HEX_POTION =
-            Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.hex"),
+            Registry.register(BuiltInRegistries.POTION, new ResourceLocation(SBA.MOD_ID, "sba.hex"),
                     new Potion(new MobEffectInstance(ModEffects.HEX, 9600, 0)));
     public static final Potion HEX_POTION_EXTENDED =
-            Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.long_hex"),
-                    new Potion("roundabout.hex", new MobEffectInstance(ModEffects.HEX, 19200, 0)));
+            Registry.register(BuiltInRegistries.POTION, new ResourceLocation(SBA.MOD_ID, "sba.long_hex"),
+                    new Potion("sba.hex", new MobEffectInstance(ModEffects.HEX, 19200, 0)));
     public static final Potion HEX_POTION_STRONG =
-            Registry.register(BuiltInRegistries.POTION, new ResourceLocation(Roundabout.MOD_ID, "roundabout.strong_hex"),
-                    new Potion("roundabout.hex", new MobEffectInstance(ModEffects.HEX, 4800, 1)));
+            Registry.register(BuiltInRegistries.POTION, new ResourceLocation(SBA.MOD_ID, "sba.strong_hex"),
+                    new Potion("sba.hex", new MobEffectInstance(ModEffects.HEX, 4800, 1)));
 
     public static void registerPotions(){
         FabricBrewingRecipeRegistry.registerPotionRecipe(Potions.AWKWARD, Ingredient.of(ModItems.LOCACACA_PIT), HEX_POTION);
@@ -569,11 +569,11 @@ public class FabricItems {
     }
 
     private static Item registerItem(String name, Item item){
-        return Registry.register(BuiltInRegistries.ITEM, Roundabout.location(name), item);
+        return Registry.register(BuiltInRegistries.ITEM, SBA.location(name), item);
     }
 
     public static final CreativeModeTab JOJO_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
-            new ResourceLocation(Roundabout.MOD_ID, "jojo"),
+            new ResourceLocation(SBA.MOD_ID, "jojo"),
             FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo"))
                     .icon(() -> new ItemStack(STAND_ARROW)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
@@ -753,7 +753,7 @@ public class FabricItems {
                     }).build());
 
     public static final CreativeModeTab JOJO_BUILDING_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
-            new ResourceLocation(Roundabout.MOD_ID, "jojo_building_blocks"),
+            new ResourceLocation(SBA.MOD_ID, "jojo_building_blocks"),
             FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_building_blocks"))
                     .icon(() -> new ItemStack(ModBlocks.GODDESS_STATUE_BLOCK)).displayItems((displayContext, entries) -> {
                         entries.accept(ModBlocks.WOODEN_MANOR_TABLE);
@@ -886,7 +886,7 @@ public class FabricItems {
     }
 
     public static final CreativeModeTab STAND_DISC_GROUP = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
-            new ResourceLocation(Roundabout.MOD_ID, "jojo_discs"),
+            new ResourceLocation(SBA.MOD_ID, "jojo_discs"),
             FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_discs"))
                     .icon(() -> new ItemStack(STAND_DISC_STAR_PLATINUM)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
@@ -931,7 +931,7 @@ public class FabricItems {
                     }).build());
 
     public static final CreativeModeTab WIP_FEATURE = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
-            new ResourceLocation(Roundabout.MOD_ID, "jojo_wip_features"),
+            new ResourceLocation(SBA.MOD_ID, "jojo_wip_features"),
             FabricItemGroup.builder().title(Component.translatable("itemgroup.jojo_wip_features"))
                     .icon(() -> new ItemStack(AJA)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here
@@ -999,7 +999,7 @@ public class FabricItems {
                         entries.accept(PAINTING_ZOMBIE_HORSE);
                     }).build());
     public static final CreativeModeTab FOG_BLOCK_ITEMS = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB,
-            new ResourceLocation(Roundabout.MOD_ID, "justice_fog_items"),
+            new ResourceLocation(SBA.MOD_ID, "justice_fog_items"),
             FabricItemGroup.builder().title(Component.translatable("itemgroup.justice_fog_items")).hideTitle()
                     .icon(() -> new ItemStack(FOG_DIRT)).displayItems((displayContext, entries) -> {
                         //Add all items from the Jojo mod tab here

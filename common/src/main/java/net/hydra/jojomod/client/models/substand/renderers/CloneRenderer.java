@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -114,7 +114,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         }
     }
 
-    public ResourceLocation roundabout$getTextureLocation(T thisr) {
+    public ResourceLocation sba$getTextureLocation(T thisr) {
             ItemStack visage = thisr.getVisage();
             if (visage != null && !visage.isEmpty()) {
                 if (visage.getItem() instanceof MaskItem MI) {
@@ -122,20 +122,20 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                     if (vd.isCharacterVisage()) {
                         if (FateTypes.isUndisguisedZombie(thisr)) {
                             // 37 67 -34
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
+                            return (new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/zombie_skins/" + vd.getSkinPath() + ".png"));
                         } else {
-                            return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
+                            return (new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/player_skins/" + vd.getSkinPath() + ".png"));
 
                         }
                     } else if (visage.is(ModItems.RAT_MASK)){
-                        return (new ResourceLocation(Roundabout.MOD_ID, "textures/entity/visage/rat/rat_skin.png"));
+                        return (new ResourceLocation(SBA.MOD_ID, "textures/entity/visage/rat/rat_skin.png"));
                     }
                 }
             }
 
             if (FateTypes.isUndisguisedZombie(thisr)) {
                 PlayerModel pm = ClientUtil.getPlayerModel(thisr);
-                if (pm != null && (((IPlayerModel)pm).roundabout$getSlim())){
+                if (pm != null && (((IPlayerModel)pm).sba$getSlim())){
                     return (StandIcons.ZOMBIE_SKIN_SLIM);
                 } else {
                     return (StandIcons.ZOMBIE_SKIN);
@@ -165,7 +165,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             return skin.texture();
         }
 
-        ResourceLocation loc = roundabout$getTextureLocation(entity);
+        ResourceLocation loc = sba$getTextureLocation(entity);
         if (loc != null){
             return loc;
         }
@@ -227,7 +227,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                            this.model =  getModelFromUUID(uuid);
                         }
 //                        if (ER instanceof PlayerRenderer PR && PR.getModel() instanceof PlayerModel<AbstractClientPlayer>) {
-//                            this.model = ((IPlayerModel) PR.getModel()).roundabout$getSlim()? slim : bulk;
+//                            this.model = ((IPlayerModel) PR.getModel()).sba$getSlim()? slim : bulk;
 //                        } else {
 //                            this.model = slim;
 //                        }
@@ -253,7 +253,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
             ItemStack visage = null;
             if (entity.getPlayer() != null) {
                 IPlayerEntity pl = ((IPlayerEntity) entity.getPlayer());
-                visage = pl.roundabout$getMaskSlot();
+                visage = pl.sba$getMaskSlot();
             } else {
                 visage = entity.getVisage();
             }
@@ -302,7 +302,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         }
         if ($$0 instanceof StandUser standUser) {
             PlayerModel<T> playerModel = this.getModel();
-            if (standUser.roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+            if (standUser.sba$getStandPowers() instanceof PowersGreenDay PGD) {
 
                 if (PGD.legGoneTicks > 0) {
                     playerModel.leftLeg.visible = false;
@@ -338,7 +338,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
 
             if (!(ClientUtil.checkIfFirstPerson() && $$0.is(ClientUtil.getPlayer()))
-                    || !((IEntityAndData)$$0).roundabout$getExclusiveLayers()){
+                    || !((IEntityAndData)$$0).sba$getExclusiveLayers()){
                 if (ClientUtil.hasChangedArms($$0)){
                     playerModel.rightArm.visible = false;
                     playerModel.rightSleeve.visible = false;
@@ -361,8 +361,8 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                 }
                 if (ClientUtil.hideCapeAndEars($$0)){
                     IPlayerModel iPlayerModel = ((IPlayerModel) playerModel);
-                    iPlayerModel.roundabout$getEar().visible = false;
-                    iPlayerModel.roundabout$getCloak().visible = false;
+                    iPlayerModel.sba$getEar().visible = false;
+                    iPlayerModel.sba$getCloak().visible = false;
                 }
             }
 
@@ -413,7 +413,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
 
     public void applyScale(T entity, PoseStack $$1, float $$2){
 
-        byte widthMod = entity.roundabout$getWidthFactor();
+        byte widthMod = entity.sba$getWidthFactor();
         if (widthMod > 0){
             if (widthMod < 5){
                 float factor = 1f-(0.03F*widthMod);
@@ -436,7 +436,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         ItemStack visage = null;
         if (entity.getPlayer() != null) {
             IPlayerEntity pl = ((IPlayerEntity) entity.getPlayer());
-            visage = pl.roundabout$getMaskSlot();
+            visage = pl.sba$getMaskSlot();
         } else {
             visage = entity.getVisage();
         }

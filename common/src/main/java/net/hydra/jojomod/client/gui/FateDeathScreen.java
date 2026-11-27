@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.gui;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -52,7 +52,7 @@ public class FateDeathScreen extends Screen {
 
 
         if (!hardcore) {
-            Component humanRespawn = Component.translatable(Roundabout.MOD_ID,"text.roundabout.respawn_as_human");
+            Component humanRespawn = Component.translatable(SBA.MOD_ID,"text.sba.respawn_as_human");
             this.exitButtons.add(this.addRenderableWidget(Button.builder(humanRespawn, $$0x -> {
                 respawnPacket();
                 $$0x.active = false;

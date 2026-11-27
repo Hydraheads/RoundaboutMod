@@ -96,7 +96,7 @@ public class WhiteAlbumCoatingBlock
         if ($$3 instanceof EntityCollisionContext entitycollisioncontext) {
             Entity entity = entitycollisioncontext.getEntity();
             if (entity != null && entity instanceof LivingEntity LE) {
-                if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()){
+                if (((StandUser)LE).sba$getStandPowers() instanceof PowersWhiteAlbum PWA && PWA.hasSkatesActivated()){
                     return Shapes.empty();
                 }
                 return SHAPE_SMALL;

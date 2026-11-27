@@ -62,17 +62,17 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     @Unique
     @Override
     public FatePowers rdbt$getFatePowers(){
-        if (rdbt$lastFate != ((IPlayerEntity)this).roundabout$getFate()){
-            rdbt$lastFate = ((IPlayerEntity)this).roundabout$getFate();
+        if (rdbt$lastFate != ((IPlayerEntity)this).sba$getFate()){
+            rdbt$lastFate = ((IPlayerEntity)this).sba$getFate();
             rdbt$fatePowers = null;
         }
         if (rdbt$fatePowers == null){
-            rdbt$fatePowers = FateTypes.getFateFromByte(((IPlayerEntity)this).roundabout$getFate()).fatePowers.generateFatePowers(this);
+            rdbt$fatePowers = FateTypes.getFateFromByte(((IPlayerEntity)this).sba$getFate()).fatePowers.generateFatePowers(this);
         }
         return rdbt$fatePowers;
     }
     @Inject(method = "playStepSound", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$playStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci) {
+    protected void sba$playStepSound(BlockPos $$0, BlockState $$1, CallbackInfo ci) {
         if (PowerTypes.isErasingTime(this)){
             ci.cancel();
             return;
@@ -103,7 +103,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$Tick(CallbackInfo ci) {
+    protected void sba$Tick(CallbackInfo ci) {
         if (this.isAlive() && !this.isRemoved()) {
             ((AccessFateFoodData) getFoodData()).rdbt$setPlayer((Player) (Object) this);
             if (!this.level().isClientSide()) {
@@ -123,12 +123,12 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
         //starts the animation
         rdbt$vampireTransformation = 0;
         if (mask){
-            ((StandUser)this).roundabout$setDazed((byte) 120);
+            ((StandUser)this).sba$setDazed((byte) 120);
             level().playSound(null, this, ModSounds.STONE_MASK_ACTIVATE_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
         } else {
-            ((StandUser)this).roundabout$setDazed((byte) 20);
+            ((StandUser)this).sba$setDazed((byte) 20);
             rdbt$vampireTransformation = 100;
-            ((IPlayerEntity)this).roundabout$SetPoseEmote((byte)12);
+            ((IPlayerEntity)this).sba$SetPoseEmote((byte)12);
             level().playSound(null, this, ModSounds.VAMPIRE_AWAKEN_EVENT, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
@@ -148,7 +148,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
                         if (FateTypes.canCurrentlyAvoidSunlight(this)) {
                             if (!isCreative()) {
                                 float amt = ClientNetworking.getAppropriateConfig().whiteAlbumSettings.sunArmorDamage;
-                                ((StandUser)this).roundabout$damageGuard(amt);
+                                ((StandUser)this).sba$damageGuard(amt);
                             }
                         } else {
                             if (this.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SUNLIGHT),
@@ -232,26 +232,26 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
                 if (FateTypes.isHuman(this)){
                     MainUtil.popOffStoneMask(this);
                     FateTypes.setVampire(this);
-                    displayClientMessage(Component.translatable("item.roundabout.stand_arrow.acquireVampire1").withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.BOLD), true);
-                    (((IPlayerEntity)this)).roundabout$qmessage(2);
+                    displayClientMessage(Component.translatable("item.sba.stand_arrow.acquireVampire1").withStyle(ChatFormatting.WHITE).withStyle(ChatFormatting.BOLD), true);
+                    (((IPlayerEntity)this)).sba$qmessage(2);
                     if (hasEffect(ModEffects.BLEED)){
                         removeEffect(ModEffects.BLEED);
                     }
                 }
                 //12 is the id of vampire stone mask transformation animation in Poses.java
-                if (((IPlayerEntity)this).roundabout$GetPoseEmote() == 12){
-                    ((IPlayerEntity)this).roundabout$SetPoseEmote((byte)0);
+                if (((IPlayerEntity)this).sba$GetPoseEmote() == 12){
+                    ((IPlayerEntity)this).sba$SetPoseEmote((byte)0);
                 }
             } else if (rdbt$vampireTransformation > 13){
                 if (rdbt$vampireTransformation == 14){
                     //12 is the id of vampire stone mask transformation animation in Poses.java
-                    ((IPlayerEntity)this).roundabout$SetPoseEmote((byte)12);
+                    ((IPlayerEntity)this).sba$SetPoseEmote((byte)12);
                 }
                 rdbt$scatterTransformationParticles();
             }
             markHurt();
             hasImpulse = true;
-            Vec3 getTransformVec = RotationUtil.vecPlayerToWorld(new Vec3(0,-0.1,0),((IGravityEntity)this).roundabout$getGravityDirection());
+            Vec3 getTransformVec = RotationUtil.vecPlayerToWorld(new Vec3(0,-0.1,0),((IGravityEntity)this).sba$getGravityDirection());
             Vec3 dm = getDeltaMovement().add(getTransformVec.x,getTransformVec.y,getTransformVec.z);
             setDeltaMovement(dm);
         }
@@ -269,7 +269,7 @@ public abstract class FatePlayerMixin extends LivingEntity implements IFatePlaye
                     0, randomX, randomY, randomZ, 3.5);
         }
     }
-    //((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
+    //((IPlayerEntity) this.getSelf()).sba$SetPos(PlayerPosIndex.DODGE_BACKWARD);
 
     protected FatePlayerMixin(EntityType<? extends LivingEntity> $$0, Level $$1) {
         super($$0, $$1);

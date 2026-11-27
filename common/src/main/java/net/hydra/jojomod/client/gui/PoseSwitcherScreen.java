@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.KeyInputRegistry;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class PoseSwitcherScreen extends Screen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation MOB_SWITCHER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation MOB_SWITCHER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/pose_switcher.png");
     private static final int SPRITE_SHEET_WIDTH = 256;
     private static final int SPRITE_SHEET_HEIGHT = 256;
@@ -53,7 +53,7 @@ public class PoseSwitcherScreen extends Screen {
     private ShapeShifts getDefaultSelected() {
         Player pl = Minecraft.getInstance().player;
         if (pl != null){
-            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).roundabout$getShapeShift());
+            return ShapeShifts.getShiftFromByte(((IPlayerEntity)pl).sba$getShapeShift());
         }
         return ShapeShifts.PLAYER;
     }
@@ -118,7 +118,7 @@ public class PoseSwitcherScreen extends Screen {
             return;
         }
 
-        byte ppos = ((IPlayerEntity)minecraft.player).roundabout$GetPoseEmote();
+        byte ppos = ((IPlayerEntity)minecraft.player).sba$GetPoseEmote();
         if (pIcon.id != ppos) {
             C2SPacketUtil.byteToServerPacket(PacketDataIndex.BYTE_STRIKE_POSE,pIcon.id);
         }
@@ -130,9 +130,9 @@ public class PoseSwitcherScreen extends Screen {
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     private boolean checkToClose() {
@@ -157,29 +157,29 @@ public class PoseSwitcherScreen extends Screen {
     }
 
     public enum posIcon {
-        GIORNO(Component.translatable("roundabout.pose.giorno"), new ResourceLocation(Roundabout.MOD_ID,
+        GIORNO(Component.translatable("sba.pose.giorno"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/giorno.png"),Poses.GIORNO.id,0,93),
-        JOSEPH(Component.translatable("roundabout.pose.joseph"), new ResourceLocation(Roundabout.MOD_ID,
+        JOSEPH(Component.translatable("sba.pose.joseph"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/joseph.png"),Poses.JOSEPH.id,-31,62),
-        KOICHI(Component.translatable("roundabout.pose.koichi"), new ResourceLocation(Roundabout.MOD_ID,
+        KOICHI(Component.translatable("sba.pose.koichi"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/koichi.png"),Poses.KOICHI.id,31,31),
 
-        WRY(Component.translatable("roundabout.pose.wry"), new ResourceLocation(Roundabout.MOD_ID,
+        WRY(Component.translatable("sba.pose.wry"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/wry.png"),Poses.WRY.id,-31,0),
-        OH_NO(Component.translatable("roundabout.pose.oh_no"), new ResourceLocation(Roundabout.MOD_ID,
+        OH_NO(Component.translatable("sba.pose.oh_no"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/oh_no.png"),Poses.OH_NO.id,-31,31),
-        TORTURE_DANCE(Component.translatable("roundabout.pose.torture_dance"), new ResourceLocation(Roundabout.MOD_ID,
+        TORTURE_DANCE(Component.translatable("sba.pose.torture_dance"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/torture_dance.png"),Poses.TORTURE_DANCE.id,0,0),
-        WAMUU(Component.translatable("roundabout.pose.wamuu"), new ResourceLocation(Roundabout.MOD_ID,
+        WAMUU(Component.translatable("sba.pose.wamuu"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/wamuu.png"),Poses.WAMUU.id,0,62),
-        JOTARO(Component.translatable("roundabout.pose.jotaro"), new ResourceLocation(Roundabout.MOD_ID,
+        JOTARO(Component.translatable("sba.pose.jotaro"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/jotaro.png"),Poses.JOTARO.id,31,62),
-        JONATHAN(Component.translatable("roundabout.pose.jonathan"), new ResourceLocation(Roundabout.MOD_ID,
+        JONATHAN(Component.translatable("sba.pose.jonathan"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),Poses.JONATHAN.id,31,0),
-        SITTING(Component.translatable("roundabout.pose.sitting"), new ResourceLocation(Roundabout.MOD_ID,
+        SITTING(Component.translatable("sba.pose.sitting"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/sit.png"),Poses.SITTING.id,-62,31),
 
-        NONE(Component.translatable("roundabout.pose.none"), new ResourceLocation(Roundabout.MOD_ID,
+        NONE(Component.translatable("sba.pose.none"), new ResourceLocation(SBA.MOD_ID,
                 "textures/gui/pose_icons/jonathan.png"),Poses.NONE.id,0,31);
 
         static PoseSwitcherScreen.posIcon getByte(Poses pose) {

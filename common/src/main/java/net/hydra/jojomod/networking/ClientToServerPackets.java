@@ -127,7 +127,7 @@ public class ClientToServerPackets {
                     server.execute(() -> {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
-                        powers.roundabout$tryPower(b, true);
+                        powers.sba$tryPower(b, true);
                     });
                 }
                 /**Try Power Packet*/
@@ -136,7 +136,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         Vector3f c = (Vector3f) vargs[1];
-                        powers.roundabout$tryPosPower(b, true, new Vec3(c.x, c.y, c.z));
+                        powers.sba$tryPosPower(b, true, new Vec3(c.x, c.y, c.z));
                     });
                 }
                 /**Try Block Pos Power Packet*/
@@ -145,7 +145,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         BlockPos c = (BlockPos) vargs[1];
-                        powers.roundabout$tryBlockPosPower(b, true, c);
+                        powers.sba$tryBlockPosPower(b, true, c);
                     });
                 }
                 /**Try Block Pos Power Packet*/
@@ -155,7 +155,7 @@ public class ClientToServerPackets {
                         byte b = (byte) vargs[0];
                         BlockPos c = (BlockPos) vargs[1];
                         BlockHitResult d = (BlockHitResult) vargs[2];
-                        powers.roundabout$tryBlockPosPower(b, true, c, d);
+                        powers.sba$tryBlockPosPower(b, true, c, d);
                     });
                 }
                 /**Try Power Packet*/
@@ -164,7 +164,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         int c = (int) vargs[1];
-                        powers.roundabout$tryIntPower(b, true, c);
+                        powers.sba$tryIntPower(b, true, c);
                     });
                 }
                 /**Try Triple Int Power Packet*/
@@ -175,7 +175,7 @@ public class ClientToServerPackets {
                         int c = (int) vargs[1];
                         int d = (int) vargs[2];
                         int e = (int) vargs[3];
-                        powers.roundabout$tryIntPower(b, true, c, d, e);
+                        powers.sba$tryIntPower(b, true, c, d, e);
                     });
                 }
 
@@ -184,7 +184,7 @@ public class ClientToServerPackets {
                     server.execute(() -> {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
-                        powers.roundabout$tryPowerF(b, true);
+                        powers.sba$tryPowerF(b, true);
                     });
                 }
                 /**Try Power Packet*/
@@ -193,7 +193,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         Vector3f c = (Vector3f) vargs[1];
-                        powers.roundabout$tryPosPowerF(b, true, new Vec3(c.x, c.y, c.z));
+                        powers.sba$tryPosPowerF(b, true, new Vec3(c.x, c.y, c.z));
                     });
                 }
                 /**Try Block Pos Power Packet*/
@@ -202,7 +202,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         BlockPos c = (BlockPos) vargs[1];
-                        powers.roundabout$tryBlockPosPowerF(b, true, c);
+                        powers.sba$tryBlockPosPowerF(b, true, c);
                     });
                 }
                 /**Try Block Pos Power Packet*/
@@ -212,7 +212,7 @@ public class ClientToServerPackets {
                         byte b = (byte) vargs[0];
                         BlockPos c = (BlockPos) vargs[1];
                         BlockHitResult d = (BlockHitResult) vargs[2];
-                        powers.roundabout$tryBlockPosPowerF(b, true, c, d);
+                        powers.sba$tryBlockPosPowerF(b, true, c, d);
                     });
                 }
                 /**Try Power Packet*/
@@ -221,7 +221,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         int c = (int) vargs[1];
-                        powers.roundabout$tryIntPowerF(b, true, c);
+                        powers.sba$tryIntPowerF(b, true, c);
                     });
                 }
                 /**Try Triple Int Power Packet*/
@@ -232,7 +232,7 @@ public class ClientToServerPackets {
                         int c = (int) vargs[1];
                         int d = (int) vargs[2];
                         int e = (int) vargs[3];
-                        powers.roundabout$tryIntPowerF(b, true, c, d, e);
+                        powers.sba$tryIntPowerF(b, true, c, d, e);
                     });
                 }
 
@@ -241,7 +241,7 @@ public class ClientToServerPackets {
                     server.execute(() -> {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
-                        powers.roundabout$tryPowerP(b, true);
+                        powers.sba$tryPowerP(b, true);
                     });
                 }
                 /**Try Power Packet*/
@@ -250,7 +250,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         Vector3f c = (Vector3f) vargs[1];
-                        powers.roundabout$tryPosPowerP(b, true, new Vec3(c.x, c.y, c.z));
+                        powers.sba$tryPosPowerP(b, true, new Vec3(c.x, c.y, c.z));
                     });
                 }
                 /**Try Block Pos Power Packet*/
@@ -259,7 +259,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         BlockPos c = (BlockPos) vargs[1];
-                        powers.roundabout$tryBlockPosPowerP(b, true, c);
+                        powers.sba$tryBlockPosPowerP(b, true, c);
                     });
                 }
                 /**Try Block Pos Power Packet*/
@@ -269,7 +269,7 @@ public class ClientToServerPackets {
                         byte b = (byte) vargs[0];
                         BlockPos c = (BlockPos) vargs[1];
                         BlockHitResult d = (BlockHitResult) vargs[2];
-                        powers.roundabout$tryBlockPosPowerP(b, true, c, d);
+                        powers.sba$tryBlockPosPowerP(b, true, c, d);
                     });
                 }
                 /**Try Power Packet*/
@@ -278,7 +278,7 @@ public class ClientToServerPackets {
                         StandUser powers = basicChecks(sender);
                         byte b = (byte) vargs[0];
                         int c = (int) vargs[1];
-                        powers.roundabout$tryIntPowerP(b, true, c);
+                        powers.sba$tryIntPowerP(b, true, c);
                     });
                 }
                 /**Try Triple Int Power Packet*/
@@ -289,7 +289,7 @@ public class ClientToServerPackets {
                         int c = (int) vargs[1];
                         int d = (int) vargs[2];
                         int e = (int) vargs[3];
-                        powers.roundabout$tryIntPowerP(b, true, c, d, e);
+                        powers.sba$tryIntPowerP(b, true, c, d, e);
                     });
                 }
 
@@ -475,7 +475,7 @@ public class ClientToServerPackets {
                     server.execute(() -> {
                         boolean tsJump = (boolean) vargs[0];
                         ServerLevel level = (ServerLevel) sender.level();
-                        ((StandUser) sender).roundabout$setTSJump(tsJump);
+                        ((StandUser) sender).sba$setTSJump(tsJump);
                     });
                 }
                 /**The glaive you use and the entity you hit with it*/
@@ -494,7 +494,7 @@ public class ClientToServerPackets {
                 /**Summoning stands*/
                 if (message.equals(MESSAGES.StandSummon.value)) {
                     ServerLevel world = (ServerLevel) sender.level();
-                    ((StandUser) sender).roundabout$summonStand(world, false, true);
+                    ((StandUser) sender).sba$summonStand(world, false, true);
                 }
                 /**Updating Zombie Fish*/
                 if (message.equals(MESSAGES.RequestZombieFish.value)) {
@@ -532,7 +532,7 @@ public class ClientToServerPackets {
                 if (message.equals(MESSAGES.MoveSync.value)) {
                     byte forward = (byte)vargs[0];
                     byte strafe = (byte)vargs[1];
-                    ((StandUser) sender).roundabout$setDI(forward, strafe);
+                    ((StandUser) sender).sba$setDI(forward, strafe);
                 }
                 /**Zombie Minion Tactic Switching*/
                 if (message.equals(MESSAGES.ZombieMinionTactic.value)) {
@@ -573,15 +573,15 @@ public class ClientToServerPackets {
                     int targetID = (int)vargs[0];
                     byte APP = (byte)vargs[1];
                     Entity TE = sender.level().getEntity(targetID);
-                    ((StandUser) sender).roundabout$getStandPowers().setActivePowerPhase(APP);
-                    ((StandUser) sender).roundabout$getStandPowers().punchImpact(TE);
+                    ((StandUser) sender).sba$getStandPowers().setActivePowerPhase(APP);
+                    ((StandUser) sender).sba$getStandPowers().punchImpact(TE);
                 }
                 /**Basic stand barrage hit packet*/
                 if (message.equals(MESSAGES.StandBarrageHit.value)) {
                     int targetID = (int)vargs[0];
                     int hitNumber = (int)vargs[1];
                     Entity TE = sender.level().getEntity(targetID);
-                    ((StandUser) sender).roundabout$getStandPowers().barrageImpact(TE, hitNumber);
+                    ((StandUser) sender).sba$getStandPowers().barrageImpact(TE, hitNumber);
                 }
                 /**Basic powers barrage hit packet*/
                 if (message.equals(MESSAGES.PowersBarrageHit.value)) {
@@ -597,9 +597,9 @@ public class ClientToServerPackets {
                     float clashProg = (float)vargs[0];
                     boolean clashDone = (boolean)vargs[1];
 
-                    if (((StandUser) sender).roundabout$isClashing()){
-                        ((StandUser) sender).roundabout$getStandPowers().setClashProgress(clashProg);
-                        ((StandUser) sender).roundabout$getStandPowers().setClashDone(clashDone);
+                    if (((StandUser) sender).sba$isClashing()){
+                        ((StandUser) sender).sba$getStandPowers().setClashProgress(clashProg);
+                        ((StandUser) sender).sba$getStandPowers().setClashDone(clashDone);
                     }
                 }
                 /**Handshake packet*/
@@ -632,7 +632,7 @@ public class ClientToServerPackets {
                     Vector3f delta = (Vector3f) vargs[4];
                     boolean isSprinting = (boolean)vargs[5];
                     boolean runaway = (boolean)vargs[6];
-                    if (((StandUser)sender).roundabout$getStandPowers() instanceof PowersKingCrimson pkc){
+                    if (((StandUser)sender).sba$getStandPowers() instanceof PowersKingCrimson pkc){
                         pkc.isBackingUp = isBackingUp;
                         pkc.isMovingForward = isMovingForward;
                         pkc.isSneaking = isSneaking;
@@ -645,14 +645,14 @@ public class ClientToServerPackets {
 
                 /**Release right click to stop guarding*/
                 if (message.equals(MESSAGES.GuardCancel.value)) {
-                    if (((StandUser) sender).roundabout$isGuardInput() || ((StandUser) sender).roundabout$isBarraging()
+                    if (((StandUser) sender).sba$isGuardInput() || ((StandUser) sender).sba$isBarraging()
                             || (((IPowersPlayer)sender).rdbt$getPowers() instanceof PunchingGeneralPowers pgp &&
                             pgp.isBarraging())
-                            || ((StandUser) sender).roundabout$getStandPowers().clickRelease()) {
+                            || ((StandUser) sender).sba$getStandPowers().clickRelease()) {
                         if (PowerTypes.hasPowerActivelyEquipped(sender)) {
-                            ((StandUser) sender).roundabout$tryPowerP(PowerIndex.NONE, true);
+                            ((StandUser) sender).sba$tryPowerP(PowerIndex.NONE, true);
                         } else {
-                            ((StandUser) sender).roundabout$tryPower(PowerIndex.NONE, true);
+                            ((StandUser) sender).sba$tryPower(PowerIndex.NONE, true);
                         }
                     }
                 }

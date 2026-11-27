@@ -1,7 +1,7 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -44,36 +44,36 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
     }
 
     @Unique
-    public boolean roundabout$ModifyEntity;
+    public boolean sba$ModifyEntity;
     @Unique
-    public @Nullable ItemStack roundabout$RenderMainHand;
+    public @Nullable ItemStack sba$RenderMainHand;
     @Unique
-    public @Nullable ItemStack roundabout$RenderOffHand;
+    public @Nullable ItemStack sba$RenderOffHand;
     @Unique
     public boolean dominant$Hand;
     @Unique
     public Entity stored$Ent;
 
     @Inject(method = "render", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$Render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
+    public void sba$Render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float $$4, float $$5, float $$6, float $$7, float $$8, float $$9, CallbackInfo ci){
         stored$Ent = entity;
         IEntityAndData entityAndData = ((IEntityAndData) entity);
         StandUserClient userClient = ((StandUserClient) entity);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && ClientNetworking.getAppropriateConfig() != null &&
+        if (entityAndData.sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() && ClientNetworking.getAppropriateConfig() != null &&
         ClientNetworking.getAppropriateConfig().achtungSettings != null &&
                 ClientNetworking.getAppropriateConfig().achtungSettings.hidesHeldItems && !ClientUtil.checkIfClientCanSeeMobsForWindVision()){
             ci.cancel();
             return;
         }
-        if (entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+        if (entityAndData.sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
             ci.cancel();
             return;
         }
-        if (((StandUser)entity).roundabout$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(entity)) {
+        if (((StandUser)entity).sba$getStandPowers() instanceof Powers20thCenturyBoy CB && CB.invincibleState && PowerTypes.isUsingStand(entity)) {
             ci.cancel();
             return;
         }
-        if (((StandUser)entity).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0 && PowerTypes.isUsingStand(entity)) {
+        if (((StandUser)entity).sba$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.ctrDodgeTicks != 0 && PowerTypes.isUsingStand(entity)) {
             ci.cancel();
             return;
         }
@@ -81,42 +81,42 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
 
         dominant$Hand = entity.getMainArm() == HumanoidArm.RIGHT;
         if (entity instanceof Player) {
-            roundabout$ModifyEntity = ((TimeStop) entity.level()).CanTimeStopEntity(entity) || ClientUtil.getScreenFreeze();
-            if (roundabout$ModifyEntity) {
-                if (userClient.roundabout$getRoundaboutRenderMainHand() == null){
-                    userClient.roundabout$setRoundaboutRenderMainHand(entity.getMainHandItem().copy());
+            sba$ModifyEntity = ((TimeStop) entity.level()).CanTimeStopEntity(entity) || ClientUtil.getScreenFreeze();
+            if (sba$ModifyEntity) {
+                if (userClient.sba$getSBARenderMainHand() == null){
+                    userClient.sba$setSBARenderMainHand(entity.getMainHandItem().copy());
                 }
-                if (userClient.roundabout$getRoundaboutRenderOffHand() == null){
-                    userClient.roundabout$setRoundaboutRenderOffHand(entity.getOffhandItem().copy());
+                if (userClient.sba$getSBARenderOffHand() == null){
+                    userClient.sba$setSBARenderOffHand(entity.getOffhandItem().copy());
                 }
-                roundabout$RenderMainHand = userClient.roundabout$getRoundaboutRenderMainHand();
-                roundabout$RenderOffHand = userClient.roundabout$getRoundaboutRenderOffHand();
+                sba$RenderMainHand = userClient.sba$getSBARenderMainHand();
+                sba$RenderOffHand = userClient.sba$getSBARenderOffHand();
             } else {
-                if (userClient.roundabout$getRoundaboutRenderOffHand() != null){
-                    userClient.roundabout$setRoundaboutRenderOffHand(null);
-                } else if (userClient.roundabout$getRoundaboutRenderMainHand() != null){
-                    userClient.roundabout$setRoundaboutRenderMainHand(null);
+                if (userClient.sba$getSBARenderOffHand() != null){
+                    userClient.sba$setSBARenderOffHand(null);
+                } else if (userClient.sba$getSBARenderMainHand() != null){
+                    userClient.sba$setSBARenderMainHand(null);
                 }
             }
         } else {
-            roundabout$ModifyEntity = false;
+            sba$ModifyEntity = false;
         }
 
         LivingEntity host = entity;
-        if ( ((StandUser)host).roundabout$getStandPowers() instanceof PowersRatt) {
-            if ( ((StandUser)host).roundabout$getStandPowers().scopeLevel != 0  ) {
+        if ( ((StandUser)host).sba$getStandPowers() instanceof PowersRatt) {
+            if ( ((StandUser)host).sba$getStandPowers().scopeLevel != 0  ) {
                 ci.cancel();
             }
         }
-        if (entity instanceof JojoNPC jnpc && jnpc.host != null && ((StandUser)jnpc.host).roundabout$getEffectiveCombatMode()){
+        if (entity instanceof JojoNPC jnpc && jnpc.host != null && ((StandUser)jnpc.host).sba$getEffectiveCombatMode()){
             host = jnpc.host;
         }
 
 
 
-        if (host != null && ((StandUser)host).roundabout$getEffectiveCombatMode() && !host.isUsingItem()){
+        if (host != null && ((StandUser)host).sba$getEffectiveCombatMode() && !host.isUsingItem()){
             boolean bl = true;
-            if (((StandUser)host).roundabout$getStandPowers() instanceof PowersAnubis PA) {
+            if (((StandUser)host).sba$getStandPowers() instanceof PowersAnubis PA) {
                 if (AnubisLayer.shouldShowItem(host)) {
                     bl = false;
                 }
@@ -129,14 +129,14 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
             }
         }
 
-        if (entity instanceof Player pl && PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)pl).roundabout$GetPos2())){
+        if (entity instanceof Player pl && PlayerPosIndex.isHidingHeldItem(((IPlayerEntity)pl).sba$GetPos2())){
             ci.cancel();
             return;
         }
     }
 
     @ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 0)
-    public ItemStack roundabout$Render2(ItemStack it){
+    public ItemStack sba$Render2(ItemStack it){
         if (stored$Ent instanceof Player) {
             EquipmentSlot es;
             if (!dominant$Hand) {
@@ -155,14 +155,14 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
         }
 
 
-        if (roundabout$ModifyEntity) {
+        if (sba$ModifyEntity) {
             if (!dominant$Hand) {
-                if (roundabout$RenderMainHand != null) {
-                    return roundabout$RenderMainHand;
+                if (sba$RenderMainHand != null) {
+                    return sba$RenderMainHand;
                 }
             } else {
-                if (roundabout$RenderOffHand != null) {
-                    return roundabout$RenderOffHand;
+                if (sba$RenderOffHand != null) {
+                    return sba$RenderOffHand;
                 }
             }
         }
@@ -170,7 +170,7 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
     }
 
     @ModifyVariable(method = "render", at = @At(value = "STORE"), ordinal = 1)
-    public ItemStack roundabout$Render3(ItemStack it){
+    public ItemStack sba$Render3(ItemStack it){
 
         if (stored$Ent instanceof Player) {
             EquipmentSlot es;
@@ -189,14 +189,14 @@ public class ZItemInHandLayer<T extends LivingEntity, M extends EntityModel<T> &
             }
         }
 
-        if (roundabout$ModifyEntity) {
+        if (sba$ModifyEntity) {
             if (dominant$Hand) {
-                if (roundabout$RenderMainHand != null) {
-                    return roundabout$RenderMainHand;
+                if (sba$RenderMainHand != null) {
+                    return sba$RenderMainHand;
                 }
             } else {
-                if (roundabout$RenderOffHand != null) {
-                    return roundabout$RenderOffHand;
+                if (sba$RenderOffHand != null) {
+                    return sba$RenderOffHand;
                 }
             }
         }

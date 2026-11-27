@@ -54,19 +54,19 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
     @Override
     public void addAdditionalSaveData(CompoundTag $$0){
         CompoundTag compoundtag = new CompoundTag();
-        $$0.put("roundabout.HeldItem",this.getHeldItem().save(compoundtag));
-        $$0.putBoolean("roundabout.ditchedItem",hasDitchedItem);
-        $$0.putBoolean("roundabout.canGiveYouItem",canGiveYouItem);
-        $$0.putFloat("roundabout.speed",getSped());
+        $$0.put("sba.HeldItem",this.getHeldItem().save(compoundtag));
+        $$0.putBoolean("sba.ditchedItem",hasDitchedItem);
+        $$0.putBoolean("sba.canGiveYouItem",canGiveYouItem);
+        $$0.putFloat("sba.speed",getSped());
         super.addAdditionalSaveData($$0);
     }
     @Override
     public void readAdditionalSaveData(CompoundTag $$0){
-        CompoundTag compoundtag = $$0.getCompound("roundabout.HeldItem");
+        CompoundTag compoundtag = $$0.getCompound("sba.HeldItem");
         ItemStack itemstack = ItemStack.of(compoundtag);
-        hasDitchedItem = $$0.getBoolean("roundabout.ditchedItem");
-        canGiveYouItem = $$0.getBoolean("roundabout.canGiveYouItem");
-        setSped($$0.getFloat("roundabout.speed"));
+        hasDitchedItem = $$0.getBoolean("sba.ditchedItem");
+        canGiveYouItem = $$0.getBoolean("sba.canGiveYouItem");
+        setSped($$0.getFloat("sba.speed"));
         this.setHeldItem(itemstack);
         super.readAdditionalSaveData($$0);
     }
@@ -98,7 +98,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
     public void tick(){
         if (!this.level().isClientSide()) {
             lifeSpan--;
-            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet))) {
+            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).sba$getStandPowers() instanceof PowersSoftAndWet))) {
                 popBubble();
                 return;
             }
@@ -230,12 +230,12 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
         if (!this.level().isClientSide()) {
 
             if ($$0.getEntity() instanceof EnderMan em) {
-                ((IEnderMan)em).roundabout$teleport();
+                ((IEnderMan)em).sba$teleport();
                 return;
             }
             Entity ent = $$0.getEntity();
             if (!(ent instanceof SoftAndWetBubbleEntity)) {
-                if (this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                if (this.getOwner() instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                     if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
 
                         if (ent.hurt(ModDamageTypes.of(ent.level(), ModDamageTypes.EXPLOSIVE_STAND, this.getOwner()),
@@ -264,7 +264,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
                 if (!entityList.isEmpty()) {
                     for (Entity ent : entityList) {
                         if (!(ent instanceof SoftAndWetBubbleEntity)) {
-                            if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                            if (((StandUser) LE).sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                                 if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
                                     float degrees = MainUtil.getLookAtEntityYawWithAngle(location, ent);
                                     MainUtil.takeKnockbackWithY(ent, 0.6F,
@@ -299,7 +299,7 @@ public class SoftAndWetItemLaunchingBubbleEntity extends SoftAndWetBubbleEntity{
     public boolean getCanPlace(LivingEntity self){
         return !(self instanceof Player PE && ((ServerPlayer) PE).gameMode.getGameModeForPlayer() == GameType.SPECTATOR)
                 && !(self instanceof Player PE2 && ((ServerPlayer) PE2).gameMode.getGameModeForPlayer() == GameType.ADVENTURE)
-                && self.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING);
+                && self.level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING);
     }
     public void popWithForce(Vec3 launch2) {
         if (!this.level().isClientSide()) {

@@ -1,0 +1,500 @@
+package net.hydra.jojomod.entity.projectile;
+
+import net.hydra.jojomod.access.IAbstractArrowAccess;
+import net.hydra.jojomod.access.IEnderMan;
+import net.hydra.jojomod.access.IProjectileAccess;
+import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.entity.ModEntities;
+import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandPowers;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.sound.ModSounds;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
+import net.hydra.jojomod.stand.powers.PowersKillerQueen;
+import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class SBABulletEntity extends AbstractArrow {
+    private Vec3 spawnPos = null;
+    private final List<Vec3> trailPoints = new ArrayList<>();
+    // trail length
+    private static final int MAX_TRAIL_POINTS = 16;
+
+    public SBABulletEntity(EntityType<? extends SBABulletEntity> type, Level level) {
+        super(type, level);
+    }
+
+    public SBABulletEntity(Level level, LivingEntity livingEntity) {
+        super(ModEntities.SBA_BULLET_ENTITY, livingEntity, level);
+        setNoGravity(true);
+    }
+    public SBABulletEntity(Level $$0, LivingEntity $$1, ItemStack $$2, double p_36862_, double p_36863_, double p_36864_) {
+        super(ModEntities.SBA_BULLET_ENTITY, p_36862_, p_36863_, p_36864_, $$0);
+    }
+
+    public List<Vec3> getTrailPoints() {
+        return this.trailPoints;
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("SuperThrown", this.entityData.get(SBA$SUPER_THROWN));
+        tag.putByte("AmmoType", this.entityData.get(AMMO_TYPE));
+        tag.putBoolean("TimeStopShot", this.timeStopShot);
+        tag.putInt("OutsideTimeStop", this.outsideOfTimeStop);
+        tag.putInt("SuperThrownTimer", this.superThrownTimer);
+        if (this.spawnPos != null) {
+            tag.putDouble("SpawnX", this.spawnPos.x);
+            tag.putDouble("SpawnY", this.spawnPos.y);
+            tag.putDouble("SpawnZ", this.spawnPos.z);
+        }
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.entityData.set(SBA$SUPER_THROWN, tag.getBoolean("SuperThrown"));
+        this.entityData.set(AMMO_TYPE, tag.getByte("AmmoType"));
+        this.timeStopShot = tag.getBoolean("TimeStopShot");
+        this.outsideOfTimeStop = tag.getInt("OutsideTimeStop");
+        this.superThrownTimer = tag.getInt("SuperThrownTimer");
+        if (tag.contains("SpawnX")) {
+            this.spawnPos = new Vec3(tag.getDouble("SpawnX"), tag.getDouble("SpawnY"), tag.getDouble("SpawnZ"));
+        }
+    }
+
+
+    private static final EntityDataAccessor<Boolean> SBA$SUPER_THROWN = SynchedEntityData.defineId(SBABulletEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> AMMO_TYPE = SynchedEntityData.defineId(SBABulletEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> DEFLECTED = SynchedEntityData.defineId(SBABulletEntity.class, EntityDataSerializers.BOOLEAN);
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SBA$SUPER_THROWN, false);
+        this.entityData.define(AMMO_TYPE, (byte) 0);
+        this.entityData.define(DEFLECTED, false);
+    }
+
+    public boolean getSuperThrown() {
+        return this.entityData.get(SBA$SUPER_THROWN);
+    }
+
+    public void setSuperThrown(boolean value) {
+        this.entityData.set(SBA$SUPER_THROWN, value);
+        setNoGravity(value);
+    }
+
+    public boolean getDeflected() {
+        return this.entityData.get(DEFLECTED);
+    }
+
+    public void setDeflected(boolean value) {
+        this.entityData.set(DEFLECTED, value);
+    }
+
+    public final void setAmmoType(byte ammoType) {
+        this.entityData.set(AMMO_TYPE, ammoType);
+    }
+    public byte getAmmoType() {
+        return this.entityData.get(AMMO_TYPE);
+    }
+
+    public static final byte NONE = 0;
+    public static final byte SNUBNOSE = 1;
+    public static final byte TOMMY_GUN = 2;
+    public static final byte SNIPER = 3;
+    public static final byte COLT = 4;
+    public static final byte BERETTA = 5;
+
+    public ItemStack getBulletItemStack() {
+        ItemStack itemStack;
+        if (getAmmoType() == NONE) {
+            return ItemStack.EMPTY;
+        } else if (getAmmoType() == SNUBNOSE) {
+            itemStack = ModItems.SNUBNOSE_AMMO.getDefaultInstance();
+            return itemStack;
+        } else if (getAmmoType() == TOMMY_GUN) {
+            itemStack = ModItems.TOMMY_AMMO.getDefaultInstance();
+            return itemStack;
+        } else if (getAmmoType() == COLT) {
+            itemStack = ModItems.SNUBNOSE_AMMO.getDefaultInstance();
+            return itemStack;
+        } else if (getAmmoType() == SNIPER) {
+            itemStack = ModItems.SNIPER_AMMO.getDefaultInstance();
+            return itemStack;
+        } else if (getAmmoType() == BERETTA) {
+            itemStack = ModItems.PISTOL_AMMO.getDefaultInstance();
+            return itemStack;
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public void applyEffect(LivingEntity target) {
+        // pistols won't do bleed, but will do more damage compared to revolvers
+        if (!MainUtil.isBossMob(target) && !(target instanceof RoadRollerEntity)
+                && getAmmoType() != BERETTA) {
+            if (MainUtil.getMobBleed(target)) {
+                if (getAmmoType() == TOMMY_GUN){
+                    MainUtil.makeBleed(target,0,180,getOwner());
+                } else {
+                    MainUtil.makeBleed(target,0,400,getOwner());
+                }
+            }
+        }
+
+        if (getOwner() instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers() instanceof PowersKillerQueen KQ && KQ.bombEntity == this && KQ.getCurrentBombStatus() == 10) {
+            KQ.bulletContacted(target);
+        }
+    }
+
+    boolean timeStopShot = false;
+    int outsideOfTimeStop = 0;
+
+    private int superThrownTimer = 0;
+
+    private float getBulletDamage() {
+        return switch (getAmmoType()) {
+            case SNUBNOSE -> timeStopShot ? 3.7F : ClientNetworking.getAppropriateConfig().itemSettings.snubnoseDamage;
+            case TOMMY_GUN -> timeStopShot ? 0.74F : ClientNetworking.getAppropriateConfig().itemSettings.tommyGunDamage;
+            case SNIPER -> timeStopShot ? 3.7F : ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage;
+            case COLT -> timeStopShot ? 3.8F : ClientNetworking.getAppropriateConfig().itemSettings.coltDamage;
+            case BERETTA -> timeStopShot ? 3.74F : ClientNetworking.getAppropriateConfig().itemSettings.berettaDamage;
+            default -> 0.0F;
+        };
+    }
+
+    public boolean isHattan = false;
+    public boolean isKillerQueen = false;
+    public float manhattanDamage = 0.0F;
+
+    @Override
+    public void onHitEntity(EntityHitResult result) {
+        Entity entity = result.getEntity();
+
+        if (!level().isClientSide && entity instanceof EnderMan em) {
+
+            if (((IEnderMan) em).sba$teleport()) return;
+
+            for (int i = 0; i < 64; i++) {
+                if (((IEnderMan) em).sba$teleport()) {
+                    return;
+                }
+            }
+        }
+
+        if (entity instanceof LivingEntity $$3) {
+            StandPowers entityPowers = ((StandUser) $$3).sba$getStandPowers();
+            if (entityPowers != null ) {
+                if (entityPowers.dealWithProjectile(this, result)) {
+                    discard();
+                    return;
+                } else if (entityPowers.dealWithProjectileNoDiscard(this, result)) {
+                    return;
+                }
+            }
+        }
+
+        if (entity instanceof LivingEntity livingEntity) {
+
+            boolean hadIFrames = livingEntity.invulnerableTime > 0 || livingEntity.hurtTime > 0;
+
+            if (livingEntity.isInvulnerable()) {
+                return;
+            }
+
+            if (outsideOfTimeStop > 0 || getAmmoType() == TOMMY_GUN) {
+                livingEntity.hurtTime = 0;
+                livingEntity.invulnerableTime = 0;
+            }
+
+            if (getAmmoType() == SNUBNOSE || getAmmoType() == BERETTA && hadIFrames) {
+                livingEntity.invulnerableTime = 0;
+                livingEntity.hurtTime = 0;
+            }
+
+            float damage = getBulletDamage();
+            float damageManhattan = this.manhattanDamage;
+
+            if (getAmmoType() == SNIPER) {
+                float multiplier = Math.min(travelTicks / 7.0F, 1.0F);
+                damage = damage * multiplier;
+
+                if (MainUtil.isBossMob(livingEntity)) {
+                    damage = Math.min(damage, ClientNetworking.getAppropriateConfig().itemSettings.rifleDamage / 3F);
+                }
+            }
+
+            if (getAmmoType() == BERETTA && this.spawnPos != null) {
+                double distanceTravelled = this.position().distanceTo(this.spawnPos);
+                if (distanceTravelled > 10.0D) {
+                    damage -= 3;
+                }
+            }
+
+            if (getAmmoType() == SNUBNOSE && !hadIFrames) {
+                damage += 1.0F;
+            }
+            if (livingEntity instanceof Player) {
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnPlayers * 0.01));
+                damage *= 0.85F;
+
+                if (getAmmoType() == TOMMY_GUN) {
+                    damage *= 0.57F;
+                }
+            } else {
+                damage = (float) (damage * (ClientNetworking.getAppropriateConfig().itemSettings.gunDamageOnMobs * 0.01));
+                ;
+            }
+
+            if (isKillerQueen) { damage *= 0.4f; }
+
+            if (!isHattan) {
+                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damage);
+
+                if (didDamage) {
+                    applyEffect(livingEntity);
+                    PowersGoldExperience.applyTreeImbueOnProjectileHit(this, livingEntity);
+                }
+
+                if (didDamage && getAmmoType() == SNUBNOSE || getAmmoType() == BERETTA && outsideOfTimeStop == 0) {
+                    livingEntity.invulnerableTime = 10;
+                    livingEntity.hurtTime = 10;
+                }
+            } else {
+                boolean didDamage = livingEntity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), damageManhattan);
+
+                if (didDamage) {
+                    applyEffect(livingEntity);
+                    PowersGoldExperience.applyTreeImbueOnProjectileHit(this, livingEntity);
+                }
+
+                if (didDamage && getAmmoType() == SNUBNOSE || getAmmoType() == BERETTA && outsideOfTimeStop == 0) {
+                    livingEntity.invulnerableTime = 10;
+                    livingEntity.hurtTime = 10;
+                }
+
+                if (livingEntity.isAlive()) {
+                    doPostHurtXtraDamage(livingEntity);
+                }
+            }
+        }else if (entity instanceof GentlyWeepsEntity gwe){
+                GentlyWeepsEntity.dealWithProjectile(this,gwe);
+                return;
+        } else {
+            entity.hurt(ModDamageTypes.of(level(), getDamageType(), this, this.getOwner()), 1);
+        }
+
+        Entity $$2 = this.getOwner();
+        if ($$2 instanceof LivingEntity livingOwner) {
+            livingOwner.setLastHurtMob(entity);
+        }
+
+        this.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.BULLET_PENTRATION_EVENT, this.getSoundSource(), 1.0F, 1.0F);
+        this.discard();
+    }
+
+    ResourceKey<DamageType> getDamageType(){
+        if (getAmmoType() == SNIPER) {
+            return ModDamageTypes.SNIPER_BULLET;
+        }
+        return ModDamageTypes.BULLET;
+    }
+
+    protected void onHitBlock2(BlockHitResult $$0) {
+        ((IAbstractArrowAccess)this).sba$setLastState(this.level().getBlockState($$0.getBlockPos()));
+        BlockState BSS = this.level().getBlockState($$0.getBlockPos());
+        BSS.onProjectileHit(this.level(), BSS, $$0, this);
+        Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
+        this.setDeltaMovement($$1);
+        Vec3 $$2 = $$1.normalize().scale(0.05F);
+        this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
+        this.playSound(ModSounds.BULLET_PENTRATION_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+        this.inGround = true;
+        this.shakeTime = 7;
+        this.setCritArrow(false);
+        this.setPierceLevel((byte)0);
+        this.setSoundEvent(SoundEvents.ARROW_HIT);
+        this.setShotFromCrossbow(false);
+        ((IAbstractArrowAccess)this).sba$resetPiercedEntities();
+    }
+
+    protected void doPostHurtXtraDamage(LivingEntity target) {
+        /*Bonus stand damage for Manhattan Transfer*/
+        float mult = this.getAmmoType() == TOMMY_GUN ? 0.1F : 1F;
+        float amount = 0;
+        float finalDamage = 0;
+        if(target instanceof Player || MainUtil.isBossMob(target)){
+            amount = (1 + manhattanDamage / 8)*0.7F;
+            if (this.getAmmoType() == SNIPER){amount+=0.5F;}
+        } else {
+            amount = 1 + manhattanDamage / 5;
+        }
+        finalDamage = amount <= 4 ? amount : 4;
+
+        target.hurt(ModDamageTypes.of(level(), ModDamageTypes.STAND, this, this.getOwner()), finalDamage * mult);
+    }
+
+    @Override
+    protected void doPostHurtEffects(LivingEntity target) {
+    }
+
+    boolean deflectSoundPlayed = false;
+    private int travelTicks = 0;
+
+    @Override
+    public void tick() {
+        if (this.spawnPos == null) {
+            this.spawnPos = this.position();
+        }
+
+        Vec3 delta = this.getDeltaMovement();
+
+        if (((IProjectileAccess) this).sba$getSBAIsTimeStopCreated()) {
+            timeStopShot = true;
+        }
+
+        if ((this.getSuperThrown() || isNoGravity()) && this.getAmmoType() != SNIPER) {
+            superThrownTimer++;
+            if (superThrownTimer >= 20) {
+                this.setSuperThrown(false);
+                superThrownTimer = 0;
+            }
+        } else {
+            superThrownTimer = 0;
+        }
+
+        if (timeStopShot) {
+            if (outsideOfTimeStop < 5) {
+                outsideOfTimeStop++;
+            } else if (outsideOfTimeStop >= 5) {
+                timeStopShot = false;
+                outsideOfTimeStop = 0;
+            }
+        }
+
+        if (inGroundTime >= 160) {
+            this.remove(RemovalReason.DISCARDED);
+        }
+
+        if(this.isInWater()) {
+            this.entityData.set(SBA$SUPER_THROWN,false);
+        }
+
+//        if (getDeflected()) {
+//            this.flipTrajectory();
+//            return;
+//        }
+
+        super.tick();
+
+        travelTicks++;
+
+        if (this.getSuperThrown()) {
+            this.setDeltaMovement(delta);
+        }
+
+        // for getting the trail
+        if (this.level().isClientSide()) {
+            if (!this.inGround && !this.isRemoved()) {
+                this.trailPoints.add(this.position().add(0, 0.1, 0));
+                if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
+                    this.trailPoints.remove(0);
+                }
+            } else if (this.inGround) {
+                this.trailPoints.clear();
+            }
+        }
+    }
+
+    @Override
+    protected ItemStack getPickupItem() {
+        return ItemStack.EMPTY;
+    }
+
+    public void blockBreakParticles(Block block, Vec3 pos){
+        if (!this.level().isClientSide()) {
+            ((ServerLevel) this.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                            block.defaultBlockState()),
+                    pos.x, pos.y, pos.z,
+                    100, 0, 0, 0, 0.5);
+        }
+    }
+
+    @Override
+    protected void onHitBlock(BlockHitResult $$0) {
+        PowersGoldExperience.applyTreeImbueOnBlockHit(this, $$0);
+        this.setSuperThrown(false);
+        this.setDeltaMovement(Vec3.ZERO);
+        if (!level().isClientSide) {
+            Block blkk = this.level().getBlockState($$0.getBlockPos()).getBlock();
+            if (blkk instanceof AbstractGlassBlock || blkk instanceof StainedGlassPaneBlock
+                    || blkk.defaultBlockState().is(Blocks.GLASS_PANE)){
+                if (this.level().removeBlock($$0.getBlockPos(),false)){
+                    blockBreakParticles(blkk,
+                            new Vec3($$0.getBlockPos().getX()+0.5,
+                                    $$0.getBlockPos().getY()+0.5,
+                                    $$0.getBlockPos().getZ()+0.5));
+                    this.playSound(blkk.defaultBlockState().getSoundType().getBreakSound(), 1.0F, 0.9F);
+                    return;
+                }
+            }
+        }
+
+        onHitBlock2($$0);
+    }
+
+
+    @Override
+    protected boolean tryPickup(Player $$0) {
+        return false;
+    }
+
+    @Override
+    public void tickDespawn() {
+        int $$0 = 1;
+        if (this.pickup != Pickup.ALLOWED || $$0 <= 0) {
+            super.tickDespawn();
+        }
+    }
+
+    @Override
+    protected float getWaterInertia() {
+        return 0.99F;
+    }
+
+    @Override
+    public boolean shouldRender(double $$0, double $$1, double $$2) {
+        return true;
+    }
+}

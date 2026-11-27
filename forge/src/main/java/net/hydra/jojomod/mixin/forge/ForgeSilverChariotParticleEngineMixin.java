@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ForgeSilverChariotParticleEngineMixin {
 
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;Lnet/minecraft/client/renderer/LightTexture;Lnet/minecraft/client/Camera;FLnet/minecraft/client/renderer/culling/Frustum;)V", at = @At(value = "HEAD"), cancellable = true, require = 0, remap = false)
-    private void roundabout$forgeDoNotRenderParticles(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, LightTexture lightTexture, Camera camera, float partialTick, Frustum frustum, CallbackInfo ci) {
+    private void sba$forgeDoNotRenderParticles(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource, LightTexture lightTexture, Camera camera, float partialTick, Frustum frustum, CallbackInfo ci) {
         if (!ClientUtil.canSilverChariotControlModeSeeParticles()) {
             ci.cancel();
             return;

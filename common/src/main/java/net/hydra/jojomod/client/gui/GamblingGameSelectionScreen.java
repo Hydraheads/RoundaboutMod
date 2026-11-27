@@ -18,11 +18,11 @@ public class GamblingGameSelectionScreen extends Screen {
     // Registry of available games (gameId, translationKey (like in en_us))
     public record GameEntry(int id, Component name) {}
     private final List<GameEntry> games = List.of(
-            new GameEntry(1, Component.translatable("gui.roundabout.gambling_table.game.coin_drop"))
+            new GameEntry(1, Component.translatable("gui.sba.gambling_table.game.coin_drop"))
     );
 
     public GamblingGameSelectionScreen(GamblingTableMenu menu) {
-        super(Component.translatable("gui.roundabout.gambling_table.select_game"));
+        super(Component.translatable("gui.sba.gambling_table.select_game"));
         this.menu = menu;
     }
 
@@ -120,7 +120,7 @@ public class GamblingGameSelectionScreen extends Screen {
             this.menu.setSelectedGameClient(gameId);
             if (this.minecraft.player != null) {
                 this.minecraft.setScreen(new GamblingTableScreen(
-                        this.menu, this.minecraft.player.getInventory(), Component.translatable("container.roundabout.gambling_table")));
+                        this.menu, this.minecraft.player.getInventory(), Component.translatable("container.sba.gambling_table")));
             }
         }
     }

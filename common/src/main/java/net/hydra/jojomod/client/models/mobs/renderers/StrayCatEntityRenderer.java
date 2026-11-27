@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.mobs.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.layers.anubis.AnubisMobLayer;
@@ -32,15 +32,15 @@ public class StrayCatEntityRenderer<T extends StrayCatEntity>
         extends MobRenderer<T, StrayCatEntityModel<T>> {
 
     private static final ResourceLocation ANIME =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/entity/stray_cat/entity/anime.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/entity/stray_cat/entity/anime.png");
     private static final ResourceLocation MANGA =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/entity/stray_cat/entity/manga.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/entity/stray_cat/entity/manga.png");
 
     /// Bubbles Shields Render :0
     private static final ResourceLocation BIG_PINK =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/projectiles/big_pink.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/stand/killer_queen/projectiles/big_pink.png");
     private static final ResourceLocation BIG_GREEN =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/stand/killer_queen/projectiles/big_green.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/stand/killer_queen/projectiles/big_green.png");
 
 
     public StrayCatEntityRenderer(EntityRendererProvider.Context context) {

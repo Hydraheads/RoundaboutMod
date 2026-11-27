@@ -23,7 +23,7 @@ public abstract class GravityEntityCollisionContextMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void roundabout$isAbove(VoxelShape shape, BlockPos pos, boolean defaultValue, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$isAbove(VoxelShape shape, BlockPos pos, boolean defaultValue, CallbackInfoReturnable<Boolean> cir) {
         if (this.entity == null) return;
 
         Direction gravityDirection = GravityAPI.getGravityDirection(this.entity);

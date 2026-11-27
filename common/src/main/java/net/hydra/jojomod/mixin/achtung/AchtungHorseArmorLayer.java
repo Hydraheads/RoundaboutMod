@@ -22,7 +22,7 @@ public class AchtungHorseArmorLayer {
     {
         if ($$3 != null) {
             IEntityAndData entityAndData = ((IEntityAndData) $$3);
-            if (MainUtil.getEntityIsTrulyInvisible($$3) && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || entityAndData.roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            if (MainUtil.getEntityIsTrulyInvisible($$3) && !ClientUtil.checkIfClientCanSeeInvisAchtung() && !ClientUtil.checkIfClientCanSeeMobsForWindVision() || entityAndData.sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
                 ci.cancel();
             }
         }

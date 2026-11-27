@@ -16,30 +16,30 @@ public class AccessSmithingTemplateItem implements ISmithingTemplateItem {
     /**There is no reason for these to be private or protected, we should be able to tap into them.*/
     @Override
     @Unique
-    public ResourceLocation roundabout$sword_slot(){
+    public ResourceLocation sba$sword_slot(){
         return EMPTY_SLOT_SWORD;
     }
 
     @Override
     @Unique
-    public List<ResourceLocation> roundabout$createSwordIconList() {
+    public List<ResourceLocation> sba$createSwordIconList() {
         return List.of(EMPTY_SLOT_SWORD);
     }
 
     @Override
     @Unique
-    public ResourceLocation roundabout$axe_slot(){
+    public ResourceLocation sba$axe_slot(){
         return EMPTY_SLOT_AXE;
     }
 
     @Override
     @Unique
-    public List<ResourceLocation> roundabout$createAxeIconList() {
+    public List<ResourceLocation> sba$createAxeIconList() {
         return List.of(EMPTY_SLOT_AXE);
     }
     @Override
     @Unique
-    public List<ResourceLocation> roundabout$creatMaterialIconList() {
+    public List<ResourceLocation> sba$creatMaterialIconList() {
         return List.of(EMPTY_SLOT_INGOT);
     }
 

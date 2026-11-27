@@ -1,10 +1,10 @@
 {
   "replace": false,
   "values": [
-    "roundabout:bubble_scaffold",
-    "roundabout:diver_limb",
-    "roundabout:sc_rapier_platform",
-    "roundabout:climbing_wire",
-    "roundabout:ge_vine"
+    "sba:bubble_scaffold",
+    "sba:diver_limb",
+    "sba:sc_rapier_platform",
+    "sba:climbing_wire",
+    "sba:ge_vine"
   ]
 }

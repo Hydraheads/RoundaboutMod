@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "minecraft:string"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "ICI"
+  ],
+  "result": {
+    "count": 4,
+    "item": "sba:wire_trap"
+  },
+  "show_notification": true
+}

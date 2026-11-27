@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.GoldExperienceModel;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.GoldExperienceEntity;
@@ -17,9 +17,9 @@ import net.minecraft.resources.ResourceLocation;
 
 public class GoldExperienceCrackLayer extends RenderLayer<GoldExperienceEntity, StandModel<GoldExperienceEntity>> {
 
-    private static final ResourceLocation CRACK_1 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/transformation/ge_crack_1.png");
-    private static final ResourceLocation CRACK_2 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/transformation/ge_crack_2.png");
-    private static final ResourceLocation CRACK_3 = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/gold_experience/transformation/ge_crack_3.png");
+    private static final ResourceLocation CRACK_1 = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/transformation/ge_crack_1.png");
+    private static final ResourceLocation CRACK_2 = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/transformation/ge_crack_2.png");
+    private static final ResourceLocation CRACK_3 = new ResourceLocation(SBA.MOD_ID, "textures/stand/gold_experience/transformation/ge_crack_3.png");
 
 
     public GoldExperienceCrackLayer(RenderLayerParent<GoldExperienceEntity, StandModel<GoldExperienceEntity>> renderer) {
@@ -28,7 +28,7 @@ public class GoldExperienceCrackLayer extends RenderLayer<GoldExperienceEntity, 
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, GoldExperienceEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entity.thisIsRequiemAnimation.isStarted() && entity.getUser() != null && ((StandUser)entity.getUser()).roundabout$getStandPowers() instanceof PowersGoldExperience GE) {
+        if (entity.thisIsRequiemAnimation.isStarted() && entity.getUser() != null && ((StandUser)entity.getUser()).sba$getStandPowers() instanceof PowersGoldExperience GE) {
 
             ResourceLocation crack = getCrackByTime(GE.attackTimeDuring / 20.0f);
             if (crack != null) {

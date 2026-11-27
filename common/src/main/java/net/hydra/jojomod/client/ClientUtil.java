@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.block.GamblingTableBlockEntity;
 import net.hydra.jojomod.client.gui.*;
@@ -171,9 +171,9 @@ public class ClientUtil {
                 }
             }
 
-            skinTicker(lastSkin,((StandUser)player).roundabout$getStandSkin());
+            skinTicker(lastSkin,((StandUser)player).sba$getStandSkin());
             PlayerTickStart = player.tickCount;
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+            if (((StandUser) player).sba$getStandPowers() instanceof PowersKingCrimson PKC){
                 if (PKC.isUsingTimeErase()){
                     if (clientTicker % 2 == 0) {
                         ClientEffectUtil.spawnTerrainFragment(player);
@@ -232,13 +232,13 @@ public class ClientUtil {
         Player pl = getPlayer();
         if (pl != null){
             IPlayerEntity ipe = ((IPlayerEntity) pl);
-            int cont = ipe.roundabout$getControlling();
+            int cont = ipe.sba$getControlling();
             if (cont > 0){
                 Entity zentity = pl.level().getEntity(cont);
                 if (zentity == null ||
                         !zentity.level().dimension().equals(pl.level().dimension())
                         || zentity.isRemoved() || !zentity.isAlive()){
-                    ipe.roundabout$setIsControlling(0);
+                    ipe.sba$setIsControlling(0);
                     C2SPacketUtil.intToServerPacket(PacketDataIndex.INT_UPDATE_PILOT,0);
                     ClientUtil.setCameraEntity(null);
                 }
@@ -362,9 +362,9 @@ public class ClientUtil {
         if (!(mc.getCameraEntity() != null && ent.is(mc.getCameraEntity())) &&
                 !(mc.player !=null && ent.is(mc.player))
         && !(
-                ent instanceof LivingEntity LV && ((StandUser)LV).roundabout$getStandPowers().isPiloting()
-                && ((StandUser)LV).roundabout$getStandPowers().getPilotingStand() != null &&
-                ((StandUser)LV).roundabout$getStandPowers().getPilotingStand().getUUID() == ent.getUUID())
+                ent instanceof LivingEntity LV && ((StandUser)LV).sba$getStandPowers().isPiloting()
+                && ((StandUser)LV).sba$getStandPowers().getPilotingStand() != null &&
+                ((StandUser)LV).sba$getStandPowers().getPilotingStand().getUUID() == ent.getUUID())
         ) {
             return true;
         }
@@ -379,7 +379,7 @@ public class ClientUtil {
     }
 
     public static boolean rendersRipperEyes(Entity ent){
-        if (ent instanceof Player pl && ((IPlayerEntity)pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
+        if (ent instanceof Player pl && ((IPlayerEntity)pl).sba$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE){
             return true;
         }
         return false;
@@ -497,19 +497,19 @@ public class ClientUtil {
     }
 
     public static void preRenderFloatSabbath(BlackSabbathEntity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
-        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
+        float lerpYRot = (float) ((ILivingEntityAccess)ent).sba$getLerpYRot();
         ent.yRotO = lerpYRot;
         ent.setYRot(lerpYRot);
         ent.setYBodyRot(lerpYRot);
         ent.setYHeadRot(lerpYRot);
         LivingEntity user = ent.getUser();
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersBlackSabbath PBS) {
+        if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersBlackSabbath PBS) {
                 PBS.transformSabbath(ent);
         }
     }
 
     public static void preRenderGrabbedSoul(BlackSabbathEntity ent, StandEntity se, Entity allayVex , double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
-        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
+        float lerpYRot = (float) ((ILivingEntityAccess)ent).sba$getLerpYRot();
         ent.yRotO = lerpYRot;
         ent.setYRot(lerpYRot);
         ent.setYBodyRot(lerpYRot);
@@ -530,7 +530,7 @@ public class ClientUtil {
                 $$4 = 0;
             }
             LivingEntity user = ent.getStandUser();
-            if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+            if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                 if (ent.getCrossNumber() > 0) {
                     if (ent.getCrossNumber() < 5) {
                         if (PMR.hurricaneSpecial == null) {
@@ -563,7 +563,7 @@ public class ClientUtil {
 
 
     public static void preRenderSurvivor(Entity ent, double $$1, double $$2, double $$3, float $$4, PoseStack pose, MultiBufferSource $$6) {
-        float lerpYRot = (float) ((ILivingEntityAccess)ent).roundabout$getLerpYRot();
+        float lerpYRot = (float) ((ILivingEntityAccess)ent).sba$getLerpYRot();
         ent.yRotO = lerpYRot;
         ent.setYRot(lerpYRot);
         ent.setYBodyRot(lerpYRot);
@@ -642,7 +642,7 @@ public class ClientUtil {
             $$4 = 0;
         }
         LivingEntity user = ent.getStandUser();
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersCinderella PCR) {
+        if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersCinderella PCR) {
             if (PCR.floatingVisages == null) {
                 PCR.floatingVisages = new ArrayList<>();
             }
@@ -675,7 +675,7 @@ public class ClientUtil {
         if (((IClientNetworking)client) == null){
             return null;
         }
-        Connection integratedServerCon = ((IClientNetworking)client).roundabout$getServer();
+        Connection integratedServerCon = ((IClientNetworking)client).sba$getServer();
 
         return (integratedServerCon != null ? integratedServerCon : client.player.connection.getConnection());
     }
@@ -698,7 +698,7 @@ public class ClientUtil {
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Rewind.value)) {
                     StandUser user = ((StandUser)player);
-                    StandPowers powers = user.roundabout$getStandPowers();
+                    StandPowers powers = user.sba$getStandPowers();
                     if (ConfigManager.getClientConfig().mandomRewindShowsVisualEffectsToNonMandomUsers ||
                             powers instanceof PowersMandom){
                         int ticks = powers.timeRewindOverlayTicks;
@@ -740,7 +740,7 @@ public class ClientUtil {
                     /**The penalty for killing or placing blocks to distort time and raise cooldown*/
                     int altared = (int)vargs[0];
                     StandUser user = ((StandUser)player);
-                    StandPowers powers = user.roundabout$getStandPowers();
+                    StandPowers powers = user.sba$getStandPowers();
                     if (powers instanceof PowersMandom PM){
                         PM.setTimeHasBeenAltered(altared);
                     }
@@ -750,7 +750,7 @@ public class ClientUtil {
                     int altered = (int)vargs[1];
                     Entity ent = player.level().getEntity(entityID);
                     if (ent != null){
-                        ((IEntityAndData)ent).roundabout$setTrueInvisibility(altered);
+                        ((IEntityAndData)ent).sba$setTrueInvisibility(altered);
 
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncDaze.value)) {
@@ -761,18 +761,18 @@ public class ClientUtil {
                     /**Guard Sync Packet*/
                     float guardPoints = (float)vargs[0];
                     boolean guardBroken = (boolean)vargs[1];
-                    ((StandUser) player).roundabout$setGuardPoints(guardPoints);
-                    ((StandUser)player).roundabout$setGuardBroken(guardBroken);
+                    ((StandUser) player).sba$setGuardPoints(guardPoints);
+                    ((StandUser)player).sba$setGuardBroken(guardBroken);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncWhitesnakeDisc.value)) {
                     byte type = (byte) vargs[0];
                     boolean present = (boolean) vargs[1];
                     int sealTicks = (int) vargs[2];
                     int sealMaxTicks = (int) vargs[3];
                     DiscBearer bearer = (DiscBearer) player;
-                    if (type == WhitesnakeDiscUtil.SIGHT) bearer.roundabout$setHasSightDisc(present);
-                    else if (type == WhitesnakeDiscUtil.MEMORY) bearer.roundabout$setHasMemoryDisc(present);
-                    else if (type == WhitesnakeDiscUtil.HEARING) bearer.roundabout$setHasHearingDisc(present);
-                    bearer.roundabout$setDiscSeal(type, sealTicks, sealMaxTicks);
+                    if (type == WhitesnakeDiscUtil.SIGHT) bearer.sba$setHasSightDisc(present);
+                    else if (type == WhitesnakeDiscUtil.MEMORY) bearer.sba$setHasMemoryDisc(present);
+                    else if (type == WhitesnakeDiscUtil.HEARING) bearer.sba$setHasHearingDisc(present);
+                    bearer.sba$setDiscSeal(type, sealTicks, sealMaxTicks);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.MusicDisc.value)) {
                     Entity entity = player.level().getEntity((int) vargs[0]);
                     if (entity instanceof LivingEntity) MusicDiscClient.play(entity, (String) vargs[1]);
@@ -793,7 +793,7 @@ public class ClientUtil {
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity){
                         if (!PowerTypes.isInADifferentExistenceNoTE(User,player)){
-                            ((StandUserClient) User).roundabout$clientQueSound(soundID, isVoice);
+                            ((StandUserClient) User).sba$clientQueSound(soundID, isVoice);
                         }
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.StopSound.value)) {
@@ -802,7 +802,7 @@ public class ClientUtil {
                     byte soundID = (byte) vargs[1];
                     Entity User = player.level().getEntity(entId);
                     if (User instanceof LivingEntity LE){
-                            ((StandUserClient) User).roundabout$clientQueSoundCanceling(soundID);
+                            ((StandUserClient) User).sba$clientQueSoundCanceling(soundID);
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.Blip.value)) {
                     /**TS Teleport blip*/
@@ -853,7 +853,7 @@ public class ClientUtil {
                     /**Syncs the active power the stand is using*/
                     byte activePower = (byte) vargs[0];
                     int data = (int) vargs[1];
-                    ((StandUser) player).roundabout$getStandPowers().updatePowerInt(activePower,data);
+                    ((StandUser) player).sba$getStandPowers().updatePowerInt(activePower,data);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.IntToClient.value)) {
                     /**Generic int that is sent to the client*/
                     byte context = (byte) vargs[0];
@@ -906,7 +906,7 @@ public class ClientUtil {
                     int entityID = (int) vargs[0];
                     Entity ent = player.level().getEntity(entityID);
                     if (ent instanceof LivingEntity LE &&
-                            ((StandUser)LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW){
+                            ((StandUser)LE).sba$getStandPowers() instanceof PowersWalkingHeart PW){
                         PW.setHeelExtension(3);
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.RefreshAllCooldowns.value)) {
@@ -915,17 +915,17 @@ public class ClientUtil {
                     ((IPlayerEntity)player).rdbt$setCooldownQuery(true);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTimer.value)) {
                     int sigmaTime = (int) vargs[0];
-                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
+                    if (((StandUser)player).sba$getStandPowers() instanceof PowersCream PC) {
                         PC.setVoidTime(sigmaTime);
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformTimer.value)) {
                     int sigmaTime = (int) vargs[0];
-                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
+                    if (((StandUser)player).sba$getStandPowers() instanceof PowersCream PC) {
                         PC.setTransformTimer(sigmaTime);
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.CreamUpdateTransformDirection.value)) {
                     int sigmaDirection = (int) vargs[0];
-                    if (((StandUser)player).roundabout$getStandPowers() instanceof PowersCream PC) {
+                    if (((StandUser)player).sba$getStandPowers() instanceof PowersCream PC) {
                         PC.setTransformDirection(sigmaDirection);
                     }
                 }
@@ -981,7 +981,7 @@ public class ClientUtil {
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPossessor.value)) {
                     Player possessed = (Player) player.level().getEntity((int)vargs[0]);
                     LivingEntity target = (LivingEntity) player.level().getEntity((int)vargs[1]);
-                    ((StandUser)possessed).roundabout$getPossessor().setTarget(target);
+                    ((StandUser)possessed).sba$getPossessor().setTarget(target);
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ShatterIce.value)) {
                     int i = (int) vargs[0];
                     Entity target = player.level().getEntity(i);
@@ -991,7 +991,7 @@ public class ClientUtil {
 
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncAllies.value)) {;
                     String data = (String) vargs[0];
-                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+                    if(((StandUser) player).sba$getStandPowers() instanceof PowersGreenDay PGD){
                         PGD.allies = PGD.allyListParser(data);
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.AddEpitaph.value)) {
@@ -1001,11 +1001,11 @@ public class ClientUtil {
                     double z = (double) vargs[3];
                     float xrot = (float) vargs[4];
                     float yrot = (float) vargs[5];
-                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                    if(((StandUser) player).sba$getStandPowers() instanceof PowersKingCrimson PKC){
                         PKC.epitaph.put(i,new TimeSkipSnapshot(i,new Vec3(x,y,z),xrot,yrot));
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.ClearEpitaph.value)) {
-                    if(((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+                    if(((StandUser) player).sba$getStandPowers() instanceof PowersKingCrimson PKC){
                         PKC.epitaph.clear();
                     }
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SendSafeSound.value)) {
@@ -1122,7 +1122,7 @@ public class ClientUtil {
                     boolean hasmainhand = ((int) vargs[4]) == 1;
                     int legsent = (int) vargs[5];
                     Entity userent = player.level().getEntity(user);
-                    if(userent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersGreenDay PGD){
+                    if(userent instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers() instanceof PowersGreenDay PGD){
 
                         PGD.Main_arm = (SeperatedArmEntity) player.level().getEntity(mainhandent);
                         PGD.Off_hand_entity = (SeperatedArmEntity) player.level().getEntity(offhandent);
@@ -1134,7 +1134,7 @@ public class ClientUtil {
 
                 } else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncPurpleHazePods.value)) {
                     byte pods = (byte) vargs[0];
-                    ((IPlayerEntity) player).roundabout$setPurpleHazePods(pods);
+                    ((IPlayerEntity) player).sba$setPurpleHazePods(pods);
                 }
 
                 else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.SyncGamblingState.value)) {
@@ -1158,7 +1158,7 @@ public class ClientUtil {
                         int targetID = (int) vargs[0];
                         int inflation = (int) vargs[1];
                         if (pl.level().getEntity(targetID) instanceof LivingEntity LE) {
-                            ((StandUser)LE).roundabout$setExplosionInflation(inflation);
+                            ((StandUser)LE).sba$setExplosionInflation(inflation);
                         }
                     }
                 }
@@ -1166,14 +1166,14 @@ public class ClientUtil {
                 else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnAddItemContainer.value)) {
                     BlockPos pos = (BlockPos) vargs[0];
                     BlockPos pos2 = (BlockPos) vargs[1];
-                    if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
+                    if (((StandUser) player).sba$getStandPowers() instanceof PowersKingNothing pkn) {
                         pkn.addItemBlockPos(pos, pos2);
                     }
                 }
 
                 else if (message.equals(ServerToClientPackets.S2CPackets.MESSAGES.KnRemoveItemContainer.value)) {
                     BlockPos pos = (BlockPos) vargs[0];
-                    if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
+                    if (((StandUser) player).sba$getStandPowers() instanceof PowersKingNothing pkn) {
                         pkn.removeItemBlockPos(pos);
                     }
                 }
@@ -1197,7 +1197,7 @@ public class ClientUtil {
 
                 // theoretical deregister dynamic worlds packet
                 // String name = buf.readUtf();
-                //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, Roundabout.location(name));
+                //        ResourceKey<Level> LEVEL_KEY = ResourceKey.create(Registries.DIMENSION, SBA.location(name));
                 //
                 //        if (client.player != null) {
                 //            client.player.connection.levels().remove(LEVEL_KEY);
@@ -1241,7 +1241,7 @@ public class ClientUtil {
                 rightAxis = Direction.UP;
             }
         }
-        return ((IGravityEntity)self).roundabout$getGravityDirection() != rightAxis;
+        return ((IGravityEntity)self).sba$getGravityDirection() != rightAxis;
     }
 
     /**
@@ -1249,27 +1249,27 @@ public class ClientUtil {
      */
     public static void handleIntPacketS2C(Player player, int data, byte context) {
         if (context == 1) {
-            ((StandUser) player).roundabout$setGasolineTime(data);
+            ((StandUser) player).sba$setGasolineTime(data);
         } else if (context == PacketDataIndex.S2C_POWER_INVENTORY) {
             checkthisdat = data;
             checkthis = 1;
         } else if (context == PacketDataIndex.S2C_INT_OXYGEN_TANK) {
-            ((StandUser) player).roundabout$getStandPowers().setAirAmount(data);
+            ((StandUser) player).sba$getStandPowers().setAirAmount(data);
         } else if (context== PacketDataIndex.S2C_INT_GRAB_ITEM){
             Entity target = player.level().getEntity(data);
             if (target instanceof ItemEntity IE) {
                 IE.getItem().shrink(1);
             }
         } else if (context== PacketDataIndex.S2C_INT_ATD){
-            ((StandUser) player).roundabout$getStandPowers().setAttackTimeDuring(data);
+            ((StandUser) player).sba$getStandPowers().setAttackTimeDuring(data);
         } else if (context == PacketDataIndex.S2C_INT_SEAL){
             StandUser user = ((StandUser) player);
-            if (user.roundabout$getMaxSealedTicks() < data){
-                user.roundabout$setMaxSealedTicks(data);
+            if (user.sba$getMaxSealedTicks() < data){
+                user.sba$setMaxSealedTicks(data);
             }
-            user.roundabout$setSealedTicks(data);
+            user.sba$setSealedTicks(data);
         } else if (context == PacketDataIndex.S2C_INT_MAX_SEAL){
-            ((StandUser) player).roundabout$setMaxSealedTicks(data);
+            ((StandUser) player).sba$setMaxSealedTicks(data);
         } else if (context == PacketDataIndex.S2C_INT_BUBBLE_FINISH){
             Entity target = player.level().getEntity(data);
             if (target instanceof SoftAndWetPlunderBubbleEntity IE) {
@@ -1281,7 +1281,7 @@ public class ClientUtil {
                 VP.setSpeedActivated(data);
             }
         } else if (context == PacketDataIndex.S2C_INT_STAND_MODE){
-            ((StandUser) player).roundabout$getStandPowers().clientIntUpdated(data);
+            ((StandUser) player).sba$getStandPowers().clientIntUpdated(data);
         } else if (context == PacketDataIndex.S2C_INT_FLESH_BUD){
             Entity target = player.level().getEntity(data);
             if (target != null && !target.isRemoved() && target.isAlive() && target.distanceTo(getPlayer()) < 30) {
@@ -1315,22 +1315,22 @@ public class ClientUtil {
             }
         } else if (context == PacketDataIndex.S2C_INT_RESET_ACCELERATION) {
             StandUser user = ((StandUser) player);
-            if (user.roundabout$getStandPowers() instanceof PowersWhiteAlbum pwa){
+            if (user.sba$getStandPowers() instanceof PowersWhiteAlbum pwa){
                 pwa.acceleration =data;
             }
         } else if (context == PacketDataIndex.S2C_INT_CKB_ADD) {
             StandUser user = ((StandUser) player);
-            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+            if (user.sba$getStandPowers() instanceof PowersCalifornia ckb){
                 ckb.addToClientList(data);
             }
         } else if (context == PacketDataIndex.S2C_INT_CKB_REMOVE) {
             StandUser user = ((StandUser) player);
-            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+            if (user.sba$getStandPowers() instanceof PowersCalifornia ckb){
                 ckb.removeFromClientList(data);
             }
         } else if (context == PacketDataIndex.S2C_INT_LEADED) {
             StandUser user = ((StandUser) player);
-            if (user.roundabout$getStandPowers() instanceof PowersCalifornia ckb){
+            if (user.sba$getStandPowers() instanceof PowersCalifornia ckb){
                 ckb.leadedInt = data;
             }
         } else if (context == PacketDataIndex.S2C_IN_PURPLE_HAZE_TICKS) {
@@ -1344,28 +1344,28 @@ public class ClientUtil {
             ipe.rdbt$setLevelDecreaseTicks(data);
         } else if (context == PacketDataIndex.S2C_STAND_SPECIAL_INT) {
             StandUser user = ((StandUser) player);
-            if (user.roundabout$getStandPowers() instanceof PowersKingCrimson ckb){
+            if (user.sba$getStandPowers() instanceof PowersKingCrimson ckb){
                 ckb.disengageTargetInt = data;
             }
         } else if (context == PacketDataIndex.S2C_KN_ADD_HIGHLIGHT_ENTITY) {
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+            if (((StandUser) player).sba$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.addItemEntity(data);
             }
         } else if (context == PacketDataIndex.S2C_KN_REMOVE_HIGHLIGHT_ENTITY) {
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+            if (((StandUser) player).sba$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.removeItemEntity(data);
             }
         } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_BLOCK) {
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+            if (((StandUser) player).sba$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.setMemorizedScent(BuiltInRegistries.BLOCK.byId(data));
             }
         } else if (context == PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_ENTITY) {
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingNothing kn) {
+            if (((StandUser) player).sba$getStandPowers() instanceof PowersKingNothing kn) {
                 kn.setMemorizedScent(BuiltInRegistries.ENTITY_TYPE.byId(data));
             }
         } else if (context == PacketDataIndex.S2C_TUSK_DEATH_TARGET_SYNC) {
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersTusk PT) {
-                Roundabout.LOGGER.info(""+player.level().getEntity(data));
+            if (((StandUser) player).sba$getStandPowers() instanceof PowersTusk PT) {
+                SBA.LOGGER.info(""+player.level().getEntity(data));
                 PT.deathTarget = player.level().getEntity(data);
             }
         }
@@ -1386,9 +1386,9 @@ public class ClientUtil {
             Entity target = player.level().getEntity(data);
             if (target instanceof LivingEntity LE) {
                 StandUser SU = (StandUser) LE;
-                if (SU.roundabout$getStandPowers() != null) {
-                    SU.roundabout$getStandPowers().setActivePower((byte) data2);
-                    SU.roundabout$getStandPowers().setAttackTimeDuring(0);
+                if (SU.sba$getStandPowers() != null) {
+                    SU.sba$getStandPowers().setActivePower((byte) data2);
+                    SU.sba$getStandPowers().setAttackTimeDuring(0);
                 }
             }
         } else if (context == PacketDataIndex.S2C_HALLUCINATION_INDICATOR) {
@@ -1397,13 +1397,13 @@ public class ClientUtil {
     }
 
     public static boolean canSeeStands(Player lp){
-        return !(lp != null && (((StandUser)lp).roundabout$getStandDisc().isEmpty() &&
+        return !(lp != null && (((StandUser)lp).sba$getStandDisc().isEmpty() &&
                 !lp.isSpectator()) && ConfigManager.getClientConfig().generalSettings.onlyStandUsersCanSeeStands);
     }
     public static boolean checkIfClientCanSeePastLocations() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersMandom PM && PM.activatedPastVision()){
+            if (((StandUser)player).sba$getStandPowers() instanceof PowersMandom PM && PM.activatedPastVision()){
                 return true;
             }
         }
@@ -1412,7 +1412,7 @@ public class ClientUtil {
     public static boolean checkIfClientCanSeeInvisAchtung() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersAchtungBaby PM && PM.invisibleVisionOn()){
+            if (((StandUser)player).sba$getStandPowers() instanceof PowersAchtungBaby PM && PM.invisibleVisionOn()){
                 return true;
             }
         }
@@ -1422,7 +1422,7 @@ public class ClientUtil {
     public static boolean canSilverChariotControlModeSeeParticles() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isPiloting()) {
+            if (((StandUser) player).sba$getStandPowers() instanceof PowersSilverChariot PSC && PSC.isPiloting()) {
                 return false;
             }
         }
@@ -1446,7 +1446,7 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null){
             PlayerTickStart = player.tickCount;
-            if (((StandUser) player).roundabout$getStandPowers() instanceof PowersKingCrimson PKC){
+            if (((StandUser) player).sba$getStandPowers() instanceof PowersKingCrimson PKC){
                 if (PKC.isUsingEpitaph()) {
                     return true;
                 } else {
@@ -1472,7 +1472,7 @@ public class ClientUtil {
         return false;
     }
     public static boolean canRenderBetweenScreen() {
-        if (((StandUser)getPlayer()).roundabout$getStandPowers() instanceof PowersD4C pd){
+        if (((StandUser)getPlayer()).sba$getStandPowers() instanceof PowersD4C pd){
             if (pd.seesBetween){
                 return true;
             }
@@ -1494,7 +1494,7 @@ public class ClientUtil {
     public static boolean checkIfClientCanSeeMobsForWindVision() {
 
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersManhattanTransfer PMT && (PMT.isPiloting() || PMT.visionModeClient)) {
+        if (player != null && ((StandUser) player).sba$getStandPowers() instanceof PowersManhattanTransfer PMT && (PMT.isPiloting() || PMT.visionModeClient)) {
             if(PMT.isActive()) {
                 return true;
             } else {
@@ -1563,7 +1563,7 @@ public class ClientUtil {
             if (stand.getUser() != null){
                 if (stand.getUser().is(player)){
                     if (Minecraft.getInstance().options.getCameraType().isFirstPerson()){
-                        if (((StandUser)stand.getUser()).roundabout$getStandPowers().isPiloting()){
+                        if (((StandUser)stand.getUser()).sba$getStandPowers().isPiloting()){
                             return true;
                         }
                     }
@@ -1574,7 +1574,7 @@ public class ClientUtil {
     }
     public static boolean setCameraEntity(Entity entity) {
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-        ((ICamera)camera).roundabout$setEntity(entity);
+        ((ICamera)camera).sba$setEntity(entity);
         return entity != null && entity.isAlive() && !entity.isRemoved();
     }
 
@@ -1593,7 +1593,7 @@ public class ClientUtil {
         float throwFade = 1f;
         delta = delta % 1;
         IEntityAndData entityAndData = ((IEntityAndData) ent);
-        if (entityAndData.roundabout$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
+        if (entityAndData.sba$getTrueInvisibility() > -1 && !ClientUtil.checkIfClientCanSeeMobsForWindVision()) {
             throwFade = throwFade * 0.4F;
         }
 
@@ -1624,7 +1624,7 @@ public class ClientUtil {
                 }
             }
 
-            byte posX = ((IPlayerEntity)pl).roundabout$GetPos2();
+            byte posX = ((IPlayerEntity)pl).sba$GetPos2();
             if (posX == PlayerPosIndex.VANISH_PERSIST){
                 throwFade = 0;
             } else if (posX == PlayerPosIndex.VANISH_START){
@@ -1692,7 +1692,7 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             StandUser standComp = ((StandUser) player);
-            StandPowers powers = standComp.roundabout$getStandPowers();
+            StandPowers powers = standComp.sba$getStandPowers();
             FatePowers fatePowers = ((IFatePlayer)player).rdbt$getFatePowers();
 
             if (powers.getGoBeyondTarget() != null && powers.getGoBeyondTarget().is(entity)) {
@@ -1712,7 +1712,7 @@ public class ClientUtil {
         }
 
         if (entity instanceof LivingEntity LE){
-            int yes = ((StandUser)LE).roundabout$getDetectTicks();
+            int yes = ((StandUser)LE).sba$getDetectTicks();
             if (yes > -1){
                 return 16285219;
             }
@@ -1787,7 +1787,7 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             StandUser user = ((StandUser) player);
-            ItemStack stack = user.roundabout$getStandDisc();
+            ItemStack stack = user.sba$getStandDisc();
             if (stack != null && !stack.isEmpty()){
                 return (stack.is(ModItems.STAND_DISC_STAR_PLATINUM) || stack.is(ModItems.STAND_DISC_THE_WORLD)
                         || stack.is(ModItems.MAX_STAND_DISC_STAR_PLATINUM) || stack.is(ModItems.MAX_STAND_DISC_THE_WORLD));
@@ -1853,7 +1853,7 @@ public class ClientUtil {
             boolean isSneaking = mc.options.keyShift.isDown() || mc.player.isCrouching();
             boolean isJumping = mc.options.keyJump.isDown() || (!mc.player.onGround() && !mc.player.isHurt() && getPlayer().fallDistance < 2 &&
                     !getPlayer().getAbilities().flying);
-            if (((StandUser)mc.player).roundabout$getBubbleEncased() > 0){
+            if (((StandUser)mc.player).sba$getBubbleEncased() > 0){
                 isJumping = false;
             }
             boolean isSprinting = mc.player.isSprinting();
@@ -1988,17 +1988,17 @@ public class ClientUtil {
             }
             if (target instanceof LivingEntity LE) {
                 if (!isPlayer(target)) {
-                    ((StandUser) target).roundabout$setBlip(vec);
-                    ((StandUser) target).roundabout$tryBlip();
+                    ((StandUser) target).sba$setBlip(vec);
+                    ((StandUser) target).sba$tryBlip();
                 }
 
-                StandEntity SE = ((StandUser) target).roundabout$getStand();
+                StandEntity SE = ((StandUser) target).sba$getStand();
                 if (SE instanceof FollowingStandEntity fse && fse.getFollowing() != null && fse.getFollowing().is(target)) {
                     byte OT = fse.getOffsetType();
                     if (OffsetIndex.OffsetStyle(OT) != OffsetIndex.LOOSE_STYLE) {
                         Vec3 spos = fse.getStandOffsetVector(LE);
-                        ((StandUser) SE).roundabout$setBlip(spos.toVector3f());
-                        ((StandUser) target).roundabout$tryBlip();
+                        ((StandUser) SE).sba$setBlip(spos.toVector3f());
+                        ((StandUser) target).sba$tryBlip();
                     }
                 }
             }
@@ -2015,13 +2015,13 @@ public class ClientUtil {
                 return;
             }
             if (target instanceof LivingEntity LE) {
-                ((StandUser) target).roundabout$setBlip(vec);
+                ((StandUser) target).sba$setBlip(vec);
 
-                StandEntity SE = ((StandUser) target).roundabout$getStand();
+                StandEntity SE = ((StandUser) target).sba$getStand();
                 if (SE != null) {
-                    ((StandUser) SE).roundabout$setBlip(vec);
+                    ((StandUser) SE).sba$setBlip(vec);
                 }
-                ((StandUser) target).roundabout$tryBlip();
+                ((StandUser) target).sba$tryBlip();
             }
         }
     }
@@ -2029,8 +2029,8 @@ public class ClientUtil {
     public static void clashUpdatePacket(int clashOpID, float progress) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            ((StandUser) player).roundabout$getStandPowers().setClashOp((LivingEntity) player.level().getEntity(clashOpID));
-            ((StandUser) player).roundabout$getStandPowers().setClashOpProgress(progress);
+            ((StandUser) player).sba$getStandPowers().setClashOp((LivingEntity) player.level().getEntity(clashOpID));
+            ((StandUser) player).sba$getStandPowers().setClashOpProgress(progress);
         }
     }
 
@@ -2043,7 +2043,7 @@ public class ClientUtil {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             Entity User = player.level().getEntity(startPlayerID);
-            ((StandUserClient) User).roundabout$clientQueSound(soundQue, false);
+            ((StandUserClient) User).sba$clientQueSound(soundQue, false);
         }
     }
 
@@ -2096,17 +2096,17 @@ public class ClientUtil {
 
 
     public static void pushPoseAndCooperate(PoseStack stack, int caseNumber){
-        //Roundabout.LOGGER.info("Case Push "+caseNumber);
+        //SBA.LOGGER.info("Case Push "+caseNumber);
         stack.pushPose();
     }
     public static void popPoseAndCooperate(PoseStack stack, int caseNumber){
-        //Roundabout.LOGGER.info("Case Pop "+caseNumber);
+        //SBA.LOGGER.info("Case Pop "+caseNumber);
         stack.popPose();
     }
 
 
     public static BlockHitResult getHitResult(){
-        //Roundabout.LOGGER.info("Case Pop "+caseNumber);
+        //SBA.LOGGER.info("Case Pop "+caseNumber);
         Minecraft mc = Minecraft.getInstance();
 
         if (mc.hitResult instanceof BlockHitResult blockHit) {
@@ -2116,7 +2116,7 @@ public class ClientUtil {
     }
 
 
-    public static boolean roundabout$configButtonSelected = false;
+    public static boolean sba$configButtonSelected = false;
 
     public static String[] splitIntoLine(String input, int maxCharInLine){
 
@@ -2150,7 +2150,7 @@ public class ClientUtil {
             LocalPlayer localPlayer = Minecraft.getInstance().player;
             if (localPlayer == null)
                 return false;
-            if (((StandUser) localPlayer).roundabout$getStandPowers() instanceof PowersAchtungBaby PA && PA.invisibleVisionOn()) {
+            if (((StandUser) localPlayer).sba$getStandPowers() instanceof PowersAchtungBaby PA && PA.invisibleVisionOn()) {
                 return true;
             }
         }
@@ -2167,7 +2167,7 @@ public class ClientUtil {
         LocalPlayer localPlayer = Minecraft.getInstance().player;
         if (localPlayer == null)
         {
-            Roundabout.LOGGER.error("Errored while synchronizing Dynamic World: \"player\" is null!");
+            SBA.LOGGER.error("Errored while synchronizing Dynamic World: \"player\" is null!");
             return false;
         }
 
@@ -2181,20 +2181,20 @@ public class ClientUtil {
     public static void handlePowerFloatPacket(byte activePower, float data){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            ((StandUser) player).roundabout$getStandPowers().updatePowerFloat(activePower,data);
+            ((StandUser) player).sba$getStandPowers().updatePowerFloat(activePower,data);
         }
     }
     public static void handlePowerIntPacket(byte activePower, int data){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            ((StandUser) player).roundabout$getStandPowers().updatePowerInt(activePower,data);
+            ((StandUser) player).sba$getStandPowers().updatePowerInt(activePower,data);
         }
     }
     public static void handleGuardUpdate(float guardPoints, boolean guardBroken){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            ((StandUser) player).roundabout$setGuardPoints(guardPoints);
-            ((StandUser) player).roundabout$setGuardBroken(guardBroken);
+            ((StandUser) player).sba$setGuardPoints(guardPoints);
+            ((StandUser) player).sba$setGuardBroken(guardBroken);
         }
     }
     public static void CDSyncPacket(int attackTime, int attackTimeMax, int attackTimeDuring,
@@ -2222,14 +2222,14 @@ public class ClientUtil {
     public static void skillCDSyncPacket(byte power, int cooldown){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            StandPowers powers = ((StandUser) player).roundabout$getStandPowers();
+            StandPowers powers = ((StandUser) player).sba$getStandPowers();
             powers.setCooldown(power,cooldown);
         }
     }
     public static void skillMaxCDSyncPacket(byte power, int cooldown, int maxCooldown){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            StandPowers powers = ((StandUser) player).roundabout$getStandPowers();
+            StandPowers powers = ((StandUser) player).sba$getStandPowers();
             powers.setCooldownMax(power,cooldown,maxCooldown);
         }
     }
@@ -2247,7 +2247,7 @@ public class ClientUtil {
     public static void updateDazePacket(byte dazeTime){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            ((StandUser) player).roundabout$setDazeTime(dazeTime);
+            ((StandUser) player).sba$setDazeTime(dazeTime);
         }
     }
     public static void handleBlipPacketS2C(int data, byte context, Vector3f vec){
@@ -2286,20 +2286,20 @@ public class ClientUtil {
     public static void handlePermaCastingEntityPacket(int timeStoppingEntity, double x, double y, double z, double range, byte context){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            ((IPermaCasting) player.level()).roundabout$processPermaCastPacket(timeStoppingEntity,x,y,z,range,context);
+            ((IPermaCasting) player.level()).sba$processPermaCastPacket(timeStoppingEntity,x,y,z,range,context);
         }
     }
     public static void handlePermaCastingRemovePacket(int entityID){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            ((IPermaCasting) player.level()).roundabout$processPermaCastRemovePacket(entityID);
+            ((IPermaCasting) player.level()).sba$processPermaCastRemovePacket(entityID);
         }
     }
     public static void handleStopSoundPacket(int data, byte context){
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
             Entity User = player.level().getEntity(data);
-            ((StandUserClient)User).roundabout$clientQueSoundCanceling(context);
+            ((StandUserClient)User).sba$clientQueSoundCanceling(context);
         }
     }
 
@@ -2326,11 +2326,11 @@ public class ClientUtil {
             IPlayerEntity ple = ((IPlayerEntity) player);
             StandUser se = ((StandUser) player);
             if (byte2 > 0) {
-                ple.roundabout$setUnlockedBonusSkin(true);
+                ple.sba$setUnlockedBonusSkin(true);
             } else {
-                ple.roundabout$setUnlockedBonusSkin(false);
+                ple.sba$setUnlockedBonusSkin(false);
             }
-            se.roundabout$setStandSkin(byte1);
+            se.sba$setStandSkin(byte1);
 
         }
     }
@@ -2338,21 +2338,21 @@ public class ClientUtil {
     public static void handlePowerInventoryOptionsPacketS2C(Player player, int anchorPlace, float distanceOut, float idleOpacity,
                                                             float combatOpacity, float enemyOpacity, int anchorPlaceAttack){
         IPlayerEntity ple = ((IPlayerEntity) player);
-        ple.roundabout$setAnchorPlace(anchorPlace);
-        ple.roundabout$setDistanceOut(distanceOut);
-        ple.roundabout$setSizePercent(idleOpacity);
-        ple.roundabout$setIdleRotation(combatOpacity);
-        ple.roundabout$setIdleYOffset(enemyOpacity);
-        ple.roundabout$setAnchorPlaceAttack(anchorPlaceAttack);
+        ple.sba$setAnchorPlace(anchorPlace);
+        ple.sba$setDistanceOut(distanceOut);
+        ple.sba$setSizePercent(idleOpacity);
+        ple.sba$setIdleRotation(combatOpacity);
+        ple.sba$setIdleYOffset(enemyOpacity);
+        ple.sba$setAnchorPlaceAttack(anchorPlaceAttack);
 
     }
     /**A generalized packet for sending bytes to the client. Only a context is provided.*/
     public static void handleSimpleBytePacketS2C(LocalPlayer player, byte context){
         if (context == 1) {
-            ((StandUser) player).roundabout$setGasolineTime(context);
+            ((StandUser) player).sba$setGasolineTime(context);
         } else if (context == PacketDataIndex.S2C_SIMPLE_SUSPEND_RIGHT_CLICK) {
-            ((StandUser) player).roundabout$getStandPowers().suspendGuard = true;
-            ((StandUser) player).roundabout$getStandPowers().scopeLevel = 0;
+            ((StandUser) player).sba$getStandPowers().suspendGuard = true;
+            ((StandUser) player).sba$getStandPowers().scopeLevel = 0;
         } else if (context == PacketDataIndex.S2C_SIMPLE_CLOSE_THE_RELLA) {
             if (Minecraft.getInstance().screen instanceof VisageStoreScreen vs){
                 setScreenNull = true;
@@ -2366,33 +2366,33 @@ public class ClientUtil {
             if (!ClientNetworking.getAppropriateConfig().killerQueenSettings.bitesTheDustDayModeAffectGlobalTime) {
                 IDayInterpolationClientLevelData levelTimeData = ((IDayInterpolationClientLevelData) player.level().getLevelData());
 
-                long dayTime = levelTimeData.roundabout$getRoundaboutDayTimeMinecraft();
+                long dayTime = levelTimeData.sba$getSBADayTimeMinecraft();
                 long targetDayTime = dayTime - (dayTime % 24000);
 
-                levelTimeData.roundabout$setRoundaboutDayTimeActual(targetDayTime);
-                levelTimeData.roundabout$setRoundaboutInterpolatingDaytime(true);
+                levelTimeData.sba$setSBADayTimeActual(targetDayTime);
+                levelTimeData.sba$setSBAInterpolatingDaytime(true);
             }
         } else if (context == PacketDataIndex.BITES_THE_DUST_COMBAT){
             bitesTheDustTicker = 0;
         } else if (context == PacketDataIndex.DONT_SPAM_TIME_STOP){
-            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof TWAndSPSharedPowers TW) {
+            if (player != null && ((StandUser)player).sba$getStandPowers() instanceof TWAndSPSharedPowers TW) {
                 TW.TSFORCE = false;
             }
         } else if (context == PacketDataIndex.S2C_SOFT){
-            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+            if (player != null && ((StandUser)player).sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                 PW.setGoBeyondChargeTicks(PW.goBeyondChargeTicks+PW.getGoBeyondUseTicks2());
             }
         } else if (context == PacketDataIndex.CLEAR_LEADED){
-            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof PowersMagiciansRed PW) {
+            if (player != null && ((StandUser)player).sba$getStandPowers() instanceof PowersMagiciansRed PW) {
                 PW.leaded = null;
             }
         } else if (context == PacketDataIndex.STALL){
-            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof
+            if (player != null && ((StandUser)player).sba$getStandPowers() instanceof
                     PowersWhiteAlbum PW) {
                 PW.stallTicks = 10;
             }
         } else if (context == PacketDataIndex.STAND_HIT){
-            if (player != null && ((StandUser)player).roundabout$getStandPowers() instanceof
+            if (player != null && ((StandUser)player).sba$getStandPowers() instanceof
                     PowersWhiteAlbum PW) {
                 PW.setAttackTime(0);
                 PW.setActivePowerPhase(PW.getActivePowerPhaseMax());
@@ -2519,7 +2519,7 @@ public class ClientUtil {
                     float b = pl.rdbt$getHairColorZ();
 
 
-                    ItemStack visage = pl.roundabout$getMaskSlot();
+                    ItemStack visage = pl.sba$getMaskSlot();
                     if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
 
                         VisageData vd = ME.visageData.generateVisageData(play);
@@ -2541,7 +2541,7 @@ public class ClientUtil {
                     stack.popPose();
                 }
             }
-            byte bt = ((IPlayerEntity) play).roundabout$GetPos2();
+            byte bt = ((IPlayerEntity) play).sba$GetPos2();
             // vampire again
 
             if (PowerTypes.hasHandsActive(play)){
@@ -2550,7 +2550,7 @@ public class ClientUtil {
                 float r = 1;
                 float g = 1;
                 float b = 1;
-                byte animation = ((StandUser)play).roundabout$getStandAnimation();
+                byte animation = ((StandUser)play).sba$getStandAnimation();
                 boolean isIdle = animation == StandPowers.NONE;
                 Vec3 gtranslation = new Vec3(0, -0.2, -0.15);
                 if (isIdle){
@@ -2613,7 +2613,7 @@ public class ClientUtil {
                     // Tilt it forward
                     stack.mulPose(Axis.XP.rotationDegrees(-71.0F));
                     stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
-                    ModStrayModels.bannerFlag.roundabout$renderInSpot(
+                    ModStrayModels.bannerFlag.sba$renderInSpot(
                             play.getMainHandItem(), play.getPosition($$4%1), play.level(), $$4,
                             stack, source,light,
                             LightTexture.FULL_BRIGHT,scale);
@@ -2674,7 +2674,7 @@ public class ClientUtil {
                 float b = pl.rdbt$getHairColorZ();
 
 
-                ItemStack visage = pl.roundabout$getMaskSlot();
+                ItemStack visage = pl.sba$getMaskSlot();
                 if (visage != null && !visage.isEmpty() && visage.getItem() instanceof MaskItem ME) {
                     VisageData vd = ME.visageData.generateVisageData(play);
                     if (vd != null && vd.isCharacterVisage()) {
@@ -2702,7 +2702,7 @@ public class ClientUtil {
             if (renderer instanceof PlayerRenderer playerRenderer) {
                 PlayerModel<?> model = playerRenderer.getModel();
                 IPlayerModel ipm = (IPlayerModel) model;
-                slimBoolean = ipm.roundabout$getSlim();
+                slimBoolean = ipm.sba$getSlim();
             }
 
             Item item = play.getUseItem().getItem();
@@ -2713,11 +2713,11 @@ public class ClientUtil {
                 FirstPersonArmsSlimModel.player = play;
 
                 if (play.getCooldowns().isOnCooldown(play.getUseItem().getItem())) {
-                    pl.roundabout$getItemAnimationActive().startIfStopped(cameraEnt.tickCount);
-                    pl.roundabout$getItemAnimation().stop();
+                    pl.sba$getItemAnimationActive().startIfStopped(cameraEnt.tickCount);
+                    pl.sba$getItemAnimation().stop();
                 } else {
-                    pl.roundabout$getItemAnimationActive().stop();
-                    pl.roundabout$getItemAnimation().startIfStopped(cameraEnt.tickCount);
+                    pl.sba$getItemAnimationActive().stop();
+                    pl.sba$getItemAnimation().startIfStopped(cameraEnt.tickCount);
                 }
 
                 if (!(item instanceof JackalRifleItem)) {
@@ -2741,21 +2741,21 @@ public class ClientUtil {
                 stack.popPose();
             } else if (item instanceof AnubisItem) {
 
-                pl.roundabout$getItemAnimation().startIfStopped(cameraEnt.tickCount);
+                pl.sba$getItemAnimation().startIfStopped(cameraEnt.tickCount);
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
 
             } else {
-                pl.roundabout$getItemAnimation().stop();
-                pl.roundabout$getItemAnimationActive().stop();
+                pl.sba$getItemAnimation().stop();
+                pl.sba$getItemAnimationActive().stop();
             }
 
             StandUser standUser = (StandUser) cameraEnt;
             boolean isUsingAnubis = play.isUsingItem() && play.getUseItem().is(ModItems.ANUBIS_ITEM);
             if (AnubisLayer.shouldRender(play) != null && !isUsingAnubis && (!play.getMainHandItem().is(ModItems.ANUBIS_ITEM)
-                    || (PowerTypes.isUsingStand(play) && standUser.roundabout$getStandPowers() instanceof PowersAnubis)
-                    || standUser.roundabout$getPossessor() instanceof AnubisPossessorEntity) ) {
+                    || (PowerTypes.isUsingStand(play) && standUser.sba$getStandPowers() instanceof PowersAnubis)
+                    || standUser.sba$getPossessor() instanceof AnubisPossessorEntity) ) {
                 ModStrayModels.ANUBIS.renderFirstPerson(stack,source,light,play,cameraEnt.tickCount + $$4);
-            } else if (standUser.roundabout$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play) && !play.isUsingItem() ) {
+            } else if (standUser.sba$getStandPowers() instanceof PowersTusk && PowerTypes.isUsingStand(play) && !play.isUsingItem() ) {
                 stack.pushPose();
                 FirstPersonArmsModel.player = play;
                 FirstPersonArmsSlimModel.player = play;
@@ -2766,7 +2766,7 @@ public class ClientUtil {
                     ModStrayModels.FirstPersonArmsModel.render(cameraEnt, cameraEnt.tickCount + $$4, stack, source, light);
                 }
                 stack.popPose();
-            } else if (standUser.roundabout$getStandPowers() instanceof  Powers20thCenturyBoy PCB && PCB.invincibleState) {
+            } else if (standUser.sba$getStandPowers() instanceof  Powers20thCenturyBoy PCB && PCB.invincibleState) {
                 stack.pushPose();
                 FirstPersonArmsModel.player = play;
                 FirstPersonArmsSlimModel.player = play;
@@ -2794,7 +2794,7 @@ public class ClientUtil {
     }
 
     // Red Bind rendering
-    public static void roundabout$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
+    public static void sba$renderBound(LivingEntity victim, float delta, PoseStack poseStack, MultiBufferSource mb, Entity binder, float focus) {
         poseStack.pushPose();
         int getBindType = 0;
         if (victim != null){
@@ -2807,7 +2807,7 @@ public class ClientUtil {
         if (isMr){
             if (binder instanceof LivingEntity lv){
                 StandUser su = ((StandUser)lv);
-                StandEntity stand = su.roundabout$getStand();
+                StandEntity stand = su.sba$getStand();
                 if (stand != null){
                     vec3 = stand.getRopeHoldPosition(delta);
                 }
@@ -2849,28 +2849,28 @@ public class ClientUtil {
         }
         BlockPos blockpos = BlockPos.containing(eyeVectorV);
         BlockPos blockpos1 = BlockPos.containing(eyeVectorB);
-        int i = roundabout$getBlockLightLevel(victim, blockpos);
-        int j = roundabout$getBlockLightLevel(binder, blockpos1);
+        int i = sba$getBlockLightLevel(victim, blockpos);
+        int j = sba$getBlockLightLevel(binder, blockpos1);
         int k = victim.level().getBrightness(LightLayer.SKY, blockpos);
         int l = victim.level().getBrightness(LightLayer.SKY, blockpos1);
 
         for(int i1 = 0; i1 <= 24; ++i1) {
-            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
+            sba$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
                     0.025F, f5, f6, i1, false,focus, getBindType);
         }
 
         for(int j1 = 24; j1 >= 0; --j1) {
-            roundabout$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
+            sba$addVertexPair(binder, vertexconsumer, matrix4f, f, f1, f2, i, j, k, l, 0.025F,
                     0.0F, f5, f6, j1, true,focus,getBindType);
         }
 
         poseStack.popPose();
     }
-    public static int roundabout$getBlockLightLevel(Entity $$0, BlockPos $$1) {
+    public static int sba$getBlockLightLevel(Entity $$0, BlockPos $$1) {
         return $$0.isOnFire() ? 15 : $$0.level().getBrightness(LightLayer.BLOCK, $$1);
     }
 
-    public static void roundabout$addVertexPair(Entity binder, VertexConsumer p_174308_, Matrix4f p_254405_, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float focus,
+    public static void sba$addVertexPair(Entity binder, VertexConsumer p_174308_, Matrix4f p_254405_, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_, float focus,
                                                 int getBindType) {
         boolean isMr = getBindType == 2;
         boolean isCKB = getBindType == 1;
@@ -2891,7 +2891,7 @@ public class ClientUtil {
         } else if (isCKB) {
             f1 = 0.9F + (float) (Math.random() * 0.1f);
         }
-        Vec3 color = roundabout$getBindColor(binder);
+        Vec3 color = sba$getBindColor(binder);
         float f2 = (float) (color.x() * f1);
         float f3 = (float) (color.y() * f1);
         float f4 = (float) (color.z() * f1);
@@ -2910,8 +2910,8 @@ public class ClientUtil {
         p_174308_.vertex(p_254405_, f5 + p_174319_ + width, f6 + p_174317_ - p_174318_ - width - focus, f7 - p_174320_ - width).color(f2, f3, f4, alpha).uv2(k).endVertex();
     }
 
-    public static Vec3 roundabout$getBindColor(Entity binder) {
-        if (binder instanceof LivingEntity LE && ((StandUser)binder).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+    public static Vec3 sba$getBindColor(Entity binder) {
+        if (binder instanceof LivingEntity LE && ((StandUser)binder).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
             byte sft = PMR.getFireColor();
             if (sft == StandFireType.BLUE.id){
                 return new Vec3(0,0.8F,0.949F);
@@ -2924,7 +2924,7 @@ public class ClientUtil {
             } else if (sft == StandFireType.CREAM.id){
                 return new Vec3(0.949F,0.945F,0.718F);
             }
-        } else if (binder instanceof LivingEntity LE && ((StandUser)binder).roundabout$getStandPowers() instanceof PowersCalifornia){
+        } else if (binder instanceof LivingEntity LE && ((StandUser)binder).sba$getStandPowers() instanceof PowersCalifornia){
             return new Vec3(0.992F,0.843F,1F);
         }
         return new Vec3(0.969F,0.569F,0.102F);
@@ -2953,7 +2953,7 @@ public class ClientUtil {
                 VertexConsumer $$14;
                 $$14 = ItemRenderer.getFoilBufferDirect($$4, $$12, true, $$0.hasFoil());
 
-                ((IItemRenderer)itemRenderer).roundabout$renderModelLists($$7, $$0, $$5, $$6, $$3, $$14);
+                ((IItemRenderer)itemRenderer).sba$renderModelLists($$7, $$0, $$5, $$6, $$3, $$14);
             } else {
                 renderer.renderByItem($$0, $$1, $$3, $$4, $$5, $$6);
             }
@@ -2965,21 +2965,21 @@ public class ClientUtil {
     public static boolean forceEntityRendering(Entity entity){
         if (entity != null){
             if (entity instanceof Player pl) {
-                if (((IPlayerEntity) pl).roundabout$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
+                if (((IPlayerEntity) pl).sba$GetPos2() == PlayerPosIndex.RIPPER_EYES_ACTIVE) {
                     return true;
                 }
             }
             if (entity instanceof LivingEntity LE) {
                 StandUser su = ((StandUser) LE);
-                if (su.roundabout$hasStandOut()) {
+                if (su.sba$hasStandOut()) {
                     return true;
-                } else if (su.roundabout$getBoundTo() != null) {
+                } else if (su.sba$getBoundTo() != null) {
                     return true;
                 }
             }
             if (isUsingEpitaph()) {
                 Player pl = getPlayer();
-                if (pl != null && ((StandUser) pl).roundabout$getStandPowers()
+                if (pl != null && ((StandUser) pl).sba$getStandPowers()
                         instanceof PowersKingCrimson pkc) {
                     Entity root = entity.getRootVehicle();
                     if (pkc.epitaph.containsKey(entity.getId()) ||

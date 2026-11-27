@@ -1,5 +1,5 @@
 package net.hydra.jojomod.mixin.gravity.client;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.ICamera;
 import net.hydra.jojomod.util.RotationAnimation;
 import net.hydra.jojomod.util.gravity.GravityAPI;
@@ -132,7 +132,7 @@ public abstract class GravityCameraMixin {
         if (this.entity != null) {
 
             Entity entity2 = entity;
-            Entity pov = ((ICamera)this).roundabout$getPovSwitch();
+            Entity pov = ((ICamera)this).sba$getPovSwitch();
             if (pov != null && entity != null && !pov.is(entity)) {
                 if (pov.isAlive() && !pov.isRemoved()) {
                     entity2 = pov;

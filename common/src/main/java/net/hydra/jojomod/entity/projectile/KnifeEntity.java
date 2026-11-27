@@ -129,7 +129,7 @@ public class KnifeEntity extends AbstractArrow {
     @Override
     protected void onHitBlock(BlockHitResult $$0) {
         PowersGoldExperience.applyTreeImbueOnBlockHit(this, $$0);
-        ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
+        ((IAbstractArrowAccess)this).sba$setLastState(this.level().getBlockState($$0.getBlockPos()));
         BlockState BSS = this.level().getBlockState($$0.getBlockPos());
         BSS.onProjectileHit(this.level(), BSS, $$0, this);
         Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
@@ -143,7 +143,7 @@ public class KnifeEntity extends AbstractArrow {
         this.setPierceLevel((byte)0);
         this.setSoundEvent(SoundEvents.ARROW_HIT);
         this.setShotFromCrossbow(false);
-        ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
+        ((IAbstractArrowAccess)this).sba$resetPiercedEntities();
     }
 
     public boolean isHattanKnife = false;
@@ -152,16 +152,16 @@ public class KnifeEntity extends AbstractArrow {
     protected void onHitEntity(EntityHitResult $$0) {
         Entity $$1 = $$0.getEntity();
         if ($$1 instanceof LivingEntity LE){
-            if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectile(this,$$0)){
+            if (((StandUser)LE).sba$getStandPowers().dealWithProjectile(this,$$0)){
                 this.discard();
                 return;
-            } else if (((StandUser)LE).roundabout$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
+            } else if (((StandUser)LE).sba$getStandPowers().dealWithProjectileNoDiscard(this,$$0)){
                 return;
             } else if(LE instanceof ManhattanTransferEntity ME){
                 if(!ME.hasItem){
                     ItemStack ii = this.getPickupItem();
                     if (!ii.isEmpty()) {
-                        if(ME.getUser() instanceof Player PL && ((StandUser) PL).roundabout$getStandPowers() instanceof  PowersManhattanTransfer PM){
+                        if(ME.getUser() instanceof Player PL && ((StandUser) PL).sba$getStandPowers() instanceof  PowersManhattanTransfer PM){
                             if(ME.getHattanTarget() == 0 || PM.switchShootingMode()) {
                                 PM.getSelf().level().playSound(null, PM.getSelf().blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
                             } else {
@@ -221,7 +221,7 @@ public class KnifeEntity extends AbstractArrow {
             if ($$4 instanceof LivingEntity LE) {
                 LE.setLastHurtMob($$1);
 
-                if (((StandUser)$$4).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && is(KQ.bombEntity) && KQ.getCurrentBombStatus() == 10) {
+                if (((StandUser)$$4).sba$getStandPowers() instanceof PowersKillerQueen KQ && is(KQ.bombEntity) && KQ.getCurrentBombStatus() == 10) {
                     KQ.contactExplodeKnife($$1);
                 }
 
@@ -250,7 +250,7 @@ public class KnifeEntity extends AbstractArrow {
             this.discard();
         }
         else if ($$4 instanceof LivingEntity LE) {
-            if (((StandUser)$$4).roundabout$getStandPowers() instanceof PowersKillerQueen KQ && is(KQ.bombEntity) && KQ.getCurrentBombStatus() == 10) {
+            if (((StandUser)$$4).sba$getStandPowers() instanceof PowersKillerQueen KQ && is(KQ.bombEntity) && KQ.getCurrentBombStatus() == 10) {
                 KQ.defuseServer();
             }
         }

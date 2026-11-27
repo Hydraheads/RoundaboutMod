@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(ServerPlayerGameMode.class)
 public interface ServerPlayerGameModeAccessor {
     @Accessor("player")
-    ServerPlayer roundabout$getPlayer();
+    ServerPlayer sba$getPlayer();
 }

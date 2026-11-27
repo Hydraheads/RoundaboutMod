@@ -19,7 +19,7 @@ public abstract class AnubisVillagerRendererMixin extends MobRenderer<Villager, 
     }
 
     @Inject(method = "<init>",at = @At(value = "RETURN"))
-    private void roundabout$anubisVillagerLayer(EntityRendererProvider.Context $$0, CallbackInfo ci) {
+    private void sba$anubisVillagerLayer(EntityRendererProvider.Context $$0, CallbackInfo ci) {
         this.addLayer(new AnubisMobLayer<>(this));
     }
 }

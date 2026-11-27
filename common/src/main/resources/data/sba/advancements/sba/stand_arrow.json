@@ -1,0 +1,38 @@
+{
+  "parent": "sba:sba/root",
+  "criteria": {
+    "stand_arrow": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "sba:stand_arrow"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.sba.stand_arrow.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "sba:stand_arrow"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.sba.stand_arrow.title"
+    }
+  },
+  "requirements": [
+    [
+      "stand_arrow"
+    ]
+  ]
+}

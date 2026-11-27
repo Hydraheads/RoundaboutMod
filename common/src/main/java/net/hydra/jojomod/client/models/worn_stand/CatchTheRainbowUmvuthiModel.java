@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.worn_stand;// Made with Blockbench 5.2.2
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.CatchTheRainbowAnimations;
@@ -83,13 +83,13 @@ public class CatchTheRainbowUmvuthiModel extends PsuedoHierarchicalModel {
 	@Override
 	public ModelPart root() {return Root;}
 
-	public static ResourceLocation umvuthi_on = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation umvuthi_on = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/umvuthi_on.png");
-	public static ResourceLocation umvuthi_off = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation umvuthi_off = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/catch_the_rainbow/umvuthi_off.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin) {
-		if (((StandUser) context).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && !PCR.isInRain()) {
+		if (((StandUser) context).sba$getStandPowers() instanceof PowersCatchTheRainbow PCR && !PCR.isInRain()) {
 			switch (skin) {
 				default -> {
 					return umvuthi_off;
@@ -117,22 +117,22 @@ public class CatchTheRainbowUmvuthiModel extends PsuedoHierarchicalModel {
 			}
 			StandUser user = ((StandUser) LE);
 			VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
-			user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+			user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 
 			byte idle = MainUtil.getWornStandIdleSafe(user, PowersCatchTheRainbow.class);
 
 			if (idle != 0) {
-				user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+				user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 			}
 			else {
-				user.roundabout$getWornStandIdleAnimation().stop();
+				user.sba$getWornStandIdleAnimation().stop();
 			}
 
 			if (idle == 1) {
-				this.animate(user.roundabout$getWornStandIdleAnimation(), CatchTheRainbowAnimations.umvuthiright, partialTicks, 1f);
+				this.animate(user.sba$getWornStandIdleAnimation(), CatchTheRainbowAnimations.umvuthiright, partialTicks, 1f);
 			}
 			if (idle == 2) {
-				this.animate(user.roundabout$getWornStandIdleAnimation(), CatchTheRainbowAnimations.umvuthileft, partialTicks, 1f);
+				this.animate(user.sba$getWornStandIdleAnimation(), CatchTheRainbowAnimations.umvuthileft, partialTicks, 1f);
 			}
 
 			root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);

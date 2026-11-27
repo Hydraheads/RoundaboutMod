@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.Minecraft;
@@ -17,17 +17,17 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class BloodSplatterRenderer extends EntityRenderer<BloodSplatterEntity> {
-    private static final ResourceLocation ITEM_1 = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation ITEM_1 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/projectile/blood_1.png");
-    private static final ResourceLocation ITEM_2 = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation ITEM_2 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/projectile/blood_2.png");
-    private static final ResourceLocation ITEM_3 = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation ITEM_3 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/projectile/blood_3.png");
-    private static final ResourceLocation ITEM_4 = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation ITEM_4 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/projectile/blood_4.png");
-    private static final ResourceLocation ITEM_5 = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation ITEM_5 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/projectile/blood_5.png");
-    private static final ResourceLocation ITEM_6 = new ResourceLocation(Roundabout.MOD_ID,
+    private static final ResourceLocation ITEM_6 = new ResourceLocation(SBA.MOD_ID,
             "textures/entity/projectile/blood_6.png");
 
     private final float scale;

@@ -72,7 +72,7 @@ public class InvisiBlock extends BaseEntityBlock {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof InvisiBlockEntity inv && (inv.getOriginalState().is(Blocks.POWDER_SNOW)
                     || inv.getOriginalState().is(Blocks.MAGMA_BLOCK))) {
-                if (entity != null && ((IEntityAndData)entity).roundabout$getTrueInvisibility() <= -1) {
+                if (entity != null && ((IEntityAndData)entity).sba$getTrueInvisibility() <= -1) {
                     inv.restoreNow();
                 }
             }
@@ -118,7 +118,7 @@ public class InvisiBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack $$6 = player.getItemInHand(hand);
         if (!getIsTNT(level,pos) && !$$6.is(Items.FLINT_AND_STEEL) && !$$6.is(Items.FIRE_CHARGE)) {
-            if (!level.isClientSide && player != null && (((IEntityAndData) player).roundabout$getTrueInvisibility() <= -1 ||
+            if (!level.isClientSide && player != null && (((IEntityAndData) player).sba$getTrueInvisibility() <= -1 ||
                     !(!player.getItemInHand(hand).isEmpty() && player.getItemInHand(hand).getItem() instanceof BlockItem))) {
                 BlockEntity entity = level.getBlockEntity(pos);
                 if (entity instanceof InvisiBlockEntity inv) {
@@ -206,7 +206,7 @@ public class InvisiBlock extends BaseEntityBlock {
             PrimedTnt $$3 = new PrimedTnt($$0, (double)$$1.getX() + 0.5, (double)$$1.getY(), (double)$$1.getZ() + 0.5, $$2);
             BlockEntity ent = $$0.getBlockEntity($$1);
             if (ent instanceof InvisiBlockEntity ibe && $$3 != null){
-                ((IEntityAndData)$$3).roundabout$setTrueInvisibility(ibe.ticksUntilRestore);
+                ((IEntityAndData)$$3).sba$setTrueInvisibility(ibe.ticksUntilRestore);
             }
             $$0.addFreshEntity($$3);
             $$0.playSound(null, $$3.getX(), $$3.getY(), $$3.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);

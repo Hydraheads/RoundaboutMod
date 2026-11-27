@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.gui.NoCancelInputScreen;
@@ -39,11 +39,11 @@ public class BigBubbleLayer<T extends LivingEntity, A extends EntityModel<T>> ex
     }
 
     float scale = 1;
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/stand/soft_and_wet/projectiles/large_bubble.png");
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
-            if (((StandUser)entity).roundabout$isBubbleEncased() && ((IEntityAndData)entity).roundabout$getExclusiveLayers()) {
+            if (((StandUser)entity).sba$isBubbleEncased() && ((IEntityAndData)entity).sba$getExclusiveLayers()) {
 
                 ClientUtil.pushPoseAndCooperate(poseStack,22);
                 float height = entity.getDimensions(Pose.STANDING).height;

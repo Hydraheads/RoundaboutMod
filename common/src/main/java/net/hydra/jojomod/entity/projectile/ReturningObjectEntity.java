@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.sound.ModSounds;
@@ -206,7 +206,7 @@ public class ReturningObjectEntity extends ThrowableItemProjectile {
                                 for(int y=Sy;y<Ey-Sy;y++) {
                                     for(int z=Sz;z<Ez-Sz;z++) {
                                         BlockPos updater = new BlockPos(x,y,z);
-                                        Roundabout.LOGGER.info(""+updater);
+                                        SBA.LOGGER.info(""+updater);
                                         this.level().blockUpdated(updater,Blocks.AIR);
                                     }
                                 }

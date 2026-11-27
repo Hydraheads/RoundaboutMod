@@ -3,8 +3,8 @@ package net.hydra.jojomod.client.models.paintings;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
+import net.hydra.jojomod.SBA;
+import net.hydra.jojomod.entity.paintings.SBAPainting;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,12 +18,12 @@ import net.minecraft.util.Mth;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
-public class CustomPaintingRenderer extends EntityRenderer<RoundaboutPainting> {
+public class CustomPaintingRenderer extends EntityRenderer<SBAPainting> {
     public CustomPaintingRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
     }
 
-    public void render(RoundaboutPainting painting, float yaw, float partialTicks,
+    public void render(SBAPainting painting, float yaw, float partialTicks,
                        PoseStack poseStack, MultiBufferSource source, int light) {
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yaw));
@@ -51,13 +51,13 @@ public class CustomPaintingRenderer extends EntityRenderer<RoundaboutPainting> {
     }
 
     public ResourceLocation getTexture() {
-        return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/painting/van_gogh.png");
+        return new ResourceLocation(SBA.MOD_ID,"textures/entity/painting/van_gogh.png");
     }
     public ResourceLocation getTextureBack() {
-        return new ResourceLocation(Roundabout.MOD_ID,"textures/entity/painting/back.png");
+        return new ResourceLocation(SBA.MOD_ID,"textures/entity/painting/back.png");
     }
 
-    public ResourceLocation getTextureLocation(RoundaboutPainting $$0) {
+    public ResourceLocation getTextureLocation(SBAPainting $$0) {
         return getTextureBack();
     }
 
@@ -66,7 +66,7 @@ public class CustomPaintingRenderer extends EntityRenderer<RoundaboutPainting> {
     private void renderPainting(PoseStack stack,
                                 ResourceLocation frontBuffer,
                                 ResourceLocation backBuffer,
-                                RoundaboutPainting painting,
+                                SBAPainting painting,
                                 int width,
                                 int height,
                                 MultiBufferSource source) {
@@ -199,7 +199,7 @@ public class CustomPaintingRenderer extends EntityRenderer<RoundaboutPainting> {
     private void renderPaintingSpecial(PoseStack stack,
                                 ResourceLocation frontBuffer,
                                 ResourceLocation backBuffer,
-                                RoundaboutPainting painting,
+                                SBAPainting painting,
                                 int width,
                                 int height,
                                 MultiBufferSource source) {

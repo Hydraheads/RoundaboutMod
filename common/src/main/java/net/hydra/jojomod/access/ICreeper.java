@@ -3,6 +3,6 @@ package net.hydra.jojomod.access;
 public interface ICreeper {
 
 
-    int roundabout$getSwell();
-    void roundabout$setSwell(int swell);
+    int sba$getSwell();
+    void sba$setSwell(int swell);
 }

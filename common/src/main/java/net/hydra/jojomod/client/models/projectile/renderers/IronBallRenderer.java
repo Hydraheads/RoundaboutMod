@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.StandFireballModel;
@@ -52,7 +52,7 @@ public class IronBallRenderer extends EntityRenderer<IronBallEntity> {
     }
 
 
-    public static final ResourceLocation IRON_BALL_TEXTURE = new ResourceLocation(Roundabout.MOD_ID, "textures/entity/projectile/iron_ball.png");
+    public static final ResourceLocation IRON_BALL_TEXTURE = new ResourceLocation(SBA.MOD_ID, "textures/entity/projectile/iron_ball.png");
 
     @Override
     public ResourceLocation getTextureLocation(IronBallEntity var1) {

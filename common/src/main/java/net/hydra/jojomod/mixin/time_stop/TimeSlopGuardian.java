@@ -35,7 +35,7 @@ public abstract class TimeSlopGuardian extends Monster implements AccessGuardian
 
     }
     @Inject(method = "getActiveAttackTarget", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$tick(CallbackInfoReturnable<LivingEntity> cir) {
+    protected void sba$tick(CallbackInfoReturnable<LivingEntity> cir) {
         if (((TimeStop) this.level()).CanTimeStopEntity(this)){
             cir.setReturnValue(null);
         }

@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.layers;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.ModStrayModels;
 import net.hydra.jojomod.event.index.PowerIndex;
@@ -34,7 +34,7 @@ public class TuskLayer<T extends LivingEntity, A extends HumanoidModel<T>> exten
             if (!entity.isInvisible()) {
                 StandUser user = ((StandUser) entity);
                 if (PowerTypes.isUsingStand(entity)) {
-                    if (user.roundabout$getStandPowers() instanceof PowersTusk PT) {
+                    if (user.sba$getStandPowers() instanceof PowersTusk PT) {
                         boolean rh = entity.getMainArm() == HumanoidArm.RIGHT;
                         boolean isHurt = entity.hurtTime > 0;
                         float r = 1;

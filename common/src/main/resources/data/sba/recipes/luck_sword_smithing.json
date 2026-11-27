@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "minecraft:gold_ingot"
+  },
+  "base": {
+    "item": "minecraft:iron_sword"
+  },
+  "result": {
+    "item": "sba:luck_sword"
+  },
+  "template": {
+    "item": "sba:luck_upgrade"
+  }
+}

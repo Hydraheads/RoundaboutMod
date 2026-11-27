@@ -1,7 +1,7 @@
 package net.hydra.jojomod.entity.npcs;
 
 import com.mojang.logging.LogUtils;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.stand.CinderellaEntity;
 import net.hydra.jojomod.entity.stand.TheWorldEntity;
@@ -72,10 +72,10 @@ public class ZombieAesthetician extends Zombie {
     }
 
     protected void defineSynchedData() {
-        if (!this.entityData.hasItem(ROUNDABOUT$SKIN_NUMBER)) {
+        if (!this.entityData.hasItem(SBA$SKIN_NUMBER)) {
             super.defineSynchedData();
             this.entityData.define(DATA_CONVERTING_ID, false);
-            this.entityData.define(ROUNDABOUT$SKIN_NUMBER, 1);
+            this.entityData.define(SBA$SKIN_NUMBER, 1);
         }
     }
 
@@ -87,7 +87,7 @@ public class ZombieAesthetician extends Zombie {
     }
     public boolean isInitialized = false;
     public void applySkin(){
-        ((StandUser)this).roundabout$setStandSkin(CinderellaEntity.ZOMBIE_SKIN);
+        ((StandUser)this).sba$setStandSkin(CinderellaEntity.ZOMBIE_SKIN);
     }
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
@@ -107,10 +107,10 @@ public class ZombieAesthetician extends Zombie {
 
     public void rollStand(){
         if (!isInitialized){
-            ItemStack stack = ((StandUser)this).roundabout$getStandDisc();
+            ItemStack stack = ((StandUser)this).sba$getStandDisc();
             if (stack == null || stack.isEmpty()){
                 if (getDisc() != null){
-                    ((StandUser)this).roundabout$setStandDisc(getDisc().getDefaultInstance().copy());
+                    ((StandUser)this).sba$setStandDisc(getDisc().getDefaultInstance().copy());
                     applySkin();
                 }
             }
@@ -211,7 +211,7 @@ public class ZombieAesthetician extends Zombie {
     private void finishConversion(ServerLevel serverLevel) {
         Aesthetician villager = this.convertTo(ModEntities.AESTHETICIAN, false);
         if (villager != null) {
-            ((StandUser) villager).roundabout$setStandDisc(((StandUser) this).roundabout$getStandDisc());
+            ((StandUser) villager).sba$setStandDisc(((StandUser) this).sba$getStandDisc());
             villager.setSkinNumber(getSkinNumber());
         }
         EquipmentSlot[] var3 = EquipmentSlot.values();
@@ -297,14 +297,14 @@ public class ZombieAesthetician extends Zombie {
     protected ItemStack getSkull() {
         return ItemStack.EMPTY;
     }
-    private static final EntityDataAccessor<Integer> ROUNDABOUT$SKIN_NUMBER = SynchedEntityData.defineId(ZombieAesthetician.class,
+    private static final EntityDataAccessor<Integer> SBA$SKIN_NUMBER = SynchedEntityData.defineId(ZombieAesthetician.class,
             EntityDataSerializers.INT);
 
     public void setSkinNumber(int Pos){
-        this.getEntityData().set(ROUNDABOUT$SKIN_NUMBER, Pos);
+        this.getEntityData().set(SBA$SKIN_NUMBER, Pos);
     }
     public int getSkinNumber(){
-        return this.getEntityData().get(ROUNDABOUT$SKIN_NUMBER);
+        return this.getEntityData().get(SBA$SKIN_NUMBER);
     }
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {

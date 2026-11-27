@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.projectile;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEnderMan;
 import net.hydra.jojomod.block.FogBlock;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -69,7 +69,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
     public void tick() {
         if (!this.level().isClientSide()) {
             lifeSpan--;
-            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).roundabout$getStandPowers() instanceof PowersSoftAndWet))) {
+            if (lifeSpan <= 0 || (this.standUser == null || !(((StandUser) this.standUser).sba$getStandPowers() instanceof PowersSoftAndWet))) {
                 popBubble();
                 return;
             }
@@ -200,12 +200,12 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
         if (!this.level().isClientSide()) {
 
             if ($$0.getEntity() instanceof EnderMan em) {
-                ((IEnderMan) em).roundabout$teleport();
+                ((IEnderMan) em).sba$teleport();
                 return;
             }
             Entity ent = $$0.getEntity();
             if (!(ent instanceof SoftAndWetBubbleEntity)) {
-                if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                     if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
                         float str = 0;
                         if (getReady()){
@@ -255,7 +255,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
                 if (!entityList.isEmpty()) {
                     for (Entity ent : entityList) {
                         if (!(ent instanceof SoftAndWetBubbleEntity)) {
-                            if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                            if (((StandUser) LE).sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                                 if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
                                     float degrees = MainUtil.getLookAtEntityYawWithAngle(location, ent);
                                     MainUtil.takeKnockbackWithY(ent, 0.6F,
@@ -289,7 +289,7 @@ public class SoftAndWetExplosiveBubbleEntity extends SoftAndWetBubbleEntity {
                 if (!entityList.isEmpty()) {
                     for (Entity ent : entityList) {
                         if (!(ent instanceof SoftAndWetBubbleEntity)) {
-                            if (((StandUser) LE).roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                            if (((StandUser) LE).sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                                 if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
                                     float degrees = MainUtil.getLookAtEntityYawWithAngle(this.position(), ent);
                                     MainUtil.takeKnockbackWithY(ent, 1.05F,

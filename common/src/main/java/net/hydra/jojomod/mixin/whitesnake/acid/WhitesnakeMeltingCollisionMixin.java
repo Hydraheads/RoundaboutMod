@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class WhitesnakeMeltingCollisionMixin {
     @Inject(method = "getCollisionShape(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;",
             at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$phaseGrabCollision(BlockGetter level, BlockPos pos,
+    private void sbaWhitesnake$phaseGrabCollision(BlockGetter level, BlockPos pos,
                                                           CollisionContext context,
                                                           CallbackInfoReturnable<VoxelShape> cir) {
         if (!(context instanceof EntityCollisionContext entityContext)) return;

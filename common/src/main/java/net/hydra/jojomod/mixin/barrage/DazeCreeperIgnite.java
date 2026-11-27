@@ -20,10 +20,10 @@ public abstract class DazeCreeperIgnite extends Goal {
      * that it shouldn't explode during, it stops. Complements the DazeCreeper Mixin.*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$Tick(CallbackInfo ci) {
-        if (((StandUser)this.creeper).roundabout$isDazed() ||
-                (!((StandUser)this.creeper).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)this.creeper).roundabout$getStandPowers().disableMobAiAttack())){
+    protected void sba$Tick(CallbackInfo ci) {
+        if (((StandUser)this.creeper).sba$isDazed() ||
+                (!((StandUser)this.creeper).sba$getStandDisc().isEmpty() &&
+                        ((StandUser)this.creeper).sba$getStandPowers().disableMobAiAttack())){
            this.creeper.setSwellDir(-1);
            ci.cancel();
         }

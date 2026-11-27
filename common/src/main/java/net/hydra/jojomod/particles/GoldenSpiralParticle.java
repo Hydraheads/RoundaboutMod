@@ -1,7 +1,7 @@
 package net.hydra.jojomod.particles;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.event.index.FateTypes;
 import net.minecraft.client.Camera;

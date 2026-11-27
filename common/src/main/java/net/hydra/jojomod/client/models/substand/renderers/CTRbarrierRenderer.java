@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.substand.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.projectile.GentlyWeepsModel;
@@ -34,7 +34,7 @@ public class CTRbarrierRenderer extends EntityRenderer<CTRbarrierEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(CTRbarrierEntity ctrbarrierEntity) {
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/stand/achtung_baby/very_badass_texture.png");
     }
 }

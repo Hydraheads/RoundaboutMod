@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/crossbow",
-  "textures": {
-    "layer0": "roundabout:item/iron_ball_crossbow_pulling_0"
-  }
-}

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.item.paintings;
 
-import net.hydra.jojomod.entity.paintings.RoundaboutPainting;
+import net.hydra.jojomod.entity.paintings.SBAPainting;
 import net.hydra.jojomod.entity.paintings.VanGoughPainting;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -44,7 +44,7 @@ public class VanGoughPaintingItem  extends Item {
         } else {
             Level level = p_41331_.getLevel();
             HangingEntity hangingentity;
-            Optional<RoundaboutPainting> optional = VanGoughPainting.create(level, blockpos1, direction);
+            Optional<SBAPainting> optional = VanGoughPainting.create(level, blockpos1, direction);
             if (optional.isEmpty()) {
                 return InteractionResult.CONSUME;
             }

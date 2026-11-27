@@ -41,10 +41,10 @@ public class SavedSecondPlayer extends SavedSecondLiving {
         super.loadTime(ent);
         if (ent instanceof Player PE) {
             IFoodData ifp = ((IFoodData) PE.getFoodData());
-            ifp.roundabout$setExhaustionLevel(this.exhaustionLevel);
-            ifp.roundabout$setSaturationLevel(this.saturationLevel);
-            ifp.roundabout$setFoodLevel(this.foodLevel);
-            ((StandUser)PE).roundabout$setHeat(heatLevel);
+            ifp.sba$setExhaustionLevel(this.exhaustionLevel);
+            ifp.sba$setSaturationLevel(this.saturationLevel);
+            ifp.sba$setFoodLevel(this.foodLevel);
+            ((StandUser)PE).sba$setHeat(heatLevel);
         }
     }
 }

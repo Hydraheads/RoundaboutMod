@@ -13,27 +13,27 @@ import java.util.List;
 
 /**This code lets me access the ZAbstractArrow Mixin externally, so I can call abstract arrow functions*/
 public interface IAbstractArrowAccess {
-    boolean roundabout$GetInGround();
-    void roundabout$resetPiercedEntities();
-    void roundabout$setLastState(BlockState last);
-    void roundabout$SetInGround(boolean inGround);
+    boolean sba$GetInGround();
+    void sba$resetPiercedEntities();
+    void sba$setLastState(BlockState last);
+    void sba$SetInGround(boolean inGround);
     IntOpenHashSet rdbt$piercingIgnoreEntityIds();
     void rdbt$piercingIgnoreEntityIds(IntOpenHashSet mp);
     List<Entity> rdbt$piercedAndKilledEntities();
     void rdbt$piercedAndKilledEntities(List<Entity> ent);
     int rdbt$knockback();
-    byte roundabout$GetPierceLevel();
-    ItemStack roundabout$GetPickupItem();
+    byte sba$GetPierceLevel();
+    ItemStack sba$GetPickupItem();
 
     /**Manhattan Transfer Values*/
-    boolean roundabout$GetIsManhattan();
-    void roundabout$SetIsManhattan(boolean isManhattanProjectile);
-    void roundabout$isArrowTooSlow(boolean mobAIForManhattan);
-    float roundabout$getHattanDamage();
-    void roundabout$setHattanDamage(float manhattanDmg);
-    void roundabout$isMobAiArrow(boolean mobAIForManhattan);
+    boolean sba$GetIsManhattan();
+    void sba$SetIsManhattan(boolean isManhattanProjectile);
+    void sba$isArrowTooSlow(boolean mobAIForManhattan);
+    float sba$getHattanDamage();
+    void sba$setHattanDamage(float manhattanDmg);
+    void sba$isMobAiArrow(boolean mobAIForManhattan);
 
     @Nullable
-    EntityHitResult roundabout$FindHitEntity(Vec3 $$0, Vec3 $$1);
+    EntityHitResult sba$FindHitEntity(Vec3 $$0, Vec3 $$1);
 
 }

@@ -216,7 +216,7 @@ public class ExplosionUtil {
 			double dist2 = center.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
 
 			if (dist2 <= explosionDistance) {
-				boolean shouldDrop = (useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info, true)) && level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING_OBTAINMENT);
+				boolean shouldDrop = (useTool && causer instanceof Player PL && canMineWithAnyInventoryTool(PL, info, true)) && level.getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING_OBTAINMENT);
 
 				destroyBlockHandled(level, pos, shouldDrop, causer);
 			}

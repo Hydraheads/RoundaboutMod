@@ -37,12 +37,12 @@ public abstract class GravityGameRendererMixin {
                     value = "HEAD"
             )
     )
-    private void roundabout$inject_renderWorldHEAD(float tickDelta, long limitTime, PoseStack matrix, CallbackInfo ci) {
+    private void sba$inject_renderWorldHEAD(float tickDelta, long limitTime, PoseStack matrix, CallbackInfo ci) {
         if (ClientUtil.getPlayer() != null) {
             IGravityEntity igav = ((IGravityEntity) ClientUtil.getPlayer());
-            if (igav.roundabout$canChangeGravity()) {
-                igav.roundabout$updateGravityStatus();
-                igav.roundabout$applyGravityChange();
+            if (igav.sba$canChangeGravity()) {
+                igav.sba$updateGravityStatus();
+                igav.sba$applyGravityChange();
             }
         }
     }
@@ -56,7 +56,7 @@ public abstract class GravityGameRendererMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void roundabout$inject_renderWorld(float tickDelta, long limitTime, PoseStack matrix, CallbackInfo ci) {
+    private void sba$inject_renderWorld(float tickDelta, long limitTime, PoseStack matrix, CallbackInfo ci) {
         if (!Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
             if (this.mainCamera.getEntity() != null) {
                 Entity focusedEntity = this.mainCamera.getEntity();
@@ -65,7 +65,7 @@ public abstract class GravityGameRendererMixin {
                 if (animation == null) {
                     return;
                 }
-                if(focusedEntity instanceof LivingEntity LE && ((StandUser)LE).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isPiloting()){
+                if(focusedEntity instanceof LivingEntity LE && ((StandUser)LE).sba$getStandPowers() instanceof PowersManhattanTransfer PM && PM.isPiloting()){
                     return;
                 }
                 long timeMs = focusedEntity.level().getGameTime() * 50 + (long) (tickDelta%1 * 50);

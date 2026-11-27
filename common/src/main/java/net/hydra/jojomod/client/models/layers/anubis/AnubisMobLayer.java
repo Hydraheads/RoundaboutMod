@@ -37,7 +37,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
 
         if (entity.level().isClientSide()) {
             StandUser SU = (StandUser) entity;
-            if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
+            if (SU.sba$getStandPowers() instanceof PowersAnubis) {
                 if (entity instanceof AbstractIllager AI) {
                     renderIllager(poseStack, bufferSource, packedLight, AI, v, v1, v2, partialTicks, v4, v5);
                 } else if (entity instanceof Wolf W) {
@@ -67,7 +67,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
                     return;
                 }
             } else {
-                ((AccessIllagerModel) this.getParentModel()).roundabout$getRightArm().translateAndRotate(poseStack);
+                ((AccessIllagerModel) this.getParentModel()).sba$getRightArm().translateAndRotate(poseStack);
             }
 
             poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, -90), 0, 0, 0);
@@ -91,19 +91,19 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         StandUser SU = (StandUser) W;
         ClientUtil.pushPoseAndCooperate(poseStack, 50);
 
-        ((AccessWolfModel)this.getParentModel()).roundabout$getHead().translateAndRotate(poseStack);
+        ((AccessWolfModel)this.getParentModel()).sba$getHead().translateAndRotate(poseStack);
 
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,0);
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,-90),0,0,0);
 
         poseStack.translate(0.55,0,-0.06);
 
-        boolean hasHeyYaOut = (PowerTypes.hasStandActive(W) && SU.roundabout$getStandPowers() instanceof PowersAnubis);
+        boolean hasHeyYaOut = (PowerTypes.hasStandActive(W) && SU.sba$getStandPowers() instanceof PowersAnubis);
         int heyTicks = 0;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-            heyTicks = SU.roundabout$getCurrentStandVanishTicks();
-        }else if (SU.roundabout$getPreviousStandPowers() instanceof PowersAnubis) {
-            heyTicks = SU.roundabout$getPreviousStandVanishTicks();
+        if (SU.sba$getStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.sba$getCurrentStandVanishTicks();
+        }else if (SU.sba$getPreviousStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.sba$getPreviousStandVanishTicks();
         }
         float heyFull = 0;
         float fixedPartial = partialTicks - (int) partialTicks;
@@ -120,7 +120,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
 
 
         ModStrayModels.ANUBIS.render(W, partialTicks, poseStack, bufferSource, packedLight,
-                1, 1, 1, heyFull, SU.roundabout$getStandSkin());
+                1, 1, 1, heyFull, SU.sba$getStandSkin());
 
         ClientUtil.popPoseAndCooperate(poseStack,50);
     }
@@ -130,7 +130,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
 
         ClientUtil.pushPoseAndCooperate(poseStack, 50);
 
-        ((AccessFoxModel)this.getParentModel()).roundabout$getHead().translateAndRotate(poseStack);
+        ((AccessFoxModel)this.getParentModel()).sba$getHead().translateAndRotate(poseStack);
 
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(1,0,0,90),0,0,0);
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,-90),0,0,0);
@@ -138,12 +138,12 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         poseStack.translate(0.75,0,-0.1);
 
 
-        boolean hasHeyYaOut = (PowerTypes.hasStandActive(F) && SU.roundabout$getStandPowers() instanceof PowersAnubis);
+        boolean hasHeyYaOut = (PowerTypes.hasStandActive(F) && SU.sba$getStandPowers() instanceof PowersAnubis);
         int heyTicks = 0;
-        if (SU.roundabout$getStandPowers() instanceof PowersAnubis) {
-            heyTicks = SU.roundabout$getCurrentStandVanishTicks();
-        }else if (SU.roundabout$getPreviousStandPowers() instanceof PowersAnubis) {
-            heyTicks = SU.roundabout$getPreviousStandVanishTicks();
+        if (SU.sba$getStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.sba$getCurrentStandVanishTicks();
+        }else if (SU.sba$getPreviousStandPowers() instanceof PowersAnubis) {
+            heyTicks = SU.sba$getPreviousStandVanishTicks();
         }
         float heyFull = 0;
         float fixedPartial = partialTicks - (int) partialTicks;
@@ -159,7 +159,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         }
 
         ModStrayModels.ANUBIS.render(F, partialTicks, poseStack, bufferSource, packedLight,
-                1, 1, 1, heyFull, SU.roundabout$getStandSkin());
+                1, 1, 1, heyFull, SU.sba$getStandSkin());
 
         ClientUtil.popPoseAndCooperate(poseStack,50);
     }
@@ -168,7 +168,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         StandUser SU = (StandUser) H;
         ClientUtil.pushPoseAndCooperate(poseStack, 50);
 
-        ((AccessHorseModel) this.getParentModel()).roundabout$getBody().translateAndRotate(poseStack);
+        ((AccessHorseModel) this.getParentModel()).sba$getBody().translateAndRotate(poseStack);
 
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0, 1, 0, 90), 0, 0, 0);
         poseStack.translate(0.6, 0, -0.3);
@@ -177,7 +177,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         poseStack.scale(0.8F, 0.8F, 0.8F);
 
         ModStrayModels.ANUBIS.render(H, partialTicks, poseStack, bufferSource, packedLight,
-                1, 1, 1, 1.0F, SU.roundabout$getStandSkin());
+                1, 1, 1, 1.0F, SU.sba$getStandSkin());
 
         ClientUtil.popPoseAndCooperate(poseStack, 50);
 
@@ -187,7 +187,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         StandUser SU = (StandUser) AV;
         ClientUtil.pushPoseAndCooperate(poseStack, 50);
 
-        ((AccessVillagerModel) this.getParentModel()).roundabout$getRoot().translateAndRotate(poseStack);
+        ((AccessVillagerModel) this.getParentModel()).sba$getRoot().translateAndRotate(poseStack);
 
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,1,0,90),0,0,0);
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,60),0,0,0);
@@ -197,7 +197,7 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         poseStack.scale(0.8F, 0.8F, 0.8F);
 
         ModStrayModels.ANUBIS.render(AV, partialTicks, poseStack, bufferSource, packedLight,
-                1, 1, 1, 1.0F, SU.roundabout$getStandSkin());
+                1, 1, 1, 1.0F, SU.sba$getStandSkin());
 
         ClientUtil.popPoseAndCooperate(poseStack, 50);
 
@@ -207,14 +207,14 @@ public class AnubisMobLayer<T extends LivingEntity, M extends HierarchicalModel<
         StandUser SU = (StandUser) c;
         ClientUtil.pushPoseAndCooperate(poseStack, 50);
 
-        ((AccessQuadrupedModel) this.getParentModel()).roundabout$getBody().translateAndRotate(poseStack);
+        ((AccessQuadrupedModel) this.getParentModel()).sba$getBody().translateAndRotate(poseStack);
 
         poseStack.scale(0.8F,0.8F,0.8F);
         poseStack.rotateAround(new Quaternionf().fromAxisAngleDeg(0,0,1,60),0,0,0);
         poseStack.translate(0.6,-0.35,0);
 
         ModStrayModels.ANUBIS.render(c, partialTicks, poseStack, bufferSource, packedLight,
-                1, 1, 1, 1.0F, SU.roundabout$getStandSkin());
+                1, 1, 1, 1.0F, SU.sba$getStandSkin());
 
         ClientUtil.popPoseAndCooperate(poseStack, 50);
 

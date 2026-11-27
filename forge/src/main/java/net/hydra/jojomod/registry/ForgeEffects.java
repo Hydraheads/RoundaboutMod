@@ -1,6 +1,6 @@
 package net.hydra.jojomod.registry;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.ReconstructionEffect;
 import net.hydra.jojomod.event.powers.whitesnake.HallucinationEffect;
 import net.hydra.jojomod.event.powers.whitesnake.OldEffect;
@@ -15,7 +15,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class ForgeEffects{
 
     public static final DeferredRegister<MobEffect> POTION_EFFECTS =
-            DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Roundabout.MOD_ID);
+            DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, SBA.MOD_ID);
     public static final RegistryObject<MobEffect> BLEED =
             POTION_EFFECTS.register("bleed", () ->
                     new Effect(MobEffectCategory.HARMFUL, 11994666)

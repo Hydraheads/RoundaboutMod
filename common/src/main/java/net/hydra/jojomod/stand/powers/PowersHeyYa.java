@@ -1,7 +1,7 @@
 package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.block.MiningAlertBlock;
 import net.hydra.jojomod.block.ModBlocks;
@@ -50,7 +50,7 @@ public class PowersHeyYa extends NewDashPreset {
 
 
     public boolean dangerYappingOn(){
-        return getStandUserSelf().roundabout$getUniqueStandModeToggle();
+        return getStandUserSelf().sba$getUniqueStandModeToggle();
     }
     public boolean canSummonStandAsEntity(){
         return false;
@@ -159,9 +159,9 @@ public class PowersHeyYa extends NewDashPreset {
         } else {
             yapSounds();
                 if (isEvilYapper()){
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.mining.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilMiningYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.hey_ya_messaging.mining.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilMiningYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
                 } else {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.mining.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfMiningYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.hey_ya_messaging.mining.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfMiningYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
                 }
         }
         return true;
@@ -171,7 +171,7 @@ public class PowersHeyYa extends NewDashPreset {
 
         if (!isYapping()){
             setYapTime(40);
-            getStandUserSelf().roundabout$setStandAnimation(YAP);
+            getStandUserSelf().sba$setStandAnimation(YAP);
             playStandUserOnlySoundsIfNearby((byte) (71 + Mth.floor(Math.random() * 7)), 100, false, true);
         }
     }
@@ -204,8 +204,8 @@ public class PowersHeyYa extends NewDashPreset {
     public void tickMobAI(LivingEntity attackTarget){
         ticksSinceLastYap--;
         if (!hasStandActive(this.self)){
-            ((IMob)this.self).roundabout$setRetractTicks(500);
-            getStandUserSelf().roundabout$summonStand(this.self.level(),true,false);
+            ((IMob)this.self).sba$setRetractTicks(500);
+            getStandUserSelf().sba$summonStand(this.self.level(),true,false);
         }
         if (ticksSinceLastYap <= 0){
             yapSounds();
@@ -224,7 +224,7 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
     public boolean switchDangerMode(){
-        getStandUserSelf().roundabout$setUniqueStandModeToggle(!dangerYappingOn());
+        getStandUserSelf().sba$setUniqueStandModeToggle(!dangerYappingOn());
         return true;
     }
     public boolean doYap(){
@@ -232,9 +232,9 @@ public class PowersHeyYa extends NewDashPreset {
         if (!isClient()){
             yapSounds();
             if (isEvilYapper()){
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.hey_ya_messaging.evil.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
             } else {
-                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
+                ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.hey_ya_messaging.no_"+(Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfYapLines)+1)).withStyle(ChatFormatting.GOLD), true);
             }
         }
         return true;
@@ -266,9 +266,9 @@ public class PowersHeyYa extends NewDashPreset {
     public void tickPower() {
         if (!isClient()) {
             if (isYapping()) {
-                getStandUserSelf().roundabout$setStandAnimation(YAP);
+                getStandUserSelf().sba$setStandAnimation(YAP);
             } else {
-                getStandUserSelf().roundabout$setStandAnimation(NONE);
+                getStandUserSelf().sba$setStandAnimation(NONE);
             }
             tickYapping();
         }
@@ -298,9 +298,9 @@ public class PowersHeyYa extends NewDashPreset {
                     if (MainUtil.getIfMobIsAttacking(mob) && !(mob instanceof KingCrimsonCloneEntity)) {
                         yapSounds();
                         if (isEvilYapper()) {
-                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.evil.no_" + (Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilDangerYapLines) + 1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.hey_ya_messaging.danger.evil.no_" + (Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfEvilDangerYapLines) + 1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
                         } else {
-                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.roundabout.hey_ya_messaging.danger.no_" + (Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfDangerYapLines) + 1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                            ((ServerPlayer) this.self).displayClientMessage(Component.translatable("text.sba.hey_ya_messaging.danger.no_" + (Mth.floor(Math.random() * ClientNetworking.getAppropriateConfig().heyYaSettings.numberOfDangerYapLines) + 1), mob.getDisplayName()).withStyle(ChatFormatting.RED), true);
                         }
                     }
                 }
@@ -395,7 +395,7 @@ public class PowersHeyYa extends NewDashPreset {
     }
 
     public boolean isEvilYapper(){
-        switch (getStandUserSelf().roundabout$getStandSkin())
+        switch (getStandUserSelf().sba$getStandSkin())
         {
             case PowersHeyYa.DEVIL,PowersHeyYa.HELL_NAH, PowersHeyYa.ANTI,
                     PowersHeyYa.WORLD, PowersHeyYa.WARDEN -> {return true;}
@@ -405,31 +405,31 @@ public class PowersHeyYa extends NewDashPreset {
     @Override public Component getSkinName(byte skinId) {
         return switch (skinId)
         {
-            case GOTHIC -> Component.translatable("skins.roundabout.hey_ya.gothic");
-            case VOLUME_2 -> Component.translatable("skins.roundabout.hey_ya.volume_2");
-            case CHAPTER_24 -> Component.translatable("skins.roundabout.hey_ya.chapter_24");
-            case GREENER -> Component.translatable("skins.roundabout.hey_ya.greener");
-            case WORLD -> Component.translatable("skins.roundabout.hey_ya.world");
-            case WARDEN -> Component.translatable("skins.roundabout.hey_ya.warden");
-            case FIRE_AND_ICE -> Component.translatable("skins.roundabout.hey_ya.fire_and_ice");
-            case ICE_COLD -> Component.translatable("skins.roundabout.hey_ya.ice_cold");
-            case VILLAGER -> Component.translatable("skins.roundabout.hey_ya.villager");
-            case GEEZER -> Component.translatable("skins.roundabout.hey_ya.geezer");
-            case DEVIL -> Component.translatable("skins.roundabout.hey_ya.devil");
-            case TUSK -> Component.translatable("skins.roundabout.hey_ya.tusk");
-            case SKELETON -> Component.translatable("skins.roundabout.hey_ya.skeleton");
-            case WITHER -> Component.translatable("skins.roundabout.hey_ya.wither");
-            case HELL_NAH -> Component.translatable("skins.roundabout.hey_ya.hell_nah");
-            case ALIEN -> Component.translatable("skins.roundabout.hey_ya.alien");
-            case AMERICA -> Component.translatable("skins.roundabout.hey_ya.america");
-            case ZOMBIE -> Component.translatable("skins.roundabout.hey_ya.zombie");
-            case ANTI -> Component.translatable("skins.roundabout.hey_ya.anti");
-            case GREY_YA -> Component.translatable("skins.roundabout.hey_ya.grey_ya");
-            case ANGEL -> Component.translatable("skins.roundabout.hey_ya.angel");
-            case KNIGHT -> Component.translatable("skins.roundabout.hey_ya.knight");
-            case SAINT -> Component.translatable("skins.roundabout.hey_ya.saint");
-            case VAMPIRE -> Component.translatable("skins.roundabout.hey_ya.vampire");
-            default -> Component.translatable("skins.roundabout.hey_ya.manga");
+            case GOTHIC -> Component.translatable("skins.sba.hey_ya.gothic");
+            case VOLUME_2 -> Component.translatable("skins.sba.hey_ya.volume_2");
+            case CHAPTER_24 -> Component.translatable("skins.sba.hey_ya.chapter_24");
+            case GREENER -> Component.translatable("skins.sba.hey_ya.greener");
+            case WORLD -> Component.translatable("skins.sba.hey_ya.world");
+            case WARDEN -> Component.translatable("skins.sba.hey_ya.warden");
+            case FIRE_AND_ICE -> Component.translatable("skins.sba.hey_ya.fire_and_ice");
+            case ICE_COLD -> Component.translatable("skins.sba.hey_ya.ice_cold");
+            case VILLAGER -> Component.translatable("skins.sba.hey_ya.villager");
+            case GEEZER -> Component.translatable("skins.sba.hey_ya.geezer");
+            case DEVIL -> Component.translatable("skins.sba.hey_ya.devil");
+            case TUSK -> Component.translatable("skins.sba.hey_ya.tusk");
+            case SKELETON -> Component.translatable("skins.sba.hey_ya.skeleton");
+            case WITHER -> Component.translatable("skins.sba.hey_ya.wither");
+            case HELL_NAH -> Component.translatable("skins.sba.hey_ya.hell_nah");
+            case ALIEN -> Component.translatable("skins.sba.hey_ya.alien");
+            case AMERICA -> Component.translatable("skins.sba.hey_ya.america");
+            case ZOMBIE -> Component.translatable("skins.sba.hey_ya.zombie");
+            case ANTI -> Component.translatable("skins.sba.hey_ya.anti");
+            case GREY_YA -> Component.translatable("skins.sba.hey_ya.grey_ya");
+            case ANGEL -> Component.translatable("skins.sba.hey_ya.angel");
+            case KNIGHT -> Component.translatable("skins.sba.hey_ya.knight");
+            case SAINT -> Component.translatable("skins.sba.hey_ya.saint");
+            case VAMPIRE -> Component.translatable("skins.sba.hey_ya.vampire");
+            default -> Component.translatable("skins.sba.hey_ya.manga");
         };
     }
 
@@ -477,22 +477,22 @@ public class PowersHeyYa extends NewDashPreset {
     }
     public Component getPosName(byte posID) {
         if (posID == 1) {
-            return Component.translatable("idle.roundabout.hey_ya_2");
+            return Component.translatable("idle.sba.hey_ya_2");
         } else {
-            return Component.translatable("idle.roundabout.hey_ya_1");
+            return Component.translatable("idle.sba.hey_ya_1");
         }
     }
 
     public List<AbilityIconInstance> drawGUIIcons(GuiGraphics context, float delta, int mouseX, int mouseY, int leftPos, int topPos, byte level, boolean bypass) {
         List<AbilityIconInstance> $$1 = Lists.newArrayList();
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.roundabout.danger_yap",
-                "instruction.roundabout.press_skill", StandIcons.DANGER_YAP, 1, level, bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.roundabout.mining_yap",
-                "instruction.roundabout.press_skill", StandIcons.MINING_YAP,2,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.roundabout.dodge",
-                "instruction.roundabout.press_skill", StandIcons.DODGE,3,level,bypass));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.yap_yap",
-                "instruction.roundabout.press_skill", StandIcons.YAP_YAP,4,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 80, 0, "ability.sba.danger_yap",
+                "instruction.sba.press_skill", StandIcons.DANGER_YAP, 1, level, bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 99, 0, "ability.sba.mining_yap",
+                "instruction.sba.press_skill", StandIcons.MINING_YAP,2,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 20, topPos + 118, 0, "ability.sba.dodge",
+                "instruction.sba.press_skill", StandIcons.DODGE,3,level,bypass));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.sba.yap_yap",
+                "instruction.sba.press_skill", StandIcons.YAP_YAP,4,level,bypass));
         return $$1;
     }
 }

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersJustice;
 import net.minecraft.core.BlockPos;
@@ -39,7 +39,7 @@ public class FogTrapBlockEntity extends BlockEntity {
             owner = thisowner.getUUID();
             name = thisname;
 
-            if(thisowner instanceof StandUser se && se.roundabout$getStandPowers() instanceof PowersJustice justice){
+            if(thisowner instanceof StandUser se && se.sba$getStandPowers() instanceof PowersJustice justice){
                 range = justice.fogTrapRange;
             }
 

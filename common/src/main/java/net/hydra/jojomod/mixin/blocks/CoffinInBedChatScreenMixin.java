@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.blocks;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,7 +29,7 @@ public abstract class CoffinInBedChatScreenMixin extends ChatScreen {
                 if (Minecraft.getInstance().player.level().getBlockState(Minecraft.getInstance().player.getSleepingPos().get()).is(ModBlocks.COFFIN_BLOCK)){
 
                     if (rdbt$leaveCoffinButton == null){
-                        rdbt$leaveCoffinButton = Button.builder(Component.translatable("roundabout.coffin_sleep"), $$0x -> this.sendWakeUp())
+                        rdbt$leaveCoffinButton = Button.builder(Component.translatable("sba.coffin_sleep"), $$0x -> this.sendWakeUp())
                                 .bounds(this.width / 2 - 100, this.height - 40, 200, 20)
                                 .build();
                         this.clearWidgets();

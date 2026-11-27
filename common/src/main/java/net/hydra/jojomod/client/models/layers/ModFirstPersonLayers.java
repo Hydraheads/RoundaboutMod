@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.models.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -22,7 +22,7 @@ public class ModFirstPersonLayers {
     /**Mojang decided to make literally zero layer applications on first person, so to render beams like guardian
      * ones without arbitrarily making them entities, we have to use our own custom coded renderer*/
 
-    public static final ResourceLocation BEAM_LOCATION = new ResourceLocation(Roundabout.MOD_ID,"textures/entity/locacaca_layers/locacaca_beam.png");
+    public static final ResourceLocation BEAM_LOCATION = new ResourceLocation(SBA.MOD_ID,"textures/entity/locacaca_layers/locacaca_beam.png");
     public static final RenderType BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(BEAM_LOCATION);
     private static void vertex(
             VertexConsumer $$0, Matrix4f $$1, Matrix3f $$2, float $$3, float $$4, float $$5, int $$6, int $$7, int $$8, float $$9, float $$10

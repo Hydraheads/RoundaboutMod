@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.stand;// Made with Blockbench 4.12.5
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.animations.RattAnimations;
 import net.hydra.jojomod.client.models.substand.zsabbathsouls.animations.MobSoulAnimation;
 import net.hydra.jojomod.entity.stand.ChairRattEntity;
@@ -145,7 +145,7 @@ public class ChairRattModel<T extends ChairRattEntity> extends StandModel<T> {
     }
 
 
-    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/chair.png");
     public ResourceLocation getTextureLocation(Entity context, byte skin){
         return base;
@@ -171,7 +171,7 @@ public class ChairRattModel<T extends ChairRattEntity> extends StandModel<T> {
 
         StandUser SU = (StandUser) pEntity.getUser();
         if (SU != null) {
-            if (SU.roundabout$getStandPowers() instanceof PowersRatt PR) {
+            if (SU.sba$getStandPowers() instanceof PowersRatt PR) {
                 if (!mc.isPaused() && !(((TimeStop) pEntity.level()).CanTimeStopEntity(pEntity.getUser()))) {
                     Entity target = PR.getShootTarget();
                     Vec3 v = PR.getRotations(target);

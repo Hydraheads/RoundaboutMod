@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.entity.stand.D4CEntity;
 import net.hydra.jojomod.entity.stand.KingCrimsonEntity;
@@ -25,7 +25,7 @@ public class D4CBaseRenderer<M extends StandEntity> extends StandRenderer<D4CEnt
 
     public static ResourceLocation getSkin(byte BT){
         String path = PowersD4C.getSkinString(BT);
-        return new ResourceLocation(Roundabout.MOD_ID,"textures/stand/d4c/"+path+".png");
+        return new ResourceLocation(SBA.MOD_ID,"textures/stand/d4c/"+path+".png");
     }
 
     @Override

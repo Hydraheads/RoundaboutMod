@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.blocks;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.CoffinBlock;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.core.Holder;

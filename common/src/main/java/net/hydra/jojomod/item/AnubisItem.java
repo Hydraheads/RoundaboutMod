@@ -47,7 +47,7 @@ public class AnubisItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack $$0, Level $$1, LivingEntity $$2) {
         if ($$2 instanceof Player P) {
-            if (P != null && ((StandUser)P).roundabout$getEffectiveCombatMode()){
+            if (P != null && ((StandUser)P).sba$getEffectiveCombatMode()){
                 P.stopUsingItem();
                 return $$0;
             }
@@ -55,8 +55,8 @@ public class AnubisItem extends Item {
             if (!$$1.isClientSide) {
                 P.getCooldowns().addCooldown($$0.getItem(),1200);
 
-                if (SU.roundabout$getStandPowers() instanceof PowersKillerQueen PKQ && SU.roundabout$hasStandOut()
-                        && !((IPlayerEntity)P).roundabout$getUnlockedBonusSkin()) {
+                if (SU.sba$getStandPowers() instanceof PowersKillerQueen PKQ && SU.sba$hasStandOut()
+                        && !((IPlayerEntity)P).sba$getUnlockedBonusSkin()) {
                     PKQ.samuraiUnlockTrigger();
                     return $$0;
                 }
@@ -73,11 +73,11 @@ public class AnubisItem extends Item {
                 AnubisPossessorEntity anubisPossessorEntity = new AnubisPossessorEntity($$2.level(), $$2, targets );
                 anubisPossessorEntity.setPos($$2.getPosition(1));
                 $$1.addFreshEntity(anubisPossessorEntity);
-                SU.roundabout$setPossessor(anubisPossessorEntity);
+                SU.sba$setPossessor(anubisPossessorEntity);
                 P.startRiding(anubisPossessorEntity);
 
                 if (!targets.isEmpty()) {
-                    ((StandUser)$$2).roundabout$setActive(false);
+                    ((StandUser)$$2).sba$setActive(false);
                 }
 
                 AnubisItem.aggroOnto($$2);
@@ -88,14 +88,14 @@ public class AnubisItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
-        $$2.add(Component.translatable("roundabout.anubis_item.requires_mainhand").withStyle(ChatFormatting.GRAY));
+        $$2.add(Component.translatable("sba.anubis_item.requires_mainhand").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
     public void onUseTick(Level $$0, LivingEntity $$1, ItemStack $$2, int $$3) {
         if (!$$0.isClientSide()) {
             if ($$1.isUsingItem()) {
-                if ($$1 != null && ((StandUser)$$1).roundabout$getEffectiveCombatMode()){
+                if ($$1 != null && ((StandUser)$$1).sba$getEffectiveCombatMode()){
                     $$1.stopUsingItem();
                     return;
                 }
@@ -106,7 +106,7 @@ public class AnubisItem extends Item {
                 }
 
                 if (getUseDuration($$2)-$$3+1 == 20){
-                    ((StandUser) $$1).roundabout$getStandPowers().playSoundsIfNearby(SoundIndex.SWORD_UNSHEATHE, 12, false);
+                    ((StandUser) $$1).sba$getStandPowers().playSoundsIfNearby(SoundIndex.SWORD_UNSHEATHE, 12, false);
                 }
             }
         }
@@ -116,7 +116,7 @@ public class AnubisItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level $$0, Player $$1, InteractionHand $$2) {
 
         ItemStack $$3 = $$1.getItemInHand($$2);
-        if ($$2.equals(InteractionHand.MAIN_HAND) && ((StandUser)$$1).roundabout$getEffectiveCombatMode()){
+        if ($$2.equals(InteractionHand.MAIN_HAND) && ((StandUser)$$1).sba$getEffectiveCombatMode()){
             return InteractionResultHolder.fail($$3);
         }
 
@@ -137,7 +137,7 @@ public class AnubisItem extends Item {
     @Override
     public void releaseUsing(ItemStack $$0, Level $$1, LivingEntity $$2, int $$3) {
         if ($$2 instanceof Player $$4) {
-            ((StandUser) $$2).roundabout$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
+            ((StandUser) $$2).sba$getStandPowers().stopSoundsIfNearby(SoundIndex.ITEM_GROUP, 30,false);
         }
     }
 

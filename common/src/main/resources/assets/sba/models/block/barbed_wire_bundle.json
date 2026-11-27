@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "sba:block/barbed_wire_bundle"
+  },
+  "render_type": "cutout"
+}

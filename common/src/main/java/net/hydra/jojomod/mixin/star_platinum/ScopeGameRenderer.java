@@ -30,10 +30,10 @@ public class ScopeGameRenderer {
     /**Scoping influences FOV and bobbing while walking*/
 
     @Inject(method = "tickFov()V", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$tickfov(CallbackInfo ci) {
+    private void sba$tickfov(CallbackInfo ci) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null){
-            StandPowers SP = ((StandUser)player).roundabout$getStandPowers();
+            StandPowers SP = ((StandUser)player).sba$getStandPowers();
             FatePowers fp = ((IFatePlayer)player).rdbt$getFatePowers();
             float zoomMod = fp.zoomMod();
 
@@ -87,20 +87,20 @@ public class ScopeGameRenderer {
         }
     }
     @Inject(method = "bobView", at = @At(value = "HEAD"), cancellable = true)
-    private void RoundaboutBobView(PoseStack $$0, float $$1, CallbackInfo ci) {
+    private void SBABobView(PoseStack $$0, float $$1, CallbackInfo ci) {
         LivingEntity player = Minecraft.getInstance().player;
         if (player != null) {
             if (ClientUtil.disableBobbing(player)){
                 ci.cancel();
                 return;
             }
-            StandPowers SP = ((StandUser) player).roundabout$getStandPowers();
+            StandPowers SP = ((StandUser) player).sba$getStandPowers();
             if (SP.scopeLevel > 0) {
                 ci.cancel();
                 return;
             }
 
-            if (((StandUser)player).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW
+            if (((StandUser)player).sba$getStandPowers() instanceof PowersWhiteAlbum PW
             && PW.hasSkatesActivated()){
                 ci.cancel();
                 if (this.minecraft.getCameraEntity() instanceof Player) {

@@ -21,7 +21,7 @@ public final class HallucinationRenderOffset {
             return Vec3.ZERO;
         }
         if (ClientUtil.checkIfClientCanSeeMobsForWindVision()) return Vec3.ZERO;
-        if (((StandUser) minecraft.player).roundabout$getStand() == rendered) return Vec3.ZERO;
+        if (((StandUser) minecraft.player).sba$getStand() == rendered) return Vec3.ZERO;
         MobEffectInstance effect = minecraft.player.getEffect(ModEffects.HALLUCINATION);
         if (effect == null || effect.getAmplifier() < 1) return Vec3.ZERO;
 

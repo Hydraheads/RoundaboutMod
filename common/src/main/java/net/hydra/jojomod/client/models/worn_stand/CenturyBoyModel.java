@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.worn_stand;// Made with Blockbench 5.1.1
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.CenturyBoyAnimations;
@@ -106,56 +106,56 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 
 	}
 
-	public static ResourceLocation manga = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation manga = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/manga.png");
-	public static ResourceLocation bedrock = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation bedrock = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/bedrock.png");
-	public static ResourceLocation bee = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation bee = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/bee.png");
-	public static ResourceLocation biker = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation biker = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/biker.png");
-	public static ResourceLocation retro = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation retro = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/retro.png");
-	public static ResourceLocation gold = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation gold = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/gold.png");
-	public static ResourceLocation old_century_boy = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation old_century_boy = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/19th_century_boy.png");
-	public static ResourceLocation shulker = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation shulker = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/shulker.png");
-	public static ResourceLocation sulfur = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation sulfur = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/sulfur.png");
-	public static ResourceLocation lemon = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation lemon = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/lemon.png");
-	public static ResourceLocation blue = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation blue = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/blue.png");
-	public static ResourceLocation grape = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation grape = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/grape.png");
-	public static ResourceLocation strawberry = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation strawberry = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/strawberry.png");
-	public static ResourceLocation salmonberry = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation salmonberry = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/salmonberry.png");
-	public static ResourceLocation chicken = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation chicken = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/chicken.png");
-	public static ResourceLocation older_century_boy = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation older_century_boy = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/10th_century_boy.png");
-	public static ResourceLocation oldest_century_boy = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation oldest_century_boy = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/11th_century_boy.png");
-	public static ResourceLocation beta = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation beta = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/beta.png");
-	public static ResourceLocation pumpkin = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation pumpkin = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/pumpkin.png");
-	public static ResourceLocation evil_pumpkin = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation evil_pumpkin = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/evil_pumkin.png");
-	public static ResourceLocation ghost = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation ghost = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/ghost.png");
-	public static ResourceLocation wandering = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation wandering = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/wandering.png");
-	public static ResourceLocation parasite = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation parasite = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/parasite.png");
-	public static ResourceLocation chorus = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation chorus = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/chorus.png");
 
-	public static ResourceLocation parasite_overlay = new ResourceLocation(Roundabout.MOD_ID,
+	public static ResourceLocation parasite_overlay = new ResourceLocation(SBA.MOD_ID,
 			"textures/stand/20_centuryboy/parasite_overlay.png");
 
 
@@ -279,21 +279,21 @@ public class CenturyBoyModel extends PsuedoHierarchicalModel {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 
 		StandUser user = ((StandUser) LE);
-		user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount);
+		user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount);
 
 		byte idle = MainUtil.getWornStandIdleSafe(user, Powers20thCenturyBoy.class);
 		/*(byte)0;
-		if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy) {
-			idle = user.roundabout$getIdlePos();
-		}else if (user.roundabout$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
-			idle = user.roundabout$getPreviousPose();
+		if (user.sba$getStandPowers() instanceof Powers20thCenturyBoy) {
+			idle = user.sba$getIdlePos();
+		}else if (user.sba$getPreviousStandPowers() instanceof Powers20thCenturyBoy) {
+			idle = user.sba$getPreviousPose();
 		}*/
 
 		if (idle == 2){
-			this.animate(user.roundabout$getWornStandIdleAnimation(), CenturyBoyAnimations.standanim.hat,partialTicks, 1f);
+			this.animate(user.sba$getWornStandIdleAnimation(), CenturyBoyAnimations.standanim.hat,partialTicks, 1f);
 		}
 		if (idle == 1){
-			this.animate(user.roundabout$getWornStandIdleAnimation(), CenturyBoyAnimations.standanim.unlatch,partialTicks, 1f);
+			this.animate(user.sba$getWornStandIdleAnimation(), CenturyBoyAnimations.standanim.unlatch,partialTicks, 1f);
 		}
 
 	}

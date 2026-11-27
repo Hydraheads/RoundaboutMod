@@ -14,7 +14,7 @@ public class StandFirePortalShapeMixin {
     /**When the portal considers stand fire empty space, it is ready to be activated by it
      * */
     @Inject(method = "isEmpty(Lnet/minecraft/world/level/block/state/BlockState;)Z", at = @At(value = "HEAD"), cancellable = true)
-    private static void roundabout$isEmpty(BlockState $$0, CallbackInfoReturnable<Boolean> cir) {
+    private static void sba$isEmpty(BlockState $$0, CallbackInfoReturnable<Boolean> cir) {
         if ($$0.is(ModBlocks.STAND_FIRE)){
             cir.setReturnValue(true);
         }

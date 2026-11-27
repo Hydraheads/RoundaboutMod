@@ -13,13 +13,13 @@ public class AccessTargetGoal implements ITargetGoal {
     /**There is no reason for these to be private or protected, we should be able to tap into them.*/
     @Override
     @Unique
-    public void roundabout$removeTarget(){
+    public void sba$removeTarget(){
         targetMob = null;
     }
 
     @Override
     @Unique
-    public void roundabout$setTarget(LivingEntity target){
+    public void sba$setTarget(LivingEntity target){
         targetMob = target;
     }
 

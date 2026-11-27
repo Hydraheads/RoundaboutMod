@@ -1,6 +1,6 @@
 package net.hydra.jojomod.mixin.tusk;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -26,10 +26,10 @@ public abstract class TuskRefreshedMixin {
     protected abstract int tickDownDuration();
 
     @Inject(method = "tick",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/effect/MobEffectInstance;tickDownDuration()I"))
-    private void roundabout$tickRefreshed(LivingEntity $$0, Runnable $$1, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$tickRefreshed(LivingEntity $$0, Runnable $$1, CallbackInfoReturnable<Boolean> cir) {
         if (this.effect.equals(ModEffects.REFRESHED)) {
             StandUser SU = (StandUser) $$0;
-            if (SU.roundabout$getStandPowers() instanceof PowersTusk PT && PT.getUsedNails() > 0) {
+            if (SU.sba$getStandPowers() instanceof PowersTusk PT && PT.getUsedNails() > 0) {
                 final int bonus = 14;
                 PT.tickNailsFaster(bonus);
                 for(int i=0;i<bonus;i++) {this.tickDownDuration();}

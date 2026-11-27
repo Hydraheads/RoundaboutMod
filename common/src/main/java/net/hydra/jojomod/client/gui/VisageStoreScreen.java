@@ -3,7 +3,7 @@ package net.hydra.jojomod.client.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IKeyMapping;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.PacketDataIndex;
@@ -35,7 +35,7 @@ import java.util.Optional;
 
 public class VisageStoreScreen extends Screen {
     //Check out GamemodeSwitcherScreen
-    static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(Roundabout.MOD_ID,
+    static final ResourceLocation CORPSE_CHOOSER_LOCATION = new ResourceLocation(SBA.MOD_ID,
             "textures/gui/cinderella_gui.png");
     private static final int SPRITE_SHEET_WIDTH = 256;
     private static final int SPRITE_SHEET_HEIGHT = 256;
@@ -207,16 +207,16 @@ public class VisageStoreScreen extends Screen {
         guiGraphics.blit(CORPSE_CHOOSER_LOCATION, k, l, 0.0f, 0.0f, 113, 26, 256, 256);
         guiGraphics.pose().popPose();
         super.render(guiGraphics, mouseX, mouseY, delta);
-        guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
+        guiGraphics.drawCenteredString(this.font, Component.translatable("sba.cinderella.gui"), this.width / 2 -2, this.height / 2 - 31 - 76, -1);
 
         guiGraphics.drawCenteredString(this.font, ""+(page+1), this.width / 2, this.height / 2 + 30, -1);
 
         if (isSurelyHovering( this.width / 2-30,  this.height / 2 + 50, 60, 10, mouseX, mouseY)) {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit").
+            guiGraphics.drawCenteredString(this.font, Component.translatable("sba.cinderella.gui.exit").
                             withStyle(ChatFormatting.GREEN),
                     this.width / 2, this.height / 2 + 50, -1);
         } else {
-            guiGraphics.drawCenteredString(this.font, Component.translatable("roundabout.cinderella.gui.exit"),
+            guiGraphics.drawCenteredString(this.font, Component.translatable("sba.cinderella.gui.exit"),
                     this.width / 2, this.height / 2 + 50, -1);
         }
 
@@ -262,12 +262,12 @@ public class VisageStoreScreen extends Screen {
                     compList.add(Component.translatable(  value.stack.getDescriptionId()+".desc", value.costE).withStyle(ChatFormatting.ITALIC));
 
                     if (costsEmeralds){
-                        compList.add(Component.translatable(  "roundabout.cinderella.gui.cost_emeralds", value.costE).withStyle(ChatFormatting.GREEN));
+                        compList.add(Component.translatable(  "sba.cinderella.gui.cost_emeralds", value.costE).withStyle(ChatFormatting.GREEN));
                     } else {
-                        compList.add(Component.translatable(  "roundabout.cinderella.gui.cost_levels", value.costL).withStyle(ChatFormatting.GREEN));
+                        compList.add(Component.translatable(  "sba.cinderella.gui.cost_levels", value.costL).withStyle(ChatFormatting.GREEN));
                     }
                     if (!canAfford(value)){
-                        compList.add(Component.translatable(  "roundabout.cinderella.gui.cannot_afford").withStyle(ChatFormatting.RED));
+                        compList.add(Component.translatable(  "sba.cinderella.gui.cannot_afford").withStyle(ChatFormatting.RED));
                     }
 
                     guiGraphics.renderTooltip(this.font, compList, Optional.empty(), mouseX, mouseY);
@@ -290,9 +290,9 @@ public class VisageStoreScreen extends Screen {
         );
     }
     public boolean sameKeyOneX(KeyMapping key1, Options options){
-        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).roundabout$justTellMeTheKey().getValue())
-                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).roundabout$justTellMeTheKey().getValue()))
-                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).roundabout$justTellMeTheKey().getValue()))
+        return (InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)key1).sba$justTellMeTheKey().getValue())
+                || (key1.same(options.keyLoadHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keyLoadHotbarActivator).sba$justTellMeTheKey().getValue()))
+                || (key1.same(options.keySaveHotbarActivator) && InputConstants.isKeyDown(this.minecraft.getWindow().getWindow(), ((IKeyMapping)options.keySaveHotbarActivator).sba$justTellMeTheKey().getValue()))
         );
     }
     @Override

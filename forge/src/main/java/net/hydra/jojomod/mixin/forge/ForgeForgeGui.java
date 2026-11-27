@@ -40,7 +40,7 @@ public abstract class ForgeForgeGui extends Gui {
     }
 
     @Inject(method = "renderFood(IILnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "HEAD"), remap = false, cancellable = true)
-    public void roundabout$renderFood(int width, int height, GuiGraphics guiGraphics, CallbackInfo ci) {
+    public void sba$renderFood(int width, int height, GuiGraphics guiGraphics, CallbackInfo ci) {
         Player player = (Player) this.minecraft.getCameraEntity();
         if (player != null){
             if (FateTypes.hasBloodHunger(player)){
@@ -67,19 +67,19 @@ public abstract class ForgeForgeGui extends Gui {
 
     @Inject(method = "renderAir(IILnet/minecraft/client/gui/GuiGraphics;)V", at = @At(value = "INVOKE",
             target="Lcom/mojang/blaze3d/systems/RenderSystem;disableBlend()V",shift = At.Shift.BEFORE), remap = false)
-    public void roundabout$renderAir(int width, int height, GuiGraphics guiGraphics, CallbackInfo ci) {
+    public void sba$renderAir(int width, int height, GuiGraphics guiGraphics, CallbackInfo ci) {
         if (minecraft.player != null && minecraft.level != null){
-            int oxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getAirAmount();
-            int maxOxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getMaxAirAmount();
+            int oxygenBonus = ((StandUser)minecraft.player).sba$getStandPowers().getAirAmount();
+            int maxOxygenBonus = ((StandUser)minecraft.player).sba$getStandPowers().getMaxAirAmount();
             if (oxygenBonus > -1 && PowerTypes.hasStandActive(minecraft.player)) {
                 int $$28 = minecraft.player.getMaxAirSupply();
                 int $$29 = Math.min(minecraft.player.getAirSupply(), $$28);
                 boolean $$3 = !minecraft.player.canBreatheUnderwater() && !MobEffectUtil.hasWaterBreathing(minecraft.player) &&
                         (!minecraft.player.getAbilities().invulnerable);
                 if ((minecraft.player.isEyeInFluid(FluidTags.WATER) && $$3)  || oxygenBonus < maxOxygenBonus) {
-                    LivingEntity $$21 = roundabout$getPlayerVehicleWithHealth();
-                    int $$22 = roundabout$getVehicleMaxHearts($$21);
-                    int $$30 = roundabout$etVisibleVehicleHeartRows($$22) - 1;
+                    LivingEntity $$21 = sba$getPlayerVehicleWithHealth();
+                    int $$22 = sba$getVehicleMaxHearts($$21);
+                    int $$30 = sba$etVisibleVehicleHeartRows($$22) - 1;
                     int $$9 = this.screenWidth / 2 + 6;
                     int $$10 = this.screenHeight - 39;
                     int $$16 = $$10 - 10;
@@ -101,15 +101,15 @@ public abstract class ForgeForgeGui extends Gui {
     }
 
     @Inject(method = "pre",at = @At(value = "HEAD"),remap = false, cancellable = true )
-    private void roundabout$stopGuiCancelling(NamedGuiOverlay overlay, GuiGraphics guiGraphics, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$stopGuiCancelling(NamedGuiOverlay overlay, GuiGraphics guiGraphics, CallbackInfoReturnable<Boolean> cir) {
         /// this should allow for specifically stopping cancellations, but it doesn't seem to want to cooperate
 
 
     }
 
     @Unique
-    private LivingEntity roundabout$getPlayerVehicleWithHealth() {
-        Player player = roundabout$getCameraPlayer();
+    private LivingEntity sba$getPlayerVehicleWithHealth() {
+        Player player = sba$getCameraPlayer();
         if (player != null) {
             Entity entity = player.getVehicle();
             if (entity == null) {
@@ -126,7 +126,7 @@ public abstract class ForgeForgeGui extends Gui {
 
 
     @Unique
-    private int roundabout$getVehicleMaxHearts(LivingEntity p_93023_) {
+    private int sba$getVehicleMaxHearts(LivingEntity p_93023_) {
         if (p_93023_ != null && p_93023_.showVehicleHealth()) {
             float f = p_93023_.getMaxHealth();
             int i = (int)(f + 0.5F) / 2;
@@ -141,13 +141,13 @@ public abstract class ForgeForgeGui extends Gui {
     }
 
     @Unique
-    private int roundabout$etVisibleVehicleHeartRows(int p_93013_) {
+    private int sba$etVisibleVehicleHeartRows(int p_93013_) {
         return (int)Math.ceil((double)p_93013_ / 10.0D);
     }
 
 
     @Unique
-    private Player roundabout$getCameraPlayer() {
+    private Player sba$getCameraPlayer() {
         return !(this.minecraft.getCameraEntity() instanceof Player) ? null : (Player)this.minecraft.getCameraEntity();
     }
 }

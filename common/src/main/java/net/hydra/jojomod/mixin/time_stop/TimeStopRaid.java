@@ -16,7 +16,7 @@ public class TimeStopRaid {
 
     /**Time Stop can stop raids from progressing*/
     @Inject(method = "tick", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$tick(CallbackInfo ci) {
+    public void sba$tick(CallbackInfo ci) {
         if (((TimeStop)this.level).inTimeStopRange(center)){
             ci.cancel();
         }

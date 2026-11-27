@@ -167,11 +167,11 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
         }
 
         if (!level().isClientSide()) {
-            if (host == null || !(host.isAlive() && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ
+            if (host == null || !(host.isAlive() && ((StandUser)host).sba$getStandPowers() instanceof PowersKillerQueen PKQ
                     /*&& PKQ.getCurrentBombStatus() == (byte)2*/ && PKQ.bombPlantedItem == this)) {
                     defuse();
-                    if(host != null && ((StandUser)host).roundabout$getStandPowers() != null
-                       && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen PKQ){
+                    if(host != null && ((StandUser)host).sba$getStandPowers() != null
+                       && ((StandUser)host).sba$getStandPowers() instanceof PowersKillerQueen PKQ){
                         PKQ.bombPlantedItem = null;
                     }
             }
@@ -188,8 +188,8 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
                 this.age++;
             }
         }
-        if (((IEntityAndData)this).roundabout$getNoGravTicks() > 0){
-            ((IEntityAndData)this).roundabout$setNoGravTicks(((IEntityAndData)this).roundabout$getNoGravTicks()-1);
+        if (((IEntityAndData)this).sba$getNoGravTicks() > 0){
+            ((IEntityAndData)this).sba$setNoGravTicks(((IEntityAndData)this).sba$getNoGravTicks()-1);
             if (!this.isNoGravity()) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.04, 0.0));
             }
@@ -236,7 +236,7 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
 
                         if (BE instanceof JukeboxBlockEntity je && je.getFirstItem().isEmpty()) {
                             je.setItem(0,this.getItem());
-                            if (host != null && ((StandUser)host).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+                            if (host != null && ((StandUser)host).sba$getStandPowers() instanceof PowersKillerQueen KQ) {
                                 KQ.transferItem2BlockBom(pos);
                             }
                             discard();
@@ -248,7 +248,7 @@ public class BombPlantedItemEntity extends Entity implements TraceableEntity {
                                 BE = level().getBlockEntity(pos);
                                 if (BE instanceof StereoBlockEntity je && je.getFirstItem().isEmpty()) {
                                     je.setItem(0, this.getItem());
-                                    if (host != null && ((StandUser) host).roundabout$getStandPowers() instanceof PowersKillerQueen KQ) {
+                                    if (host != null && ((StandUser) host).sba$getStandPowers() instanceof PowersKillerQueen KQ) {
                                         KQ.transferItem2BlockBom(pos);
                                     }
                                     discard();

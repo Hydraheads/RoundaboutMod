@@ -17,21 +17,21 @@ public abstract class ZMerchantContainerMixin {
     @Shadow @Final private Merchant merchant;
 
     @Inject(method = "updateSellItem", at = @At("HEAD"))
-    private void roundabout$setLockoutContext(CallbackInfo ci) {
+    private void sba$setLockoutContext(CallbackInfo ci) {
         boolean isLocked = false;
 
         if (this.merchant instanceof IVillagerAccess villagerAccess) {
-            isLocked = villagerAccess.roundabout$isSnakeOilLockedOut();
+            isLocked = villagerAccess.sba$isSnakeOilLockedOut();
         }
         else if (this.merchant instanceof ClientSideMerchant && TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER != null) {
-            isLocked = ((IVillagerAccess) TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER).roundabout$isSnakeOilLockedOut();
+            isLocked = ((IVillagerAccess) TradeLockoutHelper.CLIENT_INTERACTED_VILLAGER).sba$isSnakeOilLockedOut();
         }
 
         TradeLockoutHelper.IS_LOCKED_OUT.set(isLocked);
     }
 
     @Inject(method = "updateSellItem", at = @At("TAIL"))
-    private void roundabout$clearLockoutContext(CallbackInfo ci) {
+    private void sba$clearLockoutContext(CallbackInfo ci) {
         TradeLockoutHelper.IS_LOCKED_OUT.remove();
     }
 }

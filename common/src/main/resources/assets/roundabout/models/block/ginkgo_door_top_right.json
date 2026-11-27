@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/door_top_right",
-  "render_type": "cutout",
-  "textures": {
-    "bottom": "roundabout:block/ginkgo_door_bottom",
-    "top": "roundabout:block/ginkgo_door_top"
-  }
-}

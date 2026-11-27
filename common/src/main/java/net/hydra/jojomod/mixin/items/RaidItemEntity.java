@@ -26,8 +26,8 @@ public abstract class RaidItemEntity extends Entity implements IItemEntityAccess
     /**This mixin makes designated reward items sparkle when drop, the executioner axe's template sparkles
      *  on the ground after winning a raid*/
     @Inject(method = "tick", at = @At(value = "HEAD"))
-    protected void roundabout$tick(CallbackInfo ci) {
-        if (roundabout$raidSparkle){
+    protected void sba$tick(CallbackInfo ci) {
+        if (sba$raidSparkle){
             if (!this.level().isClientSide()){
                 ((ServerLevel) this.level()).sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(3),
                         this.getRandomY(), this.getRandomZ(3),
@@ -37,20 +37,20 @@ public abstract class RaidItemEntity extends Entity implements IItemEntityAccess
     }
 
     @Unique
-    public boolean roundabout$raidSparkle = false;
+    public boolean sba$raidSparkle = false;
     @Override
     @Unique
-    public void roundabout$setRaidSparkle(boolean sparkle){
-        roundabout$raidSparkle = sparkle;
+    public void sba$setRaidSparkle(boolean sparkle){
+        sba$raidSparkle = sparkle;
     }
     @Override
     @Unique
-    public int roundabout$getPickupDelay(){
+    public int sba$getPickupDelay(){
         return pickupDelay;
     }
     @Override
     @Unique
-    public UUID roundabout$getTarget(){
+    public UUID sba$getTarget(){
         return target;
     }
 

@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.event.ModParticles;
@@ -126,7 +126,7 @@ public class StepRuleEntity extends Entity {
 
         if (!level().isClientSide()) {
             if (userEntity instanceof LivingEntity LE &&
-                    ((StandUser)LE).roundabout$getStandPowers() instanceof PowersCalifornia pca) {
+                    ((StandUser)LE).sba$getStandPowers() instanceof PowersCalifornia pca) {
                 if (timing > -1 && !((TimeStop) level()).inTimeStopRange(this)) {
                     timing2++;
                     timing--;
@@ -184,7 +184,7 @@ public class StepRuleEntity extends Entity {
                                                             mob.getEyePosition().x, mob.getEyePosition().y + 0.5F, mob.getEyePosition().z,
                                                             0, 0, 0.5, 0, 0.15);
                                                     if (PowerTypes.hasStandActive(player)
-                                                            && !((StandUser) player).roundabout$getStandPowers().isSecondaryStand()
+                                                            && !((StandUser) player).sba$getStandPowers().isSecondaryStand()
                                                             && ((IPlayerEntity) player).rdbt$getLevelDecreaseTicks() <= 0
                                                     ) {
                                                         ((IPlayerEntity) player).rdbt$setLevelDecreaseTicks(400);

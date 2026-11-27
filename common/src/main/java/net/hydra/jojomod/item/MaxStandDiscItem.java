@@ -34,19 +34,19 @@ public class MaxStandDiscItem extends StandDiscItem{
     public void appendHoverText(ItemStack $$0, @Nullable Level $$1, List<Component> $$2, TooltipFlag $$3) {
 
         if(this.standPowers != null && this.standPowers.isWip()){
-            $$2.add(Component.translatable("leveling.roundabout.disc_wip").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
-            $$2.add(Component.translatable("leveling.roundabout.disc_wip_2").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
-            $$2.add(Component.translatable("leveling.roundabout.disc_wip_3").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
-            $$2.add(Component.translatable("roundabout.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
+            $$2.add(Component.translatable("leveling.sba.disc_wip").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
+            $$2.add(Component.translatable("leveling.sba.disc_wip_2").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
+            $$2.add(Component.translatable("leveling.sba.disc_wip_3").withStyle(ChatFormatting.RED).withStyle(ChatFormatting.BOLD));
+            $$2.add(Component.translatable("sba.dev_status.dev_status").withStyle(ChatFormatting.WHITE)
                     .append(" ")
                     .append(this.standPowers.ifWipListDevStatus()));
-            $$2.add(Component.translatable("roundabout.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
+            $$2.add(Component.translatable("sba.dev_status.dev_name").withStyle(ChatFormatting.WHITE)
                     .append(" ")
                     .append(this.standPowers.ifWipListDev()));
             $$2.add(this.getDisplayName2().withStyle(ChatFormatting.AQUA));
         } else {
             $$2.add(this.getDisplayName2().withStyle(ChatFormatting.AQUA));
-            $$2.add(Component.translatable("leveling.roundabout.disc_maxed").withStyle(ChatFormatting.GRAY));
+            $$2.add(Component.translatable("leveling.sba.disc_maxed").withStyle(ChatFormatting.GRAY));
         }
         CompoundTag $$4 = $$0.getTagElement("Memory");
         if ($$4 != null && $$1 != null) {

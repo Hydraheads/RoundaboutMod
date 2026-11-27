@@ -3,7 +3,7 @@ package net.hydra.jojomod.mixin.blocks;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Unit;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.block.CoffinBlock;
 import net.hydra.jojomod.block.ModBlocks;
 import net.minecraft.core.BlockPos;

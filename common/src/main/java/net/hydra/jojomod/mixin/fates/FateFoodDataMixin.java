@@ -48,7 +48,7 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
     }
 
     @Inject(method = "eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$eat(Item $$0, ItemStack $$1, CallbackInfo ci) {
+    protected void sba$eat(Item $$0, ItemStack $$1, CallbackInfo ci) {
         if (rdbt$player != null){
 
             if (PowerTypes.isErasingTime(rdbt$player)){
@@ -65,7 +65,7 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
     }
 
     @Inject(method = "eat(IF)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$eat2(int $$0, float $$1, CallbackInfo ci) {
+    protected void sba$eat2(int $$0, float $$1, CallbackInfo ci) {
         if (rdbt$player != null){
             if (PowerTypes.isErasingTime(rdbt$player)){
                 ci.cancel();
@@ -91,7 +91,7 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
     }
 
     @Inject(method = "getSaturationLevel()F", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$getSaturationLevel(CallbackInfoReturnable<Float> cir) {
+    protected void sba$getSaturationLevel(CallbackInfoReturnable<Float> cir) {
         if (!ClientNetworking.getAppropriateConfig().vampireSettings.vampireUsesInternalSaturation) {
             if (rdbt$player != null) {
                 if (FateTypes.hasBloodHunger(rdbt$player)) {
@@ -101,7 +101,7 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
         }
     }
     @Inject(method = "setSaturation(F)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$setSaturation(float $$0, CallbackInfo ci) {
+    protected void sba$setSaturation(float $$0, CallbackInfo ci) {
         if (rdbt$player != null){
             if (FateTypes.hasBloodHunger(rdbt$player)){
                 this.rdbt$alternateSaturation = $$0;
@@ -110,7 +110,7 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
         }
     }
     @Inject(method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$addAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
+    protected void sba$addAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
         if (rdbt$player != null){
             if (FateTypes.hasBloodHunger(rdbt$player)){
                 $$0.putInt("foodLevel", this.foodLevel);
@@ -122,7 +122,7 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
         }
     }
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
+    protected void sba$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
         if (rdbt$player != null){
             if (FateTypes.hasBloodHunger(rdbt$player)){
                 if ($$0.contains("foodLevel", 99)) {
@@ -140,7 +140,7 @@ public abstract class FateFoodDataMixin implements AccessFateFoodData {
     public int rdbt$cycle = 0;
     /**Vampires do not starve, remove the starve code here*/
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$tickVamp(Player $$0, CallbackInfo ci) {
+    protected void sba$tickVamp(Player $$0, CallbackInfo ci) {
         if (FateTypes.hasBloodHunger(rdbt$player)){
             ci.cancel();
             float multiplier = 1F;

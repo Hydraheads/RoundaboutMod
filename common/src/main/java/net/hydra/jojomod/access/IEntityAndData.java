@@ -12,19 +12,19 @@ import java.util.UUID;
 
 public interface IEntityAndData {
 
-    int roundabout$getBleedLevel();
-    void roundabout$setBleedLevel(int val);
-    void roundabout$setLastDamageTaken(float amount);
-    void roundabout$refreshBoardingCooldown();
-    float roundabout$getLastDamageTaken();
+    int sba$getBleedLevel();
+    void sba$setBleedLevel(int val);
+    void sba$setLastDamageTaken(float amount);
+    void sba$refreshBoardingCooldown();
+    float sba$getLastDamageTaken();
     void rdbt$forceDeltaMovement(Vec3 $$0);
-    float roundabout$getPreTSTick();
-    void roundabout$setExclusiveLayers(boolean exclusive);
-    boolean roundabout$getExclusiveLayers();
+    float sba$getPreTSTick();
+    void sba$setExclusiveLayers(boolean exclusive);
+    boolean sba$getExclusiveLayers();
     boolean rdbt$returnPickup();
     void rdbt$setReturnPickup(boolean ye);
-    void roundabout$setNoGravTicks(int ticks);
-    int roundabout$getNoGravTicks();
+    void sba$setNoGravTicks(int ticks);
+    int sba$getNoGravTicks();
     int rdbt$getAltCheckCooldown();
     void rdbt$setAltCheckCooldown(int ticks);
     UUID rdbt$getNativeCopy();
@@ -39,67 +39,67 @@ public interface IEntityAndData {
     void rdbt$setTicksUntilGone(int lol);
     Entity rdbt$getNearAlt();
     boolean rdbt$getSharedFlag(int flag);
-    float roundabout$getStepHeight();
+    float sba$getStepHeight();
 
     AABB rdbt$getPoseBox(Pose pose);
-    void roundabout$setNoAAB();
+    void sba$setNoAAB();
 
-    Entity roundabout$getVehicle();
-    void roundabout$setVehicle(Entity ride);
+    Entity sba$getVehicle();
+    void sba$setVehicle(Entity ride);
 
-    boolean roundabout$getShadow();
-    void roundabout$setShadow(boolean shadow);
+    boolean sba$getShadow();
+    void sba$setShadow(boolean shadow);
 
-    double roundabout$getRoundaboutPrevX();
+    double sba$getSBAPrevX();
 
-    double roundabout$getRoundaboutPrevY();
+    double sba$getSBAPrevY();
 
-    void roundabout$setRoundaboutJamBreath(boolean roundaboutJamBreath);
-    boolean roundabout$getRoundaboutJamBreath();
+    void sba$setSBAJamBreath(boolean sbaJamBreath);
+    boolean sba$getSBAJamBreath();
 
-    double roundabout$getRoundaboutPrevZ();
+    double sba$getSBAPrevZ();
 
-    void roundabout$setPreTSTick(float frameTime);
+    void sba$setPreTSTick(float frameTime);
 
-    void roundabout$setRoundaboutPrevX(double roundaboutPrevX);
+    void sba$setSBAPrevX(double sbaPrevX);
 
-    void roundabout$setRoundaboutPrevY(double roundaboutPrevY);
-    void roundabout$setRoundaboutPrevZ(double roundaboutPrevZ);
+    void sba$setSBAPrevY(double sbaPrevY);
+    void sba$setSBAPrevZ(double sbaPrevZ);
 
     Vec3 rdbt$getStuckSpeedMultiplier();
-    void roundabout$resetPreTSTick();
-    @Nullable Vec3 roundabout$getRoundaboutDeltaBuildupTS();
+    void sba$resetPreTSTick();
+    @Nullable Vec3 sba$getSBADeltaBuildupTS();
 
-    void roundabout$setRoundaboutDeltaBuildupTS(Vec3 vec3);
-    void roundabout$tickQVec();
+    void sba$setSBADeltaBuildupTS(Vec3 vec3);
+    void sba$tickQVec();
 
-    void roundabout$setQVec(Vec3 q);
-    void roundabout$setQVecParams(Vec3 ec);
-    void roundabout$setQVec2Params(Vec3 ec);
+    void sba$setQVec(Vec3 q);
+    void sba$setQVecParams(Vec3 ec);
+    void sba$setQVec2Params(Vec3 ec);
 
-    void roundabout$setDeltaMovementRaw(Vec3 ec);
-    ArrayDeque<SavedSecond> roundabout$getSecondQue();
+    void sba$setDeltaMovementRaw(Vec3 ec);
+    ArrayDeque<SavedSecond> sba$getSecondQue();
 
-    void roundabout$initialDayCheck(int day);
-    void roundabout$setInitialDaySec();
-    SavedSecond roundabout$getInitialDaySec();
+    void sba$initialDayCheck(int day);
+    void sba$setInitialDaySec();
+    SavedSecond sba$getInitialDaySec();
 
-    SavedSecond roundabout$getLastSavedSecond();
-    void roundabout$addSecondToQueue();
+    SavedSecond sba$getLastSavedSecond();
+    void sba$addSecondToQueue();
 
-    void roundabout$resetSecondQueue();
+    void sba$resetSecondQueue();
 
     /**Achtung*/
-    void roundabout$setTrueInvisibility(int only);
-    int roundabout$getTrueInvisibility();
+    void sba$setTrueInvisibility(int only);
+    int sba$getTrueInvisibility();
 
     /**Manhattan Transfer*/
-    int roundabout$getTrueInvisibilityManhattan();
+    int sba$getTrueInvisibilityManhattan();
 
     void rdbt$doWindVisionDetection();
 
 
-    void roundabout$universalTick();
+    void sba$universalTick();
 
 
 }

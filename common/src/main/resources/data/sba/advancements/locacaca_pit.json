@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_locacaca": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "sba:locacaca"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "sba:locacaca_pit_shapeless"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_locacaca",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sba:locacaca_pit_shapeless"
+    ]
+  },
+  "sends_telemetry_event": false
+}

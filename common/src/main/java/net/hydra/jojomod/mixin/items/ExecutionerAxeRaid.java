@@ -27,11 +27,11 @@ import java.util.UUID;
 public class ExecutionerAxeRaid {
     /**Reward a winner of a raid with the executioner axe template*/
     @Unique
-    public boolean roundabout$hasRewarded = false;
+    public boolean sba$hasRewarded = false;
     @Inject(method = "tick", at = @At(value = "INVOKE",target="Lnet/minecraft/world/entity/LivingEntity;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)Z"))
-    public void roundabout$tickMid(CallbackInfo ci) {
-        if (!roundabout$hasRewarded){
-            roundabout$hasRewarded = true;
+    public void sba$tickMid(CallbackInfo ci) {
+        if (!sba$hasRewarded){
+            sba$hasRewarded = true;
             for(UUID uuid : this.heroesOfTheVillage) {
                 Entity entity = this.level.getEntity(uuid);
                 if (entity instanceof Player && !entity.isSpectator()) {
@@ -39,9 +39,9 @@ public class ExecutionerAxeRaid {
                             entity.getY()+10, entity.getZ(),
                             ModItems.EXECUTION_UPGRADE.getDefaultInstance());
                     $$4.setPickUpDelay(40);
-                    ((IItemEntityAccess)$$4).roundabout$setRaidSparkle(true);
+                    ((IItemEntityAccess)$$4).sba$setRaidSparkle(true);
                     level.addFreshEntity($$4);
-                    ((IItemEntityAccess)$$4).roundabout$setRaidSparkle(true);
+                    ((IItemEntityAccess)$$4).sba$setRaidSparkle(true);
                     break;
                 }
             }
@@ -50,11 +50,11 @@ public class ExecutionerAxeRaid {
 
     // GE resolve gain
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;awardStat(Lnet/minecraft/resources/ResourceLocation;)V"))
-    private void roundabout$onRaidVictory(CallbackInfo ci) {
+    private void sba$onRaidVictory(CallbackInfo ci) {
         for (UUID uuid : this.heroesOfTheVillage) {
             Entity entity = this.level.getEntity(uuid);
             if (entity instanceof ServerPlayer player
-                    && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+                    && ((StandUser) player).sba$getStandPowers() instanceof PowersGoldExperience ge) {
                 ge.onRaidWon();
             }
         }

@@ -35,7 +35,7 @@ public class AchtungItemInHandRenderer {
      */
     @Inject(method = "renderHandsWithItems", at = @At(value = "HEAD"), cancellable = true)
     public<T extends LivingEntity, M extends EntityModel<T>>
-    void roundabout$renderHandsWithItemsAchtung(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
+    void sba$renderHandsWithItemsAchtung(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource,
                                                 LocalPlayer localPlayer, int light, CallbackInfo ci) {
         if (localPlayer != null){
 
@@ -43,10 +43,10 @@ public class AchtungItemInHandRenderer {
 
             float throwFadeToTheEther = 1f;
             IEntityAndData entityAndData = ((IEntityAndData) user);
-            if (entityAndData.roundabout$getTrueInvisibility() > -1 || ClientUtil.checkIfClientCanSeeMobsForWindVision() && entityAndData.roundabout$getTrueInvisibilityManhattan() < 1){
+            if (entityAndData.sba$getTrueInvisibility() > -1 || ClientUtil.checkIfClientCanSeeMobsForWindVision() && entityAndData.sba$getTrueInvisibilityManhattan() < 1){
                 throwFadeToTheEther = throwFadeToTheEther*0.1F;
                 /**
-                StandPowers powers = user.roundabout$getStandPowers();
+                StandPowers powers = user.sba$getStandPowers();
                 if (powers instanceof PowersAchtungBaby PB && PB.invisibleVisionOn()){
                     AbstractClientPlayer $$14 = this.minecraft.player;
                     if ($$14 != null) {
@@ -60,7 +60,7 @@ public class AchtungItemInHandRenderer {
                 throwFadeToTheEther = throwFadeToTheEther*0.6F;
             }
 
-            byte posX = ((IPlayerEntity)localPlayer).roundabout$GetPos2();
+            byte posX = ((IPlayerEntity)localPlayer).sba$GetPos2();
             if (posX == PlayerPosIndex.VANISH_PERSIST || posX == PlayerPosIndex.VANISH_START) {
                 throwFadeToTheEther = throwFadeToTheEther*0.5F;
             }

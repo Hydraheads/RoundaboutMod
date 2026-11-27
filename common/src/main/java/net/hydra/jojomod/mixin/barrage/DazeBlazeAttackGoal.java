@@ -18,10 +18,10 @@ public abstract class DazeBlazeAttackGoal extends Goal {
      * This mixin also makes it so when the blaze is barraging, it doesn't also use its other attacks.*/
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$Tick(CallbackInfo ci) {
-        if (((StandUser)blaze).roundabout$isDazed() ||
-                (!((StandUser)blaze).roundabout$getStandDisc().isEmpty() &&
-                        ((StandUser)blaze).roundabout$getStandPowers().disableMobAiAttack())) {
+    protected void sba$Tick(CallbackInfo ci) {
+        if (((StandUser)blaze).sba$isDazed() ||
+                (!((StandUser)blaze).sba$getStandDisc().isEmpty() &&
+                        ((StandUser)blaze).sba$getStandPowers().disableMobAiAttack())) {
             super.tick();
             ci.cancel();
         }

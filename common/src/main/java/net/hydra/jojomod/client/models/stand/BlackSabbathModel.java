@@ -230,7 +230,7 @@ public class BlackSabbathModel<T extends BlackSabbathEntity> extends StandModel<
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         StandUser SU = (StandUser) pEntity.getUser();
         if (SU != null) {
-            if (SU.roundabout$getStandPowers() instanceof PowersBlackSabbath PBS) {
+            if (SU.sba$getStandPowers() instanceof PowersBlackSabbath PBS) {
                 float tickDelta = mc.getDeltaFrameTime();
                 float tickDelta2 = Math.min(tickDelta, 2);
                 float r = pEntity.getUser().getViewXRot(tickDelta2);

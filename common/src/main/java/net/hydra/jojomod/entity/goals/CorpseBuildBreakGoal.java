@@ -1,6 +1,6 @@
 package net.hydra.jojomod.entity.goals;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.core.BlockPos;
@@ -55,7 +55,7 @@ public class CorpseBuildBreakGoal extends Goal {
         if($$0.controller instanceof Player plr){
             this.owner = plr;
         } else{
-            Roundabout.LOGGER.info("A corpse is not being controlled by a player???");
+            SBA.LOGGER.info("A corpse is not being controlled by a player???");
 
         }
     }
@@ -261,7 +261,7 @@ public class CorpseBuildBreakGoal extends Goal {
             }
         } catch(Exception e) {
             //put shader debug stuff here
-            Roundabout.LOGGER.info("Something might be amiss, report if a vanilla block caused this with corpse breaking or placing");
+            SBA.LOGGER.info("Something might be amiss, report if a vanilla block caused this with corpse breaking or placing");
             this.stop();
             this.fallenMob.removeBuildBreakGoal();
         }

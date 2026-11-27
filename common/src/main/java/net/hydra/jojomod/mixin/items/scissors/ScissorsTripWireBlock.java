@@ -21,7 +21,7 @@ public abstract class ScissorsTripWireBlock extends Block {
     /**Scissors can be used on tripwires like shears*/
 
     @Inject(method = "playerWillDestroy", at = @At(value = "HEAD"),cancellable = true)
-    public void roundabout$playerWillDestroy(Level $$0, BlockPos $$1, BlockState $$2, Player $$3, CallbackInfo ci) {
+    public void sba$playerWillDestroy(Level $$0, BlockPos $$1, BlockState $$2, Player $$3, CallbackInfo ci) {
         if (!$$0.isClientSide && !$$3.getMainHandItem().isEmpty() && $$3.getMainHandItem().is(ModItems.SCISSORS)) {
             $$0.setBlock($$1, $$2.setValue(DISARMED, Boolean.valueOf(true)), 4);
             $$0.gameEvent($$3, GameEvent.SHEAR, $$1);

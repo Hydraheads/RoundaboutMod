@@ -36,7 +36,7 @@ public class DiverDownAnvilMenu extends AnvilMenu {
     @Override
     public void createResult() {
         super.createResult();
-        DataSlot costSlot = ((AnvilMenuAccessor) this).roundabout$getCostSlot();
+        DataSlot costSlot = ((AnvilMenuAccessor) this).sba$getCostSlot();
         // prevents the cost just appearing as 1, even when there's nothing
         if (costSlot.get() > 0) {
             costSlot.set(costSlot.get() + 1);

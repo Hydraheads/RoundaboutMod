@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.gui;
 
 import com.mojang.datafixers.util.Pair;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ModItemBonusTextures;
 import net.hydra.jojomod.item.MaskItem;
@@ -53,7 +53,7 @@ public class PowerInventoryMenu extends AbstractContainerMenu {
         this.owner = $$2;
         //this.addSlot(new ResultSlot($$0.player, this.craftSlots, this.resultSlots, 0, 154, 28));
         IPlayerEntity play = ((IPlayerEntity)this.owner);
-        PlayerMaskSlots plm = play.roundabout$getMaskInventory();
+        PlayerMaskSlots plm = play.sba$getMaskInventory();
         this.addSlot(new Slot(plm, 0, 8, 8) {
             @Override
             public int getMaxStackSize() {

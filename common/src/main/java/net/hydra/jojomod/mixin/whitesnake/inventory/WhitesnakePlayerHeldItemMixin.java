@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemInHandLayer.class)
 public abstract class WhitesnakePlayerHeldItemMixin {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$hideControlItems(PoseStack poseStack, MultiBufferSource buffers,
+    private void sbaWhitesnake$hideControlItems(PoseStack poseStack, MultiBufferSource buffers,
                                                        int light, LivingEntity entity, float limbSwing,
                                                        float limbSwingAmount, float partialTick,
                                                        float ageInTicks, float netHeadYaw, float headPitch,

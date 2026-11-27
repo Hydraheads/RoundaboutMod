@@ -45,20 +45,20 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int integ, T var4,
                        float var5, float var6, float var7, float var8, float var9, float var10) {
-        if (((IEntityAndData)var4).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)var4).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision() )
+        if (((IEntityAndData)var4).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung() || ((IEntityAndData)var4).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision() )
             return;
 
-        if (((StandUser)var4).roundabout$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet()
+        if (((StandUser)var4).sba$getStandPowers() instanceof PowersWhiteAlbum pw && pw.renderHelmet()
         && ClientUtil.canSeeStands(ClientUtil.getPlayer())){
             return;
         }
-        if (((StandUser)var4).roundabout$getStandPowers() instanceof PowersOasis po && po.renderSuit()
+        if (((StandUser)var4).sba$getStandPowers() instanceof PowersOasis po && po.renderSuit()
                 && ClientUtil.canSeeStands(ClientUtil.getPlayer())){
             return;
         }
 
         transformedModel = livingEntityRenderer.getModel();
-        byte curse = ((StandUser)var4).roundabout$getLocacacaCurse();
+        byte curse = ((StandUser)var4).sba$getLocacacaCurse();
         if (curse > -1) {
             ResourceLocation rl = null;
             if (curse == LocacacaCurseIndex.LEFT_LEG){
@@ -77,7 +77,7 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
                 rl = StandIcons.STONE_CHEST;
             } else if (curse == LocacacaCurseIndex.HEAD){
                 if (var4 instanceof Player PL){
-                    ItemStack stack =((IPlayerEntity)PL).roundabout$getMaskSlot();
+                    ItemStack stack =((IPlayerEntity)PL).sba$getMaskSlot();
                     if (stack !=null && stack.is(ModItems.JOSUKE_PART_EIGHT_MASK)){
                         rl = StandIcons.STONE_HEAD_JOSUKE;
                     } else {
@@ -104,11 +104,11 @@ public class StoneLayer<T extends LivingEntity, M extends HumanoidModel<T>, A ex
         if (RL != null) {
             VertexConsumer $$10 = multiBufferSource.getBuffer(RenderType.armorCutoutNoCull(RL));
 
-            ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale += 0.04F);
-            ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale += 0.04F);
+            ((IHumanoidModelAccess) $$4).sba$getBodyParts().forEach($$8x -> $$8x.xScale += 0.04F);
+            ((IHumanoidModelAccess) $$4).sba$getBodyParts().forEach($$8x -> $$8x.zScale += 0.04F);
             $$4.renderToBuffer(poseStack, $$10, integ, OverlayTexture.NO_OVERLAY, $$6, $$7, $$8, 1.0F);
-            ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.xScale -= 0.04F);
-            ((IHumanoidModelAccess) $$4).roundabout$getBodyParts().forEach($$8x -> $$8x.zScale -= 0.04F);
+            ((IHumanoidModelAccess) $$4).sba$getBodyParts().forEach($$8x -> $$8x.xScale -= 0.04F);
+            ((IHumanoidModelAccess) $$4).sba$getBodyParts().forEach($$8x -> $$8x.zScale -= 0.04F);
         }
     }
 }

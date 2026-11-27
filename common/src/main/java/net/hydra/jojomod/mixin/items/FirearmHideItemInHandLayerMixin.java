@@ -2,7 +2,7 @@ package net.hydra.jojomod.mixin.items;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import jdk.jfr.Frequency;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.item.BowlerHatItem;
 import net.hydra.jojomod.item.FirearmItem;
 import net.minecraft.client.player.AbstractClientPlayer;

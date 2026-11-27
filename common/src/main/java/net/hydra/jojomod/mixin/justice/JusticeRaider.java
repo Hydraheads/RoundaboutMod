@@ -19,20 +19,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class JusticeRaider extends PatrollingMonster implements IRaider {
     /**This is a value used in the mob renderer to make raiders appear as villagers when transformed.*/
     @Unique
-    public boolean roundabout$isTransformed(){
-        return this.getEntityData().get(roundabout$IS_TRANSFORMED);
+    public boolean sba$isTransformed(){
+        return this.getEntityData().get(sba$IS_TRANSFORMED);
     }
-    public void roundabout$setTransformed(boolean transformed){
-        this.getEntityData().set(roundabout$IS_TRANSFORMED, transformed);
+    public void sba$setTransformed(boolean transformed){
+        this.getEntityData().set(sba$IS_TRANSFORMED, transformed);
     }
     @Inject(method = "defineSynchedData", at = @At(value = "TAIL"))
-    protected void roundabout$DefineSyncedData(CallbackInfo ci) {
-        if (!((Raider)(Object)this).getEntityData().hasItem(roundabout$IS_TRANSFORMED)) {
-            this.entityData.define(roundabout$IS_TRANSFORMED, false);
+    protected void sba$DefineSyncedData(CallbackInfo ci) {
+        if (!((Raider)(Object)this).getEntityData().hasItem(sba$IS_TRANSFORMED)) {
+            this.entityData.define(sba$IS_TRANSFORMED, false);
         }
 
     }
-    private static final EntityDataAccessor<Boolean> roundabout$IS_TRANSFORMED = SynchedEntityData.defineId(Raider.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> sba$IS_TRANSFORMED = SynchedEntityData.defineId(Raider.class, EntityDataSerializers.BOOLEAN);
 
     /**Shadows, ignore
      * -------------------------------------------------------------------------------------------------------------

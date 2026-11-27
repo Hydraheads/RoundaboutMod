@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "sba:block/ginkgo_log"
+    },
+    "axis=x": {
+      "model": "sba:block/ginkgo_log",
+      "x": 90,
+      "y": 90
+    },
+    "axis=z": {
+      "model": "sba:block/ginkgo_log",
+      "x": 90
+    }
+  }
+}

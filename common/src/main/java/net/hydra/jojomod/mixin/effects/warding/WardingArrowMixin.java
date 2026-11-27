@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class WardingArrowMixin {
     /**Warding negates potion effects from arrows specifically*/
     @Inject(method = "doPostHurtEffects(Lnet/minecraft/world/entity/LivingEntity;)V", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$doPostHurtEffects(LivingEntity $$0, CallbackInfo ci) {
+    protected void sba$doPostHurtEffects(LivingEntity $$0, CallbackInfo ci) {
         if ($$0.hasEffect(ModEffects.BANISH)) {
             ci.cancel();
             return;

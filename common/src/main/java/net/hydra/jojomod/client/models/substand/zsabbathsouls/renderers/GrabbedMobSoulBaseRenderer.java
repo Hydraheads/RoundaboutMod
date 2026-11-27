@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.substand.zsabbathsouls.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.stand.StandModel;
 import net.hydra.jojomod.client.models.stand.renderers.StandRenderer;
@@ -24,8 +24,8 @@ public class GrabbedMobSoulBaseRenderer<T extends GrabbedMobSoul, P extends Huma
         super(context, entityModel, f);
     }
 
-    private static final ResourceLocation BLUE_SOUL = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/black_sabbath/souls/blue.png");
-    private static final ResourceLocation NULL = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/achtung_baby/very_badass_texture.png");
+    private static final ResourceLocation BLUE_SOUL = new ResourceLocation(SBA.MOD_ID, "textures/stand/black_sabbath/souls/blue.png");
+    private static final ResourceLocation NULL = new ResourceLocation(SBA.MOD_ID, "textures/stand/achtung_baby/very_badass_texture.png");
     @Override
     public ResourceLocation getTextureLocation(GrabbedMobSoul entity) {
             return BLUE_SOUL;

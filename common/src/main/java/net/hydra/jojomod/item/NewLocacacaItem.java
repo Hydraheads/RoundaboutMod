@@ -1,7 +1,7 @@
 package net.hydra.jojomod.item;
 
 import com.google.common.collect.Lists;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.index.LocacacaCurseIndex;
@@ -90,21 +90,21 @@ public class NewLocacacaItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity entity) {
         ItemStack $$3 = super.finishUsingItem(itemStack, level, entity);
-        byte curse = ((StandUser)entity).roundabout$getLocacacaCurse();
+        byte curse = ((StandUser)entity).sba$getLocacacaCurse();
         LivingEntity ent = MainUtil.getStoneTarget(level, entity);
         if (ent != null) {
             if (entity instanceof Player PE){
                 PE.getCooldowns().addCooldown(this, ClientNetworking.getAppropriateConfig().itemSettings.locacacaEatingCooldowns);
             }
-            byte entCurse = ((StandUser)ent).roundabout$getLocacacaCurse();
+            byte entCurse = ((StandUser)ent).sba$getLocacacaCurse();
             if (!level.isClientSide && entity.isAlive()) {
                 if (curse > -1 && curse != entCurse){
                     if (entCurse > -1){
-                        ((StandUser) ent).roundabout$setLocacacaCurse(curse);
-                        ((StandUser) entity).roundabout$setLocacacaCurse(entCurse);
+                        ((StandUser) ent).sba$setLocacacaCurse(curse);
+                        ((StandUser) entity).sba$setLocacacaCurse(entCurse);
                     } else if (ent instanceof Player){
-                        ((StandUser) ent).roundabout$setLocacacaCurse(curse);
-                        ((StandUser) entity).roundabout$setLocacacaCurse((byte) -1);
+                        ((StandUser) ent).sba$setLocacacaCurse(curse);
+                        ((StandUser) entity).sba$setLocacacaCurse((byte) -1);
                     } else {
                         float damage = 20;
                         if (curse == LocacacaCurseIndex.HEART || curse == LocacacaCurseIndex.CHEST) {
@@ -121,7 +121,7 @@ public class NewLocacacaItem extends Item {
                         }
 
 
-                        ((StandUser) entity).roundabout$setLocacacaCurse((byte) -1);
+                        ((StandUser) entity).sba$setLocacacaCurse((byte) -1);
                     }
 
                     SoundEvent $$6 = ModSounds.LOCACACA_FUSION_EVENT;
@@ -130,14 +130,14 @@ public class NewLocacacaItem extends Item {
                     if (ent instanceof Cat){
                         if (entity instanceof Player PL){
                             StandUser user = ((StandUser) PL);
-                            if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW){
+                            if (user.sba$getStandPowers() instanceof PowersSoftAndWet PW){
                                 PW.unlockSkin();
                             }
                         }
                     }
                     if (entCurse > -1){
-                        ((StandUser) entity).roundabout$setLocacacaCurse(entCurse);
-                        ((StandUser) ent).roundabout$setLocacacaCurse((byte) -1);
+                        ((StandUser) entity).sba$setLocacacaCurse(entCurse);
+                        ((StandUser) ent).sba$setLocacacaCurse((byte) -1);
                         SoundEvent $$6 = ModSounds.LOCACACA_FUSION_EVENT;
                         level.playSound(null,entity,$$6, SoundSource.PLAYERS, 1.0F, 1F);
                     } else {

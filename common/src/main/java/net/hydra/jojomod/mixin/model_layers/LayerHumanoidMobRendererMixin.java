@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LayerHumanoidMobRendererMixin<T extends Mob, M extends HumanoidModel<T>> extends MobRenderer<T, M> {
     /**All humanoid model related layers*/
     @Inject(method= "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/HumanoidModel;FFFF)V", at = @At(value = "RETURN"))
-    private void roundabout$renderHumanoidMobRenderer(EntityRendererProvider.Context $$0, HumanoidModel $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
+    private void sba$renderHumanoidMobRenderer(EntityRendererProvider.Context $$0, HumanoidModel $$1, float $$2, float $$3, float $$4, float $$5, CallbackInfo ci) {
         this.addLayer(new FacelessLayer<>($$0, this));
         this.addLayer(new HeyYaLayer<>($$0, this));
         this.addLayer(new MandomLayer<>($$0, this));

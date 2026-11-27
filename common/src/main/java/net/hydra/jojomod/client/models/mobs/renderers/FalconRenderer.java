@@ -1,7 +1,7 @@
 package net.hydra.jojomod.client.models.mobs.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
 import net.hydra.jojomod.client.models.mobs.FalconModel;
 import net.hydra.jojomod.entity.mobs.FalconEntity;
@@ -14,13 +14,13 @@ public class FalconRenderer<T extends FalconEntity>
         extends MobRenderer<T, FalconModel<T>> {
 
     private static final ResourceLocation PET_SHOP =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/entity/falcon/pet_shop.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/entity/falcon/pet_shop.png");
     private static final ResourceLocation APLOMADO =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/entity/falcon/aplomado.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/entity/falcon/aplomado.png");
     private static final ResourceLocation GERIFALTE =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/entity/falcon/gerifalte.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/entity/falcon/gerifalte.png");
     private static final ResourceLocation CARACARA =
-            new ResourceLocation(Roundabout.MOD_ID,"textures/entity/falcon/caracara.png");
+            new ResourceLocation(SBA.MOD_ID,"textures/entity/falcon/caracara.png");
 
     public FalconRenderer(EntityRendererProvider.Context context) {
         super(context,new FalconModel<>(context.bakeLayer(ModEntityRendererClient.FALCON_LAYER)),0.125F);

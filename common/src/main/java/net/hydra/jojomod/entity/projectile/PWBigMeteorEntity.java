@@ -329,7 +329,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
         radialExplosion(null);
 
         BlockPos center = this.blockPosition();
-        if (this.level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)) {
+        if (this.level().getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)) {
             int explosionRadius = Math.round(4 * craterMultiplier);
 
 
@@ -386,7 +386,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
         LivingEntity user = this.getStandUser();
 
         if (user instanceof StandUser SU &&
-                SU.roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+                SU.sba$getStandPowers() instanceof PowersPlanetWaves PPW) {
 
             PPW.addEXP(7);
         }
@@ -512,7 +512,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
             LivingEntity user = this.getStandUser();
 
             if (user != null &&
-                    ((StandUser) user).roundabout$getStandPowers()
+                    ((StandUser) user).sba$getStandPowers()
                             instanceof PowersPlanetWaves PPW) {
 
                 this.level().playSound(
@@ -657,7 +657,7 @@ public class PWBigMeteorEntity extends AbstractHurtingProjectile implements Unbu
         }
 
         LivingEntity user = this.getStandUser();
-        if (user != null && ((StandUser) user).roundabout$getStandPowers() instanceof PowersPlanetWaves PPW) {
+        if (user != null && ((StandUser) user).sba$getStandPowers() instanceof PowersPlanetWaves PPW) {
             ParticleOptions particle = PPW.getFlameParticle();
             return particle != null ? particle : ParticleTypes.SMOKE;
         }

@@ -6,10 +6,10 @@ import com.mojang.math.Axis;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.TrailRenderer;
 import net.hydra.jojomod.client.models.layers.ModEntityRendererClient;
-import net.hydra.jojomod.client.models.projectile.RoundaboutBulletModel;
+import net.hydra.jojomod.client.models.projectile.SBABulletModel;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.entity.projectile.BadCompanyBulletEntity;
-import net.hydra.jojomod.entity.projectile.RoundaboutBulletEntity;
+import net.hydra.jojomod.entity.projectile.SBABulletEntity;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -24,16 +24,16 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public class BadCompanyBulletEntityRenderer extends EntityRenderer<BadCompanyBulletEntity> {
-    private final RoundaboutBulletModel model;
+    private final SBABulletModel model;
 
     public BadCompanyBulletEntityRenderer(EntityRendererProvider.Context $$0) {
         super($$0);
-        this.model = new RoundaboutBulletModel<>($$0.bakeLayer(ModEntityRendererClient.ROUNDABOUT_BULLET_LAYER));
+        this.model = new SBABulletModel<>($$0.bakeLayer(ModEntityRendererClient.SBA_BULLET_LAYER));
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BadCompanyBulletEntity roundaboutBulletEntity) {
-        return ModEntities.ROUNDABOUT_BULLET_ENTITY_TEXTURE;
+    public ResourceLocation getTextureLocation(BadCompanyBulletEntity sbaBulletEntity) {
+        return ModEntities.SBA_BULLET_ENTITY_TEXTURE;
     }
 
     @Override

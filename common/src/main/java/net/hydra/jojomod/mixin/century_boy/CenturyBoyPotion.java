@@ -18,7 +18,7 @@ public abstract class CenturyBoyPotion {
     private void cancelRegen(LivingEntity entity, int $$1, CallbackInfo ci){
         MobEffect effect = (MobEffect) (Object) this;
 
-        if (entity instanceof StandUser user && user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy pcb) {
+        if (entity instanceof StandUser user && user.sba$getStandPowers() instanceof Powers20thCenturyBoy pcb) {
             if (pcb.invincibleState) {
                 if (effect != MobEffects.WITHER || effect != ModEffects.STAND_VIRUS) {
                     ci.cancel();

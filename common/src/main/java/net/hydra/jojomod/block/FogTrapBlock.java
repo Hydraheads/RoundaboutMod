@@ -1,7 +1,7 @@
 package net.hydra.jojomod.block;
 
-import net.hydra.jojomod.Roundabout;
-import net.hydra.jojomod.RoundaboutCommands;
+import net.hydra.jojomod.SBA;
+import net.hydra.jojomod.SBACommands;
 import net.hydra.jojomod.entity.corpses.FallenMob;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
@@ -135,7 +135,7 @@ public class FogTrapBlock extends FogBlock implements EntityBlock{
         }
         if($$2.getValue(IN_FOG) &&
                 ownerEntity != null && !stepper.is(ownerEntity)
-                && ownerEntity instanceof StandUser se && se.roundabout$getStandPowers() instanceof PowersJustice justice &&
+                && ownerEntity instanceof StandUser se && se.sba$getStandPowers() instanceof PowersJustice justice &&
                 !justice.queryJusticeEntities().contains(stepper)){
 
             if(stepper instanceof ServerPlayer stp){
@@ -143,9 +143,9 @@ public class FogTrapBlock extends FogBlock implements EntityBlock{
             }
             if(ownerEntity instanceof ServerPlayer sp){
                 if(!(name == null) && !(name.isEmpty()) && !name.equals("[Fog Trap]")){
-                    sp.displayClientMessage(Component.literal(name).append(Component.translatable("text.roundabout.warn_trap_triggered").withStyle(ChatFormatting.YELLOW)), true);
+                    sp.displayClientMessage(Component.literal(name).append(Component.translatable("text.sba.warn_trap_triggered").withStyle(ChatFormatting.YELLOW)), true);
                 } else{
-                    sp.displayClientMessage(Component.translatable("text.roundabout.warn_unnamed_trap_triggered").withStyle(ChatFormatting.YELLOW),true);
+                    sp.displayClientMessage(Component.translatable("text.sba.warn_unnamed_trap_triggered").withStyle(ChatFormatting.YELLOW),true);
                 }
 
 

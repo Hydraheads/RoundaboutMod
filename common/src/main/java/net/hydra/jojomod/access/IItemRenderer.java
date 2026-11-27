@@ -7,6 +7,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemStack;
 
 public interface IItemRenderer {
-    BlockEntityWithoutLevelRenderer roundabout$getBlockEntityRenderer();
-    void roundabout$renderModelLists(BakedModel $$0, ItemStack $$1, int $$2, int $$3, PoseStack $$4, VertexConsumer $$5);
+    BlockEntityWithoutLevelRenderer sba$getBlockEntityRenderer();
+    void sba$renderModelLists(BakedModel $$0, ItemStack $$1, int $$2, int $$3, PoseStack $$4, VertexConsumer $$5);
 }

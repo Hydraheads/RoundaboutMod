@@ -23,14 +23,14 @@ public class DatalessBlock {
      * it should be able to use modding, not data pack stuff*/
     @Inject(method = "getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;)Ljava/util/List;",
             at = @At(value = "HEAD"), cancellable = true)
-    private static void roundabout$getDrops(BlockState $$0, ServerLevel $$1, BlockPos $$2, BlockEntity $$3, CallbackInfoReturnable<List<ItemStack>> cir) {
+    private static void sba$getDrops(BlockState $$0, ServerLevel $$1, BlockPos $$2, BlockEntity $$3, CallbackInfoReturnable<List<ItemStack>> cir) {
         if ($$0.getBlock() instanceof CancelDataDrivenDropLimits CL){
             cir.setReturnValue(CL.getRealDrops($$0,$$1,$$2,$$3));
         }
     }
     @Inject(method = "getDrops(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)Ljava/util/List;",
             at = @At(value = "HEAD"), cancellable = true)
-    private static void roundabout$getDrops(BlockState $$0, ServerLevel $$1, BlockPos $$2, BlockEntity $$3, Entity $$4, ItemStack $$5, CallbackInfoReturnable<List<ItemStack>> cir) {
+    private static void sba$getDrops(BlockState $$0, ServerLevel $$1, BlockPos $$2, BlockEntity $$3, Entity $$4, ItemStack $$5, CallbackInfoReturnable<List<ItemStack>> cir) {
         if ($$0.getBlock() instanceof CancelDataDrivenDropLimits CL){
             cir.setReturnValue(CL.getRealDrops($$0,$$1,$$2,$$3,$$4,$$5));
         }

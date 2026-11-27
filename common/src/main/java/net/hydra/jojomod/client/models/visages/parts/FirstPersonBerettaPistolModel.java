@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.visages.parts;// Made with Blockbench 5.
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.event.index.Poses;
 import net.minecraft.client.model.HierarchicalModel;
@@ -62,7 +62,7 @@ public class FirstPersonBerettaPistolModel<T extends Entity> extends Hierarchica
     }
 
     public ResourceLocation getTextureLocation(Entity context){
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/item/beretta_pistol.png");
     }
 
@@ -80,11 +80,11 @@ public class FirstPersonBerettaPistolModel<T extends Entity> extends Hierarchica
             if (LE instanceof Player player) {
                 mainHandRight = player.getMainArm() == HumanoidArm.RIGHT;
                 if (mainHandRight) {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.BERETTA_MODEL_AIM.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.BERETTA_MODEL_RECOIL.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.BERETTA_MODEL_AIM.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.BERETTA_MODEL_RECOIL.ad, partialTicks, 1f);
                 } else if (!mainHandRight) {
-                    this.animate(ipe.roundabout$getItemAnimation(), Poses.BERETTA_MODEL_AIM_LEFT.ad, partialTicks, 1f);
-                    this.animate(ipe.roundabout$getItemAnimationActive(), Poses.BERETTA_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimation(), Poses.BERETTA_MODEL_AIM_LEFT.ad, partialTicks, 1f);
+                    this.animate(ipe.sba$getItemAnimationActive(), Poses.BERETTA_MODEL_RECOIL_LEFT.ad, partialTicks, 1f);
                 }
             }
             root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);

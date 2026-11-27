@@ -105,7 +105,7 @@ public abstract class GravityPathNavigationMixin {
 //    )
 //    private static void rdbt$isClearForMovementBetween(Mob $$0, Vec3 $$1, Vec3 $$2, boolean $$3, CallbackInfoReturnable<Boolean> cir) {
 //        if ($$0 != null) {
-//            Direction dir = ((IGravityEntity) $$0).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) $$0).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //            Vec3 vec = new Vec3(0, (double)$$0.getBbHeight() * 0.5, 0);
@@ -126,7 +126,7 @@ public abstract class GravityPathNavigationMixin {
 //    )
 //    public void rdbt$followThePath(CallbackInfo ci) {
 //        if (this.mob != null) {
-//            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //
@@ -162,7 +162,7 @@ public abstract class GravityPathNavigationMixin {
 //    )
 //    public void rdbt$createPath(Set<BlockPos> $$0, int $$1, boolean $$2, int $$3, float $$4, CallbackInfoReturnable<Path> cir) {
 //        if (this.mob != null) {
-//            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //
@@ -201,7 +201,7 @@ public abstract class GravityPathNavigationMixin {
 //
 //    public void rdbt$isStableDestination(BlockPos $$0, CallbackInfoReturnable<Boolean> cir) {
 //        if (this.mob != null) {
-//            Direction dir = ((IGravityEntity) this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity) this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //            BlockPos $$1 = $$0.relative(dir);
@@ -218,7 +218,7 @@ public abstract class GravityPathNavigationMixin {
 //    )
 //    public void rdbt$tickTrue(CallbackInfo ci) {
 //        if (this.mob != null){
-//            Direction dir = ((IGravityEntity)this.mob).roundabout$getGravityDirection();
+//            Direction dir = ((IGravityEntity)this.mob).sba$getGravityDirection();
 //            if (dir == Direction.DOWN)
 //                return;
 //

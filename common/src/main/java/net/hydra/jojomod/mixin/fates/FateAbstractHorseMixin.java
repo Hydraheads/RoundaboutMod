@@ -18,16 +18,16 @@ public abstract class FateAbstractHorseMixin extends Animal {
     //Vampire Horses Jump Higher
 
     @Inject(method = "getCustomJump()D", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$getCustomJump(CallbackInfoReturnable<Double> cir) {
-        if (((IMob)this).roundabout$isVampire()) {
+    protected void sba$getCustomJump(CallbackInfoReturnable<Double> cir) {
+        if (((IMob)this).sba$isVampire()) {
             cir.setReturnValue(this.getAttributeValue(Attributes.JUMP_STRENGTH)*1.5F);
             return;
         }
     }
     @Inject(method = "calculateFallDamage(FF)I", at = @At(value = "HEAD"), cancellable = true)
-    protected void roundabout$calculateFallDamageVampHorse(float $$0, float $$1, CallbackInfoReturnable<Integer> cir) {
-        if (((IMob)this).roundabout$isVampire() ||
-                ((StandUser)this).roundabout$hasDiverLegs()) {
+    protected void sba$calculateFallDamageVampHorse(float $$0, float $$1, CallbackInfoReturnable<Integer> cir) {
+        if (((IMob)this).sba$isVampire() ||
+                ((StandUser)this).sba$hasDiverLegs()) {
             cir.setReturnValue(Mth.ceil((($$0/2) * 0.5F - 3.0F) * $$1));
             return;
         }

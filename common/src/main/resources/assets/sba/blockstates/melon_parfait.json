@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "stage=1": {
+      "model": "sba:block/melon_parfait"
+    },
+    "stage=2": {
+      "model": "sba:block/melon_parfait_stage_2"
+    },
+    "stage=3": {
+      "model": "sba:block/melon_parfait_stage_3"
+    }
+  }
+}

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EffectRenderingInventoryScreen.class)
 public abstract class HallucinationInventoryMixin {
     @Inject(method = "renderEffects", at = @At("HEAD"), cancellable = true)
-    private void roundaboutWhitesnake$hideEffects(GuiGraphics graphics, int mouseX, int mouseY,
+    private void sbaWhitesnake$hideEffects(GuiGraphics graphics, int mouseX, int mouseY,
                                                    CallbackInfo ci) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinationHidesEffects

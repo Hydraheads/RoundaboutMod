@@ -34,7 +34,7 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float var5, float var6, float var7, float partialTicks, float var9, float var10) {
         if (ClientUtil.canSeeStands(ClientUtil.getPlayer())) {
-            if (((IEntityAndData)entity).roundabout$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
+            if (((IEntityAndData)entity).sba$getTrueInvisibility() > - 1 && !ClientUtil.checkIfClientCanSeeInvisAchtung())
                 return;
             LivingEntity livent = entity;
             if (!entity.isInvisible()) {
@@ -42,26 +42,26 @@ public class HeyYaLayer<T extends LivingEntity, A extends HumanoidModel<T>> exte
                     StandUser user = ((StandUser) livent);
                     int heyTicks = MainUtil.getWornStandVanishticksSafe(user, PowersHeyYa.class);
                     /*int heyTicks = 0;
-                    if (user.roundabout$getStandPowers() instanceof PowersHeyYa) {
-                        heyTicks = user.roundabout$getCurrentStandVanishTicks();
-                    }else if (user.roundabout$getPreviousStandPowers() instanceof PowersHeyYa) {
-                        heyTicks = user.roundabout$getPreviousStandVanishTicks();
+                    if (user.sba$getStandPowers() instanceof PowersHeyYa) {
+                        heyTicks = user.sba$getCurrentStandVanishTicks();
+                    }else if (user.sba$getPreviousStandPowers() instanceof PowersHeyYa) {
+                        heyTicks = user.sba$getPreviousStandVanishTicks();
                     }*/
 
-                    boolean hasHeyYaOut = (PowerTypes.hasStandActive(livent) && user.roundabout$getStandPowers() instanceof PowersHeyYa);
+                    boolean hasHeyYaOut = (PowerTypes.hasStandActive(livent) && user.sba$getStandPowers() instanceof PowersHeyYa);
 
 
                     if (heyTicks > 0 || hasHeyYaOut) {
-                        byte skin = user.roundabout$getStandSkin();
-                        if (user.roundabout$getStandPowers() instanceof PowersHeyYa) {
-                            if (user.roundabout$getLastStandSkin() != skin){
-                                user.roundabout$setLastStandSkin(skin);
+                        byte skin = user.sba$getStandSkin();
+                        if (user.sba$getStandPowers() instanceof PowersHeyYa) {
+                            if (user.sba$getLastStandSkin() != skin){
+                                user.sba$setLastStandSkin(skin);
                                 heyTicks = 0;
 
-                                user.roundabout$setCurrentStandVanishTicks(0);
+                                user.sba$setCurrentStandVanishTicks(0);
                             }
                         }else {
-                            skin = user.roundabout$getPreviousSkin();
+                            skin = user.sba$getPreviousSkin();
                         }
 
                         float heyFull = 0;

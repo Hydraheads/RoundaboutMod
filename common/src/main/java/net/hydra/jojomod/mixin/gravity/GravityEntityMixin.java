@@ -2,7 +2,7 @@ package net.hydra.jojomod.mixin.gravity;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IClientEntity;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IGravityEntity;
@@ -177,11 +177,11 @@ public abstract class GravityEntityMixin implements IGravityEntity {
      * so regular entities use a function in IEntityAndData instead.
      */
     @Unique
-    private static final EntityDataAccessor<Direction> ROUNDABOUT$GRAVITY_DIRECTION = SynchedEntityData.defineId(
+    private static final EntityDataAccessor<Direction> SBA$GRAVITY_DIRECTION = SynchedEntityData.defineId(
             Entity.class,
             EntityDataSerializers.DIRECTION);
     @Unique
-    private static final EntityDataAccessor<Byte> ROUNDABOUT$EXIST_PLANE = SynchedEntityData.defineId(Entity.class,
+    private static final EntityDataAccessor<Byte> SBA$EXIST_PLANE = SynchedEntityData.defineId(Entity.class,
             EntityDataSerializers.BYTE);
 
     @Unique
@@ -209,70 +209,70 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
     @Unique
     @Override
-    public void roundabout$setExistPlane(byte adj) {
+    public void sba$setExistPlane(byte adj) {
         rdbt$setExistPlaneLevel(this.level().dimension());
-        roundabout$setExistVec(adj, this.position());
+        sba$setExistVec(adj, this.position());
     }
 
     @Unique
     @Override
-    public void roundabout$setExistVec(byte adj, Vec3 exist) {
-        if (this.entityData.hasItem(ROUNDABOUT$EXIST_PLANE)) {
-            this.getEntityData().set(ROUNDABOUT$EXIST_PLANE, adj);
+    public void sba$setExistVec(byte adj, Vec3 exist) {
+        if (this.entityData.hasItem(SBA$EXIST_PLANE)) {
+            this.getEntityData().set(SBA$EXIST_PLANE, adj);
         }
         rdb$existPlaneStartPoint = exist;
     }
 
     @Unique
     @Override
-    public byte roundabout$getExistPlane() {
-        if (this.entityData.hasItem(ROUNDABOUT$EXIST_PLANE)) {
-            return this.getEntityData().get(ROUNDABOUT$EXIST_PLANE);
+    public byte sba$getExistPlane() {
+        if (this.entityData.hasItem(SBA$EXIST_PLANE)) {
+            return this.getEntityData().get(SBA$EXIST_PLANE);
         }
         return 0;
     }
 
     @Unique
     @Override
-    public Direction roundabout$getGravityDirection() {
-        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
-            return this.getEntityData().get(ROUNDABOUT$GRAVITY_DIRECTION);
+    public Direction sba$getGravityDirection() {
+        if (this.entityData.hasItem(SBA$GRAVITY_DIRECTION)) {
+            return this.getEntityData().get(SBA$GRAVITY_DIRECTION);
         }
         return Direction.DOWN;
     }
 
     @Unique
     @Override
-    public void roundabout$setBaseGravityDirection(Direction gravityDirection) {
-        if (!roundabout$canChangeGravity()) {
+    public void sba$setBaseGravityDirection(Direction gravityDirection) {
+        if (!sba$canChangeGravity()) {
             return;
         }
 
-        if (roundabout$baseGravityDirection != gravityDirection) {
-            roundabout$baseGravityDirection = gravityDirection;
-            roundabout$updateGravityStatus(); // will this cause issue?
+        if (sba$baseGravityDirection != gravityDirection) {
+            sba$baseGravityDirection = gravityDirection;
+            sba$updateGravityStatus(); // will this cause issue?
         }
     }
 
     @Unique
     @Override
-    public int roundabout$getSuffocationTicks() {
+    public int sba$getSuffocationTicks() {
         return rdbt$noSuffocateTicks;
     }
 
     @Unique
     @Override
-    public void roundabout$setGravityDirection(Direction direction) {
-        if (this.entityData.hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
-            this.getEntityData().set(ROUNDABOUT$GRAVITY_DIRECTION, direction);
+    public void sba$setGravityDirection(Direction direction) {
+        if (this.entityData.hasItem(SBA$GRAVITY_DIRECTION)) {
+            this.getEntityData().set(SBA$GRAVITY_DIRECTION, direction);
         }
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V", at = @At("TAIL"))
-    public void roundabout$init(EntityType $$0, Level $$1, CallbackInfo ci) {
-        if (!((Entity) (Object) this).getEntityData().hasItem(ROUNDABOUT$GRAVITY_DIRECTION)) {
-            ((Entity) (Object) this).getEntityData().define(ROUNDABOUT$GRAVITY_DIRECTION, Direction.DOWN);
-            ((Entity) (Object) this).getEntityData().define(ROUNDABOUT$EXIST_PLANE, (byte) 0);
+    public void sba$init(EntityType $$0, Level $$1, CallbackInfo ci) {
+        if (!((Entity) (Object) this).getEntityData().hasItem(SBA$GRAVITY_DIRECTION)) {
+            ((Entity) (Object) this).getEntityData().define(SBA$GRAVITY_DIRECTION, Direction.DOWN);
+            ((Entity) (Object) this).getEntityData().define(SBA$EXIST_PLANE, (byte) 0);
         }
     }
 
@@ -286,83 +286,83 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Unique
-    private boolean roundabout$initialized = false;
+    private boolean sba$initialized = false;
 
     // not synchronized
     @Unique
-    private Direction roundabout$prevGravityDirection = Direction.DOWN;
+    private Direction sba$prevGravityDirection = Direction.DOWN;
     @Unique
-    private double roundabout$prevGravityStrength = 1.0;
+    private double sba$prevGravityStrength = 1.0;
 
     @Unique
     @Override
-    public double roundabout$getGravityStrength() {
-        return roundabout$currGravityStrength;
+    public double sba$getGravityStrength() {
+        return sba$currGravityStrength;
     }
 
     @Unique
     @Override
-    public void roundabout$setGravityStrength(double str) {
-        roundabout$currGravityStrength = str;
+    public void sba$setGravityStrength(double str) {
+        sba$currGravityStrength = str;
     }
 
     // the base gravity direction
     @Unique
-    Direction roundabout$baseGravityDirection = Direction.DOWN;
+    Direction sba$baseGravityDirection = Direction.DOWN;
 
     // the base gravity strength
     @Unique
-    private static double roundabout$baseGravityStrength = 1.0;
+    private static double sba$baseGravityStrength = 1.0;
 
     @Nullable
-    RotationParameters roundabout$currentRotationParameters = RotationParameters.getDefault();
+    RotationParameters sba$currentRotationParameters = RotationParameters.getDefault();
 
     @Unique
-    private double roundabout$currGravityStrength = 1.0;
+    private double sba$currGravityStrength = 1.0;
     @Unique
-    private double roundabout$currentEffectPriority = Double.MIN_VALUE;
+    private double sba$currentEffectPriority = Double.MIN_VALUE;
 
     // if it equals entity.tickCount,
     // it means that the gravity update event has already fired in this tick
     @Unique
-    private long roundabout$lastUpdateTickCount = 0;
+    private long sba$lastUpdateTickCount = 0;
 
     @Inject(method = "tick", at = @At("HEAD"))
-    private void roundabout$tickGrav(CallbackInfo ci) {
-        if (!roundabout$canChangeGravity()) {
+    private void sba$tickGrav(CallbackInfo ci) {
+        if (!sba$canChangeGravity()) {
             return;
         }
-        roundabout$updateGravityStatus();
-        roundabout$applyGravityChange();
+        sba$updateGravityStatus();
+        sba$applyGravityChange();
     }
 
     // @Inject(
     // method = "setOnGround(Z)V",
     // at = @At("HEAD"))
-    // private void roundabout$setOnGround(boolean $$0, CallbackInfo ci) {
+    // private void sba$setOnGround(boolean $$0, CallbackInfo ci) {
     // if (rdbt$this() instanceof Player && !isControlledByLocalInstance() &&
-    // roundabout$getGravityDirection() != Direction.DOWN){
-    // Roundabout.LOGGER.info(" 1: "+$$0);
+    // sba$getGravityDirection() != Direction.DOWN){
+    // SBA.LOGGER.info(" 1: "+$$0);
     // }
     // }
     // @Inject(
     // method = "setOnGroundWithKnownMovement(ZLnet/minecraft/world/phys/Vec3;)V",
     // at = @At("HEAD"))
-    // private void roundabout$setOnGround2(boolean $$0, Vec3 $$1, CallbackInfo ci)
+    // private void sba$setOnGround2(boolean $$0, Vec3 $$1, CallbackInfo ci)
     // {
     // if (rdbt$this() instanceof Player && !isControlledByLocalInstance() &&
-    // roundabout$getGravityDirection() != Direction.DOWN){
-    // Roundabout.LOGGER.info(" 1: "+$$0+" 2: "+$$1);
+    // sba$getGravityDirection() != Direction.DOWN){
+    // SBA.LOGGER.info(" 1: "+$$0+" 2: "+$$1);
     // }
     // }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void roundabout$tickGravTail(CallbackInfo ci) {
-        if (!roundabout$canChangeGravity()) {
+    private void sba$tickGravTail(CallbackInfo ci) {
+        if (!sba$canChangeGravity()) {
             return;
         }
-        roundabout$updateGravityStatus();
-        roundabout$applyGravityChange();
+        sba$updateGravityStatus();
+        sba$applyGravityChange();
         if (rdbt$noSuffocateTicks > 0) {
             rdbt$noSuffocateTicks--;
         }
@@ -370,36 +370,36 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
     @Unique
     @Override
-    public void roundabout$applyGravityChange() {
+    public void sba$applyGravityChange() {
 
-        if (!roundabout$canChangeGravity()) {
+        if (!sba$canChangeGravity()) {
             return;
         }
 
-        if (roundabout$currentRotationParameters == null) {
-            roundabout$currentRotationParameters = RotationParameters.getDefault();
+        if (sba$currentRotationParameters == null) {
+            sba$currentRotationParameters = RotationParameters.getDefault();
         }
 
-        if (roundabout$prevGravityDirection != roundabout$getGravityDirection()) {
-            roundabout$applyGravityDirectionChange(
-                    roundabout$prevGravityDirection, roundabout$getGravityDirection(),
-                    roundabout$currentRotationParameters, false);
-            roundabout$prevGravityDirection = roundabout$getGravityDirection();
+        if (sba$prevGravityDirection != sba$getGravityDirection()) {
+            sba$applyGravityDirectionChange(
+                    sba$prevGravityDirection, sba$getGravityDirection(),
+                    sba$currentRotationParameters, false);
+            sba$prevGravityDirection = sba$getGravityDirection();
         }
 
-        if (Math.abs(roundabout$currGravityStrength - roundabout$prevGravityStrength) > 0.0001) {
-            roundabout$prevGravityStrength = roundabout$currGravityStrength;
+        if (Math.abs(sba$currGravityStrength - sba$prevGravityStrength) > 0.0001) {
+            sba$prevGravityStrength = sba$currGravityStrength;
         }
     }
 
     @Unique
     @Override
-    public boolean roundabout$canChangeGravity() {
+    public boolean sba$canChangeGravity() {
         return GEntityTags.canChangeGravity((Entity) (Object) this);
     }
 
     @Unique
-    public void roundabout$applyGravityDirectionChange(
+    public void sba$applyGravityDirectionChange(
             Direction oldGravity, Direction newGravity,
             RotationParameters rotationParameters, boolean isInitialization) {
 
@@ -421,7 +421,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
         long timeMs = level().getGameTime() * 50;
 
-        Vec3 relativeRotationCenter = roundabout$getLocalRotationCenter(
+        Vec3 relativeRotationCenter = sba$getLocalRotationCenter(
                 ((Entity) (Object) this), oldGravity, newGravity, rotationParameters);
         Vec3 oldPos = position();
         Vec3 oldLastTickPos = new Vec3(xOld, yOld, zOld);
@@ -438,11 +438,11 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         this.yOld = newLastTickPos.y;
         this.zOld = newLastTickPos.z;
 
-        roundabout$adjustEntityPosition(oldGravity, newGravity, getBoundingBox());
+        sba$adjustEntityPosition(oldGravity, newGravity, getBoundingBox());
 
-        // Roundabout.LOGGER.info("1");
+        // SBA.LOGGER.info("1");
         if (level().isClientSide()) {
-            RotationAnimation ani = ((IClientEntity) this).roundabout$getGravityAnimation();
+            RotationAnimation ani = ((IClientEntity) this).sba$getGravityAnimation();
             Validate.notNull(ani, "gravity animation is null");
 
             int rotationTimeMS = rotationParameters.rotationTimeMS();
@@ -461,7 +461,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         revGrav2 = RotationUtil.vecPlayerToWorld(revGrav2, oldGravity);
 
         setDeltaMovement(getDeltaMovement().add(revGrav.x, revGrav.y, revGrav.z));
-        Vec3 realWorldVelocity = roundabout$getRealWorldVelocity(((Entity) (Object) this), oldGravity);
+        Vec3 realWorldVelocity = sba$getRealWorldVelocity(((Entity) (Object) this), oldGravity);
         // if (rotationParameters.rotateVelocity()) {
         // Rotate velocity with gravity, this will cause things to appear to take a
         // sharp turn
@@ -488,7 +488,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
     // Adjust position to avoid suffocation in blocks when changing gravity
     @Unique
-    private void roundabout$adjustEntityPosition(Direction oldGravity, Direction newGravity, AABB entityBoundingBox) {
+    private void sba$adjustEntityPosition(Direction oldGravity, Direction newGravity, AABB entityBoundingBox) {
         Entity ent = ((Entity) (Object) this);
         if (ent instanceof AreaEffectCloud || ent instanceof AbstractArrow || ent instanceof EndCrystal) {
             return;
@@ -517,7 +517,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
         // here?
         // if (MainUtil.isPlayerBonkingHead(this)){
         if (totalCollisionBox != null) {
-            Vec3 positionAdjustmentOffset = roundabout$getPositionAdjustmentOffset(
+            Vec3 positionAdjustmentOffset = sba$getPositionAdjustmentOffset(
                     entityBoundingBox, totalCollisionBox, movingDirection);
             Vec3 addPos = ent.position().add(positionAdjustmentOffset);
             if (!ent.level().getBlockState(BlockPos.containing(addPos)).isSolid()) {
@@ -527,7 +527,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Unique
-    private static Vec3 roundabout$getPositionAdjustmentOffset(
+    private static Vec3 sba$getPositionAdjustmentOffset(
             AABB entityBoundingBox, AABB nearbyCollisionUnion, Direction movingDirection) {
         Direction.Axis axis = movingDirection.getAxis();
         double offset = 0;
@@ -550,7 +550,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
     @Unique
     @NotNull
-    private static Vec3 roundabout$getLocalRotationCenter(
+    private static Vec3 sba$getLocalRotationCenter(
             Entity entity,
             Direction oldGravity, Direction newGravity, RotationParameters rotationParameters) {
         if (entity instanceof EndCrystal) {
@@ -573,7 +573,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     // downwards vector.
     // The real velocity is this tick position subtract last tick position
     @Unique
-    private static Vec3 roundabout$getRealWorldVelocity(Entity entity, Direction prevGravityDirection) {
+    private static Vec3 sba$getRealWorldVelocity(Entity entity, Direction prevGravityDirection) {
         if (entity.isControlledByLocalInstance()) {
             return new Vec3(
                     entity.getX() - entity.xo,
@@ -591,42 +591,42 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
     @Unique
     @Override
-    public void roundabout$updateGravityStatus() {
+    public void sba$updateGravityStatus() {
 
-        Direction oldGravityDirection = roundabout$getGravityDirection();
-        double oldGravityStrength = roundabout$currGravityStrength;
+        Direction oldGravityDirection = sba$getGravityDirection();
+        double oldGravityStrength = sba$currGravityStrength;
 
         if (!this.level.isClientSide()) {
             Entity vehicle = getVehicle();
             if (vehicle != null) {
-                roundabout$setGravityDirection(GravityAPI.getGravityDirection(vehicle));
-                roundabout$currGravityStrength = GravityAPI.getGravityStrength(vehicle);
+                sba$setGravityDirection(GravityAPI.getGravityDirection(vehicle));
+                sba$currGravityStrength = GravityAPI.getGravityStrength(vehicle);
             } else if (rdbt$this() instanceof FollowingStandEntity SE && SE.getFollowingAggressive() != null) {
-                roundabout$setGravityDirection(GravityAPI.getGravityDirection(SE.getFollowingAggressive()));
-                roundabout$currGravityStrength = GravityAPI.getGravityStrength(SE.getFollowingAggressive());
+                sba$setGravityDirection(GravityAPI.getGravityDirection(SE.getFollowingAggressive()));
+                sba$currGravityStrength = GravityAPI.getGravityStrength(SE.getFollowingAggressive());
             } else if (rdbt$this() instanceof CinderellaVisageDisplayEntity CD && CD.getStandUser() != null) {
-                roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getStandUser()));
-                roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getStandUser());
+                sba$setGravityDirection(GravityAPI.getGravityDirection(CD.getStandUser()));
+                sba$currGravityStrength = GravityAPI.getGravityStrength(CD.getStandUser());
             } else if (rdbt$this() instanceof CrossfireHurricaneEntity CD && CD.getUser() != null
                     && CD.getCrossNumber() != 7) {
-                roundabout$setGravityDirection(GravityAPI.getGravityDirection(CD.getUser()));
-                roundabout$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
+                sba$setGravityDirection(GravityAPI.getGravityDirection(CD.getUser()));
+                sba$currGravityStrength = GravityAPI.getGravityStrength(CD.getUser());
             } else if(rdbt$this() instanceof BlackSabbathEntity BE && BE.getUser() != null){
-                if(((StandUser)BE.getUser()).roundabout$getStandPowers() instanceof PowersBlackSabbath pb && !BE.getHunting()) {
-                    roundabout$setGravityDirection(GravityAPI.getGravityDirection(BE.getUser()));
-                    roundabout$currGravityStrength = GravityAPI.getGravityStrength(BE.getUser());
+                if(((StandUser)BE.getUser()).sba$getStandPowers() instanceof PowersBlackSabbath pb && !BE.getHunting()) {
+                    sba$setGravityDirection(GravityAPI.getGravityDirection(BE.getUser()));
+                    sba$currGravityStrength = GravityAPI.getGravityStrength(BE.getUser());
                 }
             } else if (rdbt$this() instanceof LivingEntity LE && LE.isSleeping()) {
-                roundabout$setGravityDirection(Direction.DOWN);
+                sba$setGravityDirection(Direction.DOWN);
             } else {
                 if (!this.level.isClientSide()) {
                     Direction dr = Direction.DOWN;
                     if (rdbt$this() instanceof LivingEntity LE &&
-                            ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                            ((StandUser) LE).sba$getStandPowers() instanceof PowersWalkingHeart PW
                             && PW.hasExtendedHeelsForWalking()) {
                         dr = PW.getHeelDirection();
                     } else if (rdbt$this() instanceof LivingEntity LE &&
-                            ((StandUser) LE).roundabout$getStandPowers() instanceof PowersDiverDown PDD
+                            ((StandUser) LE).sba$getStandPowers() instanceof PowersDiverDown PDD
                             && PDD.inZipMode()) {
                         dr = PDD.getHeelDirection();
                     } else if (rdbt$this() instanceof Player pl
@@ -652,29 +652,29 @@ public abstract class GravityEntityMixin implements IGravityEntity {
                                 dr = Direction.UP;
                             }
                         }
-                        if (((StandUser) LE).roundabout$isPossessed()) {
+                        if (((StandUser) LE).sba$isPossessed()) {
                             dr = Direction.DOWN;
                         }
                     }
-                    roundabout$setGravityDirection(dr);
+                    sba$setGravityDirection(dr);
                 }
             }
-            if (roundabout$isReadyToResetGravity()) {
-                roundabout$setGravityDirection(roundabout$baseGravityDirection);
-                roundabout$currGravityStrength = roundabout$baseGravityStrength;
+            if (sba$isReadyToResetGravity()) {
+                sba$setGravityDirection(sba$baseGravityDirection);
+                sba$currGravityStrength = sba$baseGravityStrength;
 
-                if (roundabout$currentEffectPriority == Double.MIN_VALUE) {
+                if (sba$currentEffectPriority == Double.MIN_VALUE) {
                     // if no effect is applied, reset the rotation parameters
-                    roundabout$currentRotationParameters = RotationParameters.getDefault();
+                    sba$currentRotationParameters = RotationParameters.getDefault();
                 }
             }
 
-            roundabout$lastUpdateTickCount = tickCount;
+            sba$lastUpdateTickCount = tickCount;
         }
     }
 
     @Unique
-    public boolean roundabout$isReadyToResetGravity() {
+    public boolean sba$isReadyToResetGravity() {
         return false;
     }
 
@@ -845,19 +845,19 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Inject(method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", shift = At.Shift.AFTER))
-    public void roundabout$addAdditionalSaveData(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir) {
-        CompoundTag compoundtag = $$0.getCompound("roundabout");
-        compoundtag.putByte("GravityDirection", MainUtil.getByteFromDirection(roundabout$getGravityDirection()));
-        compoundtag.putByte("ExistPlane", roundabout$getExistPlane());
+    public void sba$addAdditionalSaveData(CompoundTag $$0, CallbackInfoReturnable<CompoundTag> cir) {
+        CompoundTag compoundtag = $$0.getCompound("sba");
+        compoundtag.putByte("GravityDirection", MainUtil.getByteFromDirection(sba$getGravityDirection()));
+        compoundtag.putByte("ExistPlane", sba$getExistPlane());
     }
 
     @Inject(method = "load(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", shift = At.Shift.AFTER))
-    public void roundabout$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
-        Direction gd = MainUtil.getDirectionFromByte($$0.getCompound("roundabout").getByte("GravityDirection"));
-        roundabout$setGravityDirection(gd);
-        roundabout$setExistPlane($$0.getCompound("roundabout").getByte("ExistPlane"));
+    public void sba$readAdditionalSaveData(CompoundTag $$0, CallbackInfo ci) {
+        Direction gd = MainUtil.getDirectionFromByte($$0.getCompound("sba").getByte("GravityDirection"));
+        sba$setGravityDirection(gd);
+        sba$setExistPlane($$0.getCompound("sba").getByte("ExistPlane"));
         if (gd != Direction.DOWN && rdbt$this() instanceof LivingEntity LE &&
-                ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW) {
+                ((StandUser) LE).sba$getStandPowers() instanceof PowersWalkingHeart PW) {
             PW.setHeelDirection(gd);
             PW.toggleSpikes(true);
         } else if (gd != Direction.DOWN && rdbt$this() instanceof Player PL &&
@@ -946,7 +946,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Inject(method = "collideBoundingBox(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/level/Level;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;", at = @At("HEAD"), cancellable = true, require = 0)
-    private static void roundabout$collideBoundingBox(@Nullable Entity entity, Vec3 movement, AABB entityBoundingBox,
+    private static void sba$collideBoundingBox(@Nullable Entity entity, Vec3 movement, AABB entityBoundingBox,
             Level $$3, List<VoxelShape> collisions, CallbackInfoReturnable<Vec3> cir) {
         if (entity == null)
             return;
@@ -1029,7 +1029,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Inject(method = "isInWall", at = @At("HEAD"), cancellable = true, require = 0)
-    private void roundabout$isInWall(CallbackInfoReturnable<Boolean> cir) {
+    private void sba$isInWall(CallbackInfoReturnable<Boolean> cir) {
 
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
@@ -1060,7 +1060,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Inject(method = "getForward", at = @At("HEAD"), cancellable = true, require = 0)
-    private void roundabout$getForward(CallbackInfoReturnable<Vec3> cir) {
+    private void sba$getForward(CallbackInfoReturnable<Vec3> cir) {
 
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
@@ -1072,7 +1072,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Inject(method = "getDirection", at = @At("HEAD"), cancellable = true, require = 0)
-    private void roundabout$getDirection(CallbackInfoReturnable<Direction> cir) {
+    private void sba$getDirection(CallbackInfoReturnable<Direction> cir) {
 
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)
@@ -1131,38 +1131,38 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Inject(method = "onAboveBubbleCol(Z)V", at = @At("HEAD"), cancellable = true, require = 0)
-    private void roundabout$onAboveBubbleCol(boolean $$0, CallbackInfo ci) {
+    private void sba$onAboveBubbleCol(boolean $$0, CallbackInfo ci) {
         if (rdbt$this() instanceof LivingEntity LE
-                && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && ((StandUser) LE).sba$getStandPowers() instanceof PowersWalkingHeart PW
                 && PW.hasExtendedHeelsForWalking()) {
             ci.cancel();
         }
         if (rdbt$this() instanceof LivingEntity LE
-                && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()) {
+                && ((StandUser) LE).sba$getStandPowers() instanceof PowersDiverDown PDD && PDD.inZipMode()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "onInsideBubbleColumn(Z)V", at = @At("HEAD"), cancellable = true, require = 0)
-    private void roundabout$onInsideBubbleColumn(boolean $$0, CallbackInfo ci) {
+    private void sba$onInsideBubbleColumn(boolean $$0, CallbackInfo ci) {
         if (rdbt$this() instanceof LivingEntity LE
-                && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && ((StandUser) LE).sba$getStandPowers() instanceof PowersWalkingHeart PW
                 && PW.hasExtendedHeelsForWalking()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "isPushedByFluid", at = @At("HEAD"), cancellable = true, require = 0)
-    private void roundabout$isPushedByFluid(CallbackInfoReturnable<Boolean> cir) {
+    private void sba$isPushedByFluid(CallbackInfoReturnable<Boolean> cir) {
         if (rdbt$this() instanceof LivingEntity LE
-                && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && ((StandUser) LE).sba$getStandPowers() instanceof PowersWalkingHeart PW
                 && PW.hasExtendedHeelsForWalking()) {
             cir.setReturnValue(false);
         }
     }
 
     @Inject(method = "updateFluidHeightAndDoFluidPushing(Lnet/minecraft/tags/TagKey;D)Z", at = @At("HEAD"), cancellable = true, require = 0)
-    private void roundabout$updateFluidHeightAndDoFluidPushing(TagKey<Fluid> $$0, double $$1,
+    private void sba$updateFluidHeightAndDoFluidPushing(TagKey<Fluid> $$0, double $$1,
             CallbackInfoReturnable<Boolean> cir) {
         if (Objects.equals(ModPacketHandler.PLATFORM_ACCESS.getPlatformName(), "Forge")) {
             return;
@@ -1170,7 +1170,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
 
         boolean counterPushing = false;
         if (rdbt$this() instanceof LivingEntity LE
-                && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersWalkingHeart PW
+                && ((StandUser) LE).sba$getStandPowers() instanceof PowersWalkingHeart PW
                 && PW.hasExtendedHeelsForWalking()) {
             counterPushing = true;
         }
@@ -1316,7 +1316,7 @@ public abstract class GravityEntityMixin implements IGravityEntity {
     }
 
     @Inject(method = "isFree(DDD)Z", at = @At("HEAD"), cancellable = true, require = 0)
-    private void roundabout$isFree(double $$0, double $$1, double $$2, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$isFree(double $$0, double $$1, double $$2, CallbackInfoReturnable<Boolean> cir) {
 
         Direction gravityDirection = GravityAPI.getGravityDirection((Entity) (Object) this);
         if (gravityDirection == Direction.DOWN)

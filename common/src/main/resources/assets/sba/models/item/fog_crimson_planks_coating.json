@@ -1,0 +1,6 @@
+{
+  "parent": "sba:item/fog_coating",
+  "textures": {
+    "layer0": "minecraft:block/crimson_planks"
+  }
+}

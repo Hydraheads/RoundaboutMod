@@ -1,6 +1,6 @@
 package net.hydra.jojomod.stand.powers.presets;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -91,7 +91,7 @@ public class NewDashPreset extends StandPowerRewrite {
                         int buffer = 0;
                         int cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.dashCooldown;
                         if (this.getSelf() instanceof Player) {
-                            ((IPlayerEntity) this.getSelf()).roundabout$setClientDodgeTime(0);
+                            ((IPlayerEntity) this.getSelf()).sba$setClientDodgeTime(0);
                             if (options.keyJump.isDown()) {
                                 cdTime = ClientNetworking.getAppropriateConfig().generalStandSettings.jumpingDashCooldown;
                                 buffer = 1000;
@@ -103,7 +103,7 @@ public class NewDashPreset extends StandPowerRewrite {
                                 Mth.sin(-20 * ((float) Math.PI / 180)),
                                 -Mth.cos(degrees * ((float) Math.PI / 180)));
 
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.MOVEMENT, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.MOVEMENT, true);
                         tryIntPowerPacket(PowerIndex.MOVEMENT, backwards+buffer);
                     }
             }
@@ -141,7 +141,7 @@ public class NewDashPreset extends StandPowerRewrite {
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
             if (hasHandsOut()) {
-                getStandUserSelf().roundabout$setStandAnimation(VAULT);
+                getStandUserSelf().sba$setStandAnimation(VAULT);
                 refreshArms();
             }
 
@@ -184,17 +184,17 @@ public class NewDashPreset extends StandPowerRewrite {
             cancelConsumableItem(this.getSelf());
             this.setPowerNone();
             if (!this.getSelf().level().isClientSide()) {
-                ((IPlayerEntity)this.getSelf()).roundabout$setClientDodgeTime(0);
-                ((IPlayerEntity) this.getSelf()).roundabout$setDodgeTime(0);
+                ((IPlayerEntity)this.getSelf()).sba$setClientDodgeTime(0);
+                ((IPlayerEntity) this.getSelf()).sba$setDodgeTime(0);
                 boolean yes = false;
                 if (storedInt > 500){
                     storedInt-=1000;
                     yes = true;
                 }
                 if (storedInt < 0) {
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_BACKWARD);
+                    ((IPlayerEntity) this.getSelf()).sba$SetPos(PlayerPosIndex.DODGE_BACKWARD);
                 } else {
-                    ((IPlayerEntity) this.getSelf()).roundabout$SetPos(PlayerPosIndex.DODGE_FORWARD);
+                    ((IPlayerEntity) this.getSelf()).sba$SetPos(PlayerPosIndex.DODGE_FORWARD);
                 }
 
                 int degrees = (int) (this.getSelf().getYRot() % 360);
@@ -216,7 +216,7 @@ public class NewDashPreset extends StandPowerRewrite {
                     Vec3 dvec = new Vec3(Mth.sin(degrees * ((float) Math.PI / 180))*0.3,
                             Mth.sin(-20 * ((float) Math.PI / 180))*-j,
                             -Mth.cos(degrees * ((float) Math.PI / 180))*0.3);
-                    Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                    Direction gravD = ((IGravityEntity)this.self).sba$getGravityDirection();
                     if (gravD != Direction.DOWN){
                         cvec = RotationUtil.vecPlayerToWorld(cvec,gravD);
                         dvec = RotationUtil.vecPlayerToWorld(dvec,gravD);

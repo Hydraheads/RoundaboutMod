@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models.projectile;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ModItemModels;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.Model;
@@ -20,7 +20,7 @@ import javax.swing.text.html.parser.Entity;
 
 public class HarpoonModel extends Model {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "harpoon"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(SBA.MOD_ID, "harpoon"), "main");
 	private final ModelPart harpoon;
 
 	public HarpoonModel(ModelPart root) {

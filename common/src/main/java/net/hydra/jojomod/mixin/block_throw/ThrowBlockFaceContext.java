@@ -18,13 +18,13 @@ public class ThrowBlockFaceContext extends UseOnContext {
     /**Dripstone block has a bug in its code where it crashes if placed naturally without an attached
      * player, so it is exempt from this list.*/
     @Inject(method = "getNearestLookingVerticalDirection", at = @At("HEAD"), cancellable = true)
-    public void roundabout$getNearestLookingVDirection(CallbackInfoReturnable<Direction> cir) {
+    public void sba$getNearestLookingVDirection(CallbackInfoReturnable<Direction> cir) {
         if (this.getPlayer() == null){
-            cir.setReturnValue(roundabout$getFacingAxis(Direction.Axis.Y));
+            cir.setReturnValue(sba$getFacingAxis(Direction.Axis.Y));
         }
     }
     @Unique
-    public Direction roundabout$getFacingAxis(Direction.Axis axis) {
+    public Direction sba$getFacingAxis(Direction.Axis axis) {
         return switch (axis) {
             default -> throw new IncompatibleClassChangeError();
             case X -> {

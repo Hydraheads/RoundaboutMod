@@ -21,14 +21,14 @@ public class JusticeAbstractZombieRenderer {
      * select green team- your zombie morph will look like a green team zombie.*/
 
     @Inject(method = "getTextureLocation(Lnet/minecraft/world/entity/monster/Zombie;)Lnet/minecraft/resources/ResourceLocation;", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$getTexture(Zombie $$0, CallbackInfoReturnable<ResourceLocation> cir) {
+    private void sba$getTexture(Zombie $$0, CallbackInfoReturnable<ResourceLocation> cir) {
         if ($$0 != null){
             StandUser user = (StandUser) $$0;
-            if (user.roundabout$getEmulator() instanceof Player PE){
+            if (user.sba$getEmulator() instanceof Player PE){
                 StandUser user2 = ((StandUser) PE);
-                if (user2.roundabout$getStandPowers() instanceof PowersJustice PJ){
+                if (user2.sba$getStandPowers() instanceof PowersJustice PJ){
                     IPlayerEntity ipe = ((IPlayerEntity) PE);
-                    byte bt = ipe.roundabout$getTeamColor();
+                    byte bt = ipe.sba$getTeamColor();
                     if (bt == 1){
                         cir.setReturnValue(FallenZombieRenderer.FALLEN_ZOMBIE_LOCATION_B);
                     } else if (bt == 2){

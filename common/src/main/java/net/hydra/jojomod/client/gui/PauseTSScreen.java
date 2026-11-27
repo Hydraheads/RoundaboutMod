@@ -38,7 +38,7 @@ public class PauseTSScreen extends Screen {
     private static final Component DISCONNECT = Component.translatable("menu.disconnect");
     private static final Component SAVING_LEVEL = Component.translatable("menu.savingLevel");
     private static final Component GAME = Component.translatable("menu.game");
-    private static final Component PAUSED = Component.translatable("roundabout.menu.ts_paused");
+    private static final Component PAUSED = Component.translatable("sba.menu.ts_paused");
     private final boolean showPauseMenu;
     @Nullable
     private Button disconnectButton;

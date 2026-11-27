@@ -5,39 +5,39 @@ import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 
 public interface ILivingEntityAccess {
-    public double roundabout$getLerpX();
-    public double roundabout$getLerpY();
-    public double roundabout$getLerpZ();
-    public void roundabout$setLerp(Vector3f lerp);
-    public void roundabout$setLerpXRot(double d);
-    public void roundabout$setLerpYRot(double d);
-    public double roundabout$getLerpXRot();
-    public double roundabout$getLerpYRot();
-    float roundabout$getSwimAmount();
-    float roundabout$getSwimAmountO();
-    void roundabout$setSwimAmount(float sa);
-    void roundabout$setSwimAmountO(float sa);
-    void roundabout$setWasTouchingWater(boolean set);
-    void roundabout$setFallFlyingTicks(int set);
-    boolean roundabout$getSharedFlag(int $$0);
-    void roundabout$setSharedFlag(int $$0, boolean $$1);
-    boolean roundabout$getWasTouchingWater();
-    void roundabout$setUseItemTicks(int ticks);
+    public double sba$getLerpX();
+    public double sba$getLerpY();
+    public double sba$getLerpZ();
+    public void sba$setLerp(Vector3f lerp);
+    public void sba$setLerpXRot(double d);
+    public void sba$setLerpYRot(double d);
+    public double sba$getLerpXRot();
+    public double sba$getLerpYRot();
+    float sba$getSwimAmount();
+    float sba$getSwimAmountO();
+    void sba$setSwimAmount(float sa);
+    void sba$setSwimAmountO(float sa);
+    void sba$setWasTouchingWater(boolean set);
+    void sba$setFallFlyingTicks(int set);
+    boolean sba$getSharedFlag(int $$0);
+    void sba$setSharedFlag(int $$0, boolean $$1);
+    boolean sba$getWasTouchingWater();
+    void sba$setUseItemTicks(int ticks);
 
-    void roundabout$setAnimStep(float animStep);
+    void sba$setAnimStep(float animStep);
 
-    void roundabout$setAnimStepO(float animStepO);
-    void roundabout$setUseItem(ItemStack stack);
+    void sba$setAnimStepO(float animStepO);
+    void sba$setUseItem(ItemStack stack);
 
-    float roundabout$getAnimStep();
+    float sba$getAnimStep();
 
-    float roundabout$getAnimStepO();
+    float sba$getAnimStepO();
 
-    int roundabout$getLerpSteps();
+    int sba$getLerpSteps();
 
-    void roundabout$setLerpSteps(int lerpSteps);
+    void sba$setLerpSteps(int lerpSteps);
 
-    void roundabout$PushEntities();
+    void sba$PushEntities();
 
-    int roundabout$DecreaseAirSupply(int amt);
+    int sba$DecreaseAirSupply(int amt);
 }

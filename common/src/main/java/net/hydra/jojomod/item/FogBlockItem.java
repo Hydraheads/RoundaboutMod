@@ -22,10 +22,10 @@ public class FogBlockItem extends BlockItem {
     @Override
     public Component getName(ItemStack $$0) {
         if (mimicking != null && mimicking != Blocks.TRIPWIRE) {
-            return Component.translatable("block.roundabout.fog_block.title").append(" ").
+            return Component.translatable("block.sba.fog_block.title").append(" ").
                     append(Component.translatable(mimicking.asItem().getDescriptionId(mimicking.asItem().getDefaultInstance())));
         } else if(mimicking == Blocks.TRIPWIRE){
-            return Component.translatable("block.roundabout.fog_trap");
+            return Component.translatable("block.sba.fog_trap");
         }
         else {
             return super.getName($$0);
@@ -35,7 +35,7 @@ public class FogBlockItem extends BlockItem {
     @Override
     public void inventoryTick(ItemStack $$0, Level $$1, Entity $$2, int $$3, boolean $$4) {
         if ($$2 instanceof Player PE){
-            if (!(((StandUser)PE).roundabout$getStandPowers() instanceof PowersJustice) && !PE.isCreative()){
+            if (!(((StandUser)PE).sba$getStandPowers() instanceof PowersJustice) && !PE.isCreative()){
                 $$0.setCount(0);
             }
         }

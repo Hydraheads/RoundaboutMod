@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractMinecart.class)
 public class AchtungMinecart {
     @Inject(method = "tick", at = @At(value = "TAIL"))
-    protected void roundabout$tick(CallbackInfo ci) {
-        ((IEntityAndData)this).roundabout$universalTick();
-        ((IEntityAndData)this).roundabout$tickQVec();
+    protected void sba$tick(CallbackInfo ci) {
+        ((IEntityAndData)this).sba$universalTick();
+        ((IEntityAndData)this).sba$tickQVec();
     }
 }

@@ -78,7 +78,7 @@ public class VampiricFate extends FatePowers {
                 //toggleSpikes(true);
                 Direction gd = RotationUtil.getRealFacingDirection2(this.self);
                 setWallWalkDirection(gd);
-                ((IGravityEntity) this.self).roundabout$setGravityDirection(gd);
+                ((IGravityEntity) this.self).sba$setGravityDirection(gd);
                 justFlippedTicks = 7;
         jumpedOffWall = true;
         if (this.self.level().isClientSide()) {
@@ -143,13 +143,13 @@ public int speedActivated = 0;
                 Vec3 newVec4 = new Vec3(0, -0.5, 0);
                 Vec3 newVec5 = new Vec3(0, -1.1, 0);
 
-                newVec = RotationUtil.vecPlayerToWorld(newVec, ((IGravityEntity) self).roundabout$getGravityDirection());
+                newVec = RotationUtil.vecPlayerToWorld(newVec, ((IGravityEntity) self).sba$getGravityDirection());
                 BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-                newVec2 = RotationUtil.vecPlayerToWorld(newVec2, ((IGravityEntity) self).roundabout$getGravityDirection());
+                newVec2 = RotationUtil.vecPlayerToWorld(newVec2, ((IGravityEntity) self).sba$getGravityDirection());
                 BlockPos pos2 = BlockPos.containing(self.getPosition(1).add(newVec2));
-                newVec4 = RotationUtil.vecPlayerToWorld(newVec4, ((IGravityEntity) self).roundabout$getGravityDirection());
+                newVec4 = RotationUtil.vecPlayerToWorld(newVec4, ((IGravityEntity) self).sba$getGravityDirection());
                 BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
-                newVec5 = RotationUtil.vecPlayerToWorld(newVec5, ((IGravityEntity) self).roundabout$getGravityDirection());
+                newVec5 = RotationUtil.vecPlayerToWorld(newVec5, ((IGravityEntity) self).sba$getGravityDirection());
                 BlockPos pos5 = BlockPos.containing(self.getPosition(1).add(newVec5));
 
                 BlockState state1 = self.level().getBlockState(pos);
@@ -177,7 +177,7 @@ public int speedActivated = 0;
                     }
                 }
 
-                StandPowers sp = ((StandUser) self).roundabout$getStandPowers();
+                StandPowers sp = ((StandUser) self).sba$getStandPowers();
                 boolean hasWallStand = (sp instanceof PowersWalkingHeart pw && pw.hasExtendedHeelsForWalking())
                         || (sp instanceof PowersDiverDown dd && dd.inZipMode());
 
@@ -192,7 +192,7 @@ public int speedActivated = 0;
 
                     if (self.isSwimming()) {
                         setWallWalkDirection(getIntendedDirection());
-                        ((IGravityEntity) this.self).roundabout$setGravityDirection(getIntendedDirection());
+                        ((IGravityEntity) this.self).sba$setGravityDirection(getIntendedDirection());
                         C2SPacketUtil.intToServerPacket(
                                 PacketDataIndex.INT_GRAVITY_FLIP_4, MainUtil.getIntFromDirection(getIntendedDirection())
                         );
@@ -216,7 +216,7 @@ public int speedActivated = 0;
                             }
                             if (self.isSleeping() || ((!self.onGround()) && mercyTicks <= 0) || self.getRootVehicle() != this.self) {
                                 wallWalkDirection = getIntendedDirection();
-                                ((IGravityEntity) this.self).roundabout$setGravityDirection(wallWalkDirection);
+                                ((IGravityEntity) this.self).sba$setGravityDirection(wallWalkDirection);
                                 setWallWalkDirection(wallWalkDirection);
                                 C2SPacketUtil.intToServerPacket(
                                         PacketDataIndex.INT_GRAVITY_FLIP_4, MainUtil.getIntFromDirection(wallWalkDirection)
@@ -237,9 +237,9 @@ public int speedActivated = 0;
             Vec3 newVec = new Vec3(0,-0.2,0);
             Vec3 newVec4 = new Vec3(0,-0.5,0);
 
-            newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).roundabout$getGravityDirection());
+            newVec = RotationUtil.vecPlayerToWorld(newVec,((IGravityEntity)self).sba$getGravityDirection());
             BlockPos pos = BlockPos.containing(self.getPosition(1).add(newVec));
-            newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).roundabout$getGravityDirection());
+            newVec4 = RotationUtil.vecPlayerToWorld(newVec4,((IGravityEntity)self).sba$getGravityDirection());
             BlockPos pos4 = BlockPos.containing(self.getPosition(1).add(newVec4));
             BlockState state1 = self.level().getBlockState(pos);
             BlockState state4 = self.level().getBlockState(pos4);
@@ -389,7 +389,7 @@ public int speedActivated = 0;
                     rightAxis = Direction.UP;
                 }
             }
-            return ((IGravityEntity)self).roundabout$getGravityDirection() != rightAxis;
+            return ((IGravityEntity)self).sba$getGravityDirection() != rightAxis;
         }
     }
 
@@ -417,7 +417,7 @@ public int speedActivated = 0;
                             && self.hurtTime <= 0 && bloodSuckingTarget.is(TE)) {
                         if (TE instanceof LivingEntity LE) {
                             LE.setDeltaMovement(0, -0.1F, 0);
-                            ((StandUser) LE).roundabout$setDazed((byte) 3);
+                            ((StandUser) LE).sba$setDazed((byte) 3);
                         }
 
                         if (self.tickCount % 2 == 0) {
@@ -612,7 +612,7 @@ public int speedActivated = 0;
 
     public boolean isPlantedInWall() {
         //reworked this code because it was starting get really long and confusing. this lets future people understand it easier without having to read a bunch of and statements -88superguy
-        net.hydra.jojomod.event.powers.StandPowers standPowers = ((StandUser) self).roundabout$getStandPowers();
+        net.hydra.jojomod.event.powers.StandPowers standPowers = ((StandUser) self).sba$getStandPowers();
         if (standPowers instanceof PowersWalkingHeart PW && PW.hasExtendedHeelsForWalking()) {
             return false;
         }
@@ -644,7 +644,7 @@ public int speedActivated = 0;
             return false;
 
         Vec3 mpos = this.self.getPosition(1F);
-        Direction gravdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        Direction gravdir = ((IGravityEntity)this.self).sba$getGravityDirection();
         switch (gravdir) {
             case DOWN -> {
                 mpos = mpos.add(0,0.1F,0);
@@ -862,7 +862,7 @@ public int speedActivated = 0;
                                 int scaledWidth, int scaledHeight, int ticks, int vehicleHeartCount,
                                 float flashAlpha, float otherFlashAlpha) {
         StandUser standUser = ((StandUser) playerEntity);
-        boolean standOn = standUser.roundabout$getActive();
+        boolean standOn = standUser.sba$getActive();
         int j = scaledHeight / 2 - 7 - 4;
         int k = scaledWidth / 2 - 8 - 1;
         if (!standOn){
@@ -948,11 +948,11 @@ public int speedActivated = 0;
     }
 
     public boolean isSoundStolen(Entity ent){
-        if ((((ILevelAccess)ent.level()).roundabout$isSoundPlunderedEntity(ent)) ||
-        (((ILevelAccess)ent.level()).roundabout$isSoundPlundered(ent.blockPosition()))){
+        if ((((ILevelAccess)ent.level()).sba$isSoundPlunderedEntity(ent)) ||
+        (((ILevelAccess)ent.level()).sba$isSoundPlundered(ent.blockPosition()))){
             return true;
         }
-        if (ent instanceof LivingEntity LE && ((StandUser)LE).roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEART)
+        if (ent instanceof LivingEntity LE && ((StandUser)LE).sba$getLocacacaCurse() == LocacacaCurseIndex.HEART)
             return true;
         return false;
     }

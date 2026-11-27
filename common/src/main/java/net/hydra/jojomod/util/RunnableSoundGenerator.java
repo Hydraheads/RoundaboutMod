@@ -11,14 +11,14 @@ class RunnableSoundGenerator {
 
     public static final String[] strings = {
             "public static final String _&1_ = \"_&2_\"; ",
-            "public static final ResourceLocation _&1_ = new ResourceLocation(Roundabout.MOD_ID,_&2_);",
+            "public static final ResourceLocation _&1_ = new ResourceLocation(SBA.MOD_ID,_&2_);",
             "public static SoundEvent _&1_ = SoundEvent.createVariableRangeEvent(_&2_);",
 
             "addSound(ModSounds._&1_, ModSounds._&2_);",
 
             " public static final RegistryObject<SoundEvent> _&1_ =\n register(ModSounds._&2_, ModSounds._&3_);",
 
-            " \"_&1_\": {\n  \"subtitle\": \"sounds.roundabout._&1_\",\n  \"sounds\": [\n  \"roundabout:_&1_\" \n  ]\n   },"
+            " \"_&1_\": {\n  \"subtitle\": \"sounds.sba._&1_\",\n  \"sounds\": [\n  \"sba:_&1_\" \n  ]\n   },"
     };
 
     public static final String[] string_titles = {"ModSounds","","","FabricSounds","ForgeSounds","sounds.json"};

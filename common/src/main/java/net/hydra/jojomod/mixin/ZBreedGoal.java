@@ -26,7 +26,7 @@ public abstract class ZBreedGoal extends Goal {
             at = @At("RETURN"),
             cancellable = true
     )
-    private void roundabout$preventParallelBreeding(CallbackInfoReturnable<Animal> cir) {
+    private void sba$preventParallelBreeding(CallbackInfoReturnable<Animal> cir) {
         Animal partner = cir.getReturnValue();
 
         if (partner == null) {

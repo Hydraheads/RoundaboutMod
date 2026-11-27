@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.RattShoulderLayer;
@@ -52,27 +52,27 @@ public class RattShoulderModel extends PsuedoHierarchicalModel {
     public void setupAnim(Entity var1, float pAgeInTicks) {
     }
 
-    public static ResourceLocation base = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation base = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/anime.png");
-    public static ResourceLocation anime = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation anime = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/anime.png");
-    public static ResourceLocation manga = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation manga = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/manga.png");
-    public static ResourceLocation melon = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation melon = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/melon.png");
-    public static ResourceLocation sand = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation sand = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/sand.png");
-    public static ResourceLocation aztec = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation aztec = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/aztec.png");
-    public static ResourceLocation snowy = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation snowy = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/snowy.png");
-    public static ResourceLocation nether = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation nether = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/nether.png");
-    public static ResourceLocation tower = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation tower = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/tower.png");
-    public static ResourceLocation guardian = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation guardian = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/guardian.png");
-    public static ResourceLocation elder_guardian = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation elder_guardian = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/ratt/elder_guardian.png");
 
 

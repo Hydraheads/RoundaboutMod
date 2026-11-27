@@ -19,7 +19,7 @@ public class CenturyBoyHeal {
 
     @Inject(method = "tick", at=@At(value = "HEAD"), cancellable = true)
     private void FoodHeal(Player player, CallbackInfo ci){
-        if (player instanceof StandUser user && user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy pCB) {
+        if (player instanceof StandUser user && user.sba$getStandPowers() instanceof Powers20thCenturyBoy pCB) {
             if (pCB.invincibleState) {
                 ci.cancel();
             }

@@ -5,7 +5,7 @@ package net.hydra.jojomod.client.models;// Made with Blockbench 4.12.6
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -74,7 +74,7 @@ public class UVBlasterModel<T extends Entity> extends PsuedoHierarchicalModel {
     public void rotateHead(Entity context, float partialTicks, StandUser user){
         if (this.root().getChild("stand").getChild("stand2").hasChild("head")) {
             ModelPart head = this.root().getChild("stand").getChild("stand2").getChild("head");
-            if (user.roundabout$getIdlePos() == 1) {
+            if (user.sba$getIdlePos() == 1) {
                 head.setRotation((((context.getViewXRot(partialTicks)) * Mth.DEG_TO_RAD)), 0, 0);
             } else {
                 head.setRotation(0, 0, 0);
@@ -83,11 +83,11 @@ public class UVBlasterModel<T extends Entity> extends PsuedoHierarchicalModel {
         }
     }
     public ResourceLocation getTextureLocation(){
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/entity/other_layers/uv_blasters.png");
     }
     public ResourceLocation getTextureLocation2(){
-        return new ResourceLocation(Roundabout.MOD_ID,
+        return new ResourceLocation(SBA.MOD_ID,
                 "textures/entity/other_layers/uv_blasters_overlay.png");
     }
 

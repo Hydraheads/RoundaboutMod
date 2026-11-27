@@ -40,7 +40,7 @@ public class BubbleScaffoldBlockEntity extends BlockEntity {
     public static void tickBubbleScaffold(Level lvl, BlockPos bp, BlockState bs, BubbleScaffoldBlockEntity bubble) {
         bubble.tickCount++;
             if (!lvl.isClientSide()) {
-                if (bubble.standuser != null && ((StandUser)bubble.standuser).roundabout$getStandPowers() instanceof PowersSoftAndWet PW){
+                if (bubble.standuser != null && ((StandUser)bubble.standuser).sba$getStandPowers() instanceof PowersSoftAndWet PW){
                     if (bs.getBlock() instanceof BubbleScaffoldBlock fb) {
                         if (bubble.tickCount > 200 || PW.bubbleNumber != bubble.bubbleNo) {
                             lvl.removeBlock(bp, false);

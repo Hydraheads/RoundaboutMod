@@ -148,7 +148,7 @@ public final class JJFFloatingBlocks {
             return false;
         }
 
-        boolean canGrief = level.getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_GRIEFING)
+        boolean canGrief = level.getGameRules().getBoolean(ModGamerules.SBA_STAND_GRIEFING)
                 && MainUtil.getIsGamemodeApproriateForGrief(owner);
         FallingBlockEntity block;
         if (canGrief) {

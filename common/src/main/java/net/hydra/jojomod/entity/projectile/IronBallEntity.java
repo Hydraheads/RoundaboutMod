@@ -2,7 +2,7 @@ package net.hydra.jojomod.entity.projectile;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.entity.ModEntities;
 import net.hydra.jojomod.event.powers.ModDamageTypes;

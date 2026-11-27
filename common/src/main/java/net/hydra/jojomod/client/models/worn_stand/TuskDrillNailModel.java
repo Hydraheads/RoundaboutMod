@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.worn_stand;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.models.PsuedoHierarchicalModel;
 import net.hydra.jojomod.client.models.layers.animations.TuskAnimations;
@@ -22,7 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import org.joml.Quaternionf;
 
 public class TuskDrillNailModel extends PsuedoHierarchicalModel {
-    public static ResourceLocation buh = new ResourceLocation(Roundabout.MOD_ID,
+    public static ResourceLocation buh = new ResourceLocation(SBA.MOD_ID,
             "textures/stand/tusk/projectiles/drill_nail.png");
     public ResourceLocation getTextureLocation(Entity context){
         return buh;
@@ -65,8 +65,8 @@ public class TuskDrillNailModel extends PsuedoHierarchicalModel {
         if (context instanceof LivingEntity LE) {
             this.root().getAllParts().forEach(ModelPart::resetPose);
             StandUser user = ((StandUser) LE);
-            if (user.roundabout$getStandPowers() instanceof PowersTusk PT) {
-                user.roundabout$getWornStandIdleAnimation().startIfStopped(context.tickCount + i * 3);
+            if (user.sba$getStandPowers() instanceof PowersTusk PT) {
+                user.sba$getWornStandIdleAnimation().startIfStopped(context.tickCount + i * 3);
                 VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context)));
 
                 nail1.yRot = partialTicks * 100;

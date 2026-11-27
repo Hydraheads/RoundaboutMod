@@ -33,7 +33,7 @@ public class StandArrowHeldItemLayer<T extends GoldExperienceEntity, M extends S
             return;
         }
 
-        if (entity.getUser() == null || !(((StandUser)entity.getUser()).roundabout$getStandPowers() instanceof PowersGoldExperience GE && GE.attackTimeDuring <= 20)) {
+        if (entity.getUser() == null || !(((StandUser)entity.getUser()).sba$getStandPowers() instanceof PowersGoldExperience GE && GE.attackTimeDuring <= 20)) {
             return;
         }
 

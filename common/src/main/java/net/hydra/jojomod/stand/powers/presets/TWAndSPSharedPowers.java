@@ -108,7 +108,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     /**Dodge ability*/
 
     public boolean tryReboundLeap(){
-        if (!this.getSelf().onGround() && ((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) {
+        if (!this.getSelf().onGround() && ((StandUser) this.getSelf()).sba$getLeapTicks() > -1) {
             /*Stand leap rebounds*/
             standRebound();
             return true;
@@ -123,7 +123,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             return;
         if ((this.getActivePower() != PowerIndex.POWER_2_BLOCK)) {
             if (!this.onCooldown(PowerIndex.SKILL_2)) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_2_BLOCK, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_2_BLOCK, true);
                 tryPowerPacket(PowerIndex.POWER_2_BLOCK);
             }
         }
@@ -150,9 +150,9 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                         }
                         bonusLeapCount = 3;
                         bigLeap(this.getSelf(), 20, 1);
-                        ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-                        ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
+                        ((StandUser) this.getSelf()).sba$setLeapTicks(((StandUser) this.getSelf()).sba$getMaxLeapTicks());
+                        ((StandUser) this.getSelf()).sba$setLeapIntentionally(true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.SNEAK_MOVEMENT, true);
                         tryPowerPacket(PowerIndex.SNEAK_MOVEMENT);
                     }
                 }
@@ -199,7 +199,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             }
                             if ((stand.isTechnicallyInWall() && this.getActivePower() != PowerIndex.POWER_1_BONUS) ||
                                     stand.position().distanceTo(this.getSelf().position()) > getFloatOutRange()) {
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                             }
                         }
                     }
@@ -208,7 +208,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 /**Tick Phase Grab*/
                 if (!this.getSelf().level().isClientSide()) {
                     if (this.attackTimeDuring == 108) {
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                     } else if (this.attackTimeDuring >= 0) {
                         StandEntity stand = getStandEntity(this.self);
                         if (Objects.nonNull(stand)) {
@@ -227,7 +227,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                 stand.setYRot(this.getSelf().getYHeadRot() % 360);
                                 stand.setXRot(this.getSelf().getXRot());
                             } else {
-                                Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+                                Direction gdir = ((IGravityEntity)this.self).sba$getGravityDirection();
                                 Vec2 grot = new Vec2(getLookAtPlaceYaw(stand,vec3d3),
                                         getLookAtPlacePitch(stand,vec3d3)
                                 );
@@ -245,7 +245,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                     stand.position().distanceTo(this.getSelf().position()) > 15){
                                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, 7);
                                 this.setCooldown(PowerIndex.SKILL_2, 5);
-                                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                                 return;
                             }
 
@@ -255,7 +255,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                             Vec3 vec3d2ST = stand.getViewVector(0);
                             Vec3 vec3d3ST = vec3dST.add(vec3d2ST.x * 3, vec3d2ST.y * 3, vec3d2ST.z * 3);
 
-                            if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.ROUNDABOUT_STAND_REDSTONE_INTERFERENCE))
+                            if (this.getSelf().level().getGameRules().getBoolean(ModGamerules.SBA_STAND_REDSTONE_INTERFERENCE))
                             {
                                 BlockHitResult blockHit = stand.level().clip(new ClipContext(vec3dST, vec3d3ST,
                                         ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, stand));
@@ -268,7 +268,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                                             || (blk instanceof FenceGateBlock))
                                             && this.getSelf() instanceof Player PE) {
                                         blk.use(state, this.getSelf().level(), bpos, PE, PE.getUsedItemHand(), blockHit);
-                                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                                         return;
                                     }
                                 }
@@ -299,7 +299,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             animateStand(StandEntity.IDLE);
             xTryPower(PowerIndex.NONE,true);
             if (!hasArmsOut){
-                StandEntity stand = getStandUserSelf().roundabout$getStand();
+                StandEntity stand = getStandUserSelf().sba$getStand();
                 if (stand != null){
                     stand.forceDespawn(true);
                 }
@@ -465,7 +465,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
                 boolean sendPacket = false;
                 if (this.isStoppingTime()) {
-                    KeyInputs.roundaboutClickCount = 2;
+                    KeyInputs.sbaClickCount = 2;
                     tryPowerPacket(PowerIndex.SPECIAL_FINISH);
                 } else if (this.getActivePower() == PowerIndex.SPECIAL || (this.getSelf() instanceof Player && (((Player)this.getSelf()).isCreative() && ClientNetworking.getAppropriateConfig().timeStopSettings.creativeModeInfiniteTimeStop))) {
                     sendPacket = true;
@@ -600,7 +600,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
 
             StandUser standUser = ((StandUser) this.getSelf());
-            if (standUser.roundabout$getTSJump()) {
+            if (standUser.sba$getTSJump()) {
                 if (this.getSelf().isCrouching()) {
                     basis *= 1.1f;
                 } else {
@@ -645,7 +645,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (ClientNetworking.getAppropriateConfig().timeStopSettings.postTSCancel) {
                     if (this.getActivePower() == PowerIndex.POWER_1_SNEAK || this.getActivePower() == PowerIndex.POWER_1
                             || this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE) {
-                        ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                        ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                     }
                 }
 
@@ -682,7 +682,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         }
         this.setChargedTSTicks(0);
         if (this.isBarraging()) {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
         }
         return true;
     }
@@ -754,8 +754,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             if (Math.random() > 0.5){
                 addEXP(1);
             }
-            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+            ((StandUser) this.getSelf()).sba$setLeapTicks(((StandUser) this.getSelf()).sba$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).sba$setLeapIntentionally(true);
             playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.STAND_LEAP_EVENT, SoundSource.PLAYERS, 2.3F, (float) (0.98 + (Math.random() * 0.04)));
         }
         return true;
@@ -794,7 +794,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
                     BlockHitResult blockHit = this.self.level().clip(new ClipContext(vec3d, vec3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.self));
                     BlockPos blockDest = blockHit.getBlockPos();
-                    ((StandUser)this.self).roundabout$explodePublic(0.4F,blockDest.getX(),blockDest.getY(),blockDest.getZ());
+                    ((StandUser)this.self).sba$explodePublic(0.4F,blockDest.getX(),blockDest.getY(),blockDest.getZ());
                 }
             }
 
@@ -819,7 +819,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
 
             if (this.getSelf().onGround()){
-                if (((StandUser)this.getSelf()).roundabout$getLeapTicks() <= -1) {
+                if (((StandUser)this.getSelf()).sba$getLeapTicks() <= -1) {
                     if (this.getAnimation() == StandEntity.LEAP) {
                         animateStand(StandEntity.LEAP_END);
                     }
@@ -841,10 +841,10 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!this.onCooldown(PowerIndex.SKILL_1_SNEAK)) {
             if (canExecuteMoveWithLevel(getImpaleLevel())) {
                 if (this.activePower == PowerIndex.POWER_1_SNEAK) {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                     tryPowerPacket(PowerIndex.NONE);
                 } else {
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1_SNEAK, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.POWER_1_SNEAK, true);
                     tryPowerPacket(PowerIndex.POWER_1_SNEAK);
                 }
             }
@@ -871,7 +871,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
     @Override
     public void preButtonInput4(boolean keyIsDown, Options options){
         if (hasStandActive(this.getSelf()) && !this.isClashing()) {
-            ((StandUser) this.getSelf()).roundabout$setIdleTime(0);
+            ((StandUser) this.getSelf()).sba$setIdleTime(0);
             buttonInput4(keyIsDown, options);
         }
     }
@@ -901,8 +901,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         this.setAttackTimeDuring(-7);
         this.getSelf().resetFallDistance();
         if (!this.getSelf().level().isClientSide()) {
-            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+            ((StandUser) this.getSelf()).sba$setLeapTicks(((StandUser) this.getSelf()).sba$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).sba$setLeapIntentionally(true);
             playSoundIfPossible(self.level(),null, this.getSelf().blockPosition(), ModSounds.DODGE_EVENT, SoundSource.PLAYERS, 1.5F, (float) (0.5 + (Math.random() * 0.04)));
         }
         return true;
@@ -941,7 +941,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     tryIntPowerPacket(PowerIndex.SPECIAL_CHARGED,TSChargeSeconds);
                 }
             } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_CHARGED, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.SPECIAL_CHARGED, true);
             }
         } else {
             this.setChargedTSTicks(TSChargeSeconds);
@@ -953,11 +953,11 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (this.attackTimeDuring > -1) {
             if (this.attackTimeDuring >= 80) {
                 if (this.getSelf() instanceof Player && this.getSelf().level().isClientSide && this.isPacketPlayer()){
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                     tryPowerPacket(PowerIndex.NONE);
                 }
             } else if (this.attackTimeDuring >= getMaxSuperHitTime() && !(this.getSelf() instanceof Player)){
-                ((StandUser) this.getSelf()).roundabout$tryIntPower(PowerIndex.SNEAK_ATTACK, true,getMaxSuperHitTime());
+                ((StandUser) this.getSelf()).sba$tryIntPower(PowerIndex.SNEAK_ATTACK, true,getMaxSuperHitTime());
             }
         }
     }
@@ -1225,7 +1225,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.poseStand(OffsetIndex.LOOSE);
 
             Vec2 twoVec = new Vec2((this.getSelf().getYHeadRot() % 360),(this.getSelf().getXRot()));
-            Direction gdir = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+            Direction gdir = ((IGravityEntity)this.self).sba$getGravityDirection();
             Vec2 twoVecGrav = RotationUtil.rotPlayerToWorld(twoVec,gdir);
             Vec3 threeVec = new Vec3(0,0.25,0);
             threeVec = RotationUtil.vecPlayerToWorld(threeVec,gdir);
@@ -1359,7 +1359,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.setChargedTSTicks(data);
         } else if (activePower == PowerIndex.SPECIAL_FINISH){
             if (this.isBarraging()) {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
             }
         }
     }
@@ -1372,7 +1372,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
 
             boolean cannotBreathInTs = ClientNetworking.getAppropriateConfig().timeStopSettings.preventsBreathing;
             if (cannotBreathInTs){
-                this.getSelf().setAirSupply(((ILivingEntityAccess) this.getSelf()).roundabout$DecreaseAirSupply(this.getSelf().getAirSupply()));
+                this.getSelf().setAirSupply(((ILivingEntityAccess) this.getSelf()).sba$DecreaseAirSupply(this.getSelf().getAirSupply()));
             }
 
             if (TSChargeTicks < 0 || (cannotBreathInTs && this.getSelf().getAirSupply() == -20)) {
@@ -1384,7 +1384,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (this.getSelf().level().isClientSide) {
                     tryIntPowerPacket(PowerIndex.SPECIAL_FINISH, TSChargeTicks);
                 }
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.SPECIAL_FINISH, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.SPECIAL_FINISH, true);
             } else {
                 if (this.getSelf().level().isClientSide) {
                     /*If the server is behind on the client TS time, update it to lower*/
@@ -1470,7 +1470,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                     if (this.getSelf() instanceof Player) {
                         S2CPacketUtil.sendIntPowerDataPacket(((ServerPlayer) this.getSelf()), PowerIndex.SPECIAL, maxChargeTSTime);
                     }
-                    ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+                    ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
                     setCooldown(PowerIndex.POWER_4,5);
                     /**
                      if (animate){
@@ -1479,17 +1479,17 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                      */
                 }
             } else {
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.LEAD_IN, true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.LEAD_IN, true);
             }
         } else {
-            ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.NONE, true);
+            ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.NONE, true);
         }
         return true;
     }
 
     @SuppressWarnings("deprecation")
     public boolean canStandRebound(){
-        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        Direction gravD = ((IGravityEntity)this.self).sba$getGravityDirection();
         boolean isUpOrDown = (gravD == Direction.UP || gravD == Direction.DOWN);
         boolean isEastOrWest = (gravD == Direction.EAST || gravD == Direction.WEST);
         boolean isNorthOrSouth = (gravD == Direction.NORTH || gravD == Direction.SOUTH);
@@ -1636,7 +1636,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (bonusLeapCount <=0){
                     this.setCooldown(PowerIndex.EXTRA, 100);
                 }
-                ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.BOUNCE,true);
+                ((StandUser) this.getSelf()).sba$tryPower(PowerIndex.BOUNCE,true);
                 tryPowerPacket(PowerIndex.BOUNCE);
             }
         }
@@ -1658,7 +1658,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 (blockHit.getLocation().y - this.getSelf().getY())/mag,
                 (blockHit.getLocation().z - this.getSelf().getZ())/mag
         );
-        Direction gravD = ((IGravityEntity)this.self).roundabout$getGravityDirection();
+        Direction gravD = ((IGravityEntity)this.self).sba$getGravityDirection();
         if (gravD != Direction.DOWN){
             vec3 = RotationUtil.vecWorldToPlayer(vec3,gravD);
         }
@@ -1839,7 +1839,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
         if (!this.getSelf().level().isClientSide()) {
             if (!this.getSelf().level().isClientSide() && (((TimeStop)this.getSelf().level()).CanTimeStopEntity(entity))) {
                 if (entity instanceof  LivingEntity){
-                    ((StandUser)entity).roundaboutSetTSHurtSound(3);
+                    ((StandUser)entity).sbaSetTSHurtSound(3);
                 }
                 playBarrageBlockEndNoise(0,entity);
             } else {
@@ -1885,8 +1885,8 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
             this.stopSoundsIfNearby(SoundIndex.BARRAGE_SOUND_GROUP, 100,false);
         }
         if (!this.getSelf().level().isClientSide && move == PowerIndex.SNEAK_MOVEMENT && this.isClashing()){
-            ((StandUser) this.getSelf()).roundabout$setLeapTicks(((StandUser) this.getSelf()).roundabout$getMaxLeapTicks());
-            ((StandUser) this.getSelf()).roundabout$setLeapIntentionally(true);
+            ((StandUser) this.getSelf()).sba$setLeapTicks(((StandUser) this.getSelf()).sba$getMaxLeapTicks());
+            ((StandUser) this.getSelf()).sba$setLeapIntentionally(true);
         }
         if (!this.getSelf().level().isClientSide && this.getActivePower() == PowerIndex.SPECIAL) {
             this.stopSoundsIfNearby(SoundIndex.TIME_CHARGE_SOUND_GROUP, 100,true);
@@ -1987,7 +1987,7 @@ public class TWAndSPSharedPowers extends BlockGrabPreset{
                 if (!((TimeStop)this.getSelf().level()).isTimeStoppingEntity(this.getSelf())){
                     TimeStopInstance tsi = ((TimeStop)this.getSelf().level()).getTimeStopperInstanceClient(this.getSelf().position());
                     if (tsi != null && tsi.maxDuration >= 170) {
-                        ((StandUserClient)this.getSelf()).roundabout$clientPlaySoundIfNoneActive(TIME_STOP_TICKING);
+                        ((StandUserClient)this.getSelf()).sba$clientPlaySoundIfNoneActive(TIME_STOP_TICKING);
                     }
                 }
             }

@@ -44,16 +44,16 @@ public abstract class ForgeLootTableMixin implements ILootTable {
     private BiFunction<ItemStack, LootContext, ItemStack> compositeFunction;
 
     @Override
-    public int roundabout$getSize() {
+    public int sba$getSize() {
         int size = 0;
         for (LootPool pool : this.pools) {
-            size += ((ILootPool)pool).roundabout$getSize();
+            size += ((ILootPool)pool).sba$getSize();
         }
         return size;
     }
 
     @Override
-    public List<LootPool> roundabout$getPools() {
+    public List<LootPool> sba$getPools() {
         return pools;
     }
 
@@ -61,7 +61,7 @@ public abstract class ForgeLootTableMixin implements ILootTable {
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;decorate(Ljava/util/function/BiFunction;Ljava/util/function/Consumer;Lnet/minecraft/world/level/storage/loot/LootContext;)Ljava/util/function/Consumer;",shift = At.Shift.AFTER),
             locals = LocalCapture.CAPTURE_FAILHARD)
-    private void roundabout$addLoot(LootContext lootContext, Consumer<ItemStack> consumer1, CallbackInfo ci, LootContext.VisitedEntry visitedEntry) {
+    private void sba$addLoot(LootContext lootContext, Consumer<ItemStack> consumer1, CallbackInfo ci, LootContext.VisitedEntry visitedEntry) {
         Consumer<ItemStack> consumer2 = LootItemFunction.decorate(this.compositeFunction, consumer1, lootContext);
         for (Field field : LootAdder.class.getDeclaredFields()) {
             try {

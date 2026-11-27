@@ -49,13 +49,13 @@ public class LifeTrackerEntity extends LivingEntity implements TridentsIgnoreThi
             }
             if (user != null) {
                 if (MainUtil.cheapDistanceTo2(this.getX(), this.getZ(), user.getX(), user.getZ()) > 80
-                        || !user.isAlive() || user.isRemoved() || !(((StandUser)user).roundabout$getStandPowers()
+                        || !user.isAlive() || user.isRemoved() || !(((StandUser)user).sba$getStandPowers()
                 instanceof PowersMagiciansRed)) {
                     this.discard();
                     return;
                 }
 
-                if (((StandUser) user).roundabout$getStandPowers() instanceof PowersMagiciansRed PMR) {
+                if (((StandUser) user).sba$getStandPowers() instanceof PowersMagiciansRed PMR) {
                     if (this.tickCount %4 == 0) {
                         ((ServerLevel) this.level()).sendParticles(PMR.getFlameParticle(), this.getX(),
                                 this.getY() + (this.getBbHeight() * 0.5), this.getZ(),
@@ -74,7 +74,7 @@ public class LifeTrackerEntity extends LivingEntity implements TridentsIgnoreThi
                 List<? extends LivingEntity> $$1 = this.level().getNearbyEntities(LivingEntity.class, MainUtil.plsWorkTargetting, this, $$0);
                 for (LivingEntity $$3 : $$1) {
                     if (!$$3.is(user) && !($$3 instanceof StandEntity) && !($$3 instanceof ArmorStand) && !($$3 instanceof FallenMob)) {
-                        ((StandUser) $$3).roundabout$setDetectTicks(2);
+                        ((StandUser) $$3).sba$setDetectTicks(2);
                     }
                 }
             }

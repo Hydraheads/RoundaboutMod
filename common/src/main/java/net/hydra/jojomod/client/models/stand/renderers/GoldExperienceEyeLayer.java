@@ -2,7 +2,7 @@ package net.hydra.jojomod.client.models.stand.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientUtil;
@@ -29,7 +29,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class GoldExperienceEyeLayer<T extends GoldExperienceEntity, M extends StandModel<T>> extends EyesLayer<T, M> {
     private final StandRenderer<T> standRenderer;
 
-    private static final RenderType CREAKING_GLOW = RenderType.eyes(new ResourceLocation(Roundabout.MOD_ID,"textures/stand/gold_experience/transformation/ger_eye.png"));
+    private static final RenderType CREAKING_GLOW = RenderType.eyes(new ResourceLocation(SBA.MOD_ID,"textures/stand/gold_experience/transformation/ger_eye.png"));
 
     public GoldExperienceEyeLayer(RenderLayerParent<T, M> $$0, StandRenderer<T> standRenderer) {
         super($$0);
@@ -46,9 +46,9 @@ public class GoldExperienceEyeLayer<T extends GoldExperienceEntity, M extends St
 
         if (User == null) {return; }
 
-        if (((((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
-                ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1)
-                || !(((StandUser)User).roundabout$getStandPowers() instanceof PowersGoldExperience GE
+        if (((((IEntityAndData)User).sba$getTrueInvisibility() > -1) ||
+                ((IEntityAndData)mobEntity).sba$getTrueInvisibility() > -1)
+                || !(((StandUser)User).sba$getStandPowers() instanceof PowersGoldExperience GE
                 && (GE.attackTimeDuring/20f) >= 10.42)){
             return;
         }
@@ -58,12 +58,12 @@ public class GoldExperienceEyeLayer<T extends GoldExperienceEntity, M extends St
 
             LocalPlayer lp = Minecraft.getInstance().player;
 
-            if ((User != null && ((IEntityAndData)User).roundabout$getTrueInvisibility() > -1) ||
-                    ((IEntityAndData)mobEntity).roundabout$getTrueInvisibility() > -1){
+            if ((User != null && ((IEntityAndData)User).sba$getTrueInvisibility() > -1) ||
+                    ((IEntityAndData)mobEntity).sba$getTrueInvisibility() > -1){
                 return;
             }
 
-            if (User != null && !mobEntity.getUser().is(lp) && ((IEntityAndData)User).roundabout$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
+            if (User != null && !mobEntity.getUser().is(lp) && ((IEntityAndData)User).sba$getTrueInvisibilityManhattan() < 1 && ClientUtil.checkIfClientCanSeeMobsForWindVision()){
                 return;
             }
 
@@ -72,7 +72,7 @@ public class GoldExperienceEyeLayer<T extends GoldExperienceEntity, M extends St
                 IPlayerEntity ipe = ((IPlayerEntity) lp);
                 if (User != null && mobEntity.getUser().is(lp)) {
                     StandUser standUser = ((StandUser)mobEntity.getUser());
-                    if (standUser.roundabout$getStandPowers().getActivePower() == PowerIndex.NONE){
+                    if (standUser.sba$getStandPowers().getActivePower() == PowerIndex.NONE){
                         maxfade = ConfigManager.getClientConfig().opacitySettings.opacityOfStand;
                         if (ConfigManager.getClientConfig().opacitySettings.opacityOfStand <= 0.1F){
                             return;

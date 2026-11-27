@@ -17,7 +17,7 @@ import java.util.UUID;
 public class AbsurdPiglinBruteAiFix {
     @Inject(method = "setAngerTarget",
             at = @At(value = "HEAD"), cancellable = true)
-    private static <T extends Mob> void roundabout$setAngerTarget(PiglinBrute $$0, LivingEntity $$1, CallbackInfo ci) {
+    private static <T extends Mob> void sba$setAngerTarget(PiglinBrute $$0, LivingEntity $$1, CallbackInfo ci) {
 
         if ($$0 != null && $$1 != null) {
             /**Flesh buds prevent aggro on the planter*/
@@ -28,7 +28,7 @@ public class AbsurdPiglinBruteAiFix {
                 return;
             }
             /**Stands that react to aggro like hey ya and wonder of u*/
-            ((StandUser)$$1).roundabout$getStandPowers().reactToAggro(((Mob) (Object)$$0));
+            ((StandUser)$$1).sba$getStandPowers().reactToAggro(((Mob) (Object)$$0));
         }
     }
 }

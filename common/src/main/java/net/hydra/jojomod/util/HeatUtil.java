@@ -24,70 +24,70 @@ import net.minecraft.world.phys.Vec3;
 public class HeatUtil {
     public static boolean isHot(Entity entity){
         if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat() > 0;
+            return ((StandUser)LE).sba$getHeat() > 0;
         }
         return false;
     }
     public static boolean isCold(Entity entity){
         if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat() < 0;
+            return ((StandUser)LE).sba$getHeat() < 0;
         }
         return false;
     }
     public static int getHeat(Entity entity){
         if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat();
+            return ((StandUser)LE).sba$getHeat();
         }
         return 0;
     }
 
     public static boolean isArmsFrozen(Entity entity){
         if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat() <= -33;
+            return ((StandUser)LE).sba$getHeat() <= -33;
         }
         return false;
     }
     public static boolean isLegsFrozen(Entity entity){
         if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat() <= -66;
+            return ((StandUser)LE).sba$getHeat() <= -66;
         }
         return false;
     }
     public static boolean isBodyFrozen(Entity entity){
         if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat() <= -100;
+            return ((StandUser)LE).sba$getHeat() <= -100;
         }
         return false;
     }
 
     public static boolean isSweating(Entity entity){
         if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat() >= 33;
+            return ((StandUser)LE).sba$getHeat() >= 33;
         }
         return false;
     }
     public static boolean isCooking(Entity entity){
         if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat() >= 66;
+            return ((StandUser)LE).sba$getHeat() >= 66;
         }
         return false;
     }
     public static boolean isBurning(Entity entity){
         if (entity instanceof LivingEntity LE){
-            return ((StandUser)LE).roundabout$getHeat() >= 100;
+            return ((StandUser)LE).sba$getHeat() >= 100;
         }
         return false;
     }
     public static void resetHeat(Entity entity) {
         if (entity instanceof LivingEntity LE) {
             StandUser su = ((StandUser) LE);
-            su.roundabout$setHeat(0);
+            su.sba$setHeat(0);
         }
     }
     public static void setHeat(Entity entity, int heat) {
         if (entity instanceof LivingEntity LE) {
             StandUser su = ((StandUser) LE);
-            su.roundabout$setHeat(Mth.clamp(heat,-110,110));
+            su.sba$setHeat(Mth.clamp(heat,-110,110));
         }
     }
 
@@ -99,7 +99,7 @@ public class HeatUtil {
         }
         if (entity instanceof LivingEntity LE){
             // White album is immune to gaining heat while the armor is in place, and always immune to cold with its suit
-            if (((StandUser)LE).roundabout$getStandPowers() instanceof PowersWhiteAlbum PWA &&
+            if (((StandUser)LE).sba$getStandPowers() instanceof PowersWhiteAlbum PWA &&
             PWA.hasStandActive(LE)){
                 if (amt > 0 && !PWA.cracked){
                     return;
@@ -112,7 +112,7 @@ public class HeatUtil {
                 return;
             }
             StandUser su = ((StandUser)LE);
-            int heat = su.roundabout$getHeat();
+            int heat = su.sba$getHeat();
             int prevHeat = heat;
             heat = Mth.clamp(heat+amt,-110,110);
             if (heat <= -100 && amt < 0){
@@ -130,7 +130,7 @@ public class HeatUtil {
             if (heat >= 100 && amt > 0){
                 heat = 110;
             }
-            su.roundabout$setHeat(heat);
+            su.sba$setHeat(heat);
         }
     }
 
@@ -143,27 +143,27 @@ public class HeatUtil {
                 return;
             }
             StandUser su = ((StandUser)LE);
-            int heat = su.roundabout$getHeat();
+            int heat = su.sba$getHeat();
             if (heat < 0){
                 boolean rate = entity.tickCount%10==0;
-                if (entity.isOnFire() || su.roundabout$isOnStandFire() || entity.isInLava()){
+                if (entity.isOnFire() || su.sba$isOnStandFire() || entity.isInLava()){
                     rate = entity.tickCount%4==0;
                 }
                 if (rate){
                     int sub = 1;
                     heat = Mth.clamp(heat+sub,-110,0);
-                    su.roundabout$setHeat(heat);
+                    su.sba$setHeat(heat);
                 } if (heat <= -100){
                     AbilityScapeBasis.setDazedTrue(LE,(byte)3);
                     LE.hurtMarked = true;
                     LE.hasImpulse = true;
                     LE.setDeltaMovement(RotationUtil.vecPlayerToWorld(new Vec3(0,-0.4,0),
-                            ((IGravityEntity)entity).roundabout$getGravityDirection()));
+                            ((IGravityEntity)entity).sba$getGravityDirection()));
                 }
             } else if (heat > 0) {
                 if (entity.tickCount%10==0){
                     heat = Mth.clamp(heat-1,0,110);
-                    su.roundabout$setHeat(heat);
+                    su.sba$setHeat(heat);
                 }
             }
         }

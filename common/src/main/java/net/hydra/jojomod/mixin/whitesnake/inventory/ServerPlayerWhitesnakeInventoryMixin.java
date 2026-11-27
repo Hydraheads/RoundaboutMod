@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerWhitesnakeInventoryMixin {
     @Inject(method = "restoreFrom", at = @At("TAIL"))
-    private void roundaboutWhitesnake$copyInventory(ServerPlayer oldPlayer, boolean alive, CallbackInfo ci) {
+    private void sbaWhitesnake$copyInventory(ServerPlayer oldPlayer, boolean alive, CallbackInfo ci) {
         WhitesnakeInventoryAccess oldAccess = (WhitesnakeInventoryAccess) oldPlayer;
-        ((WhitesnakeInventoryAccess) this).roundaboutWhitesnake$setInventory(oldAccess.roundaboutWhitesnake$getInventory());
+        ((WhitesnakeInventoryAccess) this).sbaWhitesnake$setInventory(oldAccess.sbaWhitesnake$getInventory());
     }
 }

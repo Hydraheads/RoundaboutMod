@@ -17,7 +17,7 @@ public abstract class ZMerchantOfferMixin {
 
     // self explanatory, accepts snake oil as payment
     @Inject(method = "satisfiedBy", at = @At("HEAD"), cancellable = true)
-    private void roundabout$acceptSnakeOilAsPayment(ItemStack playerInputA, ItemStack playerInputB, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$acceptSnakeOilAsPayment(ItemStack playerInputA, ItemStack playerInputB, CallbackInfoReturnable<Boolean> cir) {
         boolean inputAIsSnakeOil = playerInputA.is(ModItems.SNAKE_OIL);
         boolean inputBIsSnakeOil = playerInputB.is(ModItems.SNAKE_OIL);
 
@@ -43,7 +43,7 @@ public abstract class ZMerchantOfferMixin {
 
     // snake oil deduction after using snake oil
     @Inject(method = "take", at = @At("HEAD"), cancellable = true)
-    private void roundabout$consumeSnakeOilOnTrade(ItemStack playerInputA, ItemStack playerInputB, CallbackInfoReturnable<Boolean> cir) {
+    private void sba$consumeSnakeOilOnTrade(ItemStack playerInputA, ItemStack playerInputB, CallbackInfoReturnable<Boolean> cir) {
         boolean usedSnakeOilA = playerInputA.is(ModItems.SNAKE_OIL);
         boolean usedSnakeOilB = playerInputB.is(ModItems.SNAKE_OIL);
 

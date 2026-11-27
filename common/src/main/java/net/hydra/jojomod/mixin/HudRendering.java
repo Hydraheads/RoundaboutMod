@@ -2,7 +2,7 @@ package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.*;
 import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
@@ -84,12 +84,12 @@ public abstract class HudRendering implements IHudAccess {
     private int screenHeight;
 
     @Unique
-    private float roundabout$flashAlpha = 0f;
+    private float sba$flashAlpha = 0f;
     @Unique
-    private float roundabout$otherFlashAlpha = 0f;
+    private float sba$otherFlashAlpha = 0f;
 
     @Unique
-    private boolean roundabout$Redo = false;
+    private boolean sba$Redo = false;
 
     @Shadow
     @Final
@@ -108,27 +108,27 @@ public abstract class HudRendering implements IHudAccess {
 
     /** The stand move HUD renders with the hotbar so that it may exist in all gamemodes.*/
     @Inject(method = "renderHotbar", at = @At(value = "HEAD"))
-    private void roundabout$renderHotbarMixin(float $$0, GuiGraphics $$1, CallbackInfo info) {
+    private void sba$renderHotbarMixin(float $$0, GuiGraphics $$1, CallbackInfo info) {
 
 
         if (this.minecraft.player != null) {
             if (ClientUtil.canRenderEpitaphScreen()){
                 RenderSystem.enableBlend();
-                roundabout$renderTextureOverlay($$1, StandIcons.EPITAPH,
+                sba$renderTextureOverlay($$1, StandIcons.EPITAPH,
                         0.25F,1F,1F,1F);
             }
             if (ClientUtil.canRenderBetweenScreen()){
                 RenderSystem.enableBlend();
-                roundabout$renderTextureOverlay($$1, StandIcons.BETWEEN_VISION,
+                sba$renderTextureOverlay($$1, StandIcons.BETWEEN_VISION,
                         0.15F,1F,1F,1F);
-                roundabout$renderTextureOverlay($$1, StandIcons.BETWEEN_VISION_2,
+                sba$renderTextureOverlay($$1, StandIcons.BETWEEN_VISION_2,
                         0.2F,1F,1F,1F);
             }
 
             if (ClientUtil.timeSkipTicker > -1){
                 if (ClientUtil.canSeeStands(this.minecraft.player)) {
                     RenderSystem.enableBlend();
-                    roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                    sba$renderTextureOverlay($$1, new ResourceLocation(SBA.MOD_ID,
                                     "textures/misc/king_crimson/frame_" + ClientUtil.timeSkipTicker + ".png"),
                             ConfigManager.getClientConfig().generalSettings.timeSkipOpacity, 1F, 1F, 1F);
                 }
@@ -136,7 +136,7 @@ public abstract class HudRendering implements IHudAccess {
             if (ClientUtil.bitesTheDustTicker > -1){
                 if (ClientUtil.canSeeStands(this.minecraft.player)) {
                     RenderSystem.enableBlend();
-                    roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                    sba$renderTextureOverlay($$1, new ResourceLocation(SBA.MOD_ID,
                                     "textures/misc/bites_the_dust/frame_" + ClientUtil.bitesTheDustTicker + ".png"),
                             ConfigManager.getClientConfig().generalSettings.bitesTheDustOpacity, 1F, 1F, 1F);
                 }
@@ -156,9 +156,9 @@ public abstract class HudRendering implements IHudAccess {
             StandUser user = ((StandUser) this.minecraft.player);
             boolean renderGasOverlay = ConfigManager.getClientConfig().renderGasSplatterOverlay;
             if (renderGasOverlay) {
-                int overlay = user.roundabout$getGasolineTime();
+                int overlay = user.sba$getGasolineTime();
                 if (overlay > 0) {
-                    int overlayR = user.roundabout$getGasolineRenderTime();
+                    int overlayR = user.sba$getGasolineRenderTime();
                     float overlay2 = 0;
                     if (overlay <= 40) {
                         overlay2 = 0.5F - ((float) (40 - overlay) / 40) * 0.5F;
@@ -169,14 +169,14 @@ public abstract class HudRendering implements IHudAccess {
                     this.renderTextureOverlay($$1, StandIcons.GASOLINE_OVERLAY, overlay2);
                 }
             }
-            if (((StandUser) this.minecraft.player ).roundabout$getStandPowers() instanceof PowersRatt) {
-                if ( ((StandUser) this.minecraft.player).roundabout$getStandPowers().scopeLevel != 0 ) {
+            if (((StandUser) this.minecraft.player ).sba$getStandPowers() instanceof PowersRatt) {
+                if ( ((StandUser) this.minecraft.player).sba$getStandPowers().scopeLevel != 0 ) {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.RATT_SCOPE_OVERLAY, 0.99F);
                 }
             }
-            if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity) {
-                roundabout$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
+            if (user.sba$getPossessor() instanceof AnubisPossessorEntity) {
+                sba$renderTextureOverlay($$1, StandIcons.ANUBIS_POSSESSION_OVERLAY, 0.8F,1F,1F,1F);
             }
             if (this.minecraft.options.getCameraType().isFirstPerson()) {
                 if (FateTypes.takesSunlightDamage(this.minecraft.player)) {
@@ -231,23 +231,23 @@ public abstract class HudRendering implements IHudAccess {
                 }
                 if(MainUtil.isInMold(this.minecraft.player)) {
                     RenderSystem.enableBlend();
-                    float[] moldTint = roundabout$getMoldTint(MainUtil.getMoldSkin(this.minecraft.player));
-                    roundabout$renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F,
+                    float[] moldTint = sba$getMoldTint(MainUtil.getMoldSkin(this.minecraft.player));
+                    sba$renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F,
                             moldTint[0], moldTint[1], moldTint[2]);
                 }
                 //Purple Haze overlay
                 if (MainUtil.isInPurpleHaze(this.minecraft.player)) {
                     RenderSystem.enableBlend();
-                    float[] roundabout$hazeTint = roundabout$getPurpleHazeTint(MainUtil.getPurpleHazeSkin(this.minecraft.player));
+                    float[] sba$hazeTint = sba$getPurpleHazeTint(MainUtil.getPurpleHazeSkin(this.minecraft.player));
                     int frame = 0;
                     if (!ConfigManager.getClientConfig().purpleHazeSettings.disablePHazeOverlayAnimation) {
                         frame = (minecraft.player.tickCount / 3 % 10);
                     }
 
-                    roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                    sba$renderTextureOverlay($$1, new ResourceLocation(SBA.MOD_ID,
                                     "textures/misc/purple_overlay/purple_overlay" + frame + ".png"),
                             ConfigManager.getClientConfig().generalSettings.hazeFieldOpacity,
-                            roundabout$hazeTint[0], roundabout$hazeTint[1], roundabout$hazeTint[2]);
+                            sba$hazeTint[0], sba$hazeTint[1], sba$hazeTint[2]);
                 }
                 //Distortion Haze overlay
                 if (MainUtil.isInDistortionHaze(this.minecraft.player)) {
@@ -257,7 +257,7 @@ public abstract class HudRendering implements IHudAccess {
                         frame = (minecraft.player.tickCount / 3 % 10);
                     }
                     
-                    roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                    sba$renderTextureOverlay($$1, new ResourceLocation(SBA.MOD_ID,
                             "textures/misc/distortion_overlay/distortion_overlay" + frame + ".png"),
                             ConfigManager.getClientConfig().generalSettings.hazeFieldOpacity, 1F, 1F, 1F);
                 }
@@ -267,7 +267,7 @@ public abstract class HudRendering implements IHudAccess {
                             Math.min((HeatUtil.getHeat(this.minecraft.player)*-1)*0.003f,1f));
                 }
                 //Bubble Overlay
-                if (user.roundabout$isBubbleEncased()){
+                if (user.sba$isBubbleEncased()){
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.IN_BUBBLE_OVERLAY, 0.99F);
                 }
@@ -282,7 +282,7 @@ public abstract class HudRendering implements IHudAccess {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.BLOODY_MASK_OVERLAY, 0.55F);
                 }
-                if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0) {
+                if (user.sba$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0) {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.CREAM_OVERLAY, 1F);
                 }
@@ -290,10 +290,10 @@ public abstract class HudRendering implements IHudAccess {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.SNIPER_OVERLAY, 1F);
                 }
-                if (user.roundabout$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
-                    if (((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot() != null &&
-                            !((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().isEmpty() &&
-                            ((IPlayerEntity) this.minecraft.player).roundabout$getMaskSlot().getItem() instanceof MaskItem ME &&
+                if (user.sba$getLocacacaCurse() == LocacacaCurseIndex.HEAD) {
+                    if (((IPlayerEntity) this.minecraft.player).sba$getMaskSlot() != null &&
+                            !((IPlayerEntity) this.minecraft.player).sba$getMaskSlot().isEmpty() &&
+                            ((IPlayerEntity) this.minecraft.player).sba$getMaskSlot().getItem() instanceof MaskItem ME &&
                             ME.visageData instanceof JosukePartEightVisage){
                         RenderSystem.enableBlend();
                         this.renderTextureOverlay($$1, StandIcons.STONE_HEAD_OVERLAY_JOSUKE, 1F);
@@ -303,7 +303,7 @@ public abstract class HudRendering implements IHudAccess {
                     }
                 }
                 // Lyin Eyes stand hud renderer
-                if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes
+                if (((StandUser) this.minecraft.player).sba$getStandPowers() instanceof PowersLyinEyes lyinEyes
                         && lyinEyes.getSummonOverlayTicks() != 0) {
                     ResourceLocation texture;
                     if (lyinEyes.getSummonOverlayTicks() >= 12) {
@@ -314,20 +314,20 @@ public abstract class HudRendering implements IHudAccess {
                             idleFrame += ((lyinEyes.getIdleOverlayTicks() / 3) % idleFrameCount);
                         }
 
-                        texture = new ResourceLocation(Roundabout.MOD_ID,
+                        texture = new ResourceLocation(SBA.MOD_ID,
                                 "textures/misc/lyin_eyes/idle_f" + idleFrame + ".png");
                     } else {
                         // need to stop the thing from reaching 0, so i put an extra math method to clamp it.
                         int frame = Math.max(1, Math.min(lyinEyes.getSummonOverlayTicks() / 2, 6));
                         // this copies PH distortion gui formatting since this is also an animation
-                        texture = new ResourceLocation(Roundabout.MOD_ID,
+                        texture = new ResourceLocation(SBA.MOD_ID,
                                 "textures/misc/lyin_eyes/lyin_eyes_" + frame + ".png");
                     }
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, texture, ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity);
                 }
                 // Lyin Eyes gathering renderer
-                if (((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes lyinEyes
+                if (((StandUser) this.minecraft.player).sba$getStandPowers() instanceof PowersLyinEyes lyinEyes
                         && lyinEyes.getGatherOverlayTicks() != 0 && lyinEyes.getGatherOverlayTicks() != 7) {
                     // inverse opacity of the map, aka it fades in when the map fades out and vice versa
                     float gatherOpacity = 1.0F - lyinEyes.getMapOpacity();
@@ -341,7 +341,7 @@ public abstract class HudRendering implements IHudAccess {
                         }
 
                         // this copies PH distortion gui formatting since this is also an animation
-                        ResourceLocation texture = new ResourceLocation(Roundabout.MOD_ID,
+                        ResourceLocation texture = new ResourceLocation(SBA.MOD_ID,
                                 "textures/misc/lyin_eyes/pileup_f" + frame + ".png");
                         RenderSystem.enableBlend();
                         gatherOpacity *= ConfigManager.getClientConfig().lyinEyesSettings.nematodeOpacity;
@@ -349,9 +349,9 @@ public abstract class HudRendering implements IHudAccess {
                     }
                 }
 
-                float ticks = user.roundabout$getZappedTicks();
+                float ticks = user.sba$getZappedTicks();
                 if (ticks > -1){
-                    if (user.roundabout$getZappedToID() > -1){
+                    if (user.sba$getZappedToID() > -1){
                         ticks+=tsdelta;
                     } else {
                         ticks-=tsdelta;
@@ -359,10 +359,10 @@ public abstract class HudRendering implements IHudAccess {
                     ticks = Mth.clamp(ticks,0,10);
                     ticks*=0.1F;
                     RenderSystem.enableBlend();
-                    roundabout$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.6F,1F,1F,1F);
+                    sba$renderTextureOverlay($$1, StandIcons.SURVIVOR_ANGER, ticks*0.6F,1F,1F,1F);
                 }
             } else {
-                if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0) {
+                if (user.sba$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0) {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.CREAM_OVERLAY, 1F);
                 }
@@ -383,26 +383,26 @@ public abstract class HudRendering implements IHudAccess {
 
                 if (vp.isFast()){
                         RenderSystem.enableBlend();
-                        roundabout$renderTextureOverlay($$1, new ResourceLocation(Roundabout.MOD_ID,
+                        sba$renderTextureOverlay($$1, new ResourceLocation(SBA.MOD_ID,
                                 "textures/misc/vamp_speed/frame_" + (minecraft.player.tickCount % 10) + ".png"), 0.2F, 1F, 1F, 1F);
                 }
             }
 
 
-             StandPowers powers = user.roundabout$getStandPowers();
+             StandPowers powers = user.sba$getStandPowers();
                 if (powers.timeRewindOverlayTicks > -1) {
                     RenderSystem.enableBlend();
                     this.renderTextureOverlay($$1, StandIcons.TIME_REWIND, powers.getOverlayFromOverlayTicks($$0));
                 }
 
         }
-        StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
+        StandHudRender.renderStandHud($$1, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), sba$flashAlpha, sba$otherFlashAlpha);
 
         RenderSystem.enableBlend();
     }
 
     @Inject(method = "renderHotbar", at = @At(value = "TAIL"))
-    private void roundabout$renderHotbarTailMixin(float partialTick, GuiGraphics graphics, CallbackInfo info) {
+    private void sba$renderHotbarTailMixin(float partialTick, GuiGraphics graphics, CallbackInfo info) {
 
         // for counting gun ammo
 
@@ -499,15 +499,15 @@ public abstract class HudRendering implements IHudAccess {
     }
 
     @Inject(method = "renderTextureOverlay", at = @At(value = "HEAD"), cancellable = true)
-    private void roundabout$renderOverlaysHttan(GuiGraphics $$0, ResourceLocation $$1, float $$2, CallbackInfo info) {
-        if (((StandUser) this.minecraft.player ).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+    private void sba$renderOverlaysHttan(GuiGraphics $$0, ResourceLocation $$1, float $$2, CallbackInfo info) {
+        if (((StandUser) this.minecraft.player ).sba$getStandPowers() instanceof PowersManhattanTransfer PM) {
             if (PM.isPiloting()) {
                 info.cancel();
             }
         }
     }
 
-    private void roundabout$renderTextureOverlay(GuiGraphics $$0, ResourceLocation $$1, float opacity, float r, float g, float b) {
+    private void sba$renderTextureOverlay(GuiGraphics $$0, ResourceLocation $$1, float opacity, float r, float g, float b) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         $$0.setColor(r, g, b, opacity);
@@ -517,7 +517,7 @@ public abstract class HudRendering implements IHudAccess {
         $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
     @Unique
-    private static float[] roundabout$getPurpleHazeTint(byte skin) {
+    private static float[] sba$getPurpleHazeTint(byte skin) {
         int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(skin, PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
         float r = ((color >> 16) & 0xFF) / 255.0F;
         float g = ((color >> 8) & 0xFF) / 255.0F;
@@ -525,7 +525,7 @@ public abstract class HudRendering implements IHudAccess {
         return new float[]{r, g, b};
     }
     @Unique
-    private static float[] roundabout$getMoldTint(byte skin) {
+    private static float[] sba$getMoldTint(byte skin) {
         int color = PowersGreenDay.MOLD_COLOR_MAP.getOrDefault(skin, PowersGreenDay.defaultMoldColor());
         float r = ((color >> 16) & 0xFF) / 255.0F;
         float g = ((color >> 8) & 0xFF) / 255.0F;
@@ -533,7 +533,7 @@ public abstract class HudRendering implements IHudAccess {
         return new float[]{r, g, b};
     }
     @Inject(method = "renderEffects", at = @At("HEAD"), cancellable = true)
-    private void roundabout$renderOverlay(GuiGraphics $$0, CallbackInfo ci) {
+    private void sba$renderOverlay(GuiGraphics $$0, CallbackInfo ci) {
         if (ClientNetworking.getAppropriateConfig().whitesnakeSettings.hallucinationHidesEffects
                 && minecraft.player != null && minecraft.player.hasEffect(ModEffects.HALLUCINATION)) {
             ci.cancel();
@@ -541,8 +541,8 @@ public abstract class HudRendering implements IHudAccess {
     }
 
     @Inject(method = "renderHearts", at = @At(value = "TAIL"))
-    private void roundabout$renderHotbarMixin(GuiGraphics $$0, Player $$1, int $$2, int $$3, int $$4, int $$5, float $$6, int $$7, int $$8, int $$9, boolean $$10, CallbackInfo ci) {
-        if (((StandUser)$$1).roundabout$getLocacacaCurse()== LocacacaCurseIndex.HEART){
+    private void sba$renderHotbarMixin(GuiGraphics $$0, Player $$1, int $$2, int $$3, int $$4, int $$5, float $$6, int $$7, int $$8, int $$9, boolean $$10, CallbackInfo ci) {
+        if (((StandUser)$$1).sba$getLocacacaCurse()== LocacacaCurseIndex.HEART){
             int $$12 = 208;
             int $$13 = Mth.ceil((double)$$6 / 2.0);
             int $$14 = Mth.ceil((double)$$9 / 2.0);
@@ -565,12 +565,12 @@ public abstract class HudRendering implements IHudAccess {
                 if ($$10 && $$21 < $$8) {
                     boolean $$25 = $$21 + 1 == $$8;
                     boolean $$22 = $$16 >= $$13;
-                        this.roundabout$renderStoneHeart($$0, $$19, $$20, $$12, true, $$25);
+                        this.sba$renderStoneHeart($$0, $$19, $$20, $$12, true, $$25);
                 }
 
                 if ($$21 < $$7) {
                     boolean $$26 = $$21 + 1 == $$7;
-                        this.roundabout$renderStoneHeart($$0, $$19, $$20, $$12, false, $$26);
+                        this.sba$renderStoneHeart($$0, $$19, $$20, $$12, false, $$26);
                 }
             }
         }
@@ -598,24 +598,24 @@ public abstract class HudRendering implements IHudAccess {
                 if ($$10 && $$21 < $$8) {
                     boolean $$25 = $$21 + 1 == $$8;
                     boolean $$22 = $$16 >= $$13;
-                    this.roundabout$renderStoneHeart($$0, $$19, $$20, $$12, true, $$25);
+                    this.sba$renderStoneHeart($$0, $$19, $$20, $$12, true, $$25);
                 }
 
                 if ($$21 < $$7) {
                     boolean $$26 = $$21 + 1 == $$7;
-                    this.roundabout$renderStoneHeart($$0, $$19, $$20, $$12, false, $$26);
+                    this.sba$renderStoneHeart($$0, $$19, $$20, $$12, false, $$26);
                 }
             }
         }
     }
 
     @Unique
-    private void roundabout$renderStoneHeart(GuiGraphics p_283024_, int p_283636_, int p_283279_, int p_283188_, boolean p_283440_, boolean p_282496_) {
-        p_283024_.blit(StandIcons.JOJO_ICONS, p_283636_, p_283279_, roundabout$getXShift(p_282496_, p_283440_), p_283188_, 9, 9);
+    private void sba$renderStoneHeart(GuiGraphics p_283024_, int p_283636_, int p_283279_, int p_283188_, boolean p_283440_, boolean p_282496_) {
+        p_283024_.blit(StandIcons.JOJO_ICONS, p_283636_, p_283279_, sba$getXShift(p_282496_, p_283440_), p_283188_, 9, 9);
     }
 
     @Unique
-    public int roundabout$getXShift(boolean p_168735_, boolean p_168736_) {
+    public int sba$getXShift(boolean p_168735_, boolean p_168736_) {
         int i;
         int j = p_168735_ ? 1 : 0;
         int k = p_168736_ ? 2 : 0;
@@ -627,27 +627,27 @@ public abstract class HudRendering implements IHudAccess {
     /** The guard HUD uses the exp bar, because you dont need to check exp
      *  while you are blocking, efficient HUD use.*/
     @Inject(method = "renderExperienceBar", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$RenderExperienceBar(GuiGraphics $$0, int $$1, CallbackInfo ci){
-        if (roundabout$RenderBars($$0, $$1)){
-            roundabout$RenderHeatBars($$0, $$1);
+    public void sba$RenderExperienceBar(GuiGraphics $$0, int $$1, CallbackInfo ci){
+        if (sba$RenderBars($$0, $$1)){
+            sba$RenderHeatBars($$0, $$1);
             ci.cancel();
         }
-        roundabout$infiniteSpinHud($$0,$$1);
+        sba$infiniteSpinHud($$0,$$1);
     }
     @Inject(method = "renderJumpMeter", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$RenderMountJumpBar(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
-        if (roundabout$RenderBars($$1, $$2)){
-            roundabout$RenderHeatBars($$1, $$2);
+    public void sba$RenderMountJumpBar(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
+        if (sba$RenderBars($$1, $$2)){
+            sba$RenderHeatBars($$1, $$2);
             ci.cancel();
         }
-        roundabout$infiniteSpinHud($$1,$$2);
+        sba$infiniteSpinHud($$1,$$2);
 
     }
 
     @Unique
-    private void roundabout$infiniteSpinHud(GuiGraphics graphics, int x) {
+    private void sba$infiniteSpinHud(GuiGraphics graphics, int x) {
         StandUser user = ((StandUser) minecraft.player);
-        StandPowers standPowers = user.roundabout$getStandPowers();
+        StandPowers standPowers = user.sba$getStandPowers();
         GeneralPowers powers = ((IPowersPlayer) minecraft.player).rdbt$getPowers();
         if (standPowers != null && standPowers.getInfiniteSpin() > 0 ) {
             StandHudRender.renderInfiniteSpinHUD(graphics,screenWidth,screenHeight,x,standPowers);
@@ -655,14 +655,14 @@ public abstract class HudRendering implements IHudAccess {
     }
 
     @Inject(method = "renderExperienceBar", at = @At(value = "TAIL"), cancellable = true)
-    public void roundabout$RenderExperienceBar2(GuiGraphics $$0, int $$1, CallbackInfo ci){
-        roundabout$RenderHeatBars($$0, $$1);
-        roundabout$infiniteSpinHud($$0,$$1);
+    public void sba$RenderExperienceBar2(GuiGraphics $$0, int $$1, CallbackInfo ci){
+        sba$RenderHeatBars($$0, $$1);
+        sba$infiniteSpinHud($$0,$$1);
     }
     @Inject(method = "renderJumpMeter", at = @At(value = "TAIL"), cancellable = true)
-    public void roundabout$RenderMountJumpBar2(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
-        roundabout$RenderHeatBars($$1, $$2);
-        roundabout$infiniteSpinHud($$1,$$2);
+    public void sba$RenderMountJumpBar2(PlayerRideableJumping $$0, GuiGraphics $$1, int $$2, CallbackInfo ci){
+        sba$RenderHeatBars($$1, $$2);
+        sba$infiniteSpinHud($$1,$$2);
     }
 
 
@@ -679,15 +679,15 @@ public abstract class HudRendering implements IHudAccess {
 
         /**desaturate hearts when time is stopped*/
     @Inject(method = "renderPlayerHealth", at = @At(value = "HEAD"), cancellable = true)
-    public void roundabout$renderHealth(GuiGraphics $$0, CallbackInfo ci){
+    public void sba$renderHealth(GuiGraphics $$0, CallbackInfo ci){
         if (minecraft.player != null && minecraft.level != null){
-           if (!roundabout$Redo) {
+           if (!sba$Redo) {
                 if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
-                    roundabout$Redo = true;
+                    sba$Redo = true;
                     $$0.setColor(0.7F, 0.7F, 0.7F, 1.0F);
                     renderPlayerHealth($$0);
                     $$0.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-                    roundabout$Redo = false;
+                    sba$Redo = false;
                     ci.cancel();
                     return;
                 }
@@ -797,8 +797,8 @@ public abstract class HudRendering implements IHudAccess {
     @Unique
     public void rdbt$renderHealth2Common(GuiGraphics $$0){
         if (minecraft.player != null && minecraft.level != null){
-            int oxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getAirAmount();
-            int maxOxygenBonus = ((StandUser)minecraft.player).roundabout$getStandPowers().getMaxAirAmount();
+            int oxygenBonus = ((StandUser)minecraft.player).sba$getStandPowers().getAirAmount();
+            int maxOxygenBonus = ((StandUser)minecraft.player).sba$getStandPowers().getMaxAirAmount();
             if (oxygenBonus > -1 && PowerTypes.hasStandActive(minecraft.player)) {
                 int $$28 = minecraft.player.getMaxAirSupply();
                 int $$29 = Math.min(minecraft.player.getAirSupply(), $$28);
@@ -828,17 +828,17 @@ public abstract class HudRendering implements IHudAccess {
 
 
     @Inject(method = "renderPlayerHealth", at = @At(value = "TAIL"))
-    public void roundabout$renderHealth2(GuiGraphics $$0, CallbackInfo ci){
+    public void sba$renderHealth2(GuiGraphics $$0, CallbackInfo ci){
         rdbt$renderHealth2Common($$0);
     }
 
     @Unique
-    private void roundabout$RenderHeatBars(GuiGraphics context, int x){
-        StandHudRender.renderHeatHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).roundabout$getLastClashPower());
+    private void sba$RenderHeatBars(GuiGraphics context, int x){
+        StandHudRender.renderHeatHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).sba$getLastClashPower());
 
     }
     @Unique
-    private boolean roundabout$RenderBars(GuiGraphics context, int x){
+    private boolean sba$RenderBars(GuiGraphics context, int x){
         if (minecraft.player != null && minecraft.level != null && this.getCameraPlayer() != null) {
 
             StandUser user = ((StandUser) minecraft.player);
@@ -848,14 +848,14 @@ public abstract class HudRendering implements IHudAccess {
             boolean removeNum = false;
             boolean showComboAmt = false;
             boolean displayCombatTicks =
-                    (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW &&
-                            !user.roundabout$getEffectiveCombatMode() &&
+                    (user.sba$getStandPowers() instanceof PowersSoftAndWet PW &&
+                            !user.sba$getEffectiveCombatMode() &&
                             PowerTypes.hasStandActivelyEquipped(minecraft.player) &&
                             (PW.getShootTicks() > 0))
 
                             ||
 
-                            (user.roundabout$getStandPowers() instanceof PowersEmperor &&
+                            (user.sba$getStandPowers() instanceof PowersEmperor &&
                                     PowerTypes.hasStandActivelyEquipped(minecraft.player));
             if (displayCombatTicks) {
                 removeNum = true;
@@ -869,30 +869,30 @@ public abstract class HudRendering implements IHudAccess {
             }
 
 
-            Entity boundTo = ((StandUser)minecraft.player).roundabout$getBoundTo();
+            Entity boundTo = ((StandUser)minecraft.player).sba$getBoundTo();
             boolean isTSEntity = ((TimeStop) minecraft.level).isTimeStoppingEntity(minecraft.player);
             if (((TimeStop) minecraft.level).CanTimeStopEntity(minecraft.player)) {
 
-                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, false, this.getFont());
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha, false, this.getFont());
                 return true;
-            } if (user.roundabout$getPossessor() instanceof AnubisPossessorEntity possessor && possessor.getTarget() != null) {
+            } if (user.sba$getPossessor() instanceof AnubisPossessorEntity possessor && possessor.getTarget() != null) {
                 StandHudRender.renderPossessionHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
-            } else if (user.roundabout$getStandPowers() instanceof PowersAnubis PA && PA.playTime > 0) {
+            } else if (user.sba$getStandPowers() instanceof PowersAnubis PA && PA.playTime > 0) {
                 StandHudRender.renderRecordingHud(context,minecraft,getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
-            } else if (user.roundabout$isClashing()) {
-                ((StandUserClientPlayer) minecraft.player).roundabout$setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
-                float c = (user.roundabout$getStandPowers().getClashProgress());
-                ((StandUserClientPlayer) minecraft.player).roundabout$setLastClashPower(c);
-                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, c);
+            } else if (user.sba$isClashing()) {
+                ((StandUserClientPlayer) minecraft.player).sba$setClashDisplayExtraTimestamp(this.minecraft.player.tickCount);
+                float c = (user.sba$getStandPowers().getClashProgress());
+                ((StandUserClientPlayer) minecraft.player).sba$setLastClashPower(c);
+                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha, c);
                 return true;
-            } else if (((StandUserClientPlayer) minecraft.player).roundabout$getClashDisplayExtraTimestamp() >= minecraft.player.tickCount - 20) {
-                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).roundabout$getLastClashPower());
+            } else if (((StandUserClientPlayer) minecraft.player).sba$getClashDisplayExtraTimestamp() >= minecraft.player.tickCount - 20) {
+                StandHudRender.renderClashHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha, ((StandUserClientPlayer) minecraft.player).sba$getLastClashPower());
                 return true;
-            } else if (user.roundabout$isGuarding()) {
-                if (!(user.roundabout$getStandPowers() instanceof PowersRatt && PowerTypes.hasStandActivelyEquipped(minecraft.player))) {
-                    StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,showComboAmt);
+            } else if (user.sba$isGuarding()) {
+                if (!(user.sba$getStandPowers() instanceof PowersRatt && PowerTypes.hasStandActivelyEquipped(minecraft.player))) {
+                    StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha,showComboAmt);
                     if (showComboAmt){
                         if (powers instanceof PunchingGeneralPowers pgp) {
                             StandHudRender.renderComboHudNumber(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, pgp);
@@ -900,43 +900,43 @@ public abstract class HudRendering implements IHudAccess {
                     }
                     return true;
                 }
-            } else if (user.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.getActivePower() == PowersSilverChariot.SILVER_CHARIOT_SELF_GRAB) {
+            } else if (user.sba$getStandPowers() instanceof PowersSilverChariot PSC && PSC.getActivePower() == PowersSilverChariot.SILVER_CHARIOT_SELF_GRAB) {
                 // StandHudRender.renderSelfCarryHoverHud(context, this.getCameraPlayer(), screenWidth, screenHeight, x, PSC);
-            } else if (isTSEntity || (user.roundabout$getStandPowers().getMaxTSTime() > 0
-                    && (user.roundabout$getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  user.roundabout$getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
+            } else if (isTSEntity || (user.sba$getStandPowers().getMaxTSTime() > 0
+                    && (user.sba$getStandPowers().getActivePower() == PowerIndex.SPECIAL) ||  user.sba$getStandPowers().getActivePower() == PowerIndex.LEAD_IN)) {
 
-                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, true, this.getFont());
+                StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha, true, this.getFont());
                 return true;
-            }else if (user.roundabout$getGrabberSabbath() != 0){
-                StandHudRender.renderBlockedStandHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
+            }else if (user.sba$getGrabberSabbath() != 0){
+                StandHudRender.renderBlockedStandHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha);
                 return true;
             } else if (minecraft.player.getVehicle() != null && minecraft.player.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()){
 
-                StandHudRender.renderGrabbedHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
+                StandHudRender.renderGrabbedHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha);
                 return true;
-            } else if (user.roundabout$isSealed() && user.roundabout$getGrabberSabbath() == 0){
+            } else if (user.sba$isSealed() && user.sba$getGrabberSabbath() == 0){
 
-                StandHudRender.renderSealedDiscHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
+                StandHudRender.renderSealedDiscHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha);
                 return true;
-            } else if (user.roundabout$getStandPowers().isPiloting() && user.roundabout$getStandPowers().shouldRenderPilotingHud()){
+            } else if (user.sba$getStandPowers().isPiloting() && user.sba$getStandPowers().shouldRenderPilotingHud()){
                 if (this.getCameraPlayer() != null) {
-                    StandHudRender.renderDistanceHUDPiloting(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, user.roundabout$getStandPowers().getPilotingStand());
+                    StandHudRender.renderDistanceHUDPiloting(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, user.sba$getStandPowers().getPilotingStand());
                 }
                 return true;
-            } else if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW && user.roundabout$getEffectiveCombatMode() &&  PowerTypes.hasStandActivelyEquipped(minecraft.player)){
+            } else if (user.sba$getStandPowers() instanceof PowersSoftAndWet PW && user.sba$getEffectiveCombatMode() &&  PowerTypes.hasStandActivelyEquipped(minecraft.player)){
                 StandHudRender.renderShootModeSoftAndWet(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PW);
                 return true;
-            } else if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0){
+            } else if (user.sba$getStandPowers() instanceof PowersCream PC && PC.insideVoidInt > 0){
                 StandHudRender.renderCreamVoidTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
                 return true;
-            } else if (user.roundabout$getStandPowers() instanceof PowersCream PC && PC.transformTimer > 0) {
+            } else if (user.sba$getStandPowers() instanceof PowersCream PC && PC.transformTimer > 0) {
                 StandHudRender.renderCreamTransformTimerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, PC);
                 return true;
             } else if (powers.replaceHudActively()){
                 powers.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
                 if (removeNum){
                     if (displayCombatTicks){
-                        if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                        if (user.sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                             StandHudRender.renderShootModeLightSoftAndWet(
                                     context,
                                     minecraft,
@@ -946,7 +946,7 @@ public abstract class HudRendering implements IHudAccess {
                                     x,
                                     PW
                             );
-                        } else if (user.roundabout$getStandPowers() instanceof PowersEmperor PE) {
+                        } else if (user.sba$getStandPowers() instanceof PowersEmperor PE) {
 
                             StandHudRender.renderShootModeEmperor(
                                     context,
@@ -968,20 +968,20 @@ public abstract class HudRendering implements IHudAccess {
             } else if (fate.replaceHudActively()){
                 fate.getReplacementHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
                 return true;
-            } else if (user.roundabout$getStandPowers().replaceHudActively()) {
-                user.roundabout$getStandPowers().getReplacementHUD(context, this.getCameraPlayer(), screenWidth, screenHeight, x, removeNum);
+            } else if (user.sba$getStandPowers().replaceHudActively()) {
+                user.sba$getStandPowers().getReplacementHUD(context, this.getCameraPlayer(), screenWidth, screenHeight, x, removeNum);
                 return true;
             } else if (boundTo != null && user.rdbt$getBoundType(boundTo) == 1){
                 StandHudRender.renderCKBDistance(context,this.getCameraPlayer(),screenWidth,screenHeight,x,boundTo.getId());
                 return true;
-            } else if (((IEntityAndData)minecraft.player).roundabout$getTrueInvisibility() > -1){
+            } else if (((IEntityAndData)minecraft.player).sba$getTrueInvisibility() > -1){
                 StandHudRender.renderInvisibilityHUD(context,this.getCameraPlayer(),screenWidth,screenHeight,x);
                 return true;
             } else if (PowerTypes.isInD4CWorldWithRender(minecraft.player)){
                 StandHudRender.renderForeignWorldTimer(context,this.getCameraPlayer(),screenWidth,screenHeight,x,removeNum);
                 return true;
-            } else if (user.roundabout$getGuardPoints() < user.roundabout$getMaxGuardPoints()){
-                StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,showComboAmt);
+            } else if (user.sba$getGuardPoints() < user.sba$getMaxGuardPoints()){
+                StandHudRender.renderGuardHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha,showComboAmt);
                 if (showComboAmt){
                     if (powers instanceof PunchingGeneralPowers pgp) {
                         StandHudRender.renderComboHudNumber(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, pgp);
@@ -989,19 +989,19 @@ public abstract class HudRendering implements IHudAccess {
                 }
                 return true;
             } else if (minecraft.player.getVehicle() != null && minecraft.player.getVehicle() instanceof RoadRollerEntity RRE && RRE.getPavingBoolean()) {
-                StandHudRender.renderRoadRollerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,  RRE);
+                StandHudRender.renderRoadRollerHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha,  RRE);
                 return true;
             } else if (ClientUtil.getRoadRollerPickingRRE() != null && ClientUtil.getRoadRollerPickingRRE() instanceof RoadRollerEntity && ClientUtil.getRoadRollerPickingRRE().getPickupBoolean()==minecraft.player.getId()) {
-                StandHudRender.renderRoadRollerPickupHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha,  ClientUtil.getRoadRollerPickingRRE());
+                StandHudRender.renderRoadRollerPickupHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha,  ClientUtil.getRoadRollerPickingRRE());
                 return true;
-            } else if (((IPlayerEntity)minecraft.player).roundabout$getDisplayExp() && user.roundabout$hasAStand()){
+            } else if (((IPlayerEntity)minecraft.player).sba$getDisplayExp() && user.sba$hasAStand()){
 
-                StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, removeNum);
+                StandHudRender.renderExpHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, sba$flashAlpha, sba$otherFlashAlpha, removeNum);
                 if (displayCombatTicks) {
 
                     if (displayCombatTicks) {
 
-                        if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                        if (user.sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                             StandHudRender.renderShootModeLightSoftAndWet(
                                     context,
                                     minecraft,
@@ -1011,7 +1011,7 @@ public abstract class HudRendering implements IHudAccess {
                                     x,
                                     PW
                             );
-                        } else if (user.roundabout$getStandPowers() instanceof PowersEmperor PE) {
+                        } else if (user.sba$getStandPowers() instanceof PowersEmperor PE) {
 
                             StandHudRender.renderShootModeEmperor(
                                     context,
@@ -1029,7 +1029,7 @@ public abstract class HudRendering implements IHudAccess {
             } else if (removeNum) {
                 StandHudRender.renderExperienceBar(minecraft, screenWidth, screenHeight, context);
                 if (displayCombatTicks) {
-                    if (user.roundabout$getStandPowers() instanceof PowersSoftAndWet PW) {
+                    if (user.sba$getStandPowers() instanceof PowersSoftAndWet PW) {
                         StandHudRender.renderShootModeLightSoftAndWet(
                                 context,
                                 minecraft,
@@ -1039,7 +1039,7 @@ public abstract class HudRendering implements IHudAccess {
                                 x,
                                 PW
                         );
-                    } else if (user.roundabout$getStandPowers() instanceof PowersEmperor PE) {
+                    } else if (user.sba$getStandPowers() instanceof PowersEmperor PE) {
 
                         StandHudRender.renderShootModeEmperor(
                                 context,
@@ -1053,7 +1053,7 @@ public abstract class HudRendering implements IHudAccess {
                     }
                 } else if (showComboAmt){
                     if (((IPowersPlayer)minecraft.player).rdbt$getPowers() instanceof PunchingGeneralPowers pgp) {
-                        roundabout$RenderHeatBars(context, x);
+                        sba$RenderHeatBars(context, x);
                         StandHudRender.renderComboHudNumber(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, x, pgp);
                     }
                 }
@@ -1067,8 +1067,8 @@ public abstract class HudRendering implements IHudAccess {
     @Inject(method = "renderExperienceBar", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V", shift = At.Shift.AFTER),
             cancellable = true)
-    public void roundabout$renderExperienceBar2(GuiGraphics $$0, int $$1, CallbackInfo ci){
-        if (((StandUser) minecraft.player).roundabout$getLeapTicks() > -1){
+    public void sba$renderExperienceBar2(GuiGraphics $$0, int $$1, CallbackInfo ci){
+        if (((StandUser) minecraft.player).sba$getLeapTicks() > -1){
             int k = screenWidth/2 - 5;
             int l = screenHeight - 31 - 5;
             $$0.blit(StandIcons.JOJO_ICONS, k, l, 183, 40, 9, 9);
@@ -1082,7 +1082,7 @@ public abstract class HudRendering implements IHudAccess {
         // updated the mixin to be cancellable so i can hide the crosshair in map mode while it's active
         // lyin eyes map
         if (this.minecraft.player != null
-                && ((StandUser) this.minecraft.player).roundabout$getStandPowers() instanceof PowersLyinEyes LE
+                && ((StandUser) this.minecraft.player).sba$getStandPowers() instanceof PowersLyinEyes LE
                 && LE.getMapModeClient()
                 && LE.isActive()) {
             LyinEyesMapOverlay.renderMap($$0, this.minecraft.getFrameTime());
@@ -1091,7 +1091,7 @@ public abstract class HudRendering implements IHudAccess {
         }
         //See ForgeForgeGui
         RenderSystem.defaultBlendFunc();
-        StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), roundabout$flashAlpha, roundabout$otherFlashAlpha);
+        StandHudRender.renderAttackHud($$0, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, this.getVehicleMaxHearts(this.getPlayerVehicleWithHealth()), sba$flashAlpha, sba$otherFlashAlpha);
 
 
         if (this.minecraft.player != null) {
@@ -1107,7 +1107,7 @@ public abstract class HudRendering implements IHudAccess {
                             if (!this.minecraft.player.onGround()) {
                                 Vec3 vec3d = this.minecraft.player.getEyePosition(1);
 
-                                Direction gravD = ((IGravityEntity) this.minecraft.player).roundabout$getGravityDirection();
+                                Direction gravD = ((IGravityEntity) this.minecraft.player).sba$getGravityDirection();
                                 Vec3 vec3d2 = this.minecraft.player.getViewVector(1);
                                 float reach = 1.5F;
                                 Vec3 vec3d3 = vec3d.add(vec3d2.x * reach, vec3d2.y * reach, vec3d2.z * reach);
@@ -1190,13 +1190,13 @@ public abstract class HudRendering implements IHudAccess {
     @Shadow @Final private static ResourceLocation GUI_ICONS_LOCATION;
 
     @Override
-    public void roundabout$setFlashAlpha(float flashAlpha) {
-        this.roundabout$flashAlpha = flashAlpha;
+    public void sba$setFlashAlpha(float flashAlpha) {
+        this.sba$flashAlpha = flashAlpha;
     }
 
     @Override
-    public void roundabout$setOtherFlashAlpha(float otherFlashAlpha) {
-        this.roundabout$otherFlashAlpha = otherFlashAlpha;
+    public void sba$setOtherFlashAlpha(float otherFlashAlpha) {
+        this.sba$otherFlashAlpha = otherFlashAlpha;
     }
-//    public static final String DEBUG_TEXT_1 = "hud.roundabout.standout";
+//    public static final String DEBUG_TEXT_1 = "hud.sba.standout";
 }

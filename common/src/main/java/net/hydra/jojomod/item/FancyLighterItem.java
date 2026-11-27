@@ -1,6 +1,6 @@
 package net.hydra.jojomod.item;
 
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.SBA;
 import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.block.*;
@@ -122,11 +122,11 @@ public class FancyLighterItem extends BlockItem {
                         Entity user = $$8.getEntity(tag.getUUID("StuffOther"));
                         if (user != null && $$0 != null) {
                             if(user != $$0){
-                                boolean userPowers = !(user instanceof Player) || user instanceof Player p && ((IPlayerEntity)p).roundabout$getPower() == PowerTypes.STAND.ordinal();
-                                if(userPowers && ((StandUser)user).roundabout$getStandPowers() instanceof PowersBlackSabbath pbs){
+                                boolean userPowers = !(user instanceof Player) || user instanceof Player p && ((IPlayerEntity)p).sba$getPower() == PowerTypes.STAND.ordinal();
+                                if(userPowers && ((StandUser)user).sba$getStandPowers() instanceof PowersBlackSabbath pbs){
                                     if(pbs.tickDown2 <= -9) {
-                                        if(!((StandUser) user).roundabout$getActive()){
-                                            ((StandUser) user).roundabout$setActive(true);
+                                        if(!((StandUser) user).sba$getActive()){
+                                            ((StandUser) user).sba$setActive(true);
                                         }
 
                                         if (!pbs.blackSabbathTargets.contains($$0)) {

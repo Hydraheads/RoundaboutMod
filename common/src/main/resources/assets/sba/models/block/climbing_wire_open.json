@@ -1,0 +1,7 @@
+{
+  "parent": "sba:block/flat_trapdoor_open",
+  "textures": {
+    "texture": "sba:block/climbing_wire"
+  },
+  "render_type": "cutout"
+}

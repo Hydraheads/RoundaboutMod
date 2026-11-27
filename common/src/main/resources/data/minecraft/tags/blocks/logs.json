@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "roundabout:ginkgo_log",
-    "roundabout:ginkgo_wood",
-    "roundabout:stripped_ginkgo_log",
-    "roundabout:stripped_ginkgo_wood"
+    "sba:ginkgo_log",
+    "sba:ginkgo_wood",
+    "sba:stripped_ginkgo_log",
+    "sba:stripped_ginkgo_wood"
   ]
 }
