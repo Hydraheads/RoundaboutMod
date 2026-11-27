@@ -954,6 +954,8 @@ public class ForgeEvents {
         ModParticles.PUZZLE_PARTICLE = ForgeParticles.PUZZLE_PARTICLE.get();
         ModParticles.VITAL_ESSENCE = ForgeParticles.VITAL_ESSENCE.get();
         ModParticles.GE_WAVE = ForgeParticles.GE_WAVE.get();
+        ModParticles.GOLDEN_CLOUD = ForgeParticles.GOLDEN_CLOUD.get();
+        ModParticles.GOLDEN_CLOUD_SMALL = ForgeParticles.GOLDEN_CLOUD_SMALL.get();
         ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();
         ModParticles.GINKGO_LEAVES = ForgeParticles.GINKGO_LEAVES.get();
         ModParticles.RAIN_BUBBLE = ForgeParticles.RAIN_BUBBLE.get();

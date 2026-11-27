@@ -131,6 +131,8 @@ public class FabricParticlesClient {
 
         ParticleFactoryRegistry.getInstance().register(FabricParticles.VITAL_ESSENCE, VitalEssenceParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GE_WAVE, GEWaveParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLDEN_CLOUD, GoldenCloudParticle.Provider::new);
+        ParticleFactoryRegistry.getInstance().register(FabricParticles.GOLDEN_CLOUD_SMALL, GoldenCloudSmallParticle.Provider::new);
 
         ParticleFactoryRegistry.getInstance().register(FabricParticles.AUTUMN_LEAVES, AutumnLeavesParticle.Provider::new);
         ParticleFactoryRegistry.getInstance().register(FabricParticles.GINKGO_LEAVES, GinkgoLeavesParticle.Provider::new);

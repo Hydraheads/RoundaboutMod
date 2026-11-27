@@ -45,6 +45,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -2265,7 +2266,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     protected final Map<ResolveSource, SourceProgress> resolveProgress = new EnumMap<>(ResolveSource.class);
 
     public float getResolvePoints() { return resolvePoints; }
-    public float getNeededResolvePoints() { return 300.0F; }
+    public float getNeededResolvePoints() { return 10.0F; }
 
     @Override
     public boolean onStandArrowUse() {
@@ -2277,11 +2278,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         20, 0, 0, 0, 0.4);
 
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GE_REQUIEM_ARROW_EVENT, SoundSource.PLAYERS, 1.05F, 1.0f);
-
-                if (!isClient()) {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_activated").
-                            withStyle(ChatFormatting.YELLOW), true);
-                }
 
                 return false;
             }else {
@@ -2539,6 +2535,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void updateRequiem() {
+        if (!this.self.level().isClientSide() && attackTimeDuring >= 0 && attackTimeDuring < 240) {
+            spawnRequiemGatheringClouds();
+        }
 
         if (attackTimeDuring >= 240) {
             //setPowerNone();
@@ -2605,6 +2604,65 @@ public class PowersGoldExperience extends BlockGrabPreset {
             ((StandUser)self).roundabout$setStand(GERequiem);
 
         }
+    }
+
+    private void spawnRequiemGatheringClouds() {
+        int smallCloudsToSpawn;
+        if (attackTimeDuring < 80) {
+            smallCloudsToSpawn = (attackTimeDuring % 4 == 0) ? 1 : 0;
+        } else if (attackTimeDuring < 160) {
+            smallCloudsToSpawn = (attackTimeDuring % 2 == 0) ? 1 : 0;
+        } else {
+            smallCloudsToSpawn = 2;
+        }
+
+        boolean spawnBigCloud = attackTimeDuring >= 30 && this.self.level().random.nextFloat() < 0.14F;
+
+        if (smallCloudsToSpawn == 0 && !spawnBigCloud) {
+            return;
+        }
+
+        Level level = this.self.level();
+        StandEntity stand = getStandEntity(this.self);
+
+        Vec3 lookVec = this.self.getLookAngle();
+        Vec3 forward = new Vec3(lookVec.x, 0.0, lookVec.z);
+        if (forward.lengthSqr() < 1.0E-4) {
+            forward = new Vec3(0.0, 0.0, 1.0);
+        } else {
+            forward = forward.normalize();
+        }
+        Vec3 right = new Vec3(-forward.z, 0.0, forward.x);
+
+        for (int i = 0; i < smallCloudsToSpawn; i++) {
+            spawnSingleGoldenCloud(level, stand, forward, right, false);
+        }
+
+        if (spawnBigCloud) {
+            spawnSingleGoldenCloud(level, stand, forward, right, true);
+        }
+    }
+
+    private void spawnSingleGoldenCloud(Level level, StandEntity stand, Vec3 forward, Vec3 right, boolean isBig) {
+        Entity anchor = (stand != null && !stand.isRemoved() && level.random.nextBoolean()) ? stand : this.self;
+
+        double halfSpan = 2.0 + level.random.nextDouble() * 0.8;
+        double sideSign = level.random.nextBoolean() ? 1.0 : -1.0;
+        double depthOffset = (level.random.nextDouble() - 0.35) * 1.4;
+        double yPos = anchor.getY() + anchor.getBbHeight() * (0.10 + level.random.nextDouble() * 0.95);
+
+        double speed = isBig
+                ? (0.035 + level.random.nextDouble() * 0.045)
+                : (0.045 + level.random.nextDouble() * 0.080);
+
+        Vec3 passCenter = new Vec3(anchor.getX(), yPos, anchor.getZ()).add(forward.scale(depthOffset));
+        Vec3 spawnPos = passCenter.subtract(right.scale(sideSign * halfSpan));
+        Vec3 velocity = right.scale(sideSign * speed);
+
+        SimpleParticleType particleType = isBig ? ModParticles.GOLDEN_CLOUD : ModParticles.GOLDEN_CLOUD_SMALL;
+        sendParticlesIfPossible(level, particleType,
+                spawnPos.x, spawnPos.y, spawnPos.z,
+                0, velocity.x, 0.0, velocity.z, 1.0);
     }
 
     // requiem animation end
