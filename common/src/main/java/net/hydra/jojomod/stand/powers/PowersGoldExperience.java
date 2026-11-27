@@ -2262,6 +2262,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public boolean isPossibleToRequiem() {
         ItemStack goldDisc = ((StandUser) this.self).roundabout$getStandDisc();
         boolean bypass = ((Player)this.self).isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+        if (bypass) {
+            resolvePoints = 300;
+        }
         return (resolvePoints >= getNeededResolvePoints() || bypass) && ((StandUser)self).roundabout$getActive();
     }
 
