@@ -124,7 +124,7 @@ public class TuskAct3Model<T extends TuskEntity> extends StandModel<T> {
 
     @Override
     public float rotationStrength() {
-        return 0.5F;
+        return 0.3F;
     }
 
     @Override
