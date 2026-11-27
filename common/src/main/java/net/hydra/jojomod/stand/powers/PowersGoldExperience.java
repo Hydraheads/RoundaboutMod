@@ -2535,6 +2535,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(GoldExperienceEntity.REQUIEM);
             this.poseStand(OffsetIndex.IN_FRONT);
+            ((IPlayerEntity) this.getSelf()).roundabout$SetPoseEmote(Poses.GIORNO.id);
             return true;
         }
         return false;
@@ -2551,6 +2552,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     spawnRequiemCrackStage(stand, 2);
                 } else if (attackTimeDuring == 171) {
                     spawnRequiemCrackStage(stand, 3);
+                } else if (attackTimeDuring == 212) {
+                    spawnRequiemFlare(stand, -0.32, 0.65);
+                } else if (attackTimeDuring == 217) {
+                    spawnRequiemFlare(stand, 0.28, 0.58);
+                } else if (attackTimeDuring == 222) {
+                    spawnRequiemFlare(stand, -0.10, 0.5);
                 }
             }
         }
@@ -2560,6 +2567,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (oldStand != null && !oldStand.isRemoved()) {
                     spawnRequiemCrackStage(oldStand, 4);
                 }
+            }
+
+            if (this.self instanceof Player player) {
+                ((IPlayerEntity) player).roundabout$SetPoseEmote(Poses.NONE.id);
             }
 
             //setPowerNone();
@@ -2737,6 +2748,21 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         75, spreadXZ, spreadY, spreadXZ, 0.26);
             }
         }
+    }
+
+    private void spawnRequiemFlare(StandEntity stand, double sideFraction, double heightFraction) {
+        Level level = this.self.level();
+        Vec3 look = Vec3.directionFromRotation(0.0F, stand.getYRot());
+        Vec3 right = new Vec3(-look.z, 0.0, look.x);
+
+        double forward = 0.28;
+        double side = stand.getBbWidth() * sideFraction;
+        double x = stand.getX() + look.x * forward + right.x * side;
+        double y = stand.getY() + stand.getBbHeight() * heightFraction;
+        double z = stand.getZ() + look.z * forward + right.z * side;
+
+        sendParticlesIfPossible(level, ModParticles.REQUIEM_FLARE, x, y, z,
+                0, 0.0, 0.002, 0.0, 1.0);
     }
 
     // requiem animation end
