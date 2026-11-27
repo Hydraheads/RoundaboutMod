@@ -29,7 +29,6 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.*;
-import net.hydra.jojomod.mixin.stand_users.PowersItemStack;
 import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
@@ -159,7 +158,7 @@ public class PowersKingNothing extends NewDashPreset {
     private int summonAnimTicks = 0;
     private int disintegrateAnimTicks = 0;
 
-    private boolean startPhaseTickAfter = false;
+    private boolean justSummoned = false;
 
     public PowersKingNothing(LivingEntity self) {
         super(self);
@@ -699,8 +698,7 @@ public class PowersKingNothing extends NewDashPreset {
                     TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
                     if (tc != null) {
                         tc.setUser(this.getSelf());
-                        tc.setPos(getStandEntity(getSelf()) == null ? getSelf().getBoundingBox().getCenter() :
-                                getStandEntity(getSelf()).getBoundingBox().getCenter());
+                        tc.setPos(getSelf().getBoundingBox().getCenter());
                         this.getSelf().level().addFreshEntity(tc);
                         this.trackingCloud = tc;
                     }
@@ -712,7 +710,10 @@ public class PowersKingNothing extends NewDashPreset {
                     int color = getParticleColor(pdata);
                     MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
                             ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                            trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.3, 0.3, 0.3, 0.01);
+                            trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1,
+                            trackingCloud.isInsideTrackedBlock() ? 0.35 : 0.3,
+                            trackingCloud.isInsideTrackedBlock() ? 0.35 : 0.3,
+                            trackingCloud.isInsideTrackedBlock() ? 0.35 : 0.3, 0.01);
                 }
             }
         }
@@ -943,8 +944,8 @@ public class PowersKingNothing extends NewDashPreset {
         if (getSelf().isAlive() && !getSelf().isRemoved()) {
             // Tick Phase
             if (isPhasing() && !this.isClient()) {
-                if (startPhaseTickAfter) {
-                    startPhaseTickAfter = false;
+                if (justSummoned) {
+                    justSummoned = false;
                     startPhaseMovement(getStandEntity(getSelf()));
                 }
                 else if (this.attackTimeDuring == 108) {
@@ -1074,7 +1075,7 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
             else {
-               startPhaseTickAfter = false;
+               justSummoned = false;
             }
         }
     }
@@ -1338,6 +1339,17 @@ public class PowersKingNothing extends NewDashPreset {
 
     private boolean startMemorizedScentTrack() {
         if (!onCooldown(PowerIndex.SKILL_1)) {
+            StandEntity stand = getStandEntity(getSelf());
+            if (stand != null) {
+                for (int i = 0; i < 8; i++) {
+                    int color = getParticleColor(getVisualInfo());
+                    MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                            ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                            stand.getBoundingBox().getCenter().x(), stand.getBoundingBox().getCenter().y(),
+                            stand.getBoundingBox().getCenter().z(), 1,
+                            0.3, 0.3, 0.3, 0.01);
+                }
+            }
             if (!isClient()) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 20);
                 this.setCooldown(PowerIndex.SKILL_1, 20);
@@ -1515,7 +1527,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void startPhaseMovement(StandEntity stand) {
-        if (!startPhaseTickAfter) {
+        if (!justSummoned) {
             this.poseStand(OffsetIndex.LOOSE);
             animateStand(KingNothingEntity.REACH);
             this.attackTimeDuring = 0;
@@ -1987,7 +1999,7 @@ public class PowersKingNothing extends NewDashPreset {
             summonAnimTicks = 0;
             returnAnimTicks = 0;
             animateStand(KingNothingEntity.SUMMON);
-            startPhaseTickAfter = true;
+            justSummoned = true;
         }
     }
 

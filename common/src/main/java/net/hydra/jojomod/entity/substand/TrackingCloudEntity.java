@@ -67,6 +67,7 @@ public class TrackingCloudEntity extends StandEntity {
         else {
             PKN.clearTrackedEntity();
             if (PKN.isInBlockGroup(level().getBlockState(blockPosition()).getBlock())) {
+
                 // PKN.setTrackedBlockPos(blockPosition());
             }
             else {
@@ -184,5 +185,10 @@ public class TrackingCloudEntity extends StandEntity {
     public static AttributeSupplier.Builder createStandAttributes() {
         return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,
                 0.2F).add(Attributes.MAX_HEALTH, 20.0).add(Attributes.ATTACK_DAMAGE, 2.0);
+    }
+
+    public boolean isInsideTrackedBlock() {
+        return ((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersKingNothing PKN
+                && PKN.isInBlockGroup(level().getBlockState(blockPosition()).getBlock());
     }
 }
