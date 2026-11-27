@@ -760,6 +760,13 @@ public class FabricEntities {
                         EntityType.Builder.of(DarkMirageEntity::new, MobCategory.MISC).
                                 sized(ModEntities.justiceWidth, ModEntities.justiceHeight).clientTrackingRange(14).build(Roundabout.MOD_ID+":dark_mirage")
                 );
+        public static final EntityType<KingNothingEntity> KING_NOTHING =
+                Registry.register(
+                        BuiltInRegistries.ENTITY_TYPE,
+                        Roundabout.location("king_nothing"),
+                        EntityType.Builder.of(KingNothingEntity::new, MobCategory.MISC)
+                                .sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":king_nothing")
+                );
     public static final EntityType<TuskEntity> TUSK_A1 =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -861,6 +868,13 @@ public class FabricEntities {
                             .sized(0.75f, 2.05f)
                             .clientTrackingRange(14)
                             .build(Roundabout.MOD_ID + ":gold_experience_beta")
+            );
+    public static final EntityType<GoldExperienceRequiemDeimosEntity> GOLD_EXPERIENCE_REQUIEM_DEIMOS =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("gold_experience_requiem_deimos"),
+                    EntityType.Builder.of(GoldExperienceRequiemDeimosEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":gold_experience_requiem_deimos")
             );
     public static final EntityType<GEBrambleEntity> GE_BRAMBLE =
             Registry.register(
@@ -1023,7 +1037,7 @@ public class FabricEntities {
                     BuiltInRegistries.ENTITY_TYPE,
                     new ResourceLocation(Roundabout.MOD_ID, "ctr_barrier"),
                     EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
-                            sized(4f, 4f).
+                            sized(4f, 10f).
                             clientTrackingRange(15).build(Roundabout.MOD_ID+":ctrbarrier")
             );
     public static final EntityType<BlockWallEntity> BLOCK_WALL =
@@ -1520,6 +1534,10 @@ public class FabricEntities {
                     EntityType.Builder.of(SheerHeartAttackEntity::new, MobCategory.CREATURE).
                             sized(SheerHeartAttackEntity.width, SheerHeartAttackEntity.height).clientTrackingRange(15).build(Roundabout.MOD_ID+":sheer_heart_attack")
             );
+    public static final EntityType<TrackingCloudEntity> TRACKING_CLOUD = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE, Roundabout.location("tracking_cloud"),
+            EntityType.Builder.of(TrackingCloudEntity::new, MobCategory.MISC).sized(0.1f, 0.1f).clientTrackingRange(
+                    15).build(Roundabout.MOD_ID + ":tracking_cloud"));
     public static final EntityType<GinkgoBoatEntity> GINKGO_BOAT =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1610,6 +1628,7 @@ public class FabricEntities {
                 ModEntities.PEARL_JAM = PEARL_JAM;
                 ModEntities.JUSTICE_PIRATE = JUSTICE_PIRATE;
                 ModEntities.DARK_MIRAGE = DARK_MIRAGE;
+                ModEntities.KING_NOTHING = KING_NOTHING;
                 ModEntities.TUSK_A1 = TUSK_A1;
                 ModEntities.TUSK_A2 = TUSK_A2;
                 ModEntities.TUSK_A3 = TUSK_A3;
@@ -1623,6 +1642,7 @@ public class FabricEntities {
         ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
         ModEntities.GOLD_EXPERIENCE_REQUIEM = GOLD_EXPERIENCE_REQUIEM;
         ModEntities.GOLD_EXPERIENCE_BETA = GOLD_EXPERIENCE_BETA;
+        ModEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS = GOLD_EXPERIENCE_REQUIEM_DEIMOS;
         ModEntities.GE_BRAMBLE = GE_BRAMBLE;
         ModEntities.GE_THORN = GE_THORN;
         ModEntities.GE_BAT = GE_BAT;
@@ -1763,6 +1783,7 @@ public class FabricEntities {
 
                 ModEntities.METALLICA_KNIFE = METALLICA_KNIFE;
                 ModEntities.SHEER_HEART_ATTACK = SHEER_HEART_ATTACK;
+                ModEntities.TRACKING_CLOUD = TRACKING_CLOUD;
 
         ModEntities.DNA_CREATION_SPAWNER = DNA_CREATION_SPAWNER;
 
@@ -1860,6 +1881,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(JUSTICE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(JUSTICE_PIRATE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(DARK_MIRAGE, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(KING_NOTHING, KingNothingEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_A1, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_A2, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(TUSK_A3, StandEntity.createStandAttributes());
@@ -1891,6 +1913,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE_REQUIEM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE_BETA, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE_REQUIEM_DEIMOS, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT_PHARAOH, StandEntity.createStandAttributes());
 
@@ -1915,6 +1938,7 @@ public class FabricEntities {
         FabricDefaultAttributeRegistry.register(CTR_BARRIER, CTRbarrierEntity.createStandAttributes());
 
         FabricDefaultAttributeRegistry.register(SHEER_HEART_ATTACK, SheerHeartAttackEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(TRACKING_CLOUD, TrackingCloudEntity.createStandAttributes());
 
         /*Spawn Weights and Biomes*/
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.CREATURE,
@@ -1927,12 +1951,12 @@ public class FabricEntities {
                         .or(BiomeSelectors.tag(BiomeTags.IS_BADLANDS))
                         .or(BiomeSelectors.tag(BiomeTags.IS_SAVANNA)),
                 MobCategory.CREATURE,
-                ModEntities.SNAKE, 8, 1, 2
+                ModEntities.SNAKE, 4, 1, 2
         );
         BiomeModifications.addSpawn(
                 BiomeSelectors.tag(BiomeTags.IS_JUNGLE),
                 MobCategory.CREATURE,
-                ModEntities.SNAKE, 10, 1, 3
+                ModEntities.SNAKE, 6, 1, 3
         );
         BiomeModifications.addSpawn(
                 BiomeSelectors.includeByKey(
@@ -1942,7 +1966,7 @@ public class FabricEntities {
                         Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_RIVER
                 ),
                 MobCategory.CREATURE,
-                ModEntities.SNAKE, 7, 1, 2
+                ModEntities.SNAKE, 3, 1, 2
         );
         BiomeModifications.addSpawn(
                 BiomeSelectors.tag(BiomeTags.IS_FOREST)
@@ -1952,7 +1976,7 @@ public class FabricEntities {
                                 Biomes.SWAMP, Biomes.MANGROVE_SWAMP, Biomes.MEADOW
                         )),
                 MobCategory.CREATURE,
-                ModEntities.SNAKE, 6, 1, 2
+                ModEntities.SNAKE, 2, 1, 2
         );
         BiomeModifications.addSpawn(
                 BiomeSelectors.tag(BiomeTags.IS_RIVER).or(BiomeSelectors.tag(BiomeTags.IS_OCEAN)),

@@ -68,7 +68,12 @@ public class ServerToClientPackets {
             SendSafeSound2("send_safe_sound_2"),
             SendSafeParticle("send_safe_particle"),
             SyncGamblingState( "sync_gambling_state "),
-            SyncKqInflaton("sync_kq_inflation");
+            SyncKqInflaton("sync_kq_inflation"),
+            KnAddItemContainer("kn_add_item_container"),
+            KnRemoveItemContainer("kn_remove_item_container"),
+            StartRTZ("start_rtz");
+
+
 
             public final String value;
 

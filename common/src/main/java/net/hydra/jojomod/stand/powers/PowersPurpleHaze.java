@@ -2,7 +2,6 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -19,7 +18,7 @@ import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
-import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.util.C2SPacketUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -1005,18 +1004,20 @@ public class PowersPurpleHaze extends NewPunchingStand {
             if (canExecuteMoveWithLevel(getDistortionAndPodBiteLevel())) {
                 if (self.hasEffect(ModEffects.VIRUS_IMMUNITY)) {
                     setSkillIcon(context, x, y, 1, StandIcons.VIRUS_SPIT, PowerIndex.POWER_1_BONUS);
-                } else setSkillIcon(context, x, y, 1, StandIcons.POD_BITE, PowerIndex.SKILL_1_SNEAK);
-            } else setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+                } else {
+                    setSkillIcon(context, x, y, 1, StandIcons.POD_BITE, PowerIndex.SKILL_1_SNEAK);
+                }
+            } else {
+                setSkillIcon(context, x, y, 1, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         }
         else setSkillIcon(context, x, y, 1, StandIcons.POD_THROW, PowerIndex.SKILL_1);
 
         if (isHoldingSneak()){
-            if (canExecuteMoveWithLevel(getStrangleLevel())) {
-            setSkillIcon(context, x, y, 2, StandIcons.PH_HEAVY_KICK, PowerIndex.SKILL_2_SNEAK);
-            } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
-        }else if (canExecuteMoveWithLevel(getStrangleLevel())) {
-            setSkillIcon(context, x, y, 2, StandIcons.PURPLE_HAZE_STRANGLE, PowerIndex.SKILL_2);
-        } else setSkillIcon(context, x, y, 2, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            LockedOrNot(context, x, y, 2, StandIcons.PH_HEAVY_KICK, PowerIndex.SKILL_2_SNEAK,getStrangleLevel());
+        } else {
+            LockedOrNot(context, x, y, 2, StandIcons.PURPLE_HAZE_STRANGLE, PowerIndex.SKILL_2,getStrangleLevel());
+        }
 
         if (isHoldingSneak()) {
             if (canExecuteMoveWithLevel(getLeapLevel())) {
@@ -1026,7 +1027,9 @@ public class PowersPurpleHaze extends NewPunchingStand {
                 } else {
                     setSkillIcon(context, x, y, 3, StandIcons.STAND_LEAP_PURPLE_HAZE, PowerIndex.GLOBAL_DASH);
                 }
-            } else setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            } else {
+                setSkillIcon(context, x, y, 3, StandIcons.LOCKED, PowerIndex.NO_CD, true);
+            }
         } else {
             if (!(((StandUser) this.getSelf()).roundabout$getLeapTicks() > -1) && !this.getSelf().onGround() && canVault()) {
                 setSkillIcon(context, x, y, 3, StandIcons.PURPLE_HAZE_LEDGE_GRAB, PowerIndex.GLOBAL_DASH);
@@ -1894,7 +1897,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
         int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(getStandSkin(), PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
 
         sendParticlesIfPossible(self.level(),
-                HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_BLASTWAVE, color),
+                ColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_BLASTWAVE, color),
                 pos.x, pos.y + 0.05, pos.z,
                 1, 0.005, 0.01, 0.005, 0.02);
         /*sendParticlesIfPossible(self.level(),

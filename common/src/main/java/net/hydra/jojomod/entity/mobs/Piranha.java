@@ -6,14 +6,13 @@ import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FollowFlockLeaderGoal;
@@ -29,8 +28,9 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
-public class Piranha extends AbstractSchoolingFish {
+public class Piranha extends AbstractSchoolingFish implements NeutralMob {
     public Piranha(EntityType<? extends Piranha> $$0, Level $$1) {
         super($$0, $$1);
     }
@@ -39,6 +39,33 @@ public class Piranha extends AbstractSchoolingFish {
 
     private byte ATTACK = 4;
 
+    private static final UniformInt PERSISTENT_ANGER_TIME;
+    static {
+        PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
+    }
+    private int remainingPersistentAngerTime;
+    @javax.annotation.Nullable
+    private UUID persistentAngerTarget;
+
+    public void startPersistentAngerTimer() {
+        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
+    }
+    public void setRemainingPersistentAngerTime(int $$0) {
+        this.remainingPersistentAngerTime = $$0;
+    }
+
+    public int getRemainingPersistentAngerTime() {
+        return this.remainingPersistentAngerTime;
+    }
+
+    public void setPersistentAngerTarget(@javax.annotation.Nullable UUID $$0) {
+        this.persistentAngerTarget = $$0;
+    }
+
+    @javax.annotation.Nullable
+    public UUID getPersistentAngerTarget() {
+        return this.persistentAngerTarget;
+    }
     @Override
     protected void registerGoals() {
         // eeeek bitey fish :(

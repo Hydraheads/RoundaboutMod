@@ -5,31 +5,27 @@ import net.hydra.jojomod.access.IAbstractArrowAccess;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IProjectileAccess;
 import net.hydra.jojomod.access.ISuperThrownAbstractArrow;
-import net.hydra.jojomod.entity.objects.GentlyWeepsEntity;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.StandEntity;
-import net.hydra.jojomod.entity.visages.CloneEntity;
-import net.hydra.jojomod.event.ModEffects;
 import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
-import net.hydra.jojomod.stand.powers.PowersWhiteAlbum;
-import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -51,19 +47,22 @@ public class CTRbarrierEntity extends StandEntity {
 
     private int lifespan = 160;
 
-    public int followTimer = 1;
+    private boolean isInRain(Entity ent) {
+        if (ClientNetworking.getAppropriateConfig().catchTheRainbowSettings.catchTheRainbowCanAlwaysUse) {
+            return true;
+        }else{
+            BlockPos $$0 = ent.blockPosition();
+            return ent.level().isRainingAt($$0)
+                    || ent.level().isRainingAt(BlockPos.containing((double) $$0.getX(), ent.getBoundingBox().maxY, (double) $$0.getZ()));
+        }
+    }
 
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
-            if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR
-                    && PCR.isInRain()
-                    && User.isAlive()) {
-                if (followTimer != 10) {
-                    this.setPos(User.getX(), User.getY(), User.getZ());
-                    followTimer++;
-                }
-            } else {
+            if (User == null
+                    || !(((StandUser) User).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR)
+                    || !User.isAlive()) {
                 this.discard();
             }
 
@@ -84,16 +83,20 @@ public class CTRbarrierEntity extends StandEntity {
                         continue;
                     }
                     if (mob instanceof Projectile pj){
-                        dealWithProjectile(pj,this);
+                        if (isInRain(pj)) {
+                            dealWithProjectile(pj, this);
+                        }
                     } else if (mob instanceof LivingEntity && mob != User){
-                        MainUtil.makeBleed(mob, 1, 40, User);
-                        mob.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SHARP_RAINDROP), 2);
+                        if (isInRain(mob)) {
+                            MainUtil.makeBleed(mob, 1, 80, User);
+                            mob.hurt(ModDamageTypes.of(this.level(), ModDamageTypes.SHARP_RAINDROP), 2);
+                        }
                     }
                 }
             }
             double randX = Roundabout.RANDOM.nextDouble(-2, 2);
             double randZ = Roundabout.RANDOM.nextDouble(-2, 2);
-            double randY = Roundabout.RANDOM.nextDouble(0, 4);
+            double randY = Roundabout.RANDOM.nextDouble(0, 10);
             if (Math.random() > 0.3) {
                 sendParticlesIfPossible(this, level(), ParticleTypes.DRIPPING_DRIPSTONE_WATER,
                         this.getX() + randX,
@@ -101,11 +104,34 @@ public class CTRbarrierEntity extends StandEntity {
                         this.getZ() + randZ,
                         1, 0, 0, 0, 0);
             }
+
+            if (Math.random() > 0.6) {
+                int randParticle = Roundabout.RANDOM.nextInt(0, 3);
+                if (randParticle == 0) {
+                    sendParticlesIfPossible(this, level(), ModParticles.RAIN_SHARD_1,
+                            this.getX() + randX,
+                            this.getY() + randY,
+                            this.getZ() + randZ,
+                            1, 0, 0, 0, 0);
+                } else if (randParticle == 1) {
+                    sendParticlesIfPossible(this, level(), ModParticles.RAIN_SHARD_2,
+                            this.getX() + randX,
+                            this.getY() + randY,
+                            this.getZ() + randZ,
+                            1, 0, 0, 0, 0);
+                } else if (randParticle == 2) {
+                    sendParticlesIfPossible(this, level(), ModParticles.RAIN_SHARD_3,
+                            this.getX() + randX,
+                            this.getY() + randY,
+                            this.getZ() + randZ,
+                            1, 0, 0, 0, 0);
+                }
+            }
         }
         super.tick();
     }
 
-    private static void dealWithProjectile(Projectile pj, CTRbarrierEntity this2){
+    private void dealWithProjectile(Projectile pj, CTRbarrierEntity this2){
         if (pj.level() instanceof ServerLevel sl) {
             if (!(pj.getOwner() instanceof LivingEntity LE &&
                     ((StandUser) LE).roundabout$getStandPowers() instanceof PowersCatchTheRainbow)) {
@@ -127,7 +153,8 @@ public class CTRbarrierEntity extends StandEntity {
                                         pj.getX(),
                                         pj.getY(),
                                         pj.getZ(),
-                                        10, 0, 0, 0, 0.2);
+                                        8, 0, 0, 0, 0.2);
+                                    //change the sound
                                 pj.level().playSound(null, pj.blockPosition(), ModSounds.ICE_BREAKER_EVENT,
                                         SoundSource.PLAYERS, 1.0F, 2.0F);
                                 if (pj instanceof RoundaboutBulletEntity) {
@@ -140,6 +167,23 @@ public class CTRbarrierEntity extends StandEntity {
                                 pj.yRotO += 180.0F;
                             }
                         }
+                    }
+
+                    if (pj instanceof Fireball || pj instanceof StandFireballEntity) {
+                        if (lifespan - 30 < 0){
+                            lifespan = 0;
+                        } else {
+                            lifespan = lifespan - 30;
+                        }
+
+                        ((ServerLevel) this2.level()).sendParticles(ParticleTypes.SMOKE,
+                                pj.getX(),
+                                pj.getY(),
+                                pj.getZ(),
+                                6, 0, 0, 0, 0.2);
+                        pj.level().playSound(null, pj.blockPosition(), SoundEvents.GENERIC_EXTINGUISH_FIRE,
+                                SoundSource.PLAYERS, 1.0F, 2.0F);
+                        pj.discard();
                     }
                 }
             }

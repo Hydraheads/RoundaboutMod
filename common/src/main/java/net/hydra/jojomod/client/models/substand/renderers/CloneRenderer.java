@@ -486,8 +486,6 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
                     }
                 }
             }
-        }if ($$0.getPlayer() != null){
-            return $$0.getPlayer().shouldShowName() && !ClientUtil.isPlayer($$0.getPlayer());
         }
         Optional<UUID> uuid = $$0.getPlayerUUID();
         if (uuid.isPresent() && ClientUtil.isPlayerUUID(uuid.get())){

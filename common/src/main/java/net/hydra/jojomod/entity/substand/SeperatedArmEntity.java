@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FleshBucketItem;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.KnifeItem;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
 import net.hydra.jojomod.stand.powers.PowersGreenDay;
@@ -114,8 +115,8 @@ public class SeperatedArmEntity extends StandEntity {
 
     public void jump(Vec3 jumpT0Pos){
         Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay) {
-            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+            ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, PGD.getMoldDustParticleColor()), location.x,
                     location.y, location.z,
                     24,
                     0.005, 0.005, 0.005,
@@ -144,8 +145,8 @@ public class SeperatedArmEntity extends StandEntity {
 
     public void jump2(Vec3 jumpT0Pos){
         Vec3 location = new Vec3(this.getX(),this.getY(),this.getZ());
-        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay) {
-            ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST, location.x,
+        if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+            ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, PGD.getMoldDustParticleColor()), location.x,
                     location.y, location.z,
                     24,
                     0.005, 0.005, 0.005,
@@ -266,6 +267,8 @@ public class SeperatedArmEntity extends StandEntity {
         return CurrentCheckPos;
     }
 
+    private int chokeTimer;
+
     @Override
     public void tick() {
         this.entityData.set(HELD_ITEM,this.getMainHandItem());
@@ -282,6 +285,12 @@ public class SeperatedArmEntity extends StandEntity {
                             this.setPos(rayCastFromGrabbedEntity(0.5).subtract(0, 0.35, 0));
                             this.lookAt(EntityAnchorArgument.Anchor.EYES, grabbedEntity.getEyePosition());
 
+                            if (chokeTimer == 0) {
+                                grabbedEntity.hurt(ModDamageTypes.of(this.level(), DamageTypes.DROWN), 2);
+                                chokeTimer = 15;
+                            } else {
+                                chokeTimer--;
+                            }
                             ((LivingEntity) grabbedEntity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 2), grabbedEntity);
                         } else {
                             grabbedEntity = null;
@@ -299,6 +308,12 @@ public class SeperatedArmEntity extends StandEntity {
                                 StartupTicks--;
                             else
                                 StartupTicks = 0;
+                        }
+                    }
+                    if (User != null) {
+                        if (MainUtil.cheapDistanceTo(this.getX(), this.getY(), this.getZ(), User.getX(), User.getY(), User.getZ()) > 16) {
+                            grabbedEntity = null;
+                            StartupTicks = 0;
                         }
                     }
                 }
@@ -409,12 +424,12 @@ public class SeperatedArmEntity extends StandEntity {
 
                                     this.setDeltaMovement(0, 0, 0);
 
-
-                                        if (!((Player) user).isCreative()) {
-                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
-                                            }
-                                        }
+                                    if (user instanceof ServerPlayer SP) {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), SP);
+                                    }
+                                    else {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                    }
 
                                     Can_activate = false;
                                 }
@@ -428,11 +443,12 @@ public class SeperatedArmEntity extends StandEntity {
                                     this.setDeltaMovement(0, 0, 0);
                                     level.destroyBlock(targetpos, false);
 
-                                        if (!((Player) user).isCreative()) {
-                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
-                                            }
-                                        }
+                                        if (user instanceof ServerPlayer SP) {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), SP);
+                                    }
+                                    else {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                    }
 
                                     Can_activate = false;
                                 }
@@ -446,11 +462,12 @@ public class SeperatedArmEntity extends StandEntity {
                                     level.destroyBlock(targetpos, false);
                                     this.setDeltaMovement(0, 0, 0);
 
-                                        if (!((Player) user).isCreative()) {
-                                            if (!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
-                                            }
-                                        }
+                                        if (user instanceof ServerPlayer SP) {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), SP);
+                                    }
+                                    else {
+                                        this.getMainHandItem().hurt(1, this.level().getRandom(), null);
+                                    }
 
                                     Can_activate = false;
                                 }
@@ -462,8 +479,10 @@ public class SeperatedArmEntity extends StandEntity {
                     }doAttack();
                 }
                 attractMobs();
-                pickUpItems();
                 doSpin();
+                if (grabbedEntity == null){
+                    pickUpItems();
+                }
 
                 if (FireworkLaunchTicks > 0) {
                     FireworkLaunchTicks--;
@@ -479,8 +498,8 @@ public class SeperatedArmEntity extends StandEntity {
                     double randX = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
                     double randY = Roundabout.RANDOM.nextDouble(-0.1, 0.1);
                     double randZ = Roundabout.RANDOM.nextDouble(-0.2, 0.2);
-                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay) {
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD,
+                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                        ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD, PGD.getMoldParticleColor()),
                                 this.getX() + randX,
                                 this.getY() + randY + 0.15,
                                 this.getZ() + randZ,
@@ -494,8 +513,8 @@ public class SeperatedArmEntity extends StandEntity {
                     }
                 }
                 if (Can_activate && !onGround()) {
-                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay) {
-                        ((ServerLevel) this.level()).sendParticles(ModParticles.MOLD_DUST,
+                    if (((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                        ((ServerLevel) this.level()).sendParticles(ColorParticleOptions.fromPackedColor(ModParticles.MOLD_DUST, PGD.getMoldDustParticleColor()),
                                 this.getX(),
                                 this.getY() + 0.15,
                                 this.getZ(),
@@ -552,11 +571,14 @@ public class SeperatedArmEntity extends StandEntity {
                     }
                 }
                 for (int i = 0; i < 1; i = i + 1) {
+                    Vector3f dustColor = PowersGreenDay.defaultFloatDustColor();
+                    if (User != null && ((StandUser) User).roundabout$getStandPowers() instanceof PowersGreenDay PGD) {
+                        dustColor = PGD.getFloatDustParticleColor();
+                    }
                     double randX = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
                     double randY = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
                     double randZ = Roundabout.RANDOM.nextDouble(-0.3, 0.3);
-                    ((ServerLevel) level()).sendParticles(new DustParticleOptions(new Vector3f(0.76F, 1.0F, 0.9F
-                            ), 2f),
+                    ((ServerLevel) level()).sendParticles(new DustParticleOptions(dustColor, 2f),
                             this.getX() + randX,
                             this.getY() + randY,
                             this.getZ() + randZ,
@@ -706,10 +728,11 @@ public class SeperatedArmEntity extends StandEntity {
 
                 if(SpinTicks == 0) {
                     if (this.getMainHandItem().isDamageableItem()) {
-                        if(!((Player)user).isCreative()) {
-                            if(!(this.getMainHandItem().getItem() instanceof FleshBucketItem)) {
-                                this.getMainHandItem().hurt(1, this.level().getRandom(), null);
-                            }
+                        if (user instanceof ServerPlayer SP) {
+                            this.getMainHandItem().hurt(1, this.level().getRandom(), SP);
+                        }
+                        else {
+                            this.getMainHandItem().hurt(1, this.level().getRandom(), null);
                         }
                     }
                 }
@@ -810,6 +833,9 @@ public class SeperatedArmEntity extends StandEntity {
                             if (((((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersCatchTheRainbow))){
                                 if (grabbedEntity == null) {
                                     grabbedEntity = entity;
+                                    chokeTimer = 80;
+                                    spawnAtLocation(this.getMainHandItem());
+                                    this.setItemInHand(InteractionHand.MAIN_HAND,ItemStack.EMPTY);
                                 }
                             }
                         }
@@ -913,6 +939,10 @@ public class SeperatedArmEntity extends StandEntity {
     }
 
     public boolean standCanShowName() {
+        return false;
+    }
+
+    public boolean canChangeDimensions() {
         return false;
     }
 }

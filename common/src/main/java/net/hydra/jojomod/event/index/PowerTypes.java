@@ -284,6 +284,7 @@ public enum PowerTypes {
     //10 = time erase
     //11 = man in the mirror
     //12 = gold experience life punch
+    //13 = GER infinite death loop
     public static byte getPlaneOfExisting(Entity entity){
         if (entity != null){
             if (PowerTypes.isErasingTime(entity)){
@@ -474,7 +475,7 @@ public enum PowerTypes {
         return 200;
     }
     public static int getForeignWorldMaxTime(byte worldType){
-        if (worldType == 0 || worldType == 10){
+        if (worldType == 0 || worldType == 10 || worldType == 13){
             return -1;
         }
         if (worldType <= 8){

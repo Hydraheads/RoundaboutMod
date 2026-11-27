@@ -22,15 +22,11 @@ import net.minecraft.world.entity.LivingEntity;
 public class SilverChariotSwordModel extends PsuedoHierarchicalModel {
 
     private final ModelPart sword;
-    private final ModelPart blade;
-    private final ModelPart tip;
 
     public SilverChariotSwordModel() {
         super(RenderType::entityTranslucent);
 
         this.sword = createBodyLayer().bakeRoot();
-        this.blade = this.sword.getChild("blade");
-        this.tip = this.blade.getChild("tip");
 
         ModStrayModels.SILVER_CHARIOT_SWORD = this;
     }
@@ -39,8 +35,19 @@ public class SilverChariotSwordModel extends PsuedoHierarchicalModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
+        /*
+
         PartDefinition sword = partdefinition.addOrReplaceChild("sword", CubeListBuilder.create().texOffs(112, 100).addBox(-1.5F, -1.5F, -2.7667F, 3.0F, 3.0F, 5.0F, new CubeDeformation(0.35F))
                 .texOffs(112, 92).addBox(-0.5F, -0.5F, -4.0667F, 1.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.5F, 11.5F, 0.0667F, 0.0F, 0.0F, -1.5708F));
+
+        PartDefinition blade = sword.addOrReplaceChild("blade", CubeListBuilder.create().texOffs(92, 107).addBox(0.0F, -2.5F, -5.0F, 0.0F, 5.0F, 5.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, 0.0F, -4.0667F, 0.0F, 0.0F, 1.5708F));
+
+        PartDefinition tip = blade.addOrReplaceChild("tip", CubeListBuilder.create().texOffs(97, 110).addBox(0.0F, -2.5F, -7.0F, 0.0F, 5.0F, 7.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, 0.0F, -5.0F));
+
+        */
+
+        PartDefinition sword = partdefinition.addOrReplaceChild("sword", CubeListBuilder.create().texOffs(112, 100).addBox(-1.5F, -1.5F, -2.7667F, 3.0F, 3.0F, 5.0F, new CubeDeformation(0.35F))
+                .texOffs(112, 92).addBox(-0.5F, -0.5F, -4.0667F, 1.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 11.5F, 5.0F, 0.0F, 0.0F, -1.5708F));
 
         PartDefinition blade = sword.addOrReplaceChild("blade", CubeListBuilder.create().texOffs(92, 107).addBox(0.0F, -2.5F, -5.0F, 0.0F, 5.0F, 5.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.0F, 0.0F, -4.0667F, 0.0F, 0.0F, 1.5708F));
 
@@ -82,7 +89,7 @@ public class SilverChariotSwordModel extends PsuedoHierarchicalModel {
     private static final ResourceLocation PHARAOH = new ResourceLocation(Roundabout.MOD_ID, "textures/stand/silver_chariot/pharaoh_silver_chariot.png");
 
 
-    public ResourceLocation getTextureLocation(Entity context, byte skin) {
+    public ResourceLocation getTextureLocation(byte skin) {
         switch (skin) {
             case SilverChariotEntity.PART_3_GREY -> {
                 return PART_3_GREY;
@@ -156,7 +163,7 @@ public class SilverChariotSwordModel extends PsuedoHierarchicalModel {
     }
 
     public void render(Entity context, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int light, float rr, float gg, float bb, float v) {
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(context, (byte)0)));
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation((byte)0)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY);
     }
 
@@ -170,7 +177,7 @@ public class SilverChariotSwordModel extends PsuedoHierarchicalModel {
             StandUser user = ((StandUser) LE);
         }
 
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(context, skin)));
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(getTextureLocation(skin)));
         root().render(poseStack, consumer, light, OverlayTexture.NO_OVERLAY, r, g, b, alpha);
     }
 }

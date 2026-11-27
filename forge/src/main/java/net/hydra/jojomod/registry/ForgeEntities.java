@@ -10,11 +10,7 @@ import net.hydra.jojomod.entity.npcs.Aesthetician;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.objects.*;
 import net.hydra.jojomod.entity.paintings.*;
-import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
-import net.hydra.jojomod.entity.pathfinding.CommandDiscPossession;
-import net.hydra.jojomod.entity.pathfinding.GroundBubbleEntity;
-import net.hydra.jojomod.entity.pathfinding.GroundHurricaneEntity;
-import net.hydra.jojomod.entity.pathfinding.TuskHoleEntity;
+import net.hydra.jojomod.entity.pathfinding.*;
 import net.hydra.jojomod.entity.projectile.*;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.entity.substand.*;
@@ -680,6 +676,16 @@ public class ForgeEntities {
                             clientTrackingRange(14).
                             build(new ResourceLocation(Roundabout.MOD_ID, "dark_mirage").toString())
             );
+    public static final RegistryObject<EntityType<KingNothingEntity>> KING_NOTHING =
+            ENTITY_TYPES.register("king_nothing", () ->
+                    EntityType.Builder.of(KingNothingEntity::new, MobCategory.MISC).sized(0.75f, 2.05f)
+                            .clientTrackingRange(14).build(Roundabout.location("king_nothing").toString())
+            );
+    public static final RegistryObject<EntityType<TrackingCloudEntity>> TRACKING_CLOUD =
+            ENTITY_TYPES.register("tracking_cloud",
+                    () -> EntityType.Builder.of(TrackingCloudEntity::new, MobCategory.MISC).sized(0.5f,
+                            0.5f).clientTrackingRange(14).build(Roundabout.location("tracking_cloud").toString())
+            );
     public static final RegistryObject<EntityType<TuskEntity>> TUSK_A1 =
             ENTITY_TYPES.register("tusk_a1", () ->
                     EntityType.Builder.of(TuskEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).
@@ -770,6 +776,12 @@ public class ForgeEntities {
                             .sized(0.75f, 2.05f)
                             .clientTrackingRange(14)
                             .build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_beta").toString())
+            );
+    public static final RegistryObject<EntityType<GoldExperienceRequiemDeimosEntity>> GOLD_EXPERIENCE_REQUIEM_DEIMOS =
+            ENTITY_TYPES.register("gold_experience_requiem_deimos", () ->
+                    EntityType.Builder.of(GoldExperienceRequiemDeimosEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_requiem_deimos").toString())
             );
     public static final RegistryObject<EntityType<GEBrambleEntity>> GE_BRAMBLE = ENTITY_TYPES.register("ge_bramble",
             () -> EntityType.Builder.<GEBrambleEntity>of(GEBrambleEntity::new, MobCategory.MISC)
@@ -1275,7 +1287,7 @@ public class ForgeEntities {
     public static final RegistryObject<EntityType<CTRbarrierEntity>> CTR_BARRIER =
             ENTITY_TYPES.register("ctrbarrier", () ->
                     EntityType.Builder.<CTRbarrierEntity>of(CTRbarrierEntity::new, MobCategory.MISC).
-                            sized(4f, 4f).
+                            sized(4f, 10f).
                             clientTrackingRange(15).
                             build(new ResourceLocation(Roundabout.MOD_ID, "ctrbarrier").toString())
             );

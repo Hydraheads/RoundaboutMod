@@ -4,6 +4,8 @@ import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.projectile.TuskNailEntity;
 import net.hydra.jojomod.event.index.OffsetIndex;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
+import net.hydra.jojomod.event.powers.StandUser;
+import net.hydra.jojomod.stand.powers.PowersTusk;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -48,14 +50,14 @@ public class TuskEntity extends FollowingStandEntity {
         this.shrink.animateWhen(this.getAnimation() == SHRINK,this.tickCount);
     }
 
-    @Override
-    public boolean canBeHitByStands() {
-        return this.getAct() == 4 && this.getOffsetType() == OffsetIndex.LOOSE;
-    }
 
     @Override
     public boolean canStandBeHurt() {
-        return this.getAct() == 4 && this.getOffsetType() == OffsetIndex.LOOSE;
+        return isDeathPunching();
+    }
+
+    public boolean isDeathPunching() {
+        return this.getUser() != null && ((StandUser)this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.DEATH_PUNCH;
     }
 
     @Override
@@ -64,6 +66,12 @@ public class TuskEntity extends FollowingStandEntity {
         if (this.getAnimation() == SHRINK && this.hurtTime == 0 && !this.level().isClientSide()) {
             this.discard();
             TuskNailEntity tuskNailEntity = new TuskNailEntity(this.getUser(),this.level(),(byte)4);
+            tuskNailEntity.setExtra(TuskNailEntity.REFLECTED);
+            if (this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT) {
+                PT.deathShot = tuskNailEntity;
+                PT.setPowerNone();
+            }
+            tuskNailEntity.setPos(this.position());
             tuskNailEntity.shootFromRotation(this,
                     redirectX,redirectY,-0.5F,1,0.05F);
             this.level().addFreshEntity(tuskNailEntity);
@@ -76,7 +84,7 @@ public class TuskEntity extends FollowingStandEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() != null && source.equals(ModDamageTypes.STAND)) {
+        if (source.getEntity() != null && source.is(ModDamageTypes.STAND)) {
             this.setAnimation(SHRINK);
             redirectX = source.getEntity().getViewXRot(0);
             redirectY = source.getEntity().getViewYRot(0);

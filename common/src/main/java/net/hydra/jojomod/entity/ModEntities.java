@@ -75,6 +75,7 @@ public class ModEntities {
     public static EntityType<JumpinJackFlashEntity> JUMPIN_JACK_FLASH;
     public static EntityType<BlockBombEntity> BLOCK_BOMB;
     public static EntityType<SheerHeartAttackEntity> SHEER_HEART_ATTACK;
+    public static EntityType<TrackingCloudEntity> TRACKING_CLOUD;
     public static EntityType<CinderellaEntity> CINDERELLA;
     public static EntityType<CaliforniaKingBedEntity> CALIFORNIA_KING_BED;
     public static EntityType<PlanetWavesEntity> PLANET_WAVES;
@@ -95,6 +96,7 @@ public class ModEntities {
     public static EntityType<WalkingHeartEntity> WALKING_HEART;
     public static EntityType<JusticePirateEntity> JUSTICE_PIRATE;
     public static EntityType<DarkMirageEntity> DARK_MIRAGE;
+    public static EntityType<KingNothingEntity> KING_NOTHING;
     public static EntityType<TuskEntity> TUSK_A1;
     public static EntityType<TuskEntity> TUSK_A2;
     public static EntityType<TuskEntity> TUSK_A3;
@@ -117,6 +119,7 @@ public class ModEntities {
     public static EntityType<GoldExperienceEntity> GOLD_EXPERIENCE;
     public static EntityType<GoldExperienceRequiemEntity> GOLD_EXPERIENCE_REQUIEM;
     public static EntityType<GoldExperienceBetaEntity> GOLD_EXPERIENCE_BETA;
+    public static EntityType<GoldExperienceRequiemDeimosEntity> GOLD_EXPERIENCE_REQUIEM_DEIMOS;
     public static EntityType<GEBrambleEntity> GE_BRAMBLE;
     public static EntityType<GEThornEntity> GE_THORN;
     public static EntityType<GEBatEntity> GE_BAT;

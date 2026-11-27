@@ -3,6 +3,11 @@ package net.hydra.jojomod.client.models.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.stand.DiverDownBetaModel;
+import net.hydra.jojomod.client.models.stand.DiverDownModel;
+import net.hydra.jojomod.client.models.stand.DiverDownWorldModel;
+import net.hydra.jojomod.client.models.stand.DiverDrownedModel;
 import net.hydra.jojomod.client.models.stand.renderers.DiverDownBaseRenderer;
 import net.hydra.jojomod.entity.stand.DiverDownEntity;
 import net.hydra.jojomod.event.powers.StandUser;
@@ -10,7 +15,6 @@ import net.hydra.jojomod.mixin.model_layers.LayerPlayerRendererMixin;
 import net.hydra.jojomod.stand.powers.PowersDiverDown;
 import net.hydra.jojomod.util.MainUtil;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -33,21 +37,25 @@ public class DiverArmsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
     private final Map<Byte, ArmPair> skinArmModels = new HashMap<>();
     private final ArmPair defaultArms;
 
-    public DiverArmsLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
-        super(livingEntityRenderer);
+    public DiverArmsLayer() {
+        super(null);
         INSTANCE = this;
 
-        this.defaultArms = bakeDiverArms(context, ModEntityRendererClient.DIVER_DOWN_LAYER);
+        this.defaultArms = bakeDiverArms(DiverDownModel.getTexturedModelData().bakeRoot());
         this.skinArmModels.put((byte) 0, this.defaultArms);
-        this.skinArmModels.put(DiverDownEntity.BETA_DIVER, bakeDiverArms(context, ModEntityRendererClient.DIVER_DOWN_BETA_LAYER));
-        this.skinArmModels.put(DiverDownEntity.WORLD_DIVER, bakeDiverArms(context, ModEntityRendererClient.DIVER_DOWN_WORLD_LAYER));
-        this.skinArmModels.put(DiverDownEntity.DIVER_DROWNED, bakeDiverArms(context, ModEntityRendererClient.DIVER_DROWNED_LAYER));
+        this.skinArmModels.put(DiverDownEntity.BETA_DIVER, bakeDiverArms(DiverDownBetaModel.getTexturedModelData().bakeRoot()));
+        this.skinArmModels.put(DiverDownEntity.WORLD_DIVER, bakeDiverArms(DiverDownWorldModel.getTexturedModelData().bakeRoot()));
+        this.skinArmModels.put(DiverDownEntity.DIVER_DROWNED, bakeDiverArms(DiverDrownedModel.getTexturedModelData().bakeRoot()));
         // In the future, follow this template to add more
-        // this.skinArmModels.put(DiverDownEntity.MODEL_NAME, bakeDiverArms(context, ModEntityRendererClient.MODEL_NAME_LAYER));
+        // this.skinArmModels.put(DiverDownEntity.MODEL_NAME, bakeDiverArms(DiverDownModelNameModel.getTexturedModelData().bakeRoot()));
     }
 
-    private static ArmPair bakeDiverArms(EntityRendererProvider.Context context, ModelLayerLocation layer) {
-        ModelPart standRoot = context.bakeLayer(layer);
+    public DiverArmsLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
+        super(livingEntityRenderer);
+        this.defaultArms = null;
+    }
+
+    private static ArmPair bakeDiverArms(ModelPart standRoot) {
         ModelPart standArms = standRoot.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("torso").getChild("upper_chest");
         return new ArmPair(standArms.getChild("left_arm"), standArms.getChild("right_arm"));
     }
@@ -58,6 +66,7 @@ public class DiverArmsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
                        float ageInTicks, float netHeadYaw, float headPitch) {
 
         if (entity == null || entity.isInvisible() || !MainUtil.isHumanoid2(entity)) return;
+        if (ModStrayModels.diverArmsLayer == null) return;
 
         if (entity instanceof StandUser su && su.roundabout$hasDiverArms()) {
             if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;
@@ -71,7 +80,7 @@ public class DiverArmsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
 
             byte skin = (diverOwner != null) ? diverOwner.roundabout$getStandSkin() : (byte) 0;
             ResourceLocation texture = DiverDownBaseRenderer.getSkin(skin);
-            ArmPair arms = skinArmModels.getOrDefault(skin, defaultArms);
+            ArmPair arms = (ArmPair) ModStrayModels.diverArmsLayer.skinArmModels.getOrDefault(skin, ModStrayModels.diverArmsLayer.defaultArms);
 
             VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(texture));
 
@@ -101,7 +110,7 @@ public class DiverArmsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
                                             int packedLight, AbstractClientPlayer player,
                                             ModelPart playerArm, boolean isRightArm, float alpha) {
         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;
-        if (alpha <= 0.0F) return;
+        if (alpha <= 0.0F || ModStrayModels.diverArmsLayer == null) return;
 
         StandUser su = (StandUser) player;
         StandUser diverOwner = null;
@@ -113,7 +122,7 @@ public class DiverArmsLayer<T extends LivingEntity, A extends HumanoidModel<T>> 
 
         byte skin = (diverOwner != null) ? diverOwner.roundabout$getStandSkin() : (byte) 0;
         ResourceLocation texture = DiverDownBaseRenderer.getSkin(skin);
-        ArmPair arms = INSTANCE.skinArmModels.getOrDefault(skin, INSTANCE.defaultArms);
+        ArmPair arms = (ArmPair) ModStrayModels.diverArmsLayer.skinArmModels.getOrDefault(skin, ModStrayModels.diverArmsLayer.defaultArms);
 
         ModelPart armToRender = isRightArm ? arms.rightArm() : arms.leftArm();
         armToRender.setRotation(0.0F, 0.0F, 0.0F);

@@ -12,7 +12,7 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.event.ModEffects;
-import net.hydra.jojomod.particles.HazeColorParticleOptions;
+import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -41,6 +41,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -209,7 +211,17 @@ public class PurpleSmokeEntity extends StandEntity {
         Block block = state.getBlock();
         if (MainUtil.PURPLE_HAZE_DECAY_BLOCKS.containsKey(block) && MainUtil.PURPLE_HAZE_DECAY_RATE.containsKey(block)) {
             if (Roundabout.RANDOM.nextFloat() < MainUtil.PURPLE_HAZE_DECAY_RATE.get(block)) {
-                return MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
+                BlockState replacement = MainUtil.PURPLE_HAZE_DECAY_BLOCKS.get(block).defaultBlockState();
+                if (state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED)
+                        && replacement.getBlock() == Blocks.AIR) {
+                    return Blocks.WATER.defaultBlockState();
+                }
+                for (Property<?> prop : state.getProperties()) {
+                    if (replacement.hasProperty(prop)) {
+                        replacement = MainUtil.copyBlockStateProperty(state, replacement, prop);
+                    }
+                }
+                return replacement;
             }
         }
         return null;
@@ -262,7 +274,7 @@ public class PurpleSmokeEntity extends StandEntity {
             return ModParticles.DISTORTION_SMOKE;
         }
         int color = SKIN_COLORS.getOrDefault(skin, DEFAULT_HAZE_COLOR);
-        return HazeColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
+        return ColorParticleOptions.fromPackedColor(ModParticles.PURPLE_HAZE_SMOKE, color);
     }
 
     private int lastTier = 0;

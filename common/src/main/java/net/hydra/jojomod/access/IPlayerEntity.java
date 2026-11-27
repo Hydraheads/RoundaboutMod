@@ -6,6 +6,7 @@ import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
 import net.hydra.jojomod.powers.GeneralPowers;
 import net.hydra.jojomod.util.BlackSabbathPlayerInventory;
 import net.hydra.jojomod.util.PlayerMaskSlots;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.player.Inventory;
@@ -153,4 +154,9 @@ public interface IPlayerEntity {
     byte roundabout$getPurpleHazePods();
     void roundabout$setPurpleHazePods(byte pods);
 
+    int rdbt$getGerDeathLoops();
+    void rdbt$setGerDeathLoops(int loops);
+    // used to temp clear the inventory for things like keep inventory true
+    ListTag rdbt$getGerSavedInventory();
+    void rdbt$setGerSavedInventory(ListTag inv);
 }

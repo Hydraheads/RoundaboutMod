@@ -5,6 +5,9 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -25,7 +28,15 @@ public class GEButterflyEntity extends Butterfly implements GELifeform {
     private UUID creatorUUID;
     private int lifespan = 600;
 
-    private ItemStack sourceItem = ItemStack.EMPTY;
+    private static final EntityDataAccessor<ItemStack> DATA_SOURCE_ITEM =
+            SynchedEntityData.defineId(GEButterflyEntity.class, EntityDataSerializers.ITEM_STACK);
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_SOURCE_ITEM, ItemStack.EMPTY);
+    }
+
     @Nullable
     private Vec3 targetPos = null;
     @Nullable
@@ -149,8 +160,8 @@ public class GEButterflyEntity extends Butterfly implements GELifeform {
             tag.putUUID("CreatorUUID", this.creatorUUID);
         }
         tag.putInt("GELifespan", this.lifespan);
-        if (!this.sourceItem.isEmpty()) {
-            tag.put("GESourceItem", this.sourceItem.save(new CompoundTag()));
+        if (!this.getSourceItem().isEmpty()) {
+            tag.put("GESourceItem", this.getSourceItem().save(new CompoundTag()));
         }
         if (this.targetPos != null) {
             tag.putDouble("TargetX", this.targetPos.x);
@@ -177,7 +188,7 @@ public class GEButterflyEntity extends Butterfly implements GELifeform {
             this.lifespan = tag.getInt("GELifespan");
         }
         if (tag.contains("GESourceItem")) {
-            this.sourceItem = ItemStack.of(tag.getCompound("GESourceItem"));
+            this.setSourceItem(ItemStack.of(tag.getCompound("GESourceItem")));
         }
         if (tag.contains("TargetX") && tag.contains("TargetY") && tag.contains("TargetZ")) {
             this.targetPos = new Vec3(tag.getDouble("TargetX"), tag.getDouble("TargetY"), tag.getDouble("TargetZ"));
@@ -199,7 +210,7 @@ public class GEButterflyEntity extends Butterfly implements GELifeform {
     @Override
     public void setLifespan(int ticks) { this.lifespan = ticks; }
     @Override
-    public ItemStack getSourceItem() { return sourceItem; }
+    public void setSourceItem(ItemStack stack) {this.entityData.set(DATA_SOURCE_ITEM, stack);}
     @Override
-    public void setSourceItem(ItemStack stack) { this.sourceItem = stack; }
+    public ItemStack getSourceItem() {return this.entityData.get(DATA_SOURCE_ITEM);}
 }

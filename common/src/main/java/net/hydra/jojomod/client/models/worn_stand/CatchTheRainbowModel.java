@@ -39,7 +39,12 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -9.0F, -2.5F, 8.0F, 8.0F, 5.0F, new CubeDeformation(0.45F)), PartPose.offset(0.5F, 20.5F, 5.75F));
+		PartDefinition stand = partdefinition.addOrReplaceChild("stand", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -9.0F, -2.5F, 8.0F, 8.0F, 5.0F, new CubeDeformation(0.45F))
+				.texOffs(18, 15).addBox(0.0F, -14.25F, -0.5F, 0.0F, 5.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, 20.5F, 5.75F));
+
+		PartDefinition hair_r1 = stand.addOrReplaceChild("hair_r1", CubeListBuilder.create().texOffs(0, 18).addBox(0.0F, -1.0F, -2.5F, 0.0F, 8.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.6F, -8.0F, 0.0F, 0.0F, 0.0F, 0.2182F));
+
+		PartDefinition hair_r2 = stand.addOrReplaceChild("hair_r2", CubeListBuilder.create().texOffs(0, 18).addBox(0.0F, -1.0F, -2.5F, 0.0F, 8.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.6F, -8.0F, 0.0F, 0.0F, 0.0F, -0.2182F));
 
 		PartDefinition forehead_r1 = stand.addOrReplaceChild("forehead_r1", CubeListBuilder.create().texOffs(0, 13).addBox(-4.0F, -8.0F, -4F, 8.0F, 3.0F, 1.0F, new CubeDeformation(0.35F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
 
@@ -85,6 +90,8 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 			"textures/stand/catch_the_rainbow/cmy.png");
 	public static ResourceLocation magma = new ResourceLocation(Roundabout.MOD_ID,
 			"textures/stand/catch_the_rainbow/magma.png");
+	public static ResourceLocation knight = new ResourceLocation(Roundabout.MOD_ID,
+			"textures/stand/catch_the_rainbow/knight.png");
 
 	public ResourceLocation getTextureLocation(Entity context, byte skin) {
 		if ( ((StandUser) context).roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && !PCR.isInRain()) {
@@ -105,13 +112,16 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 					return neon_off;
 				}
 				case PowersCatchTheRainbow.STRIDER -> {
-					return strider_sick;
+					return strider_healthy;
 				}
 				case PowersCatchTheRainbow.CMY -> {
 					return cmy;
 				}
 				case PowersCatchTheRainbow.MAGMA -> {
 					return magma;
+				}
+				case PowersCatchTheRainbow.KNIGHT -> {
+					return knight;
 				}
 				default -> {
 					return base;
@@ -136,13 +146,16 @@ public class CatchTheRainbowModel extends PsuedoHierarchicalModel {
 					return neon_on;
 				}
 				case PowersCatchTheRainbow.STRIDER -> {
-					return strider_healthy;
+					return strider_sick;
 				}
 				case PowersCatchTheRainbow.CMY -> {
 					return cmy;
 				}
 				case PowersCatchTheRainbow.MAGMA -> {
 					return magma;
+				}
+				case PowersCatchTheRainbow.KNIGHT -> {
+					return knight;
 				}
 				default -> {
 					return base;

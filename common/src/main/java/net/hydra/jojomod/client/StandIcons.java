@@ -64,6 +64,22 @@ public class StandIcons {
             new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_t.png"),
             new ResourceLocation(Roundabout.MOD_ID, "textures/environment/time_erase_b.png")
     };
+    public static final ResourceLocation[] RTZ_SKYBOX = new ResourceLocation[]{
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_t.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_b.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_n.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_s.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_w.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/return_to_zero_e.png")
+    };
+    public static final ResourceLocation[] RTZ_STAR_SKYBOX = new ResourceLocation[]{
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_t.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_b.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_n.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_s.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_w.png"),
+            new ResourceLocation(Roundabout.MOD_ID, "textures/environment/rtz_stars_e.png")
+    };
 
     public static final ResourceLocation NONE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/none.png");
@@ -87,6 +103,8 @@ public class StandIcons {
             "textures/gui/move_square3.png");
     public static final ResourceLocation UNLOCK_SQUARE_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_square5.png");
+    public static final ResourceLocation SQUARE_REQUIEM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/move_square_requiem.png");
     public static final ResourceLocation COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/move_cooldown.png");
     public static final ResourceLocation FROZEN_COOLDOWN_ICON = new ResourceLocation(Roundabout.MOD_ID,
@@ -507,6 +525,15 @@ public class StandIcons {
     public static final ResourceLocation KILLER_QUEEN_HANDS_ACTIVE = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/hands_active.png");
 
+    public static final ResourceLocation KING_NOTHING_TRACKING = Roundabout.location("textures/gui/icons/king_nothing/tracking.png");
+    public static final ResourceLocation KING_NOTHING_REFORM = Roundabout.location("textures/gui/icons/king_nothing/reform.png");
+    public static final ResourceLocation KING_NOTHING_SNIFF_ITEM = Roundabout.location("textures/gui/icons/king_nothing/sniff_item.png");
+    public static final ResourceLocation KING_NOTHING_PHASE_GRAB = Roundabout.location("textures/gui/icons/king_nothing/phase_grab.png");
+    public static final ResourceLocation KING_NOTHING_PHASE_ITEM = Roundabout.location("textures/gui/icons/king_nothing/phase_item.png");
+    public static final ResourceLocation KING_NOTHING_FORM_PREDICT = Roundabout.location("textures/gui/icons/king_nothing/form_predict.png");
+    public static final ResourceLocation KING_NOTHING_DROP_ITEM = Roundabout.location(
+            "textures/gui/icons/king_nothing/item_drop.png");
+
     public static final ResourceLocation BITES_THE_DUST_PLANTED = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/killer_queen/bites_the_dust_planted.png");
     public static final ResourceLocation BITES_THE_DUST_TARGET = new ResourceLocation(Roundabout.MOD_ID,
@@ -522,6 +549,8 @@ public class StandIcons {
             "textures/gui/icons/bad_company/pilot_mode_exit.png");
     public static final ResourceLocation BAD_COMPANY_TACTICAL_OPTIONS = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/bad_company/tactical_options.png");
+    public static final ResourceLocation BAD_COMPANY_AMMUNITION = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/bad_company/recharge.png");
 
     public static final ResourceLocation PLANET_WAVES_METEOR_SHOWER = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/planet_waves/meteor_shower.png");
@@ -553,10 +582,14 @@ public class StandIcons {
             "textures/gui/icons/jjf/shoot.png");
     public static final ResourceLocation JJF_UNLOADING_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/jjf/unload.png" );
+    public static final ResourceLocation JJF_LOAD_SPIT_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/load_spit.png");
     public static final ResourceLocation JJF_SPIT_ICON = new ResourceLocation( Roundabout.MOD_ID,
             "textures/gui/icons/jjf/spit.png");
     public static final ResourceLocation JJF_PUNCH_ICON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/jjf/punch.png");
+    public static final ResourceLocation JJF_ARMS_MODE_ICON = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/jjf/arms_mode.png");
     public static final ResourceLocation JJF_GUARD_ICON = new ResourceLocation( Roundabout.MOD_ID,
             "textures/gui/icons/jjf/guard.png" );
 
@@ -570,6 +603,8 @@ public class StandIcons {
             "textures/gui/icons/silver_chariot/fall_brace.png");
     public static final ResourceLocation SILVER_CHARIOT_VAULT = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/stand_ledge_grab.png");
+    public static final ResourceLocation SILVER_CHARIOT_VAULT_2 = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/stand_ledge_grab_2.png");
     public static final ResourceLocation SILVER_CHARIOT_SLAB_CUTTING = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/slab_cutting.png");
     public static final ResourceLocation SILVER_CHARIOT_STATUE_CUTTING = new ResourceLocation(Roundabout.MOD_ID,
@@ -584,10 +619,12 @@ public class StandIcons {
             "textures/gui/icons/silver_chariot/rapier_slash.png");
     public static final ResourceLocation SILVER_CHARIOT_RAPIER_SPIN = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/rapier_spin.png");
-    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/silver_chariot/rapier_shot.png");
-    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SHOT_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/silver_chariot/rapier_shot_platform.png");
+    public static final ResourceLocation SILVER_CHARIOT_SWORD_PROJECTILE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/sword_projectile.png");
+    public static final ResourceLocation SILVER_CHARIOT_SWORD_PROJECTILE_PLATFORM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/sword_projectile_platform.png");
+    public static final ResourceLocation SILVER_CHARIOT_SWORD_PROJECTILE_TOGGLE_SWITCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/silver_chariot/sword_projectile_toggle_switch.png");
     public static final ResourceLocation SILVER_CHARIOT_CONTROL_MODE_ON = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/silver_chariot/control_mode_on.png");
     public static final ResourceLocation SILVER_CHARIOT_CONTROL_MODE_OFF = new ResourceLocation(Roundabout.MOD_ID,
@@ -1189,8 +1226,6 @@ public class StandIcons {
 
     // gold experience icons start
 
-    public static final ResourceLocation GOLD_EXPERIENCE_PLACEHOLDER = new ResourceLocation(Roundabout.MOD_ID,
-            "textures/gui/icons/gold_experience/placeholder.png");
     public static final ResourceLocation GOLD_EXPERIENCE_LIFE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/life_punch.png");
     public static final ResourceLocation GOLD_EXPERIENCE_DNA_CREATION = new ResourceLocation(Roundabout.MOD_ID,
@@ -1215,6 +1250,20 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/item_imbue.png");
     public static final ResourceLocation GOLD_EXPERIENCE_LIFE_SENSOR = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/life_sensor.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/barrage.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_DOUBLE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/double_punch.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_GUARD = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/guard.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_KICK_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/kick_barrage.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_MINING = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/mining.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_PUNCH = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/punch.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_REQUIEM = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/requiem.png");
 
     // gold experience icons end
 

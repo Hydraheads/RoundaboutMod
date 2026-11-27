@@ -1,5 +1,6 @@
 package net.hydra.jojomod.stand.powers;
 
+import com.google.common.collect.BiMap;
 import com.google.common.collect.Lists;
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
@@ -26,6 +27,8 @@ import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.*;
 import net.hydra.jojomod.item.MaxStandDiscItem;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.mixin.access.AccessAxeItem;
+import net.hydra.jojomod.networking.ServerToClientPackets;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
@@ -51,6 +54,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -62,16 +66,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BrushableBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;
@@ -79,10 +81,7 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class PowersTusk extends NewDashPreset {
     public PowersTusk(LivingEntity self) {
@@ -124,7 +123,8 @@ public class PowersTusk extends NewDashPreset {
         WALL_BREAK = 57,
         WALL_BREAK_2 = 61,
         DEATH_NAIL = 58,
-        DEATH_PUNCH = 59;
+        DEATH_PUNCH = 59,
+        STRIPPING = 60;
 
     public static final byte
         MINING = 2,
@@ -594,6 +594,17 @@ public class PowersTusk extends NewDashPreset {
                     stand.forceDespawn(true);
                 }
             }
+
+            case PowersTusk.ADVANCE_BARRAGE -> {
+                this.setActivePower(PowersTusk.ADVANCE_BARRAGE);
+                this.setAttackTimeDuring(0);
+                this.setAttackTime(0);
+                this.setAttackTimeMax(80);
+                if (!isClient()) {
+                    this.playBarrageChargeSound();
+                    this.animateStand(StandEntity.BARRAGE_CHARGE);
+                }
+            }
         }
 
         return super.setPowerOther(move,lastMove);
@@ -780,19 +791,22 @@ public class PowersTusk extends NewDashPreset {
                 }
             }
             case PowersTusk.DEATH_PUNCH -> {
+                StandEntity standEntity = this.getStandEntity(this.getSelf());
+                if (standEntity instanceof TuskEntity TE && TE.getAct() != 4) {
+                    this.setPowerNone();
+                }
                 if (this.getAttackTimeDuring() == 30) {
-                    if (!isClient()) {
+                    if (!isClient() && standEntity != null && standEntity.getAnimation() != TuskEntity.SHRINK ) {
                         deathPunch();
                     }
                 } else if (this.getAttackTimeDuring() > 40) {
                     deathTarget = null;
                     this.setPowerNone();
                 } else {
-                    StandEntity stand = this.getStandEntity(this.getSelf());
-                    if (stand != null && !isClient()) {
+                    if (standEntity != null && !isClient()) {
                         if (this.attackTimeDuring % 4 == 0) {
                             sendParticlesIfPossible(self.level(), ModParticles.MENACING,
-                                    stand.getX(), stand.getY() + 0.3, stand.getZ(),
+                                    standEntity.getX(), standEntity.getY() + 0.3, standEntity.getZ(),
                                     1, 0.2, 0.2, 0.2, 0.05);
                         }
                     }
@@ -1447,7 +1461,7 @@ public class PowersTusk extends NewDashPreset {
     private BlockHitResult getLookedBlock() {
         Vec3 vec3d = this.getSelf().getEyePosition(0);
         Vec3 vec3d2 = this.getSelf().getViewVector(0);
-        Vec3 vec3d3 = vec3d.add(vec3d2.x * 3, vec3d2.y * 3, vec3d2.z * 3);
+        Vec3 vec3d3 = vec3d.add(vec3d2.x * 5, vec3d2.y * 5, vec3d2.z * 5);
         return this.getSelf().level().clip(new ClipContext(vec3d, vec3d3,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.getSelf()));
     }
@@ -1611,11 +1625,81 @@ public class PowersTusk extends NewDashPreset {
 
 
     @Override
-    public boolean interceptGuard() {return this.isCharging();}
+    public boolean interceptGuard() {return this.isCharging() || (this.getSelf().isCrouching() && this.getAct() != 4 && this.getMode() == MELEE);}
     @Override
     public boolean buttonInputGuard(boolean keyIsDown, Options options) {
+        if (this.getAct() != 4 && getSelf().isCrouching()) {
+            BlockHitResult result = this.getLookedBlock();
+            BlockPos pos = result.getBlockPos();
+            BlockState blockState = getSelf().level().getBlockState(pos);
+            if (!blockState.isAir() && getSelf() instanceof Player P) {
+                if (getAct() == 1) {
+                    if ( AccessAxeItem.getStrippables().containsKey(blockState.getBlock()) ) {
+                        Optional<BlockState> stripped = getStripped(blockState);
+                        if (stripped.isPresent()) {
+                            this.tryBlockPosPowerPacket(PowersTusk.STRIPPING,pos);
+                        }
+                    }
+                } else if (getAct() >= 2) {
+                    Optional<BlockState> weathering = WeatheringCopper.getPrevious(blockState);
+                    Optional<BlockState> wax = Optional.ofNullable((Block)((BiMap) HoneycombItem.WAX_OFF_BY_BLOCK.get()).get(blockState.getBlock())).map((block) -> block.withPropertiesOf(blockState));
+                    if (weathering.isPresent() || wax.isPresent()) {
+                        this.tryBlockPosPowerPacket(PowersTusk.STRIPPING,pos);
+                    }
+                }
+            }
+
+        }
         return false;
     }
+
+    @Override
+    public boolean tryBlockPosPower(int move, boolean forced, BlockPos pos) {
+        switch (move) {
+            case PowersTusk.STRIPPING -> {
+                if (!isClient()) {
+                    BlockState blockState = getSelf().level().getBlockState(pos);
+                    if (!blockState.isAir() && getSelf() instanceof Player P) {
+                        if (getAct() == 1) {
+                            if ( AccessAxeItem.getStrippables().containsKey(blockState.getBlock()) ) {
+                                Optional<BlockState> stripped = getStripped(blockState);
+                                if (stripped.isPresent()) {
+                                    getSelf().level().playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+                                    getSelf().level().setBlock(pos, stripped.get(), 11);
+                                    getSelf().level().gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(P, stripped.get()));
+                                }
+                            }
+                        } else if (getAct() >= 2) {
+                            Optional<BlockState> weathering = WeatheringCopper.getPrevious(blockState);
+                            Optional<BlockState> wax = Optional.ofNullable((Block) ((BiMap) HoneycombItem.WAX_OFF_BY_BLOCK.get()).get(blockState.getBlock())).map((block) -> block.withPropertiesOf(blockState));
+                            Optional<BlockState> optional = Optional.empty();
+                            if (weathering.isPresent()) {
+                                getSelf().level().playSound(null, pos, SoundEvents.AXE_SCRAPE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                                getSelf().level().levelEvent(P, 3005, pos, 0);
+                                optional = weathering;
+                            } else if (wax.isPresent()) {
+                                getSelf().level().playSound(null, pos, SoundEvents.AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
+                                getSelf().level().levelEvent(P, 3004, pos, 0);
+                                optional = wax;
+                            }
+
+                            if (optional.isPresent()) {
+                                getSelf().level().setBlock(pos, optional.get(), 11);
+                                 getSelf().level().gameEvent(GameEvent.BLOCK_CHANGE,pos , GameEvent.Context.of(P, optional.get()));
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return super.tryBlockPosPower(move, forced, pos);
+    }
+
+    private Optional<BlockState> getStripped(BlockState blockState) {
+        return Optional.ofNullable(AccessAxeItem.getStrippables().get(blockState.getBlock())).map((block) -> block.defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS)));
+    }
+
     @Override
     public boolean canCombatModeUse(ItemStack stack) {return !isCharging();}
 
@@ -1635,7 +1719,7 @@ public class PowersTusk extends NewDashPreset {
                     tryPower(PowersTusk.FIRE_EXTRA_NAILS);
                     tryPowerPacket(PowersTusk.FIRE_EXTRA_NAILS);
                 }
-            } else if (this.getStandEntity(this.getSelf()) != null) {
+            } else {
                 if (this.getMode() == RANGED && !this.getSelf().isUsingItem()) {
                     buttonInputShoot(keyIsDown, options);
                 } else {
@@ -2017,22 +2101,23 @@ public class PowersTusk extends NewDashPreset {
 
     public Vec3 advanceVec;
     public void buttonInputAdvance(boolean keyIsDown, Options options) {
-        if (!isCharging()) {
-            if (keyIsDown && this.getAttackTime() > 10) {
+        if (!isCharging() && this.canSummonStandAsEntity()) {
+            if (keyIsDown && this.getAttackTime() > 10 ) {
+                if (this.getActivePower() == PowersTusk.ADVANCE) {
+                    this.setAttackTime(0);
+                    tryPower(PowersTusk.ADVANCE_BARRAGE);
+                    tryPowerPacket(PowersTusk.ADVANCE_BARRAGE);
+                    return;
+                }
                 if (canAttack()) {
                     this.setAttackTime(0);
                     if (this.getActivePower() != PowersTusk.ADVANCE) {
                         tryPower(PowersTusk.ADVANCE);
                         tryPowerPacket(PowersTusk.ADVANCE);
-                        return;
                     }
                 }
-                if (!canAttack() || this.getActivePower() == PowersTusk.ADVANCE) {
-                    this.setAttackTime(0);
-                    tryPower(PowerIndex.NONE);
-                    tryPowerPacket(PowerIndex.NONE);
-                }
             }
+
         }
     }
 
@@ -2334,7 +2419,7 @@ public class PowersTusk extends NewDashPreset {
 
 
     public Entity deathTarget = null;
-    private TuskNailEntity deathShot = null;
+    public TuskNailEntity deathShot = null;
 
     public void deathShot() {
         this.expendNails();
@@ -2360,6 +2445,7 @@ public class PowersTusk extends NewDashPreset {
             this.setActivePower(PowersTusk.DEATH_PUNCH);
             if (this.getSelf() instanceof Player P) {
                 S2CPacketUtil.sendActivePowerPacket(P,PowersTusk.DEATH_PUNCH);
+             //   sendIntPacketIfNearby(PacketDataIndex.S2C_TUSK_DEATH_TARGET_SYNC, deathTarget.getId(),50);
                 S2CPacketUtil.sendIntPowerDataPacket(P,PowersTusk.DEATH_PUNCH,deathTarget.getId());
             }
             this.setAttackTimeDuring(0);
@@ -2423,7 +2509,7 @@ public class PowersTusk extends NewDashPreset {
     }
     public void buttonInputShoot(boolean keyIsDown, Options options) {
         if (keyIsDown && this.getActivePower() != PowersTusk.FLATTEN) {
-            if (this.getAct() == 1) {
+            if (this.getAct() == 1 && (this.canSummonStandAsEntity() || !canExecuteMoveWithLevel(1) )) {
                 if (this.hasNail() && this.nailFireDelay == 0 ) {
 
                     int delay = 4;
@@ -2930,7 +3016,7 @@ public class PowersTusk extends NewDashPreset {
             "jack",
             "magma",
             "ruby",
-            "creaking"
+            "creaking",
     };
     @Override
     public List<Byte> getSkinList() {
@@ -2940,7 +3026,6 @@ public class PowersTusk extends NewDashPreset {
                 AMETHYST,
                 DARK,
                 GREEN,
-                HAMON,
                 JACK,
                 MAGMA,
                 RUBY,

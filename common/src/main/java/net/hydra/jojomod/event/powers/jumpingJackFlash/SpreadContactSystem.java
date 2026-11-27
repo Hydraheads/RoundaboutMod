@@ -20,81 +20,52 @@ public final class SpreadContactSystem {
 
     private static final double CONTACT_DISTANCE = 0.40D;
     private static final double CONTACT_PUSH = 0.045D;
+    private static final float MAX_SPREAD_RADIUS = 20.0F;
+    private static final int SPREAD_PULSE_TICKS = 10;
+    private static final int MAX_TARGETS_PER_PULSE = 12;
 
     private SpreadContactSystem() {
     }
 
-    public static void tick(
-            LivingEntity entity,
-            ZeroGravityState state
-    ) {
-        if (entity.level().isClientSide()) {
+    public static void tick(LivingEntity entity, ZeroGravityState state) {
+        if (entity.level().isClientSide() || !state.isSpread()) {
             return;
         }
-
-        if (!state.isSpread()) {
-            return;
-        }
-
-        if (state.getZeroGravityTicks() >= SPREAD_DURATION_TICKS) {
+        if (state.getZeroGravityTicks() >= SPREAD_DURATION_TICKS
+                || isEscapingOwner(entity, state)) {
             endSpread(entity, state);
             return;
         }
-
-        if (isEscapingOwner(entity, state)) {
-            endSpread(entity, state);
+        int age = state.getZeroGravityTicks();
+        float progress = Math.min(1.0F, age / (float) SPREAD_DURATION_TICKS);
+        float radius = (float) (CONTACT_DISTANCE
+                + (MAX_SPREAD_RADIUS - CONTACT_DISTANCE) * progress);
+        state.setRadius(radius);
+        if (age < SPREAD_ARM_TICKS || age % SPREAD_PULSE_TICKS != 0) {
             return;
         }
-
-        if (state.getZeroGravityTicks() < SPREAD_ARM_TICKS) {
-            return;
-        }
-
-        AABB area =
-                entity.getBoundingBox()
-                        .inflate(CONTACT_DISTANCE);
-
-        List<LivingEntity> targets =
-                entity.level().getEntitiesOfClass(
-                        LivingEntity.class,
-                        area,
-                        target ->
-                                target != entity
-                                        && target.isAlive()
-                                        && !target.isSpectator()
-                );
-
-        UUID ownerUUID =
-                state.getOwnerUUID();
-
+        AABB area = entity.getBoundingBox().inflate(radius);
+        List<LivingEntity> targets = entity.level().getEntitiesOfClass(
+                LivingEntity.class, area,
+                target -> target != entity && target.isAlive() && !target.isSpectator()
+        );
+        UUID ownerUUID = state.getOwnerUUID();
+        int infected = 0;
         for (LivingEntity target : targets) {
-
+            if (target.distanceToSqr(entity) > radius * radius) {
+                continue;
+            }
             if (!(target instanceof ZeroGravityAccess access)) {
                 continue;
             }
-
-            if (ownerUUID != null
-                    && target.getUUID().equals(ownerUUID)) {
-                continue;
-            }
-
-            ZeroGravityState targetState =
-                    access.jjf$getZeroGravityState();
-
-            if (targetState.isSafeUserZeroGravity()) {
-                continue;
-            }
-
+            ZeroGravityState targetState = access.jjf$getZeroGravityState();
             if (targetState.isSpread()) {
                 continue;
             }
-
-            infect(
-                    entity,
-                    target,
-                    targetState,
-                    ownerUUID
-            );
+            infect(entity, target, targetState, ownerUUID);
+            if (++infected >= MAX_TARGETS_PER_PULSE) {
+                break;
+            }
         }
     }
 

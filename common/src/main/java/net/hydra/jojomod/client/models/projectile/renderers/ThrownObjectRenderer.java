@@ -2,6 +2,7 @@ package net.hydra.jojomod.client.models.projectile.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.client.TrailRenderer;
 import net.hydra.jojomod.entity.projectile.ThrownObjectEntity;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.AnubisItem;
@@ -25,6 +26,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
+
+import java.util.List;
 
 public class ThrownObjectRenderer<T extends Entity>
         extends EntityRenderer<T> {
@@ -86,7 +89,8 @@ public class ThrownObjectRenderer<T extends Entity>
                     (TOE.getStyle() == ThrownObjectEntity.SPTHROW
                     || TOE.getStyle() == ThrownObjectEntity.TWTHROW
                     || TOE.getStyle() == ThrownObjectEntity.STAND_DAMAGE
-                    || TOE.getStyle() == ThrownObjectEntity.GETHROW)
+                    || TOE.getStyle() == ThrownObjectEntity.GETHROW
+                    || TOE.getStyle() == ThrownObjectEntity.GERTHROW)
             ){
                 poseStack.scale((float) (this.scale*3), (float) (this.scale*3), (float) (this.scale*3));
             } else {
@@ -103,6 +107,24 @@ public class ThrownObjectRenderer<T extends Entity>
 
         }
         poseStack.popPose();
+        if (thrownObjectEntity.getStyle() == ThrownObjectEntity.GERTHROW) {
+            Vec3 anchor = entity.getPosition(g);
+            List<Vec3> points = thrownObjectEntity.getTrailPoints();
+
+            if (points != null && points.size() >= 2) {
+                poseStack.pushPose();
+                TrailRenderer.drawTrailRaw(
+                        anchor,
+                        points,
+                        poseStack.last(),
+                        i,
+                        g,
+                        TrailRenderer.Settings.BULLETS,
+                        multiBufferSource
+                );
+                poseStack.popPose();
+            }
+        }
         super.render(entity, f, g, poseStack, multiBufferSource, i);
     }
 

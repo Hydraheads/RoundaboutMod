@@ -1,10 +1,9 @@
 package net.hydra.jojomod.client.models.layers.visages;
 
-import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.hydra.jojomod.Roundabout;
+import net.hydra.jojomod.access.IFatePlayer;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.access.IPlayerEntityAbstractClient;
 import net.hydra.jojomod.access.IPlayerModel;
@@ -15,12 +14,11 @@ import net.hydra.jojomod.entity.FogCloneEntity;
 import net.hydra.jojomod.entity.npcs.ZombieAesthetician;
 import net.hydra.jojomod.entity.visages.CloneEntity;
 import net.hydra.jojomod.entity.visages.JojoNPC;
-import net.hydra.jojomod.event.index.LocacacaCurseIndex;
-import net.hydra.jojomod.event.index.PlayerPosIndex;
-import net.hydra.jojomod.event.index.PowerTypes;
-import net.hydra.jojomod.event.index.ShapeShifts;
+import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.visagedata.VisageData;
+import net.hydra.jojomod.fates.powers.VampireFate;
+import net.hydra.jojomod.fates.powers.ZombieFate;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.item.ModItems;
 import net.hydra.jojomod.stand.powers.*;
@@ -40,15 +38,11 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.hydra.jojomod.item.BowlerHatItem;
-
-import java.util.Map;
 
 public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>> extends RenderLayer<T, A> {
 
@@ -349,6 +343,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                             renderDaiyaEars(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
+                        if (vd.rendersNorisukeHair() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !hideExtraPartsWithSuit) {
+                            renderNorisukeHair(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    path, r, g, b);
+                        }
                         if (vd.rendersLaemBreasts() && !isBodyFrozen && !MainUtil.isWearingEitherStoneMask(entity) && !isHoldingBowlerHat
                                 && !hideExtraPartsWithSuit) {
                             renderLaemBreasts(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -461,6 +459,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         }
                         if(vd.renderJohngalliaTie() && !hideExtraPartsWithSuit){
                             renderJohngalliaTiePart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
+                                    r, g, b);
+                        }
+                        if(vd.renderPolpoNose() && !hideExtraPartsWithSuit){
+                            renderPolpoNose(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks,
                                     r, g, b);
                         }
                     }
@@ -708,6 +710,10 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
 
                 //dibbo
+                if (net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.shouldRender(ogEnt)) {
+                    net.hydra.jojomod.client.models.layers.JJFPlayerArmsOverlay.render(
+                            ogEnt, getParentModel(), poseStack, bufferSource, packedLight);
+                }
                 if (((StandUser)ogEnt).roundabout$getArmVanishTicks() > 0 ||
                         (((StandUser)ogEnt).roundabout$getStandPowers().hasHandsOut() && ClientUtil.inPowerInventory)){
                     renderKingCrimsonArms(poseStack, bufferSource, packedLight, (T) ogEnt, xx, yy, zz, partialTicks,
@@ -988,6 +994,14 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,36);
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.DaiyaEarsPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,36);
+    }
+    public void renderNorisukeHair(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                                   float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,36);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.NorisukeHairPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,36);
     }
@@ -1508,6 +1522,19 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ModStrayModels.JohngalliaTiePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, "johngallia");
         ClientUtil.popPoseAndCooperate(poseStack,47);
+    }
+    public void  renderPolpoNose(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks,
+                                         float r, float g, float b) {
+        ClientUtil.pushPoseAndCooperate(poseStack,50);
+        getParentModel().head.translateAndRotate(poseStack);
+        if(entity instanceof Player p && ((IFatePlayer)p).rdbt$getFatePowers() instanceof ZombieFate ZF && !ZF.isDisguised()){
+            ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, 1, "polpo_zombie");
+        } else {
+            ModStrayModels.PolpoNosePart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                    r, g, b, 1, "polpo");
+        }
+        ClientUtil.popPoseAndCooperate(poseStack,50);
     }
 
     public void  renderExtraHairPart(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity,

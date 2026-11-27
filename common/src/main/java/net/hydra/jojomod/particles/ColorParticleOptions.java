@@ -4,25 +4,24 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.hydra.jojomod.event.ModParticles;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.registries.BuiltInRegistries;
 
-public class HazeColorParticleOptions implements ParticleOptions {
-    private final ParticleType<HazeColorParticleOptions> type;
+public class ColorParticleOptions implements ParticleOptions {
+    private final ParticleType<ColorParticleOptions> type;
     private final float r, g, b;
 
-    public HazeColorParticleOptions(ParticleType<HazeColorParticleOptions> type, float r, float g, float b) {
+    public ColorParticleOptions(ParticleType<ColorParticleOptions> type, float r, float g, float b) {
         this.type = type;
         this.r = r;
         this.g = g;
         this.b = b;
     }
 
-    public static HazeColorParticleOptions fromPackedColor(ParticleType<HazeColorParticleOptions> type, int color) {
-        return new HazeColorParticleOptions(
+    public static ColorParticleOptions fromPackedColor(ParticleType<ColorParticleOptions> type, int color) {
+        return new ColorParticleOptions(
                 type,
                 ((color >> 16) & 0xFF) / 255.0F,
                 ((color >> 8) & 0xFF) / 255.0F,
@@ -34,29 +33,29 @@ public class HazeColorParticleOptions implements ParticleOptions {
     public float getG() { return g; }
     public float getB() { return b; }
 
-    public static Codec<HazeColorParticleOptions> codec(ParticleType<HazeColorParticleOptions> type) {
+    public static Codec<ColorParticleOptions> codec(ParticleType<ColorParticleOptions> type) {
         return RecordCodecBuilder.create(instance -> instance.group(
                 Codec.FLOAT.fieldOf("r").forGetter(o -> o.r),
                 Codec.FLOAT.fieldOf("g").forGetter(o -> o.g),
                 Codec.FLOAT.fieldOf("b").forGetter(o -> o.b)
-        ).apply(instance, (r, g, b) -> new HazeColorParticleOptions(type, r, g, b)));
+        ).apply(instance, (r, g, b) -> new ColorParticleOptions(type, r, g, b)));
     }
 
-    public static final Deserializer<HazeColorParticleOptions> DESERIALIZER = new Deserializer<>() {
+    public static final Deserializer<ColorParticleOptions> DESERIALIZER = new Deserializer<>() {
         @Override
-        public HazeColorParticleOptions fromCommand(ParticleType<HazeColorParticleOptions> type, StringReader reader) throws CommandSyntaxException {
+        public ColorParticleOptions fromCommand(ParticleType<ColorParticleOptions> type, StringReader reader) throws CommandSyntaxException {
             reader.expect(' ');
             float r = (float) reader.readDouble();
             reader.expect(' ');
             float g = (float) reader.readDouble();
             reader.expect(' ');
             float b = (float) reader.readDouble();
-            return new HazeColorParticleOptions(type, r, g, b);
+            return new ColorParticleOptions(type, r, g, b);
         }
 
         @Override
-        public HazeColorParticleOptions fromNetwork(ParticleType<HazeColorParticleOptions> type, FriendlyByteBuf buffer) {
-            return new HazeColorParticleOptions(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+        public ColorParticleOptions fromNetwork(ParticleType<ColorParticleOptions> type, FriendlyByteBuf buffer) {
+            return new ColorParticleOptions(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
         }
     };
 

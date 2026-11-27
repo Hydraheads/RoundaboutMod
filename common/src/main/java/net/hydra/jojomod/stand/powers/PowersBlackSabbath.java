@@ -2,6 +2,7 @@ package net.hydra.jojomod.stand.powers;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IGravityEntity;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
@@ -11,6 +12,7 @@ import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
 import net.hydra.jojomod.entity.stand.*;
 import net.hydra.jojomod.event.AbilityIconInstance;
 import net.hydra.jojomod.event.ModEffects;
+import net.hydra.jojomod.event.ModParticles;
 import net.hydra.jojomod.event.index.*;
 import net.hydra.jojomod.event.powers.ModDamageTypes;
 import net.hydra.jojomod.event.powers.StandPowers;
@@ -107,22 +109,47 @@ public class PowersBlackSabbath extends NewDashPreset {
         if (!fogControlledEntities2.isEmpty()){
             for (LivingEntity value : fogControlledEntities2) {
                 if (value != null) {
-                    if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying() || value instanceof Player P && (P.isSpectator() || P.isCreative())) {
-                        if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
-                            BE.setMeleeInteractionTicks(-1);
-                            if(MainUtil.cheapDistanceTo(BE.getX(), BE.getY(), BE.getZ(), value.getX(), value.getY(), value.getZ()) < 10) {
-                                BE.pickUpTheItemsAroundTheCadaver(value);
+                    if(!isClient()) {
+                        if (value.isRemoved() || !value.isAlive() || value.isDeadOrDying() || value instanceof Player P && (P.isSpectator() || P.isCreative())) {
+                            if (this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
+                                BE.setMeleeInteractionTicks(-1);
+                                if (MainUtil.cheapDistanceTo(BE.getX(), BE.getY(), BE.getZ(), value.getX(), value.getY(), value.getZ()) < 10) {
+                                    BE.pickUpTheItemsAroundTheCadaver(value);
+                                }
+                            }
+                            if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
+                                if (BE.getGrabbing() != 0) {
+                                    Entity ent = BE.level().getEntity(BE.getGrabbing());
+                                    if (ent != null && ent instanceof LivingEntity LE && LE.is(value)) {
+                                        BE.setMeleeInteractionTicks(-1);
+                                        BE.killSoul();
+                                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                    }
+                                }
+                            }
+                            removeTargetEntities(value);
+                        }
+                        if (this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
+                            DimensionType t = BE.level().dimensionType();
+                            DimensionType T = value.level().dimensionType();
+                            if (t != T) {
+                                if (BE.getGrabbing() != 0) {
+                                    Entity ent = BE.level().getEntity(BE.getGrabbing());
+                                    if (ent != null && ent instanceof LivingEntity LE && ent.is(value)) {
+                                        BE.setMeleeInteractionTicks(-1);
+                                        BE.killSoul();
+                                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                                    }
+                                }
+                                removeTargetEntities(value);
                             }
                         }
-                        removeTargetEntities(value);
-                        if (this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity BE) {
-                            if (BE.getGrabbing() != 0) {
-                                Entity ent = BE.level().getEntity(BE.getGrabbing());
-                                if (ent != null && ent instanceof LivingEntity LE) {
-                                    BE.setMeleeInteractionTicks(-1);
-                                    ((StandUser) LE).roundabout$setGrabbedSoul(false);
-                                    BE.killSoul();
-                                    ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                        if(value.isRemoved()){
+                            if (blackSabbathTargets.isEmpty()) {
+                                this.clearTargetEntities();
+                                setTickDown2(40);
+                                if(this.self instanceof Player) {
+                                    clearTargetEntitiesOnStandDeath();
                                 }
                             }
                         }
@@ -157,7 +184,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
     public List<LivingEntity> clearTargetEntitiesOnStandDeath(){
         blackSabbathTargets = new ArrayList<>();
-        S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.C2S_SYNC_DESTROY_LIST, 0);
+        S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.C2S_SYNC_DESTROY_LIST, 0);
         return blackSabbathTargets;
     }
 
@@ -185,12 +212,10 @@ public class PowersBlackSabbath extends NewDashPreset {
                 this.clearTargetEntities();
             }
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
-                if(this.getSelf() != null) {
                     Entity ent = this.getSelf().level().getEntity(data);
                     if(ent instanceof LivingEntity lent) {
                         this.removeTargetEntities(lent);
                     }
-                }
             }
         }
         super.updatePowerInt(activePower,data);
@@ -236,7 +261,6 @@ public class PowersBlackSabbath extends NewDashPreset {
         if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
             Entity e = be.level().getEntity(be.getGrabbing());
             if(e != null && e instanceof LivingEntity l) {
-                ((StandUser)l).roundabout$setGrabbedSoul(false);
                 ((StandUser)l).roundabout$setGrabberSabbath(0);
                 be.killSoul();
             }
@@ -266,7 +290,9 @@ public class PowersBlackSabbath extends NewDashPreset {
                     }
                     if (moveMode == 3) {
                         setNull();
-                        clearTargetEntitiesOnStandDeath();
+                        if(this.self instanceof Player) {
+                            clearTargetEntitiesOnStandDeath();
+                        }
                         killTargetListClient();
                         setTickDown2(20);
                     }
@@ -280,7 +306,6 @@ public class PowersBlackSabbath extends NewDashPreset {
             }
             if(this.getStandEntity(self) instanceof BlackSabbathEntity BE){
                 if(BE.level().getEntity(BE.getGrabbing()) != null) {
-                    ((StandUser) BE.level().getEntity(BE.getGrabbing())).roundabout$setGrabbedSoul(false);
                     ((StandUser)BE.level().getEntity(BE.getGrabbing())).roundabout$setGrabberSabbath(0);
                     BE.killSoul();
                 }
@@ -380,7 +405,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH ->{
-                if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1)) {
+                if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1) && self.onGround()) {
                     blackChestClient();
                 }
             }
@@ -525,9 +550,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                     }
                 }
             }
-            if(isClient()){
-                //makeSoulTest();
-            }
         } else {
             if (!this.getSelf().level().isClientSide()) {
                 blackSelect.forceDespawnSet = true;
@@ -537,11 +559,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
         return true;
     }
-
-    public boolean isWideSkin(Player p) {
-        return ((AbstractClientPlayer) p).getModelName().equals("default");
-    }
-
     private boolean biteFingers(LivingEntity ojiroSasame){
         if(this.self.isAlive()) {
             if (!isClient()) {
@@ -564,30 +581,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
         }
          return true;
-    }
-    public boolean checkIfYouAreInDark(){
-        Entity $$0 = this.getSelf();
-        BlockPos pos = $$0.blockPosition();
-        long timeOfDay = $$0.level().getDayTime() % 24000L;
-        Vec3 yes = $$0.getEyePosition();
-        BlockPos atVec = BlockPos.containing(yes);
-        boolean isDay = timeOfDay < 12555L || timeOfDay > 23470;
-        if($$0.level().getBrightness(LightLayer.BLOCK, pos) < 12){
-            if(isDay){
-                 if ($$0.level().isRaining() || $$0.level().isThundering()){
-                    return true;
-                } else if ( $$0.level().getBrightness(LightLayer.SKY, atVec) < 14){
-                    return true;
-                }else {
-                    return false;
-                }
-            } else if (!isDay){
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return  false;
     }
     public boolean checkIfBposIsInDark(Vec3 bla){
         Entity $$0 = this.getSelf();
@@ -634,6 +627,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if(this.getStandEntity(self) == null && !blackSabbathTargets.isEmpty() && tickBeforeHunt < 1){
                 this.setTickBeforeHunt(20);
                 moveMode = 3;
+                setStupidTicksSon(8);
             }
         }
         if(this.getSelf() instanceof AbstractIllager || this.getSelf() instanceof Raider || this.getSelf() instanceof Witch){
@@ -659,16 +653,14 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 self.hurt(ModDamageTypes.of(this.self.level(), ModDamageTypes.STAND), 4f);
             }
             if(effect.getDuration() > 35 && effect.getDuration() < 65){
-                Random random = new Random();
-                float flute5 = random.nextFloat(0F, 0.15F);
-                float flute6 = random.nextFloat(-0.35F, 0.35F);
-                float flute7 = random.nextFloat(-0.35F, 0.35F);
                 if(this.self.onGround()) {
-                    ((ServerLevel) self.level()).sendParticles((new DustParticleOptions(new Vector3f(flute5, flute5, flute5), 1.75f)), self.getX() + flute6,
-                            self.getY() - 0.175, self.getZ() + flute7,
-                            200,
-                            0.01, 0.01, 0.01,
-                            0.1);
+                    ((ServerLevel) self.level()).addParticle(
+                            ModParticles.BLACK_SABBATH_MOVING_RIPPLE,
+                            self.getX(),
+                            self.getY() + 0.05f,
+                            self.getZ(),
+                            0.0, 0.0, 0.0
+                    );
                 }
             }
         }
@@ -706,8 +698,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         BlockPos bposExtra = BlockPos.containing(Vec3.ZERO);
         var blockState = this.self.level().getBlockState(bpos);
         var blockState2 = this.self.level().getBlockState(bposExtra);
-
-
         if(gravityDirection == Direction.DOWN) {
             lvec = getLookAngleChest(self.getYRot(), self);
             pn = self.getEyePosition().add(lvec.scale(1));
@@ -720,74 +710,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 setShouldBSummonBot(true);
                 return bposExtra;
             }
-        } else {
-            //TODO: to anyone: DON'T REMOVE THE CODE PLEASE.
-           /* Vec2 vecGravity = RotationUtil.rotPlayerToWorld(self.getYRot(), self.getXRot(), gravityDirection);
-            if (gravityDirection == Direction.UP) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(pn.x(), Math.round(self.getY() -1), pn.z());
-                bposExtra = BlockPos.containing(pn.x(), Math.round(self.getY()), pn.z());
-                if (this.self.level().getBlockState(bpos.above()).isSolid()) {
-                    setShouldBSummonBot(false);
-                    return bpos;
-                } else if (this.self.level().getBlockState(bposExtra.above()).isSolid()) {
-                    setShouldBSummonBot(true);
-                    return bposExtra;
-                }
-            } else if (gravityDirection == Direction.NORTH) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()));
-                bposExtra = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()) + 1);
-                if (this.self.level().getBlockState(bpos.north()).isSolid()) {
-                    setShouldBSummonBot(false);
-                    return bpos;
-                } else if (this.self.level().getBlockState(bposExtra.north()).isSolid()) {
-                    setShouldBSummonBot(true);
-                    return bposExtra;
-                }
-            } else if (gravityDirection == Direction.SOUTH) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()));
-                bposExtra = BlockPos.containing(pn.x(), pn.y(), Math.round(self.getZ()) - 1);
-                if (this.self.level().getBlockState(bpos.south()).isSolid()) {
-                    setShouldBSummonBot(false);
-                    return bpos;
-                } else if (this.self.level().getBlockState(bposExtra.south()).isSolid()) {
-                    setShouldBSummonBot(true);
-                    return bposExtra;
-                }
-            } else if (gravityDirection == Direction.EAST) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(Math.round(self.getX()), pn.y(), pn.z());
-                bposExtra = BlockPos.containing(Math.round(self.getX()) + 1, pn.y(), pn.z());
-                if (self.onGround()) {
-                    if (this.self.level().getBlockState(bpos.east()).isSolid()) {
-                        setShouldBSummonBot(false);
-                        return bpos;
-                    } else if (this.self.level().getBlockState(bposExtra.east()).isSolid()) {
-                        setShouldBSummonBot(true);
-                        return bposExtra;
-                    }
-                }
-            } else if (gravityDirection == Direction.WEST) {
-                lvec = getLookAngleChest(vecGravity.x, self);
-                pn = self.getEyePosition().add(lvec.scale(1));
-                bpos = BlockPos.containing(Math.round(self.getX()), pn.y(), pn.z());
-                bposExtra = BlockPos.containing(Math.round(self.getX()) - 1,pn.y(), pn.z());
-                if (self.onGround()) {
-                    if (this.self.level().getBlockState(bpos.west()).isSolid()) {
-                        setShouldBSummonBot(false);
-                        return bpos;
-                    } else if (this.self.level().getBlockState(bposExtra.west()).isSolid()) {
-                        setShouldBSummonBot(true);
-                        return bposExtra;
-                    }
-                }
-            }*/
         }
         if ((!blockState.canOcclude() || blockState.isAir()) && (!blockState2.canOcclude() || blockState2.isAir())) {
             return null;
@@ -800,11 +722,10 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if(slot == 4 && this.getSelf().getHealth() <= 1) {
             return  true;
         }
-        if (slot == 2 && ((!this.checkIfYouAreInDark() && !(moveMode == 3) || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
+        if (slot == 2 && ((!checkIfBposIsInDark(self.position()) && !(moveMode == 3) || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
             return true;
         }
-        //TODO: FINSH THAT STUPID CHEST GRAVITY CODE!!!
-        if(slot == 1 && (!this.checkIfYouAreInDark() || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN)){
+        if(slot == 1 && (!checkIfBposIsInDark(self.position()) || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN)){
             return true;
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -852,7 +773,19 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             tickBeforeHunt--;
             if(tickBeforeHunt == 1){
                 if(!this.isClient() && this.spawnTarget() != null && this.self.level() instanceof ServerLevel sl){
-                    createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl,spawnTarget(), 25D)));
+                    if(findBlackSabbathSpawnPosition(sl,spawnTarget(), 25D) != null) {
+                            createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl, spawnTarget(), 25D)));
+                    } else {
+                        if(this.checkIfBposIsInDark(self.position())){
+                            createTheMightyHunterOfTheShadows(self.position());
+                        } else {
+                            setNull();
+                            if(this.getSelf() instanceof Player PE){
+                                PE.displayClientMessage(Component.translatable("text.roundabout.failed_black_sabbath_summon"), true);
+                            }
+                            return;
+                        }
+                    }
                 }
             }
         }
@@ -962,8 +895,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
 
             if(this.getGrabbed() != null){
-                ((StandUser)getGrabbed()).roundabout$setGrabbedSoul(false);
-               /* ((StandUser) getGrabbed()).roundabout$updateSealedTicks(-1);*/
                 setGrabbed(null);
                 if(getGrabbedSoul() != null && getGrabbedSoul() instanceof StandEntity se){
                     se.forceDespawn(true);
@@ -987,13 +918,13 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             BSE.openCustomInventoryScreen(PL);
                         }
                     }
-                    if(!checkIfYouAreInDark()){
+                    if(!checkIfBposIsInDark(self.position())){
                         this.active = false;
                         this.RecallClient();
                     }
                 }
                 if(selecting){
-                    if(!checkIfYouAreInDark()){
+                    if(!checkIfBposIsInDark(self.position())){
                         playSoundIfPossible(self.level(),null, this.self.getX(), this.self.getY(),
                                 this.self.getZ(), ModSounds.RATT_DEPLACE_EVENT, this.self.getSoundSource(), 1F, 1.1F);
                         this.selecting = false;
@@ -1002,20 +933,45 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
             }
         }
-
-        String test = "";
-
-        if(this.isClient()){
-            test = "Level is Clientside";
-        } else {
-            test = "Level is Serverside";
+        if(active && this.getStandEntity(self) != null){
+            if(this.getStandEntity(self).tickCount % 6 == 0) {
+                this.getStandEntity(self).level().addParticle(
+                        ModParticles.BLACK_SABBATH_IDLE_RIPPLE,
+                        this.getStandEntity(self).getX(),
+                        this.getStandEntity(self).getY() + 0.05,
+                        this.getStandEntity(self).getZ(),
+                        0.0, 0.0, 0.0
+                );
+            }
         }
 
-        //System.out.println(tickDown2 + ". " + test);
-       // System.out.println(blackSabbathTargets + ". " + test);
-       // System.out.println(moveMode + ". " + test);
-
-        //TODO: REWRITE DIMENSION CHANGING STUFF
+if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be) {
+    DimensionType t = be.level().dimensionType();
+    DimensionType T = this.getSelf().level().dimensionType();
+    if (t != T) {
+        if (moveMode != 0) {
+            be.forceDespawn(true);
+            active = false;
+            if(moveMode == 2){
+                this.selecting = false;
+            }
+            if(moveMode == 3){
+                if (be.getGrabbing() != 0) {
+                    Entity ent = be.level().getEntity(be.getGrabbing());
+                    if (ent != null && ent instanceof LivingEntity LE) {
+                        be.setMeleeInteractionTicks(-1);
+                        be.killSoul();
+                        ((StandUser) LE).roundabout$setGrabberSabbath(0);
+                    }
+                }
+                if(this.self instanceof Player) {
+                    this.clearTargetEntitiesOnStandDeath();
+                }
+            }
+            setNull();
+        }
+    }
+}
 
         if(isClient()){
             StandEntity s = this.getStandEntity(this.getSelf());
@@ -1055,7 +1011,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                     ts = BE.targetSabbath();
                                 }
                                 if(!this.isClient() && this.self.level() instanceof ServerLevel sl) {
-                                    spawnTp(ts);
+                                    if(findBlackSabbathSpawnPosition(sl, ts, 25D) != null) {
+                                        spawnTp(ts);
+                                    }
                                 }
                             }
                         }
@@ -1108,10 +1066,27 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
     }
 
+    boolean sealStandPenalty = false;
+    int lostHp = 0;
+
     public void tickPowerEnd() {
         if (blackSelect != null && this.getStandEntity(self) != null) {
             if (!this.self.level().isClientSide()) {
-                blackRotation((BlackSabbathEntity) this.getStandEntity(self));
+                //blackRotation((BlackSabbathEntity) this.getStandEntity(self));
+                int difference = (int) this.getStandEntity(self).getMaxHealth() - (int) this.getStandEntity(self).getHealth();
+                lostHp = difference;
+                if(this.getStandEntity(self) instanceof BlackSabbathEntity bs && bs.isBlackSabbathUnderLight() && bs.getHunting()){
+                    sealStandPenalty = true;
+                }
+            }
+        } else {
+            if(!isClient() && sealStandPenalty){
+                sealStandPenalty = false;
+                if(lostHp >= 3) {
+                    ((StandUser) this.getSelf()).roundabout$setSealedTicks(lostHp * 15);
+                    this.setTickDown2(20);
+                    lostHp = 0;
+                }
             }
         }
     }
@@ -1125,51 +1100,76 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         int attempts = 100;
         double minDistance = 1D;
 
-        for (int yOffset = 0; yOffset <= 13; yOffset++) {
-            for (int i = 0; i < attempts; i++) {
-                double angle = Math.random() * Math.PI * 2.0D;
-                double distance = minDistance
-                        + Math.sqrt(Math.random()) * (radius - minDistance);
-                double x = lent.getX() + Math.cos(angle) * distance;
-                double z = lent.getZ() + Math.sin(angle) * distance;
-                int baseY = Mth.floor(lent.getY());
-                double y = Mth.floor(baseY + yOffset);
-                Vec3 candidate = new Vec3(x, y, z);
-                BlockPos bpos = BlockPos.containing(x, y, z);
-                var blockState = this.self.level().getBlockState(bpos);
-                AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
-                AABB testBox = yesbox.move(
-                        candidate.x - lent.getX(),
-                        candidate.y - lent.getY(),
-                        candidate.z - lent.getZ()
-                );;
-                if (level.noCollision(lent, testBox) && !blockState.is(Blocks.LAVA) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
-                    return candidate;
-                } else if(yOffset == 13){
-                    for (int yOffset2 = 0; yOffset2 >= -13; yOffset2--) {
-                    for (int i2 = 0; i2 < attempts; i2++) {
-                        double distance2 = minDistance
+        /*Just to make sure it summons in the right place :)*/
+
+        for (int i = 0; i < attempts; i++) {
+            double angle = Math.random() * Math.PI * 2.0D;
+            double distance = minDistance
+                    + Math.sqrt(Math.random()) * (radius - minDistance);
+            double x = lent.getX() + Math.cos(angle) * distance;
+            double z = lent.getZ() + Math.sin(angle) * distance;
+            int baseY = Mth.floor(lent.getY());
+            double y = Mth.floor(baseY);
+            Vec3 candidate = new Vec3(x, y, z);
+            BlockPos bpos = BlockPos.containing(x, y, z);
+            var blockState = this.self.level().getBlockState(bpos);
+            AABB yesbox = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
+            AABB testBox = yesbox.move(
+                    candidate.x - lent.getX(),
+                    candidate.y - lent.getY(),
+                    candidate.z - lent.getZ()
+            );
+            if (level.noCollision(lent, testBox) && !blockState.isAir() && checkIfBposIsInDark(candidate)) {
+                return candidate;
+            } else if (i > 90) {
+                for (int yOffset = 0; yOffset <= 13; yOffset++) {
+                    for (int i3 = 0; i3 < attempts; i3++) {
+                        double angle3 = Math.random() * Math.PI * 2.0D;
+                        double distance3 = minDistance
                                 + Math.sqrt(Math.random()) * (radius - minDistance);
-                        double x2 = lent.getX() + Math.cos(angle) * distance2;
-                        double z2 = lent.getZ() + Math.sin(angle) * distance2;
-                        double y2 = Mth.floor(baseY + yOffset2);
-                        Vec3 candidate2 = new Vec3(x2, y2, z2);
-                        BlockPos bpos2 = BlockPos.containing(x, y2, z);
-                        var blockState2 = this.self.level().getBlockState(bpos2);
-                        AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
-                        AABB testBox2 = yesbox2.move(
-                                candidate2.x - lent.getX(),
-                                candidate2.y - lent.getY(),
-                                candidate2.z - lent.getZ()
-                        );
-                        if (level.noCollision(lent, testBox2) && !blockState.is(Blocks.LAVA) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
-                        return candidate2;
+                        double x3 = lent.getX() + Math.cos(angle3) * distance3;
+                        double z3 = lent.getZ() + Math.sin(angle3) * distance3;
+                        int baseY3 = Mth.floor(lent.getY());
+                        double y3 = Mth.floor(baseY3 + yOffset);
+                        Vec3 candidate3 = new Vec3(x3, y3, z3);
+                        BlockPos bpos3 = BlockPos.containing(x3, y3, z3);
+                        var blockState3 = this.self.level().getBlockState(bpos3);
+                        AABB yesbox3 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), Mth.floor(lent.getY()), lent.getZ());
+                        AABB testBox3 = yesbox3.move(
+                                candidate3.x - lent.getX(),
+                                candidate3.y - lent.getY(),
+                                candidate3.z - lent.getZ()
+                        );;
+                        if (level.noCollision(lent, testBox3) && !blockState3.is(Blocks.LAVA) && !blockState3.isAir() && checkIfBposIsInDark(candidate3)) {
+                            return candidate3;
+                        } else if (yOffset == 13 && i3 > 90){
+                            for (int yOffset2 = 0; yOffset2 >= -13; yOffset2--) {
+                                for (int i2 = 0; i2 < attempts; i2++) {
+                                    double distance2 = minDistance
+                                            + Math.sqrt(Math.random()) * (radius - minDistance);
+                                    double x2 = lent.getX() + Math.cos(angle) * distance2;
+                                    double z2 = lent.getZ() + Math.sin(angle) * distance2;
+                                    double y2 = Mth.floor(baseY + yOffset2);
+                                    Vec3 candidate2 = new Vec3(x2, y2, z2);
+                                    BlockPos bpos2 = BlockPos.containing(x, y2, z);
+                                    var blockState2 = this.self.level().getBlockState(bpos2);
+                                    AABB yesbox2 = ModEntities.BLACK_SABBATH.getAABB(lent.getX(), lent.getY(), lent.getZ());
+                                    AABB testBox2 = yesbox2.move(
+                                            candidate2.x - lent.getX(),
+                                            candidate2.y - lent.getY(),
+                                            candidate2.z - lent.getZ()
+                                    );
+                                    if (level.noCollision(lent, testBox2) && !blockState.is(Blocks.LAVA) && !blockState2.isAir() && checkIfBposIsInDark(candidate)) {
+                                        return candidate2;
+                                    }
+                                }
+                            }
                         }
-                    }
                     }
                 }
             }
         }
+
         return null;
     }
     private LivingEntity spawnTarget(){
@@ -1202,7 +1202,8 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                             if(pos != null) {
                                 BE.absMoveTo(pos.x(), pos.y(), pos.z());
                             } else {
-                                BE.absMoveTo(self.getX(), self.getY(), self.getZ());
+                                Roundabout.LOGGER.error("Something unexpected happened at PowersBlackSabbath.java line 1204: spawn position is null, canceling stand summon");
+                                return;
                             }
                             BE.setYRot(randomInt);
                             BE.setMaster(this.self);
@@ -1227,10 +1228,15 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                 }
                             } else if (BE.getUser() != null && !(BE.getUser() instanceof Player)) {
                                 ItemStack stack = ItemStack.EMPTY;
-                                if(self instanceof Pillager || self instanceof Skeleton) {
+                                if(self instanceof Pillager || self instanceof Skeleton && !(self instanceof Stray)) {
                                     stack = new ItemStack(Items.ARROW);
                                     stack.setCount(64);
-                                } else if (self instanceof WitherSkeleton){
+                                } else if (self instanceof Stray){
+                                    Potion $$7 = Potions.STRONG_SLOWNESS;
+                                    stack = new ItemStack(Items.TIPPED_ARROW);
+                                    stack.setCount(64);
+                                    PotionUtils.setPotion(stack, $$7);
+                                }else if (self instanceof WitherSkeleton){
                                     stack = new ItemStack(Items.STONE_SWORD);
                                 }else if (self instanceof Piglin || self instanceof ZombifiedPiglin){
                                     stack = new ItemStack(Items.GOLDEN_SWORD);
@@ -1255,14 +1261,18 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                         }
                                     }
                                 }else if (self instanceof Evoker){
-                                    stack = new ItemStack(ModItems.STAND_ARROW);
+                                    Random weaponRandom = new Random();
+                                    int weapon = weaponRandom.nextInt(0, 5);
+                                    if(weapon == 4) {
+                                        stack = new ItemStack(ModItems.STAND_ARROW);
+                                    }
                                 }else if (self instanceof Vindicator){
                                     stack = new ItemStack(Items.IRON_AXE);
                                 }else if (self instanceof PiglinBrute){
                                     stack = new ItemStack(Items.GOLDEN_AXE);
                                 }else if (self instanceof WanderingTrader){
                                     Random weaponRandom = new Random();
-                                    int weapon = weaponRandom.nextInt(0, 9);
+                                    int weapon = weaponRandom.nextInt(0, 8);
                                     switch (weapon) {
                                         case 0 -> {
                                             stack = new ItemStack(Items.NETHERITE_SWORD);
@@ -1286,30 +1296,23 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                                             stack.setCount(16);
                                         }
                                         case 6 -> {
-                                            stack = new ItemStack(ModItems.HARPOON);
-                                            stack.setCount(64);
-                                        }
-                                        case 7 -> {
                                             Potion $$7 = Potions.STRONG_HARMING;
                                             stack = new ItemStack(Items.TIPPED_ARROW);
                                             stack.setCount(64);
                                             PotionUtils.setPotion(stack, $$7);
                                         }
-                                        case 8 -> {
+                                        case 7 -> {
                                             Potion $$7 = Potions.LONG_INVISIBILITY;
                                             stack = new ItemStack(Items.POTION);
                                             PotionUtils.setPotion(stack, $$7);
                                         }
                                     }
                                 }else if (self instanceof Creeper){
-                                    Potion $$7 = Potions.LONG_SLOWNESS;
-                                    stack = new ItemStack(Items.POTION);
-                                    PotionUtils.setPotion(stack, $$7);
-                                }else if (self instanceof Drowned){
+                                Potion $$7 = Potions.LONG_SLOWNESS;
+                                stack = new ItemStack(Items.POTION);
+                                PotionUtils.setPotion(stack, $$7);
+                            }else if (self instanceof Drowned){
                                     stack = new ItemStack(Items.TRIDENT);
-                                    Map<Enchantment, Integer> map = Maps.newHashMap();
-                                    map.put(Enchantments.LOYALTY, 3);
-                                    EnchantmentHelper.setEnchantments(map, stack);
                                 }
 
                                 if(!isClient()) {
@@ -1329,9 +1332,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 }
             }
         }
-    }
-    public void blackRotation(BlackSabbathEntity blackSabbathEntity) {
-        transformSabbath(blackSabbathEntity);
     }
     public void transformSabbath(BlackSabbathEntity value){
         if (value != null) {
@@ -1376,10 +1376,14 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
           if(self != null) {
               if(moveMode == 2 || moveMode == 3 && this.blackSabbathTargets.contains(entity)) {
                   Entity TE = MainUtil.getTargetEntity(self, 100, 10);
-                  if (TE != null && TE.is(entity) && !(TE instanceof StandEntity) && !TE.isInvisible() && TE instanceof LivingEntity && !(TE instanceof RoadRollerEntity)) {
-                      if(TE instanceof Player p && (p.isCreative() || p.isSpectator())){
-                          return false;
+                  if(TE != null && TE.is(entity)) {
+                      if (!(TE instanceof StandEntity) && !TE.isInvisible() && TE instanceof LivingEntity && !(TE instanceof RoadRollerEntity)) {
+                          if (TE instanceof Player p && (p.isCreative() || p.isSpectator())) {
+                              return false;
+                          }
+                          return true;
                       }
+                  } else if (this.blackSabbathTargets.contains(entity) && moveMode == 2 && self.hasLineOfSight(entity) && !entity.isInvisible() && !(entity instanceof RoadRollerEntity)){
                       return true;
                   }
               }
@@ -1388,7 +1392,14 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     }
 
     public int highlightsEntityColor(Entity ent, Player player){
-        return 14877186;
+        Entity TE = MainUtil.getTargetEntity(self, 100, 10);
+        if(blackSabbathTargets.contains(ent) && TE != null && TE.is(ent)) {
+            return 14877186;
+        } else if (blackSabbathTargets.contains(ent) && self.hasLineOfSight(ent) && !ent.isInvisible() && !(ent instanceof RoadRollerEntity) && moveMode == 2){
+            return 6684708;
+        } else {
+            return 9371857;
+        }
     }
 
     public void placeBlackChest(Vec3 pos) {
@@ -1415,7 +1426,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         StandEntity stand = getNewStandEntity();
         Vec3 lvec = getLookAngleChest(self.getYRot(), self);
         Position pn = self.getEyePosition().add(lvec.scale(1));
-        BlockPos position = this.getValidPlacement();
         if (self.level() instanceof ServerLevel sl){
             playSoundIfPossible(self.level(),null, this.self.blockPosition(),
                     ModSounds.OPEN_BLACK_SABBATH_CHEST_EVENT, SoundSource.PLAYERS, 1F,
@@ -1423,6 +1433,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         }
         float evilY = shouldBSummonBot ? (float) self.getY() - 1 : (float) self.getY();
         if (stand instanceof BlackSabbathEntity BE) {
+                BE.setBsAnimations((byte)1);
                 BE.absMoveTo(pn.x(), Math.round(evilY), pn.z());
                 BE.setMaster(this.self);
                 BE.setYRot((self.getYRot() % 360) - 180);
@@ -1450,10 +1461,10 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if (!holdAttack) {
                 holdAttack = true;
                 if (moveMode == 2) {
-                    if(this.isHoldingSneak()){
-                        unselectClient();
-                    } else {
+                    if(!this.blackSabbathTargets.contains(getTarget())){
                         selectTargetClient();
+                    } else {
+                        unselectClient();
                     }
                 }
             }
@@ -1480,16 +1491,14 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             }
             case PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET -> {
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET);
-                if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);/*((StandUser) e).roundabout$updateSealedTicks(-1);*/}
+                if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be && be.getGrabbing() != 0){
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabberSabbath(0);/*((StandUser) e).roundabout$updateSealedTicks(-1);*/}
                 }
                 this.setAttackTime(0);
                 Entity target = this.getSelf().level().getEntity(value);
                 if(value != 0) {
                     if (target != null && target instanceof LivingEntity LE) {
-                        if(blackSabbathTargets.contains(LE)) {
-                            this.removeTargetEntities(LE);
-                        }
+                        this.removeTargetEntities(LE);
                     }
                 }
             }
@@ -1497,7 +1506,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 this.setActivePower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST);
                 this.setAttackTime(0);
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);/*((StandUser) e).roundabout$updateSealedTicks(-1);*/be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                    if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
                 }
                 setTickDown2(40);
                 this.clearTargetEntities();
@@ -1532,7 +1541,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
             if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
                 be.setMeleeInteractionTicks(-1);
-                ((StandUser)e).roundabout$setGrabbedSoul(false);
                 be.killSoul();
                 ((StandUser)e).roundabout$setGrabberSabbath(0);
             }
@@ -1544,6 +1552,13 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if(this.getSelf() instanceof Player P) {
                 S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
             }
+        } else {
+                this.removeTargetEntities(LE);
+                tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, true, LE.getId());
+                tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
+                if(this.getSelf() instanceof Player P) {
+                    S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET, LE.getId());
+                }
         }
     }
     public void unselectClient(){
@@ -1553,7 +1568,6 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
                 if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
                     if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e && be.level().getEntity(be.getGrabbing()).is(LE)){
                         be.setMeleeInteractionTicks(-1);
-                        ((StandUser)e).roundabout$setGrabbedSoul(false);
                         be.killSoul();
                         ((StandUser)e).roundabout$setGrabberSabbath(0);
                     }
@@ -1574,7 +1588,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             this.clearTargetEntities();
             setTickDown2(40);
             if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof BlackSabbathEntity be){
-                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){((StandUser)e).roundabout$setGrabbedSoul(false);be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
+                if(be.level().getEntity(be.getGrabbing()) instanceof LivingEntity e){be.killSoul();((StandUser)e).roundabout$setGrabberSabbath(0);}
             }
             tryIntPower(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, true, 0);
             tryIntPowerPacket(PowersBlackSabbath.CLIENT_SYNC_REMOVE_TARGET_LIST, 0);
@@ -1587,7 +1601,9 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if(!blackSabbathTargets.isEmpty()) {
             this.clearTargetEntities();
             setTickDown2(40);
-            clearTargetEntitiesOnStandDeath();
+            if(this.self instanceof Player) {
+                clearTargetEntitiesOnStandDeath();
+            }
         }
     }
     public void selectTargetClient(){
@@ -1669,6 +1685,8 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             return Component.translatable("skins.roundabout.black_sabbath.taco");
         } else if (skinId == BlackSabbathEntity.WOOL) {
             return Component.translatable("skins.roundabout.black_sabbath.woven");
+        } else if (skinId == BlackSabbathEntity.WOODEN) {
+            return Component.translatable("skins.roundabout.black_sabbath.wooden");
         } else if (skinId == BlackSabbathEntity.DAPPER){
             return Component.translatable("skins.roundabout.black_sabbath.dapper");
         } else if (skinId == BlackSabbathEntity.COPPER){
@@ -1752,18 +1770,19 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             MINT = 10,
             TACO = 11,
             WOVEN = 12,
-            FUNGUS = 13,
-            DAPPER = 14,
-            COPPER = 15,
-            PHANTOM_SKIN = 16,
-            SWEET_SKIN = 17,
-            MAGMA = 18,
-            OCULUS = 19,
-            CRIMSON = 20,
-            SACTHOTH_SKIN = 21,
-            COWBOY = 22,
-            BEACH = 23,
-            SANTA = 24;
+            WOODEN = 13,
+            FUNGUS = 14,
+            DAPPER = 15,
+            COPPER = 16,
+            PHANTOM_SKIN = 17,
+            SWEET_SKIN = 18,
+            MAGMA = 19,
+            OCULUS = 20,
+            CRIMSON = 21,
+            SACTHOTH_SKIN = 22,
+            COWBOY = 23,
+            BEACH = 24,
+            SANTA = 25;
     @Override
     public List<Byte> getSkinList() {
         if (isPlaced()) {
@@ -1786,6 +1805,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             list.add(MINT);
             list.add(TACO);
             list.add(WOVEN);
+            list.add(WOODEN);
             list.add(DAPPER);
             list.add(COPPER);
             list.add(FUNGUS);
@@ -1852,4 +1872,12 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
     public Component ifWipListDev(){
         return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_PURPLE);
     }
+   /* @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.dropped").withStyle(ChatFormatting.DARK_RED);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "H-I-A-T-U-S").withStyle(ChatFormatting.DARK_RED);
+    }*/
 }

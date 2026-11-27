@@ -3,7 +3,10 @@ package net.hydra.jojomod.client.models.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.client.ClientUtil;
+import net.hydra.jojomod.client.ModStrayModels;
+import net.hydra.jojomod.client.models.stand.SilverChariotModel;
 import net.hydra.jojomod.client.models.stand.renderers.SilverChariotBaseRenderer;
 import net.hydra.jojomod.entity.stand.SilverChariotEntity;
 import net.hydra.jojomod.event.index.PowerTypes;
@@ -33,21 +36,24 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
 
     public static SilverChariotArmsLayer<?, ?> INSTANCE;
     private record ArmPair(ModelPart leftArm, ModelPart rightArm) {}
+    private record ArmModels(ArmPair firstPerson, ArmPair thirdPerson) {}
 
     private final Map<Byte, ArmPair> skinArmModels = new HashMap<>();
     private final ArmPair defaultArms;
 
+    public SilverChariotArmsLayer() {
+        super(null);
+        INSTANCE = this;
+        this.defaultArms = bakeSilverChariotArms(SilverChariotModel.getTexturedModelData().bakeRoot());
+        this.skinArmModels.put((byte) 0, this.defaultArms);
+        this.skinArmModels.put(SilverChariotEntity.PHARAOH, bakeSilverChariotArms(SilverChariotModel.getTexturedModelData().bakeRoot()));
+    }
     public SilverChariotArmsLayer(EntityRendererProvider.Context context, LivingEntityRenderer<T, A> livingEntityRenderer) {
         super(livingEntityRenderer);
-        INSTANCE = this;
-
-        this.defaultArms = bakeSilverChariotArms(context, ModEntityRendererClient.SILVER_CHARIOT_LAYER);
-        this.skinArmModels.put((byte) 0, this.defaultArms);
-        this.skinArmModels.put(SilverChariotEntity.PHARAOH, bakeSilverChariotArms(context, ModEntityRendererClient.SILVER_CHARIOT_PHARAOH_LAYER));
+        this.defaultArms = null;
     }
 
-    private static ArmPair bakeSilverChariotArms(EntityRendererProvider.Context context, ModelLayerLocation layer) {
-        ModelPart standRoot = context.bakeLayer(layer);
+    private static ArmPair bakeSilverChariotArms(ModelPart standRoot) {
         ModelPart standArms = standRoot.getChild("stand").getChild("stand2").getChild("body").getChild("body2").getChild("torso").getChild("upper_chest");
         return new ArmPair(standArms.getChild("left_arm"), standArms.getChild("right_arm"));
     }
@@ -57,19 +63,23 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
                        T entity, float limbSwing, float limbSwingAmount, float partialTicks,
                        float ageInTicks, float netHeadYaw, float headPitch) {
         if (entity == null || entity.isInvisible() || !MainUtil.isHumanoid2(entity)) return;
+        if (ModStrayModels.chariotArmsLayer == null) return;
 
         if (!ClientUtil.canSeeStands(ClientUtil.getPlayer())) return;
         if (entity instanceof StandUser SU) {
             byte skin = SU.roundabout$getStandSkin();
             ResourceLocation texture = SilverChariotBaseRenderer.getSkin(skin);
-            ArmPair arms = skinArmModels.getOrDefault(skin, defaultArms);
+            ArmPair arms = (ArmPair) ModStrayModels.chariotArmsLayer.skinArmModels.getOrDefault(skin, ModStrayModels.chariotArmsLayer.defaultArms);
+
+            this.resetModelParts(arms.rightArm(), true);
+            this.resetModelParts(arms.leftArm(), false);
 
             VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityTranslucent(texture));
 
             arms.rightArm().setRotation(0.0F, 0.0F, 0.0F);
             arms.leftArm().setRotation(0.0F, 0.0F, 0.0F);
-            arms.rightArm().setPos(1.0F, -1.0F, 0.0F);
-            arms.leftArm().setPos(-1.0F, -1.0F, 0.0F);
+            arms.rightArm().setPos(1.1F, -1.0F, 0.0F);
+            arms.leftArm().setPos(-1.1F, -1.0F, 0.0F);
 
             if (SU.roundabout$getStandPowers() instanceof PowersSilverChariot PSC && PSC.hasHandsOut()) {
                 // Has to use the left arm for part 5 skins
@@ -106,15 +116,26 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
         ModelPart armToRender = isRightArm ? arms.rightArm() : arms.leftArm();
         ModelPart swordToRender = getSword(armToRender, isRightArm);
         ModelPart bladeToRender = getBlade(swordToRender, isRightArm);
+
+        float xRotateLeftArm = ClientNetworking.getAppropriateConfig().silverChariotSettings.leftSwordModelRotateX;
+        float yRotateLeftArm = ClientNetworking.getAppropriateConfig().silverChariotSettings.leftSwordModelRotateY;
+        float zRotateLeftArm = ClientNetworking.getAppropriateConfig().silverChariotSettings.leftSwordModelRotateZ;
+
+        float xRotateRightArm = ClientNetworking.getAppropriateConfig().silverChariotSettings.rightSwordModelRotateX;
+        float yRotateRightArm = ClientNetworking.getAppropriateConfig().silverChariotSettings.rightSwordModelRotateY;
+        float zRotateRightArm = ClientNetworking.getAppropriateConfig().silverChariotSettings.rightSwordModelRotateZ;
+
         // armToRender = swordToRender;
         armToRender.setRotation(0.0F, 0.0F, 0.0F);
         armToRender.setPos(isRightArm ? 1.0F : -1.0F, -1.0F, 0.0F);
         if (isRightArm) {
             // swordToRender.setRotation(45.0F * Mth.DEG_TO_RAD, 0.0F, 0.0F);
-            poseStack.mulPose(Axis.XP.rotationDegrees(45));
+            swordToRender.setRotation(xRotateRightArm * Mth.DEG_TO_RAD, yRotateRightArm * Mth.DEG_TO_RAD, zRotateRightArm * Mth.DEG_TO_RAD);
+            // poseStack.mulPose(Axis.XP.rotationDegrees(45));
         } else {
             // swordToRender.setRotation(-45.0F * Mth.DEG_TO_RAD, 0.0F, 0.0F);
-            poseStack.mulPose(Axis.XP.rotationDegrees(-45));
+            swordToRender.setRotation(xRotateLeftArm * Mth.DEG_TO_RAD, yRotateLeftArm * Mth.DEG_TO_RAD, zRotateLeftArm * Mth.DEG_TO_RAD);
+            // poseStack.mulPose(Axis.XP.rotationDegrees(-45));
         }
         // armToRender.setPos(isRightArm ? 1.0F : -1.0F, -1.0F, 0.0F);
         // poseStack.translate();
@@ -145,5 +166,16 @@ public class SilverChariotArmsLayer<T extends LivingEntity, A extends HumanoidMo
             return sword.getChild("left_blade");
         }
         // return sword;
+    }
+
+    private void resetModelParts(ModelPart arm, boolean isRightArm) {
+        arm.setRotation(0.0F, 0.0F, 0.0F);
+        arm.setPos(isRightArm ? 1.1F : -1.1F, -1.0F, 0.0F);
+
+        ModelPart sword = getSword(arm, isRightArm);
+        sword.setRotation(0.0F, 0.0F, 0.0F);
+
+        ModelPart blade = getBlade(sword, isRightArm);
+        blade.setRotation(0.0F, 0.0F, 0.0F);
     }
 }

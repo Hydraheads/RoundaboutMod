@@ -12,7 +12,6 @@ import net.hydra.jojomod.client.hud.StandHudRender;
 import net.hydra.jojomod.entity.SilverChariotMountEntity;
 import net.hydra.jojomod.entity.pathfinding.AnubisPossessorEntity;
 import net.hydra.jojomod.entity.projectile.RoadRollerEntity;
-import net.hydra.jojomod.entity.stand.BlackSabbathEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
 import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.event.ModEffects;
@@ -36,7 +35,6 @@ import net.hydra.jojomod.event.powers.visagedata.JosukePartEightVisage;
 import net.hydra.jojomod.item.MaskItem;
 import net.hydra.jojomod.util.HeatUtil;
 import net.hydra.jojomod.util.MainUtil;
-import net.hydra.jojomod.util.config.ClientConfig;
 import net.hydra.jojomod.util.config.ConfigManager;
 import net.hydra.jojomod.util.gravity.RotationUtil;
 import net.minecraft.Util;
@@ -61,7 +59,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
@@ -233,7 +230,10 @@ public abstract class HudRendering implements IHudAccess {
 
                 }
                 if(MainUtil.isInMold(this.minecraft.player)) {
-                    this.renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F);
+                    RenderSystem.enableBlend();
+                    float[] moldTint = roundabout$getMoldTint(MainUtil.getMoldSkin(this.minecraft.player));
+                    roundabout$renderTextureOverlay($$1, StandIcons.MOLD_OVERLAY, 0.7F,
+                            moldTint[0], moldTint[1], moldTint[2]);
                 }
                 //Purple Haze overlay
                 if (MainUtil.isInPurpleHaze(this.minecraft.player)) {
@@ -440,6 +440,38 @@ public abstract class HudRendering implements IHudAccess {
                 // prints :0
                 graphics.drawString(this.getFont(), ammoText, x, y, color, true);
             }
+
+            ItemStack otherItem = this.minecraft.player.getOffhandItem();
+
+            // check if the main hand item is a firearm, don't render with jackal rifle cuz like... it's 1 ammo...
+            if (otherItem.getItem() instanceof FirearmItem gun && PowersGoldExperience.getDisguisedDisplayStack(otherItem).isEmpty()) {
+                String ammoText;
+                int color = 0xFFFFFF; // white
+
+                // if gun is reloading, print dots to indicate  an action
+                if (gun.isReloading(otherItem)) {
+                    ammoText = "...";
+                    color = 0xFFFF55; // yellow
+                } else {
+                    // self explanatory, just print the current and max ammo
+                    int currentAmmo = gun.getAmmo(otherItem);
+                    int maxAmmo = gun.getMaxAmmo();
+                    ammoText = currentAmmo + " / " + maxAmmo;
+
+                    // if low, make it red
+                    if (currentAmmo < maxAmmo * 0.25) {
+                        color = 0xFF5555; // red
+                    }
+                }
+
+                // put the thing bottom right
+                int x = 15;
+                int paddingBottom = 20;
+                int y = this.screenHeight - paddingBottom;
+
+                // prints :0
+                graphics.drawString(this.getFont(), ammoText, x, y, color, true);
+            }
         }
     }
 
@@ -487,6 +519,14 @@ public abstract class HudRendering implements IHudAccess {
     @Unique
     private static float[] roundabout$getPurpleHazeTint(byte skin) {
         int color = PurpleSmokeEntity.SKIN_COLORS.getOrDefault(skin, PurpleSmokeEntity.DEFAULT_HAZE_COLOR);
+        float r = ((color >> 16) & 0xFF) / 255.0F;
+        float g = ((color >> 8) & 0xFF) / 255.0F;
+        float b = (color & 0xFF) / 255.0F;
+        return new float[]{r, g, b};
+    }
+    @Unique
+    private static float[] roundabout$getMoldTint(byte skin) {
+        int color = PowersGreenDay.MOLD_COLOR_MAP.getOrDefault(skin, PowersGreenDay.defaultMoldColor());
         float r = ((color >> 16) & 0xFF) / 255.0F;
         float g = ((color >> 8) & 0xFF) / 255.0F;
         float b = (color & 0xFF) / 255.0F;
@@ -867,14 +907,14 @@ public abstract class HudRendering implements IHudAccess {
 
                 StandHudRender.renderTSHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha, true, this.getFont());
                 return true;
-            }else if (user.roundabout$getGrabbedSoul()){
+            }else if (user.roundabout$getGrabberSabbath() != 0){
                 StandHudRender.renderBlockedStandHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
             } else if (minecraft.player.getVehicle() != null && minecraft.player.getVehicle() instanceof StandEntity SE && SE.canRestrainWhileMounted()){
 
                 StandHudRender.renderGrabbedHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;
-            } else if (user.roundabout$isSealed() && !user.roundabout$getGrabbedSoul()){
+            } else if (user.roundabout$isSealed() && user.roundabout$getGrabberSabbath() == 0){
 
                 StandHudRender.renderSealedDiscHud(context, minecraft, this.getCameraPlayer(), screenWidth, screenHeight, tickCount, x, roundabout$flashAlpha, roundabout$otherFlashAlpha);
                 return true;

@@ -92,7 +92,7 @@ public class CatchTheRainbowLayer<T extends LivingEntity, A extends HumanoidMode
                             poseStack.scale(0.6F, 0.6F, 0.6F);
                             poseStack.translate(0.3, 3, -0.3);
                             }
-                        if (skin != 10) {
+                        if (skin != 11) {
                             ModStrayModels.CATCH_THE_RAINBOW.render(livent, partialTicks, poseStack, bufferSource, packedLight,
                                     1, 1, 1, heyFull, skin);
                         }else {

@@ -62,11 +62,21 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ThrownObjectEntity extends ThrowableItemProjectile {
    public boolean places;
 
     private static final EntityDataAccessor<Boolean> ROUNDABOUT$SUPER_THROWN = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> ROUNDABOUT$STYLE = SynchedEntityData.defineId(ThrownObjectEntity.class, EntityDataSerializers.BYTE);
+
+    private final List<Vec3> trailPoints = new ArrayList<>();
+    private static final int MAX_TRAIL_POINTS = 16;
+
+    public List<Vec3> getTrailPoints() {
+        return this.trailPoints;
+    }
 
     private int superThrowTicks = -1;
 
@@ -147,6 +157,17 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                 }
             }
         }
+        if (this.level().isClientSide() && this.getStyle() == GERTHROW) {
+            if (!this.isRemoved()) {
+                double yOffset = (this.getItem().getItem() instanceof BlockItem) ? 0.5 : 0.15;
+                this.trailPoints.add(this.position().add(0, yOffset, 0));
+                if (this.trailPoints.size() > MAX_TRAIL_POINTS) {
+                    this.trailPoints.remove(0);
+                }
+            } else {
+                this.trailPoints.clear();
+            }
+        }
     }
     public static final byte
             SPTHROW = 1,
@@ -155,7 +176,8 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
             SPINTHROW = 4,
             STAND_DAMAGE = 5,
             BRIDGETHROW = 6,
-            GETHROW = 7;
+            GETHROW = 7,
+            GERTHROW = 8;
     public static boolean throwAnObject(LivingEntity thrower, boolean canSnipe, ItemStack item, float getShotAccuracy,
                                      float getBundleAccuracy,
                                      float getThrowAngle1, float getThrowAngle2, float getThrowAngle3,
@@ -163,7 +185,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
                                         boolean playSounds, float mult, boolean canGiveYouItem){
         // all these throwable object things create a new entity that ISN'T a ThrownObjectEntity
         // I need to disable the special interactions for GE so that it can actually transform thrown stuff into mobs later
-        if (styleType != GETHROW) {
+        if (styleType != GETHROW && styleType != GERTHROW) {
             if (item.getItem() instanceof ThrowablePotionItem) {
                 ThrownPotion $$4 = new ThrownPotion(thrower.level(), thrower);
                 $$4.setPos(pos);
@@ -506,8 +528,7 @@ public class ThrownObjectEntity extends ThrowableItemProjectile {
         if (!this.level().isClientSide) {
             if (!this.getItem().isEmpty()) {
                 // gold experience transformation thing
-                Vec3 landingPos = $$0.getLocation().add(0, 0.1, 0);
-                if (tryTransformIntoLifeform(landingPos)) {
+                if (tryTransformIntoLifeform($$0)) {
                     return;
                 }
 
@@ -754,6 +775,11 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
         } else if (getStyle() == GETHROW) {
             damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
             damage*= 0.65F;
+        } else if (getStyle() == GERTHROW) {
+            // setting damage here makes it so that useless items also hit like a truck
+            damage = Math.max(damage, 6.0F);
+            damage *= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier * 0.01);
+            damage *= 1.25F;
         } else {
             damage*= (float) (ClientNetworking.getAppropriateConfig().generalStandSettings.standThrownObjectMultiplier *0.01);
         }
@@ -775,12 +801,9 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             return;
         }
 
-        // ge transform
-        if (tryTransformIntoLifeform($$0.getEntity().position())) {
-            return;
-        }
+        boolean isGEThrow = this.getStyle() == GETHROW || this.getStyle() == GERTHROW;
 
-        if (handleDiscImpact($$0)) return;
+        if (!isGEThrow && handleDiscImpact($$0)) return;
         if (getStyle() == STAND_DAMAGE){
             if ($$0.getEntity() instanceof BlockWallEntity bwe && bwe.isWhiteAlbumWall){
                 return;
@@ -851,11 +874,11 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
                     HeatUtil.addHeat(LE,heat);
                 }
             }
-        } else if (this.getItem().getItem() instanceof NameTagItem) {
+        } else if (!isGEThrow && this.getItem().getItem() instanceof NameTagItem) {
             if ($$1 instanceof LivingEntity && !this.useNametag(this.getItem(), ((LivingEntity) $$1))){
                 this.dropItem($$1.getOnPos());
             }
-        } else if (this.getItem().getItem() instanceof StandDiscItem SD) {
+        } else if (!isGEThrow && this.getItem().getItem() instanceof StandDiscItem SD) {
             if (this.places && $$1 instanceof LivingEntity LE && MainUtil.canGrantStand(LE) &&
             SD.standPowers.isWorthinessType(LE)){
                 ((StandUser) LE).roundabout$setStandDisc(this.getItem());
@@ -863,11 +886,11 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             } else {
                 this.dropItem($$1.getOnPos());
             }
-        } else if (this.getItem().getItem() instanceof DyeItem && $$1 instanceof LivingEntity) {
+        } else if (!isGEThrow && this.getItem().getItem() instanceof DyeItem && $$1 instanceof LivingEntity) {
             if (!this.useDye(this.getItem(), ((LivingEntity) $$1))){
                 this.dropItem($$1.getOnPos());
             }
-        } else if (this.getItem().getItem() instanceof MaskItem && $$1 instanceof Player pe) {
+        } else if (!isGEThrow && this.getItem().getItem() instanceof MaskItem && $$1 instanceof Player pe) {
             if (ClientNetworking.getAppropriateConfig().itemSettings.canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(0).isEmpty()) {
                 ((IPlayerEntity) pe).roundabout$getMaskInventory().setItem(0, this.getItem().copy());
             } else if (ClientNetworking.getAppropriateConfig().itemSettings.canThrowVisagesOntoOtherPlayers && ((IPlayerEntity)pe).roundabout$getMaskInventory().getItem(1).isEmpty()){
@@ -875,11 +898,11 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             } else {
                 this.dropItem($$1.getOnPos());
             }
-        } else if (this.getItem().getItem() instanceof SaddleItem && $$1 instanceof LivingEntity) {
+        } else if (!isGEThrow && this.getItem().getItem() instanceof SaddleItem && $$1 instanceof LivingEntity) {
             if (!this.useSaddle(this.getItem(), ((LivingEntity) $$1))){
                 this.dropItem($$1.getOnPos());
             }
-        } else if (this.getItem().getItem() instanceof LeadItem && $$1 instanceof Mob) {
+        } else if (!isGEThrow && this.getItem().getItem() instanceof LeadItem && $$1 instanceof Mob) {
             if (!this.useLeash(this.getItem(), ((Mob) $$1))){
                 this.dropItem($$1.getOnPos());
             }
@@ -951,8 +974,7 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
                     Item tem = stack.getItem();
                     if (stack.isDamageableItem()
                     ) {
-                        if (!(tem instanceof FleshBucketItem)
-                                && !(tem instanceof FishingRodItem)
+                        if (!(tem instanceof FishingRodItem)
                                 && !(tem instanceof LuckyLipstickItem)
                                 && !(tem instanceof MemoryChessPieceItem)
                                 && !(tem instanceof ExperienceBishopItem)
@@ -1001,6 +1023,9 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             } else {
                 this.dropItem($$1.getOnPos());
             }
+        }
+        if (isGEThrow) {
+            tryTransformIntoLifeform($$0.getEntity().position());
         }
         this.discard();
 
@@ -1135,20 +1160,11 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
 
     // GE
     private boolean tryTransformIntoLifeform(Vec3 spawnPos) {
-        if (this.getStyle() == GETHROW && this.getOwner() instanceof StandUser entity) {
+        if ((this.getStyle() == GETHROW || this.getStyle() == GERTHROW) && this.getOwner() instanceof StandUser entity) {
             StandPowers powers = entity.roundabout$getStandPowers();
 
             if (powers instanceof PowersGoldExperience gePowers) {
-                byte selectedAnimal = gePowers.getSelectedAnimalType();
-                EntityType<?> typeToSpawn = ModEntities.GE_FROG;
-
-                if (selectedAnimal == AnimalTypes.BAT.id) typeToSpawn = ModEntities.GE_BAT;
-                else if (selectedAnimal == AnimalTypes.BEE.id) typeToSpawn = ModEntities.GE_BEE;
-                else if (selectedAnimal == AnimalTypes.FISH.id) typeToSpawn = ModEntities.GE_FISH;
-                else if (selectedAnimal == AnimalTypes.FOX.id) typeToSpawn = ModEntities.GE_FOX;
-                else if (selectedAnimal == AnimalTypes.SNAKE.id) typeToSpawn = ModEntities.GE_SNAKE;
-                else if (selectedAnimal == AnimalTypes.PIRAHNA.id) typeToSpawn = ModEntities.GE_PIRANHA;
-                else if (selectedAnimal == AnimalTypes.BUTTERFLY.id) typeToSpawn = ModEntities.GE_BUTTERFLY;
+                EntityType<?> typeToSpawn = getGELifeformType(gePowers.getSelectedAnimalType());
 
                 if (gePowers.spawnLifeform(typeToSpawn, spawnPos, this.getItem())) {
                     this.discard();
@@ -1157,6 +1173,69 @@ private void bridgePlace(BlockHitResult $$0,Player P) {
             }
         }
         return false;
+    }
+
+    private boolean tryTransformIntoLifeform(BlockHitResult hitResult) {
+        if ((this.getStyle() == GETHROW || this.getStyle() == GERTHROW) && this.getOwner() instanceof StandUser entity) {
+            StandPowers powers = entity.roundabout$getStandPowers();
+
+            if (powers instanceof PowersGoldExperience gePowers) {
+                EntityType<?> typeToSpawn = getGELifeformType(gePowers.getSelectedAnimalType());
+                Vec3 safePos = findSafeLifeformSpawnPos(hitResult, typeToSpawn);
+
+                if (gePowers.spawnLifeform(typeToSpawn, safePos, this.getItem())) {
+                    this.discard();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private EntityType<?> getGELifeformType(byte selectedAnimal) {
+        if (selectedAnimal == AnimalTypes.BAT.id) return ModEntities.GE_BAT;
+        if (selectedAnimal == AnimalTypes.BEE.id) return ModEntities.GE_BEE;
+        if (selectedAnimal == AnimalTypes.FISH.id) return ModEntities.GE_FISH;
+        if (selectedAnimal == AnimalTypes.FOX.id) return ModEntities.GE_FOX;
+        if (selectedAnimal == AnimalTypes.SNAKE.id) return ModEntities.GE_SNAKE;
+        if (selectedAnimal == AnimalTypes.PIRAHNA.id) return ModEntities.GE_PIRANHA;
+        if (selectedAnimal == AnimalTypes.BUTTERFLY.id) return ModEntities.GE_BUTTERFLY;
+        return ModEntities.GE_FROG;
+    }
+
+    private Vec3 findSafeLifeformSpawnPos(BlockHitResult hitResult, EntityType<?> entityType) {
+        Direction face = hitResult.getDirection();
+        Vec3 hitLoc = hitResult.getLocation();
+        EntityDimensions dims = entityType.getDimensions();
+        double halfWidth = dims.width * 0.5D + 0.05D;
+        double height = dims.height;
+
+        // basically, all of these checks look for possible places to spawn the mob in, the spawn it there, with a fallback just in case it doesn't find one
+        Vec3 candidate = switch (face) {
+            case UP -> hitLoc.add(0.0D, 0.02D, 0.0D);
+            case DOWN -> hitLoc.add(0.0D, -(height + 0.05D), 0.0D);
+            default -> hitLoc.add(
+                    face.getStepX() * halfWidth,
+                    0.02D,
+                    face.getStepZ() * halfWidth
+            );
+        };
+        if (this.level().noCollision(entityType.getAABB(candidate.x, candidate.y, candidate.z))) {
+            return candidate;
+        }
+        BlockPos adjacentPos = hitResult.getBlockPos().relative(face);
+        Vec3 blockCenter = new Vec3(adjacentPos.getX() + 0.5D, adjacentPos.getY() + 0.02D, adjacentPos.getZ() + 0.5D);
+        if (this.level().noCollision(entityType.getAABB(blockCenter.x, blockCenter.y, blockCenter.z))) {
+            return blockCenter;
+        }
+
+        BlockPos abovePos = adjacentPos.above();
+        Vec3 aboveCenter = new Vec3(abovePos.getX() + 0.5D, abovePos.getY() + 0.02D, abovePos.getZ() + 0.5D);
+        if (this.level().noCollision(entityType.getAABB(aboveCenter.x, aboveCenter.y, aboveCenter.z))) {
+            return aboveCenter;
+        }
+
+        return blockCenter;
     }
 
     public void shootWithVariance(double $$0, double $$1, double $$2, float $$3, float $$4) {

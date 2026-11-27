@@ -73,6 +73,7 @@ public class ModDamageTypes {
         public static final ResourceKey<DamageType> SHARP_RAINDROP = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "sharp_raindrop"));
         public static final ResourceKey<DamageType> AIR_PRESSURE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "air_pressure"));
         public static final ResourceKey<DamageType> BRAMBLE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "bramble"));
+        public static final ResourceKey<DamageType> GER_STAND = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Roundabout.MOD_ID, "ger_stand"));
 
         public static DamageSource of(Level world, ResourceKey<DamageType> key, Entity attacker) {
             return new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(key), attacker, attacker);

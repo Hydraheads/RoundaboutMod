@@ -95,7 +95,7 @@ public final class ZeroGravitySync {
 
         state.setAirPressureTicks(snapshot.airPressureTicks());
         state.setRestorationTicks(snapshot.restorationTicks());
-        clientMeterVisible = source == ZeroGravitySource.SPREAD && snapshot.meterVisible();
+        clientMeterVisible = snapshot.meterVisible();
     }
 
     public static boolean shouldRenderClientMeter() {

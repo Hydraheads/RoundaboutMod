@@ -586,10 +586,44 @@
       "roundabout:ge_vine"
     ]
   },
+  "return_to_zero": {
+    "subtitle": "sounds.roundabout.return_to_zero",
+    "sounds": [
+      "roundabout:return_to_zero_1",
+      "roundabout:return_to_zero_2",
+      "roundabout:return_to_zero_3",
+      "roundabout:return_to_zero_4"
+    ]
+  },
+  "return_to_zero_rewind": {
+    "subtitle": "sounds.roundabout.return_to_zero",
+    "sounds": [
+      "roundabout:return_to_zero_rewind"
+    ]
+  },
   "summon_king_crimson": {
     "subtitle": "sounds.roundabout.summon_king_crimson",
     "sounds": [
       "roundabout:summon_king_crimson"
+    ]
+  },
+  "ger_barrage": {
+    "subtitle": "sounds.roundabout.stand_barrage_hit",
+    "sounds": [
+      "roundabout:ger_barrage_1",
+      "roundabout:ger_barrage_2"
+    ]
+  },
+  "ger_barrage_windup": {
+    "subtitle": "sounds.roundabout.stand_barrage_windup",
+    "sounds": [
+      "roundabout:ger_barrage_windup"
+    ]
+  },
+  "requiem_muda": {
+    "subtitle": "sounds.roundabout.the_world_muda",
+    "sounds": [
+      "roundabout:requiem_muda"
     ]
   },
   "king_crimson_impale": {
@@ -758,6 +792,24 @@
     "subtitle": "sounds.roundabout.chess_break",
     "sounds": [
       "roundabout:chess_break"
+    ]
+  },
+  "king_nothing_summon": {
+    "subtitle": "sounds.roundabout.summon_stand",
+    "sounds": [
+      "roundabout:king_nothing_summon"
+    ]
+  },
+  "king_nothing_phase": {
+    "subtitle": "sounds.roundabout.king_nothing_phase",
+    "sounds": [
+      "roundabout:king_nothing_phase"
+    ]
+  },
+  "king_nothing_desummon": {
+    "subtitle": "sounds.roundabout.king_nothing_desummon",
+    "sounds": [
+      "roundabout:king_nothing_desummon"
     ]
   },
   "ice_blast_charge": {
@@ -5160,6 +5212,18 @@
     "subtitle": "sounds.roundabout.ctr_stabilizing_rain",
     "sounds": [
       "roundabout:ctr_stabilizing_rain"
+    ]
+  },
+  "ctr_barrier": {
+    "subtitle": "sounds.roundabout.ctr_barrier",
+    "sounds": [
+      "roundabout:ctr_barrier"
+    ]
+  },
+  "ctr_full_body_dodge": {
+    "subtitle": "sounds.roundabout.ctr_full_body_dodge",
+    "sounds": [
+      "roundabout:ctr_full_body_dodge"
     ]
   },
   "jumpin_jack_flash_summon": {

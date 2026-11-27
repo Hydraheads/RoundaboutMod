@@ -509,6 +509,16 @@ public abstract class InputEvents implements IInputEvents {
             if (player != null) {
                 StandUser standComp = ((StandUser) player);
                 StandPowers powers = standComp.roundabout$getStandPowers();
+                if (powers instanceof net.hydra.jojomod.stand.powers.PowersJumpinJackFlash jjf
+                        && PowerTypes.hasStandActive(player)
+                        && jjf.jjf$shouldSuppressMining()) {
+                    if (this.gameMode != null) {
+                        this.gameMode.stopDestroyBlock();
+                    }
+                    roundabout$activeMining = false;
+                    ci.cancel();
+                    return;
+                }
 
                 if (standComp.roundabout$isPossessed()) {
                     ci.cancel();
@@ -1294,7 +1304,8 @@ public abstract class InputEvents implements IInputEvents {
                         roundabout$sameKeyTwo(KeyInputRegistry.guardKey) || options.keyUse.isDown());
                 /**Time Stop Levitation*/
                 boolean TSJumping = ((StandUser)player).roundabout$getTSJump();
-                if (((TimeStop)player.level()).isTimeStoppingEntity(player) || PowerTypes.isErasingTime(player)) {
+                if (((TimeStop)player.level()).isTimeStoppingEntity(player) || PowerTypes.isErasingTime(player)
+                        || ((StandUser)player).roundabout$getStandPowers() instanceof PowersGER) {
                     if (player.getAbilities().flying && TSJumping) {
                         this.roundabout$SetTSJump(false);
                     } else {
