@@ -2,13 +2,12 @@ name: Build SBA
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "arena/0b162f1b-sba-mod"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -20,13 +19,19 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Build with Gradle
         run: ./gradlew build --stacktrace
-      - name: Upload jars
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: SBA-jars
-          path: |
-            fabric/build/libs/*.jar
-            forge/build/libs/*.jar
-            common/build/libs/*.jar
-          if-no-files-found: warn
+      - name: List jars
+        run: ls -lh fabric/build/libs/ forge/build/libs/ common/build/libs/ || true
+      - name: Publish main jars as GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p release-jars
+          find fabric/build/libs forge/build/libs -maxdepth 1 -name '*.jar' \
+            ! -name '*-sources.jar' ! -name '*-javadoc.jar' ! -name '*-dev.jar' \
+            -exec cp -v {} release-jars/ \;
+          ls -lh release-jars/
+          TAG="sba-build-${{ github.run_number }}"
+          gh release create "$TAG" release-jars/*.jar \
+            --title "SBA build ${{ github.run_number }}" \
+            --notes "Built SBA jars (Fabric and Forge, Minecraft 1.20.1) from commit ${{ github.sha }}" \
+            --target "${{ github.sha }}"
