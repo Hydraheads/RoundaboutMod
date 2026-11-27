@@ -2535,6 +2535,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(GoldExperienceEntity.REQUIEM);
             this.poseStand(OffsetIndex.IN_FRONT);
+            ((IPlayerEntity) this.getSelf()).roundabout$SetPoseEmote(Poses.GIORNO.id);
             return true;
         }
         return false;
@@ -2566,6 +2567,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (oldStand != null && !oldStand.isRemoved()) {
                     spawnRequiemCrackStage(oldStand, 4);
                 }
+            }
+
+            if (this.self instanceof Player player) {
+                ((IPlayerEntity) player).roundabout$SetPoseEmote(Poses.NONE.id);
             }
 
             //setPowerNone();
