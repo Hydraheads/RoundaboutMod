@@ -2528,7 +2528,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(GoldExperienceEntity.REQUIEM);
-            this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+            this.poseStand(OffsetIndex.IN_FRONT);
             return true;
         }
         return false;

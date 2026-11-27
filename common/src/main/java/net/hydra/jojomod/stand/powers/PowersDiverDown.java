@@ -3095,7 +3095,7 @@ public class PowersDiverDown extends NewPunchingStand {
             boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
             if (toggle != getTog) {
                 if (toggle) {
-                    this.poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                    this.poseStand(OffsetIndex.IN_FRONT);
                     animateStand(DiverDownEntity.DIVER_ZIP_IDLE);
                     // put sound here
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(),

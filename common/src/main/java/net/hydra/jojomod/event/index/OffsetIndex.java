@@ -20,6 +20,7 @@ public class OffsetIndex {
     // Lazy work around for stands that should be able to carry their user
     public static final byte BENEATH_CARRY_USER = 13;
     public static final byte BENEATH_CARRY_IDLE = 14;
+    public static final byte IN_FRONT = 15;
 
 
 
@@ -29,7 +30,7 @@ public class OffsetIndex {
 
     public static byte OffsetStyle(byte offsetType){
         if (offsetType == FOLLOW || offsetType == FOLLOW_NOLEAN ||
-                offsetType == BEHIND || offsetType == BENEATH_CARRY_IDLE){
+                offsetType == BEHIND || offsetType == BENEATH_CARRY_IDLE || offsetType == IN_FRONT){
             return FOLLOW_STYLE;
         } else if (offsetType == ATTACK || offsetType == GUARD || offsetType == BENEATH|| offsetType == BENEATH_2 || offsetType == GUARD_AND_TRACE
                 || offsetType == GUARD_FURTHER_RIGHT || offsetType == BENEATH_CARRY_USER){
