@@ -351,7 +351,7 @@ public class PowersPurpleHaze extends NewPunchingStand {
     @Override
     public boolean isAttackIneptVisually(byte activeP, int slot) {
         byte pods = ((IPlayerEntity) this.getSelf()).roundabout$getPurpleHazePods();
-        if (activeP == PowerIndex.SKILL_1 || activeP == PowerIndex.SKILL_1_SNEAK || activeP == PowerIndex.SKILL_2_SNEAK) {
+        if (activeP == PowerIndex.SKILL_1 || activeP == PowerIndex.SKILL_1_SNEAK) {
             if (pods==0) {
                 return true;
             }

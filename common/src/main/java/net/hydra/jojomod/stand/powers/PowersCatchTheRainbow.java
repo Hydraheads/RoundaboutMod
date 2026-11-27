@@ -35,13 +35,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AirItem;
@@ -455,8 +455,8 @@ public class PowersCatchTheRainbow extends NewDashPreset {
         }
     }
 
-    //rain speed
-    @Override
+    //rain speed -> its in standuserentity now
+    /*@Override
     public float inputSpeedModifiers(float basis) {
         if (isInRain() && PowerTypes.hasStandActive(self)){
             if (!(this.getSelf() instanceof Mob)) {
@@ -464,7 +464,7 @@ public class PowersCatchTheRainbow extends NewDashPreset {
             }
         }
         return super.inputSpeedModifiers(basis);
-    }
+    }*/
 
     @Override
     public int getJumpHeightAddon(){
@@ -1092,6 +1092,12 @@ public class PowersCatchTheRainbow extends NewDashPreset {
                         (this.self.getX(), this.self.getY(), this.self.getZ(), attackTarget.getX(), attackTarget.getY(), attackTarget.getZ()) < 5) {
                     ((StandUser) this.getSelf()).roundabout$tryPower(PowerIndex.POWER_1, true);
                 }
+            }
+        }
+
+        if (!this.onCooldown(SKILL_1_SNEAK) && isInRain()) {
+            if (self.getHealth() < self.getMaxHealth()/3 || (self.hasEffect(ModEffects.BLEED) && self.getHealth() < self.getMaxHealth()/ 1.5)) {
+                ((StandUser) this.getSelf()).roundabout$tryPower(RAINMEND, true);
             }
         }
     }

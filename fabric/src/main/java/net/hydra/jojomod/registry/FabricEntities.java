@@ -869,6 +869,13 @@ public class FabricEntities {
                             .clientTrackingRange(14)
                             .build(Roundabout.MOD_ID + ":gold_experience_beta")
             );
+    public static final EntityType<GoldExperienceRequiemDeimosEntity> GOLD_EXPERIENCE_REQUIEM_DEIMOS =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    Roundabout.location("gold_experience_requiem_deimos"),
+                    EntityType.Builder.of(GoldExperienceRequiemDeimosEntity::new, MobCategory.MISC).
+                            sized(0.75f, 2.05f).clientTrackingRange(14).build(Roundabout.MOD_ID+":gold_experience_requiem_deimos")
+            );
     public static final EntityType<GEBrambleEntity> GE_BRAMBLE =
             Registry.register(
                     BuiltInRegistries.ENTITY_TYPE,
@@ -1635,6 +1642,7 @@ public class FabricEntities {
         ModEntities.GOLD_EXPERIENCE = GOLD_EXPERIENCE;
         ModEntities.GOLD_EXPERIENCE_REQUIEM = GOLD_EXPERIENCE_REQUIEM;
         ModEntities.GOLD_EXPERIENCE_BETA = GOLD_EXPERIENCE_BETA;
+        ModEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS = GOLD_EXPERIENCE_REQUIEM_DEIMOS;
         ModEntities.GE_BRAMBLE = GE_BRAMBLE;
         ModEntities.GE_THORN = GE_THORN;
         ModEntities.GE_BAT = GE_BAT;
@@ -1905,6 +1913,7 @@ public class FabricEntities {
                 FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE_REQUIEM, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE_BETA, StandEntity.createStandAttributes());
+                FabricDefaultAttributeRegistry.register(GOLD_EXPERIENCE_REQUIEM_DEIMOS, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT, StandEntity.createStandAttributes());
                 FabricDefaultAttributeRegistry.register(SILVER_CHARIOT_PHARAOH, StandEntity.createStandAttributes());
 

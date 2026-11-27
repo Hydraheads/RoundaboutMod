@@ -182,7 +182,8 @@ public class PowersBadCompany extends NewDashPreset {
 
     public float getSoundVolumeFromByte(byte soundChoice){
         if (soundChoice == SoundIndex.SUMMON_SOUND || soundChoice == SoundIndex.SUMMON_SOUND_2
-                || soundChoice == BUNDLE_SUMMON) {
+                || soundChoice == BUNDLE_SUMMON|| soundChoice == SOLDIER_SUMMON
+                || soundChoice == HELICOPTER_SUMMON || soundChoice == TANK_SUMMON ) {
             return 0.6f;
         }
 

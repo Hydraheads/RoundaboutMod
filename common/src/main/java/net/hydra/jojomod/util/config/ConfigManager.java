@@ -145,9 +145,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingBlockFormPredictionsv2 != null) {
+        if (getAdvancedConfig().kingNothingBlockFormPredictionsv3 != null) {
             MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictionsv2) {
+            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictionsv3) {
                 try {
                     String[] split = entry.split(":");
 
@@ -176,9 +176,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingEntityFormPredictionsv3 != null) {
+        if (getAdvancedConfig().kingNothingEntityFormPredictionsv4 != null) {
             MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsv3) {
+            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsv4) {
                 try {
                     String[] split = entry.split(":");
 
@@ -211,10 +211,10 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingBlockGroups != null) {
+        if (getAdvancedConfig().kingNothingBlockGroupsv2 != null) {
             MainUtil.KING_NOTHING_BLOCK_GROUPS.clear();
             MainUtil.KING_NOTHING_BLOCK_KEYS.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockGroups) {
+            for (String entry : getAdvancedConfig().kingNothingBlockGroupsv2) {
                 try {
                     String[] split = entry.split(":");
                     if (split.length < 4 && split.length % 2 != 0) {
@@ -247,6 +247,42 @@ public abstract class ConfigManager {
             }
         }
 
+        if (getAdvancedConfig().kingNothingEntityGroups != null) {
+            MainUtil.KING_NOTHING_ENTITY_GROUPS.clear();
+            MainUtil.KING_NOTHING_ENTITY_KEYS.clear();
+            for (String entry : getAdvancedConfig().kingNothingEntityGroups) {
+                try {
+                    String[] split = entry.split(":");
+                    if (split.length < 4 && split.length % 2 != 0) {
+                        Roundabout.LOGGER.warn("Invalid entity group entry: {}", entry);
+                        continue;
+                    }
+                    Set<EntityType<?>> group = new HashSet<>();
+                    ResourceLocation sourceId = new ResourceLocation(split[0],split[1]);
+                    EntityType<?> sourceEntity = BuiltInRegistries.ENTITY_TYPE.get(sourceId);
+                    if ((sourceEntity.equals(EntityType.PIG) && !sourceId.equals(new ResourceLocation("minecraft", "pig")))
+                            || sourceEntity.equals(EntityType.PLAYER)) {
+                        Roundabout.LOGGER.warn("Invalid entity group key: {}", sourceEntity);
+                        continue;
+                    }
+                    for (int i = 0; i < split.length; i += 2) {
+                        ResourceLocation targetId = new ResourceLocation(split[i], split[i + 1]);
+                        EntityType<?> targetEntity = BuiltInRegistries.ENTITY_TYPE.get(targetId);
+                        if ((targetEntity.equals(EntityType.PIG) && !targetId.equals(new ResourceLocation("minecraft", "pig"))
+                                || targetEntity.equals(EntityType.PLAYER) || group.contains(targetEntity))) {
+                            Roundabout.LOGGER.warn("Invalid entity group value: {}", targetEntity);
+                            continue;
+                        }
+                        MainUtil.KING_NOTHING_ENTITY_KEYS.put(targetEntity, sourceEntity);
+                        group.add(targetEntity);
+                    }
+                    MainUtil.KING_NOTHING_ENTITY_GROUPS.put(sourceEntity, group);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse entity group entry '{}'", entry, e);
+                }
+            }
+        }
+
         if (getAdvancedConfig().kingNothingBlockSniffBlacklist != null) {
             MainUtil.kingNothingBlockSniffBlacklist.clear();
             MainUtil.kingNothingBlockSniffBlacklist.addAll(getAdvancedConfig().kingNothingBlockSniffBlacklist);
@@ -261,7 +297,6 @@ public abstract class ConfigManager {
             MainUtil.KING_NOTHING_BLOCK_SNIFF_OVERRIDES.clear();
             for (String entry : getAdvancedConfig().kingNothingBlockSniffOverrides) {
                 try {
-                    if (entry.equals("mod_id:add_mob_A_here:mod_id:add_mob_B_here")) continue;
                     String[] split = entry.split(":");
 
                     if (split.length != 4) {
@@ -289,9 +324,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingEntitySniffOverrides != null) {
+        if (getAdvancedConfig().kingNothingEntitySniffOverridesv2 != null) {
             MainUtil.KING_NOTHING_ENTITY_SNIFF_OVERRIDES.clear();
-            for (String entry : getAdvancedConfig().kingNothingEntitySniffOverrides) {
+            for (String entry : getAdvancedConfig().kingNothingEntitySniffOverridesv2) {
                 try {
                     String[] split = entry.split(":");
 

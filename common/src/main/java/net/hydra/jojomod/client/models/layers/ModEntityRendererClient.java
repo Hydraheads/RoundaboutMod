@@ -93,6 +93,7 @@ public class ModEntityRendererClient {
     public static final ModelLayerLocation GOLD_EXPERIENCE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gold_experience"), "main");
     public static final ModelLayerLocation GOLD_EXPERIENCE_BETA_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_beta"), "main");
     public static final ModelLayerLocation GOLD_EXPERIENCE_REQUIEM_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_requiem"), "main");
+    public static final ModelLayerLocation GOLD_EXPERIENCE_REQUIEM_DEIMOS_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_requiem_deimos"), "main");
     public static final ModelLayerLocation GE_BRAMBLE_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ge_bramble"), "main");
     public static final ModelLayerLocation GE_THORN_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "ge_thorn"), "main");
     public static final ModelLayerLocation SILVER_CHARIOT_LAYER = new ModelLayerLocation(new ResourceLocation(Roundabout.MOD_ID, "silver_chariot"), "main");
