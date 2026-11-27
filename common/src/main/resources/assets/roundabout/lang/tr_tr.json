@@ -3441,9 +3441,7 @@
   "roundabout.bomb_config.explosion_size_1": "Orta Seviye Patlama",
   "roundabout.bomb_config.explosion_size_2": "Büyük Patlama",
   "roundabout.bomb_config.on": ": Açık",
-  "roundabout.bomb_config.off": ": Kapalı",
-
-  "roundabout.killer_queen.bomb_config": "Bomba Ayarı",
+  "roundabout.bomb_config.off": ": Kapalı"
 
   "skins.roundabout.green_day.part_five_green_day": "Part 5",
   "skins.roundabout.green_day.red_day": "Red Day",
