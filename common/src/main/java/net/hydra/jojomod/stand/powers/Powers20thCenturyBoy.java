@@ -780,7 +780,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
 
     public void tickPowerEnd(){
         super.tickPowerEnd();
-        if (self instanceof Player PL && !ClientNetworking.getAppropriateConfig().centuryBoySettings.CBCanMoveCamera) {
+        if (invincibleState && self instanceof Player PL && !ClientNetworking.getAppropriateConfig().centuryBoySettings.CBCanMoveCamera) {
             PL.setYHeadRot(playerheadRotY);
             PL.setXRot(playerheadRotX);
         }
