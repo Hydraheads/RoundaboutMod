@@ -73,7 +73,8 @@ public class TuskNailEntity extends AbstractArrow {
         GUARD_BREAK = (byte) 1,
         REDUCED = (byte) 2,
         GOLDEN = (byte) 3,
-        WALL_BREAKER = (byte) 4;
+        WALL_BREAKER = (byte) 4,
+        REFLECTED = (byte) 5;
 
 
     private static final EntityDataAccessor<Integer> ROUNDABOUT$ACT = SynchedEntityData.defineId(TuskNailEntity.class, EntityDataSerializers.INT);
@@ -253,7 +254,6 @@ public class TuskNailEntity extends AbstractArrow {
 
 
 
-
     @Override
     protected void onHitEntity(EntityHitResult $$0) {
         if (!this.level().isClientSide()) {
@@ -265,7 +265,7 @@ public class TuskNailEntity extends AbstractArrow {
             Entity ent = $$0.getEntity();
             if (!(ent instanceof TuskNailEntity)) {
                 if (this.getOwner() instanceof LivingEntity LE && ((StandUser) LE).roundabout$getStandPowers() instanceof PowersTusk PT) {
-                    if (!(MainUtil.isMobOrItsMounts(ent, getOwner())) && !MainUtil.isCreativeOrInvincible(ent)) {
+                    if ( ((!MainUtil.isMobOrItsMounts(ent, getOwner())) || this.getExtra() == REFLECTED ) && !MainUtil.isCreativeOrInvincible(ent)) {
 
                         if (this.getExtra() == GOLDEN) {
                             radialExplosion(ent);

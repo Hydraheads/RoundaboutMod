@@ -791,19 +791,22 @@ public class PowersTusk extends NewDashPreset {
                 }
             }
             case PowersTusk.DEATH_PUNCH -> {
+                StandEntity standEntity = this.getStandEntity(this.getSelf());
+                if (standEntity instanceof TuskEntity TE && TE.getAct() != 4) {
+                    this.setPowerNone();
+                }
                 if (this.getAttackTimeDuring() == 30) {
-                    if (!isClient()) {
+                    if (!isClient() && standEntity != null && standEntity.getAnimation() != TuskEntity.SHRINK ) {
                         deathPunch();
                     }
                 } else if (this.getAttackTimeDuring() > 40) {
                     deathTarget = null;
                     this.setPowerNone();
                 } else {
-                    StandEntity stand = this.getStandEntity(this.getSelf());
-                    if (stand != null && !isClient()) {
+                    if (standEntity != null && !isClient()) {
                         if (this.attackTimeDuring % 4 == 0) {
                             sendParticlesIfPossible(self.level(), ModParticles.MENACING,
-                                    stand.getX(), stand.getY() + 0.3, stand.getZ(),
+                                    standEntity.getX(), standEntity.getY() + 0.3, standEntity.getZ(),
                                     1, 0.2, 0.2, 0.2, 0.05);
                         }
                     }
@@ -2416,7 +2419,7 @@ public class PowersTusk extends NewDashPreset {
 
 
     public Entity deathTarget = null;
-    private TuskNailEntity deathShot = null;
+    public TuskNailEntity deathShot = null;
 
     public void deathShot() {
         this.expendNails();

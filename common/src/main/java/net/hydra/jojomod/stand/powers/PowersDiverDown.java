@@ -3095,7 +3095,7 @@ public class PowersDiverDown extends NewPunchingStand {
             boolean getTog = getStandUserSelf().roundabout$getUniqueStandModeToggle();
             if (toggle != getTog) {
                 if (toggle) {
-                    this.poseStand(OffsetIndex.FOLLOW_NOLEAN);
+                    this.poseStand(OffsetIndex.IN_FRONT);
                     animateStand(DiverDownEntity.DIVER_ZIP_IDLE);
                     // put sound here
                     playSoundIfPossible(self.level(), null, this.self.blockPosition(),
@@ -4180,7 +4180,7 @@ public class PowersDiverDown extends NewPunchingStand {
         // sounds and animation here
 
         DamageHandler.StandDamageEntity(victim, getRibcageSnapStrength(victim), this.self);
-        MainUtil.makeBleed(victim, 1, 1200, this.self);
+        MainUtil.makeBleed(victim, 1, 300, this.self);
         MainUtil.makeMobBleed(victim);
         MainUtil.makeMobBleed(host);
         SimpleParticleType bloodType = ModParticles.BLOOD;
