@@ -307,6 +307,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4F));
         }
     }
+    public float getLifePunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(8F));
+        }
+    }
 
     @Override
     public float multiplyPowerByStandConfigPlayers(float power){
@@ -3638,7 +3645,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             if (entity != null) {
                 hitParticlesCenter(entity);
-                float pow = getHeavyPunchStrength(entity);
+                float pow = getLifePunchStrength(entity);
                 float knockbackStrength = 0.5F;
 
                 if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
