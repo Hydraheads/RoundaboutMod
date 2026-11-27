@@ -1239,7 +1239,8 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
             }
         }
         if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotMountEntity scme) {
-            // cir.setReturnValue(false);
+            this.setShiftKeyDown(false);
+            cir.setReturnValue(false);
         }
     }
     @Inject(method = "rideTick", at = @At(value = "HEAD"), cancellable = true)
@@ -1270,7 +1271,7 @@ public abstract class PlayerEntity extends LivingEntity implements IPlayerEntity
                 }
             }
         } else if (this.getVehicle() != null && this.getVehicle() instanceof SilverChariotMountEntity scme) {
-            // this.setShiftKeyDown(false);
+            this.setShiftKeyDown(false);
             // ci.cancel();
         }
     }

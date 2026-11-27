@@ -178,20 +178,20 @@ public class BlazeTransferModel<T extends BlazeTransferEntity> extends StandMode
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
-        this.animate(pEntity.blazehattan_is_loaded, BlazeTransferAnimations.Idle, pAgeInTicks, 1f);
-        this.animate(pEntity.rain_dodging_blazehattan, BlazeTransferAnimations.Rain_Dodge, pAgeInTicks, 1f);
-        this.animate(pEntity.forward_blazehattan_incipit, BlazeTransferAnimations.Forward_North, pAgeInTicks, 1f);
-        this.animate(pEntity.back_blazehattan_incipit, BlazeTransferAnimations.Forward_South, pAgeInTicks, 1f);
-        this.animate(pEntity.left_blazehattan_incipit, BlazeTransferAnimations.Lateral_West, pAgeInTicks, 1f);
-        this.animate(pEntity.right_blazehattan_incipit, BlazeTransferAnimations.Lateral_East, pAgeInTicks, 1f);
-        this.animate(pEntity.forward_blazehattan_stop, BlazeTransferAnimations.Forward_North_Stop, pAgeInTicks, 1f);
-        this.animate(pEntity.back_blazehattan_stop, BlazeTransferAnimations.Forward_South_Stop, pAgeInTicks, 1f);
-        this.animate(pEntity.left_blazehattan_stop, BlazeTransferAnimations.Lateral_West_Stop, pAgeInTicks, 1f);
-        this.animate(pEntity.right_blazehattan_stop, BlazeTransferAnimations.Lateral_East_Stop, pAgeInTicks, 1f);
-        this.animate(pEntity.forward_blazehattan_loop, BlazeTransferAnimations.Forward_North_Loop, pAgeInTicks, 1f);
-        this.animate(pEntity.back_blazehattan_loop, BlazeTransferAnimations.Forward_South_Loop, pAgeInTicks, 1f);
-        this.animate(pEntity.left_blazehattan_loop, BlazeTransferAnimations.Lateral_West_Loop, pAgeInTicks, 1f);
-        this.animate(pEntity.right_blazehattan_loop, BlazeTransferAnimations.Lateral_East_Loop, pAgeInTicks, 1f);
+        this.animate(pEntity.manhattan_is_loaded, BlazeTransferAnimations.Idle, pAgeInTicks, 1f);
+        this.animate(pEntity.rain_dodging_manhattan, BlazeTransferAnimations.Rain_Dodge, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_incipit, BlazeTransferAnimations.Forward_North, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_incipit, BlazeTransferAnimations.Forward_South, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_incipit, BlazeTransferAnimations.Lateral_West, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_incipit, BlazeTransferAnimations.Lateral_East, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_stop, BlazeTransferAnimations.Forward_North_Stop, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_stop, BlazeTransferAnimations.Forward_South_Stop, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_stop, BlazeTransferAnimations.Lateral_West_Stop, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_stop, BlazeTransferAnimations.Lateral_East_Stop, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_loop, BlazeTransferAnimations.Forward_North_Loop, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_loop, BlazeTransferAnimations.Forward_South_Loop, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_loop, BlazeTransferAnimations.Lateral_West_Loop, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_loop, BlazeTransferAnimations.Lateral_East_Loop, pAgeInTicks, 1f);
         this.animate(pEntity.spinny_boi, BlazeTransferAnimations.Main_Spin, pAgeInTicks, 1f);
     }
 

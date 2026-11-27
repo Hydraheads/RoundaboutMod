@@ -280,8 +280,6 @@ public class ClientConfig implements Cloneable {
         @BooleanOption(group = "inherit", value = false)
         public Boolean silverChariotForceThirdPersonInControlMode;
         // @BooleanOption(group = "inherit", value = true)
-        // public Boolean silverChariotUniqueControlModeEntityRendering;
-        // @BooleanOption(group = "inherit", value = true)
         // public Boolean silverChariotControlModeVisualEffectLostSight;
         @BooleanOption(group = "inherit", value = true)
         public Boolean silverChariotRenderAfterimages;
@@ -289,14 +287,22 @@ public class ClientConfig implements Cloneable {
         public Integer silverChariotAfterimagesMaxAmount;
         @IntOption(group = "inherit", value = 5, min = 1, max = 20)
         public Integer silverChariotTickIntervalBetweenAfterimage;
-        // @FloatOption(group = "inherit", value = 1F, min = 0, max = 1)
-        // public Float silverChariotAfterimageOpacity;
         @BooleanOption(group = "inherit", value = false)
         public Boolean silverChariotShouldRenderAfterimagesWhileUserInFirstPerson;
-        @FloatOption(group = "inherit", value = 0.9F, min = 0.01F, max = 1F)
-        public Float silverChariotAfterimageSpeed;
+        @FloatOption(group = "inherit", value = 0.9F, min = 0F, max = 10F)
+        public Float silverChariotAfterimageBaseSpeed;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotAfterimageSpeedMultiplier;
         // @BooleanOption(group = "inherit", value = true)
         // public Boolean silverChariotShouldForceLeftMainArmWithPart5SkinInArmSummonMode;
+        @FloatOption(group = "inherit", value = 0.2F, min = 0F, max = 10F)
+        public Float silverChariotUnarmouredBaseOscillationSpeed;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotUnarmouredOscillationSpeedMultiplier;
+        @FloatOption(group = "inherit", value = 0.2F, min = 0F, max = 10F)
+        public Float silverChariotAfterimageBaseOscillationSpeed;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotAfterimageOscillationSpeedMultiplier;
     }
     public static class LyinEyesSettings {
         @BooleanOption(group = "inherit", value = false)

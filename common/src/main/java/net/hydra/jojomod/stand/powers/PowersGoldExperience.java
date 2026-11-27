@@ -28,6 +28,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.access.IGEProjectile;
+import net.hydra.jojomod.particles.GESkinCrackParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
@@ -2259,14 +2260,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return canExecuteMoveWithLevel(getMaxLevel());
     }
     public boolean isPossibleToRequiem() {
-        return resolvePoints >= getNeededResolvePoints() && ((StandUser)self).roundabout$getActive();
+        ItemStack goldDisc = ((StandUser) this.self).roundabout$getStandDisc();
+        boolean bypass = ((Player)this.self).isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+        if (bypass) {
+            resolvePoints = 300;
+        }
+        return (resolvePoints >= getNeededResolvePoints() || bypass) && ((StandUser)self).roundabout$getActive();
     }
 
     protected float resolvePoints = 0F;
     protected final Map<ResolveSource, SourceProgress> resolveProgress = new EnumMap<>(ResolveSource.class);
 
     public float getResolvePoints() { return resolvePoints; }
-    public float getNeededResolvePoints() { return 10.0F; }
+    public float getNeededResolvePoints() { return 300.0F; }
 
     @Override
     public boolean onStandArrowUse() {
@@ -2529,6 +2535,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(GoldExperienceEntity.REQUIEM);
             this.poseStand(OffsetIndex.IN_FRONT);
+            ((IPlayerEntity) this.getSelf()).roundabout$SetPoseEmote(Poses.GIORNO.id);
             return true;
         }
         return false;
@@ -2537,9 +2544,35 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void updateRequiem() {
         if (!this.self.level().isClientSide() && attackTimeDuring >= 0 && attackTimeDuring < 240) {
             spawnRequiemGatheringClouds();
+            StandEntity stand = getStandEntity(this.self);
+            if (stand != null && !stand.isRemoved()) {
+                if (attackTimeDuring == 20) {
+                    spawnRequiemCrackStage(stand, 1);
+                } else if (attackTimeDuring == 95) {
+                    spawnRequiemCrackStage(stand, 2);
+                } else if (attackTimeDuring == 171) {
+                    spawnRequiemCrackStage(stand, 3);
+                } else if (attackTimeDuring == 212) {
+                    spawnRequiemFlare(stand, -0.32, 0.65);
+                } else if (attackTimeDuring == 217) {
+                    spawnRequiemFlare(stand, 0.28, 0.58);
+                } else if (attackTimeDuring == 222) {
+                    spawnRequiemFlare(stand, -0.10, 0.5);
+                }
+            }
         }
-
         if (attackTimeDuring >= 240) {
+            if (!this.self.level().isClientSide()) {
+                StandEntity oldStand = getStandEntity(this.self);
+                if (oldStand != null && !oldStand.isRemoved()) {
+                    spawnRequiemCrackStage(oldStand, 4);
+                }
+            }
+
+            if (this.self instanceof Player player) {
+                ((IPlayerEntity) player).roundabout$SetPoseEmote(Poses.NONE.id);
+            }
+
             //setPowerNone();
             ItemStack arrowForGER = standArrow;
             standArrow = null;
@@ -2568,6 +2601,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 StandEntity oldMe = ((StandUser)self).roundabout$getStand();
                 if (GERequiem != null) {
                     GERequiem.absMoveTo(oldMe.getX(), oldMe.getY(), oldMe.getZ(), oldMe.getYRot(), oldMe.getXRot());
+                    GERequiem.xo = oldMe.getX();
+                    GERequiem.yo = oldMe.getY();
+                    GERequiem.zo = oldMe.getZ();
+                    GERequiem.yRotO = oldMe.getYRot();
+                    GERequiem.xRotO = oldMe.getXRot();
+                    GERequiem.setYHeadRot(oldMe.getYHeadRot());
+                    GERequiem.yHeadRotO = oldMe.yHeadRotO;
+                    GERequiem.setYBodyRot(oldMe.yBodyRot);
+                    GERequiem.yBodyRotO = oldMe.yBodyRotO;
+                    GERequiem.setFadeOut((byte) GERequiem.MaxFade);
 
                     GERequiem.setSkin(((StandUser)self).roundabout$getStandSkin());
                     GERequiem.setIdleAnimation(((StandUser)self).roundabout$getIdlePos());
@@ -2575,6 +2618,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     if (self instanceof Player PE) {
                         GERequiem.playerSetProperties(PE);
                         if (GERequiem instanceof FollowingStandEntity FE) {
+                            if (oldMe instanceof FollowingStandEntity oldFE) {
+                                FE.setOffsetType(oldFE.getOffsetType());
+                            }
                             FE.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
                             FE.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
                             FE.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
@@ -2663,6 +2709,60 @@ public class PowersGoldExperience extends BlockGrabPreset {
         sendParticlesIfPossible(level, particleType,
                 spawnPos.x, spawnPos.y, spawnPos.z,
                 0, velocity.x, 0.0, velocity.z, 1.0);
+    }
+
+    private void spawnRequiemCrackStage(StandEntity stand, int stage) {
+        Level level = this.self.level();
+        GESkinCrackParticleOptions shellShard = new GESkinCrackParticleOptions(stand.getSkin());
+
+        Vec3 forward = Vec3.directionFromRotation(0.0F, stand.getYRot()).scale(0.28);
+        double chestX = stand.getX() + forward.x;
+        double chestY = stand.getY() + stand.getBbHeight() * 0.62;
+        double chestZ = stand.getZ() + forward.z;
+
+        switch (stage) {
+            case 1 -> {
+                // crack chest
+                sendParticlesIfPossible(level, shellShard, chestX, chestY, chestZ,
+                        6, 0.06, 0.06, 0.06, 0.04);
+            }
+            case 2 -> {
+                // crack chest
+                sendParticlesIfPossible(level, shellShard, chestX, chestY, chestZ,
+                        16, 0.14, 0.16, 0.14, 0.08);
+            }
+            case 3 -> {
+                // crack chest
+                sendParticlesIfPossible(level, shellShard, chestX, chestY, chestZ,
+                        32, 0.24, 0.30, 0.24, 0.14);
+            }
+            case 4 -> {
+                // ge exploed
+                double bodyX = stand.getX();
+                double bodyY = stand.getY() + stand.getBbHeight() * 0.5;
+                double bodyZ = stand.getZ();
+                double spreadXZ = stand.getBbWidth() * 0.65;
+                double spreadY = stand.getBbHeight() * 0.45;
+
+                sendParticlesIfPossible(level, shellShard, bodyX, bodyY, bodyZ,
+                        75, spreadXZ, spreadY, spreadXZ, 0.26);
+            }
+        }
+    }
+
+    private void spawnRequiemFlare(StandEntity stand, double sideFraction, double heightFraction) {
+        Level level = this.self.level();
+        Vec3 look = Vec3.directionFromRotation(0.0F, stand.getYRot());
+        Vec3 right = new Vec3(-look.z, 0.0, look.x);
+
+        double forward = 0.28;
+        double side = stand.getBbWidth() * sideFraction;
+        double x = stand.getX() + look.x * forward + right.x * side;
+        double y = stand.getY() + stand.getBbHeight() * heightFraction;
+        double z = stand.getZ() + look.z * forward + right.z * side;
+
+        sendParticlesIfPossible(level, ModParticles.REQUIEM_FLARE, x, y, z,
+                0, 0.0, 0.002, 0.0, 1.0);
     }
 
     // requiem animation end
