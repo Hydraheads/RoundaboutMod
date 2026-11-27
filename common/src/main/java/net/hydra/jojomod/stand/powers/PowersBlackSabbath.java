@@ -148,7 +148,9 @@ public class PowersBlackSabbath extends NewDashPreset {
                             if (blackSabbathTargets.isEmpty()) {
                                 this.clearTargetEntities();
                                 setTickDown2(40);
-                                clearTargetEntitiesOnStandDeath();
+                                if(this.self instanceof Player) {
+                                    clearTargetEntitiesOnStandDeath();
+                                }
                             }
                         }
                     }
@@ -182,7 +184,7 @@ public class PowersBlackSabbath extends NewDashPreset {
     }
     public List<LivingEntity> clearTargetEntitiesOnStandDeath(){
         blackSabbathTargets = new ArrayList<>();
-        S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(),PowersBlackSabbath.C2S_SYNC_DESTROY_LIST, 0);
+        S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersBlackSabbath.C2S_SYNC_DESTROY_LIST, 0);
         return blackSabbathTargets;
     }
 
@@ -288,7 +290,9 @@ public class PowersBlackSabbath extends NewDashPreset {
                     }
                     if (moveMode == 3) {
                         setNull();
-                        clearTargetEntitiesOnStandDeath();
+                        if(this.self instanceof Player) {
+                            clearTargetEntitiesOnStandDeath();
+                        }
                         killTargetListClient();
                         setTickDown2(20);
                     }
@@ -401,7 +405,7 @@ public class PowersBlackSabbath extends NewDashPreset {
         switch (context)
         {
             case SKILL_1_NORMAL, SKILL_1_CROUCH ->{
-                if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1)) {
+                if(!onCooldown(PowerIndex.SKILL_1) && !isAttackIneptVisually(PowerIndex.SKILL_1, 1) && self.onGround()) {
                     blackChestClient();
                 }
             }
@@ -720,7 +724,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
         if (slot == 2 && ((!checkIfBposIsInDark(self.position()) && !(moveMode == 3) || this.getStandEntity(self) != null && moveMode != 2 && moveMode != 3|| this.securityTickDown > 1 && this.blackSabbathTargets.isEmpty()))) {
             return true;
         }
-        if(slot == 1 && (!checkIfBposIsInDark(self.position()) || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN || !self.onGround())){
+        if(slot == 1 && (!checkIfBposIsInDark(self.position()) || getValidPlacement() == null || self.isSwimming() || this.getStandEntity(self) != null || this.moveMode == 3 || this.securityTickDown > 1 || gravityDirection != Direction.DOWN)){
             return true;
         }
         return super.isAttackIneptVisually(activeP, slot);
@@ -959,7 +963,9 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                         ((StandUser) LE).roundabout$setGrabberSabbath(0);
                     }
                 }
-                this.clearTargetEntitiesOnStandDeath();
+                if(this.self instanceof Player) {
+                    this.clearTargetEntitiesOnStandDeath();
+                }
             }
             setNull();
         }
@@ -1195,7 +1201,8 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                             if(pos != null) {
                                 BE.absMoveTo(pos.x(), pos.y(), pos.z());
                             } else {
-                                BE.absMoveTo(self.getX(), self.getY(), self.getZ());
+                                Roundabout.LOGGER.error("Something unexpected happened at PowersBlackSabbath.java line 1204: spawn position is null, canceling stand summon");
+                                return;
                             }
                             BE.setYRot(randomInt);
                             BE.setMaster(this.self);
@@ -1220,10 +1227,15 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                                 }
                             } else if (BE.getUser() != null && !(BE.getUser() instanceof Player)) {
                                 ItemStack stack = ItemStack.EMPTY;
-                                if(self instanceof Pillager || self instanceof Skeleton) {
+                                if(self instanceof Pillager || self instanceof Skeleton && !(self instanceof Stray)) {
                                     stack = new ItemStack(Items.ARROW);
                                     stack.setCount(64);
-                                } else if (self instanceof WitherSkeleton){
+                                } else if (self instanceof Stray){
+                                    Potion $$7 = Potions.STRONG_SLOWNESS;
+                                    stack = new ItemStack(Items.TIPPED_ARROW);
+                                    stack.setCount(64);
+                                    PotionUtils.setPotion(stack, $$7);
+                                }else if (self instanceof WitherSkeleton){
                                     stack = new ItemStack(Items.STONE_SWORD);
                                 }else if (self instanceof Piglin || self instanceof ZombifiedPiglin){
                                     stack = new ItemStack(Items.GOLDEN_SWORD);
@@ -1259,7 +1271,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                                     stack = new ItemStack(Items.GOLDEN_AXE);
                                 }else if (self instanceof WanderingTrader){
                                     Random weaponRandom = new Random();
-                                    int weapon = weaponRandom.nextInt(0, 9);
+                                    int weapon = weaponRandom.nextInt(0, 8);
                                     switch (weapon) {
                                         case 0 -> {
                                             stack = new ItemStack(Items.NETHERITE_SWORD);
@@ -1283,30 +1295,23 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                                             stack.setCount(16);
                                         }
                                         case 6 -> {
-                                            stack = new ItemStack(ModItems.HARPOON);
-                                            stack.setCount(64);
-                                        }
-                                        case 7 -> {
                                             Potion $$7 = Potions.STRONG_HARMING;
                                             stack = new ItemStack(Items.TIPPED_ARROW);
                                             stack.setCount(64);
                                             PotionUtils.setPotion(stack, $$7);
                                         }
-                                        case 8 -> {
+                                        case 7 -> {
                                             Potion $$7 = Potions.LONG_INVISIBILITY;
                                             stack = new ItemStack(Items.POTION);
                                             PotionUtils.setPotion(stack, $$7);
                                         }
                                     }
                                 }else if (self instanceof Creeper){
-                                    Potion $$7 = Potions.LONG_SLOWNESS;
-                                    stack = new ItemStack(Items.POTION);
-                                    PotionUtils.setPotion(stack, $$7);
-                                }else if (self instanceof Drowned){
+                                Potion $$7 = Potions.LONG_SLOWNESS;
+                                stack = new ItemStack(Items.POTION);
+                                PotionUtils.setPotion(stack, $$7);
+                            }else if (self instanceof Drowned){
                                     stack = new ItemStack(Items.TRIDENT);
-                                    Map<Enchantment, Integer> map = Maps.newHashMap();
-                                    map.put(Enchantments.LOYALTY, 3);
-                                    EnchantmentHelper.setEnchantments(map, stack);
                                 }
 
                                 if(!isClient()) {
@@ -1373,10 +1378,14 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
           if(self != null) {
               if(moveMode == 2 || moveMode == 3 && this.blackSabbathTargets.contains(entity)) {
                   Entity TE = MainUtil.getTargetEntity(self, 100, 10);
-                  if (TE != null && TE.is(entity) && !(TE instanceof StandEntity) && !TE.isInvisible() && TE instanceof LivingEntity && !(TE instanceof RoadRollerEntity)) {
-                      if(TE instanceof Player p && (p.isCreative() || p.isSpectator())){
-                          return false;
+                  if(TE != null && TE.is(entity)) {
+                      if (!(TE instanceof StandEntity) && !TE.isInvisible() && TE instanceof LivingEntity && !(TE instanceof RoadRollerEntity)) {
+                          if (TE instanceof Player p && (p.isCreative() || p.isSpectator())) {
+                              return false;
+                          }
+                          return true;
                       }
+                  } else if (this.blackSabbathTargets.contains(entity) && moveMode == 2 && self.hasLineOfSight(entity) && !entity.isInvisible() && !(entity instanceof RoadRollerEntity)){
                       return true;
                   }
               }
@@ -1385,8 +1394,11 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
     }
 
     public int highlightsEntityColor(Entity ent, Player player){
-        if(blackSabbathTargets.contains(ent)) {
+        Entity TE = MainUtil.getTargetEntity(self, 100, 10);
+        if(blackSabbathTargets.contains(ent) && TE != null && TE.is(ent)) {
             return 14877186;
+        } else if (blackSabbathTargets.contains(ent) && self.hasLineOfSight(ent) && !ent.isInvisible() && !(ent instanceof RoadRollerEntity) && moveMode == 2){
+            return 6684708;
         } else {
             return 9371857;
         }
@@ -1423,6 +1435,7 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
         }
         float evilY = shouldBSummonBot ? (float) self.getY() - 1 : (float) self.getY();
         if (stand instanceof BlackSabbathEntity BE) {
+                BE.setBsAnimations((byte)1);
                 BE.absMoveTo(pn.x(), Math.round(evilY), pn.z());
                 BE.setMaster(this.self);
                 BE.setYRot((self.getYRot() % 360) - 180);
@@ -1590,7 +1603,9 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
         if(!blackSabbathTargets.isEmpty()) {
             this.clearTargetEntities();
             setTickDown2(40);
-            clearTargetEntitiesOnStandDeath();
+            if(this.self instanceof Player) {
+                clearTargetEntitiesOnStandDeath();
+            }
         }
     }
     public void selectTargetClient(){
@@ -1859,4 +1874,12 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
     public Component ifWipListDev(){
         return Component.literal(  "14Kacper").withStyle(ChatFormatting.DARK_PURPLE);
     }
+   /* @Override
+    public Component ifWipListDevStatus(){
+        return Component.translatable(  "roundabout.dev_status.dropped").withStyle(ChatFormatting.DARK_RED);
+    }
+    @Override
+    public Component ifWipListDev(){
+        return Component.literal(  "H-I-A-T-U-S").withStyle(ChatFormatting.DARK_RED);
+    }*/
 }

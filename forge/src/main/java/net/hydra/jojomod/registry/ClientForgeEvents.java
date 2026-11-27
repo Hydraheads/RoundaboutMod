@@ -161,6 +161,7 @@ public class ClientForgeEvents {
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE.get(), GoldExperienceRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_REQUIEM.get(), GoldExperienceRequiemRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_BETA.get(), GoldExperienceBetaRenderer::new);
+        event.registerEntityRenderer(ForgeEntities.GOLD_EXPERIENCE_REQUIEM_DEIMOS.get(), GoldExperienceRequiemDeimosRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BRAMBLE.get(), GEBrambleRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_THORN.get(), GEThornRenderer::new);
         event.registerEntityRenderer(ForgeEntities.GE_BAT.get(), GEBatRenderer::new);
@@ -401,6 +402,7 @@ public class ClientForgeEvents {
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_LAYER, GoldExperienceModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_BETA_LAYER, GoldExperienceBetaModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_REQUIEM_LAYER, GoldExperienceRequiemModel::createBodyLayer);
+        event.registerLayerDefinition(ModEntityRendererClient.GOLD_EXPERIENCE_REQUIEM_DEIMOS_LAYER, GoldExperienceRequiemDeimosModel::createBodyLayer);
         event.registerLayerDefinition(ModEntityRendererClient.GE_BRAMBLE_LAYER, GEBrambleModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.GE_THORN_LAYER, GEThornModel::getTexturedModelData);
         event.registerLayerDefinition(ModEntityRendererClient.SILVER_CHARIOT_LAYER, SilverChariotModel::getTexturedModelData);
@@ -718,6 +720,10 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PUZZLE_PARTICLE.get(), PuzzleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VITAL_ESSENCE.get(), VitalEssenceParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GE_WAVE.get(), GEWaveParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD.get(), GoldenCloudParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD_SMALL.get(), GoldenCloudSmallParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GE_SKIN_CRACK.get(), GESkinCrackParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.REQUIEM_FLARE.get(), RequiemFlareParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AUTUMN_LEAVES.get(), AutumnLeavesParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GINKGO_LEAVES.get(), GinkgoLeavesParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.RAIN_BUBBLE.get(), RainBubbleParticle.Provider::new);

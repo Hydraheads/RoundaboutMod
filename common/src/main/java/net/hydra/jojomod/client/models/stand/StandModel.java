@@ -225,7 +225,9 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
             float rotY = mobEntity.getHeadRotationY();
             if (animationStyle == OffsetIndex.FOLLOW_STYLE) {
                 /*This code makes the head of the model turn towards swim rotation while swimming*/
-                if ((mobEntity.isSwimming() || mobEntity.isVisuallyCrawling() || mobEntity.isFallFlying()) && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
+                if ((mobEntity.isSwimming() || mobEntity.isVisuallyCrawling() || mobEntity.isFallFlying())
+                        && animationNumber != OffsetIndex.FOLLOW_NOLEAN
+                        && animationNumber != OffsetIndex.IN_FRONT) {
                     if (swimRotCorrect > -45) {
                         swimRotCorrect -= 2;
                         swimRotCorrect = Math.min(swimRotCorrect, -45);
@@ -337,13 +339,15 @@ public class StandModel<T extends StandEntity> extends HierarchicalModel<T> {
             if (animationStyle == OffsetIndex.FOLLOW_STYLE) {
                 float cRot = maxRotX;
 
-                if ((mobEntity.isSwimming() || mobEntity.isFallFlying()) && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
+                if ((mobEntity.isSwimming() || mobEntity.isFallFlying())
+                        && animationNumber != OffsetIndex.FOLLOW_NOLEAN
+                        && animationNumber != OffsetIndex.IN_FRONT) {
                     cRot = ((mobEntity.getUser().getViewXRot(tickDelta) % 360) + 90) * Mth.DEG_TO_RAD;
-                } else if (mobEntity.isVisuallyCrawling() && animationNumber != OffsetIndex.FOLLOW_NOLEAN) {
+                } else if (mobEntity.isVisuallyCrawling() && animationNumber != OffsetIndex.FOLLOW_NOLEAN && animationNumber != OffsetIndex.IN_FRONT) {
                     cRot = 90 * Mth.DEG_TO_RAD;
                 } else {
                     int moveForward = FSE.getMoveForward();
-                    if (animationNumber == OffsetIndex.FOLLOW_NOLEAN) {
+                    if (animationNumber == OffsetIndex.FOLLOW_NOLEAN || animationNumber == OffsetIndex.IN_FRONT) {
                         moveForward = 0;
                     }
                     if (moveForward < 0) {

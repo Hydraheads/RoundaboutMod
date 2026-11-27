@@ -74,6 +74,9 @@ public class FollowingStandEntity extends StandEntity{
         if (getOffsetType() == OffsetIndex.BEHIND){
             return 0.2F;
         }
+        if (getOffsetType() == OffsetIndex.IN_FRONT){
+            return 1.07F;
+        }
         return this.entityData.get(DISTANCE_OUT);
     }
     public final void setSizePercent(float blocks) {
@@ -86,7 +89,7 @@ public class FollowingStandEntity extends StandEntity{
         this.entityData.set(IDLE_ROTATION, blocks);
     }
     public final float getIdleRotation() {
-        if (getOffsetType() == OffsetIndex.BEHIND){
+        if (getOffsetType() == OffsetIndex.BEHIND || getOffsetType() == OffsetIndex.IN_FRONT){
             return 0;
         }
         return this.entityData.get(IDLE_ROTATION);
@@ -104,6 +107,9 @@ public class FollowingStandEntity extends StandEntity{
         }
         if (getOffsetType() == OffsetIndex.BENEATH_CARRY_IDLE) {
             return 1.85F;
+        }
+        if (getOffsetType() == OffsetIndex.IN_FRONT) {
+            return 0.1F;
         }
         return this.entityData.get(IDLE_Y_OFFSET);
     }
@@ -281,6 +287,9 @@ public class FollowingStandEntity extends StandEntity{
 
         if (getOffsetType() == OffsetIndex.BEHIND){
             return 180;
+        }
+        if (getOffsetType() == OffsetIndex.IN_FRONT){
+            return 55;
         }
 
         return getAnchorPlace();}

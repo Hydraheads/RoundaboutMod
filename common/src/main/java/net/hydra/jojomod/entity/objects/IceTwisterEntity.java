@@ -141,10 +141,11 @@ public class IceTwisterEntity extends WhiteAlbumFreezingEntity {
                     continue;
                 }
                 if (mob.getBoundingBox().intersects(wallBox)) {
-                    if (!mob.onGround()){
+                    if (!mob.onGround() && !mob.isHurt()){
                         if (!(((StandUser)mob).roundabout$getStandPowers() instanceof PowersWhiteAlbum PW &&
                                 PowerTypes.hasStandActive(mob))) {
-                            MainUtil.takeLiteralUnresistableKnockbackWithY(mob, 0, -0.5F, 0);
+                            MainUtil.takeLiteralUnresistableKnockbackWithY(mob,
+                                    mob.getDeltaMovement().x, -0.5F,  mob.getDeltaMovement().z);
                         }
                     }
                 }

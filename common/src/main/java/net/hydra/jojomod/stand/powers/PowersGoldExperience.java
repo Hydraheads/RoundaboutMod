@@ -28,6 +28,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.access.IGEProjectile;
+import net.hydra.jojomod.particles.GESkinCrackParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
@@ -45,6 +46,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -305,6 +307,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.6F));
         } else {
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4F));
+        }
+    }
+    public float getLifePunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.6F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(8F));
         }
     }
 
@@ -2251,7 +2260,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return canExecuteMoveWithLevel(getMaxLevel());
     }
     public boolean isPossibleToRequiem() {
-        return resolvePoints >= getNeededResolvePoints() && ((StandUser)self).roundabout$getActive();
+        ItemStack goldDisc = ((StandUser) this.self).roundabout$getStandDisc();
+        boolean bypass = ((Player)this.self).isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+        if (bypass) {
+            resolvePoints = 300;
+        }
+        return (resolvePoints >= getNeededResolvePoints() || bypass) && ((StandUser)self).roundabout$getActive();
     }
 
     protected float resolvePoints = 0F;
@@ -2270,11 +2284,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         20, 0, 0, 0, 0.4);
 
                 playSoundIfPossible(self.level(),null, this.self.blockPosition(), ModSounds.GE_REQUIEM_ARROW_EVENT, SoundSource.PLAYERS, 1.05F, 1.0f);
-
-                if (!isClient()) {
-                    ((ServerPlayer) this.self).displayClientMessage(Component.translatable("leveling.roundabout.requiem_activated").
-                            withStyle(ChatFormatting.YELLOW), true);
-                }
 
                 return false;
             }else {
@@ -2525,15 +2534,45 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
             //playSoundsIfNearby(IMPALE_NOISE, 27, false);
             this.animateStand(GoldExperienceEntity.REQUIEM);
-            this.poseStand(OffsetIndex.GUARD_FURTHER_RIGHT);
+            this.poseStand(OffsetIndex.IN_FRONT);
+            ((IPlayerEntity) this.getSelf()).roundabout$SetPoseEmote(Poses.GIORNO.id);
             return true;
         }
         return false;
     }
 
     private void updateRequiem() {
-
+        if (!this.self.level().isClientSide() && attackTimeDuring >= 0 && attackTimeDuring < 240) {
+            spawnRequiemGatheringClouds();
+            StandEntity stand = getStandEntity(this.self);
+            if (stand != null && !stand.isRemoved()) {
+                if (attackTimeDuring == 20) {
+                    spawnRequiemCrackStage(stand, 1);
+                } else if (attackTimeDuring == 95) {
+                    spawnRequiemCrackStage(stand, 2);
+                } else if (attackTimeDuring == 171) {
+                    spawnRequiemCrackStage(stand, 3);
+                } else if (attackTimeDuring == 212) {
+                    spawnRequiemFlare(stand, -0.32, 0.65);
+                } else if (attackTimeDuring == 217) {
+                    spawnRequiemFlare(stand, 0.28, 0.58);
+                } else if (attackTimeDuring == 222) {
+                    spawnRequiemFlare(stand, -0.10, 0.5);
+                }
+            }
+        }
         if (attackTimeDuring >= 240) {
+            if (!this.self.level().isClientSide()) {
+                StandEntity oldStand = getStandEntity(this.self);
+                if (oldStand != null && !oldStand.isRemoved()) {
+                    spawnRequiemCrackStage(oldStand, 4);
+                }
+            }
+
+            if (this.self instanceof Player player) {
+                ((IPlayerEntity) player).roundabout$SetPoseEmote(Poses.NONE.id);
+            }
+
             //setPowerNone();
             ItemStack arrowForGER = standArrow;
             standArrow = null;
@@ -2562,6 +2601,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 StandEntity oldMe = ((StandUser)self).roundabout$getStand();
                 if (GERequiem != null) {
                     GERequiem.absMoveTo(oldMe.getX(), oldMe.getY(), oldMe.getZ(), oldMe.getYRot(), oldMe.getXRot());
+                    GERequiem.xo = oldMe.getX();
+                    GERequiem.yo = oldMe.getY();
+                    GERequiem.zo = oldMe.getZ();
+                    GERequiem.yRotO = oldMe.getYRot();
+                    GERequiem.xRotO = oldMe.getXRot();
+                    GERequiem.setYHeadRot(oldMe.getYHeadRot());
+                    GERequiem.yHeadRotO = oldMe.yHeadRotO;
+                    GERequiem.setYBodyRot(oldMe.yBodyRot);
+                    GERequiem.yBodyRotO = oldMe.yBodyRotO;
+                    GERequiem.setFadeOut((byte) GERequiem.MaxFade);
 
                     GERequiem.setSkin(((StandUser)self).roundabout$getStandSkin());
                     GERequiem.setIdleAnimation(((StandUser)self).roundabout$getIdlePos());
@@ -2569,6 +2618,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     if (self instanceof Player PE) {
                         GERequiem.playerSetProperties(PE);
                         if (GERequiem instanceof FollowingStandEntity FE) {
+                            if (oldMe instanceof FollowingStandEntity oldFE) {
+                                FE.setOffsetType(oldFE.getOffsetType());
+                            }
                             FE.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
                             FE.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
                             FE.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
@@ -2598,6 +2650,119 @@ public class PowersGoldExperience extends BlockGrabPreset {
             ((StandUser)self).roundabout$setStand(GERequiem);
 
         }
+    }
+
+    private void spawnRequiemGatheringClouds() {
+        int smallCloudsToSpawn;
+        if (attackTimeDuring < 80) {
+            smallCloudsToSpawn = (attackTimeDuring % 4 == 0) ? 1 : 0;
+        } else if (attackTimeDuring < 160) {
+            smallCloudsToSpawn = (attackTimeDuring % 2 == 0) ? 1 : 0;
+        } else {
+            smallCloudsToSpawn = 2;
+        }
+
+        boolean spawnBigCloud = attackTimeDuring >= 30 && this.self.level().random.nextFloat() < 0.14F;
+
+        if (smallCloudsToSpawn == 0 && !spawnBigCloud) {
+            return;
+        }
+
+        Level level = this.self.level();
+        StandEntity stand = getStandEntity(this.self);
+
+        Vec3 lookVec = this.self.getLookAngle();
+        Vec3 forward = new Vec3(lookVec.x, 0.0, lookVec.z);
+        if (forward.lengthSqr() < 1.0E-4) {
+            forward = new Vec3(0.0, 0.0, 1.0);
+        } else {
+            forward = forward.normalize();
+        }
+        Vec3 right = new Vec3(-forward.z, 0.0, forward.x);
+
+        for (int i = 0; i < smallCloudsToSpawn; i++) {
+            spawnSingleGoldenCloud(level, stand, forward, right, false);
+        }
+
+        if (spawnBigCloud) {
+            spawnSingleGoldenCloud(level, stand, forward, right, true);
+        }
+    }
+
+    private void spawnSingleGoldenCloud(Level level, StandEntity stand, Vec3 forward, Vec3 right, boolean isBig) {
+        Entity anchor = (stand != null && !stand.isRemoved() && level.random.nextBoolean()) ? stand : this.self;
+
+        double halfSpan = 2.0 + level.random.nextDouble() * 0.8;
+        double sideSign = level.random.nextBoolean() ? 1.0 : -1.0;
+        double depthOffset = (level.random.nextDouble() - 0.35) * 1.4;
+        double yPos = anchor.getY() + anchor.getBbHeight() * (0.10 + level.random.nextDouble() * 0.95);
+
+        double speed = isBig
+                ? (0.035 + level.random.nextDouble() * 0.045)
+                : (0.045 + level.random.nextDouble() * 0.080);
+
+        Vec3 passCenter = new Vec3(anchor.getX(), yPos, anchor.getZ()).add(forward.scale(depthOffset));
+        Vec3 spawnPos = passCenter.subtract(right.scale(sideSign * halfSpan));
+        Vec3 velocity = right.scale(sideSign * speed);
+
+        SimpleParticleType particleType = isBig ? ModParticles.GOLDEN_CLOUD : ModParticles.GOLDEN_CLOUD_SMALL;
+        sendParticlesIfPossible(level, particleType,
+                spawnPos.x, spawnPos.y, spawnPos.z,
+                0, velocity.x, 0.0, velocity.z, 1.0);
+    }
+
+    private void spawnRequiemCrackStage(StandEntity stand, int stage) {
+        Level level = this.self.level();
+        GESkinCrackParticleOptions shellShard = new GESkinCrackParticleOptions(stand.getSkin());
+
+        Vec3 forward = Vec3.directionFromRotation(0.0F, stand.getYRot()).scale(0.28);
+        double chestX = stand.getX() + forward.x;
+        double chestY = stand.getY() + stand.getBbHeight() * 0.62;
+        double chestZ = stand.getZ() + forward.z;
+
+        switch (stage) {
+            case 1 -> {
+                // crack chest
+                sendParticlesIfPossible(level, shellShard, chestX, chestY, chestZ,
+                        6, 0.06, 0.06, 0.06, 0.04);
+            }
+            case 2 -> {
+                // crack chest
+                sendParticlesIfPossible(level, shellShard, chestX, chestY, chestZ,
+                        16, 0.14, 0.16, 0.14, 0.08);
+            }
+            case 3 -> {
+                // crack chest
+                sendParticlesIfPossible(level, shellShard, chestX, chestY, chestZ,
+                        32, 0.24, 0.30, 0.24, 0.14);
+            }
+            case 4 -> {
+                // ge exploed
+                double bodyX = stand.getX();
+                double bodyY = stand.getY() + stand.getBbHeight() * 0.5;
+                double bodyZ = stand.getZ();
+                double spreadXZ = stand.getBbWidth() * 0.65;
+                double spreadY = stand.getBbHeight() * 0.45;
+
+                sendParticlesIfPossible(level, shellShard, bodyX, bodyY, bodyZ,
+                        75, spreadXZ, spreadY, spreadXZ, 0.26);
+            }
+        }
+    }
+
+    private void spawnRequiemFlare(StandEntity stand, double sideFraction, double heightFraction) {
+        Level level = this.self.level();
+        Vec3 look = Vec3.directionFromRotation(0.0F, stand.getYRot());
+        Vec3 right = new Vec3(-look.z, 0.0, look.x);
+
+        double forward = 0.28;
+        double side = stand.getBbWidth() * sideFraction;
+        double x = stand.getX() + look.x * forward + right.x * side;
+        double y = stand.getY() + stand.getBbHeight() * heightFraction;
+        double z = stand.getZ() + look.z * forward + right.z * side;
+
+        sendParticlesIfPossible(level, ModParticles.REQUIEM_FLARE, x, y, z,
+                0, 0.0, 0.002, 0.0, 1.0);
     }
 
     // requiem animation end
@@ -3638,7 +3803,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             if (entity != null) {
                 hitParticlesCenter(entity);
-                float pow = getHeavyPunchStrength(entity);
+                float pow = getLifePunchStrength(entity);
                 float knockbackStrength = 0.5F;
 
                 if (StandDamageEntityAttack(entity, pow, 0, this.self)) {
@@ -4220,6 +4385,24 @@ public class PowersGoldExperience extends BlockGrabPreset {
             case GoldExperienceEntity.PS2 -> {
                 return Component.translatable("skins.roundabout.gold_experience.ps2");
             }
+            case GoldExperienceEntity.DEIMOS -> {
+                return Component.translatable("skins.roundabout.gold_experience.deimos");
+            }
+            case GoldExperienceEntity.MANGA -> {
+                return Component.translatable("skins.roundabout.gold_experience.manga");
+            }
+            case GoldExperienceEntity.AGOGO -> {
+                return Component.translatable("skins.roundabout.gold_experience.agogo");
+            }
+            case GoldExperienceEntity.JOJOVELLER -> {
+                return Component.translatable("skins.roundabout.gold_experience.jojoveller");
+            }
+            case GoldExperienceEntity.TITLE_PAGE -> {
+                return Component.translatable("skins.roundabout.gold_experience.title_page");
+            }
+            case GoldExperienceEntity.CATERPILLAR -> {
+                return Component.translatable("skins.roundabout.gold_experience.caterpillar");
+            }
             default -> {
                 return Component.translatable("skins.roundabout.gold_experience.base");
             }
@@ -4230,13 +4413,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     public List<Byte> getSkinList() {
         List<Byte> l = Lists.newArrayList();
         l.add(GoldExperienceEntity.PART_5);
+        l.add(GoldExperienceEntity.MANGA);
         if (this.getSelf() instanceof Player PE) {
             byte Level = ((IPlayerEntity) PE).roundabout$getStandLevel();
             ItemStack goldDisc = ((StandUser) PE).roundabout$getStandDisc();
             boolean bypass = PE.isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
             if (Level > 1 || bypass) {
+                l.add(GoldExperienceEntity.AGOGO);
             }
             if (Level > 2 || bypass) {
+                l.add(GoldExperienceEntity.JOJOVELLER);
             }
             if (Level > 3 || bypass) {
                 l.add(GoldExperienceEntity.PS2);
@@ -4245,13 +4431,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 l.add(GoldExperienceEntity.DIAMOND);
             }
             if (Level > 5 || bypass) {
+                l.add(GoldExperienceEntity.CATERPILLAR);
                 l.add(GoldExperienceEntity.GUARD);
             }
             if (Level > 6 || bypass) {
+                l.add(GoldExperienceEntity.TITLE_PAGE);
                 l.add(GoldExperienceEntity.BETA);
             }
             if (((IPlayerEntity) PE).roundabout$getUnlockedBonusSkin() || bypass) {
-                // deimos GE goes here
+                l.add(GoldExperienceEntity.DEIMOS);
             }
         }
 
