@@ -38,3 +38,12 @@ jobs:
             --title "SBA build ${{ github.run_number }}" \
             --notes "Built SBA jars (Fabric and Forge, Minecraft 1.20.1) from commit ${{ github.sha }}" \
             --target "${{ github.sha }}"
+      - name: Commit jars into build folder
+        run: |
+          mkdir -p build
+          cp -v release-jars/*.jar build/
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f build/*.jar
+          git commit -m "Add built SBA jars [skip ci]" || { echo "nothing to commit"; exit 0; }
+          git push origin "HEAD:${{ github.ref_name }}"
