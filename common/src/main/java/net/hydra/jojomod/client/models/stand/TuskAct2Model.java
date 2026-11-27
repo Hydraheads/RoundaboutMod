@@ -108,5 +108,8 @@ public class TuskAct2Model<T extends TuskEntity> extends StandModel<T> {
         //    this.animate(pEntity.idleAnimationState, TuskAnimations.ACT_2_IDLE,pAgeInTicks,1F);
     }
 
-
+    @Override
+    public float rotationStrength() {
+        return 0.4F;
+    }
 }

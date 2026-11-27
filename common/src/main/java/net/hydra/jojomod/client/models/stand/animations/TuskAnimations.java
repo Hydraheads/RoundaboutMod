@@ -636,6 +636,8 @@ public class TuskAnimations {
             ))
             .build();
 
+    public static final AnimationDefinition Shrink = AnimationDefinition.Builder.withLength(1F).build();
+
 
 }
 
