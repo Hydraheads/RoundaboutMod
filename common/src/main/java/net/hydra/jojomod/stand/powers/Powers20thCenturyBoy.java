@@ -411,6 +411,11 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
             this.self.stopUsingItem();
             if(this.isClient()){ClientUtil.stopDestroyingBlock();}
+
+            if (self instanceof Player PL && !ClientNetworking.getAppropriateConfig().centuryBoySettings.CBCanMoveCamera) {
+                playerheadRotY = PL.getViewYRot(1);
+                playerheadRotX = PL.getViewXRot(1);
+            }
         } else {
             staticMode = 0;
         }
@@ -709,18 +714,29 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         return invincibleState;
     }
 
-    private int stallingTicks = 0;
+    private int getStallingPenalityCap() { return 120; }
+    private float getPenalityMultiplier() {return 1.5F; }
 
     private void setCooldownCheck() {
+        if (ClientNetworking.getAppropriateConfig().centuryBoySettings.useOldStallSytem) { return; }
+
         int normalCooldown = ConfigManager.getConfig().centuryBoySettings.invincibilityCooldown;
         int punishment = 0;
-        if (stallingTicks > 120) {
-            punishment = (int)((stallingTicks - 120) * 1.5f);
+        int check = getMaxDefenceTicks() - currentDefenseTicks;
+        if (check > getStallingPenalityCap()) {
+            punishment = Math.round((check - getStallingPenalityCap()) * getPenalityMultiplier());
         }
-        stallingTicks = 0;
 
+        if (!isClient()) {
+            if (this.getSelf() instanceof Player) {
+                S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_2, normalCooldown + punishment);
+            }
+        }
         this.setCooldown(PowerIndex.SKILL_2, normalCooldown + punishment);
     }
+
+    private float playerheadRotY = 0;
+    private float playerheadRotX = 0;
 
     @Override
     public void tickPower() {
@@ -737,8 +753,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         if (deflectTicks > 0) deflectTicks--;
 
         if (!invincibleState){
-            if (currentDefenseTicks < maxDefenceTicks){
-                currentDefenseTicks += chargingDefenseTicks;
+            if (currentDefenseTicks < getMaxDefenceTicks()){
+                currentDefenseTicks += getChargeDefenseTicks();
             }
             if (shouldDefenceTick && waitTicks > 0){
                 waitTicks--;
@@ -746,20 +762,27 @@ public class Powers20thCenturyBoy extends NewDashPreset {
         } else {
             if (shouldDefenceTick){
                 currentDefenseTicks--;
-                stallingTicks++;
             }
             if (currentDefenseTicks < 1){
                 if (ClientNetworking.getAppropriateConfig().centuryBoySettings.useOldStallSytem) {
                     this.getSelf().hurt(ModDamageTypes.of(self.level(), ModDamageTypes.BRAIN_DEAD, this.self),
                             self.getMaxHealth() + 4f);
                 } else {
-                    setInvincibleState(false);
                     setCooldownCheck();
+                    setInvincibleState(false);
                 }
             }
         }
         if (waitTicks < 0){
             shouldDefenceTick = false;
+        }
+    }
+
+    public void tickPowerEnd(){
+        super.tickPowerEnd();
+        if (invincibleState && self instanceof Player PL && !ClientNetworking.getAppropriateConfig().centuryBoySettings.CBCanMoveCamera) {
+            PL.setYHeadRot(playerheadRotY);
+            PL.setXRot(playerheadRotX);
         }
     }
 
@@ -942,7 +965,7 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     /** hud **/
     @Override
     public boolean replaceHudActively() {
-        return (invincibleState || currentDefenseTicks < maxDefenceTicks);
+        return (invincibleState || currentDefenseTicks < getMaxDefenceTicks());
     }
     public void getReplacementHUD(GuiGraphics context, Player cameraPlayer, int screenWidth, int screenHeight, int x,
                                   boolean removeNum){
@@ -955,5 +978,8 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     }
     public int getDefenceTicks() {
         return currentDefenseTicks;
+    }
+    private int getChargeDefenseTicks() {
+        return chargingDefenseTicks;
     }
 }
