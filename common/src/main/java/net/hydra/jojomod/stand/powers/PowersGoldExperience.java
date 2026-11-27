@@ -2587,6 +2587,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 StandEntity oldMe = ((StandUser)self).roundabout$getStand();
                 if (GERequiem != null) {
                     GERequiem.absMoveTo(oldMe.getX(), oldMe.getY(), oldMe.getZ(), oldMe.getYRot(), oldMe.getXRot());
+                    GERequiem.xo = oldMe.getX();
+                    GERequiem.yo = oldMe.getY();
+                    GERequiem.zo = oldMe.getZ();
+                    GERequiem.yRotO = oldMe.getYRot();
+                    GERequiem.xRotO = oldMe.getXRot();
+                    GERequiem.setYHeadRot(oldMe.getYHeadRot());
+                    GERequiem.yHeadRotO = oldMe.yHeadRotO;
+                    GERequiem.setYBodyRot(oldMe.yBodyRot);
+                    GERequiem.yBodyRotO = oldMe.yBodyRotO;
+                    GERequiem.setFadeOut((byte) GERequiem.MaxFade);
 
                     GERequiem.setSkin(((StandUser)self).roundabout$getStandSkin());
                     GERequiem.setIdleAnimation(((StandUser)self).roundabout$getIdlePos());
@@ -2594,6 +2604,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
                     if (self instanceof Player PE) {
                         GERequiem.playerSetProperties(PE);
                         if (GERequiem instanceof FollowingStandEntity FE) {
+                            if (oldMe instanceof FollowingStandEntity oldFE) {
+                                FE.setOffsetType(oldFE.getOffsetType());
+                            }
                             FE.setDistanceOut(((IPlayerEntity) PE).roundabout$getDistanceOut());
                             FE.setAnchorPlace(((IPlayerEntity) PE).roundabout$getAnchorPlace());
                             FE.setAnchorPlaceAttack(((IPlayerEntity) PE).roundabout$getAnchorPlaceAttack());
