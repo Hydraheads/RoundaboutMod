@@ -146,6 +146,8 @@ public class FabricParticles {
     public static final SimpleParticleType GE_WAVE = FabricParticleTypes.simple();
     public static final SimpleParticleType GOLDEN_CLOUD = FabricParticleTypes.simple();
     public static final SimpleParticleType GOLDEN_CLOUD_SMALL = FabricParticleTypes.simple();
+    public static final ParticleType<GESkinCrackParticleOptions> GE_SKIN_CRACK =
+            FabricParticleTypes.complex(GESkinCrackParticleOptions.DESERIALIZER);
 
     public static final SimpleParticleType RAIN_BUBBLE = FabricParticleTypes.simple();
     public static final SimpleParticleType RAIN_SHARD_1 = FabricParticleTypes.simple();
@@ -283,6 +285,7 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ge_wave"), GE_WAVE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("golden_cloud"), GOLDEN_CLOUD);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("golden_cloud_small"), GOLDEN_CLOUD_SMALL);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ge_skin_crack"), GE_SKIN_CRACK);
 
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_bubble"), RAIN_BUBBLE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("rain_shard_1"), RAIN_SHARD_1);
@@ -419,6 +422,7 @@ public class FabricParticles {
         ModParticles.GE_WAVE = GE_WAVE;
         ModParticles.GOLDEN_CLOUD = GOLDEN_CLOUD;
         ModParticles.GOLDEN_CLOUD_SMALL = GOLDEN_CLOUD_SMALL;
+        ModParticles.GE_SKIN_CRACK = GE_SKIN_CRACK;
 
         ModParticles.RAIN_BUBBLE = RAIN_BUBBLE;
         ModParticles.RAIN_SHARD_1 = RAIN_SHARD_1;

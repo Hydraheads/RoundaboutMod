@@ -28,6 +28,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.*;
 import net.hydra.jojomod.access.IGEProjectile;
+import net.hydra.jojomod.particles.GESkinCrackParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.BlockGrabPreset;
@@ -2537,9 +2538,25 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void updateRequiem() {
         if (!this.self.level().isClientSide() && attackTimeDuring >= 0 && attackTimeDuring < 240) {
             spawnRequiemGatheringClouds();
+            StandEntity stand = getStandEntity(this.self);
+            if (stand != null && !stand.isRemoved()) {
+                if (attackTimeDuring == 20) {
+                    spawnRequiemCrackStage(stand, 1);
+                } else if (attackTimeDuring == 95) {
+                    spawnRequiemCrackStage(stand, 2);
+                } else if (attackTimeDuring == 171) {
+                    spawnRequiemCrackStage(stand, 3);
+                }
+            }
         }
-
         if (attackTimeDuring >= 240) {
+            if (!this.self.level().isClientSide()) {
+                StandEntity oldStand = getStandEntity(this.self);
+                if (oldStand != null && !oldStand.isRemoved()) {
+                    spawnRequiemCrackStage(oldStand, 4);
+                }
+            }
+
             //setPowerNone();
             ItemStack arrowForGER = standArrow;
             standArrow = null;
@@ -2663,6 +2680,45 @@ public class PowersGoldExperience extends BlockGrabPreset {
         sendParticlesIfPossible(level, particleType,
                 spawnPos.x, spawnPos.y, spawnPos.z,
                 0, velocity.x, 0.0, velocity.z, 1.0);
+    }
+
+    private void spawnRequiemCrackStage(StandEntity stand, int stage) {
+        Level level = this.self.level();
+        GESkinCrackParticleOptions shellShard = new GESkinCrackParticleOptions(stand.getSkin());
+
+        Vec3 forward = Vec3.directionFromRotation(0.0F, stand.getYRot()).scale(0.28);
+        double chestX = stand.getX() + forward.x;
+        double chestY = stand.getY() + stand.getBbHeight() * 0.62;
+        double chestZ = stand.getZ() + forward.z;
+
+        switch (stage) {
+            case 1 -> {
+                // crack chest
+                sendParticlesIfPossible(level, shellShard, chestX, chestY, chestZ,
+                        6, 0.06, 0.06, 0.06, 0.04);
+            }
+            case 2 -> {
+                // crack chest
+                sendParticlesIfPossible(level, shellShard, chestX, chestY, chestZ,
+                        16, 0.14, 0.16, 0.14, 0.08);
+            }
+            case 3 -> {
+                // crack chest
+                sendParticlesIfPossible(level, shellShard, chestX, chestY, chestZ,
+                        32, 0.24, 0.30, 0.24, 0.14);
+            }
+            case 4 -> {
+                // ge exploed
+                double bodyX = stand.getX();
+                double bodyY = stand.getY() + stand.getBbHeight() * 0.5;
+                double bodyZ = stand.getZ();
+                double spreadXZ = stand.getBbWidth() * 0.65;
+                double spreadY = stand.getBbHeight() * 0.45;
+
+                sendParticlesIfPossible(level, shellShard, bodyX, bodyY, bodyZ,
+                        75, spreadXZ, spreadY, spreadXZ, 0.26);
+            }
+        }
     }
 
     // requiem animation end

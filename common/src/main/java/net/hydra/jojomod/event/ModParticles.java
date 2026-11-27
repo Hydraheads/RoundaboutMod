@@ -1,6 +1,7 @@
 package net.hydra.jojomod.event;
 
 import net.hydra.jojomod.particles.ColorParticleOptions;
+import net.hydra.jojomod.particles.GESkinCrackParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 
@@ -148,6 +149,7 @@ public class ModParticles {
     public static SimpleParticleType GE_WAVE;
     public static SimpleParticleType GOLDEN_CLOUD;
     public static SimpleParticleType GOLDEN_CLOUD_SMALL;
+    public static ParticleType<GESkinCrackParticleOptions> GE_SKIN_CRACK;
 
     public static SimpleParticleType RAIN_BUBBLE;
     public static SimpleParticleType RAIN_SHARD_1;
