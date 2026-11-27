@@ -627,6 +627,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if(this.getStandEntity(self) == null && !blackSabbathTargets.isEmpty() && tickBeforeHunt < 1){
                 this.setTickBeforeHunt(20);
                 moveMode = 3;
+                setStupidTicksSon(8);
             }
         }
         if(this.getSelf() instanceof AbstractIllager || this.getSelf() instanceof Raider || this.getSelf() instanceof Witch){
@@ -773,7 +774,7 @@ private void setStupidTicksSon(int ticks){stupidTicksSon = ticks;}
             if(tickBeforeHunt == 1){
                 if(!this.isClient() && this.spawnTarget() != null && this.self.level() instanceof ServerLevel sl){
                     if(findBlackSabbathSpawnPosition(sl,spawnTarget(), 25D) != null) {
-                        createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl, spawnTarget(), 25D)));
+                            createTheMightyHunterOfTheShadows((findBlackSabbathSpawnPosition(sl, spawnTarget(), 25D)));
                     } else {
                         if(this.checkIfBposIsInDark(self.position())){
                             createTheMightyHunterOfTheShadows(self.position());
@@ -1331,9 +1332,6 @@ if(this.getStandEntity(self) != null && this.getStandEntity(self) instanceof Bla
                 }
             }
         }
-    }
-    public void blackRotation(BlackSabbathEntity blackSabbathEntity) {
-        transformSabbath(blackSabbathEntity);
     }
     public void transformSabbath(BlackSabbathEntity value){
         if (value != null) {

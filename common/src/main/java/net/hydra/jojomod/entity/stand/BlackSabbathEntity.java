@@ -649,7 +649,7 @@ public class BlackSabbathEntity extends StandEntity implements HasCustomInventor
     int animationTick2 = 14;
     @Override
     public boolean canStandBeHurt(){
-        return getHunting() && !getUnrender();
+        return getHunting() && !getUnrender() && !getRiding();
     }
     @Override
     public boolean canBeHitByProjectile() {
