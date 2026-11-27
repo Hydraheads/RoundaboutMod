@@ -2,6 +2,9 @@ name: Build SBA
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - "arena/0b162f1b-sba-mod"
 
 jobs:
   build:
