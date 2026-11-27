@@ -2260,14 +2260,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return canExecuteMoveWithLevel(getMaxLevel());
     }
     public boolean isPossibleToRequiem() {
-        return resolvePoints >= getNeededResolvePoints() && ((StandUser)self).roundabout$getActive();
+        ItemStack goldDisc = ((StandUser) this.self).roundabout$getStandDisc();
+        boolean bypass = ((Player)this.self).isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
+        return (resolvePoints >= getNeededResolvePoints() || bypass) && ((StandUser)self).roundabout$getActive();
     }
 
     protected float resolvePoints = 0F;
     protected final Map<ResolveSource, SourceProgress> resolveProgress = new EnumMap<>(ResolveSource.class);
 
     public float getResolvePoints() { return resolvePoints; }
-    public float getNeededResolvePoints() { return 10.0F; }
+    public float getNeededResolvePoints() { return 300.0F; }
 
     @Override
     public boolean onStandArrowUse() {
