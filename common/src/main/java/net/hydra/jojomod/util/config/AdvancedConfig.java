@@ -283,7 +283,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingBlockFormPredictionsv3 = new HashSet<>(
+    public Set<String> kingNothingBlockFormPredictionsV3 = new HashSet<>(
             Arrays.asList(
                     "minecraft:coal:minecraft:coal_ore",
                     "minecraft:raw_iron:minecraft:iron_ore",
@@ -528,8 +528,8 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:raw_copper_block:minecraft:copper_ore",
                     "minecraft:raw_iron_block:minecraft:iron_ore",
                     "minecraft:raw_gold_block:minecraft:gold_ore",
-                    "minecraft:torchflower:minecraft:torchflower_seeds",
-                    "minecraft:pitcher_plant:minecraft:pitcher_pod",
+                    "minecraft:torchflower:minecraft:torchflower_crop",
+                    "minecraft:pitcher_plant:minecraft:pitcher_crop",
                     "minecraft:cut_copper:minecraft:copper_ore",
                     "minecraft:cut_copper_stairs:minecraft:copper_ore",
                     "minecraft:cut_copper_slab:minecraft:copper_ore",
@@ -560,10 +560,29 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:waxed_oxidized_copper:minecraft:copper_ore",
                     "minecraft:waxed_oxidized_cut_copper:minecraft:copper_ore",
                     "minecraft:waxed_oxidized_cut_copper_stairs:minecraft:copper_ore",
-                    "minecraft:waxed_oxidized_cut_copper_slab:minecraft:copper_ore"
+                    "minecraft:waxed_oxidized_cut_copper_slab:minecraft:copper_ore",
+                    "minecraft:quartz:minecraft:nether_quartz_ore",
+                    "roundabout:meteor_block:roundabout:ancient_meteor",
+                    "roundabout:melon_parfait:minecraft:melon",
+                    "minecraft:melon_slice:minecraft:melon",
+                    "minecraft:melon_seeds:minecraft:melon_stem",
+                    "minecraft:melon:minecraft:melon_stem",
+                    "minecraft:carved_pumpkin:minecraft:pumpkin",
+                    "minecraft:jack_o_lantern:minecraft:pumpkin",
+                    "minecraft:pumpkin:minecraft:pumpkin_stem",
+                    "minecraft:pumpkin_seeds:minecraft:pumpkin_stem",
+                    "minecraft:wheat_seeds:minecraft:wheat",
+                    "minecraft:beetroot_seeds:minecraft:beetroots",
+                    "minecraft:torchflower_seeds:minecraft:torchflower_crop",
+                    "minecraft:pitcher_pod:minecraft:pitcher_crop",
+                    "minecraft:iron_nugget:minecraft:iron_ore",
+                    "minecraft:gold_nugget:minecraft:gold_ore",
+                    "minecraft:glow_berries:minecraft:cave_vines",
+                    "minecraft:sweet_berries:minecraft:sweet_berry_bush",
+                    "roundabout:glass_door:minecraft:glass"
             )
     );
-    public Set<String> kingNothingEntityFormPredictionsv4 = new HashSet<>(
+    public Set<String> kingNothingEntityFormPredictionsV4 = new HashSet<>(
             Arrays.asList(
                     "minecraft:phantom_membrane:minecraft:phantom",
                     "minecraft:wither_skeleton_skull:minecraft:wither_skeleton",
@@ -638,34 +657,103 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:leather_horse_armor:minecraft:cow",
                     "minecraft:dragon_egg:minecraft:ender_dragon",
                     "minecraft:turtle_egg:minecraft:turtle",
-                    "minecraft:frogspawn:minecraft:tadpole"
+                    "minecraft:frogspawn:minecraft:tadpole",
+                    "minecraft:cooked_porkchop:minecraft:pig",
+                    "minecraft:cooked_mutton:minecraft:sheep",
+                    "minecraft:cooked_chicken:minecraft:chicken",
+                    "minecraft:cooked_rabbit:minecraft:rabbit",
+                    "minecraft:cooked_cod:minecraft:cod",
+                    "minecraft:cooked_salmon:minecraft:salmon",
+                    "roundabout:cooked_piranha:roundabout:piranha",
+                    "minecraft:cooked_beef:minecraft:cow",
+                    "minecraft:magma_cream:minecraft:magma_cube",
+                    "minecraft:ink_sac:minecraft:squid",
+                    "minecraft:glow_ink_sac:minecraft:glow_squid"
             )
     );
 
-    public Set<String> kingNothingBlockGroupsv2 = new HashSet<>(
+    public Set<String> kingNothingBlockGroupsV3 = new HashSet<>(
             Arrays.asList(
-                    "minecraft:iron_ore:minecraft:deepslate_iron_ore",
-                    "minecraft:gold_ore:minecraft:deepslate_gold_ore:minecraft:nether_gold_ore",
-                    "minecraft:coal_ore:minecraft:deepslate_coal_ore",
-                    "minecraft:diamond_ore:minecraft:deepslate_diamond_ore",
-                    "minecraft:emerald_ore:minecraft:deepslate_emerald_ore",
-                    "minecraft:copper_ore:minecraft:deepslate_copper_ore",
-                    "minecraft:redstone_ore:minecraft:deepslate_redstone_ore",
-                    "minecraft:lapis_ore:minecraft:deepslate_lapis_ore",
-                    "roundabout:aja_ore:roundabout:deepslate_aja_ore",
-                    "minecraft:bamboo_sapling:minecraft:bamboo"
+                    "iron_ore:minecraft:iron_ore",
+                    "iron_ore:minecraft:deepslate_iron_ore",
+                    "gold_ore:minecraft:gold_ore",
+                    "gold_ore:minecraft:deepslate_gold_ore",
+                    "gold_ore:minecraft:nether_gold_ore",
+                    "coal_ore:minecraft:coal_ore",
+                    "coal_ore:minecraft:deepslate_coal_ore",
+                    "diamond_ore:minecraft:diamond_ore",
+                    "diamond_ore:minecraft:deepslate_diamond_ore",
+                    "emerald_ore:minecraft:emerald_ore",
+                    "emerald_ore:minecraft:deepslate_emerald_ore",
+                    "copper_ore:minecraft:copper_ore",
+                    "copper_ore:minecraft:deepslate_copper_ore",
+                    "redstone_ore:minecraft:redstone_ore",
+                    "redstone_ore:minecraft:deepslate_redstone_ore",
+                    "lapis_ore:minecraft:lapis_ore",
+                    "lapis_ore:minecraft:deepslate_lapis_ore",
+                    "aja_ore:roundabout:aja_ore",
+                    "aja_ore:roundabout:deepslate_aja_ore",
+                    "bamboo:minecraft:bamboo",
+                    "bamboo:minecraft:bamboo_sapling",
+                    "shulker:minecraft:shulker_box",
+                    "shulker:minecraft:white_shulker_box",
+                    "shulker:minecraft:light_gray_shulker_box",
+                    "shulker:minecraft:gray_shulker_box",
+                    "shulker:minecraft:black_shulker_box",
+                    "shulker:minecraft:brown_shulker_box",
+                    "shulker:minecraft:red_shulker_box",
+                    "shulker:minecraft:orange_shulker_box",
+                    "shulker:minecraft:yellow_shulker_box",
+                    "shulker:minecraft:lime_shulker_box",
+                    "shulker:minecraft:green_shulker_box",
+                    "shulker:minecraft:cyan_shulker_box",
+                    "shulker:minecraft:light_blue_shulker_box",
+                    "shulker:minecraft:blue_shulker_box",
+                    "shulker:minecraft:purple_shulker_box",
+                    "shulker:minecraft:magenta_shulker_box",
+                    "shulker:minecraft:pink_shulker_box",
+                    "bed:minecraft:white_bed",
+                    "bed:minecraft:light_gray_bed",
+                    "bed:minecraft:gray_bed",
+                    "bed:minecraft:black_bed",
+                    "bed:minecraft:brown_bed",
+                    "bed:minecraft:red_bed",
+                    "bed:minecraft:orange_bed",
+                    "bed:minecraft:yellow_bed",
+                    "bed:minecraft:lime_bed",
+                    "bed:minecraft:green_bed",
+                    "bed:minecraft:cyan_bed",
+                    "bed:minecraft:light_blue_bed",
+                    "bed:minecraft:blue_bed",
+                    "bed:minecraft:purple_bed",
+                    "bed:minecraft:magenta_bed",
+                    "bed:minecraft:pink_bed",
+                    "anvil:minecraft:anvil",
+                    "anvil:minecraft:chipped_anvil",
+                    "anvil:minecraft:damaged_anvil",
+                    "melon_stem:minecraft:melon_stem",
+                    "melon_stem:minecraft:attached_melon_stem",
+                    "pumpkin_stem:minecraft:pumpkin_stem",
+                    "pumpkin_stem:minecraft:attached_pumkin_stem"
             )
     );
 
-    public Set<String> kingNothingEntityGroups = new HashSet<>(
+    public Set<String> kingNothingEntityGroupsV2 = new HashSet<>(
             Arrays.asList(
-                    "roundabout:snake:roundabout:ge_snake",
-                    "minecraft:bee:roundabout:ge_bee",
-                    "minecraft:fox:roundabout:ge_fox",
-                    "roundabout:piranha:roundabout:ge_piranha",
-                    "roundabout:butterfly:roundabout:ge_butterfly",
-                    "minecraft:bat:roundabout:ge_bat",
-                    "minecraft:salmon:roundabout:ge_fish"
+                    "snake:roundabout:snake",
+                    "snake:roundabout:ge_snake",
+                    "bee:minecraft:bee",
+                    "bee:roundabout:ge_bee",
+                    "fox:minecraft:fox",
+                    "fox:roundabout:ge_fox",
+                    "piranha:roundabout:piranha",
+                    "piranha:roundabout:ge_piranha",
+                    "butterfly:roundabout:butterfly",
+                    "butterfly:roundabout:ge_butterfly",
+                    "bat:minecraft:bat",
+                    "bat:roundabout:ge_bat",
+                    "salmon:minecraft:salmon",
+                    "salmon:roundabout:ge_fish"
             )
     );
 
@@ -683,9 +771,11 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingBlockSniffOverrides = new HashSet<>(
+    public Set<String> kingNothingBlockSniffOverridesV2 = new HashSet<>(
             Arrays.asList(
-                    "minecraft:bamboo_sapling:minecraft:bamboo"
+                    "minecraft:bamboo_sapling:minecraft:bamboo",
+                    "minecraft:attached_melon_stem:minecraft:melon_stem",
+                    "minecraft:attached_pumpkin_stem:minecraft:pumpkin_stem"
             )
     );
 

@@ -145,9 +145,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingBlockFormPredictionsv3 != null) {
+        if (getAdvancedConfig().kingNothingBlockFormPredictionsV3 != null) {
             MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictionsv3) {
+            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictionsV3) {
                 try {
                     String[] split = entry.split(":");
 
@@ -176,9 +176,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingEntityFormPredictionsv4 != null) {
+        if (getAdvancedConfig().kingNothingEntityFormPredictionsV4 != null) {
             MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsv4) {
+            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsV4) {
                 try {
                     String[] split = entry.split(":");
 
@@ -211,72 +211,70 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingBlockGroupsv2 != null) {
+        if (getAdvancedConfig().kingNothingBlockGroupsV3 != null) {
             MainUtil.KING_NOTHING_BLOCK_GROUPS.clear();
             MainUtil.KING_NOTHING_BLOCK_KEYS.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockGroupsv2) {
+            for (String entry : getAdvancedConfig().kingNothingBlockGroupsV3) {
                 try {
                     String[] split = entry.split(":");
-                    if (split.length < 4 && split.length % 2 != 0) {
+                    if (split.length != 3) {
                         Roundabout.LOGGER.warn("Invalid block group entry: {}", entry);
                         continue;
                     }
+                    String groupID = split[0];
                     Set<Block> group = new HashSet<>();
-                    ResourceLocation sourceId = new ResourceLocation(split[0],split[1]);
-                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
-                    if (sourceBlock.asItem().equals(Items.AIR) || sourceBlock.equals(Blocks.AIR)
-                            || sourceBlock.defaultDestroyTime() < 0) {
-                        Roundabout.LOGGER.warn("Invalid block group key: {}", sourceBlock);
+                    boolean groupIsPresent = false;
+                    if (MainUtil.KING_NOTHING_BLOCK_GROUPS.containsKey(groupID)) {
+                        group = MainUtil.KING_NOTHING_BLOCK_GROUPS.get(groupID);
+                        groupIsPresent = true;
+                    }
+                    ResourceLocation targetId = new ResourceLocation(split[1], split[2]);
+                    Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
+                    if (targetBlock.equals(Blocks.AIR)
+                            || targetBlock.defaultDestroyTime() < 0 || group.contains(targetBlock)) {
+                        Roundabout.LOGGER.warn("Invalid block group value: {}", targetBlock);
                         continue;
                     }
-                    for (int i = 0; i < split.length; i += 2) {
-                        ResourceLocation targetId = new ResourceLocation(split[i], split[i + 1]);
-                        Block targetBlock = BuiltInRegistries.BLOCK.get(targetId);
-                        if (targetBlock.asItem().equals(Items.AIR) || targetBlock.equals(Blocks.AIR)
-                                || targetBlock.defaultDestroyTime() < 0 || group.contains(targetBlock)) {
-                            Roundabout.LOGGER.warn("Invalid block group value: {}", targetBlock);
-                            continue;
-                        }
-                        MainUtil.KING_NOTHING_BLOCK_KEYS.put(targetBlock, sourceBlock);
-                        group.add(targetBlock);
+                    MainUtil.KING_NOTHING_BLOCK_KEYS.put(targetBlock, groupID);
+                    group.add(targetBlock);
+                    if (!groupIsPresent) {
+                        MainUtil.KING_NOTHING_BLOCK_GROUPS.put(groupID, group);
                     }
-                    MainUtil.KING_NOTHING_BLOCK_GROUPS.put(sourceBlock, group);
                 } catch (Exception e) {
                     Roundabout.LOGGER.error("Failed to parse block group entry '{}'", entry, e);
                 }
             }
         }
 
-        if (getAdvancedConfig().kingNothingEntityGroups != null) {
+        if (getAdvancedConfig().kingNothingEntityGroupsV2 != null) {
             MainUtil.KING_NOTHING_ENTITY_GROUPS.clear();
             MainUtil.KING_NOTHING_ENTITY_KEYS.clear();
-            for (String entry : getAdvancedConfig().kingNothingEntityGroups) {
+            for (String entry : getAdvancedConfig().kingNothingEntityGroupsV2) {
                 try {
                     String[] split = entry.split(":");
-                    if (split.length < 4 && split.length % 2 != 0) {
+                    if (split.length != 3) {
                         Roundabout.LOGGER.warn("Invalid entity group entry: {}", entry);
                         continue;
                     }
+                    String groupID = split[0];
                     Set<EntityType<?>> group = new HashSet<>();
-                    ResourceLocation sourceId = new ResourceLocation(split[0],split[1]);
-                    EntityType<?> sourceEntity = BuiltInRegistries.ENTITY_TYPE.get(sourceId);
-                    if ((sourceEntity.equals(EntityType.PIG) && !sourceId.equals(new ResourceLocation("minecraft", "pig")))
-                            || sourceEntity.equals(EntityType.PLAYER)) {
-                        Roundabout.LOGGER.warn("Invalid entity group key: {}", sourceEntity);
+                    boolean groupIsPresent = false;
+                    if (MainUtil.KING_NOTHING_ENTITY_GROUPS.containsKey(groupID)) {
+                        group = MainUtil.KING_NOTHING_ENTITY_GROUPS.get(groupID);
+                        groupIsPresent = true;
+                    }
+                    ResourceLocation targetId = new ResourceLocation(split[1], split[2]);
+                    EntityType<?> targetEntity = BuiltInRegistries.ENTITY_TYPE.get(targetId);
+                    if ((targetEntity.equals(EntityType.PIG) && !targetId.equals(new ResourceLocation("minecraft", "pig"))
+                            || targetEntity.equals(EntityType.PLAYER) || group.contains(targetEntity))) {
+                        Roundabout.LOGGER.warn("Invalid entity group value: {}", targetEntity);
                         continue;
                     }
-                    for (int i = 0; i < split.length; i += 2) {
-                        ResourceLocation targetId = new ResourceLocation(split[i], split[i + 1]);
-                        EntityType<?> targetEntity = BuiltInRegistries.ENTITY_TYPE.get(targetId);
-                        if ((targetEntity.equals(EntityType.PIG) && !targetId.equals(new ResourceLocation("minecraft", "pig"))
-                                || targetEntity.equals(EntityType.PLAYER) || group.contains(targetEntity))) {
-                            Roundabout.LOGGER.warn("Invalid entity group value: {}", targetEntity);
-                            continue;
-                        }
-                        MainUtil.KING_NOTHING_ENTITY_KEYS.put(targetEntity, sourceEntity);
-                        group.add(targetEntity);
+                    MainUtil.KING_NOTHING_ENTITY_KEYS.put(targetEntity, groupID);
+                    group.add(targetEntity);
+                    if (!groupIsPresent) {
+                        MainUtil.KING_NOTHING_ENTITY_GROUPS.put(groupID, group);
                     }
-                    MainUtil.KING_NOTHING_ENTITY_GROUPS.put(sourceEntity, group);
                 } catch (Exception e) {
                     Roundabout.LOGGER.error("Failed to parse entity group entry '{}'", entry, e);
                 }
@@ -293,9 +291,9 @@ public abstract class ConfigManager {
             MainUtil.kingNothingMobSniffBlacklist.addAll(getAdvancedConfig().kingNothingMobSniffBlacklistv2);
         }
 
-        if (getAdvancedConfig().kingNothingBlockSniffOverrides != null) {
+        if (getAdvancedConfig().kingNothingBlockSniffOverridesV2 != null) {
             MainUtil.KING_NOTHING_BLOCK_SNIFF_OVERRIDES.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockSniffOverrides) {
+            for (String entry : getAdvancedConfig().kingNothingBlockSniffOverridesV2) {
                 try {
                     String[] split = entry.split(":");
 

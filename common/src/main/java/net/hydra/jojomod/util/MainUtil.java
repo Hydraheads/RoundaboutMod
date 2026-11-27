@@ -252,10 +252,10 @@ public class MainUtil {
     public static final Map<Item, EntityType<?>> KING_NOTHING_ENTITY_FORM_PREDICT = new HashMap<>();
     public static final Map<Block, Block> KING_NOTHING_BLOCK_SNIFF_OVERRIDES = new HashMap<>();
     public static final Map<EntityType<?>, EntityType<?>> KING_NOTHING_ENTITY_SNIFF_OVERRIDES = new HashMap<>();
-    public static final Map<Block, Set<Block>> KING_NOTHING_BLOCK_GROUPS = new HashMap<>();
-    public static final Map<Block, Block> KING_NOTHING_BLOCK_KEYS = new HashMap<>();
-    public static final Map<EntityType<?>, Set<EntityType<?>>> KING_NOTHING_ENTITY_GROUPS = new HashMap<>();
-    public static final Map<EntityType<?>, EntityType<?>> KING_NOTHING_ENTITY_KEYS = new HashMap<>();
+    public static final Map<String, Set<Block>> KING_NOTHING_BLOCK_GROUPS = new HashMap<>();
+    public static final Map<Block, String> KING_NOTHING_BLOCK_KEYS = new HashMap<>();
+    public static final Map<String, Set<EntityType<?>>> KING_NOTHING_ENTITY_GROUPS = new HashMap<>();
+    public static final Map<EntityType<?>, String> KING_NOTHING_ENTITY_KEYS = new HashMap<>();
 
     public static final Map<Item, EntityType> GOLD_EXPERIENCE_DNA_DROPS = new HashMap<>();
     public static final Map<Item, Float> GOLD_EXPERIENCE_TRANSFORM_RATE = new HashMap<>();
