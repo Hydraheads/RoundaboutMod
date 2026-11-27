@@ -4180,7 +4180,7 @@ public class PowersDiverDown extends NewPunchingStand {
         // sounds and animation here
 
         DamageHandler.StandDamageEntity(victim, getRibcageSnapStrength(victim), this.self);
-        MainUtil.makeBleed(victim, 1, 1200, this.self);
+        MainUtil.makeBleed(victim, 1, 300, this.self);
         MainUtil.makeMobBleed(victim);
         MainUtil.makeMobBleed(host);
         SimpleParticleType bloodType = ModParticles.BLOOD;
