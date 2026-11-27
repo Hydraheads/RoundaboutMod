@@ -281,6 +281,17 @@ public class ZWorldRenderer {
                             (color & 0xFF) / 255.0F,
                             1.0f);
                 }
+                // if (pkn.getTrackedBlockPos() != null) {
+                //     ClientEffectUtil.renderPurpleBox(poseStack,
+                //             mc.renderBuffers().bufferSource(),
+                //             camera,
+                //             pkn.getTrackedBlockPos(),
+                //             pkn.getTrackedBlockPos(),
+                //             ((color >> 16) & 0xFF) / 255.0F,
+                //             ((color >> 8) & 0xFF) / 255.0F,
+                //             (color & 0xFF) / 255.0F,
+                //             1.0f);
+                // }
             }
         }
     }
