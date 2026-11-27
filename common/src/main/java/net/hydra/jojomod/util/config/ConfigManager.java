@@ -321,6 +321,32 @@ public abstract class ConfigManager {
             }
         }
 
+        if (getAdvancedConfig().silverChariotRapierSlashBreakableBlocks != null) {
+            MainUtil.SILVER_CHARIOT_RAPIER_SLASH_BREAKABLE_BLOCKS.clear();
+            for (String entry : getAdvancedConfig().silverChariotRapierSlashBreakableBlocks) {
+                try {
+                    String[] split = entry.split(":");
+                    if (split.length != 2) {
+                        Roundabout.LOGGER.warn("Invalid rapier slash breakable block entry: {}", entry);
+                        continue;
+                    }
+                    ResourceLocation sourceId = new ResourceLocation(split[0], split[1]);
+                    Block sourceBlock = BuiltInRegistries.BLOCK.get(sourceId);
+
+                    if (
+                            sourceBlock.equals(Blocks.AIR)
+                    ) {
+                        Roundabout.LOGGER.warn("Invalid rapier slash breakable block entry: {}", entry);
+                        continue;
+                    }
+
+                    MainUtil.SILVER_CHARIOT_RAPIER_SLASH_BREAKABLE_BLOCKS.add(sourceBlock);
+                } catch (Exception e) {
+                    Roundabout.LOGGER.error("Failed to parse rapier slash breakable block entry '{}'", entry, e);
+                }
+            }
+        }
+
         if (getAdvancedConfig().silverChariotBlocksToSlabsV2 != null)
         {
             MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.clear();
@@ -345,6 +371,7 @@ public abstract class ConfigManager {
                             || targetBlock.equals(Blocks.AIR)
                     ) {
                         Roundabout.LOGGER.warn("Invalid whole block to slab block entry: {}", entry);
+                        continue;
                     }
 
                     MainUtil.SILVER_CHARIOT_BLOCK_TO_SLAB.put(sourceBlock, targetBlock);
@@ -372,6 +399,7 @@ public abstract class ConfigManager {
                                     sourceBlock.equals(Blocks.AIR)
                     ) {
                         Roundabout.LOGGER.warn("Invalid statue material block entry: {}", entry);
+                        continue;
                     }
 
                     MainUtil.SILVER_CHARIOT_STATUE_MATERIAL_BLOCKS.add(sourceBlock);

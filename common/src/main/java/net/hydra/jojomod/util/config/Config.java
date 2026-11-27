@@ -1597,7 +1597,9 @@ public class Config implements Cloneable {
         public Integer getMiningTierSilverChariot;
         @IntOption(group = "inherit", value = 10, min = 0, max = 72000)
         public Integer silverChariotRemoteControlRange;
-        @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
+        // @BooleanOption(group = "inherit", value = true)
+        // public Boolean silverChariotUniqueControlModeEntityRendering;
+        @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         public Integer silverChariotCooldownStatueCutting;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer silverChariotCooldownSlabCutting;
@@ -1605,7 +1607,7 @@ public class Config implements Cloneable {
         public Integer silverChariotCooldownSelfGrab;
         @IntOption(group = "inherit", value = 280, min = 0, max = 72000)
         public Integer silverChariotCooldownSelfThrow;
-        @IntOption(group = "inherit", value = 15, min = 0, max = 72000)
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
         public Integer silverChariotCooldownVaultRebound;
         // @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         // public Integer silverChariotCooldownSelfThrowRebound;
@@ -1615,28 +1617,63 @@ public class Config implements Cloneable {
         // public Integer silverChariotCooldownArmorShed;
         // @BooleanOption(group = "inherit", value = true)
         // public Boolean silverChariotNoAttackWhileRapierShotIsOnCooldown;
+
+        // Rapier shot
         @IntOption(group = "inherit", value = 300, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShot;
-        @FloatOption(group = "inherit", value = 1F, min = 0.01F, max = 10.0F)
-        public Float silverChariotRapierShotSpeedModifier;
-        @FloatOption(group = "inherit", value = 1F, min = 0.01F, max = 10.0F)
-        public Float silverChariotRapierShotDamageModifier;
+        @FloatOption(group = "inherit", value = 10F, min = 0F, max = 1000.0F)
+        public Float silverChariotRapierShotBaseDamagePlayers;
+        @FloatOption(group = "inherit", value = 20F, min = 0F, max = 1000.0F)
+        public Float silverChariotRapierShotBaseDamageMobs;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotRapierShotSpeedMultiplier;
+        // @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        // public Integer silverChariotRapierShotDamageMultiplierGeneral;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotRapierShotDamageMultiplierPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotRapierShotDamageMultiplierMobs;
         @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierShotInterrupt;
         // @IntOption(group = "inherit", value = 400, min = 0, max = 72000)
         // public Integer silverChariotCooldownRapierShotPlatform;
+
+        // Rapier spin
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer silverChariotCooldownRapierSpin;
-        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
-        public Integer silverChariotCooldownRapierSlash;
-        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
-        public Integer silverChariotMinimumCooldownCrouchAttack;
-        // @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
-        // public Integer silverChariotRapierSlashRadius;
+        @IntOption(group = "inherit", value = 5, min = 1, max = 72000)
+        public Integer rapierSpinTicksBetweenDamage;
+        @FloatOption(group = "inherit", value = 1F, min = 0F, max = 1000.0F)
+        public Float silverChariotRapierSpinBaseDamagePlayers;
+        @FloatOption(group = "inherit", value = 2F, min = 0F, max = 1000.0F)
+        public Float silverChariotRapierSpinBaseDamageMobs;
+        @FloatOption(group = "inherit", value = 1.2F, min = 0F, max = 1000.0F)
+        public Float rapierSpinBaseKnockback;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotRapierSpinDamageMultiplierPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotRapierSpinDamageMultiplierMobs;
         @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
         public Integer silverChariotRapierSpinDuration;
         // @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
         // public Integer silverChariotRapierSpinWindup;
+
+        // Rapier slash
+        @IntOption(group = "inherit", value = 120, min = 0, max = 72000)
+        public Integer silverChariotCooldownRapierSlash;
+        @FloatOption(group = "inherit", value = 5F, min = 0F, max = 1000F)
+        public Float silverChariotRapierSlashBaseDamagePlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotRapierSlashDamageMultiplierPlayers;
+        @IntOption(group = "inherit", value = 100, min = 0, max = 72000)
+        public Integer silverChariotRapierSlashDamageMultiplierMobs;
+        @FloatOption(group = "inherit", value = 10F, min = 0F, max = 1000F)
+        public Float silverChariotRapierSlashBaseDamageMobs;
+        // @IntOption(group = "inherit", value = 5, min = 0, max = 72000)
+        // public Integer silverChariotRapierSlashRadius;
+
+        @IntOption(group = "inherit", value = 20, min = 0, max = 72000)
+        public Integer silverChariotMinimumCooldownCrouchAttack;
         @IntOption(group = "inherit", value = 200, min = 0, max = 72000)
         public Integer silverChariotArmourShedStandSealTime;
         @IntOption(group = "inherit", value = 50, min = 0, max = 72000)
@@ -1644,9 +1681,9 @@ public class Config implements Cloneable {
         @IntOption(group = "inherit", value = 1, min = 1, max = 72000)
         public Integer silverChariotSelfCarryModeHoverRechargeRate;
         @FloatOption(group = "inherit", value = 2.1F, min = 0, max = 72000F)
-        public Float silverChariotBonusPlayerDMGArmSummon;
+        public Float silverChariotBasePlayerDMGArmSummon;
         @FloatOption(group = "inherit", value = 6.0F, min = 0, max = 72000F)
-        public Float silverChariotBonusMobDMGArmSummon;
+        public Float silverChariotBaseMobDMGArmSummon;
         // @FloatOption(group = "inherit", value = 1.6F, min = 0.01F, max = 72000F)
         // public Float silverChariotAttackSpeedModifierArmSummon;
         @IntOption(group = "inherit", value = 13, min = 0, max = 72000)
@@ -1732,17 +1769,17 @@ public class Config implements Cloneable {
         public Float punchDamageModifier;
         @FloatOption(group = "inherit", value = 1.0F, min = 0.01F, max = 10F)
         public Float sneakAttackDamageModifier;
-        @FloatOption(group = "inherit", value = 1.55F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 1.35F, min = 0.01F, max = 10F)
         public Float selfThrowMagnitudeModifierX;
-        @FloatOption(group = "inherit", value = 1.55F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 1.35F, min = 0.01F, max = 10F)
         public Float selfThrowMagnitudeModifierY;
-        @FloatOption(group = "inherit", value = 1.5F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 1.6F, min = 0.01F, max = 10F)
         public Float selfThrowMagnitudeModifierZ;
         @FloatOption(group = "inherit", value = 0.05F, min = 0.01F, max = 10F)
         public Float selfCarryHoverVerticalVelocity;
-        @FloatOption(group = "inherit", value = 0.75F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 0.05F, min = 0.01F, max = 10F)
         public Float selfCarryHoverVelocityModifierX;
-        @FloatOption(group = "inherit", value = 0.75F, min = 0.01F, max = 10F)
+        @FloatOption(group = "inherit", value = 0.05F, min = 0.01F, max = 10F)
         public Float selfCarryHoverVelocityModifierZ;
         @FloatOption(group = "inherit", value = 1.5F, min = 0.01F, max = 10F)
         public Float controlModeVelocityUnarmouredModifier;
@@ -1768,14 +1805,6 @@ public class Config implements Cloneable {
         public Float rightSwordModelRotateZ;
         @FloatOption(group = "inherit", value = 15.0F, min = -360.0F, max = 360.0F)
         public Float leftSwordModelRotateZ;
-        @IntOption(group = "inherit", value = 5, min = 1, max = 72000)
-        public Integer rapierSpinTicksBetweenDamage;
-        @FloatOption(group = "inherit", value = 0.1F, min = 0.01F, max = 10.0F)
-        public Float rapierSpinDamagePlayers;
-        @FloatOption(group = "inherit", value = 0.2F, min = 0.01F, max = 10.0F)
-        public Float rapierSpinDamageMobs;
-        @FloatOption(group = "inherit", value = 1.2F, min = 0.01F, max = 10.0F)
-        public Float rapierSpinKnockback;
     }
 
     public static class CatchTheRainbowSettings {

@@ -742,6 +742,24 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
+    public Set<String> silverChariotRapierSlashBreakableBlocks = new HashSet<>(
+            Arrays.asList(
+                    "minecraft:sunflower",
+                    "minecraft:lilac",
+                    "minecraft:rose_bush",
+                    "minecraft:peony",
+                    "minecraft:fire",
+                    "minecraft:soul_fire",
+                    "minecraft:tall_grass",
+                    "minecraft:large_fern",
+                    "minecraft:cactus",
+                    "minecraft:sugarcane",
+                    "minecraft:bamboo",
+                    "minecraft:kelp",
+                    "minecraft:kelp_plant",
+                    "roundabout:stand_fire"
+            )
+    );
     public Set<String> silverChariotBlocksToSlabsV2 = new HashSet<>(
             Arrays.asList(
                     "minecraft:stone:minecraft:stone_slab",
