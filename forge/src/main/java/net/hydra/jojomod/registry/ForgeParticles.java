@@ -2,6 +2,7 @@ package net.hydra.jojomod.registry;
 
 import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.particles.ColorParticleOptions;
+import net.hydra.jojomod.particles.GESkinCrackParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -467,6 +468,12 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> GE_WAVE = PARTICLES.register("ge_wave",
             () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> GOLDEN_CLOUD = PARTICLES.register("golden_cloud",
+            () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> GOLDEN_CLOUD_SMALL = PARTICLES.register("golden_cloud_small",
+            () -> new SimpleParticleType(true));
+    public static final RegistryObject<ParticleType<GESkinCrackParticleOptions>> GE_SKIN_CRACK =
+            PARTICLES.register("ge_skin_crack", () -> createGESkinCrackParticleType(true));
 
     public static final RegistryObject<SimpleParticleType> RAIN_BUBBLE = PARTICLES.register(
             "rain_bubble",
@@ -490,6 +497,15 @@ public class ForgeParticles {
             @Override
             public com.mojang.serialization.Codec<ColorParticleOptions> codec() {
                 return ColorParticleOptions.codec(this);
+            }
+        };
+    }
+
+    public static @NotNull ParticleType<GESkinCrackParticleOptions> createGESkinCrackParticleType(boolean alwaysSpawn) {
+        return new ParticleType<>(alwaysSpawn, GESkinCrackParticleOptions.DESERIALIZER) {
+            @Override
+            public com.mojang.serialization.Codec<GESkinCrackParticleOptions> codec() {
+                return GESkinCrackParticleOptions.CODEC;
             }
         };
     }

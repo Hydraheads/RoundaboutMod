@@ -720,6 +720,9 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.PUZZLE_PARTICLE.get(), PuzzleParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.VITAL_ESSENCE.get(), VitalEssenceParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GE_WAVE.get(), GEWaveParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD.get(), GoldenCloudParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD_SMALL.get(), GoldenCloudSmallParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GE_SKIN_CRACK.get(), GESkinCrackParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AUTUMN_LEAVES.get(), AutumnLeavesParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GINKGO_LEAVES.get(), GinkgoLeavesParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.RAIN_BUBBLE.get(), RainBubbleParticle.Provider::new);
