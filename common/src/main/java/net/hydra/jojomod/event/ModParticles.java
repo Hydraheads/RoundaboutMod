@@ -150,6 +150,7 @@ public class ModParticles {
     public static SimpleParticleType GOLDEN_CLOUD;
     public static SimpleParticleType GOLDEN_CLOUD_SMALL;
     public static ParticleType<GESkinCrackParticleOptions> GE_SKIN_CRACK;
+    public static SimpleParticleType REQUIEM_FLARE;
 
     public static SimpleParticleType RAIN_BUBBLE;
     public static SimpleParticleType RAIN_SHARD_1;

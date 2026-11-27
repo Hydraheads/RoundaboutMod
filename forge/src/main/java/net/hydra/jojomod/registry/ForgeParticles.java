@@ -474,6 +474,8 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true));
     public static final RegistryObject<ParticleType<GESkinCrackParticleOptions>> GE_SKIN_CRACK =
             PARTICLES.register("ge_skin_crack", () -> createGESkinCrackParticleType(true));
+    public static final RegistryObject<SimpleParticleType> REQUIEM_FLARE = PARTICLES.register("requiem_flare",
+            () -> new SimpleParticleType(true));
 
     public static final RegistryObject<SimpleParticleType> RAIN_BUBBLE = PARTICLES.register(
             "rain_bubble",
