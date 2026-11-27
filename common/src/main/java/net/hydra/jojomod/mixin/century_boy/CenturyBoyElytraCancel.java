@@ -22,8 +22,6 @@ public class CenturyBoyElytraCancel {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof StandUser user && user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
             if (PCB.invincibleState) {
-                Roundabout.LOGGER.info("aawdawd");
-//                entity.setSharedFlag(7, false);
                 ci.cancel();
             }
 

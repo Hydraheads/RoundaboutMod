@@ -411,6 +411,11 @@ public class Powers20thCenturyBoy extends NewDashPreset {
             }
             this.self.stopUsingItem();
             if(this.isClient()){ClientUtil.stopDestroyingBlock();}
+
+            if (self instanceof Player PL && !ClientNetworking.getAppropriateConfig().centuryBoySettings.CBCanMoveCamera) {
+                playerheadRotY = PL.getViewYRot(1);
+                playerheadRotX = PL.getViewXRot(1);
+            }
         } else {
             staticMode = 0;
         }
@@ -742,11 +747,6 @@ public class Powers20thCenturyBoy extends NewDashPreset {
                 invincibleState = false;
             }
             staticMode = 0;
-        }else {
-            if (self instanceof Player PL && !ClientNetworking.getAppropriateConfig().centuryBoySettings.CBCanMoveCamera) {
-                playerheadRotY = PL.getViewYRot(1);
-                playerheadRotX = PL.getViewXRot(1);
-            }
         }
 
 
