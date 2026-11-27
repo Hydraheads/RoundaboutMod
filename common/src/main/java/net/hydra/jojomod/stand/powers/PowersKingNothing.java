@@ -695,6 +695,10 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                 }
                 if (hasTarget) {
+                    // FIND BETTER SOUND
+                    if (this.self instanceof ServerPlayer pl) {
+                        S2CPacketUtil.sendPlaySoundPacket(pl, this.self.getId(), FOUND_ITEM);
+                    }
                     TrackingCloudEntity tc = ModEntities.TRACKING_CLOUD.create(this.getSelf().level());
                     if (tc != null) {
                         tc.setUser(this.getSelf());
@@ -1491,7 +1495,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     public boolean phaseGrab() {
         StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)) {
+        if (isStandHere() && Objects.nonNull(stand)) {
             this.setActivePower(PowerIndex.POWER_2);
             startPhaseMovement(stand);
             return true;
@@ -1516,7 +1520,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     public boolean phaseItem() {
         StandEntity stand = getStandEntity(this.self);
-        if (Objects.nonNull(stand)) {
+        if (isStandHere() && Objects.nonNull(stand)) {
             if (this.inventoryGrab()) {
                 this.setActivePower(PowerIndex.POWER_2_SNEAK);
                 startPhaseMovement(stand);
