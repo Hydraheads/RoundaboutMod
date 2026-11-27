@@ -100,6 +100,10 @@ public class Powers20thCenturyBoy extends NewDashPreset {
     public void onStandSummon(boolean desummon) {
         super.onStandSummon(desummon);
         setInvincibleState(false, true);
+        if (self instanceof Player) {
+            this.getStandUserSelf().roundabout$setStandAnimation((byte) 0);
+            this.getStandUserSelf().roundabout$getWornStandAnimation().stop();
+        }
     }
 
     @Override
