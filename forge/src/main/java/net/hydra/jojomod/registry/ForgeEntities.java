@@ -777,6 +777,12 @@ public class ForgeEntities {
                             .clientTrackingRange(14)
                             .build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_beta").toString())
             );
+    public static final RegistryObject<EntityType<GoldExperienceRequiemDeimosEntity>> GOLD_EXPERIENCE_REQUIEM_DEIMOS =
+            ENTITY_TYPES.register("gold_experience_requiem_deimos", () ->
+                    EntityType.Builder.of(GoldExperienceRequiemDeimosEntity::new, MobCategory.MISC).sized(0.75f, 2.05f).
+                            clientTrackingRange(14).
+                            build(new ResourceLocation(Roundabout.MOD_ID, "gold_experience_requiem_deimos").toString())
+            );
     public static final RegistryObject<EntityType<GEBrambleEntity>> GE_BRAMBLE = ENTITY_TYPES.register("ge_bramble",
             () -> EntityType.Builder.<GEBrambleEntity>of(GEBrambleEntity::new, MobCategory.MISC)
                     .sized(0.8f, 1.8f)

@@ -53,6 +53,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -157,7 +158,7 @@ public class PowersKingNothing extends NewDashPreset {
     private int summonAnimTicks = 0;
     private int disintegrateAnimTicks = 0;
 
-    private boolean startPhaseTickAfter = false;
+    private boolean justSummoned = false;
 
     public PowersKingNothing(LivingEntity self) {
         super(self);
@@ -405,7 +406,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
             case 3 -> {
                 if ((isHoldingSneak() && (isTrackingItem()
-                        || !hasFormPrediction(getSelf().getMainHandItem().getItem())))) {
+                        || !(hasFormPrediction(getSelf().getMainHandItem()))))) {
                     return true;
                 }
             }
@@ -574,6 +575,20 @@ public class PowersKingNothing extends NewDashPreset {
         trackedEntity = null;
     }
 
+    // public void setTrackedBlockPos(BlockPos pos) {
+    //     trackedBlockPos = pos;
+    //     if (!isClient()) {
+    //         tryBlockPosPowerPacket(PowerIndex.RANGED_BARRAGE, pos);
+    //     }
+    // }
+
+    // public void clearTrackedBlockPos() {
+    // }
+
+    // public BlockPos getTrackedBlockPos() {
+    //     return trackedBlockPos;
+    // }
+
     @Override
     public void tickPower() {
         super.tickPower();
@@ -638,12 +653,13 @@ public class PowersKingNothing extends NewDashPreset {
             // passive particles
         }
         if (isTrackingMemorizedScent) {
-            if ((trackingCloud != null && (trackingCloud.isRemoved() || trackingCloud.distanceToSqr(getSelf()) > 4096))) {
+            if ((trackingCloud != null && (trackingCloud.isRemoved() || trackingCloud.distanceTo(getSelf()) > 64))) {
                 if (trackingCloud != null && !trackingCloud.isRemoved()) {
                     trackingCloud.discard();
                 }
                 trackingCloud = null;
                 clearTrackedEntity();
+                // clearTrackedBlockPos();
             }
             if (trackingCloud == null) {
                 boolean hasTarget = false;
@@ -662,8 +678,20 @@ public class PowersKingNothing extends NewDashPreset {
                     }
                     case TrackingCloudEntity.MOB -> {
                         List<Entity> list = this.getSelf().level().getEntities(this.getSelf(), this.getSelf().getBoundingBox().inflate(64f),
-                                entity -> entity.getType().equals(getMemorizedEntityType()));
+                                entity -> isInEntityGroup(entity.getType()));
                         hasTarget = !list.isEmpty();
+                    }
+                    case TrackingCloudEntity.BLOCK -> {
+                        AABB $$0 = getSelf().getBoundingBox().inflate(32f);
+                        Iterable<BlockPos> posList =
+                                BlockPos.betweenClosed(Mth.floor($$0.minX), Mth.floor($$0.minY), Mth.floor($$0.minZ),
+                                        Mth.floor($$0.maxX), Mth.floor($$0.maxY), Mth.floor($$0.maxZ));
+                        for (BlockPos pos : posList) {
+                            if (isInBlockGroup(getSelf().level().getBlockState(pos).getBlock())) {
+                                hasTarget = true;
+                                break;
+                            }
+                        }
                     }
                 }
                 if (hasTarget) {
@@ -682,11 +710,17 @@ public class PowersKingNothing extends NewDashPreset {
                     int color = getParticleColor(pdata);
                     MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
                             ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
-                            trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1, 0.2, 0.2, 0.2, 0.01);
+                            trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1,
+                            trackingCloud.isInsideTrackedBlock() ? 0.35 : 0.3,
+                            trackingCloud.isInsideTrackedBlock() ? 0.35 : 0.3,
+                            trackingCloud.isInsideTrackedBlock() ? 0.35 : 0.3, 0.01);
                 }
             }
         }
-        if (!isTrackingMemorizedScent) clearTrackedEntity();
+        if (!isTrackingMemorizedScent) {
+            clearTrackedEntity();
+            // clearTrackedBlockPos();
+        }
         if ((!foundTem && isTrackingItem()) || (isTrackingMemorizedScent && trackingCloud == null)) {
             foundItemYet = false;
             int particleInterval = ClientNetworking.getAppropriateConfig().kingNothingSettings.kingNothingParticleSpawnInterval;
@@ -910,8 +944,8 @@ public class PowersKingNothing extends NewDashPreset {
         if (getSelf().isAlive() && !getSelf().isRemoved()) {
             // Tick Phase
             if (isPhasing() && !this.isClient()) {
-                if (startPhaseTickAfter) {
-                    startPhaseTickAfter = false;
+                if (justSummoned) {
+                    justSummoned = false;
                     startPhaseMovement(getStandEntity(getSelf()));
                 }
                 else if (this.attackTimeDuring == 108) {
@@ -1041,7 +1075,7 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
             else {
-               startPhaseTickAfter = false;
+               justSummoned = false;
             }
         }
     }
@@ -1252,6 +1286,9 @@ public class PowersKingNothing extends NewDashPreset {
         if (move == PowerIndex.POWER_4) {
             memorizeBlock(blockPos);
         }
+        else if (move == PowerIndex.RANGED_BARRAGE) {
+            // setTrackedBlockPos(blockPos);
+        }
         return super.tryBlockPosPower(move, forced, blockPos);
     }
 
@@ -1302,6 +1339,17 @@ public class PowersKingNothing extends NewDashPreset {
 
     private boolean startMemorizedScentTrack() {
         if (!onCooldown(PowerIndex.SKILL_1)) {
+            StandEntity stand = getStandEntity(getSelf());
+            if (stand != null) {
+                for (int i = 0; i < 8; i++) {
+                    int color = getParticleColor(getVisualInfo());
+                    MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                            ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                            stand.getBoundingBox().getCenter().x(), stand.getBoundingBox().getCenter().y(),
+                            stand.getBoundingBox().getCenter().z(), 1,
+                            0.3, 0.3, 0.3, 0.01);
+                }
+            }
             if (!isClient()) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1, 20);
                 this.setCooldown(PowerIndex.SKILL_1, 20);
@@ -1334,7 +1382,8 @@ public class PowersKingNothing extends NewDashPreset {
             }
             trackedItem = null;
             foundItemYet = false;
-            trackedEntity = null;
+            clearTrackedEntity();
+            // clearTrackedBlockPos();
             trackingCloud = null;
             isTrackingMemorizedScent = false;
             dimension = getSelf().level().dimension();
@@ -1401,6 +1450,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
+            returnAnimTicks = 0;
             setPowerNone();
         }
         return true;
@@ -1477,7 +1527,7 @@ public class PowersKingNothing extends NewDashPreset {
     }
 
     public void startPhaseMovement(StandEntity stand) {
-        if (!startPhaseTickAfter) {
+        if (!justSummoned) {
             this.poseStand(OffsetIndex.LOOSE);
             animateStand(KingNothingEntity.REACH);
             this.attackTimeDuring = 0;
@@ -1782,7 +1832,7 @@ public class PowersKingNothing extends NewDashPreset {
     public void tryMemorize() {
         if (isStandHere()) {
             Entity targEnt = MainUtil.getTargetEntity(this.getSelf(), SMELL_RANGE, 0);
-            if (targEnt instanceof LivingEntity && !MainUtil.isMobSniffBlacklisted(targEnt)) {
+            if (targEnt instanceof LivingEntity) {
                 this.getStandUserSelf().roundabout$tryPower(PowerIndex.POWER_4_BONUS, true);
                 tryPowerPacket(PowerIndex.POWER_4_BONUS);
                 return;
@@ -1949,13 +1999,17 @@ public class PowersKingNothing extends NewDashPreset {
             summonAnimTicks = 0;
             returnAnimTicks = 0;
             animateStand(KingNothingEntity.SUMMON);
-            startPhaseTickAfter = true;
+            justSummoned = true;
         }
     }
 
     public boolean formPredict() {
         if (!isClient()) {
-            Item held = this.getSelf().getMainHandItem().getItem();
+            ItemStack stack = this.getSelf().getMainHandItem();
+            if (!PowersGoldExperience.getDisguisedDisplayStack(stack).isEmpty()) {
+                stack = PowersGoldExperience.getDisguisedDisplayStack(stack);
+            }
+            Item held = stack.getItem();
             Block potentialBlock = getBlockFormPrediction(held);
             if (potentialBlock != null) {
                 this.setMemorizedScent(potentialBlock);
@@ -1978,7 +2032,11 @@ public class PowersKingNothing extends NewDashPreset {
         return true;
     }
 
-    public boolean hasFormPrediction(Item item) {
+    public boolean hasFormPrediction(ItemStack stack) {
+        if (!PowersGoldExperience.getDisguisedDisplayStack(stack).isEmpty()) {
+            stack = PowersGoldExperience.getDisguisedDisplayStack(stack);
+        }
+        Item item = stack.getItem();
         return getEntityFormPrediction(item) != null || getBlockFormPrediction(item) != null;
     }
 
@@ -2014,6 +2072,12 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
             return toReturn;
+        }
+        else if (item instanceof SpawnEggItem SE) {
+            EntityType<?> type = SE.getType(null);
+            if (!MainUtil.isMobSniffBlacklisted(type)) {
+                return type;
+            }
         }
         return null;
     }
@@ -2081,7 +2145,7 @@ public class PowersKingNothing extends NewDashPreset {
 
     public boolean memorizeEntity() {
         Entity ent = MainUtil.getTargetEntity(this.getSelf(), SMELL_RANGE, 0);
-        if (ent instanceof LivingEntity LE && !MainUtil.isMobSniffBlacklisted(ent)) {
+        if (ent instanceof LivingEntity LE && !MainUtil.isMobSniffBlacklisted(ent.getType())) {
             setMemorizedScent(LE);
             if (this.getSelf() instanceof Player PE) {
                 PE.displayClientMessage(LE.getName().copy().withStyle(ChatFormatting.DARK_PURPLE), true);
@@ -2152,6 +2216,18 @@ public class PowersKingNothing extends NewDashPreset {
 
     public UUID getMemorizedPlayer() {
         return memorizedPlayer;
+    }
+
+    public boolean isInBlockGroup(Block block) {
+        return block.equals(memorizedBlock) || MainUtil.KING_NOTHING_BLOCK_KEYS.containsKey(block)
+                && MainUtil.KING_NOTHING_BLOCK_GROUPS.get(
+                        MainUtil.KING_NOTHING_BLOCK_KEYS.get(block)).contains(memorizedBlock);
+    }
+
+    public boolean isInEntityGroup(EntityType<?> entityType) {
+        return entityType.equals(memorizedEntityType) ||(MainUtil.KING_NOTHING_ENTITY_KEYS.containsKey(entityType)
+                && MainUtil.KING_NOTHING_ENTITY_GROUPS.get(
+                        MainUtil.KING_NOTHING_ENTITY_KEYS.get(entityType)).contains(memorizedEntityType));
     }
 
     @Override

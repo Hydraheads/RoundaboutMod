@@ -28,6 +28,7 @@ public class BCSoldierBaseRenderer extends StandRenderer<BCSoldier> {
 
     public BCSoldierBaseRenderer(EntityRendererProvider.Context context, StandModel<BCSoldier> entityModel, float f) {
         super(context, entityModel,f);
+        addLayer(new BCAmmoLayer<>(this));
     }
 
     @Override

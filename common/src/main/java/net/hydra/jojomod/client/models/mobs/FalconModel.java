@@ -115,7 +115,7 @@ public class FalconModel<T extends FalconEntity> extends HierarchicalModel<T> im
 
 		animate(falcon.sitAnimation, FalconAnimations.sit, pAgeInTicks);
 		animate(falcon.flyingAnimation, FalconAnimations.flying, pAgeInTicks);
-		animate(falcon.flappingAnimation, FalconAnimations.flap, pAgeInTicks);
+		animate(falcon.flappingAnimation, FalconAnimations.flap, pAgeInTicks, 1.5f);
 		animate(falcon.flyingFlapAnimation, FalconAnimations.wing_flap, pAgeInTicks);
 	}
 

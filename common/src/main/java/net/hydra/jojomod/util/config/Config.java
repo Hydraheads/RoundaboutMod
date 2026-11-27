@@ -1361,6 +1361,10 @@ public class Config implements Cloneable {
         public Float lifeSenseImbueRange;
         @IntOption(group = "inherit", value = 8, min = 0, max = 72000)
         public Integer brambleAmount;
+        @IntOption(group = "inherit", value = 30, min = 1, max = 72000)
+        public Integer resolveTypeCapPerDay;
+        @IntOption(group = "inherit", value = 24000, min = 1, max = 99999)
+        public Integer resolveInterval;
     }
     public static class KingCrimsonSettings {
         @BooleanOption(group = "inherit", value = true)

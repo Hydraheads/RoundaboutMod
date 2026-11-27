@@ -25,6 +25,7 @@ public class BCTankBaseRenderer extends StandRenderer<BCTank> {
 
     public BCTankBaseRenderer(EntityRendererProvider.Context context, StandModel<BCTank> entityModel, float f) {
         super(context, entityModel,f);
+        addLayer(new BCAmmoLayer<>(this));
     }
 
     @Override

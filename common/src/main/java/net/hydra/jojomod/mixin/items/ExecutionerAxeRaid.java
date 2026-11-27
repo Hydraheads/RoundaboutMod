@@ -1,10 +1,13 @@
 package net.hydra.jojomod.mixin.items;
 
 import net.hydra.jojomod.access.IItemEntityAccess;
+import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.event.powers.TimeStop;
 import net.hydra.jojomod.item.ModItems;
+import net.hydra.jojomod.stand.powers.PowersGoldExperience;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -41,6 +44,18 @@ public class ExecutionerAxeRaid {
                     ((IItemEntityAccess)$$4).roundabout$setRaidSparkle(true);
                     break;
                 }
+            }
+        }
+    }
+
+    // GE resolve gain
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;awardStat(Lnet/minecraft/resources/ResourceLocation;)V"))
+    private void roundabout$onRaidVictory(CallbackInfo ci) {
+        for (UUID uuid : this.heroesOfTheVillage) {
+            Entity entity = this.level.getEntity(uuid);
+            if (entity instanceof ServerPlayer player
+                    && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+                ge.onRaidWon();
             }
         }
     }

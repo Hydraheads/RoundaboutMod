@@ -5199,6 +5199,10 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (this.roundabout$hasDiverLegs()) {
             basis *= 1F + (ClientNetworking.getAppropriateConfig().diverDownSettings.legSpeedBoost * 0.01F); //0% speed boost default
         }
+        //inputspeedmodifier doesnt work on mobs idk maybe im stupid
+        if (roundabout$getStandPowers() instanceof PowersCatchTheRainbow PCR && PCR.isInRain() && PCR.hasStandActive(PCR.self)) {
+            basis *= 1.35;
+        }
         if(this.roundabout$getGrabberSabbath() != 0){
             basis *= 0.025F;
         }
@@ -6009,6 +6013,14 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                     if (living instanceof Player PL && ((StandUser) attacker).roundabout$getStandPowers() instanceof PowersGoldExperience PGE) {
                         PGE.onPlayerHurt(PL, damageSource, $$1);
                     }
+                }
+
+                if ($$1 > 0.0F
+                        && (Object) this instanceof OwnableEntity ownable
+                        && ownable.getOwner() instanceof ServerPlayer owner
+                        && damageSource.getEntity() != owner
+                        && ((StandUser) owner).roundabout$getStandPowers() instanceof PowersGoldExperience ge) {
+                    ge.onPetInjured($$1);
                 }
             }
 

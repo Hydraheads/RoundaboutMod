@@ -153,5 +153,5 @@ public class BCTroop extends MultipleTypeStand {
         return false;
     }
 
-
+    public boolean isRecharging() {return false;}
 }

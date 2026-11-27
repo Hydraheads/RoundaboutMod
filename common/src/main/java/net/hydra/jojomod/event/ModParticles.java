@@ -146,6 +146,8 @@ public class ModParticles {
 
     public static SimpleParticleType VITAL_ESSENCE;
     public static SimpleParticleType GE_WAVE;
+    public static SimpleParticleType GOLDEN_CLOUD;
+    public static SimpleParticleType GOLDEN_CLOUD_SMALL;
 
     public static SimpleParticleType RAIN_BUBBLE;
     public static SimpleParticleType RAIN_SHARD_1;
