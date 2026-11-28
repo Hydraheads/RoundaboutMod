@@ -4948,6 +4948,8 @@
   "config.roundabout.resolveInterval.desc": "Change how many ticks between resolve refresh.",
   "config.roundabout.maxRequiemTime.name": "Maximum Requiem Time",
   "config.roundabout.maxRequiemTime.desc": "How long requiem lasts, in seconds. The default is 60 seconds (1 minute). If you set it to -1, Requiem's duration becomes permanent",
+  "config.roundabout.showRTZSkyboxUser.name": "Show RTZ Skybox For User",
+  "config.roundabout.showRTZSkyboxUser.desc": "Shows you the Return To Zero skybox if you get hit as the GER user.",
 
   "config.roundabout.disablePHazeOverlayAnimation.name": "Disable Haze Overlay Animation",
   "config.roundabout.disablePHazeOverlayAnimation.desc": "Disables the idle animation of the haze in first person.",

@@ -1091,7 +1091,7 @@ public abstract class ZLevelRenderer implements ILevelRenderer {
             RPostShaderRegistry.InverseProjectionMatrix.mul(matrices.last().pose());
             RPostShaderRegistry.InverseProjectionMatrix.invert();
         }
-        if (ClientUtil.isUnderRTZ() && ClientUtil.rtzTicks >= 4 && ClientUtil.rtzTicks < ClientUtil.RTZ_DURATION - 4) {
+        if (ClientUtil.isUnderRTZ() && !ClientUtil.rtzSkyboxOnlyUser && ClientUtil.rtzTicks >= 4 && ClientUtil.rtzTicks < ClientUtil.RTZ_DURATION - 4) {
             ci.cancel();
         }
     }

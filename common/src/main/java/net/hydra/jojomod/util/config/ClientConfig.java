@@ -111,6 +111,8 @@ public class ClientConfig implements Cloneable {
     @NestedOption(group = "modded")
     public ClientConfig.DiverDownSettings diverDownSettings;
     @NestedOption(group = "modded")
+    public ClientConfig.GoldExperienceSettings goldExperienceSettings;
+    @NestedOption(group = "modded")
     public ClientConfig.SilverChariotSettings silverChariotSettings;
     @NestedOption(group = "modded")
     public ClientConfig.LyinEyesSettings lyinEyesSettings;
@@ -275,6 +277,10 @@ public class ClientConfig implements Cloneable {
         public Boolean customDiverDownWorkbench;
         @BooleanOption(group = "inherit", value = false)
         public Boolean forceThirdPersonInGroundDive;
+    }
+    public static class GoldExperienceSettings {
+        @BooleanOption(group = "inherit", value = false)
+        public Boolean showRTZSkyboxUser;
     }
     public static class SilverChariotSettings {
         @BooleanOption(group = "inherit", value = false)

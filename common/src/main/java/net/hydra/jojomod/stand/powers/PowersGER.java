@@ -240,6 +240,20 @@ public class PowersGER extends PowersGoldExperience {
                 }
             }
 
+            if (this.getSelf() instanceof ServerPlayer gerUser) {
+                Vec3 selfPos = gerUser.position();
+                float selfYaw = gerUser.getYRot();
+                float selfPitch = gerUser.getXRot();
+                S2CPacketUtil.sendStartRTZPacket(
+                        gerUser,
+                        selfPos,
+                        selfPos,
+                        selfYaw,
+                        selfPitch,
+                        selfYaw,
+                        selfPitch
+                );
+            }
             return true;
         }
 
