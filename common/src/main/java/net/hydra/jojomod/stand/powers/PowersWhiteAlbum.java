@@ -1267,10 +1267,9 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
             case PowerIndex.SNEAK_ATTACK_CHARGE -> { // charge punch
                 this.setActivePower(PowerIndex.SNEAK_ATTACK_CHARGE);
-                this.setAttackTimeMax(15);
+                this.setAttackTimeMax(ATTACK_MAX + (activePowerPhase != 0 ? this.getAttackTimeMax()-this.getAttackTimeDuring() : 0) );
                 this.setAttackTime(0);
                 this.setAttackTimeDuring(0);
-                this.setAttackTimeMax(0);
             }
             case PowerIndex.SNEAK_ATTACK -> setAttack(); // charge punch release
 
@@ -1793,29 +1792,27 @@ public class PowersWhiteAlbum extends NewDashPreset {
         if (self instanceof Player pl &&  ((IPlayerEntity)pl).roundabout$getAttackStrengthTicker() < 5) {
             return;
         }
+
+        int attackTimeMa = HeatUtil.isArmsFrozen(self) ? 12 : 7;
         if (keyIsDown) {
-            if (activePowerPhase == 0){
-                if (isBrawling()) {
-                    if (!isChargingCold()) {
-                        if (!ClientNetworking.getAppropriateConfig().experimentalSettings.whiteAlbumPunches) {
-                            this.tryPower(PowerIndex.ATTACK);
-                            return;
-                        }
-                        if (!this.getSelf().onGround() && !prevKey && airAttackCooldown == 0) {
-                            this.tryPower(PowerIndex.POWER_4_BONUS);
-                            this.tryPowerPacket(PowerIndex.POWER_4_BONUS);
-                        } else {
-                            if (isHoldingSneak()) {
-                                this.tryPower(PowerIndex.ATTACK);
-                            } else if (!prevKey) {
-                                this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE);
-                                this.tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
-                            }
-                        }
+            if (isBrawling() && !isChargingCold()){
+                if (!ClientNetworking.getAppropriateConfig().experimentalSettings.whiteAlbumPunches) {
+                    if (activePowerPhase == 0) {
+                        this.tryPower(PowerIndex.ATTACK);
                     }
+                    return;
+                }
+                if (!this.getSelf().onGround() && !prevKey && airAttackCooldown == 0 && activePowerPhase == 0) {
+                    this.tryPower(PowerIndex.POWER_4_BONUS);
+                    this.tryPowerPacket(PowerIndex.POWER_4_BONUS);
+                } else if (isHoldingSneak() && activePowerPhase == 0) {
+                    this.tryPower(PowerIndex.ATTACK);
+                } else if (!prevKey) {
+                    this.tryPower(PowerIndex.SNEAK_ATTACK_CHARGE);
+                    this.tryPowerPacket(PowerIndex.SNEAK_ATTACK_CHARGE);
                 }
             }
-        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && prevKey) {
+        } else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK_CHARGE && this.getAttackTimeDuring() > attackTimeMa) {
             this.tryPower(PowerIndex.SNEAK_ATTACK);
             this.tryPowerPacket(PowerIndex.SNEAK_ATTACK);
 
@@ -1826,7 +1823,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
 
     private final int ATTACK_MAX = 13;
     public float getAttackCharge() {
-        return Mth.clamp(this.getAttackTimeDuring()/(float)ATTACK_MAX,0.3F,1);
+        return Mth.clamp(this.getAttackTimeDuring()/(float)this.getAttackTimeMax(),0.3F,1);
     }
     public float attackChargeMult(float amt) {
         return amt * (0.5F + getAttackCharge() * 2.5F);

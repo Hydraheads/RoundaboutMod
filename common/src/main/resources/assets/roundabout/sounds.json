@@ -4992,6 +4992,12 @@
       "roundabout:silver_chariot_rapier_slash"
     ]
   },
+  "silver_chariot_rapier_slash_entity_hit": {
+    "subtitle": "sounds.roundabout.silver_chariot_rapier_slash_entity_hit",
+    "sounds": [
+      "roundabout:silver_chariot_rapier_slash_entity_hit"
+    ]
+  },
   "silver_chariot_rapier_shot": {
     "subtitle": "sounds.roundabout.silver_chariot_rapier_shot",
     "sounds": [
@@ -5104,6 +5110,18 @@
     "subtitle": "sounds.roundabout.silver_chariot_rebound",
     "sounds": [
       "roundabout:silver_chariot_rebound"
+    ]
+  },
+  "silver_chariot_whiff_1": {
+    "subtitle": "sounds.roundabout.silver_chariot_whiff_1",
+    "sounds": [
+      "roundabout:silver_chariot_whiff_1"
+    ]
+  },
+  "silver_chariot_whiff_2": {
+    "subtitle": "sounds.roundabout.silver_chariot_whiff_2",
+    "sounds": [
+      "roundabout:silver_chariot_whiff_2"
     ]
   },
   "bc_parachute_open": {

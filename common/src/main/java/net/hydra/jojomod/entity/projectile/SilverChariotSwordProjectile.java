@@ -34,10 +34,21 @@ import net.minecraft.world.phys.*;
 import java.util.UUID;
 
 public class SilverChariotSwordProjectile extends AbstractArrow implements UnburnableProjectile {
+    private static final EntityDataAccessor<Integer> ROUNDABOUT$MOVEMENT = SynchedEntityData.defineId(SilverChariotSwordProjectile.class, EntityDataSerializers.INT);
     // private static final EntityDataAccessor<Integer> ROUNDABOUT$BOUNCES = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
     // private static final EntityDataAccessor<Byte> ROUNDABOUT$TYPE = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
     // private static final EntityDataAccessor<Byte> SKIN = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.BYTE);
     // private static final EntityDataAccessor<Integer> USER_ID = SynchedEntityData.defineId(SilverChariotRapierShotEntity.class, EntityDataSerializers.INT);
+
+    private int movementCheck;
+
+    public int getMovementTicks() {
+        return movementCheck;
+    }
+
+    public void setMovementTicks(int movementTicks) {
+        this.movementCheck = movementTicks;
+    }
 
     public SilverChariotSwordProjectile(EntityType<? extends SilverChariotSwordProjectile> $$0, Level $$1) {
         super($$0, $$1);
@@ -239,7 +250,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
                 this.discard();
             } else if (this.getRapierShotType() == BASE_SHOT && this.getBounces() > 0) {
-                // this.setBounces(this.getBounces() - 1);
+                this.setBounces(this.getBounces() - 1);
 
                 Vec3 velocity = this.getDeltaMovement();
                 Direction hitDir = $$0.getDirection();
@@ -251,54 +262,38 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
                 this.setDeltaMovement(reflected);
 
                 Vec3 hitLoc = $$0.getLocation();
-                Vec3 pushOut = normal.scale(0.5);
+                Vec3 pushOut = normal.scale(0.2);
                 this.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
 
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_REDIRECT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
 
-                this.inGround = false;
-                this.shakeTime = 0;
+                // this.inGround = false;
+                // this.shakeTime = 0;
 
-                this.setBounces(this.getBounces() - 1);
+                // this.setBounces(this.getBounces() - 1);
             } else {
                 ((IAbstractArrowAccess)this).roundabout$setLastState(this.level().getBlockState($$0.getBlockPos()));
                 BlockState BSS = this.level().getBlockState($$0.getBlockPos());
                 BSS.onProjectileHit(this.level(), BSS, $$0, this);
                 Vec3 $$1 = $$0.getLocation().subtract(this.getX(), this.getY(), this.getZ());
-                // this.setDeltaMovement($$1);
-                this.setDeltaMovement(Vec3.ZERO);
+                this.setDeltaMovement($$1);
+                // this.setDeltaMovement(Vec3.ZERO);
                 Vec3 $$2 = $$1.normalize().scale(0.05F);
                 this.setPosRaw(this.getX() - $$2.x, this.getY() - $$2.y, this.getZ() - $$2.z);
                 this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_BLOCK_IMPACT_EVENT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-                // this.inGround = true;
-                // this.shakeTime = 7;
-                inGroundCheck = true;
+                this.inGround = true;
+                this.shakeTime = 7;
+                // inGroundCheck = true;
+                this.setCritArrow(false);
+                this.setPierceLevel((byte)0);
+                this.setShotFromCrossbow(false);
+                ((IAbstractArrowAccess)this).roundabout$resetPiercedEntities();
             }
         }
+        this.setMovementTicks(0);
     }
 
     private boolean inGroundCheck = false;
-
-    private void createPlatform(BlockHitResult $$0) {
-        // byte skin = ((StandUser) this.getUser()).roundabout$getStandSkin();
-        byte bt = this.getUser() != null ? ((StandUser) this.getUser()).roundabout$getStandSkin() : 0;
-        SilverChariotRapierPlatformEntity platform = new SilverChariotRapierPlatformEntity(
-                this.level(),
-                bt
-        );
-        platform.setUser(this.getUser());
-
-        Direction hitDir = $$0.getDirection();
-        Vec3 normal = Vec3.atLowerCornerOf(hitDir.getNormal());
-        Vec3 hitLoc = $$0.getLocation();
-        Vec3 pushOut = normal.scale(0.9);
-        platform.setPos(hitLoc.x + pushOut.x, hitLoc.y + pushOut.y, hitLoc.z + pushOut.z);
-
-        platform.setYRot(this.getYRot());
-        platform.setXRot(this.getXRot());
-
-        this.level().addFreshEntity(platform);
-    }
 
     private void createPlatformBlock(BlockHitResult $$0) {
         byte bt = this.getUser() != null ? ((StandUser) this.getUser()).roundabout$getStandSkin() : 0;
@@ -439,7 +434,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
             }
             this.playSound(ModSounds.SILVER_CHARIOT_RAPIER_SHOT_ENTITY_IMPACT_EVENT, 1.0F, (this.random.nextFloat() * 0.2F + 0.9F));
         } else if (gotten instanceof LivingEntity le && le.isBlocking()) {
-            int breakShield = 160;
+            int breakShield = 240;
             MainUtil.knockShieldPlusStand(le, breakShield);
         }
 
@@ -521,6 +516,9 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
     @Override
     public void addAdditionalSaveData(CompoundTag $$0) {
         super.addAdditionalSaveData($$0);
+        if ($$0.contains("bounces")) {
+            $$0.putInt("bounces", this.entityData.get(ROUNDABOUT$MOVEMENT));
+        }
 
         /*
         if ($$0.contains("bounces")) {
@@ -572,6 +570,22 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
 
     @Override
     public void tick() {
+        Vec3 delta = this.getDeltaMovement();
+        if (inGroundTime >= 160) {
+            this.remove(RemovalReason.DISCARDED);
+        }
+        if (this.isInWater()) {
+            this.setMovementTicks(0);
+        }
+        super.tick();
+        this.life++;
+        if (this.life > 200) {
+            this.discard();
+        }
+        if (getMovementTicks() > 0) {
+            this.setDeltaMovement(delta);
+        }
+
         /*
         boolean client = this.level().isClientSide();
         if (!client) {
@@ -597,9 +611,10 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
             }
         }
         */
+        /*
 
         if (!inGroundCheck) {
-            this.tickRotateFromVelocity();
+            // this.tickRotateFromVelocity();
         }
         // this.tickRotateFromVelocity();
 
@@ -620,6 +635,7 @@ public class SilverChariotSwordProjectile extends AbstractArrow implements Unbur
                 this.discard();
             }
         }
+        */
     }
 
     public void initRotateFromVelocity(float velMagnitude) {

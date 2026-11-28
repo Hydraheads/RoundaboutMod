@@ -205,24 +205,24 @@ public class PollinationTransferModel <T extends PollinationTransferEntity> exte
     @Override
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity,pLimbSwing,pLimbSwingAmount,pAgeInTicks,pNetHeadYaw,pHeadPitch);
-        this.animate(pEntity.flowerhattan_is_loaded, PollinationTransferAnimations.flower_loaded, pAgeInTicks, 1f);
-        this.animate(pEntity.rain_dodging_flowerhattan, PollinationTransferAnimations.rain_dodge_flowerhattan, pAgeInTicks, 1f);
-        this.animate(pEntity.slow_flowerhattan, PollinationTransferAnimations.f_slow, pAgeInTicks, 1f);
-        this.animate(pEntity.slow_flowerhattan_back, PollinationTransferAnimations.b_slow, pAgeInTicks, 1f);
-        this.animate(pEntity.slow_flowerhattan_left, PollinationTransferAnimations.l_slow, pAgeInTicks, 1f);
-        this.animate(pEntity.slow_flowerhattan_right, PollinationTransferAnimations.r_slow, pAgeInTicks, 1f);
-        this.animate(pEntity.forward_flowerhattan_incipit, PollinationTransferAnimations.f_beg, pAgeInTicks, 1f);
-        this.animate(pEntity.back_flowerhattan_incipit, PollinationTransferAnimations.b_beg, pAgeInTicks, 1f);
-        this.animate(pEntity.left_flowerhattan_incipit, PollinationTransferAnimations.l_beg, pAgeInTicks, 1f);
-        this.animate(pEntity.right_flowerhattan_incipit, PollinationTransferAnimations.r_beg, pAgeInTicks, 1f);
-        this.animate(pEntity.forward_flowerhattan_stop, PollinationTransferAnimations.f_stop, pAgeInTicks, 1f);
-        this.animate(pEntity.back_flowerhattan_stop, PollinationTransferAnimations.b_stop, pAgeInTicks, 1f);
-        this.animate(pEntity.left_flowerhattan_stop, PollinationTransferAnimations.l_stop, pAgeInTicks, 1f);
-        this.animate(pEntity.right_flowerhattan_stop, PollinationTransferAnimations.r_stop, pAgeInTicks, 1f);
-        this.animate(pEntity.forward_flowerhattan_loop, PollinationTransferAnimations.fLoop, pAgeInTicks, 1f);
-        this.animate(pEntity.back_flowerhattan_loop, PollinationTransferAnimations.bLoop, pAgeInTicks, 1f);
-        this.animate(pEntity.left_flowerhattan_loop, PollinationTransferAnimations.lLoop, pAgeInTicks, 1f);
-        this.animate(pEntity.right_flowerhattan_loop, PollinationTransferAnimations.rLoop, pAgeInTicks, 1f);
+        this.animate(pEntity.manhattan_is_loaded, PollinationTransferAnimations.flower_loaded, pAgeInTicks, 1f);
+        this.animate(pEntity.rain_dodging_manhattan, PollinationTransferAnimations.rain_dodge_flowerhattan, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_manhattan, PollinationTransferAnimations.f_slow, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_manhattan_back, PollinationTransferAnimations.b_slow, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_manhattan_left, PollinationTransferAnimations.l_slow, pAgeInTicks, 1f);
+        this.animate(pEntity.slow_manhattan_right, PollinationTransferAnimations.r_slow, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_incipit, PollinationTransferAnimations.f_beg, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_incipit, PollinationTransferAnimations.b_beg, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_incipit, PollinationTransferAnimations.l_beg, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_incipit, PollinationTransferAnimations.r_beg, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_stop, PollinationTransferAnimations.f_stop, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_stop, PollinationTransferAnimations.b_stop, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_stop, PollinationTransferAnimations.l_stop, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_stop, PollinationTransferAnimations.r_stop, pAgeInTicks, 1f);
+        this.animate(pEntity.forward_manhattan_loop, PollinationTransferAnimations.fLoop, pAgeInTicks, 1f);
+        this.animate(pEntity.back_manhattan_loop, PollinationTransferAnimations.bLoop, pAgeInTicks, 1f);
+        this.animate(pEntity.left_manhattan_loop, PollinationTransferAnimations.lLoop, pAgeInTicks, 1f);
+        this.animate(pEntity.right_manhattan_loop, PollinationTransferAnimations.rLoop, pAgeInTicks, 1f);
     }
 
     @Override

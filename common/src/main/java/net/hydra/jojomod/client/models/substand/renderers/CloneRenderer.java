@@ -74,6 +74,7 @@ public class CloneRenderer<T extends CloneEntity> extends LivingEntityRenderer<T
         this.addLayer(new ShootingArmLayer<>(context, this));
         this.addLayer(new EmperorArmLayer<>(context, this));
         this.addLayer(new HeyYaLayer<>(context, this));
+        this.addLayer(new TuskLayer<>(context, this));
         this.addLayer(new MandomLayer<>(context, this));
         this.addLayer(new CenturyBoyLayer<>(context, this));
         this.addLayer(new CatchTheRainbowLayer<>(context, this));

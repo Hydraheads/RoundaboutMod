@@ -1817,7 +1817,7 @@ public class PowersGreenDay extends NewPunchingStand {
     public float getPunchStrength(Entity entity){
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.26F));
-        } else {
+        } else {        
             return levelupDamageMod(multiplyPowerByStandConfigMobs(4.0F));
         }
     }
