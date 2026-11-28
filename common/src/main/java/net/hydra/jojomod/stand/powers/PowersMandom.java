@@ -6,6 +6,7 @@ import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.access.IMob;
 import net.hydra.jojomod.access.IPlayerEntity;
 import net.hydra.jojomod.client.ClientNetworking;
+import net.hydra.jojomod.client.ClientUtil;
 import net.hydra.jojomod.client.StandIcons;
 import net.hydra.jojomod.entity.substand.PurpleSmokeEntity;
 import net.hydra.jojomod.entity.visages.CloneEntity;
@@ -134,6 +135,10 @@ public class PowersMandom extends NewDashPreset {
         return watchStyle;
     }
     public void swapWatchStyle(){
+        //just in case someone will finally make the texture for the gui
+       /* if(isClient()){
+            ClientUtil.openMandomClockUI();
+        }*/
         byte style = getWatchStyle();
         style++;
         if (style > ROLEX){
