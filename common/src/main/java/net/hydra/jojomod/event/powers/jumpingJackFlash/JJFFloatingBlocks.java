@@ -14,6 +14,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -22,6 +23,37 @@ public final class JJFFloatingBlocks {
     public static final String FAKE_TAG = "jjf_zerog_copy";
 
     private JJFFloatingBlocks() {
+    }
+
+    private static final class Releases extends SavedData {
+        private final CompoundTag owners;
+
+        private Releases(CompoundTag owners) {
+            this.owners = owners;
+        }
+
+        @Override
+        public CompoundTag save(CompoundTag tag) {
+            tag.put("Owners", owners.copy());
+            return tag;
+        }
+    }
+
+    private static Releases releases(ServerLevel level) {
+        return level.getServer().overworld().getDataStorage().computeIfAbsent(
+                tag -> new Releases(tag.getCompound("Owners")), () -> new Releases(new CompoundTag()),
+                "roundabout_jjf_block_releases");
+    }
+
+    public static long releaseVersion(ServerLevel level, UUID owner) {
+        return releases(level).owners.getLong(owner.toString());
+    }
+
+    public static void releaseOwnedBlocks(ServerLevel level, UUID owner) {
+        Releases releases = releases(level);
+        String key = owner.toString();
+        releases.owners.putLong(key, releases.owners.getLong(key) + 1);
+        releases.setDirty();
     }
 
     public interface SyncedFloatingBlock {
