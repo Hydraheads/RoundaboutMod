@@ -2575,6 +2575,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (oldStand != null && !oldStand.isRemoved()) {
                     spawnRequiemCrackStage(oldStand, 4);
                 }
+                unlockSkin();
             }
 
             if (this.self instanceof Player player) {
@@ -4469,6 +4470,61 @@ public class PowersGoldExperience extends BlockGrabPreset {
         }
 
         return l;
+    }
+
+    public void unlockSkin() {
+        Level lv = this.getSelf().level();
+        if ((this.getSelf()) instanceof Player PE) {
+            StandUser user = ((StandUser) PE);
+            ItemStack stack = user.roundabout$getStandDisc();
+            if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_GOLD_EXPERIENCE)) {
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                if (!ipe.roundabout$getUnlockedBonusSkin()) {
+                    if (!lv.isClientSide()) {
+                        int chainCount = 0;
+                        // checks inventory for a stack of chains
+                        for (int i = 0; i < PE.getInventory().getContainerSize(); i++) {
+                            ItemStack invStack = PE.getInventory().getItem(i);
+                            if (invStack.is(Items.CHAIN)) {
+                                chainCount += invStack.getCount();
+                                if (chainCount >= 64) {
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (chainCount >= 64) {
+                            ipe.roundabout$setUnlockedBonusSkin(true);
+                            playSoundIfPossible(self.level(), null, PE.getX(), PE.getY(),
+                                    PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                            sendParticlesIfPossible(self.level(), ParticleTypes.END_ROD, PE.getX(),
+                                    PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                                    10, 0.5, 0.5, 0.5, 0.2);
+                            this.standSkin = GoldExperienceEntity.DEIMOS;
+                            user.roundabout$setStandSkin(GoldExperienceEntity.DEIMOS);
+                            ((ServerPlayer) ipe).displayClientMessage(
+                                    Component.translatable("unlock_skin.roundabout.gold_experience.deimos"), true);
+
+                            //consume the chains
+                            int remaining = 64;
+                            for (int i = 0; i < PE.getInventory().getContainerSize(); i++) {
+                                ItemStack invStack = PE.getInventory().getItem(i);
+                                if (invStack.is(Items.CHAIN)) {
+                                    int toRemove = Math.min(remaining, invStack.getCount());
+                                    invStack.shrink(toRemove);
+                                    remaining -= toRemove;
+                                    if (remaining <= 0) {
+                                        break;
+                                    }
+                                }
+                            }
+                            PE.getInventory().setChanged();
+                            PE.inventoryMenu.broadcastChanges();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
