@@ -145,7 +145,10 @@ public class FabricParticles {
     public static final SimpleParticleType VITAL_ESSENCE = FabricParticleTypes.simple();
     public static final SimpleParticleType GE_WAVE = FabricParticleTypes.simple();
     public static final SimpleParticleType GOLDEN_CLOUD = FabricParticleTypes.simple();
-    public static final SimpleParticleType GOLDEN_CLOUD_SMALL = FabricParticleTypes.simple();
+    public static final SimpleParticleType GOLDEN_CLOUD_SMALL_A = FabricParticleTypes.simple();
+    public static final SimpleParticleType GOLDEN_CLOUD_SMALL_B = FabricParticleTypes.simple();
+    public static final SimpleParticleType GOLDEN_CLOUD_SMALL_C = FabricParticleTypes.simple();
+    public static final SimpleParticleType GOLDEN_CLOUD_SMALL_D = FabricParticleTypes.simple();
     public static final ParticleType<GESkinCrackParticleOptions> GE_SKIN_CRACK =
             FabricParticleTypes.complex(GESkinCrackParticleOptions.DESERIALIZER);
     public static final SimpleParticleType REQUIEM_FLARE = FabricParticleTypes.simple();
@@ -285,7 +288,10 @@ public class FabricParticles {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("vital_essence"), VITAL_ESSENCE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ge_wave"), GE_WAVE);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("golden_cloud"), GOLDEN_CLOUD);
-        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("golden_cloud_small"), GOLDEN_CLOUD_SMALL);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("golden_cloud_small_a"), GOLDEN_CLOUD_SMALL_A);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("golden_cloud_small_b"), GOLDEN_CLOUD_SMALL_B);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("golden_cloud_small_c"), GOLDEN_CLOUD_SMALL_C);
+        Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("golden_cloud_small_d"), GOLDEN_CLOUD_SMALL_D);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("ge_skin_crack"), GE_SKIN_CRACK);
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, Roundabout.location("requiem_flare"), REQUIEM_FLARE);
 
@@ -423,7 +429,10 @@ public class FabricParticles {
         ModParticles.VITAL_ESSENCE = VITAL_ESSENCE;
         ModParticles.GE_WAVE = GE_WAVE;
         ModParticles.GOLDEN_CLOUD = GOLDEN_CLOUD;
-        ModParticles.GOLDEN_CLOUD_SMALL = GOLDEN_CLOUD_SMALL;
+        ModParticles.GOLDEN_CLOUD_SMALL_A = GOLDEN_CLOUD_SMALL_A;
+        ModParticles.GOLDEN_CLOUD_SMALL_B = GOLDEN_CLOUD_SMALL_B;
+        ModParticles.GOLDEN_CLOUD_SMALL_C = GOLDEN_CLOUD_SMALL_C;
+        ModParticles.GOLDEN_CLOUD_SMALL_D = GOLDEN_CLOUD_SMALL_D;
         ModParticles.GE_SKIN_CRACK = GE_SKIN_CRACK;
         ModParticles.REQUIEM_FLARE = REQUIEM_FLARE;
 

@@ -2715,10 +2715,19 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
         Vec3 velocity = right.scale(sideSign * speed);
 
-        SimpleParticleType particleType = isBig ? ModParticles.GOLDEN_CLOUD : ModParticles.GOLDEN_CLOUD_SMALL;
+        SimpleParticleType particleType = isBig ? ModParticles.GOLDEN_CLOUD : getRandomSmallGoldenCloud(level);
         sendParticlesIfPossible(level, particleType,
                 spawnPos.x, yPos, spawnPos.z,
                 0, velocity.x, 0.0, velocity.z, 1.0);
+    }
+
+    private SimpleParticleType getRandomSmallGoldenCloud(Level level) {
+        return switch (level.random.nextInt(4)) {
+            case 0 -> ModParticles.GOLDEN_CLOUD_SMALL_A;
+            case 1 -> ModParticles.GOLDEN_CLOUD_SMALL_B;
+            case 2 -> ModParticles.GOLDEN_CLOUD_SMALL_C;
+            default -> ModParticles.GOLDEN_CLOUD_SMALL_D;
+        };
     }
 
     private void spawnRequiemCrackStage(StandEntity stand, int stage) {
