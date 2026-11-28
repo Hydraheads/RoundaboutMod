@@ -470,7 +470,13 @@ public class ForgeParticles {
             () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> GOLDEN_CLOUD = PARTICLES.register("golden_cloud",
             () -> new SimpleParticleType(true));
-    public static final RegistryObject<SimpleParticleType> GOLDEN_CLOUD_SMALL = PARTICLES.register("golden_cloud_small",
+    public static final RegistryObject<SimpleParticleType> GOLDEN_CLOUD_SMALL_A = PARTICLES.register("golden_cloud_small_a",
+            () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> GOLDEN_CLOUD_SMALL_B = PARTICLES.register("golden_cloud_small_b",
+            () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> GOLDEN_CLOUD_SMALL_C = PARTICLES.register("golden_cloud_small_c",
+            () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> GOLDEN_CLOUD_SMALL_D = PARTICLES.register("golden_cloud_small_d",
             () -> new SimpleParticleType(true));
     public static final RegistryObject<ParticleType<GESkinCrackParticleOptions>> GE_SKIN_CRACK =
             PARTICLES.register("ge_skin_crack", () -> createGESkinCrackParticleType(true));
