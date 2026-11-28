@@ -16,10 +16,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -27,11 +30,20 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class StickyIceCoatingBlock
-        extends WhiteAlbumCoatingBlock {
+        extends WhiteAlbumCoatingBlock implements LiquidBlockContainer {
     public StickyIceCoatingBlock(Properties properties) {
         super(properties);
     }
 
+    @Override
+    public boolean canPlaceLiquid(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid) {
+        return false;
+    }
+
+    @Override
+    public boolean placeLiquid(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState, FluidState fluidState) {
+        return false;
+    }
     @SuppressWarnings("deprecation")
     @Override
     public boolean canSurvive(BlockState $$0, LevelReader $$1, BlockPos $$2) {

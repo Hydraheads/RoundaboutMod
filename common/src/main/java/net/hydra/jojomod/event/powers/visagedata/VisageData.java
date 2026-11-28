@@ -1,12 +1,7 @@
 package net.hydra.jojomod.event.powers.visagedata;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.client.models.layers.visages.VisageRenderContext;
 import net.hydra.jojomod.entity.visages.JojoNPC;
 import net.hydra.jojomod.event.powers.visagedata.voicedata.VoiceData;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -193,4 +188,6 @@ public class VisageData {
     public boolean rendersExtraHair() {return false;}
     public boolean rendersExtraHairDetails() {return false;}
     public boolean rendersOyecomovaHat() {return false;}
+    public boolean rendersMagentaCloth() {return false;}
+    public boolean rendersMagentaHat() {return false;}
 }
