@@ -1270,6 +1270,12 @@ public class Config implements Cloneable {
     public static class KingNothingSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableKingNothing;
+        @FloatOption(group = "inherit", value = 64F)
+        public Float mobTrackingRange;
+        @FloatOption(group = "inherit", value = 32F)
+        public Float blockTrackingRange;
+        @FloatOption(group = "inherit", value = 64F, min = -1F)
+        public Float playerTrackingRange;
         @IntOption(group = "inherit", value = 2, min = 1)
         public Integer kingNothingParticleSpawnInterval;
         @BooleanOption(group = "inherit", value = true)

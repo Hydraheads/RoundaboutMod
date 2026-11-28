@@ -1,5 +1,6 @@
 package net.hydra.jojomod.entity.substand;
 
+import net.hydra.jojomod.client.ClientNetworking;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class TrackingCloudEntity extends StandEntity {
 
-    public static final double SPEED = 0.2;
+    public static final double SPEED = 0.3;
 
     public static final byte
             PLAYER = 0,
@@ -61,6 +62,7 @@ public class TrackingCloudEntity extends StandEntity {
                             || entity instanceof LifePunchCloneEntity) && CE.getPlayerUUID().isPresent()
                             && CE.getPlayerUUID().get().equals(PKN.getMemorizedPlayer())));
             if (!list.isEmpty() && PKN.isTrackingMemorizedScent()) {
+                PKN.highlightEntities.removeIf(entity -> !entity.equals(list.get(0)));
                 PKN.highlightEntities.add(list.get(0));
             }
             else {
@@ -69,7 +71,7 @@ public class TrackingCloudEntity extends StandEntity {
         }
         else if (getUser() instanceof Player PE) {
             PKN.highlightEntities.clear();
-            if (PKN.isInBlockGroup(level().getBlockState(blockPosition()).getBlock())) {
+            if (PKN.isInBlockGroup(level().getBlockState(blockPosition()).getBlock()) && PKN.isTrackingMemorizedScent()) {
                 if (!PKN.highlightBPosses.contains(blockPosition())) {
                     PKN.highlightBPosses.add(blockPosition());
                     S2CPacketUtil.knAddItemContainer(PE, blockPosition(), blockPosition());
@@ -82,7 +84,7 @@ public class TrackingCloudEntity extends StandEntity {
                 }
             }
         }
-        if (tickCount % 2 == 1) {
+        if (tickCount % 5 == 1) {
             redirectVector();
         }
         if (!hasTarget) {
@@ -112,7 +114,8 @@ public class TrackingCloudEntity extends StandEntity {
                             && PKC.timeEraseActive && PKC.activeClone != null) {
                         player = PKC.activeClone;
                     }
-                    else if (PowerTypes.isInADifferentExistence(player, this) || distanceTo(player) > 64) {
+                    else if (PowerTypes.isInADifferentExistence(player, this) || distanceTo(player)
+                            > ClientNetworking.getAppropriateConfig().kingNothingSettings.playerTrackingRange) {
                         hasTarget = false;
                         break;
                     }
@@ -129,7 +132,8 @@ public class TrackingCloudEntity extends StandEntity {
                 case MOB -> {
                     Entity closest = null;
                     float closestDist = Float.MAX_VALUE;
-                    List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(64f),
+                    List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(
+                                    ClientNetworking.getAppropriateConfig().kingNothingSettings.mobTrackingRange),
                             entity -> PKN.isInEntityGroup(entity.getType()));
                     for (Entity ent : list) {
                         if (ent == null || ((LivingEntity) ent).isDeadOrDying() || PowerTypes.isInADifferentExistence(
@@ -162,7 +166,8 @@ public class TrackingCloudEntity extends StandEntity {
                     BlockPos closest = null;
                     Vec3 closestPos = null;
                     float closestDist = Float.MAX_VALUE;
-                    AABB $$0 = getBoundingBox().inflate(32f);
+                    AABB $$0 = getBoundingBox().inflate(
+                            ClientNetworking.getAppropriateConfig().kingNothingSettings.blockTrackingRange);
                     Iterable<BlockPos> posList =
                             BlockPos.betweenClosed(Mth.floor($$0.minX), Mth.floor($$0.minY), Mth.floor($$0.minZ),
                                     Mth.floor($$0.maxX), Mth.floor($$0.maxY), Mth.floor($$0.maxZ));

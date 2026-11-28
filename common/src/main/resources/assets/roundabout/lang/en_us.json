@@ -4843,6 +4843,12 @@
   "config.roundabout.kingNothingPhaseMineCd.desc": "The cooldown for Phase Item after Mining a Block.",
   "config.roundabout.kingNothingPhasePlaceCd.name": "Phase Item Place Cooldown",
   "config.roundabout.kingNothingPhasePlaceCd.desc": "The cooldown for Phase Item after Placing a Block.",
+  "config.roundabout.mobTrackingRange.name": "Mob Tracking Range",
+  "config.roundabout.mobTrackingRange.desc": "The range that King Nothing can detect and track mobs in. Higher values can potentially cause lag.",
+  "config.roundabout.playerTrackingRange.name": "Player Tracking Range",
+  "config.roundabout.playerTrackingRange.desc": "The range that King Nothing can detect and track players in. Setting this value to -1 can allow King Nothing to track players from any range.",
+  "config.roundabout.blockTrackingRange.name": "Block Tracking Range",
+  "config.roundabout.blockTrackingRange.desc": "The range that King Nothing can detect and track blocks in. Higher values WILL cause lag.",
 
   "config.roundabout.diverDownAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.diverDownAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",

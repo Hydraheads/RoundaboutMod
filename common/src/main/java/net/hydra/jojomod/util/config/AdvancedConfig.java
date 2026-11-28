@@ -283,7 +283,7 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingBlockFormPredictionsV3 = new HashSet<>(
+    public Set<String> kingNothingBlockFormPredictionsV4 = new HashSet<>(
             Arrays.asList(
                     "minecraft:coal:minecraft:coal_ore",
                     "minecraft:raw_iron:minecraft:iron_ore",
@@ -579,10 +579,17 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:gold_nugget:minecraft:gold_ore",
                     "minecraft:glow_berries:minecraft:cave_vines",
                     "minecraft:sweet_berries:minecraft:sweet_berry_bush",
-                    "roundabout:glass_door:minecraft:glass"
+                    "roundabout:glass_door:minecraft:glass",
+                    "minecraft:hay_block:minecraft:wheat",
+                    "minecraft:honeycomb_block:minecraft:bee_nest",
+                    "minecraft:honeycomb:minecraft:bee_nest",
+                    "minecraft:kelp:minecraft:kelp",
+                    "minecraft:dried_kelp:minecraft:kelp",
+                    "minecraft:dried_kelp_block:minecraft:kelp",
+                    "minecraft:chorus_fruit:minecraft:chorus_plant"
             )
     );
-    public Set<String> kingNothingEntityFormPredictionsV4 = new HashSet<>(
+    public Set<String> kingNothingEntityFormPredictionsV5 = new HashSet<>(
             Arrays.asList(
                     "minecraft:phantom_membrane:minecraft:phantom",
                     "minecraft:wither_skeleton_skull:minecraft:wither_skeleton",
@@ -668,11 +675,12 @@ public class AdvancedConfig implements Cloneable {
                     "minecraft:cooked_beef:minecraft:cow",
                     "minecraft:magma_cream:minecraft:magma_cube",
                     "minecraft:ink_sac:minecraft:squid",
-                    "minecraft:glow_ink_sac:minecraft:glow_squid"
+                    "minecraft:glow_ink_sac:minecraft:glow_squid",
+                    "minecraft:gunpowder:minecraft:creeper"
             )
     );
 
-    public Set<String> kingNothingBlockGroupsV3 = new HashSet<>(
+    public Set<String> kingNothingBlockGroupsV4 = new HashSet<>(
             Arrays.asList(
                     "iron_ore:minecraft:iron_ore",
                     "iron_ore:minecraft:deepslate_iron_ore",
@@ -734,7 +742,11 @@ public class AdvancedConfig implements Cloneable {
                     "melon_stem:minecraft:melon_stem",
                     "melon_stem:minecraft:attached_melon_stem",
                     "pumpkin_stem:minecraft:pumpkin_stem",
-                    "pumpkin_stem:minecraft:attached_pumkin_stem"
+                    "pumpkin_stem:minecraft:attached_pumkin_stem",
+                    "hive:minecraft:bee_hive",
+                    "hive:minecraft:bee_nest",
+                    "kelp:minecraft:kelp_plant",
+                    "kelp:minecraft:kelp"
             )
     );
 
@@ -771,11 +783,12 @@ public class AdvancedConfig implements Cloneable {
             )
     );
 
-    public Set<String> kingNothingBlockSniffOverridesV2 = new HashSet<>(
+    public Set<String> kingNothingBlockSniffOverridesV3 = new HashSet<>(
             Arrays.asList(
                     "minecraft:bamboo_sapling:minecraft:bamboo",
                     "minecraft:attached_melon_stem:minecraft:melon_stem",
-                    "minecraft:attached_pumpkin_stem:minecraft:pumpkin_stem"
+                    "minecraft:attached_pumpkin_stem:minecraft:pumpkin_stem",
+                    "minecraft:kelp_plant:minecraft:kelp"
             )
     );
 

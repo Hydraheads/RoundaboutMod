@@ -654,7 +654,7 @@ public class PowersKingNothing extends NewDashPreset {
                 trackingCloud = null;
                 highlightEntities.clear();
             }
-            if (trackingCloud == null) {
+            if (trackingCloud == null && getSelf().tickCount % 5 == 1) {
                 boolean hasTarget = false;
                 switch (getMemorizedScentType()) {
                     case TrackingCloudEntity.PLAYER -> {
@@ -667,17 +667,19 @@ public class PowersKingNothing extends NewDashPreset {
                                 && PKC.timeEraseActive && PKC.activeClone != null) {
                             player = PKC.activeClone;
                         }
-                        hasTarget = player == null || PowerTypes.isInADifferentExistence(player, this.getSelf()) || player.distanceTo(getSelf()) > 64;
+                        hasTarget = player == null || PowerTypes.isInADifferentExistence(player, this.getSelf()) || player.distanceTo(getSelf()) > ClientNetworking.getAppropriateConfig().kingNothingSettings.playerTrackingRange;
                     }
                     case TrackingCloudEntity.MOB -> {
                         List<Entity> list = this.getSelf().level().getEntities(this.getSelf(),
-                                this.getSelf().getBoundingBox().inflate(64f), entity ->
-                                        isInEntityGroup(entity.getType()) && entity instanceof LivingEntity LE
+                                this.getSelf().getBoundingBox().inflate(
+                                        ClientNetworking.getAppropriateConfig().kingNothingSettings.mobTrackingRange),
+                                entity -> isInEntityGroup(entity.getType()) && entity instanceof LivingEntity LE
                                                 && !LE.isDeadOrDying());
                         hasTarget = !list.isEmpty();
                     }
                     case TrackingCloudEntity.BLOCK -> {
-                        AABB $$0 = getSelf().getBoundingBox().inflate(32f);
+                        AABB $$0 = getSelf().getBoundingBox().inflate(
+                                ClientNetworking.getAppropriateConfig().kingNothingSettings.blockTrackingRange);
                         Iterable<BlockPos> posList =
                                 BlockPos.betweenClosed(Mth.floor($$0.minX), Mth.floor($$0.minY), Mth.floor($$0.minZ),
                                         Mth.floor($$0.maxX), Mth.floor($$0.maxY), Mth.floor($$0.maxZ));
@@ -2109,6 +2111,17 @@ public class PowersKingNothing extends NewDashPreset {
 
     private boolean startItemTracking() {
         if (!getSelf().getMainHandItem().isEmpty() && !onCooldown(PowerIndex.SKILL_1_SNEAK)) {
+            StandEntity stand = getStandEntity(getSelf());
+            if (stand != null) {
+                for (int i = 0; i < 8; i++) {
+                    int color = getParticleColor(getVisualInfo());
+                    MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
+                            ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
+                            stand.getBoundingBox().getCenter().x(), stand.getBoundingBox().getCenter().y(),
+                            stand.getBoundingBox().getCenter().z(), 1,
+                            0.3, 0.3, 0.3, 0.01);
+                }
+            }
             this.trackedItem = getSelf().getMainHandItem().getItem();
             if (getSelf() instanceof ServerPlayer) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 20);
