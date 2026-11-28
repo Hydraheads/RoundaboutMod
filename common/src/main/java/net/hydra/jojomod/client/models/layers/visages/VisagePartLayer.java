@@ -164,6 +164,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 //int whiteAlbumTicks = user.roundabout$getWhiteAlbumVanishTicks();
                 int whiteAlbumTicks = MainUtil.getWornStandVanishticksSafe(user, PowersWhiteAlbum.class);
                 boolean hideExtraPartsWithSuit = false;
+                boolean hideExtraPartsWithCenturyBoy = false;
                 float heyFull = 0;
                 byte skin = user.roundabout$getStandSkin();
                 if (hasWhiteAlbumOut || whiteAlbumTicks > 0){
@@ -220,12 +221,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
 
                 if (MainUtil.getWornStandVanishticksSafe(user, Powers20thCenturyBoy.class) > 0){
                     byte pos = MainUtil.getWornStandIdleSafe(user, Powers20thCenturyBoy.class);
+                    if (!hideExtraPartsWithSuit) {
+                        hideExtraPartsWithCenturyBoy = true; // so lower parts like magenta cloth dont get hidden, which would look off
+                    }
                     if (pos == 0) {
                         hideExtraPartsWithSuit = true;
                     }
                     if (pos == 2) {
                         hideTopHat = true;
                     }
+
                 }
 
                 ItemStack hand = entity.getMainHandItem();
@@ -270,7 +275,7 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                     r, g, b);
                         }
                         if (vd.rendersMagentaCloth() && !isBodyFrozen
-                                && !hideExtraPartsWithSuit) {
+                                && (!hideExtraPartsWithSuit || hideExtraPartsWithCenturyBoy)) {
                             renderMagentaCloth(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
