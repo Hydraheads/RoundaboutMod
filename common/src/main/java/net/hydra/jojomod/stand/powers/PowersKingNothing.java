@@ -403,7 +403,7 @@ public class PowersKingNothing extends NewDashPreset {
                 }
             }
             case 3 -> {
-                if ((isHoldingSneak() && (isTrackingItem()
+                if ((isHoldingSneak() && (isTrackingItem() || isTrackingMemorizedScent()
                         || !(hasFormPrediction(getSelf().getMainHandItem()))))) {
                     return true;
                 }
