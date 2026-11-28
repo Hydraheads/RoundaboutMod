@@ -234,7 +234,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return geConfig().goldExperienceCooldownDNA;
     };
     private final int getAnimalCreationCooldown() {
-        return geConfig().goldExperienceCooldownAnimal;
+        int cooldown = geConfig().goldExperienceCooldownAnimal;
+
+        if(animalType == AnimalTypes.SNAKE.id || animalType == AnimalTypes.PIRAHNA.id || animalType == AnimalTypes.BAT.id) {
+            cooldown += 200;
+        }
+        if(animalType == AnimalTypes.FROG.id || animalType == AnimalTypes.BEE.id) {
+            cooldown += 100;
+        }
+        return cooldown;
     };
     private final int getHealCooldown() {
         return geConfig().goldExperienceCooldownHeal;
@@ -3225,15 +3233,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             EntityType<?> typeToSpawn = getAnimalEntityType(this.animalType);
 
-            int cooldown = getAnimalCreationCooldown();
-
-            if(animalType == AnimalTypes.SNAKE.id || animalType == AnimalTypes.PIRAHNA.id || animalType == AnimalTypes.BAT.id) {
-                cooldown += 200;
-            }
-            if(animalType == AnimalTypes.FROG.id || animalType == AnimalTypes.BEE.id) {
-                cooldown += 100;
-            }
-
             if (typeToSpawn != null) {
                 Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
                 spawnPos = new Vec3(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
@@ -3242,7 +3241,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 ItemStack sourceStack = (isMob) ? ItemStack.EMPTY : handItem;
 
                 if (spawnLifeform(typeToSpawn, spawnPos, sourceStack)) {
-                    setCooldown(PowerIndex.SKILL_2, cooldown);
+                    setCooldown(PowerIndex.SKILL_2, getAnimalCreationCooldown());
                     if (!isMob || !handItem.isEmpty()) {
                         handItem.shrink(1);
                     }
