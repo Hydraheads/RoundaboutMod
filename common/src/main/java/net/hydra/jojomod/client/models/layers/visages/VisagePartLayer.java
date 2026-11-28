@@ -218,11 +218,12 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                 }
                 boolean hideTopHat = false;
 
-                if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity)){
-                    if (user.roundabout$getIdlePos() == 0) {
+                if (MainUtil.getWornStandVanishticksSafe(user, Powers20thCenturyBoy.class) > 0){
+                    byte pos = MainUtil.getWornStandIdleSafe(user, Powers20thCenturyBoy.class);
+                    if (pos == 0) {
                         hideExtraPartsWithSuit = true;
                     }
-                    if (user.roundabout$getIdlePos() == 2) {
+                    if (pos == 2) {
                         hideTopHat = true;
                     }
                 }
