@@ -3839,6 +3839,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                                 mob.getNavigation().stop();
                                 disabledMobTimers.put(LE.getId(), getLifePunchStunDuration());
                             }
+                            ((StandUser)LE).roundabout$sealStand(getLifePunchStunDuration());
                         }
                     }
                     takeDeterminedKnockback(this.self, entity, knockbackStrength);
