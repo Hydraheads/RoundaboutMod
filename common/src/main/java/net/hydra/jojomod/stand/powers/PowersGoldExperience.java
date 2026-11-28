@@ -2841,7 +2841,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
         }
 
-        return growGETreeAt(centerPos, true);
+        if (!growGETreeAt(centerPos, true)) {
+            this.setAttackTimeDuring(-7);
+            return false;
+        }
+        return true;
     }
 
     public boolean growGETreeAt(BlockPos centerPos, boolean fromSkill) {
@@ -2860,9 +2864,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return false;
         }
 
-        BlockPos base = fromSkill
-                ? new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), this.self.blockPosition().getY()), centerPos.getZ())
-                : centerPos;
+        BlockPos base = centerPos;
         Direction growthDirection = Direction.UP;
 
         int maxHeight = geConfig().treeMaxHeight;
@@ -3326,42 +3328,52 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void finishBramble() {
-        if (!this.self.level().isClientSide()) {
-            Level level = this.self.level();
-            Vec3 lookVec = this.self.getLookAngle();
-            Vec3 dir = new Vec3(lookVec.x, 0, lookVec.z).normalize();
+        Level level = this.self.level();
+        Vec3 lookVec = this.self.getLookAngle();
+        Vec3 horiz = new Vec3(lookVec.x, 0, lookVec.z);
+        if (horiz.lengthSqr() < 1.0E-4) {
+            this.setPowerNone();
+            return;
+        }
+        Vec3 dir = horiz.normalize();
 
-            double startX = this.self.getX();
-            double currentY = this.self.getY();
-            double startZ = this.self.getZ();
+        double startX = this.self.getX();
+        double currentY = this.self.getY();
+        double startZ = this.self.getZ();
 
-            int spikeCount = geConfig().brambleAmount;
-            double spacing = 1.3D;
+        int spikeCount = geConfig().brambleAmount;
+        double spacing = 1.3D;
 
-            // Clear any old queued spikes before adding new ones
+        List<BrambleSpawnData> validSpikes = new ArrayList<>();
+        for (int i = 1; i <= spikeCount; i++) {
+            double targetX = startX + dir.x * (i * spacing);
+            double targetZ = startZ + dir.z * (i * spacing);
+
+            BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, currentY, targetZ));
+            if (groundPos == null) {
+                break;
+            }
+
+            currentY = groundPos.getY() + 1.0;
+            validSpikes.add(new BrambleSpawnData(new Vec3(targetX, currentY, targetZ), this.self.getYRot()));
+        }
+
+        if (validSpikes.isEmpty()) {
+            this.setPowerNone();
+            return;
+        }
+
+        if (!level.isClientSide()) {
             pendingBrambles.clear();
             brambleSpawnTimer = 0;
-
-            for (int i = 1; i <= spikeCount; i++) {
-                double targetX = startX + dir.x * (i * spacing);
-                double targetZ = startZ + dir.z * (i * spacing);
-
-                BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, currentY, targetZ));
-                if (groundPos == null) {
-                    break;
-                }
-
-                currentY = groundPos.getY() + 1.0;
-                Vec3 spawnPos = new Vec3(targetX, currentY, targetZ);
-                pendingBrambles.add(new BrambleSpawnData(spawnPos, this.self.getYRot()));
-            }
+            pendingBrambles.addAll(validSpikes);
 
             playSoundIfPossible(level, null, this.self.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
             addEXP(7);
             this.setCooldown(PowerIndex.SKILL_4, getBrambleCooldown());
-            this.setAttackTimeDuring(-5);
         }
+        this.setAttackTimeDuring(-5);
     }
 
     private BlockPos findGroundPosition(Level level, BlockPos start) {
@@ -3601,9 +3613,16 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void finishBushCreation() {
-        if (!this.self.level().isClientSide()) {
-            Level level = this.self.level();
-            BlockPos origin = this.self.blockPosition();
+        Level level = this.self.level();
+        BlockPos origin = this.self.blockPosition();
+        BlockPos startGround = findGroundPosition(level, origin);
+
+        if (startGround == null) {
+            this.setPowerNone();
+            return;
+        }
+
+        if (!level.isClientSide()) {
             BlockState bushState = ModBlocks.GE_BUSH.defaultBlockState();
 
             this.pendingBushes.clear();
@@ -3612,41 +3631,38 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             double radiusSq = getBushRadius() * getBushRadius();
 
-            BlockPos startGround = findGroundPosition(level, origin);
-            if (startGround != null) {
-                Queue<BlockPos> queue = new ArrayDeque<>();
-                Set<Long> visitedColumns = new HashSet<>();
+            Queue<BlockPos> queue = new ArrayDeque<>();
+            Set<Long> visitedColumns = new HashSet<>();
 
-                BlockPos startAir = startGround.above();
-                queue.add(startAir);
-                visitedColumns.add(BlockPos.asLong(startAir.getX(), 0, startAir.getZ()));
+            BlockPos startAir = startGround.above();
+            queue.add(startAir);
+            visitedColumns.add(BlockPos.asLong(startAir.getX(), 0, startAir.getZ()));
 
-                while (!queue.isEmpty()) {
-                    BlockPos current = queue.poll();
-                    double distSq = current.distSqr(origin);
+            while (!queue.isEmpty()) {
+                BlockPos current = queue.poll();
+                double distSq = current.distSqr(origin);
 
-                    if (current.getY() >= origin.getY() - 1
-                            && current.getY() <= origin.getY() + 1
-                            && level.random.nextFloat() <= 0.70F) {
-                        BlockState checkState = level.getBlockState(current);
-                        if (checkState.canBeReplaced()
-                                && !checkState.is(ModBlocks.GE_BUSH)
-                                && bushState.canSurvive(level, current)) {
-                            this.pendingBushes.add(new BushSpawnData(current.immutable(), distSq));
-                        }
+                if (current.getY() >= origin.getY() - 1
+                        && current.getY() <= origin.getY() + 1
+                        && level.random.nextFloat() <= 0.70F) {
+                    BlockState checkState = level.getBlockState(current);
+                    if (checkState.canBeReplaced()
+                            && !checkState.is(ModBlocks.GE_BUSH)
+                            && bushState.canSurvive(level, current)) {
+                        this.pendingBushes.add(new BushSpawnData(current.immutable(), distSq));
                     }
+                }
 
-                    for (Direction dir : Direction.Plane.HORIZONTAL) {
-                        BlockPos nextCol = current.relative(dir);
-                        long colKey = BlockPos.asLong(nextCol.getX(), 0, nextCol.getZ());
-                        if (visitedColumns.contains(colKey)) continue;
-                        if (nextCol.distSqr(origin) > radiusSq) continue;
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    BlockPos nextCol = current.relative(dir);
+                    long colKey = BlockPos.asLong(nextCol.getX(), 0, nextCol.getZ());
+                    if (visitedColumns.contains(colKey)) continue;
+                    if (nextCol.distSqr(origin) > radiusSq) continue;
 
-                        visitedColumns.add(colKey);
-                        BlockPos nextGround = findGroundPosition(level, nextCol);
-                        if (nextGround != null) {
-                            queue.add(nextGround.above());
-                        }
+                    visitedColumns.add(colKey);
+                    BlockPos nextGround = findGroundPosition(level, nextCol);
+                    if (nextGround != null) {
+                        queue.add(nextGround.above());
                     }
                 }
             }
@@ -3667,8 +3683,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             addEXP(5);
             this.setCooldown(PowerIndex.GENERAL_4, getBushCooldown());
-            this.setAttackTimeDuring(-8);
         }
+        this.setAttackTimeDuring(-8);
     }
 
     protected int getBushRadius() {
