@@ -1038,7 +1038,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
             lifePunchImpact(target);
         }
         else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
-            boolean isSecondHit = this.attackTimeDuring >= 10;
+            boolean isSecondHit = this.dualPunchSecondHit;
+            this.dualPunchSecondHit = true;
             dualPunchImpact(target, isSecondHit);
         }
     }
@@ -1061,13 +1062,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (keyIsDown) {
                 if (!isHoldingSneak()) {
                     super.buttonInputAttack(keyIsDown, options);
-                } else {
-                    if (this.canAttack()) {
-                        this.tryPower(PowerIndex.SNEAK_ATTACK, true);
-                        tryPowerPacket(PowerIndex.SNEAK_ATTACK);
-                    } else {
-                        super.buttonInputAttack(keyIsDown, options);
-                    }
+                } else if (this.canAttack() && this.getActivePower() != PowerIndex.SNEAK_ATTACK) {
+                    this.tryPower(PowerIndex.SNEAK_ATTACK, true);
+                    tryPowerPacket(PowerIndex.SNEAK_ATTACK);
                 }
             }
         }
@@ -3096,9 +3093,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // 1-2 sneak attack punch start
 
     // god i hate doing attacks
+    private boolean dualPunchSecondHit = false;
+
     private boolean executeDualPunch() {
+        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
+            return false;
+        }
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
+            this.dualPunchSecondHit = false;
             this.activePowerPhase = this.getActivePowerPhaseMax();
             this.attackTimeDuring = 0;
             this.attackTimeMax = ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown;
@@ -3180,6 +3183,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         float pitch = 1.0F;
         float volume = 0.95F;
         if (isSecondHit) {
+            this.attackTimeDuring = -10;
             if (!this.self.level().isClientSide()) {
                 playTheLastHitSound();
             }
@@ -3211,7 +3215,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // animal creation (X) start
 
     private void tryMakeAnimalClient() {
-        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+        if (!this.onCooldown(PowerIndex.SKILL_2) && isHoldingItem()) {
             int animalClientConfig = 1;
             ClientConfig clientConfig = ConfigManager.getClientConfig();
             if (clientConfig != null && clientConfig.dynamicSettings != null) {
