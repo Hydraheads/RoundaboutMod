@@ -1594,6 +1594,10 @@ public class ModSounds {
     public static final ResourceLocation SILVER_CHARIOT_RAPIER_SLASH_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_RAPIER_SLASH);
     public static SoundEvent SILVER_CHARIOT_RAPIER_SLASH_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_RAPIER_SLASH_ID);
 
+    public static final String SILVER_CHARIOT_RAPIER_SLASH_ENTITY_HIT = "silver_chariot_rapier_slash_entity_hit";
+    public static final ResourceLocation SILVER_CHARIOT_RAPIER_SLASH_ENTITY_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_RAPIER_SLASH_ENTITY_HIT);
+    public static SoundEvent SILVER_CHARIOT_RAPIER_SLASH_ENTITY_HIT_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_RAPIER_SLASH_ENTITY_HIT_ID);
+
     public static final String SILVER_CHARIOT_OFFHAND_WEAPON_HIT = "silver_chariot_offhand_weapon_hit";
     public static final ResourceLocation SILVER_CHARIOT_OFFHAND_WEAPON_HIT_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_OFFHAND_WEAPON_HIT);
     public static SoundEvent SILVER_CHARIOT_OFFHAND_WEAPON_HIT_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_OFFHAND_WEAPON_HIT_ID);
@@ -1665,6 +1669,14 @@ public class ModSounds {
     public static final String SILVER_CHARIOT_REBOUND = "silver_chariot_rebound";
     public static final ResourceLocation SILVER_CHARIOT_REBOUND_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_REBOUND);
     public static SoundEvent SILVER_CHARIOT_REBOUND_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_REBOUND_ID);
+
+    public static final String SILVER_CHARIOT_WHIFF_1 = "silver_chariot_whiff_1";
+    public static final ResourceLocation SILVER_CHARIOT_WHIFF_1_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_WHIFF_1);
+    public static SoundEvent SILVER_CHARIOT_WHIFF_1_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_WHIFF_1_ID);
+
+    public static final String SILVER_CHARIOT_WHIFF_2 = "silver_chariot_whiff_2";
+    public static final ResourceLocation SILVER_CHARIOT_WHIFF_2_ID = new ResourceLocation(Roundabout.MOD_ID+":"+SILVER_CHARIOT_WHIFF_2);
+    public static SoundEvent SILVER_CHARIOT_WHIFF_2_EVENT = SoundEvent.createVariableRangeEvent(SILVER_CHARIOT_WHIFF_2_ID);
 
     public static final String RATT_SUMMON = "ratt_summon";
     public static final ResourceLocation RATT_SUMMON_ID = new ResourceLocation(Roundabout.MOD_ID+":"+RATT_SUMMON);

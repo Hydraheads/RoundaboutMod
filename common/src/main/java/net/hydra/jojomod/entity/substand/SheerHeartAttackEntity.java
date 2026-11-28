@@ -452,7 +452,7 @@ public class SheerHeartAttackEntity extends StandEntity {
 							}
 
 							if (ent instanceof LivingEntity LE) {
-								DamageSource dmg = ModDamageTypes.of(LE.level(), ModDamageTypes.STAND);
+								DamageSource dmg = ModDamageTypes.of(LE.level(), ModDamageTypes.STAND, user);
 
 
 								if (getEntityWarm(LE) > 0 && throwDamageCooldown <= 0) {

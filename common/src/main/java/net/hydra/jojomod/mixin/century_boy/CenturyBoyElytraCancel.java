@@ -18,12 +18,10 @@ public class CenturyBoyElytraCancel {
 
 
     @Inject(method = "updateFallFlying", at=@At("HEAD"), cancellable = true)
-    private void FallFlying(CallbackInfo ci) {
+    private void roundabout$FallFlying(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity instanceof StandUser user && user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy PCB) {
             if (PCB.invincibleState) {
-                Roundabout.LOGGER.info("aawdawd");
-//                entity.setSharedFlag(7, false);
                 ci.cancel();
             }
 

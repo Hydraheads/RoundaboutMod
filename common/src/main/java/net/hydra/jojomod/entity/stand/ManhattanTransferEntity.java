@@ -176,6 +176,24 @@ public class ManhattanTransferEntity extends StandEntity {
         this.entityData.set(HELD_ITEM_MANHATTAN, stack);
     }
 
+    public byte getKeyPress() {
+        return this.entityData.get(KEY_PRESS);
+    }
+    public void setKeyPress(Byte d) {
+        this.entityData.set(KEY_PRESS, d);
+    }
+    protected static final EntityDataAccessor<Byte> KEY_PRESS = SynchedEntityData.defineId(ManhattanTransferEntity.class,
+            EntityDataSerializers.BYTE);
+
+    public byte getFloatingDirection() {
+        return this.entityData.get(FLOATING_DIRECTION);
+    }
+    public void setFloatingDirection(Byte d) {
+        this.entityData.set(FLOATING_DIRECTION, d);
+    }
+    protected static final EntityDataAccessor<Byte> FLOATING_DIRECTION = SynchedEntityData.defineId(ManhattanTransferEntity.class,
+            EntityDataSerializers.BYTE);
+
     @Override
     protected void defineSynchedData() {
         if (!this.entityData.hasItem(HELD_ITEM_MANHATTAN)) {
@@ -183,6 +201,8 @@ public class ManhattanTransferEntity extends StandEntity {
             this.entityData.define(HELD_ITEM_MANHATTAN, ItemStack.EMPTY);
             this.entityData.define(HELD_ITEM_MANHATTAN_FULL, ItemStack.EMPTY);
             this.entityData.define(MANHATTAN_TARGET, 0);
+            this.entityData.define(KEY_PRESS,(byte) -1);
+            this.entityData.define(FLOATING_DIRECTION,(byte) 1);
         }
     }
 
@@ -611,16 +631,15 @@ public class ManhattanTransferEntity extends StandEntity {
     public Vec2 getStrangeVector() {
         if (this.getUser() != null && this.getUserData(this.getUser()) != null && this.getUserData(this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
             if (this.level().isClientSide) {
-                if (isKeyEverPressed) {
-                    if (verticalLastPressed) {
-                        if (pressS) {
+                    if (getFloatingDirection() == 3 || getFloatingDirection() == 1) {
+                        if (getFloatingDirection() == 3) {
                             if (this.getXRot() < 15 || this.getXRot() > -15) {
                                 return new Vec2(this.getXRot() * -1 + heighHattanPilotNoMov, this.getYRot() - 180);
                             } else {
                                 return new Vec2(this.getXRot() * -1, this.getYRot() - 180);
                             }
                         }
-                        if (!pressS) {
+                        if (getFloatingDirection() == 1) {
                             if (this.getXRot() < 15 || this.getXRot() > -15) {
                                 return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
                             } else {
@@ -628,23 +647,13 @@ public class ManhattanTransferEntity extends StandEntity {
                             }
                         }
                     } else {
-                        if (pressA) {
-                            ;
+                        if (getFloatingDirection() == 4) {
                             return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot() - 90);
                         }
-                        if (!pressA) {
+                        if (getFloatingDirection() == 2) {
                             return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot() + 90);
                         }
                     }
-                } else {
-                    if (stupidTicks < 1) {
-                        if (this.getXRot() < 15 || this.getXRot() > -15) {
-                            return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
-                        } else {
-                            return new Vec2(this.getXRot(), this.getYRot());
-                        }
-                    }
-                }
             }
         }
         return new Vec2(this.getXRot() + heighHattanPilotNoMov, this.getYRot());
@@ -795,84 +804,65 @@ public class ManhattanTransferEntity extends StandEntity {
             }
         }
 
-        if (this.getUser() != null && ((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
+        if (this.getUser() != null && this.getUser() instanceof Player && ((StandUser) this.getUser()).roundabout$getStandPowers() instanceof PowersManhattanTransfer PM) {
             if (PM.isClient()) {
                 Options options = Minecraft.getInstance().options;
-                if (PM.isPiloting()) {
-                    if (options.keyDown.isDown() || options.keyUp.isDown() || options.keyLeft.isDown() || options.keyRight.isDown()) {
-                        isKeyEverPressed = true;
+                Player player = Minecraft.getInstance().player;
+                if (PM.isPiloting() && player.is(this.getUser())) {
+                    boolean a = options.keyUp.isDown();
+                    boolean b = options.keyDown.isDown();
+                    boolean c = options.keyLeft.isDown();
+                    boolean d = options.keyRight.isDown();
+
+                    if(!(a || b || c || d)){
+                        PM.syncHattanInput((byte)-1);
                     }
-                    if (options.keyUp.isDown()) {
-                        W = true;
-                        pressS = false;
-                        pressA = false;
-                        verticalLastPressed = true;
-                        this.setHatAnimDir = 1;
+                    if(a && b && c && d){
+                        PM.syncHattanInput((byte)0);
+                        PM.syncHattanDirection((byte)1);
                     }
-                    if (!options.keyUp.isDown()) {
-                        W = false;
+                    if(a && b && !(c||d)){
+                        PM.syncHattanInput((byte)0);
+                        PM.syncHattanDirection((byte)1);
                     }
-                    if (options.keyDown.isDown()) {
-                        S = true;
-                        pressS = true;
-                        pressA = false;
-                        verticalLastPressed = true;
-                        this.setHatAnimDir = 2;
-                    }
-                    if (!options.keyDown.isDown()) {
-                        S = false;
+                    if(c && d && !(a||b)){
+                        PM.syncHattanInput((byte)0);
+                        PM.syncHattanDirection((byte)1);
                     }
 
-                    if ((options.keyUp.isDown() && options.keyDown.isDown())) {
-                        W = false;
-                        S = false;
-                        pressS = false;
-                        pressA = false;
-                        verticalLastPressed = true;
-                        this.setHatAnimDir = 1;
+                    if(a && d && !(b && d)){
+                        PM.syncHattanInput((byte)1);
+                        PM.syncHattanDirection((byte)1);
+                    }
+                    if(b && c && !(a && d)){
+                        PM.syncHattanInput((byte)5);
+                        PM.syncHattanDirection((byte)1);
+                    }
+                    if(b && d && !(a && c)){
+                        PM.syncHattanInput((byte)3);
+                        PM.syncHattanDirection((byte)2);
+                    }
+                    if(a && c && !(b && c)){
+                        PM.syncHattanInput((byte)7);
+                        PM.syncHattanDirection((byte)1);
                     }
 
-                    if(options.keyLeft.isDown() && options.keyRight.isDown()){
-                        A = false;
-                        D = false;
-                        pressS = false;
-                        pressA = false;
-                        verticalLastPressed = true;
-                        this.setHatAnimDir = 1;
+                    if(a && !(b || c ||d)){
+                        PM.syncHattanInput((byte)0);
+                        PM.syncHattanDirection((byte)1);
                     }
-
-                    if((options.keyUp.isDown() && options.keyDown.isDown() && (options.keyLeft.isDown() && options.keyRight.isDown()))){
-                        W = false;
-                        A = false;
-                        S = false;
-                        D = false;
-                        pressS = false;
-                        pressA = false;
-                        verticalLastPressed = true;
-                        this.setHatAnimDir = 1;
+                    else if (b && !(a || c ||d)){
+                        PM.syncHattanInput((byte)4);
+                        PM.syncHattanDirection((byte)3);
                     }
-
-                    if (options.keyLeft.isDown() && !options.keyRight.isDown()) {
-                        A = true;
-                        pressA = true;
-                        pressS = false;
-                        verticalLastPressed = false;
-                        this.setHatAnimDir = 3;
+                    else if (c && !(b || a ||d)){
+                        PM.syncHattanInput((byte)6);
+                        PM.syncHattanDirection((byte)4);
                     }
-                    if (!options.keyLeft.isDown()) {
-                        A = false;
+                    else if (d && !(b || c ||a)){
+                        PM.syncHattanInput((byte)2);
+                        PM.syncHattanDirection((byte)2);
                     }
-                    if (options.keyRight.isDown() && !options.keyLeft.isDown()) {
-                        D = true;
-                        pressA = false;
-                        pressS = false;
-                        verticalLastPressed = false;
-                        this.setHatAnimDir = 4;
-                    }
-                    if (!options.keyRight.isDown()) {
-                        D = false;
-                    }
-
                 }
             }
         }
@@ -1041,11 +1031,6 @@ public class ManhattanTransferEntity extends StandEntity {
     public  boolean S = false;
     public  boolean D = false;
 
-    public  boolean pressS = false;
-    public  boolean pressA = false;
-
-    public  boolean verticalLastPressed = true;
-
     public  boolean isPressing = false;
 
     @Override
@@ -1082,63 +1067,57 @@ public class ManhattanTransferEntity extends StandEntity {
 
         if (this.level().isClientSide) {
             if (!this.isInRain()) {
-                if ((W || A || S || D) && isHattanPilotMode) {
+                if(isHattanPilotMode && (getKeyPress() != -1)){
                     isPressing = true;
-                } else if ((W && S) || (A && D)){
-                    isPressing = false;
-                }else {
+                } else {
                     isPressing = false;
                 }
                 rd.stop();
                 if (!this.stopsManhattanAnimationsWhenHeldItem) {
                     loaded.stop();
-                    if (isPressing) {
+                    if (getKeyPress() != -1) {
                         forSlow.stop();
                         backSlow.stop();
                         leftSlow.stop();
                         rightSlow.stop();
-                        if (W) {
+                        if (getKeyPress() == 1 || getKeyPress() == 0 || getKeyPress() == 7) {
                             backLoop.stop();
                             forStop.stop();
                             forBeg.startIfStopped(this.tickCount);
                             forLoop.startIfStopped(this.tickCount);
-                        }
-                        if (!W) {
+                        } else {
                             forBeg.stop();
                             forLoop.stop();
                             forStop.startIfStopped(this.tickCount);
                         }
-                        if (S) {
+                        if (getKeyPress() == 4 || getKeyPress() == 3 || getKeyPress() == 5) {
                             forLoop.stop();
                             backStop.stop();
                             backBeg.startIfStopped(this.tickCount);
                             backLoop.startIfStopped(this.tickCount);
-                        }
-                        if (!S) {
+                        } else {
                             backLoop.stop();
                             backBeg.stop();
                             backStop.startIfStopped(this.tickCount);
                         }
 
-                        if (A) {
+                        if (getKeyPress() == 6 || getKeyPress() == 5 || getKeyPress() == 7) {
                             rightLoop.stop();
                             leftStop.stop();
                             leftBeg.startIfStopped(this.tickCount);
                             leftLoop.startIfStopped(this.tickCount);
-                        }
-                        if (!A) {
+                        } else {
                             leftBeg.stop();
                             leftLoop.stop();
                             leftStop.startIfStopped(this.tickCount);
                         }
 
-                        if (D) {
+                        if (getKeyPress() == 1 || getKeyPress() == 2 || getKeyPress() == 3) {
                             leftLoop.stop();
                             rightStop.stop();
                             rightBeg.startIfStopped(this.tickCount);
                             rightLoop.startIfStopped(this.tickCount);
-                        }
-                        if (!D) {
+                        } else {
                             rightBeg.stop();
                             rightLoop.stop();
                             rightStop.startIfStopped(this.tickCount);
@@ -1173,25 +1152,25 @@ public class ManhattanTransferEntity extends StandEntity {
                             rightStop.startIfStopped(this.tickCount);
                         }
 
-                        if (setHatAnimDir == 1) {
+                        if (getFloatingDirection() == 1) {
                             forSlow.startIfStopped(this.tickCount);
                             backSlow.stop();
                             leftSlow.stop();
                             rightSlow.stop();
                         }
-                        if (setHatAnimDir == 2) {
+                        if (getFloatingDirection() == 3) {
                             backSlow.startIfStopped(this.tickCount);
                             leftSlow.stop();
                             rightSlow.stop();
                             forSlow.stop();
                         }
-                        if (setHatAnimDir == 3) {
+                        if (getFloatingDirection() == 4) {
                             leftSlow.startIfStopped(this.tickCount);
                             rightSlow.stop();
                             forSlow.stop();
                             backSlow.stop();
                         }
-                        if (setHatAnimDir == 4) {
+                        if (getFloatingDirection() == 2) {
                             rightSlow.startIfStopped(this.tickCount);
                             leftSlow.stop();
                             backSlow.stop();

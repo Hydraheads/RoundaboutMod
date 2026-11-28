@@ -13,6 +13,7 @@ import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.item.FleshBucketItem;
 import net.hydra.jojomod.item.GlaiveItem;
 import net.hydra.jojomod.item.KnifeItem;
+import net.hydra.jojomod.item.ScissorItem;
 import net.hydra.jojomod.particles.ColorParticleOptions;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.PowersCatchTheRainbow;
@@ -475,7 +476,7 @@ public class SeperatedArmEntity extends StandEntity {
                             }
                         }
 
-                        Can_activate_special = false;
+
                     }doAttack();
                 }
                 attractMobs();
@@ -629,6 +630,7 @@ public class SeperatedArmEntity extends StandEntity {
         }else{
             hasUsedItem = false;
             this.getHeldItem();
+            Can_activate_special = false;
         }
     }
 
@@ -734,6 +736,12 @@ public class SeperatedArmEntity extends StandEntity {
                         else {
                             this.getMainHandItem().hurt(1, this.level().getRandom(), null);
                         }
+                    }
+                }
+
+                if(item instanceof ScissorItem){
+                    if (MainUtil.getMobBleed(entity)) {
+                        MainUtil.makeBleed(entity, 0, 400, getUser());
                     }
                 }
 
