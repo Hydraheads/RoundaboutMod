@@ -1285,14 +1285,21 @@ public class PowersPurpleHaze extends NewPunchingStand {
             return;
         }
 
-
         if (!canExecuteMoveWithLevel(getPodRegenLevel())) {
             podRechargeTicks = 0;
+            if (wasRecharging) {
+                wasRecharging = false;
+                S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.POWER_4_BONUS, 0);
+            }
             return;
         }
 
         if (getPods() >= MAX_PODS) {
             podRechargeTicks = 0;
+            if (wasRecharging) {
+                wasRecharging = false;
+                S2CPacketUtil.sendIntPowerDataPacket(PL, PowerIndex.POWER_4_BONUS, 0);
+            }
             return;
         }else if (!wasRecharging) {
             wasRecharging = true;
