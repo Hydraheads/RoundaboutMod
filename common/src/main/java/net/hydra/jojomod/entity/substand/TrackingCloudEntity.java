@@ -1,6 +1,5 @@
 package net.hydra.jojomod.entity.substand;
 
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.entity.KingCrimsonCloneEntity;
 import net.hydra.jojomod.entity.LifePunchCloneEntity;
 import net.hydra.jojomod.entity.stand.StandEntity;
@@ -9,7 +8,9 @@ import net.hydra.jojomod.event.index.PowerTypes;
 import net.hydra.jojomod.event.powers.StandUser;
 import net.hydra.jojomod.stand.powers.PowersKingCrimson;
 import net.hydra.jojomod.stand.powers.PowersKingNothing;
+import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,8 +18,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -34,6 +35,8 @@ public class TrackingCloudEntity extends StandEntity {
             BLOCK = 2;
 
     private boolean hasTarget = false;
+    Entity targetEntity = null;
+    BlockPos targetBPos = null;
 
     public TrackingCloudEntity(
             EntityType<? extends Mob> entityType,
@@ -57,21 +60,26 @@ public class TrackingCloudEntity extends StandEntity {
                             || (entity instanceof CloneEntity CE && (entity instanceof KingCrimsonCloneEntity
                             || entity instanceof LifePunchCloneEntity) && CE.getPlayerUUID().isPresent()
                             && CE.getPlayerUUID().get().equals(PKN.getMemorizedPlayer())));
-            if (!list.isEmpty()) {
-                PKN.setTrackedEntity(list.get(0));
+            if (!list.isEmpty() && PKN.isTrackingMemorizedScent()) {
+                PKN.highlightEntities.add(list.get(0));
             }
             else {
-                PKN.clearTrackedEntity();
+                PKN.highlightEntities.clear();
             }
         }
-        else {
-            PKN.clearTrackedEntity();
+        else if (getUser() instanceof Player PE) {
+            PKN.highlightEntities.clear();
             if (PKN.isInBlockGroup(level().getBlockState(blockPosition()).getBlock())) {
-
-                // PKN.setTrackedBlockPos(blockPosition());
+                if (!PKN.highlightBPosses.contains(blockPosition())) {
+                    PKN.highlightBPosses.add(blockPosition());
+                    S2CPacketUtil.knAddItemContainer(PE, blockPosition(), blockPosition());
+                }
             }
-            else {
-                // PKN.clearTrackedBlockPos();
+            else if (!level().isClientSide) {
+                if (PKN.highlightBPosses.contains(blockPosition())) {
+                    PKN.highlightBPosses.remove(blockPosition());
+                    S2CPacketUtil.knRemoveItemContainer(PE, blockPosition());
+                }
             }
         }
         if (tickCount % 2 == 1) {
@@ -88,6 +96,8 @@ public class TrackingCloudEntity extends StandEntity {
         if (((StandUser) getUser()).roundabout$getStandPowers() instanceof PowersKingNothing PKN) {
             byte memorizedScentType = PKN.getMemorizedScentType();
             Vec3 targetPos = null;
+            Entity oldTargetEnt = targetEntity;
+            BlockPos oldTargetBPos = targetBPos;
             switch (memorizedScentType) {
                 case PLAYER -> {
                     Entity player = this.level().getPlayerByUUID(PKN.getMemorizedPlayer());
@@ -107,6 +117,13 @@ public class TrackingCloudEntity extends StandEntity {
                         break;
                     }
                     targetPos = player.getBoundingBox().getCenter();
+                    targetEntity = player;
+                    if (!targetEntity.equals(oldTargetEnt)) {
+                        // FIND BETTER SOUND
+                        if (this.getUser() instanceof ServerPlayer pl) {
+                            S2CPacketUtil.sendPlaySoundPacket(pl, this.getUser().getId(), PowersKingNothing.FOUND_ITEM);
+                        }
+                    }
                     hasTarget = true;
                 }
                 case MOB -> {
@@ -131,11 +148,19 @@ public class TrackingCloudEntity extends StandEntity {
                     }
                     else {
                         targetPos = closest.getBoundingBox().getCenter();
+                        targetEntity = closest;
+                        if (!targetEntity.equals(oldTargetEnt)) {
+                            // FIND BETTER SOUND
+                            if (this.getUser() instanceof ServerPlayer pl) {
+                                S2CPacketUtil.sendPlaySoundPacket(pl, this.getUser().getId(), PowersKingNothing.FOUND_ITEM);
+                            }
+                        }
                         hasTarget = true;
                     }
                 }
                 case BLOCK -> {
-                    Vec3 closest = null;
+                    BlockPos closest = null;
+                    Vec3 closestPos = null;
                     float closestDist = Float.MAX_VALUE;
                     AABB $$0 = getBoundingBox().inflate(32f);
                     Iterable<BlockPos> posList =
@@ -144,15 +169,23 @@ public class TrackingCloudEntity extends StandEntity {
                     for (BlockPos pos : posList) {
                         if (!PKN.isInBlockGroup(level().getBlockState(pos).getBlock())) continue;
                         if (distanceToSqr(pos.getCenter()) < closestDist) {
-                            closest = pos.getCenter();
+                            closestPos = pos.getCenter();
+                            closest = new BlockPos(pos);
                             closestDist = (float) distanceToSqr(pos.getCenter());
                         }
                     }
-                    if (closest == null) {
+                    if (closestPos == null) {
                         hasTarget = false;
                     }
                     else {
-                        targetPos = closest;
+                        targetPos = closestPos;
+                        targetBPos = closest;
+                        if (!targetBPos.equals(oldTargetBPos)) {
+                            // FIND BETTER SOUND
+                            if (this.getUser() instanceof ServerPlayer pl) {
+                                S2CPacketUtil.sendPlaySoundPacket(pl, this.getUser().getId(), PowersKingNothing.FOUND_ITEM);
+                            }
+                        }
                         hasTarget = true;
                     }
                 }
