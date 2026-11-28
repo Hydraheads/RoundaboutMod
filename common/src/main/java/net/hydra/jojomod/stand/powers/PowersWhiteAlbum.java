@@ -616,7 +616,7 @@ public class PowersWhiteAlbum extends NewDashPreset {
     }
 
     public static int getMaxAccelerationTicks(){
-        return ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumMaxAcceleration;
+        return Math.max(ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumMaxAcceleration,1);
     }
     /**Add Knockback to attacks when appropriate. This replaces the knockback enchant if it is
      * higher than the knockback enchant*/
