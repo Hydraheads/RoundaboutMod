@@ -1403,6 +1403,7 @@ public class PowersKingNothing extends NewDashPreset {
             this.foundItemYet = false;
             this.highlightEntities.clear();
             this.highlightBPosses.clear();
+            this.highlightBPosPairs.clear();
             disintegrateAnimTicks = 0;
             if (getSelf() instanceof ServerPlayer) {
                 S2CPacketUtil.sendCooldownSyncPacket(((ServerPlayer) this.getSelf()), PowerIndex.SKILL_1_SNEAK, 20);
@@ -1428,6 +1429,7 @@ public class PowersKingNothing extends NewDashPreset {
             }
             this.highlightEntities.clear();
             this.highlightBPosses.clear();
+            this.highlightBPosPairs.clear();
             playSoundsIfNearby(SoundIndex.SUMMON_SOUND, 27, false);
             animateStand(KingNothingEntity.RETURN);
             returnAnimTicks = 0;
@@ -2007,6 +2009,15 @@ public class PowersKingNothing extends NewDashPreset {
                     int id = BuiltInRegistries.ENTITY_TYPE.getId(potentialEntity);
                     S2CPacketUtil.sendGenericIntToClientPacket(PE, PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_ENTITY, id);
                 }
+                return true;
+            }
+            if (stack.getItem() instanceof BlockItem BI && isMemorizableBlock(BI.getBlock())) {
+                this.setMemorizedScent(BI.getBlock());
+                if (getSelf() instanceof Player PE) {
+                    int id = BuiltInRegistries.BLOCK.getId(BI.getBlock());
+                    S2CPacketUtil.sendGenericIntToClientPacket(PE, PacketDataIndex.S2C_KN_SYNC_FORM_PREDICT_BLOCK, id);
+                    PE.displayClientMessage(BI.getBlock().getName().withStyle(ChatFormatting.DARK_PURPLE), true);
+                }
             }
         }
         return true;
@@ -2017,7 +2028,8 @@ public class PowersKingNothing extends NewDashPreset {
             stack = PowersGoldExperience.getDisguisedDisplayStack(stack);
         }
         Item item = stack.getItem();
-        return getEntityFormPrediction(item) != null || getBlockFormPrediction(item) != null;
+        return getEntityFormPrediction(item) != null || getBlockFormPrediction(item) != null || (
+                stack.getItem() instanceof BlockItem BI && isMemorizableBlock(BI.getBlock()));
     }
 
     public EntityType<?> getEntityFormPrediction(Item item) {
