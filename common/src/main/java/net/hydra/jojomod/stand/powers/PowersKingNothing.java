@@ -708,9 +708,9 @@ public class PowersKingNothing extends NewDashPreset {
                     MainUtil.sendParticlesIfPossible(getSelf(), getSelf().level(),
                             ColorParticleOptions.fromPackedColor(ModParticles.PUZZLE_PARTICLE, color),
                             trackingCloud.getX(), trackingCloud.getY(), trackingCloud.getZ(), 1,
-                            trackingCloud.isInsideTrackedBlock() ? 0.35 : 0.3,
-                            trackingCloud.isInsideTrackedBlock() ? 0.35 : 0.3,
-                            trackingCloud.isInsideTrackedBlock() ? 0.35 : 0.3, 0.01);
+                            trackingCloud.isInBlock() ? 0.35 : 0.3,
+                            trackingCloud.isInBlock() ? 0.35 : 0.3,
+                            trackingCloud.isInBlock() ? 0.35 : 0.3, 0.01);
                 }
             }
         }
