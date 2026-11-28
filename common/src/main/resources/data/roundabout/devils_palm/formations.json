@@ -1,0 +1,6 @@
+{
+  "formations": [
+    {"name": "open_palm_large", "ground_offset": 12, "arena_radius": 30, "weight": 65},
+    {"name": "curled_palm_large", "ground_offset": 12, "arena_radius": 28, "weight": 35}
+  ]
+}

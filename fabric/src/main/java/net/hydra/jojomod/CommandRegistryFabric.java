@@ -12,8 +12,10 @@ import net.minecraft.server.commands.ExperienceCommand;
 
 public class CommandRegistryFabric {
     public static void register() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
-                RoundaboutDiscCommand.register(dispatcher));
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            RoundaboutDiscCommand.register(dispatcher);
+            net.hydra.jojomod.devilspalm.DevilsPalmCommands.register(dispatcher);
+        });
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(dispatcher.register((((Commands.literal("heal").requires(source

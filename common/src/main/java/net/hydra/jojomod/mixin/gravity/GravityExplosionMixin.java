@@ -65,6 +65,13 @@ public abstract class GravityExplosionMixin {
 
     @Shadow @Final private ObjectArrayList<BlockPos> toBlow;
 
+    @Inject(method = "finalizeExplosion", at = @At("HEAD"))
+    private void rdbt$protectPalmExplosion(boolean particles, CallbackInfo ci) {
+        if (level instanceof net.minecraft.server.level.ServerLevel server) {
+            toBlow.removeIf(pos -> net.hydra.jojomod.devilspalm.DevilsPalmTerrain.blocksChange(server, pos));
+        }
+    }
+
     @Unique
     public Explosion rdbt$this(){
         return ((Explosion) (Object) this);

@@ -36,6 +36,13 @@ import static net.hydra.jojomod.registry.ForgeItems.ITEMS;
 public class ForgeBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Roundabout.MOD_ID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Roundabout.MOD_ID);
+    static {
+        for (String name : net.hydra.jojomod.devilspalm.DevilsPalmBlocks.IDS) {
+            BLOCKS.register(net.hydra.jojomod.devilspalm.DevilsPalmBlocks.id(name),
+                    () -> net.hydra.jojomod.devilspalm.DevilsPalmBlocks.create(name));
+        }
+    }
+
     public static final RegistryObject<HallucinatoryAcidBlock> HALLUCINATORY_ACID = BLOCKS.register(
             "hallucinatory_acid", () -> new HallucinatoryAcidBlock(BlockBehaviour.Properties.of()
                     .noCollission().noOcclusion().strength(1.0F, 6.0F).noLootTable().randomTicks()

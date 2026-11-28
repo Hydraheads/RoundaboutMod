@@ -174,6 +174,14 @@ public abstract class WorldTickServer extends Level {
             , require = 0)
     private void roundabout$tickInGeneralTail(BooleanSupplier $$0, CallbackInfo ci) {
         ((ILevelAccess)this).roundabout$tickPlunderBubbleRemoval();
+        net.hydra.jojomod.devilspalm.DevilsPalmManager.tick((ServerLevel)(Object)this);
+    }
+
+    @Inject(method = "gameEvent", at = @At("HEAD"))
+    private void roundabout$trackDevilsPalmActivity(GameEvent event, Vec3 position, GameEvent.Context context, CallbackInfo ci) {
+        if (context.sourceEntity() instanceof ServerPlayer && (event == GameEvent.BLOCK_PLACE || event == GameEvent.BLOCK_DESTROY || event == GameEvent.BLOCK_CHANGE)) {
+            net.hydra.jojomod.devilspalm.DevilsPalmManager.recordPlayerModification((ServerLevel)(Object)this, BlockPos.containing(position));
+        }
     }
 
     @Unique

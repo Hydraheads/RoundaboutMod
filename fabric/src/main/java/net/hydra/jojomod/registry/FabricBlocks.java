@@ -34,6 +34,13 @@ import java.util.Set;
 import static net.hydra.jojomod.block.ModBlocks.*;
 
 public class FabricBlocks {
+    static {
+        for (String name : net.hydra.jojomod.devilspalm.DevilsPalmBlocks.IDS) {
+            registerBlockItemless(net.hydra.jojomod.devilspalm.DevilsPalmBlocks.id(name),
+                    net.hydra.jojomod.devilspalm.DevilsPalmBlocks.create(name));
+        }
+    }
+
     public static final Block ANCIENT_METEOR = registerBlock("ancient_meteor", ModBlocks.ANCIENT_METEOR_PROPERTIES
     );
     public static final Block IMPACT_MOUND = registerBlock("impact_mound", ModBlocks.IMPACT_MOUND_PROPERTIES

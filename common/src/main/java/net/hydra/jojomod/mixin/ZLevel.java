@@ -42,6 +42,23 @@ import java.util.function.Predicate;
 @Mixin(Level.class)
 public abstract class ZLevel implements ILevelAccess, LevelAccessor {
 
+    @Inject(method = "setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z", at = @At("HEAD"), cancellable = true)
+    private void rdbt$protectPalmSetBlock(BlockPos pos, net.minecraft.world.level.block.state.BlockState state, int flags, int recursionLeft, CallbackInfoReturnable<Boolean> cir) {
+        if ((Object)this instanceof ServerLevel server && net.hydra.jojomod.devilspalm.DevilsPalmTerrain.blocksChange(server, pos)) {
+            cir.setReturnValue(state.isAir() && net.hydra.jojomod.devilspalm.DevilsPalmTerrain.breakTemporary(server, pos));
+        }
+    }
+
+    @Inject(method = "destroyBlock(Lnet/minecraft/core/BlockPos;ZLnet/minecraft/world/entity/Entity;I)Z", at = @At("HEAD"), cancellable = true)
+    private void rdbt$protectPalmDestroyBlock(BlockPos pos, boolean drops, Entity entity, int recursionLeft, CallbackInfoReturnable<Boolean> cir) {
+        if ((Object)this instanceof ServerLevel server && net.hydra.jojomod.devilspalm.DevilsPalmTerrain.blocksChange(server, pos)) {
+            if (!(entity instanceof net.minecraft.world.entity.player.Player)
+                    || !net.hydra.jojomod.devilspalm.DevilsPalmTerrain.canBreakTemporary(server, pos)) {
+                cir.setReturnValue(false);
+            }
+        }
+    }
+
     @Shadow
     @Final
     protected List<TickingBlockEntity> blockEntityTickers;
