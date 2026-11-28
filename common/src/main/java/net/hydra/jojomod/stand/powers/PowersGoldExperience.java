@@ -314,7 +314,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.6F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(2.5F));
         }
     }
     public float getLifePunchStrength(Entity entity){
