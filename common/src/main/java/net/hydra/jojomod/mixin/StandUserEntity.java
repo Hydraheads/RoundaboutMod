@@ -1643,6 +1643,7 @@ public abstract class StandUserEntity extends Entity implements StandUser {
                 roundabout$jumpHeight = roundabout$calculateBonusJumpHeight();
             }
         }
+        rdbt$tickAccel();
         if ((((LivingEntity) (Object) this)) instanceof Mob mb && mb.isLeashed()) {
             Entity holder = mb.getLeashHolder();
             if (holder != null && PowerTypes.isInADifferentExistence(holder, this)) {
@@ -5105,6 +5106,31 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         }
     }
 
+    public int rdbt$stickyIceAcceleration = 0;
+
+    public void rdbt$tickAccel(){
+        StandPowers powers = roundabout$getStandPowers();
+        if (!(powers instanceof PowersWhiteAlbum PW && (PW.hasSkatesActivated() || rdbt$this() instanceof Animal))
+                && !powers.isGuardInput()) {
+
+            BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
+            BlockState state2 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement().above());
+            if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK) || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) ||
+                    state2.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+                if (rdbt$stickyIceAcceleration < (float)PowersWhiteAlbum.getMaxAccelerationTicks()*0.4) {
+                    rdbt$stickyIceAcceleration++;
+                }
+            } else {
+                if (rdbt$stickyIceAcceleration > 0) {
+                    rdbt$stickyIceAcceleration--;
+                }
+            }
+
+        } else {
+            rdbt$stickyIceAcceleration = 0;
+        }
+    }
+
     @Override
     @Unique
     public float roundabout$mutualGetSpeed(float basis) {
@@ -5123,15 +5149,21 @@ public abstract class StandUserEntity extends Entity implements StandUser {
         if (rdbt$this() instanceof Turtle) {
             return basis;
         }
-        BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
-        BlockState state2 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement().above());
-        if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK) || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) ||
-                state2.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
-            StandPowers powers = roundabout$getStandPowers();
-            if (!(powers instanceof PowersWhiteAlbum PW && (PW.hasSkatesActivated() || rdbt$this() instanceof Animal))
-                    && !powers.isGuardInput()) {
-                basis *= (1.3f + (PowersWhiteAlbum.getMaxAccelerationTicks()
-                        * ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmountv3));
+        if (rdbt$stickyIceAcceleration > 0){
+
+            BlockState state = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement());
+            BlockState state2 = this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement().above());
+            if (state.is(ModBlocks.WHITE_ALBUM_ICE_BLOCK) || state.is(ModBlocks.WHITE_ALBUM_ICE_SLAB) ||
+                    state2.is(ModBlocks.WHITE_ALBUM_ICE_SLAB)) {
+
+                StandPowers powers = roundabout$getStandPowers();
+                if (!(powers instanceof PowersWhiteAlbum PW && (PW.hasSkatesActivated() || rdbt$this() instanceof Animal))
+                        && !powers.isGuardInput()) {
+                    basis *= (1.3f +
+                            ((((float) rdbt$stickyIceAcceleration) / ((float) PowersWhiteAlbum.getMaxAccelerationTicks()*0.4)) *
+                                    (PowersWhiteAlbum.getMaxAccelerationTicks()
+                                            * ClientNetworking.getAppropriateConfig().whiteAlbumSettings.whiteAlbumAccelerationAmountv3)));
+                }
             }
         }
 

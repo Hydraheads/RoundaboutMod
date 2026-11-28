@@ -41,7 +41,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class WhiteAlbumCoatingBlock
-        extends IceBlock implements LiquidBlockContainer {
+        extends IceBlock  {
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     private static final int NEIGHBORS_TO_AGE = 4;
@@ -185,14 +185,6 @@ public class WhiteAlbumCoatingBlock
         return ItemStack.EMPTY;
     }
     @Override
-    public boolean canBeReplaced(BlockState state, Fluid fluid) {
-        return false;
-    }
-    @Override
-    public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
-        return false;
-    }
-    @Override
     public InteractionResult use(BlockState state,
                                  Level level,
                                  BlockPos pos,
@@ -234,13 +226,4 @@ public class WhiteAlbumCoatingBlock
         return super.use(state, level, pos, player, hand, hit);
     }
 
-    @Override
-    public boolean canPlaceLiquid(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid) {
-        return false;
-    }
-
-    @Override
-    public boolean placeLiquid(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState, FluidState fluidState) {
-        return false;
-    }
 }
