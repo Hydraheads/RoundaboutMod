@@ -874,7 +874,8 @@ public class MainUtil {
     public static double getWorthyOdds(Mob mob) {
         if ((isBossMob(mob)
                 && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
-                || mob instanceof JojoNPC || mob instanceof StrayCatEntity || mob instanceof FallenMob || mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)) {
+                || mob instanceof JojoNPC || mob instanceof StrayCatEntity || mob instanceof FallenMob || mob instanceof CloneEntity || isMobStandUserBlacklisted(mob)
+                || mob instanceof GELifeform) {
             return 0;
         }
         return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.worthyMobOdds;
@@ -899,7 +900,7 @@ public class MainUtil {
         if ((isBossMob(mob)
                 && !ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.bossMobsCanNaturallyHaveStands)
                 || mob instanceof JojoNPC || mob instanceof StrayCatEntity || mob instanceof FallenMob || mob instanceof CloneEntity || mob instanceof ZombieAesthetician
-                || isMobStandUserBlacklisted(mob)) {
+                || isMobStandUserBlacklisted(mob) || mob instanceof GELifeform) {
             return 0;
         } else if (mob instanceof AbstractVillager) {
             return ClientNetworking.getAppropriateConfig().generalStandUserMobSettings.standUserVillagerOdds;
@@ -1941,7 +1942,7 @@ public class MainUtil {
     public static boolean canCauseRejection(Entity ent) {
         if (ent instanceof Mob ME) {
             if (!(ME instanceof WitherBoss) && !(ME instanceof EnderDragon) && !(ME instanceof Warden)) {
-                if (((StandUser) ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity)) {
+                if (((StandUser) ME).roundabout$getStandDisc().isEmpty() && !(ent instanceof StrayCatEntity) && !(ent instanceof GELifeform)) {
                     return true;
                 }
             }
@@ -1956,7 +1957,7 @@ public class MainUtil {
 
     public static boolean canGrantStand(Entity ent) {
         if (ent instanceof Mob ME) {
-            if (!(ME instanceof StandEntity) && !(ME instanceof StrayCatEntity) && !(ME instanceof FallenMob)) {
+            if (!(ME instanceof StandEntity) && !(ME instanceof StrayCatEntity) && !(ME instanceof FallenMob) && !(ME instanceof GELifeform)) {
                 if (((StandUser) ME).roundabout$getStandDisc().isEmpty()) {
                     return ((IMob) ME).roundabout$isWorthy();
                 }
