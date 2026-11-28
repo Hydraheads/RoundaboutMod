@@ -164,10 +164,18 @@ public class PowersGER extends PowersGoldExperience {
         }
     }
 
+    @Override
     public void tickPower() {
         super.tickPower();
-        if (hasNormalGEDisc()) {
-            resolvePoints -= 0.25f;
+        if (hasNormalGEDisc() && !(geConfig().maxRequiemTime == -1)) {
+            int maxSeconds = geConfig().maxRequiemTime;
+            if (maxSeconds <= 0) {
+                resolvePoints = 0f;
+            } else {
+                float drainPerTick = getNeededResolvePoints() / (maxSeconds * 20.0f);
+                resolvePoints -= drainPerTick;
+            }
+
             if (!this.self.level().isClientSide() && resolvePoints <= 0f) {
                 goBackToGE();
                 ((StandUser) self).roundabout$summonStand(self.level(), true, true);

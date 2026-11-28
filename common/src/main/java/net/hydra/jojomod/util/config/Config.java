@@ -1365,6 +1365,8 @@ public class Config implements Cloneable {
         public Integer resolveTypeCapPerDay;
         @IntOption(group = "inherit", value = 24000, min = 1, max = 99999)
         public Integer resolveInterval;
+        @IntOption(group = "inherit", value = 60, min = -1, max = 72000)
+        public Integer maxRequiemTime;
     }
     public static class KingCrimsonSettings {
         @BooleanOption(group = "inherit", value = true)

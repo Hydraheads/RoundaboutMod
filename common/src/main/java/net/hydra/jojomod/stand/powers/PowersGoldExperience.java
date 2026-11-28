@@ -356,7 +356,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     };
 
     // for configs
-    private Config.GoldExperienceSettings geConfig() {
+    protected Config.GoldExperienceSettings geConfig() {
         return ClientNetworking.getAppropriateConfig().goldExperienceSettings;
     }
 
@@ -2271,7 +2271,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         ItemStack goldDisc = ((StandUser) this.self).roundabout$getStandDisc();
         boolean bypass = ((Player)this.self).isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
         if (bypass) {
-            resolvePoints = 300;
+            resolvePoints = getNeededResolvePoints();
         }
         return (resolvePoints >= getNeededResolvePoints() || bypass) && ((StandUser)self).roundabout$getActive();
     }
