@@ -91,6 +91,8 @@ public class ModStrayModels {
     public static TasselHatPart TasselHatPart;
     public static RatHatPart ratHatPart;
     public static TimHatPart timHatPart;
+    public static MagentaHatPart magentaHatPart;
+    public static MagentaClothPart magentaClothPart;
     public static RatRightLegPart ratRightLegPart;
     public static RatLeftLegPart ratLeftLegPart;
     public static DiegoRightLegPart diegoRightLegPart;

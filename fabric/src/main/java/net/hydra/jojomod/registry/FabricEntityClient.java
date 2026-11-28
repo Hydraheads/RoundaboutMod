@@ -497,6 +497,8 @@ public class FabricEntityClient {
         ModStrayModels.diegoRightLegPart = new DiegoRightLegPart();
         ModStrayModels.ratHatPart = new RatHatPart();
         ModStrayModels.timHatPart = new TimHatPart();
+        ModStrayModels.magentaHatPart = new MagentaHatPart();
+        ModStrayModels.magentaClothPart = new MagentaClothPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
         ModStrayModels.PlayerChestPart = new PlayerChestPart();
         ModStrayModels.barrageArmsPart = new BarrageArmsPart();

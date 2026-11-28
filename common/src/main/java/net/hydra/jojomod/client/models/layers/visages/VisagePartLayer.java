@@ -216,9 +216,16 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         hideExtraPartsWithSuit = true;
                     }
                 }
+                boolean hideTopHat = false;
 
-
-                if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity) && user.roundabout$getIdlePos() == 0){hideExtraPartsWithSuit = true;}
+                if (user.roundabout$getStandPowers() instanceof Powers20thCenturyBoy && PowerTypes.hasStandActive(entity)){
+                    if (user.roundabout$getIdlePos() == 0) {
+                        hideExtraPartsWithSuit = true;
+                    }
+                    if (user.roundabout$getIdlePos() == 2) {
+                        hideTopHat = true;
+                    }
+                }
 
                 ItemStack hand = entity.getMainHandItem();
                 ItemStack offHand = entity.getOffhandItem();
@@ -259,6 +266,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                         if (vd.rendersBackpack() && !isBodyFrozen
                                 && !hideExtraPartsWithSuit) {
                             renderBackpack(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b);
+                        }
+                        if (vd.rendersMagentaCloth() && !isBodyFrozen
+                                && !hideExtraPartsWithSuit) {
+                            renderMagentaCloth(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
                         }
                         if (vd.rendersBigHair() && !isHoldingBowlerHat && !isBodyFrozen
@@ -431,6 +443,11 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
                                 && !hideExtraPartsWithSuit && !hasCTRactive) {
                             rendersTimHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
                                     r, g, b);
+                        }
+                        if (vd.rendersMagentaHat() && !isBodyFrozen && !isHoldingBowlerHat
+                                && !hideExtraPartsWithSuit && !hasCTRactive) {
+                            rendersMagentaHat(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
+                                    r, g, b, hideTopHat);
                         }
                         if (vd.rendersLegCloakPart() && !isBodyFrozen && !hideExtraPartsWithSuit) {
                             renderLegCloakPart(poseStack, bufferSource, packedLight, entity, xx, yy, zz, partialTicks, path,
@@ -875,6 +892,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         ClientUtil.pushPoseAndCooperate(poseStack,34);
         getParentModel().body.translateAndRotate(poseStack);
         ModStrayModels.BackpackPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,34);
+    }
+    public void renderMagentaCloth(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                               float r, float g, float b) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,34);
+        getParentModel().body.translateAndRotate(poseStack);
+        ModStrayModels.magentaClothPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
         ClientUtil.popPoseAndCooperate(poseStack,34);
     }
@@ -1416,6 +1442,15 @@ public class VisagePartLayer<T extends LivingEntity, A extends HumanoidModel<T>>
         getParentModel().head.translateAndRotate(poseStack);
         ModStrayModels.timHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
                 r, g, b, 1, path);
+        ClientUtil.popPoseAndCooperate(poseStack,41);
+    }
+    public void rendersMagentaHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
+                              float r, float g, float b, boolean hideHat) {
+
+        ClientUtil.pushPoseAndCooperate(poseStack,41);
+        getParentModel().head.translateAndRotate(poseStack);
+        ModStrayModels.magentaHatPart.render(entity, partialTicks, poseStack, bufferSource, packedLight,
+                r, g, b, 1, path, hideHat);
         ClientUtil.popPoseAndCooperate(poseStack,41);
     }
     public void renderTasselHat(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, T entity, float xx, float yy, float zz, float partialTicks, String path,
