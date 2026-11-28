@@ -29,8 +29,8 @@ public class GoldenCloudParticle extends TextureSheetParticle {
         this.friction = 1.0F;
         this.gravity = 0.0F;
 
-        this.lifetime = 55 + this.random.nextInt(25);
-        this.baseQuadSize = 0.70F + this.random.nextFloat() * 0.35F;
+        this.lifetime = 75 + this.random.nextInt(25);
+        this.baseQuadSize = 0.90F + this.random.nextFloat() * 0.35F;
         this.quadSize = this.baseQuadSize;
         this.maxAlpha = 0.72F;
         this.alpha = 0.0F;

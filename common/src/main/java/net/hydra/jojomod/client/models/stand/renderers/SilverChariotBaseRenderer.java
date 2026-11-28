@@ -65,6 +65,14 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
         );
     }
 
+    public static float unarmouredOscillationSpeed() {
+        return ConfigManager.getClientConfig().silverChariotSettings.silverChariotUnarmouredBaseOscillationSpeed * ConfigManager.getClientConfig().silverChariotSettings.silverChariotUnarmouredOscillationSpeedMultiplier * 0.01F;
+    }
+
+    public static float afterimageOscillationSpeed() {
+        return ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimageBaseOscillationSpeed * ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimageOscillationSpeedMultiplier * 0.01F;
+    }
+
     public static ResourceLocation getSkin(byte bt) {
         switch (bt) {
             case SilverChariotEntity.PART_3 -> {
@@ -243,18 +251,16 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
 
             // float trailAlpha = alpha * (1.0F - (float) index / total);
 
-            // float time = (mobEntity.tickCount + g) * 0.1F + index * 0.5F;
+            float time = (mobEntity.tickCount + g) * unarmouredOscillationSpeed() + index * afterimageOscillationSpeed();
 
-            /*
             float t = time + index * 0.5F;
             float minAlpha = 0.35F;
             float maxAlpha = 0.85F;
             float alphaRange = maxAlpha - minAlpha;
             float afterimageAlpha = minAlpha +
                     (Mth.sin(t) + 1.0F) / 2.0F * alphaRange;
-            */
 
-            this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, alpha);
+            this.model.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, -afterimageAlpha);
             matrixStack.popPose();
             index++;
             /*
@@ -289,9 +295,9 @@ public class SilverChariotBaseRenderer<T extends StandEntity> extends StandRende
 
         Vec3 nextPos = states.get(posIndex + 1).getPos();
 
-        float speedFactor = ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimageSpeed;
+        float speed = ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimageBaseSpeed * ConfigManager.getClientConfig().silverChariotSettings.silverChariotAfterimageSpeedMultiplier * 0.01F;
 
-        float progress = speedFactor * (
+        float progress = speed * (
                 mobEntity.getAfterImageTicks() + pt
         ) / (float) SilverChariotEntity.AFTERIMAGE_TICK_INTERVAL;
 

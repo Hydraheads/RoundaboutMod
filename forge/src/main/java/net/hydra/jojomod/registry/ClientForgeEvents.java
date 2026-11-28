@@ -723,7 +723,10 @@ public class ClientForgeEvents {
         event.registerSpriteSet(ForgeParticles.VITAL_ESSENCE.get(), VitalEssenceParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GE_WAVE.get(), GEWaveParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD.get(), GoldenCloudParticle.Provider::new);
-        event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD_SMALL.get(), GoldenCloudSmallParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD_SMALL_A.get(), GoldenCloudSmallParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD_SMALL_B.get(), GoldenCloudSmallParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD_SMALL_C.get(), GoldenCloudSmallParticle.Provider::new);
+        event.registerSpriteSet(ForgeParticles.GOLDEN_CLOUD_SMALL_D.get(), GoldenCloudSmallParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.GE_SKIN_CRACK.get(), GESkinCrackParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.REQUIEM_FLARE.get(), RequiemFlareParticle.Provider::new);
         event.registerSpriteSet(ForgeParticles.AUTUMN_LEAVES.get(), AutumnLeavesParticle.Provider::new);

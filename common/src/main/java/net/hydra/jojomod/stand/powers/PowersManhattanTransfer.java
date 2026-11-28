@@ -22,6 +22,7 @@ import net.hydra.jojomod.item.StandDiscItem;
 import net.hydra.jojomod.sound.ModSounds;
 import net.hydra.jojomod.stand.powers.elements.PowerContext;
 import net.hydra.jojomod.stand.powers.presets.NewDashPreset;
+import net.hydra.jojomod.util.C2SPacketUtil;
 import net.hydra.jojomod.util.MainUtil;
 import net.hydra.jojomod.util.S2CPacketUtil;
 import net.minecraft.ChatFormatting;
@@ -75,7 +76,9 @@ public class PowersManhattanTransfer extends NewDashPreset {
 
          UNLOADED_HATTAN =84,
          LOADED_HATTAN =85,
-         LOAD_CHECK = 86;
+         LOAD_CHECK = 86,
+        INPUT_C2S_SYNC = 87,
+        INPUT_C2S_SYNC_TWO = 88;
 
     private byte currentHattanStatus = UNLOADED_HATTAN;
 
@@ -98,6 +101,23 @@ public class PowersManhattanTransfer extends NewDashPreset {
         this.updatePowerInt(PowersManhattanTransfer.LOAD_CHECK, status);
         if(this.getSelf() instanceof Player) {
             S2CPacketUtil.sendIntPowerDataPacket((Player) this.getSelf(), PowersManhattanTransfer.LOAD_CHECK, status);
+        }
+    }
+
+    public void syncHattanInput(byte status) {
+      //  this.currentHattanStatus = status;
+        this.updatePowerInt(PowersManhattanTransfer.INPUT_C2S_SYNC, status);
+        if(this.getSelf() instanceof Player) {
+            tryIntPower(PowersManhattanTransfer.INPUT_C2S_SYNC, true, status);
+            tryIntPowerPacket(PowersManhattanTransfer.INPUT_C2S_SYNC, status);
+        }
+    }
+    public void syncHattanDirection(byte status) {
+        //  this.currentHattanStatus = status;
+        this.updatePowerInt(PowersManhattanTransfer.INPUT_C2S_SYNC_TWO, status);
+        if(this.getSelf() instanceof Player) {
+            tryIntPower(PowersManhattanTransfer.INPUT_C2S_SYNC_TWO, true, status);
+            tryIntPowerPacket(PowersManhattanTransfer.INPUT_C2S_SYNC_TWO, status);
         }
     }
 
@@ -136,7 +156,6 @@ public class PowersManhattanTransfer extends NewDashPreset {
     }
    @Override
     public StandEntity getNewStandEntity() {
-        byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
             if (((StandUser) this.getSelf()).roundabout$getStandSkin() == ManhattanTransferEntity.POLLINATION_SKIN) {
                 return ModEntities.POLLINATION_TRANSFER.create(this.getSelf().level());
             } else if (((StandUser) this.getSelf()).roundabout$getStandSkin() == ManhattanTransferEntity.BLAZE_TRANSFER_SKIN){
@@ -197,7 +216,28 @@ public class PowersManhattanTransfer extends NewDashPreset {
         }
             return super.setPowerOther(move, lastMove);
     }
-
+    @Override
+    public boolean tryIntPower(int move, boolean forced, int value){
+        switch (move) {
+            case PowersManhattanTransfer.INPUT_C2S_SYNC -> {
+                StandEntity stand = this.getStandEntity(self);
+                if(stand != null && stand instanceof ManhattanTransferEntity ME){
+                    if(!ME.level().isClientSide()){
+                        ME.setKeyPress((byte) value);
+                    }
+                }
+            }
+            case PowersManhattanTransfer.INPUT_C2S_SYNC_TWO -> {
+                StandEntity stand = this.getStandEntity(self);
+                if(stand != null && stand instanceof ManhattanTransferEntity ME){
+                    if(!ME.level().isClientSide()){
+                        ME.setFloatingDirection((byte) value);
+                    }
+                }
+            }
+        }
+        return super.tryIntPower(move, forced, value);
+    }
     @Override
     /**The stand is named on the disc so we just use that*/
     public Component getStandName(){
@@ -450,6 +490,12 @@ public class PowersManhattanTransfer extends NewDashPreset {
                     ME.isHattanPilotMode = true;
                 } else {
                     ME.isHattanPilotMode = false;
+                }
+            }
+
+            if(!isPiloting()){
+                if(ME.getKeyPress() != -1) {
+                    ME.setKeyPress((byte) -1);
                 }
             }
         }

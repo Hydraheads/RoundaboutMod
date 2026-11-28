@@ -956,7 +956,10 @@ public class ForgeEvents {
         ModParticles.VITAL_ESSENCE = ForgeParticles.VITAL_ESSENCE.get();
         ModParticles.GE_WAVE = ForgeParticles.GE_WAVE.get();
         ModParticles.GOLDEN_CLOUD = ForgeParticles.GOLDEN_CLOUD.get();
-        ModParticles.GOLDEN_CLOUD_SMALL = ForgeParticles.GOLDEN_CLOUD_SMALL.get();
+        ModParticles.GOLDEN_CLOUD_SMALL_A = ForgeParticles.GOLDEN_CLOUD_SMALL_A.get();
+        ModParticles.GOLDEN_CLOUD_SMALL_B = ForgeParticles.GOLDEN_CLOUD_SMALL_B.get();
+        ModParticles.GOLDEN_CLOUD_SMALL_C = ForgeParticles.GOLDEN_CLOUD_SMALL_C.get();
+        ModParticles.GOLDEN_CLOUD_SMALL_D = ForgeParticles.GOLDEN_CLOUD_SMALL_D.get();
         ModParticles.GE_SKIN_CRACK = ForgeParticles.GE_SKIN_CRACK.get();
         ModParticles.REQUIEM_FLARE = ForgeParticles.REQUIEM_FLARE.get();
         ModParticles.AUTUMN_LEAVES = ForgeParticles.AUTUMN_LEAVES.get();

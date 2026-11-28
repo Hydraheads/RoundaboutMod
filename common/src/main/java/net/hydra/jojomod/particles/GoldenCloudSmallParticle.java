@@ -15,6 +15,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class GoldenCloudSmallParticle extends TextureSheetParticle {
+    private final SpriteSet sprites;
     private final float maxAlpha;
     private final float yawRotation;
 
@@ -22,12 +23,13 @@ public class GoldenCloudSmallParticle extends TextureSheetParticle {
                                        double xSpeed, double ySpeed, double zSpeed,
                                        SpriteSet sprites) {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed);
+        this.sprites = sprites;
         this.hasPhysics = false;
         this.friction = 1.0F;
         this.gravity = 0.0F;
 
-        this.lifetime = 40 + this.random.nextInt(25);
-        this.quadSize = 0.26F + this.random.nextFloat() * 0.12F;
+        this.lifetime = 30 + this.random.nextInt(25);
+        this.quadSize = 0.35F + this.random.nextFloat() * 0.12F;
         this.maxAlpha = 0.65F;
         this.alpha = 0.0F;
 
@@ -36,7 +38,7 @@ public class GoldenCloudSmallParticle extends TextureSheetParticle {
         this.zd = zSpeed;
 
         this.yawRotation = (float) Mth.atan2(-this.zd, this.xd);
-        this.pickSprite(sprites);
+        this.setSpriteFromAge(this.sprites);
     }
 
     @Override
@@ -50,6 +52,7 @@ public class GoldenCloudSmallParticle extends TextureSheetParticle {
             return;
         }
 
+        this.setSpriteFromAge(this.sprites);
         this.move(this.xd, 0.0, this.zd);
 
         float progress = (float) this.age / (float) this.lifetime;
@@ -84,15 +87,15 @@ public class GoldenCloudSmallParticle extends TextureSheetParticle {
         float v1 = this.getV1();
         int light = this.getLightColor(partialTicks);
 
-        buffer.vertex(corners[0].x(), corners[0].y(), corners[0].z()).uv(u1, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
-        buffer.vertex(corners[1].x(), corners[1].y(), corners[1].z()).uv(u1, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
-        buffer.vertex(corners[2].x(), corners[2].y(), corners[2].z()).uv(u0, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
-        buffer.vertex(corners[3].x(), corners[3].y(), corners[3].z()).uv(u0, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        buffer.vertex(corners[0].x(), corners[0].y(), corners[0].z()).uv(u0, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        buffer.vertex(corners[1].x(), corners[1].y(), corners[1].z()).uv(u0, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        buffer.vertex(corners[2].x(), corners[2].y(), corners[2].z()).uv(u1, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        buffer.vertex(corners[3].x(), corners[3].y(), corners[3].z()).uv(u1, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
 
-        buffer.vertex(corners[3].x(), corners[3].y(), corners[3].z()).uv(u0, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
-        buffer.vertex(corners[2].x(), corners[2].y(), corners[2].z()).uv(u0, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
-        buffer.vertex(corners[1].x(), corners[1].y(), corners[1].z()).uv(u1, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
-        buffer.vertex(corners[0].x(), corners[0].y(), corners[0].z()).uv(u1, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        buffer.vertex(corners[3].x(), corners[3].y(), corners[3].z()).uv(u1, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        buffer.vertex(corners[2].x(), corners[2].y(), corners[2].z()).uv(u1, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        buffer.vertex(corners[1].x(), corners[1].y(), corners[1].z()).uv(u0, v0).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        buffer.vertex(corners[0].x(), corners[0].y(), corners[0].z()).uv(u0, v1).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
     }
 
     @Override

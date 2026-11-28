@@ -2655,11 +2655,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void spawnRequiemGatheringClouds() {
         int smallCloudsToSpawn;
         if (attackTimeDuring < 80) {
-            smallCloudsToSpawn = (attackTimeDuring % 4 == 0) ? 1 : 0;
+            smallCloudsToSpawn = (attackTimeDuring % 10 == 0) ? 1 : 0;
         } else if (attackTimeDuring < 160) {
-            smallCloudsToSpawn = (attackTimeDuring % 2 == 0) ? 1 : 0;
+            smallCloudsToSpawn = (attackTimeDuring % 6 == 0) ? 1 : 0;
         } else {
-            smallCloudsToSpawn = 2;
+            smallCloudsToSpawn = (attackTimeDuring % 2 == 0) ? 1 : 0;;
         }
 
         boolean spawnBigCloud = attackTimeDuring >= 30 && this.self.level().random.nextFloat() < 0.14F;
@@ -2692,23 +2692,42 @@ public class PowersGoldExperience extends BlockGrabPreset {
     private void spawnSingleGoldenCloud(Level level, StandEntity stand, Vec3 forward, Vec3 right, boolean isBig) {
         Entity anchor = (stand != null && !stand.isRemoved() && level.random.nextBoolean()) ? stand : this.self;
 
-        double halfSpan = 2.0 + level.random.nextDouble() * 0.8;
+        double halfSpan = isBig
+                ? (1.35 + level.random.nextDouble() * 0.45)
+                : (1.20 + level.random.nextDouble() * 0.45);
         double sideSign = level.random.nextBoolean() ? 1.0 : -1.0;
-        double depthOffset = (level.random.nextDouble() - 0.35) * 1.4;
-        double yPos = anchor.getY() + anchor.getBbHeight() * (0.10 + level.random.nextDouble() * 0.95);
+        double depthOffset = (level.random.nextDouble() - 0.35) * 0.85;
 
         double speed = isBig
-                ? (0.035 + level.random.nextDouble() * 0.045)
-                : (0.045 + level.random.nextDouble() * 0.080);
+                ? (0.008 + level.random.nextDouble() * 0.010)
+                : (0.012 + level.random.nextDouble() * 0.016);
 
-        Vec3 passCenter = new Vec3(anchor.getX(), yPos, anchor.getZ()).add(forward.scale(depthOffset));
+        Vec3 passCenter = new Vec3(anchor.getX(), anchor.getY(), anchor.getZ()).add(forward.scale(depthOffset));
         Vec3 spawnPos = passCenter.subtract(right.scale(sideSign * halfSpan));
+
+        double yPos;
+        if (isBig) {
+            BlockPos ground = findGroundPosition(level, BlockPos.containing(spawnPos.x, anchor.getY(), spawnPos.z));
+            yPos = (ground != null ? ground.getY() + 1.23 : anchor.getY() + 0.05);
+        } else {
+            yPos = anchor.getY() + anchor.getBbHeight() * (0.10 + level.random.nextDouble() * 0.90);
+        }
+
         Vec3 velocity = right.scale(sideSign * speed);
 
-        SimpleParticleType particleType = isBig ? ModParticles.GOLDEN_CLOUD : ModParticles.GOLDEN_CLOUD_SMALL;
+        SimpleParticleType particleType = isBig ? ModParticles.GOLDEN_CLOUD : getRandomSmallGoldenCloud(level);
         sendParticlesIfPossible(level, particleType,
-                spawnPos.x, spawnPos.y, spawnPos.z,
+                spawnPos.x, yPos, spawnPos.z,
                 0, velocity.x, 0.0, velocity.z, 1.0);
+    }
+
+    private SimpleParticleType getRandomSmallGoldenCloud(Level level) {
+        return switch (level.random.nextInt(4)) {
+            case 0 -> ModParticles.GOLDEN_CLOUD_SMALL_A;
+            case 1 -> ModParticles.GOLDEN_CLOUD_SMALL_B;
+            case 2 -> ModParticles.GOLDEN_CLOUD_SMALL_C;
+            default -> ModParticles.GOLDEN_CLOUD_SMALL_D;
+        };
     }
 
     private void spawnRequiemCrackStage(StandEntity stand, int stage) {

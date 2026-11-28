@@ -1,7 +1,6 @@
 package net.hydra.jojomod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.hydra.jojomod.Roundabout;
 import net.hydra.jojomod.access.IDayInterpolationClientLevelData;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.client.ClientEffectUtil;
@@ -35,7 +34,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -253,10 +251,10 @@ public class ZWorldRenderer {
         // what is a mere president to the king?
         if (ClientUtil.getPlayer() != null
                 && ((StandUser) ClientUtil.getPlayer()).roundabout$getStandPowers() instanceof PowersKingNothing pkn) {
-            if (pkn.isTrackingItem()) {
+            if (pkn.isTrackingItem() || pkn.isTrackingMemorizedScent()) {
                 int color = pkn.getVisualInfo().highlightColor();
                 Set<BlockPos> alreadyRendered = new HashSet<>();
-                for (Pair<BlockPos, BlockPos> posPair : pkn.itemHoldingBlockPairs) {
+                for (Pair<BlockPos, BlockPos> posPair : pkn.highlightBPosPairs) {
                     ClientEffectUtil.renderPurpleBox(poseStack,
                             mc.renderBuffers().bufferSource(),
                             camera,
@@ -269,7 +267,7 @@ public class ZWorldRenderer {
                     alreadyRendered.add(posPair.getA());
                     alreadyRendered.add(posPair.getB());
                 }
-                for (BlockPos pos : pkn.itemHoldingBlocks) {
+                for (BlockPos pos : pkn.highlightBPosses) {
                     if (alreadyRendered.contains(pos)) continue;
                     ClientEffectUtil.renderPurpleBox(poseStack,
                             mc.renderBuffers().bufferSource(),
@@ -281,17 +279,6 @@ public class ZWorldRenderer {
                             (color & 0xFF) / 255.0F,
                             1.0f);
                 }
-                // if (pkn.getTrackedBlockPos() != null) {
-                //     ClientEffectUtil.renderPurpleBox(poseStack,
-                //             mc.renderBuffers().bufferSource(),
-                //             camera,
-                //             pkn.getTrackedBlockPos(),
-                //             pkn.getTrackedBlockPos(),
-                //             ((color >> 16) & 0xFF) / 255.0F,
-                //             ((color >> 8) & 0xFF) / 255.0F,
-                //             (color & 0xFF) / 255.0F,
-                //             1.0f);
-                // }
             }
         }
     }

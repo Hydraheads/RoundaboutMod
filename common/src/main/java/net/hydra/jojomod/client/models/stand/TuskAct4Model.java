@@ -174,6 +174,7 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
         this.animate(pEntity.barrageChargeAnimationState, StandAnimations.BARRAGECHARGE, pAgeInTicks, 1f);
         this.animate(pEntity.barrageAnimationState, TuskAnimations.Barrage, pAgeInTicks, 1f);
         this.animate(pEntity.deathPunch, TuskAnimations.DeathPunch, pAgeInTicks, 1F);
+        this.animate(pEntity.shrink, TuskAnimations.Shrink, pAgeInTicks, 1F);
         if (pEntity.getUser() != null && pEntity.getUserData(pEntity.getUser()).roundabout$getStandPowers() instanceof PowersTusk PT && PT.getActivePower() == PowersTusk.DEATH_PUNCH) {
 
             if (PT.deathTarget != null) {
@@ -191,7 +192,8 @@ public class TuskAct4Model<T extends TuskEntity> extends StandModel<T> {
             this.defaultModifiers(pEntity);
         }
         if (pEntity.shrink.isStarted()) {
-            float scale = Mth.lerp(Math.max(1-pEntity.shrink.getAccumulatedTime()/1000F,0),0,1);
+            float scale = Math.max(1-pEntity.shrink.getAccumulatedTime()/1000F*2,0);
+            this.setAlpha(scale);
             stand.xScale = scale;
             stand.yScale = scale;
             stand.zScale = scale;

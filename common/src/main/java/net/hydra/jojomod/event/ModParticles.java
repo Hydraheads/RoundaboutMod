@@ -148,7 +148,10 @@ public class ModParticles {
     public static SimpleParticleType VITAL_ESSENCE;
     public static SimpleParticleType GE_WAVE;
     public static SimpleParticleType GOLDEN_CLOUD;
-    public static SimpleParticleType GOLDEN_CLOUD_SMALL;
+    public static SimpleParticleType GOLDEN_CLOUD_SMALL_A;
+    public static SimpleParticleType GOLDEN_CLOUD_SMALL_B;
+    public static SimpleParticleType GOLDEN_CLOUD_SMALL_C;
+    public static SimpleParticleType GOLDEN_CLOUD_SMALL_D;
     public static ParticleType<GESkinCrackParticleOptions> GE_SKIN_CRACK;
     public static SimpleParticleType REQUIEM_FLARE;
 
