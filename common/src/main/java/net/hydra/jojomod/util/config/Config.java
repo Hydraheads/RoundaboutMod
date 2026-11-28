@@ -1270,6 +1270,12 @@ public class Config implements Cloneable {
     public static class KingNothingSettings {
         @BooleanOption(group = "inherit", value = true)
         public Boolean enableKingNothing;
+        @FloatOption(group = "inherit", value = 64F)
+        public Float mobTrackingRange;
+        @FloatOption(group = "inherit", value = 32F)
+        public Float blockTrackingRange;
+        @FloatOption(group = "inherit", value = 64F, min = -1F)
+        public Float playerTrackingRange;
         @IntOption(group = "inherit", value = 2, min = 1)
         public Integer kingNothingParticleSpawnInterval;
         @BooleanOption(group = "inherit", value = true)
@@ -1365,6 +1371,8 @@ public class Config implements Cloneable {
         public Integer resolveTypeCapPerDay;
         @IntOption(group = "inherit", value = 24000, min = 1, max = 99999)
         public Integer resolveInterval;
+        @IntOption(group = "inherit", value = 60, min = -1, max = 72000)
+        public Integer maxRequiemTime;
     }
     public static class KingCrimsonSettings {
         @BooleanOption(group = "inherit", value = true)

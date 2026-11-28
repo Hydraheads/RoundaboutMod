@@ -1264,6 +1264,8 @@ public class StandIcons {
             "textures/gui/icons/gold_experience/punch.png");
     public static final ResourceLocation GOLD_EXPERIENCE_REQUIEM = new ResourceLocation(Roundabout.MOD_ID,
             "textures/gui/icons/gold_experience/requiem.png");
+    public static final ResourceLocation GOLD_EXPERIENCE_GROUND_BARRAGE = new ResourceLocation(Roundabout.MOD_ID,
+            "textures/gui/icons/gold_experience/ground_barrage.png");
 
     // gold experience icons end
 

@@ -2958,6 +2958,8 @@
   "ability.roundabout.gold_experience_double_punch.desc": "Throw out a 1-2 punch. This does as much damage as the last hit in a punch string, but deals more knockback.",
   "ability.roundabout.gold_experience_requiem": "Gold Experience Requiem",
   "ability.roundabout.gold_experience_requiem.desc": "Fill up your resolve bar by performing various tasks in order to evolve your stand to a temporary higher form. It's abilities are unknown even to you, the user.",
+  "ability.roundabout.gold_experience_ground_barrage": "Ground Barrage",
+  "ability.roundabout.gold_experience_ground_barrage.desc": "Barrage the ground in order to make thorns that travel forward.",
 
   "ability.roundabout.emperor_shoot": "Shoot",
   "ability.roundabout.emperor_shoot.desc": "Shoot a bullet from the emperor.",
@@ -3849,6 +3851,7 @@
   "unlock_skin.roundabout.killer_queen.samurai": "Samurai Skins Unlocked!",
   "unlock_skin.roundabout.diver_down.scuba_diver": "Diver Down: Scuba Diver Skin Unlocked",
   "unlock_skin.roundabout.purple_haze.plague": "Purple Haze: Plague Skins Unlocked",
+  "unlock_skin.roundabout.gold_experience.deimos": "Gold Experience: Deimos Skin Unlocked",
 
   "justice.morph.player": "Player",
   "justice.morph.villager": "Villager",
@@ -4840,6 +4843,12 @@
   "config.roundabout.kingNothingPhaseMineCd.desc": "The cooldown for Phase Item after Mining a Block.",
   "config.roundabout.kingNothingPhasePlaceCd.name": "Phase Item Place Cooldown",
   "config.roundabout.kingNothingPhasePlaceCd.desc": "The cooldown for Phase Item after Placing a Block.",
+  "config.roundabout.mobTrackingRange.name": "Mob Tracking Range",
+  "config.roundabout.mobTrackingRange.desc": "The range that King Nothing can detect and track mobs in. Higher values can potentially cause lag.",
+  "config.roundabout.playerTrackingRange.name": "Player Tracking Range",
+  "config.roundabout.playerTrackingRange.desc": "The range that King Nothing can detect and track players in. Setting this value to -1 can allow King Nothing to track players from any range.",
+  "config.roundabout.blockTrackingRange.name": "Block Tracking Range",
+  "config.roundabout.blockTrackingRange.desc": "The range that King Nothing can detect and track blocks in. Higher values WILL cause lag.",
 
   "config.roundabout.diverDownAttackMultOnPlayers.name": "Player Damage Multiplier",
   "config.roundabout.diverDownAttackMultOnPlayers.desc": "How much damage the stand deals to players, and potentially stand user mobs. The base of 100 means x1.0, so at 0.5 the damage is halved and at 300 the damage is tripled for instance.",
@@ -4943,6 +4952,10 @@
   "config.roundabout.resolveTypeCapPerDay.desc": "Increase to let you get more resolve type daily. it is kept low to prevent the need for massive farms and to make it ahrder to obtain for every fight.",
   "config.roundabout.resolveInterval.name": "Resolve Refresh Intervals",
   "config.roundabout.resolveInterval.desc": "Change how many ticks between resolve refresh.",
+  "config.roundabout.maxRequiemTime.name": "Maximum Requiem Time",
+  "config.roundabout.maxRequiemTime.desc": "How long requiem lasts, in seconds. The default is 60 seconds (1 minute). If you set it to -1, Requiem's duration becomes permanent",
+  "config.roundabout.showRTZSkyboxUser.name": "Show RTZ Skybox For User",
+  "config.roundabout.showRTZSkyboxUser.desc": "Shows you the Return To Zero skybox if you get hit as the GER user.",
 
   "config.roundabout.disablePHazeOverlayAnimation.name": "Disable Haze Overlay Animation",
   "config.roundabout.disablePHazeOverlayAnimation.desc": "Disables the idle animation of the haze in first person.",

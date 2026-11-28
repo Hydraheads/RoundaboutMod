@@ -164,10 +164,18 @@ public class PowersGER extends PowersGoldExperience {
         }
     }
 
+    @Override
     public void tickPower() {
         super.tickPower();
-        if (hasNormalGEDisc()) {
-            resolvePoints -= 0.25f;
+        if (hasNormalGEDisc() && !(geConfig().maxRequiemTime == -1)) {
+            int maxSeconds = geConfig().maxRequiemTime;
+            if (maxSeconds <= 0) {
+                resolvePoints = 0f;
+            } else {
+                float drainPerTick = getNeededResolvePoints() / (maxSeconds * 20.0f);
+                resolvePoints -= drainPerTick;
+            }
+
             if (!this.self.level().isClientSide() && resolvePoints <= 0f) {
                 goBackToGE();
                 ((StandUser) self).roundabout$summonStand(self.level(), true, true);
@@ -232,6 +240,20 @@ public class PowersGER extends PowersGoldExperience {
                 }
             }
 
+            if (this.getSelf() instanceof ServerPlayer gerUser) {
+                Vec3 selfPos = gerUser.position();
+                float selfYaw = gerUser.getYRot();
+                float selfPitch = gerUser.getXRot();
+                S2CPacketUtil.sendStartRTZPacket(
+                        gerUser,
+                        selfPos,
+                        selfPos,
+                        selfYaw,
+                        selfPitch,
+                        selfYaw,
+                        selfPitch
+                );
+            }
             return true;
         }
 
@@ -258,6 +280,20 @@ public class PowersGER extends PowersGoldExperience {
     // infinite death end
 
     // Buffs
+
+    // for life punch
+
+    @Override
+    protected int getLifePunchStunDuration() {
+        return 55;
+    }
+
+    // for bush grow
+
+    @Override
+    protected int getBushRadius() {
+        return 8;
+    }
 
     // for item throw (raw spaghetti laser beam) start
 
@@ -289,6 +325,33 @@ public class PowersGER extends PowersGoldExperience {
     // for item throw (raw spaghetti laser beam) start
 
     // for damage start
+
+    @Override
+    public float getBrambleDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.8F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(7F));
+        }
+    }
+
+    @Override
+    public float getThornDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5F));
+        }
+    }
+
+    @Override
+    public float getLifePunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(10F));
+        }
+    }
 
     @Override
     public float getPunchStrength(Entity entity){

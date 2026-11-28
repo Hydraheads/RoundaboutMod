@@ -244,7 +244,7 @@ public class ClientUtil {
                 }
             }
             if (rtzTicks > -1) {
-                if (pl instanceof LocalPlayer lp) {
+                if (pl instanceof LocalPlayer lp && !rtzSkyboxOnlyUser) {
                     applyRTZClientDrag(lp, 0.0F);
                     if (rtzTicks >= 6) {
                         Vec3 currentPos = lp.position();
@@ -269,6 +269,7 @@ public class ClientUtil {
                         lp.noPhysics = false;
                     }
                     rtzTicks = -1;
+                    rtzSkyboxOnlyUser = false;
                     rtzStartPos = null;
                     rtzEndPos = null;
                     lastRTZAfterimagePos = null;
@@ -3063,8 +3064,27 @@ public class ClientUtil {
     public static boolean isUnderRTZ() {
         return rtzTicks > -1;
     }
+    public static boolean rtzSkyboxOnlyUser = false;
 
     public static void startRTZClient(Vec3 startPos, Vec3 endPos, float startYaw, float startPitch, float endYaw, float endPitch) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player != null && ((StandUser) player).roundabout$getStandPowers() instanceof PowersGER) {
+            if (!ConfigManager.getClientConfig().goldExperienceSettings.showRTZSkyboxUser) {
+                return;
+            }
+            double rand = Math.random();
+            if (rand > 0.1) {
+                playSound(ModSounds.RETURN_TO_ZERO_EVENT, player, 1.0F, 1.0F);
+            }
+            playSound(ModSounds.RETURN_TO_ZERO_REWIND_EVENT, player, 1.0F, 1.0F);
+            rtzSkyboxOnlyUser = true;
+            rtzTicks = 0;
+            rtzStartPos = null;
+            rtzEndPos = null;
+            return;
+        }
+
+        rtzSkyboxOnlyUser = false;
         rtzTicks = 0;
         rtzStartPos = startPos;
         rtzEndPos = endPos;
@@ -3073,7 +3093,6 @@ public class ClientUtil {
         rtzEndYaw = endYaw;
         rtzEndPitch = endPitch;
 
-        LocalPlayer player = Minecraft.getInstance().player;
         if (player != null && startPos != null) {
             double rand = Math.random();
             if (rand > 0.25) {

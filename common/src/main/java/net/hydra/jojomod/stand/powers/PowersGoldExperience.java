@@ -234,7 +234,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return geConfig().goldExperienceCooldownDNA;
     };
     private final int getAnimalCreationCooldown() {
-        return geConfig().goldExperienceCooldownAnimal;
+        int cooldown = geConfig().goldExperienceCooldownAnimal;
+
+        if(animalType == AnimalTypes.SNAKE.id || animalType == AnimalTypes.PIRAHNA.id || animalType == AnimalTypes.BAT.id) {
+            cooldown += 200;
+        }
+        if(animalType == AnimalTypes.FROG.id || animalType == AnimalTypes.BEE.id) {
+            cooldown += 100;
+        }
+        return cooldown;
     };
     private final int getHealCooldown() {
         return geConfig().goldExperienceCooldownHeal;
@@ -306,7 +314,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         if (this.getReducedDamage(entity)){
             return levelupDamageMod(multiplyPowerByStandConfigPlayers(0.6F));
         } else {
-            return levelupDamageMod(multiplyPowerByStandConfigMobs(4F));
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(2.5F));
         }
     }
     public float getLifePunchStrength(Entity entity){
@@ -348,7 +356,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     };
 
     // for configs
-    private Config.GoldExperienceSettings geConfig() {
+    protected Config.GoldExperienceSettings geConfig() {
         return ClientNetworking.getAppropriateConfig().goldExperienceSettings;
     }
 
@@ -1030,7 +1038,8 @@ public class PowersGoldExperience extends BlockGrabPreset {
             lifePunchImpact(target);
         }
         else if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
-            boolean isSecondHit = this.attackTimeDuring >= 10;
+            boolean isSecondHit = this.dualPunchSecondHit;
+            this.dualPunchSecondHit = true;
             dualPunchImpact(target, isSecondHit);
         }
     }
@@ -1053,13 +1062,9 @@ public class PowersGoldExperience extends BlockGrabPreset {
             if (keyIsDown) {
                 if (!isHoldingSneak()) {
                     super.buttonInputAttack(keyIsDown, options);
-                } else {
-                    if (this.canAttack()) {
-                        this.tryPower(PowerIndex.SNEAK_ATTACK, true);
-                        tryPowerPacket(PowerIndex.SNEAK_ATTACK);
-                    } else {
-                        super.buttonInputAttack(keyIsDown, options);
-                    }
+                } else if (this.canAttack() && this.getActivePower() != PowerIndex.SNEAK_ATTACK) {
+                    this.tryPower(PowerIndex.SNEAK_ATTACK, true);
+                    tryPowerPacket(PowerIndex.SNEAK_ATTACK);
                 }
             }
         }
@@ -2263,7 +2268,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         ItemStack goldDisc = ((StandUser) this.self).roundabout$getStandDisc();
         boolean bypass = ((Player)this.self).isCreative() || (!goldDisc.isEmpty() && goldDisc.getItem() instanceof MaxStandDiscItem);
         if (bypass) {
-            resolvePoints = 300;
+            resolvePoints = getNeededResolvePoints();
         }
         return (resolvePoints >= getNeededResolvePoints() || bypass) && ((StandUser)self).roundabout$getActive();
     }
@@ -2567,6 +2572,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 if (oldStand != null && !oldStand.isRemoved()) {
                     spawnRequiemCrackStage(oldStand, 4);
                 }
+                unlockSkin();
             }
 
             if (this.self instanceof Player player) {
@@ -2832,7 +2838,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
         }
 
-        return growGETreeAt(centerPos, true);
+        if (!growGETreeAt(centerPos, true)) {
+            this.setAttackTimeDuring(-7);
+            return false;
+        }
+        return true;
     }
 
     public boolean growGETreeAt(BlockPos centerPos, boolean fromSkill) {
@@ -2851,9 +2861,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             return false;
         }
 
-        BlockPos base = fromSkill
-                ? new BlockPos(centerPos.getX(), Math.min(centerPos.getY(), this.self.blockPosition().getY()), centerPos.getZ())
-                : centerPos;
+        BlockPos base = centerPos;
         Direction growthDirection = Direction.UP;
 
         int maxHeight = geConfig().treeMaxHeight;
@@ -3085,9 +3093,15 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // 1-2 sneak attack punch start
 
     // god i hate doing attacks
+    private boolean dualPunchSecondHit = false;
+
     private boolean executeDualPunch() {
+        if (this.getActivePower() == PowerIndex.SNEAK_ATTACK) {
+            return false;
+        }
         StandEntity stand = getStandEntity(this.self);
         if (Objects.nonNull(stand)) {
+            this.dualPunchSecondHit = false;
             this.activePowerPhase = this.getActivePowerPhaseMax();
             this.attackTimeDuring = 0;
             this.attackTimeMax = ClientNetworking.getAppropriateConfig().generalStandSettings.finalStandPunchInStringCooldown;
@@ -3169,6 +3183,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
         float pitch = 1.0F;
         float volume = 0.95F;
         if (isSecondHit) {
+            this.attackTimeDuring = -10;
             if (!this.self.level().isClientSide()) {
                 playTheLastHitSound();
             }
@@ -3200,7 +3215,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
     // animal creation (X) start
 
     private void tryMakeAnimalClient() {
-        if (!this.onCooldown(PowerIndex.SKILL_2)) {
+        if (!this.onCooldown(PowerIndex.SKILL_2) && isHoldingItem()) {
             int animalClientConfig = 1;
             ClientConfig clientConfig = ConfigManager.getClientConfig();
             if (clientConfig != null && clientConfig.dynamicSettings != null) {
@@ -3225,15 +3240,6 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             EntityType<?> typeToSpawn = getAnimalEntityType(this.animalType);
 
-            int cooldown = getAnimalCreationCooldown();
-
-            if(animalType == AnimalTypes.SNAKE.id || animalType == AnimalTypes.PIRAHNA.id || animalType == AnimalTypes.BAT.id) {
-                cooldown += 200;
-            }
-            if(animalType == AnimalTypes.FROG.id || animalType == AnimalTypes.BEE.id) {
-                cooldown += 100;
-            }
-
             if (typeToSpawn != null) {
                 Vec3 spawnPos = this.self.position().add(this.self.getLookAngle().scale(1.2));
                 spawnPos = new Vec3(spawnPos.x, spawnPos.y + 1.0, spawnPos.z);
@@ -3242,7 +3248,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 ItemStack sourceStack = (isMob) ? ItemStack.EMPTY : handItem;
 
                 if (spawnLifeform(typeToSpawn, spawnPos, sourceStack)) {
-                    setCooldown(PowerIndex.SKILL_2, cooldown);
+                    setCooldown(PowerIndex.SKILL_2, getAnimalCreationCooldown());
                     if (!isMob || !handItem.isEmpty()) {
                         handItem.shrink(1);
                     }
@@ -3326,42 +3332,52 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void finishBramble() {
-        if (!this.self.level().isClientSide()) {
-            Level level = this.self.level();
-            Vec3 lookVec = this.self.getLookAngle();
-            Vec3 dir = new Vec3(lookVec.x, 0, lookVec.z).normalize();
+        Level level = this.self.level();
+        Vec3 lookVec = this.self.getLookAngle();
+        Vec3 horiz = new Vec3(lookVec.x, 0, lookVec.z);
+        if (horiz.lengthSqr() < 1.0E-4) {
+            this.setPowerNone();
+            return;
+        }
+        Vec3 dir = horiz.normalize();
 
-            double startX = this.self.getX();
-            double currentY = this.self.getY();
-            double startZ = this.self.getZ();
+        double startX = this.self.getX();
+        double currentY = this.self.getY();
+        double startZ = this.self.getZ();
 
-            int spikeCount = geConfig().brambleAmount;
-            double spacing = 1.3D;
+        int spikeCount = geConfig().brambleAmount;
+        double spacing = 1.3D;
 
-            // Clear any old queued spikes before adding new ones
+        List<BrambleSpawnData> validSpikes = new ArrayList<>();
+        for (int i = 1; i <= spikeCount; i++) {
+            double targetX = startX + dir.x * (i * spacing);
+            double targetZ = startZ + dir.z * (i * spacing);
+
+            BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, currentY, targetZ));
+            if (groundPos == null) {
+                break;
+            }
+
+            currentY = groundPos.getY() + 1.0;
+            validSpikes.add(new BrambleSpawnData(new Vec3(targetX, currentY, targetZ), this.self.getYRot()));
+        }
+
+        if (validSpikes.isEmpty()) {
+            this.setPowerNone();
+            return;
+        }
+
+        if (!level.isClientSide()) {
             pendingBrambles.clear();
             brambleSpawnTimer = 0;
-
-            for (int i = 1; i <= spikeCount; i++) {
-                double targetX = startX + dir.x * (i * spacing);
-                double targetZ = startZ + dir.z * (i * spacing);
-
-                BlockPos groundPos = findGroundPosition(level, BlockPos.containing(targetX, currentY, targetZ));
-                if (groundPos == null) {
-                    break;
-                }
-
-                currentY = groundPos.getY() + 1.0;
-                Vec3 spawnPos = new Vec3(targetX, currentY, targetZ);
-                pendingBrambles.add(new BrambleSpawnData(spawnPos, this.self.getYRot()));
-            }
+            pendingBrambles.addAll(validSpikes);
 
             playSoundIfPossible(level, null, this.self.blockPosition(),
                     ModSounds.GOLD_EXPERIENCE_LIFE_CREATION_EVENT, SoundSource.PLAYERS, 1.0F, 1F);
             addEXP(7);
             this.setCooldown(PowerIndex.SKILL_4, getBrambleCooldown());
-            this.setAttackTimeDuring(-5);
         }
+        this.setAttackTimeDuring(-5);
     }
 
     private BlockPos findGroundPosition(Level level, BlockPos start) {
@@ -3601,53 +3617,56 @@ public class PowersGoldExperience extends BlockGrabPreset {
     }
 
     private void finishBushCreation() {
-        if (!this.self.level().isClientSide()) {
-            Level level = this.self.level();
-            BlockPos origin = this.self.blockPosition();
+        Level level = this.self.level();
+        BlockPos origin = this.self.blockPosition();
+        BlockPos startGround = findGroundPosition(level, origin);
+
+        if (startGround == null) {
+            this.setPowerNone();
+            return;
+        }
+
+        if (!level.isClientSide()) {
             BlockState bushState = ModBlocks.GE_BUSH.defaultBlockState();
 
             this.pendingBushes.clear();
             this.bushWaveOrigin = new Vec3(origin.getX() + 0.5, origin.getY(), origin.getZ() + 0.5);
             this.bushWaveTick = 0;
 
-            int radius = 4;
-            double radiusSq = radius * radius;
+            double radiusSq = getBushRadius() * getBushRadius();
 
-            BlockPos startGround = findGroundPosition(level, origin);
-            if (startGround != null) {
-                Queue<BlockPos> queue = new ArrayDeque<>();
-                Set<Long> visitedColumns = new HashSet<>();
+            Queue<BlockPos> queue = new ArrayDeque<>();
+            Set<Long> visitedColumns = new HashSet<>();
 
-                BlockPos startAir = startGround.above();
-                queue.add(startAir);
-                visitedColumns.add(BlockPos.asLong(startAir.getX(), 0, startAir.getZ()));
+            BlockPos startAir = startGround.above();
+            queue.add(startAir);
+            visitedColumns.add(BlockPos.asLong(startAir.getX(), 0, startAir.getZ()));
 
-                while (!queue.isEmpty()) {
-                    BlockPos current = queue.poll();
-                    double distSq = current.distSqr(origin);
+            while (!queue.isEmpty()) {
+                BlockPos current = queue.poll();
+                double distSq = current.distSqr(origin);
 
-                    if (current.getY() >= origin.getY() - 1
-                            && current.getY() <= origin.getY() + 1
-                            && level.random.nextFloat() <= 0.70F) {
-                        BlockState checkState = level.getBlockState(current);
-                        if (checkState.canBeReplaced()
-                                && !checkState.is(ModBlocks.GE_BUSH)
-                                && bushState.canSurvive(level, current)) {
-                            this.pendingBushes.add(new BushSpawnData(current.immutable(), distSq));
-                        }
+                if (current.getY() >= origin.getY() - 1
+                        && current.getY() <= origin.getY() + 1
+                        && level.random.nextFloat() <= 0.70F) {
+                    BlockState checkState = level.getBlockState(current);
+                    if (checkState.canBeReplaced()
+                            && !checkState.is(ModBlocks.GE_BUSH)
+                            && bushState.canSurvive(level, current)) {
+                        this.pendingBushes.add(new BushSpawnData(current.immutable(), distSq));
                     }
+                }
 
-                    for (Direction dir : Direction.Plane.HORIZONTAL) {
-                        BlockPos nextCol = current.relative(dir);
-                        long colKey = BlockPos.asLong(nextCol.getX(), 0, nextCol.getZ());
-                        if (visitedColumns.contains(colKey)) continue;
-                        if (nextCol.distSqr(origin) > radiusSq) continue;
+                for (Direction dir : Direction.Plane.HORIZONTAL) {
+                    BlockPos nextCol = current.relative(dir);
+                    long colKey = BlockPos.asLong(nextCol.getX(), 0, nextCol.getZ());
+                    if (visitedColumns.contains(colKey)) continue;
+                    if (nextCol.distSqr(origin) > radiusSq) continue;
 
-                        visitedColumns.add(colKey);
-                        BlockPos nextGround = findGroundPosition(level, nextCol);
-                        if (nextGround != null) {
-                            queue.add(nextGround.above());
-                        }
+                    visitedColumns.add(colKey);
+                    BlockPos nextGround = findGroundPosition(level, nextCol);
+                    if (nextGround != null) {
+                        queue.add(nextGround.above());
                     }
                 }
             }
@@ -3668,8 +3687,12 @@ public class PowersGoldExperience extends BlockGrabPreset {
 
             addEXP(5);
             this.setCooldown(PowerIndex.GENERAL_4, getBushCooldown());
-            this.setAttackTimeDuring(-8);
         }
+        this.setAttackTimeDuring(-8);
+    }
+
+    protected int getBushRadius() {
+        return 4;
     }
 
     // bramble bush end
@@ -3830,12 +3853,13 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         addEXP(5, LE);
                         if (!this.self.level().isClientSide()) {
                             if (LE instanceof Player player) {
-                                startLifePunchOnPlayer(player, 40);
+                                startLifePunchOnPlayer(player, getLifePunchStunDuration());
                             } else if (LE instanceof Mob mob) {
                                 ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
                                 mob.getNavigation().stop();
-                                disabledMobTimers.put(LE.getId(), 40);
+                                disabledMobTimers.put(LE.getId(), getLifePunchStunDuration());
                             }
+                            ((StandUser)LE).roundabout$sealStand(getLifePunchStunDuration());
                         }
                     }
                     takeDeterminedKnockback(this.self, entity, knockbackStrength);
@@ -3999,6 +4023,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
             this.setCooldown(PowerIndex.GENERAL_3, getLifePunchCooldown());
         }
+    }
+
+    protected int getLifePunchStunDuration() {
+        return 40;
     }
 
     private void startLifePunchOnPlayer(Player victim, int durationTicks) {
@@ -4465,6 +4493,61 @@ public class PowersGoldExperience extends BlockGrabPreset {
         return l;
     }
 
+    public void unlockSkin() {
+        Level lv = this.getSelf().level();
+        if ((this.getSelf()) instanceof Player PE) {
+            StandUser user = ((StandUser) PE);
+            ItemStack stack = user.roundabout$getStandDisc();
+            if (!stack.isEmpty() && stack.is(ModItems.STAND_DISC_GOLD_EXPERIENCE)) {
+                IPlayerEntity ipe = ((IPlayerEntity) PE);
+                if (!ipe.roundabout$getUnlockedBonusSkin()) {
+                    if (!lv.isClientSide()) {
+                        int chainCount = 0;
+                        // checks inventory for a stack of chains
+                        for (int i = 0; i < PE.getInventory().getContainerSize(); i++) {
+                            ItemStack invStack = PE.getInventory().getItem(i);
+                            if (invStack.is(Items.CHAIN)) {
+                                chainCount += invStack.getCount();
+                                if (chainCount >= 64) {
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (chainCount >= 64) {
+                            ipe.roundabout$setUnlockedBonusSkin(true);
+                            playSoundIfPossible(self.level(), null, PE.getX(), PE.getY(),
+                                    PE.getZ(), ModSounds.UNLOCK_SKIN_EVENT, PE.getSoundSource(), 2.0F, 1.0F);
+                            sendParticlesIfPossible(self.level(), ParticleTypes.END_ROD, PE.getX(),
+                                    PE.getY() + PE.getEyeHeight(), PE.getZ(),
+                                    10, 0.5, 0.5, 0.5, 0.2);
+                            this.standSkin = GoldExperienceEntity.DEIMOS;
+                            user.roundabout$setStandSkin(GoldExperienceEntity.DEIMOS);
+                            ((ServerPlayer) ipe).displayClientMessage(
+                                    Component.translatable("unlock_skin.roundabout.gold_experience.deimos"), true);
+
+                            //consume the chains
+                            int remaining = 64;
+                            for (int i = 0; i < PE.getInventory().getContainerSize(); i++) {
+                                ItemStack invStack = PE.getInventory().getItem(i);
+                                if (invStack.is(Items.CHAIN)) {
+                                    int toRemove = Math.min(remaining, invStack.getCount());
+                                    invStack.shrink(toRemove);
+                                    remaining -= toRemove;
+                                    if (remaining <= 0) {
+                                        break;
+                                    }
+                                }
+                            }
+                            PE.getInventory().setChanged();
+                            PE.inventoryMenu.broadcastChanges();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public StandEntity getNewStandEntity() {
         byte skin = ((StandUser) this.getSelf()).roundabout$getStandSkin();
@@ -4570,37 +4653,39 @@ public class PowersGoldExperience extends BlockGrabPreset {
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_DOUBLE_PUNCH, 4, level, bypas));
         $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 80, 0, "ability.roundabout.barrage",
                 "instruction.roundabout.barrage", StandIcons.GOLD_EXPERIENCE_BARRAGE, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.kick_barrage",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 99, 0, "ability.roundabout.gold_experience_ground_barrage",
+                "instruction.roundabout.barrage", StandIcons.GOLD_EXPERIENCE_GROUND_BARRAGE, 4, level, bypas));
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.kick_barrage",
                 "instruction.roundabout.kick_barrage", StandIcons.GOLD_EXPERIENCE_KICK_BARRAGE, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 39, topPos + 118, 0, "ability.roundabout.gold_experience_lifeform_select",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, 0, "ability.roundabout.gold_experience_lifeform_select",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_LIFEFORM_SELECT, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 80, getHealLevel(), "ability.roundabout.gold_experience_heal",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, getHealLevel(), "ability.roundabout.gold_experience_heal",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_HEAL, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 99, 0, "ability.roundabout.gold_experience_life_sensor",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.gold_experience_life_sensor",
                 "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_LIFE_SENSOR, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 58, topPos + 118, 0, "ability.roundabout.gold_experience_dna_creation",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, 0, "ability.roundabout.gold_experience_dna_creation",
                 "instruction.roundabout.press_skill_item", StandIcons.GOLD_EXPERIENCE_DNA_CREATION, 1, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 80, 0, "ability.roundabout.gold_experience_lifeform_creation",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0, "ability.roundabout.gold_experience_lifeform_creation",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_LIFEFORM_CREATION, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 99, 0, "ability.roundabout.gold_experience_item_throw",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, 0, "ability.roundabout.gold_experience_item_throw",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_ITEM_THROW, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 77, topPos + 118, getTreeLevel(), "ability.roundabout.gold_experience_tree_growth",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 80, getTreeLevel(), "ability.roundabout.gold_experience_tree_growth",
                 "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_TREE_GROWTH, 2, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 80, 0, "ability.roundabout.dodge",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 99, 0, "ability.roundabout.dodge",
                 "instruction.roundabout.press_skill", StandIcons.DODGE, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 99, getLifePunchLevel(), "ability.roundabout.gold_experience_life_punch",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 118, getLifePunchLevel(), "ability.roundabout.gold_experience_life_punch",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_LIFE_PUNCH, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 96, topPos + 118, 0, "ability.roundabout.gold_experience_vine_climb",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, 0, "ability.roundabout.gold_experience_vine_climb",
                 "instruction.roundabout.press_skill_air", StandIcons.GOLD_EXPERIENCE_VINE_CLIMB, 3, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 80, getBrambleLevel(), "ability.roundabout.gold_experience_violent_brambles",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, getBrambleLevel(), "ability.roundabout.gold_experience_violent_brambles",
                 "instruction.roundabout.press_skill", StandIcons.GOLD_EXPERIENCE_BRAMBLES, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 99, getItemImbueLevel(), "ability.roundabout.gold_experience_item_imbue",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, getItemImbueLevel(), "ability.roundabout.gold_experience_item_imbue",
                 "instruction.roundabout.press_skill_crouch", StandIcons.GOLD_EXPERIENCE_ITEM_IMBUE, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 115, topPos + 118, getBushLevel(), "ability.roundabout.gold_experience_bramble_trap",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 80, getBushLevel(), "ability.roundabout.gold_experience_bramble_trap",
                 "instruction.roundabout.press_skill_block", StandIcons.GOLD_EXPERIENCE_BRAMBLE_TRAP, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 80, getBrambleLevel(), "ability.roundabout.gold_experience_requiem",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 99, getBrambleLevel(), "ability.roundabout.gold_experience_requiem",
                 "instruction.roundabout.stand_arrow", StandIcons.GOLD_EXPERIENCE_REQUIEM, 4, level, bypas));
-        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 99, getBrambleLevel(), "ability.roundabout.mining",
+        $$1.add(drawSingleGUIIcon(context, 18, leftPos + 134, topPos + 118, getBrambleLevel(), "ability.roundabout.mining",
                 "instruction.roundabout.hold_attack", StandIcons.GOLD_EXPERIENCE_MINING, 4, level, bypas));
         return $$1;
     }

@@ -145,9 +145,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingBlockFormPredictionsV3 != null) {
+        if (getAdvancedConfig().kingNothingBlockFormPredictionsV4 != null) {
             MainUtil.KING_NOTHING_BLOCK_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictionsV3) {
+            for (String entry : getAdvancedConfig().kingNothingBlockFormPredictionsV4) {
                 try {
                     String[] split = entry.split(":");
 
@@ -176,9 +176,9 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingEntityFormPredictionsV4 != null) {
+        if (getAdvancedConfig().kingNothingEntityFormPredictionsV5 != null) {
             MainUtil.KING_NOTHING_ENTITY_FORM_PREDICT.clear();
-            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsV4) {
+            for (String entry : getAdvancedConfig().kingNothingEntityFormPredictionsV5) {
                 try {
                     String[] split = entry.split(":");
 
@@ -211,10 +211,10 @@ public abstract class ConfigManager {
             }
         }
 
-        if (getAdvancedConfig().kingNothingBlockGroupsV3 != null) {
+        if (getAdvancedConfig().kingNothingBlockGroupsV4 != null) {
             MainUtil.KING_NOTHING_BLOCK_GROUPS.clear();
             MainUtil.KING_NOTHING_BLOCK_KEYS.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockGroupsV3) {
+            for (String entry : getAdvancedConfig().kingNothingBlockGroupsV4) {
                 try {
                     String[] split = entry.split(":");
                     if (split.length != 3) {
@@ -291,9 +291,9 @@ public abstract class ConfigManager {
             MainUtil.kingNothingMobSniffBlacklist.addAll(getAdvancedConfig().kingNothingMobSniffBlacklistv2);
         }
 
-        if (getAdvancedConfig().kingNothingBlockSniffOverridesV2 != null) {
+        if (getAdvancedConfig().kingNothingBlockSniffOverridesV3 != null) {
             MainUtil.KING_NOTHING_BLOCK_SNIFF_OVERRIDES.clear();
-            for (String entry : getAdvancedConfig().kingNothingBlockSniffOverridesV2) {
+            for (String entry : getAdvancedConfig().kingNothingBlockSniffOverridesV3) {
                 try {
                     String[] split = entry.split(":");
 
