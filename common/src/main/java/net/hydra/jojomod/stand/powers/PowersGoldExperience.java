@@ -3609,8 +3609,7 @@ public class PowersGoldExperience extends BlockGrabPreset {
             this.bushWaveOrigin = new Vec3(origin.getX() + 0.5, origin.getY(), origin.getZ() + 0.5);
             this.bushWaveTick = 0;
 
-            int radius = 4;
-            double radiusSq = radius * radius;
+            double radiusSq = getBushRadius() * getBushRadius();
 
             BlockPos startGround = findGroundPosition(level, origin);
             if (startGround != null) {
@@ -3669,6 +3668,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             this.setCooldown(PowerIndex.GENERAL_4, getBushCooldown());
             this.setAttackTimeDuring(-8);
         }
+    }
+
+    protected int getBushRadius() {
+        return 4;
     }
 
     // bramble bush end
@@ -3829,11 +3832,11 @@ public class PowersGoldExperience extends BlockGrabPreset {
                         addEXP(5, LE);
                         if (!this.self.level().isClientSide()) {
                             if (LE instanceof Player player) {
-                                startLifePunchOnPlayer(player, 40);
+                                startLifePunchOnPlayer(player, getLifePunchStunDuration());
                             } else if (LE instanceof Mob mob) {
                                 ((StandUser) mob).roundabout$deeplyRemoveAttackTarget();
                                 mob.getNavigation().stop();
-                                disabledMobTimers.put(LE.getId(), 40);
+                                disabledMobTimers.put(LE.getId(), getLifePunchStunDuration());
                             }
                         }
                     }
@@ -3998,6 +4001,10 @@ public class PowersGoldExperience extends BlockGrabPreset {
             }
             this.setCooldown(PowerIndex.GENERAL_3, getLifePunchCooldown());
         }
+    }
+
+    protected int getLifePunchStunDuration() {
+        return 40;
     }
 
     private void startLifePunchOnPlayer(Player victim, int durationTicks) {

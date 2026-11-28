@@ -259,6 +259,20 @@ public class PowersGER extends PowersGoldExperience {
 
     // Buffs
 
+    // for life punch
+
+    @Override
+    protected int getLifePunchStunDuration() {
+        return 55;
+    }
+
+    // for bush grow
+
+    @Override
+    protected int getBushRadius() {
+        return 8;
+    }
+
     // for item throw (raw spaghetti laser beam) start
 
     @Override
@@ -289,6 +303,33 @@ public class PowersGER extends PowersGoldExperience {
     // for item throw (raw spaghetti laser beam) start
 
     // for damage start
+
+    @Override
+    public float getBrambleDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1.8F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(7F));
+        }
+    }
+
+    @Override
+    public float getThornDamage(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(1F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(5F));
+        }
+    }
+
+    @Override
+    public float getLifePunchStrength(Entity entity){
+        if (this.getReducedDamage(entity)){
+            return levelupDamageMod(multiplyPowerByStandConfigPlayers(2F));
+        } else {
+            return levelupDamageMod(multiplyPowerByStandConfigMobs(10F));
+        }
+    }
 
     @Override
     public float getPunchStrength(Entity entity){
