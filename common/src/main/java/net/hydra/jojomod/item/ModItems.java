@@ -250,6 +250,7 @@ public class ModItems {
     public static Item KHAN_MASK;
     public static Item BOSS_MASK;
     public static Item TIM_MASK;
+    public static Item MAGENTA_MAGENTA_MASK;
     public static Item SANDMAN_MASK;
     public static Item JOTARO_MASK;
     public static Item JOTARO_4_MASK;
@@ -423,7 +424,7 @@ public class ModItems {
         addToVisageStore(ANAKISS_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GUCCIO_MASK,page, characterCostExp, characterCostEmerald);
 
-        page++; // 15 / 25
+        page++; // 17 / 25
         addToVisageStore(JOHNNY_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(GYRO_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(LUCY_MASK,page, characterCostExp, characterCostEmerald);
@@ -436,6 +437,7 @@ public class ModItems {
         addToVisageStore(TIM_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(SHERIFF_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(RINGO_MASK,page, characterCostExp, characterCostEmerald);
+        addToVisageStore(MAGENTA_MAGENTA_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(VALENTINE_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(DOT_HAN_MASK,page, characterCostExp, characterCostEmerald);
         addToVisageStore(AVDUL_MASK,page, characterCostExp, characterCostEmerald);

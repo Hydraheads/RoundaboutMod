@@ -523,6 +523,8 @@ public class ClientForgeEvents {
         ModStrayModels.ratTailPart = new RatTailPart();
         ModStrayModels.ratHatPart = new RatHatPart();
         ModStrayModels.timHatPart = new TimHatPart();
+        ModStrayModels.magentaHatPart = new MagentaHatPart();
+        ModStrayModels.magentaClothPart = new MagentaClothPart();
         ModStrayModels.ratLeftLegPart = new RatLeftLegPart();
         ModStrayModels.ratRightLegPart = new RatRightLegPart();
         ModStrayModels.LegCloakPart = new LegCloakPart();
