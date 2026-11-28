@@ -3,6 +3,7 @@ package net.hydra.jojomod.mixin.gravity;
 import net.hydra.jojomod.access.IEntityAndData;
 import net.hydra.jojomod.event.powers.jumpingJackFlash.JJFFloatingBlocks;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -51,6 +52,9 @@ public abstract class GravityFallingBlockEntityMixin extends Entity implements J
     @Unique
     private java.util.UUID jjf$floatOwner;
 
+    @Unique
+    private long jjf$releaseVersion;
+
     @Override
     public java.util.UUID jjf$getFloatOwner() {
         return jjf$floatOwner;
@@ -59,6 +63,9 @@ public abstract class GravityFallingBlockEntityMixin extends Entity implements J
     @Override
     public void jjf$setFloatOwner(java.util.UUID owner) {
         jjf$floatOwner = owner;
+        if (owner != null && level() instanceof ServerLevel server) {
+            jjf$releaseVersion = JJFFloatingBlocks.releaseVersion(server, owner);
+        }
     }
 
     @Unique
@@ -68,6 +75,7 @@ public abstract class GravityFallingBlockEntityMixin extends Entity implements J
     private void jjf$saveFloatAge(CompoundTag tag, CallbackInfo ci) {
         if (jjf$floatOwner != null) {
             tag.putUUID("JJFFloatOwner", jjf$floatOwner);
+            tag.putLong("JJFReleaseVersion", jjf$releaseVersion);
         }
         if (jjf$floatTicks > 0) {
             tag.putInt("JJFFloatTicks", jjf$floatTicks);
@@ -77,6 +85,7 @@ public abstract class GravityFallingBlockEntityMixin extends Entity implements J
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void jjf$loadFloatAge(CompoundTag tag, CallbackInfo ci) {
         jjf$floatOwner = tag.hasUUID("JJFFloatOwner") ? tag.getUUID("JJFFloatOwner") : null;
+        jjf$releaseVersion = tag.getLong("JJFReleaseVersion");
         jjf$floatTicks = tag.getInt("JJFFloatTicks");
     }
 
@@ -102,7 +111,9 @@ public abstract class GravityFallingBlockEntityMixin extends Entity implements J
             return;
         }
         jjf$floatTicks++;
-        if (jjf$floatTicks >= JJF_FLOAT_DURATION) {
+        if (jjf$floatTicks >= JJF_FLOAT_DURATION || (jjf$floatOwner != null
+                && block.level() instanceof ServerLevel server
+                && jjf$releaseVersion != JJFFloatingBlocks.releaseVersion(server, jjf$floatOwner))) {
             if (fake) {
                 block.discard();
             } else {
